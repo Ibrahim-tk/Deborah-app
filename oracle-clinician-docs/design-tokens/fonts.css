@@ -1,0 +1,7 @@
+/* src/styles/fonts.css — self-host from public/fonts (download woff2 from Google Fonts: EB Garamond 400/500 + italic 400; Cormorant Garamond 400 + italic 400). */
+@font-face { font-family:'EB Garamond'; src:url('/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'EB Garamond'; src:url('/fonts/EBGaramond-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
+@font-face { font-family:'EB Garamond'; src:url('/fonts/EBGaramond-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
+/* SF Pro is used via the system stack (-apple-system). On non-Apple machines the prototype falls back to system-ui. */

@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T13:00:00Z",
+  "title": "Design System: Your Oracle Clinician",
+  "extensions": {
+    "colorMeta": {
+      "canvas": {
+        "role": "neutral",
+        "displayName": "Parchment",
+        "tonalRamp": [
+          "#615432",
+          "#7f6d41",
+          "#a38d54",
+          "#d1b56b",
+          "#e6c776",
+          "#f4e5c0",
+          "#f7eed5",
+          "#fdf9f1"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Aubergine Ink",
+        "tonalRamp": [
+          "#291832",
+          "#351f41",
+          "#452854",
+          "#58346c",
+          "#613977",
+          "#957aa4",
+          "#cec2d5",
+          "#efebf1"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Deborah Purple"
+      },
+      "gold": {
+        "role": "secondary",
+        "displayName": "Signature Gold"
+      },
+      "pink-ink": {
+        "role": "tertiary",
+        "displayName": "Deborah's Rose",
+        "tonalRamp": [
+          "#561f35",
+          "#712846",
+          "#92345a",
+          "#bb4274",
+          "#cd497f",
+          "#e8abc4",
+          "#f0c7d7",
+          "#faedf2"
+        ]
+      },
+      "surface-signature": {
+        "role": "neutral",
+        "displayName": "Midnight",
+        "tonalRamp": [
+          "#120721",
+          "#18092b",
+          "#1f0b37",
+          "#2b104e",
+          "#554071",
+          "#9d91ae",
+          "#bdb5c8",
+          "#eae7ed"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Large titles on tab roots and signature moments."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Deborah's answers and every message."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Tab labels, timestamps, counters (SF Pro)."
+      }
+    },
+    "shadows": [
+      {
+        "name": "float-sm",
+        "value": "0 2px 8px rgba(43,16,78,0.08)",
+        "purpose": "Menus, toasts."
+      },
+      {
+        "name": "float-md",
+        "value": "0 8px 24px rgba(43,16,78,0.10), 0 1px 3px rgba(43,16,78,0.08)",
+        "purpose": "Composer, floating tab bar."
+      },
+      {
+        "name": "float-lg",
+        "value": "0 -8px 32px rgba(43,16,78,0.12)",
+        "purpose": "Bottom sheets."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-ios",
+        "value": "cubic-bezier(0.32,0.72,0,1)",
+        "purpose": "Navigation and sheets."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.22,1,0.36,1)",
+        "purpose": "Small state changes."
+      },
+      {
+        "name": "dur-base",
+        "value": "240ms",
+        "purpose": "Fades, accordions."
+      },
+      {
+        "name": "dur-screen",
+        "value": "320ms",
+        "purpose": "Push transitions."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "393px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one action per view.",
+      "html": "<button class=\"ds-btn-primary\">Continue</button>",
+      "css": ".ds-btn-primary{background:#613977;color:#fff;height:56px;padding:0 28px;border:none;border-radius:999px;font:500 18px/24px 'EB Garamond',Georgia,serif;letter-spacing:.01em;transition:background .16s,transform .16s}.ds-btn-primary:active{background:#58346c;transform:scale(.98)}.ds-btn-primary:focus-visible{outline:2px solid #613977;outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Supporting actions.",
+      "html": "<button class=\"ds-btn-secondary\">Shop on Genesis Gold</button>",
+      "css": ".ds-btn-secondary{background:#efebf1;color:#291832;height:56px;padding:0 24px;border:none;border-radius:999px;font:500 18px/24px 'EB Garamond',Georgia,serif}.ds-btn-secondary:active{background:#cec2d5}.ds-btn-secondary:focus-visible{outline:2px solid #613977;outline-offset:3px}"
+    },
+    {
+      "name": "Option Row",
+      "kind": "custom",
+      "refersTo": "option-row",
+      "description": "Replaces chips: suggestions, intake answers, quick replies.",
+      "html": "<button class=\"ds-option\">Why am I waking up at 3am?</button><button class=\"ds-option ds-option--on\">46–50</button>",
+      "css": ".ds-option{display:flex;width:100%;min-height:56px;align-items:center;padding:14px 16px;margin-bottom:8px;background:#fff;color:#291832;border:1px solid #957aa4;border-radius:16px;font:400 18px/27px 'EB Garamond',Georgia,serif;text-align:left}.ds-option--on{background:#efebf1;border:2px solid #613977;font-weight:500}.ds-option:focus-visible{outline:2px solid #613977;outline-offset:3px}"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Single-line field.",
+      "html": "<input class=\"ds-input\" placeholder=\"Maria\">",
+      "css": ".ds-input{height:56px;width:100%;padding:0 16px;background:#fff;color:#291832;border:1px solid #957aa4;border-radius:16px;font:400 18px/27px 'EB Garamond',Georgia,serif}.ds-input::placeholder{color:#816192}.ds-input:focus{outline:none;border:2px solid #613977}"
+    },
+    {
+      "name": "User Bubble",
+      "kind": "custom",
+      "refersTo": "user-bubble",
+      "description": "The user's words.",
+      "html": "<div class=\"ds-bubble\">I've been having hot flashes and can't sleep.</div>",
+      "css": ".ds-bubble{max-width:300px;margin-left:auto;padding:12px 16px;background:#efebf1;color:#291832;border-radius:24px 24px 8px 24px;font:400 19px/30px 'EB Garamond',Georgia,serif}"
+    },
+    {
+      "name": "Floating Tab Bar",
+      "kind": "nav",
+      "refersTo": "tab-bar",
+      "description": "Three always-labelled tabs.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"on\">Ask Deborah</a><a>My Health</a><a>Account</a></nav>",
+      "css": ".ds-tabs{display:flex;gap:4px;height:64px;padding:6px;background:#fff;border-radius:999px;box-shadow:0 8px 24px rgba(43,16,78,.10),0 1px 3px rgba(43,16,78,.08)}.ds-tabs a{flex:1;display:flex;align-items:center;justify-content:center;border-radius:999px;color:#58346c;font:400 13px/18px -apple-system,system-ui,sans-serif}.ds-tabs a.on{background:#efebf1;color:#291832}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat raised surface.",
+      "html": "<div class=\"ds-card\">Current focus: hot flashes and sleep</div>",
+      "css": ".ds-card{padding:20px;background:#fff;border:1px solid #cec2d5;border-radius:16px;color:#291832;font:400 18px/27px 'EB Garamond',Georgia,serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Consulting Room at Dusk",
+    "overview": "The app should feel like sitting across from Deborah in a quiet, warm consulting room in the early evening: soft parchment light, deep aubergine ink, a few precious gold details, and nothing on the desk that doesn't need to be there. It is a reading-and-listening experience first.",
+    "keyCharacteristics": [
+      "Beige canvas #fdf9f1, aubergine ink #291832; every readable text pair ≥ 7:1.",
+      "Serif everywhere people read; SF Pro only for tiny functional text.",
+      "Nothing heavier than Medium (500).",
+      "Soft rounded geometry.",
+      "Flat tonal layering; shadows only on floating elements.",
+      "Deborah unboxed, user in lilac bubbles.",
+      "No pills, tags, badges, chips, waves, ripples, shimmer or bounce."
+    ],
+    "rules": [
+      {
+        "name": "The One Action Colour Rule",
+        "body": "Deborah Purple is the only colour that means you can do something here.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gold Is Deborah Rule",
+        "body": "Gold marks Deborah's presence and premium moments only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Seven-to-One Rule",
+        "body": "Any text a user needs to read meets 7:1 on its surface.",
+        "section": "colors"
+      },
+      {
+        "name": "The Medium Ceiling Rule",
+        "body": "Nothing heavier than 500; Medium only on buttons, answer section titles, selected options and list row titles.",
+        "section": "typography"
+      },
+      {
+        "name": "The Serif Speaks Rule",
+        "body": "Anything a person reads is in a serif.",
+        "section": "typography"
+      },
+      {
+        "name": "The Only-Floating-Things-Cast-Shadows Rule",
+        "body": "If it scrolls with the content, it is flat.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do set every screen on Parchment with Aubergine Ink text.",
+      "Do keep all readable text at 7:1 or higher.",
+      "Do use option rows for every set of choices, at least 56 pt tall."
+    ],
+    "donts": [
+      "Don't use any weight above 500.",
+      "Don't use pills, tags, badges or chips.",
+      "Don't use wave, ripple, shimmer, bounce or pulse animations."
+    ]
+  }
+}
