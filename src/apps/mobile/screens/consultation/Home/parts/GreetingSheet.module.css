@@ -12,8 +12,9 @@
   animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both;
 }
 .handle { width: 36px; height: 5px; margin-bottom: var(--space-2); border-radius: var(--radius-full); background: var(--color-border-hairline); }
-.hello { max-width: 300px; font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); text-align: center; text-wrap: balance; }
+.hello { max-width: 280px; font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); text-align: center; text-wrap: balance; }
 @keyframes fade { from { opacity: 0; } }
 @keyframes rise { from { transform: translateY(100%); } }
+.actions { display: grid; gap: var(--space-3); width: 100%; margin-top: var(--space-2); }
 @media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }
 .close { position: absolute; top: var(--space-2); right: var(--space-2); color: var(--color-ink-secondary); }

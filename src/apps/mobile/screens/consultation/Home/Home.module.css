@@ -1,8 +1,9 @@
-.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; }
+.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; container-type: size; }
 
 .scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: var(--space-5); padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8)); }
 
-.intro { display: grid; gap: var(--space-1); padding: var(--space-4) 0 var(--space-2); }
+/* Greeting sits low so the composer (next in flow) starts at ~45% of the screen: easy reach, calm top. */
+.intro { display: grid; align-content: end; gap: var(--space-1); min-height: calc(45cqh - var(--safe-top) - var(--header-h) - var(--space-2) - var(--space-5)); padding: var(--space-4) 0 var(--space-2); }
 .hello { font: var(--weight-regular) var(--fs-title-1, var(--fs-display)) / var(--lh-title-1, var(--lh-display)) var(--font-display); letter-spacing: -0.01em; }
 .sub { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
 

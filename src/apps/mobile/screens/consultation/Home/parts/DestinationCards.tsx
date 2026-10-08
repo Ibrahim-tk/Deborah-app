@@ -1,10 +1,11 @@
 /**
- * Home destinations as tonal cards: a signature "Ask Deborah" hero, a wide lilac My Health card,
+ * Home destinations: the chat composer as hero (glowing rim), then tonal cards: a wide lilac My Health card,
  * linen Records + rose Family tiles (big serif title top, plain meta + one dark round action bottom),
  * and a slim Paper "My info" row. Flat colour fields — no shadows, rims or pills.
  */
 import type { CSSProperties, ReactNode } from 'react';
-import { DeborahBlob, Icon } from '@mobile/ui';
+import { Icon } from '@mobile/ui';
+import { ChatLauncher } from '@mobile/patterns/chat';
 import styles from './DestinationCards.module.css';
 
 const BG = '/images/home/my-health-bg.png';
@@ -37,16 +38,7 @@ function bg(c: PhotoCard) {
 export function DestinationCards({ askHint, onAsk, health, records, family, onInfo, today }: DestinationCardsProps) {
   return (
     <>
-      <button type="button" className={styles.hero} onClick={onAsk}>
-        <DeborahBlob size={44} />
-        <span className={styles.heroText}>
-          <span className={styles.heroTitle}>Ask Deborah</span>
-          <span className={styles.heroHint}>{askHint}</span>
-        </span>
-        <span className={styles.heroGo} aria-hidden>
-          <Icon name="chevron" size={20} />
-        </span>
-      </button>
+      <ChatLauncher glow placeholder={askHint} onOpen={onAsk} />
 
       {today}
 

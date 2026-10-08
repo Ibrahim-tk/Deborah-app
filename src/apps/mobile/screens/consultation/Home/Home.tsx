@@ -87,7 +87,7 @@ export default function Home() {
         </div>
 
         <DestinationCards
-          askHint="Tell her how you’re feeling"
+          askHint="Ask Deborah how you’re feeling…"
           onAsk={chat}
           health={{
             title: 'My Health',

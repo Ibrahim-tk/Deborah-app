@@ -1,9 +1,7 @@
 /**
- * First-visit greeting: a bottom sheet where Deborah's orb says hello, with the chat bar inside.
- * Tapping the scrim (anywhere else) dismisses it; tapping the bar opens the chat.
+ * First-visit greeting: a bottom sheet where Deborah's orb says hello, and one clear "Get started" button into the chat. Tapping the scrim (anywhere else) dismisses it.
  */
-import { DeborahBlob, IconButton, TextReveal } from '@mobile/ui';
-import { ChatLauncher } from '@mobile/patterns/chat';
+import { Button, DeborahBlob, IconButton, TextReveal } from '@mobile/ui';
 import styles from './GreetingSheet.module.css';
 
 export interface GreetingSheetProps {
@@ -14,7 +12,7 @@ export interface GreetingSheetProps {
 
 export function GreetingSheet({ name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. Tell me what’s on your mind — I’m here to listen.`;
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. Tell me what’s on your mind. I’m here to listen.`;
   return (
     <div className={styles.root}>
       <button type="button" className={styles.scrim} onClick={onDismiss} aria-label="Dismiss greeting" />
@@ -23,7 +21,9 @@ export function GreetingSheet({ name, onDismiss, onOpenChat }: GreetingSheetProp
         <IconButton icon="close" label="Close" className={styles.close} onClick={onDismiss} />
         <DeborahBlob size={80} label="Deborah" />
         <TextReveal className={styles.hello} text={hello} delay={350} />
-        <ChatLauncher onOpen={onOpenChat} />
+        <div className={styles.actions}>
+          <Button fullWidth onClick={onOpenChat}>Get started</Button>
+        </div>
       </div>
     </div>
   );

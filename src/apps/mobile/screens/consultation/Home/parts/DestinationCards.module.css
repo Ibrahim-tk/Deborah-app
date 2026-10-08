@@ -3,29 +3,10 @@
  * with a big Cormorant title, plain-text meta and one dark round action in the bottom-right.
  * They scroll, so no shadows (DESIGN.md: only floating things cast shadows) and no rims.
  */
-.hero, .photo, .row { -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
-.hero:active, .photo:active, .row:active { transform: scale(0.98); }
-.hero:focus-visible, .photo:focus-visible, .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) { .hero:active, .photo:active, .row:active { transform: none; } }
-
-/* Hero: the one signature (midnight) surface on Home, so "Ask Deborah" reads first. */
-.hero {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  width: 100%;
-  min-height: 72px;
-  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
-  border-radius: var(--radius-card);
-  background: var(--color-surface-signature);
-  color: var(--color-ink-on-signature);
-  text-align: left;
-}
-.heroText { flex: 1; min-width: 0; display: grid; gap: 2px; }
-.heroTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; }
-.heroHint { overflow: hidden; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-on-signature); opacity: 0.85; text-overflow: ellipsis; white-space: nowrap; }
-/* Inverted action on the dark hero: light circle, dark arrow. */
-.heroGo { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--color-ink-on-signature); color: var(--color-surface-signature); }
+.photo, .row { -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
+.photo:active, .row:active { transform: scale(0.98); }
+.photo:focus-visible, .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .photo:active, .row:active { transform: none; } }
 
 /* Destination cards: tone field + a faint photo wash for texture (kept ≤ 0.18 so text stays ≥ 7:1). */
 .photo {

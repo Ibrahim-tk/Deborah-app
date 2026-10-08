@@ -157,8 +157,6 @@ export default function Conversation() {
           placeholder={conversation?.status === 'intake' ? 'Or type your answer…' : 'Describe how you’re feeling…'}
           voiceSample={chat.voiceSample}
           onRecordingChange={setRecording}
-          // OPEN: disclaimer wording is placeholder until Deborah approves it.
-          disclaimer="Health education only — not medical advice."
           banner={freeLeft !== null && <TrialCounter inline left={freeLeft} onChoosePlan={() => open('M-4.1')} />}
         />
       </div>
