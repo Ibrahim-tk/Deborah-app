@@ -13,7 +13,7 @@
 .root {
   display: grid;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-2) var(--space-2);
+  padding: var(--space-3) var(--space-1) var(--space-1);
   border-radius: var(--radius-xl);
   background: var(--glass-fill);
   border: 1px solid var(--glass-rim);
@@ -31,7 +31,7 @@
 }
 
 /* Left inset = (44 px tap target − 24 px glyph) / 2, so the text starts on the + icon's edge. */
-.field { min-width: 0; display: grid; gap: 2px; padding: var(--space-1) var(--space-2) 0; }
+.field { min-width: 0; display: grid; gap: 2px; padding: var(--space-1) var(--space-3) 0; }
 /* Composer text one step under body, so the bar reads as a calm input, not a headline. */
 .field textarea { font-size: var(--fs-callout); line-height: var(--lh-callout); }
 /* Empty state reads as one line: the placeholder never wraps, it truncates. */
