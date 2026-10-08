@@ -1,0 +1,42 @@
+.root { position: absolute; inset: 0; overflow: clip; background: var(--midnight-900); }
+
+.base { position: absolute; inset: 0; overflow: clip; background: var(--color-canvas); transform-origin: 50% 0; }
+.rootView { position: absolute; inset: 0; }
+
+/* Screens leave room for the floating tab bar via this variable. */
+.rootView { --tabbar-space: var(--safe-bottom); }
+.rootView[data-tabbar] { --tabbar-space: calc(var(--tabbar-h) + 26px + var(--space-3)); }
+
+.stack { position: absolute; inset: 0; }
+.stack[data-active='false'] { display: none; }
+
+.screen { position: absolute; inset: 0; overflow: clip; background: var(--color-canvas); }
+.screen[data-hidden] { visibility: hidden; }
+
+.edge { position: absolute; top: 0; bottom: 0; left: 0; z-index: 5; width: 12px; touch-action: none; }
+
+/* Sheets and modals share one level: presentation order (DOM order) decides which is on top,
+   so a sheet presented over a modal (M-4.4 over M-4.2) sits above it, and vice versa. */
+.layer { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; }
+.scrim { position: absolute; inset: 0; background: var(--color-scrim); }
+.sheet { position: relative; width: 100%; max-height: calc(100% - var(--safe-top) - 12px); touch-action: none; }
+.sheet[data-detent='large'] { height: calc(100% - var(--safe-top) - 12px); }
+
+.modal { position: absolute; inset: 0; z-index: 40; overflow: clip; background: var(--color-canvas); box-shadow: var(--shadow-float-lg); }
+
+.toastHost {
+  position: absolute;
+  right: var(--margin-screen);
+  bottom: calc(var(--safe-bottom) + var(--space-4));
+  left: var(--margin-screen);
+  z-index: 90;
+  display: grid;
+  justify-items: center;
+  pointer-events: none;
+}
+.toastHost[data-lifted] { bottom: calc(var(--tabbar-h) + 26px + var(--space-3)); }
+/* Over a composer (M-2.1), sit above it rather than on it. */
+.toastHost[data-over-composer] { bottom: calc(var(--tabbar-h) + 26px + 132px); }
+
+.overlayHost { position: absolute; inset: 0; z-index: 100; pointer-events: none; }
+.overlayHost > * { pointer-events: auto; }

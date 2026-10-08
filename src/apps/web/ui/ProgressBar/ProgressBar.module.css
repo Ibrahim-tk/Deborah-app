@@ -1,0 +1,4 @@
+.root { display: flex; align-items: center; gap: var(--space-3); }
+.track { flex: 1; height: 8px; overflow: hidden; border-radius: var(--radius-sm); background: var(--purple-100); }
+.fill { display: block; width: var(--progress); height: 100%; background: var(--color-accent); transition: width var(--dur-base) var(--ease-out); }
+.value { flex: none; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

@@ -1,0 +1,14 @@
+.root { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: var(--space-3); }
+.icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--color-accent-tint); color: var(--color-accent); }
+.text { display: grid; gap: var(--space-1); }
+.eyebrow, .meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.chevron { color: var(--color-ink-secondary); }
+.action, .upcoming { grid-column: 1 / -1; }
+.upcoming {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-hairline);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}

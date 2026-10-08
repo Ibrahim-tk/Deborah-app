@@ -1,0 +1,18 @@
+{
+  "id": "S03",
+  "now": "2026-10-07T19:34:00-07:00",
+  "start": { "kind": "screen", "root": "main", "tab": "ask", "stack": ["M-2.1"] },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "profiles": {
+      "order": ["p-self"],
+      "byId": { "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "conditions": [], "medications": [] }, "createdAt": "2026-10-07T19:12:00-07:00" } }
+    }
+  },
+  "conversations": {
+    "c-001": { "profileId": "p-self", "scriptId": "hot-flashes-sleep", "messages": "@script:hot-flashes-sleep#intake-1", "active": true }
+  }
+}

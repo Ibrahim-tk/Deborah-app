@@ -1,0 +1,3 @@
+.body { display: grid; gap: var(--space-2); }
+.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }

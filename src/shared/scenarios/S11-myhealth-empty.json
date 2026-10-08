@@ -1,0 +1,22 @@
+{
+  "id": "S11",
+  "now": "2026-10-30T08:10:00-07:00",
+  "start": { "kind": "screen", "root": "main", "tab": "health", "stack": ["M-7.2"] },
+  "state": {
+    "userName": "Maria",
+    "accountId": "acct-maria",
+    "accountEmail": "maria@icloud.com",
+    "consentAcceptedAt": "2026-10-30T08:02:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "notificationPermission": "unknown",
+    "plan": "individual",
+    "billing": "monthly",
+    "freeConsultationsUsed": 0,
+    "renewsAt": "2026-11-29T08:02:00-08:00",
+    "profiles": {
+      "order": ["p-self"],
+      "byId": { "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "conditions": [], "medications": [] }, "createdAt": "2026-10-30T08:02:00-07:00" } }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.root {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  color: var(--color-ink);
+  text-align: left;
+}
+.default { background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
+.subtle { background: var(--color-surface-tonal); }
+.emphasis { background: var(--color-surface); box-shadow: inset 0 0 0 2px var(--color-border-selected); }
+.danger { background: var(--color-surface); box-shadow: inset 0 0 0 2px var(--color-danger-border); }
+.pressable { transition: transform var(--dur-quick) var(--ease-out); }
+.pressable:active { transform: scale(0.99); }
+.pressable:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }

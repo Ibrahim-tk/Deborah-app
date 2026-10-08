@@ -1,0 +1,5 @@
+.root { display: flex; flex-direction: column; height: 100%; padding-bottom: var(--tabbar-space); }
+.body { display: grid; gap: var(--space-3); padding: var(--space-10) var(--margin-screen); text-align: center; }
+.id { font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); color: var(--color-ink-tertiary); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); overflow-wrap: anywhere; }

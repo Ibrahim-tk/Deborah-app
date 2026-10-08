@@ -1,0 +1,7 @@
+.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8)); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.price { font: var(--weight-regular) var(--fs-data) / var(--lh-data) var(--font-ui); font-variant-numeric: tabular-nums; }
+.meta { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.group { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface-tonal); }
+.note { padding: 0 var(--space-5); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

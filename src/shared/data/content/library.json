@@ -1,0 +1,63 @@
+[
+  {
+    "id": "v-001", "type": "video", "title": "Why you wake at 3am",
+    "summary": "Deborah explains the cortisol and blood-sugar rhythm behind early waking, and three gentle evening habits to try.",
+    "topics": ["sleep", "stress"], "durationMin": 12, "publishedAt": "2026-09-28T09:00:00-07:00", "audience": "adult", "relatedProductId": "genesis-gold", "status": "placeholder"
+  },
+  {
+    "id": "a-002", "type": "article", "title": "Hot flashes are a hypothalamus story",
+    "summary": "Your body's thermostat lives in the hypothalamus. Here's what changes in midlife and what tends to help.",
+    "body": [
+      "Hot flashes can feel like they come from nowhere, but they start in a very specific place: the hypothalamus, the part of the brain that keeps your temperature steady.",
+      "As estrogen shifts, the hypothalamus can become more sensitive to small changes, and it tries to cool you down when you don't need it.",
+      "Steady sleep, regular meals and fewer evening triggers give it a calmer environment to work in. Track what you notice and bring it to your provider."
+    ],
+    "topics": ["hot-flashes", "sleep"], "durationMin": 6, "publishedAt": "2026-10-02T09:00:00-07:00", "audience": "adult", "relatedProductId": "genesis-gold", "status": "placeholder"
+  },
+  {
+    "id": "l-003", "type": "lesson", "title": "The Five Pillars, in five minutes",
+    "summary": "A short lesson on the foundations Deborah returns to in every consultation.",
+    "body": [
+      "Sleep, nourishment, movement, stress and connection — the Five Pillars are where Deborah starts with everyone.",
+      "None of them needs to be perfect. Pick the one that feels easiest and build from there for two weeks before adding another."
+    ],
+    "topics": ["foundations"], "durationMin": 5, "publishedAt": "2026-08-20T09:00:00-07:00", "audience": "all", "status": "placeholder"
+  },
+  {
+    "id": "v-004", "type": "video", "title": "Thyroid tests: beyond TSH",
+    "summary": "What a full thyroid panel includes and how to ask your provider about it.",
+    "topics": ["thyroid", "labs", "fatigue"], "durationMin": 14, "publishedAt": "2026-09-12T09:00:00-07:00", "audience": "adult", "status": "placeholder"
+  },
+  {
+    "id": "a-005", "type": "article", "title": "Reading your lab report without panic",
+    "summary": "Reference ranges, units and why one number never tells the whole story.",
+    "body": [
+      "Lab reports are written for clinicians, so they can look alarming. A value flagged high or low is a starting point for a conversation, not a diagnosis.",
+      "Look at the date, the units and the reference range. Then write down how you've been feeling around that time — your provider needs both."
+    ],
+    "topics": ["labs"], "durationMin": 7, "publishedAt": "2026-10-05T09:00:00-07:00", "audience": "all", "status": "placeholder"
+  },
+  {
+    "id": "a-006", "type": "article", "title": "First periods: what's typical in the early years",
+    "summary": "For parents and teens: why cycles take time to settle, and when it's worth asking a provider.",
+    "body": [
+      "In the first couple of years, cycles are often irregular. The hypothalamus is still learning the rhythm.",
+      "Very heavy bleeding, cycles more than three months apart, or pain that keeps her from school are good reasons to check in with a provider."
+    ],
+    "topics": ["teen", "cycles"], "durationMin": 5, "publishedAt": "2026-09-30T09:00:00-07:00", "audience": "teen", "status": "placeholder"
+  },
+  {
+    "id": "v-007", "type": "video", "title": "Sleep habits for growing bodies",
+    "summary": "A short talk for teens on why a steady bedtime matters more than you'd think.",
+    "topics": ["teen", "sleep"], "durationMin": 8, "publishedAt": "2026-09-18T09:00:00-07:00", "audience": "teen", "status": "placeholder"
+  },
+  {
+    "id": "l-008", "type": "lesson", "title": "Stress and your cycle",
+    "summary": "How stress signals reach your hormones, and small ways to soften them.",
+    "body": [
+      "Stress hormones and reproductive hormones share the same command centre. When stress runs high for weeks, cycles and sleep often change too.",
+      "A ten-minute walk, a regular wind-down, and saying no to one thing a week are all real interventions."
+    ],
+    "topics": ["stress", "cycles"], "durationMin": 6, "publishedAt": "2026-07-30T09:00:00-07:00", "audience": "all", "status": "placeholder"
+  }
+]

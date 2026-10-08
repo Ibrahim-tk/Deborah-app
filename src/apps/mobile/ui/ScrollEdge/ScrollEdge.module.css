@@ -1,0 +1,35 @@
+/* Covers the status bar + nav bar + a short feather below it. */
+.root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  height: calc(var(--safe-top) + var(--header-h) + 28px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms var(--ease-out);
+}
+.root[data-active] { opacity: 1; }
+.root > span { position: absolute; inset: 0; }
+
+/* Progressive blur: a strong layer masked to the top, a softer one reaching further down. */
+.blurStrong {
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 75%);
+  mask-image: linear-gradient(to bottom, #000 40%, transparent 75%);
+}
+.blurSoft {
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+}
+/* Gentle canvas tint so text under the bar never fights the controls. */
+.fade { background: linear-gradient(to bottom, color-mix(in srgb, var(--color-canvas) 72%, transparent) 0%, color-mix(in srgb, var(--color-canvas) 35%, transparent) 60%, transparent 100%); }
+
+@media (prefers-reduced-transparency: reduce) {
+  .blurStrong, .blurSoft { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .fade { background: linear-gradient(to bottom, var(--color-canvas) 65%, transparent); }
+}

@@ -1,0 +1,31 @@
+{
+  "version": "0.1-draft",
+  "summaryBullets": [
+    "This app offers health education and wellness guidance.",
+    "It does not diagnose, prescribe or replace your provider.",
+    "It is not emergency care. In an emergency, call 911.",
+    "Your health data stays private and is never sold."
+  ],
+  "aiDisclosure": "You're talking to an AI trained only on Deborah's published work.",
+  "aiDisclosureShort": "I'm an AI version of Deborah, built only from her published work.",
+  "terms": {
+    "title": "Terms & Disclaimer",
+    "body": [
+      "Your Oracle Clinician provides general health education based on the published work of Deborah Maragopoulos FNP. It is not medical advice, diagnosis or treatment.",
+      "Always talk with a qualified provider before making decisions about your health, medications or treatment. Never ignore professional advice or delay seeking it because of something you read here.",
+      "If you think you may have a medical emergency, call 911 or go to the nearest emergency room immediately.",
+      "Placeholder text — attorney-drafted terms will replace this before launch."
+    ]
+  },
+  "privacy": {
+    "title": "How your health data is protected",
+    "body": [
+      "We treat everything you share as protected health information under HIPAA, CCPA and CMIA.",
+      "Your conversations are never used to train AI models without your explicit consent.",
+      "Notifications on your lock screen never show symptoms, conditions or product names.",
+      "You can download or delete your data at any time from Account › Privacy & data.",
+      "Placeholder text — the final privacy notice will replace this before launch."
+    ]
+  },
+  "status": "placeholder"
+}

@@ -1,0 +1,46 @@
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-full);
+  font: var(--weight-medium) var(--fs-button) / var(--lh-button) var(--font-body);
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out);
+}
+
+.root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+.label { overflow-wrap: anywhere; }
+
+.md { min-height: var(--control-h); padding: var(--space-2) var(--space-5); }
+.lg { min-height: var(--control-h-lg); padding: var(--space-3) 28px; }
+.fullWidth { width: 100%; }
+.loading { cursor: progress; }
+
+.primary { background: var(--color-accent); color: var(--color-ink-on-accent); }
+.primary:hover:not(:disabled), .primary:active:not(:disabled) { background: var(--color-accent-pressed); }
+
+.secondary { background: var(--color-accent-tint); color: var(--color-ink); }
+.secondary:hover:not(:disabled), .secondary:active:not(:disabled) { background: var(--color-accent-tint-pressed); }
+
+.ghost { background: transparent; color: var(--color-accent); }
+.ghost:hover:not(:disabled), .ghost:active:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Inline text link look; keeps a 44 px hit area. */
+.link { min-height: var(--control-h); padding: 0 var(--space-1); background: transparent; color: var(--color-accent); border-radius: var(--radius-sm); }
+.link:hover:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; }
+
+.destructive { background: var(--color-surface); color: var(--color-danger-ink); box-shadow: inset 0 0 0 1px var(--color-danger-border); }
+.destructive:hover:not(:disabled) { background: var(--color-danger-tint); }
+
+.emergency { min-height: 56px; background: var(--color-danger-fill); color: var(--color-ink-on-accent); }
+.emergency:hover:not(:disabled) { background: var(--color-danger-ink); }
+
+/* Disabled is avoided where possible; when unavoidable: purple-50 fill, purple-400 text. */
+.root:disabled { background: var(--purple-50); color: var(--purple-400); box-shadow: none; }
+.ghost:disabled, .link:disabled { background: transparent; }

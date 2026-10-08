@@ -1,0 +1,197 @@
+{
+  "M-2.0": {
+    "title": "Home",
+    "flow": "F02 Core consultation",
+    "note": "The landing screen after onboarding. Ask Deborah is the hero path; My Health, Records, Family and My info sit as cards, with Deborah's formulations below. On a first visit a sheet greets the user with the chat bar; tapping elsewhere dismisses it. Design direction 2026-10-08; not in the spec yet."
+  },
+  "M-1.1": {
+    "title": "Splash",
+    "flow": "F01 First launch & onboarding",
+    "note": "A first-time user has just opened the app. This is a short brand moment, about 3 seconds, while the app 'loads'. It should feel calm and trustworthy. It fades into Welcome. Returning users who already consented skip it and land in Main."
+  },
+  "M-1.2": {
+    "title": "Welcome",
+    "flow": "F01 First launch & onboarding",
+    "note": "Maria meets Deborah for the first time. The aim is a warm, human first contact that asks only for her first name and makes clear she is talking to an AI version of Deborah. Get started accepts the terms and opens her first conversation. Sign in is there for returning users."
+  },
+  "M-1.3": {
+    "title": "Before we begin (consent)",
+    "flow": "F01 First launch & onboarding",
+    "note": "This is a calm, easy-to-scan summary of what the app is and isn't, plus the AI disclosure and the agreement checkbox. It was merged into Welcome on 2026-10-08, so it stays in the code but is no longer part of the flow. Agreeing opens the empty Conversation."
+  },
+  "M-2.1": {
+    "title": "Conversation",
+    "flow": "F02 Core consultation",
+    "note": "This is the heart of the product. Maria describes how she feels and Deborah asks up to three light intake questions. When Maria asks, Deborah answers in her 7-section framework. It should feel like a consultation, not a chatbot. The same screen also holds the safety, check-in, family-profile and escalation states."
+  },
+  "M-2.7": {
+    "title": "Shop (in-app browser)",
+    "flow": "F02 Core consultation",
+    "note": "Maria tapped a product from an answer, her 90-day plan or a piece of content. A mock Genesis Gold page opens in an in-app browser, labelled 'Formulated by Deborah', with ?ref=app. Shopping is a demo and checkout happens on the real site. Done takes her back to exactly where she was."
+  },
+  "M-2.8": {
+    "title": "Follow-up opt-in",
+    "flow": "F02 Core consultation",
+    "note": "This sheet appears right after Maria's first completed answer. Deborah offers to check in later so they can build on today. Maria picks a reminder interval. Our own friendly prompt always comes before the system permission alert. Not now dismisses it without any pressure."
+  },
+  "M-4.1": {
+    "title": "Free limit reached",
+    "flow": "F04 Free limit, plans & account",
+    "note": "Maria has used her 3 free consultations and is trying to start a new one. The sheet tells her that her answers are saved and invites her to choose a plan. It should never feel like a trap: safety features keep working. It leads to Choose plan, or Maybe later."
+  },
+  "M-4.2": {
+    "title": "Choose plan",
+    "flow": "F04 Free limit, plans & account",
+    "note": "Maria compares the Individual, Family and Premium plans, either monthly or annually. One plan is always preselected based on where she came from (for example, Family when she came from the upgrade sheet). Continue takes her to account creation if she has no account yet, or straight to payment."
+  },
+  "M-4.3": {
+    "title": "Create account / Sign in",
+    "flow": "F04 Free limit, plans & account",
+    "note": "The account is created only at conversion, framed as 'Save your health history'. Maria can sign up with Apple, Google or email plus a verification code, and her trial history moves with her. In sign-in mode, opened from Welcome, it greets a returning user and takes them back to Main."
+  },
+  "M-4.5": {
+    "title": "Plan success",
+    "flow": "F04 Free limit, plans & account",
+    "note": "The purchase is done. 'You're all set': unlimited consultations are unlocked and the trial counter disappears. Continue my conversation sends any message she had held back. Family plan users can go straight to adding a family member."
+  },
+  "M-4.4": {
+    "title": "Store payment (simulated)",
+    "flow": "F04 Free limit, plans & account",
+    "note": "This is a mock of the App Store subscription sheet that confirms the plan, price and auto-renewal. It should feel familiar and trustworthy. Subscribe shows a short spinner, then Done, and moves on to the success screen. Cancel returns to Choose plan."
+  },
+  "M-5.1": {
+    "title": "Lock screen notification",
+    "flow": "F05 Follow-up & return with labs",
+    "note": "Weeks later, Deborah reaches out with a generic nudge: 'How are you feeling this week?'. The lock screen never shows health details. Tapping it unlocks the phone and deep-links into a check-in conversation for the right profile. It is the moment that brings Maria back."
+  },
+  "M-5.3": {
+    "title": "Add lab results",
+    "flow": "F05 Follow-up & return with labs",
+    "note": "Maria has labs to share, either from a check-in, from Records or from the hub. She can take a photo, upload a PDF or type the values in, and a trust line reassures her that the results are encrypted. The app 'reads' the report, then shows her the values to confirm."
+  },
+  "M-5.4": {
+    "title": "Confirm lab results",
+    "flow": "F05 Follow-up & return with labs",
+    "note": "Maria checks the values that were picked up from her report and can edit, add or delete any of them before sending. This gives her control and keeps the results accurate. Sending leads to a lab-informed answer in Conversation, and the report is saved to Records."
+  },
+  "M-6.1": {
+    "title": "Profile switcher",
+    "flow": "F06 Family profiles",
+    "note": "'Who is this for?' Maria can switch between herself and her family members, and each person keeps their own private history. Switching resets Ask and My Health to that person. From here she can add a member (or see the upgrade sheet if she isn't on the Family plan) or manage profiles."
+  },
+  "M-6.2": {
+    "title": "Add family member",
+    "flow": "F06 Family profiles",
+    "note": "Maria adds someone, for example her teen daughter, with their name, relationship, date of birth, sex at birth and a consent confirmation. Children under 13 are blocked for now. Create profile switches to the new person and opens an empty conversation with teen-appropriate suggestions."
+  },
+  "M-6.3": {
+    "title": "Upgrade to Family",
+    "flow": "F06 Family profiles",
+    "note": "Maria tried to add a family member but isn't on the Family plan. This light sheet explains that the plan covers up to 5 people, each with their own private history. Upgrade opens Choose plan with Family preselected, then returns her to adding the member. Not now dismisses it."
+  },
+  "M-6.5": {
+    "title": "Profile details",
+    "flow": "F06 Family profiles",
+    "note": "This shows one person's basics and the health info gathered from intake, all editable, with links to their consultations, Visit Notes and labs. For profiles other than Maria's own, there is also a clearly destructive delete option. It reassures her that each profile's data is separate and under her control."
+  },
+  "M-6.6": {
+    "title": "Manage profiles",
+    "flow": "F06 Family profiles",
+    "note": "This is a simple list of every profile with a count out of 5, reached from the switcher or from Account. Each row opens Profile details, and there is a row to add a family member. It isn't in the wireframes; this is the minimal version from the spec."
+  },
+  "M-7.1": {
+    "title": "My Health (empty)",
+    "flow": "F07 My Health hub",
+    "note": "The active profile hasn't completed a consultation yet. The hub is never blank: it explains that her health picture builds as she talks with Deborah and offers popular starting points. Start my first consultation opens the Ask tab. The hub fills in automatically after her first answer."
+  },
+  "M-7.2": {
+    "title": "My Health hub",
+    "flow": "F07 My Health hub",
+    "note": "This is the personal home for the active profile. It shows the current focus, 90-day plan progress, the next check-in, quick links to records and content Deborah picked for her. It helps Maria keep momentum between consultations. Every card leads somewhere. The habit plan is still a proposal waiting for Deborah's approval."
+  },
+  "M-7.3": {
+    "title": "90-day plan",
+    "flow": "F07 My Health hub",
+    "note": "Maria's goal is shown in Deborah's words, with this week's habits taken from the answer's 'What You Can Do Now' section. Ticking off habits should feel gentle: no streaks and no guilt. There is a Reorder link for the product. Tell Deborah how it's going opens a check-in."
+  },
+  "M-7.4": {
+    "title": "Content detail",
+    "flow": "F07 My Health hub",
+    "note": "Maria opens a video or article Deborah picked for her, with a line explaining why she is seeing it. Ask Deborah about this takes her into chat with the composer already filled in, so learning turns into conversation. A related product, if there is one, opens the shop."
+  },
+  "M-7.5": {
+    "title": "Deborah's library",
+    "flow": "F07 My Health hub",
+    "note": "Maria can browse all of Deborah's content: search it, filter by For you, All or New, or by topic. Empty results gently send her to ask Deborah directly. This screen also links to the Facebook community and to About Deborah."
+  },
+  "M-7.6": {
+    "title": "About Deborah",
+    "flow": "F07 My Health hub",
+    "note": "This screen tells Maria who is behind the app: Deborah's portrait, credentials, philosophy and books. Its job is to build trust in the real person. The main action is Book a consultation with Deborah. The bio and photography are placeholders until Deborah approves them."
+  },
+  "M-8.2": {
+    "title": "Booking info",
+    "flow": "F08 Book Deborah",
+    "note": "When the app isn't enough, Maria can book Deborah herself. This screen explains what to expect from the 50-minute video visit, asks which state she lives in (for licensing) and offers an opt-in to share her app history. Choose a time leads to the scheduler. The price is still to be decided."
+  },
+  "M-8.3": {
+    "title": "Scheduler",
+    "flow": "F08 Book Deborah",
+    "note": "Maria picks a day and an available slot. This is a simulated, native-feeling scheduler. A summary bar confirms her choice, and Confirm booking books it, sets a reminder for the day before and replaces this screen with the confirmation."
+  },
+  "M-8.4": {
+    "title": "Booking confirmed",
+    "flow": "F08 Book Deborah",
+    "note": "'Booked with Deborah', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
+  },
+  "M-9.1": {
+    "title": "Records",
+    "flow": "F09 My Health records",
+    "note": "Everything saved for the active profile, ready to bring to a provider. It has three segments: Consultations, Visit Notes and Labs, with the newest first. Each empty segment has its own next action. Rows open a consultation, a note or a lab report, and she can add notes or labs from here."
+  },
+  "M-9.2": {
+    "title": "Consultation detail",
+    "flow": "F09 My Health records",
+    "note": "Maria rereads a past consultation: the transcript, the collapsed intake summary and Deborah's full 7-section answer. She can download a PDF to bring to her provider, share it, or continue the chat, which reopens that conversation and Deborah remembers it."
+  },
+  "M-9.4": {
+    "title": "Note editor",
+    "flow": "F09 My Health records",
+    "note": "Maria writes down questions before a visit, notes after a visit, or a saved answer. Question notes render as a checklist. Notes save automatically, so nothing gets lost. It isn't in the wireframes, and it's still open whether Deborah may read these notes later."
+  },
+  "M-9.5": {
+    "title": "Lab report",
+    "flow": "F09 My Health records",
+    "note": "This is a read-only view of a saved lab report: its details and values, reusing the layout of the confirm screen. Maria can edit or delete it from the menu. Ask Deborah about these labs starts a lab-review consultation. It isn't in the wireframes."
+  },
+  "M-9.6": {
+    "title": "PDF preview",
+    "flow": "F09 My Health records",
+    "note": "This is a printable one-page summary of an answer: questions for her provider, tests worth discussing and the disclaimer. It turns the conversation into something Maria can hand to her clinician. She can share or print it. Premium gating is still open; the prototype allows it for everyone."
+  },
+  "M-10.1": {
+    "title": "Account",
+    "flow": "F10 Account, privacy & data",
+    "note": "This is one calm place for Maria's plan, family profiles, notifications, privacy, legal and About Deborah. Trial users see a Choose a plan card at the top. Sign out keeps her data in her account and returns her to Welcome."
+  },
+  "M-10.2": {
+    "title": "Privacy & data",
+    "flow": "F10 Account, privacy & data",
+    "note": "This is where Maria exercises her data rights: download her data, read how it is used (never for training without consent), delete a profile, or delete her account. Deleting the account takes deliberate steps, including typing DELETE, and then resets the app. It should feel transparent and respectful."
+  },
+  "M-10.3": {
+    "title": "Subscription",
+    "flow": "F10 Account, privacy & data",
+    "note": "This shows Maria's current plan, price and renewal date. She can change plan, manage it in the App Store, or cancel; the plan stays active until the renewal date. It isn't in the wireframes."
+  },
+  "M-10.4": {
+    "title": "Notifications",
+    "flow": "F10 Account, privacy & data",
+    "note": "Maria controls check-in reminders (and how often they come) and booking reminders. A note reassures her that health details never show on her lock screen. If system permission is off, a banner offers a way to fix it. It isn't in the wireframes."
+  },
+  "M-10.5": {
+    "title": "Terms & disclaimer",
+    "flow": "F10 Account, privacy & data",
+    "note": "This is a read-only view of the Terms & Disclaimer, the privacy notice and the AI disclosure, showing which version Maria accepted and when. It opens from Welcome, from the (i) menu and from Account. All the copy is placeholder until the attorney drafts it."
+  }
+}

@@ -1,0 +1,12 @@
+.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6)); }
+.cardTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+.name { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
+.meta { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); overflow-wrap: anywhere; }
+
+/* Grouped settings sections: Linen (DESIGN.md › Neutral). */
+.group { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface-tonal); }
+.footer { display: grid; gap: var(--space-1); text-align: center; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.profile { display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); padding: 0 var(--space-2); border-radius: var(--radius-full); color: var(--color-ink-secondary); }
+.profile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }

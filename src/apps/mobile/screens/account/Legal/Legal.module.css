@@ -1,0 +1,5 @@
+.root { height: 100%; }
+.doc { display: grid; gap: var(--space-8); }
+.section { display: grid; gap: var(--space-3); scroll-margin-top: var(--space-4); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.heading { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.footer { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

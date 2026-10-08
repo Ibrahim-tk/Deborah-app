@@ -1,0 +1,10 @@
+.word { display: inline-block; white-space: nowrap; }
+.char {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(2px);
+  animation: reveal 600ms var(--ease-out) var(--d) forwards;
+}
+@keyframes reveal { to { opacity: 1; filter: blur(0); transform: none; } }
+@media (prefers-reduced-motion: reduce) { .char { animation: none; opacity: 1; filter: none; transform: none; } }

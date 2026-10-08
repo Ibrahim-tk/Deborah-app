@@ -5,9 +5,11 @@
 **Scenarios:** S01
 
 ```
-M-1.1 Splash ──(auto 1.6 s)──► M-1.2 Welcome ──Continue──► M-1.3 Consent ──I agree──► M-2.1 Conversation (empty)
+M-1.1 Splash ──(auto 1.6 s)──► M-1.2 Welcome ──Get started (accepts terms)──► M-2.1 Conversation (empty)
                                    └─ Sign in ──► M-4.3 (sign-in mode, as modal) ──► M-2.1 with restored history
 ```
+
+> **Change 2026-10-08 (design):** consent is merged into M-1.2. "Get started" saves the name, accepts the Terms & Privacy notice (timestamp + version) and opens M-2.1. A small line under the button reads "By tapping Get started, you agree to the Terms & Disclaimer and Privacy Notice (HIPAA)." with underlined links opening M-10.5. M-1.3 is kept in code but no longer in the flow. OPEN: legal to confirm a checkbox is not required.
 
 ---
 

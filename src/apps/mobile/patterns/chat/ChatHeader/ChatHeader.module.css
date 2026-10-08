@@ -1,0 +1,15 @@
+.root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--safe-top) + var(--space-1)) var(--margin-screen) var(--space-2);
+  /* No bar fill: ScrollEdge provides the iOS blur/fade only when content is underneath. */
+  pointer-events: none;
+}
+.root > *, .right > * { pointer-events: auto; }
+.right { display: flex; align-items: center; gap: var(--space-2); }

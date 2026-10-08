@@ -1,0 +1,23 @@
+.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-8); padding: var(--space-2) var(--margin-screen) var(--space-8); }
+.section { display: grid; gap: var(--space-3); }
+.month { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.time { font-variant-numeric: tabular-nums; }
+.note { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+
+/* Unavailable: flat lilac fill, no outline, words say "Taken" (never colour alone). */
+.section .unavailable:disabled { background: var(--color-surface-lilac); box-shadow: none; color: var(--color-ink-secondary); }
+.taken { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); }
+
+/* Summary bar: floats over the scrolling grid, so it may carry the float shadow. */
+.summary {
+  flex: none;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--margin-screen) calc(var(--tabbar-space) + var(--space-3));
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-float-lg);
+}
+.summaryText { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); text-align: center; }

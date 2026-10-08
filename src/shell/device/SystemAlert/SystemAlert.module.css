@@ -1,0 +1,14 @@
+/* System chrome: SF Pro, iOS geometry. Not product UI. */
+.root { position: absolute; inset: 0; z-index: 70; display: grid; place-items: center; background: rgba(0, 0, 0, 0.32); }
+.dialog { width: 270px; overflow: hidden; border-radius: 14px; background: #f2f2f2; color: #000; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif; text-align: center; }
+.text { padding: 19px 16px 18px; }
+.title { font-size: 17px; font-weight: 500; line-height: 22px; }
+.message { margin-top: 4px; font-size: 13px; line-height: 17px; }
+.buttons { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border-top: 0.5px solid rgba(60, 60, 67, 0.3); }
+.buttons[data-stacked] { grid-auto-flow: row; }
+.button { min-height: 44px; color: #0a66d8; font-size: 17px; }
+.button + .button { border-left: 0.5px solid rgba(60, 60, 67, 0.3); }
+.buttons[data-stacked] .button + .button { border-top: 0.5px solid rgba(60, 60, 67, 0.3); border-left: 0; }
+.button[data-style='cancel'] { font-weight: 500; }
+.button[data-style='destructive'] { color: #d70015; }
+.button:focus-visible { outline: 2px solid #0a66d8; outline-offset: -2px; }

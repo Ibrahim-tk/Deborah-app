@@ -1,0 +1,53 @@
+{
+  "id": "S09",
+  "now": "2026-11-03T16:20:00-08:00",
+  "start": { "kind": "screen", "root": "main", "tab": "ask", "stack": ["M-2.1"] },
+  "state": {
+    "userName": "Maria",
+    "accountId": "acct-maria",
+    "accountEmail": "maria@icloud.com",
+    "consentAcceptedAt": "2026-10-05T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-daughter",
+    "notificationPermission": "granted",
+    "plan": "family",
+    "billing": "monthly",
+    "freeConsultationsUsed": 3,
+    "renewsAt": "2026-11-28T19:30:00-08:00",
+    "followUpSnoozeUntil": 99,
+    "profiles": {
+      "order": ["p-self", "p-daughter"],
+      "byId": {
+        "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "ageBand": "46-50", "conditions": ["none"], "medications": [], "cycle": "irregular" }, "createdAt": "2026-10-05T19:12:00-07:00" },
+        "p-daughter": { "id": "p-daughter", "name": "Sofia", "relationship": "daughter", "dob": "2011-04-14", "sexAtBirth": "female", "intake": { "ageBand": "teen", "conditions": [], "medications": [] }, "createdAt": "2026-10-28T18:05:00-07:00", "guardianConsentAt": "2026-10-28T18:05:00-07:00" }
+      }
+    },
+    "plan90": {
+      "p-self": {
+        "profileId": "p-self",
+        "startDate": "2026-10-08T09:00:00-07:00",
+        "goal": "Calmer nights and steadier energy",
+        "productId": "genesis-gold",
+        "habits": [
+          { "id": "h-1", "text": "Lights out by 10:30pm", "doneDates": ["2026-11-01", "2026-11-02"] },
+          { "id": "h-2", "text": "Protein at breakfast", "doneDates": ["2026-11-02"] }
+        ]
+      },
+      "p-daughter": {
+        "profileId": "p-daughter",
+        "startDate": "2026-10-29T09:00:00-07:00",
+        "goal": "Helping Sofia's cycle find its rhythm",
+        "habits": [
+          { "id": "h-d1", "text": "Steady bedtime, even on weekends", "doneDates": ["2026-10-30", "2026-11-01", "2026-11-02"] },
+          { "id": "h-d2", "text": "Breakfast with some protein", "doneDates": ["2026-11-02"] },
+          { "id": "h-d3", "text": "Keep a simple cycle diary", "doneDates": [] }
+        ]
+      }
+    }
+  },
+  "conversations": {
+    "c-001": { "profileId": "p-self", "scriptId": "hot-flashes-sleep", "messages": "@script:hot-flashes-sleep#answered", "daysAgo": 26, "active": true },
+    "c-d1": { "profileId": "p-daughter", "scriptId": "teen-irregular-periods", "messages": "@script:teen-irregular-periods#answered", "daysAgo": 5 },
+    "c-d2": { "profileId": "p-daughter", "scriptId": "teen-irregular-periods", "messages": "@script:teen-irregular-periods#intake-1", "active": true }
+  }
+}

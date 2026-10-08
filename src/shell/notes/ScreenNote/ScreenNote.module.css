@@ -1,0 +1,46 @@
+/* Prototype chrome: a warm sticky note to the right of the phone. Neutral shell, not product UI. */
+.root {
+  position: absolute;
+  top: 32px;
+  left: calc(50% + 248px);
+  z-index: 10;
+  width: 260px;
+  padding: 14px 16px 12px;
+  border-radius: 4px 4px 4px 14px;
+  background: #fff6c9;
+  color: #3a3320;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 10px 24px rgba(0, 0, 0, 0.08);
+  transform: rotate(0.6deg);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.root[data-collapsed] { width: auto; padding-bottom: 14px; }
+/* Hide when the window is too narrow to fit it beside the phone. */
+@media (max-width: 1040px) { .root { display: none; } }
+
+.head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.toggle { display: grid; gap: 1px; text-align: left; color: inherit; }
+.id { font-size: 11px; font-variant-numeric: tabular-nums; opacity: 0.6; }
+.title { font-size: 14px; font-weight: 500; }
+.reset { font-size: 11px; opacity: 0.6; text-decoration: underline; color: inherit; }
+.reset:hover { opacity: 1; }
+.flow { margin-top: 2px; font-size: 11px; opacity: 0.6; }
+
+.text {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  resize: vertical;
+  field-sizing: content;
+  min-height: 4lh;
+}
+.text:focus { outline: none; }
+.text::placeholder { color: inherit; opacity: 0.45; }
+.hint { margin-top: 8px; font-size: 10.5px; opacity: 0.5; }
+
+.root:focus-within { box-shadow: 0 0 0 2px rgba(10, 102, 216, 0.35), 0 10px 24px rgba(0, 0, 0, 0.08); }

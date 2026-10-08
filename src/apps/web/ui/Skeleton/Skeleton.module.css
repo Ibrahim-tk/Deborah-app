@@ -1,0 +1,4 @@
+.root { display: block; width: var(--sk-w); height: var(--sk-h); background: var(--color-surface-tonal); }
+.md { border-radius: var(--radius-md); }
+.lg { border-radius: var(--radius-lg); }
+.full { border-radius: var(--radius-full); }

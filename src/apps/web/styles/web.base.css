@@ -1,0 +1,53 @@
+/* src/apps/web/styles/web.base.css — app-level base inside the browser viewport (DESIGN.web.md).
+ * The root fills the BrowserFrame viewport (not 100vh) and owns its scroll areas. */
+.web-root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.web-root *,
+.web-root *::before,
+.web-root *::after { box-sizing: border-box; }
+
+.web-root ::selection { background: var(--purple-100); color: var(--purple-900); }
+
+/* Focus ring: 2 px Deborah Purple, 3 px offset (DESIGN.web.md › Buttons). */
+.web-root :focus { outline: none; }
+.web-root :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+.web-root input,
+.web-root textarea { caret-color: var(--color-accent); }
+
+.web-root button,
+.web-root a,
+.web-root [role='button'],
+.web-root label[for],
+.web-root summary { cursor: pointer; }
+.web-root button:disabled { cursor: not-allowed; }
+
+.web-root a { color: var(--color-accent); text-underline-offset: 3px; }
+
+/* Visually hidden but available to assistive tech. */
+.web-root .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Reduced motion (OS setting or the shell's Reduced motion toggle): no movement, short crossfades. */
+@media (prefers-reduced-motion: reduce) {
+  .web-root *, .web-root *::before, .web-root *::after { scroll-behavior: auto !important; }
+}
+html.reduced-motion .web-root *,
+html.reduced-motion .web-root *::before,
+html.reduced-motion .web-root *::after { scroll-behavior: auto !important; }

@@ -57,4 +57,4 @@ Real values now live in `design-tokens/` (see `12-design-system.md`). Use them f
 
 ## 6. Fonts
 
-Decided in `DESIGN.md`: EB Garamond (all reading text, 400/500 + italic), Cormorant Garamond (display, 400 + italic), SF Pro via the system stack for `caption` and `data` only. Self-host the serif families in `public/fonts` (`design-tokens/fonts.css`); no runtime Google Fonts requests. Exact sizes, line heights and the `--type-scale` multiplier are in `design-tokens/mobile.tokens.css`.
+Decided in `DESIGN.md`: SF Pro via the system stack for all reading and UI text (400/500, iOS Dynamic Type sizes), Cormorant Garamond for display roles only (400 + italic). Self-host Cormorant in `public/fonts` (`design-tokens/fonts.css`); SF Pro is not bundled (Apple licence) and falls back to `system-ui`. No runtime Google Fonts requests. Exact sizes, line heights and the `--type-scale` multiplier are in `design-tokens/mobile.tokens.css`.

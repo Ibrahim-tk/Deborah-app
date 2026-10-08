@@ -1,0 +1,32 @@
+.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  align-content: start;
+  gap: var(--space-8);
+  padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8));
+}
+
+.section { display: grid; gap: var(--space-3); }
+.heading { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
+
+/* Read rows sit on a Paper card; ListRow brings its own screen-margin padding, so pull it in. */
+.rows { display: grid; border-radius: var(--radius-lg); background: var(--color-surface); overflow: hidden; }
+.rows.rows > * { padding-inline: var(--space-4); }
+.rows > * + * { border-top: 1px solid var(--color-border-hairline); }
+
+.fields { display: grid; gap: var(--space-5); }
+.group { display: grid; gap: var(--space-2); }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+/* TextArea is bare (composer); give it field styling here. Doubled class beats its own reset. */
+.textField.textField {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+}
+.textField.textField:focus { box-shadow: inset 0 0 0 2px var(--color-border-selected); }

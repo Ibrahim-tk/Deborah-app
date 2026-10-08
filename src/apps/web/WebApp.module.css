@@ -1,0 +1,12 @@
+/* src/apps/web/WebApp.module.css — placeholder until a web spec exists (docs/web/README.md). */
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-8);
+  color: var(--color-ink-secondary);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  text-align: center;
+}

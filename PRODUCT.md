@@ -41,7 +41,7 @@ Consultations in a conversation; follow-up reminders; lab reports uploaded from 
 
 - Name: Your Oracle Clinician (also "Deborah in Your Pocket"). Creator: Deborah Maragopoulos FNP, The Hormone Queen®.
 - Palette: Purple, Gold, Pink, Midnight Purple ramps (50–900), anchors purple #613977, gold #e6c776, pink #cd497f.
-- Typography: Cormorant Garamond (display), EB Garamond (body). SF Pro permitted for small functional text.
+- Typography: Cormorant Garamond (display), SF Pro (body and UI text, iOS Dynamic Type sizes).
 - Voice: warm, wise, plain-spoken — "a brilliant doctor friend".
 - Desired feel: warm, calm, trustworthy, elegant, clinical in its precision, feminine, modern.
 

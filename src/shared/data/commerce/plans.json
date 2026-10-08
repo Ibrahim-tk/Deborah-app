@@ -1,0 +1,5 @@
+[
+  { "id": "individual", "name": "Individual", "monthly": 19, "annual": 190, "features": ["Unlimited consultations", "Deborah's resource library", "Your personal 90-day plan"], "profiles": 1 },
+  { "id": "family", "name": "Family", "monthly": 39, "annual": 390, "features": ["Everything in Individual", "Each person keeps a private history"], "profiles": 5, "recommended": true },
+  { "id": "premium", "name": "Premium", "monthly": 49, "annual": 490, "features": ["Voice input", "Printable summaries", "Deeper protocol guidance"], "profiles": 1 }
+]

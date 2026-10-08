@@ -1,0 +1,95 @@
+{
+  "emergency": {
+    "patterns": [
+      "chest pain",
+      "can't breathe",
+      "cannot breathe",
+      "numb.*arm",
+      "face droop",
+      "slurred",
+      "fainted",
+      "heavy bleeding",
+      "seizure",
+      "suicid.*plan"
+    ],
+    "title": "This could be an emergency.",
+    "body": "Please call 911 now or go to the nearest emergency room. Don't wait.",
+    "status": "placeholder",
+    "acknowledgedReply": "Thank you for letting me know. What would you like to talk about?"
+  },
+  "crisis": {
+    "patterns": [
+      "don't see the point",
+      "want to die",
+      "kill myself",
+      "hurt myself",
+      "end it all"
+    ],
+    "body": "You're not alone. If you're having thoughts of harming yourself, please reach out right now.",
+    "lifeline": {
+      "label": "Call or text 988",
+      "tel": "988"
+    },
+    "status": "placeholder",
+    "gentleReply": "Thank you for telling me. I'm here with you, and we can take this slowly. What's on your mind?",
+    "moreSupport": [
+      "Text HOME to 741741 to reach the Crisis Text Line.",
+      "Talk to someone you trust and tell them how you're feeling.",
+      "If you're in danger right now, call 911."
+    ]
+  },
+  "medication": {
+    "patterns": [
+      "medication",
+      "meds",
+      "prescri",
+      "dose",
+      "dosage",
+      "levothyroxine",
+      "metformin",
+      "hrt",
+      "estradiol",
+      "progesterone cream",
+      "blood pressure pill",
+      "stop taking",
+      "start taking"
+    ],
+    "body": "I can't prescribe or tell you to start or stop a medication. Please check with your prescriber or pharmacist first.",
+    "interactionLink": {
+      "label": "Check interactions on drugs.com",
+      "url": "https://www.drugs.com/drug_interactions.html"
+    },
+    "status": "placeholder"
+  },
+  "outOfScope": {
+    "patterns": [
+      "mri",
+      "x-ray",
+      "broken bone",
+      "my car",
+      "legal advice",
+      "tax"
+    ],
+    "body": "That's outside what I can help with — I focus on hormonal and whole-body health from my clinical work. Your provider is the right person for this.",
+    "status": "placeholder"
+  },
+  "escalation": {
+    "triggers": {
+      "unresolvedConsultations": 3,
+      "phrases": [
+        "tried everything",
+        "nothing is working",
+        "nothing is changing"
+      ]
+    },
+    "body": "It sounds like your situation deserves a personal look. I'd like you to talk with me directly.",
+    "status": "placeholder"
+  },
+  "testPhrases": {
+    "emergency": "I have chest pain and my left arm feels numb.",
+    "medication": "Should I stop taking my levothyroxine?",
+    "crisis": "Some days I don't see the point anymore.",
+    "outOfScope": "Can you look at my MRI results?",
+    "escalation": "I've tried everything and nothing is working."
+  }
+}

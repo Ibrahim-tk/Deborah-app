@@ -1,0 +1,4 @@
+.root { display: grid; justify-items: center; gap: var(--space-3); padding: var(--space-8) 0 var(--space-6); text-align: center; }
+.line { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; }
+.question { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-secondary); }
+.continue { width: 100%; margin-top: var(--space-4); text-align: left; }

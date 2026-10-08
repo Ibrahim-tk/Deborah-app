@@ -1,0 +1,14 @@
+[
+  { "marker": "TSH", "unit": "mIU/L" },
+  { "marker": "Free T3", "unit": "pg/mL" },
+  { "marker": "Free T4", "unit": "ng/dL" },
+  { "marker": "Estradiol", "unit": "pg/mL" },
+  { "marker": "Progesterone", "unit": "ng/mL" },
+  { "marker": "DHEA-S", "unit": "µg/dL" },
+  { "marker": "HbA1c", "unit": "%" },
+  { "marker": "Ferritin", "unit": "ng/mL" },
+  { "marker": "Vitamin D", "unit": "ng/mL" },
+  { "marker": "Cortisol (morning)", "unit": "µg/dL" },
+  { "marker": "Testosterone", "unit": "ng/dL" },
+  { "marker": "FSH", "unit": "mIU/mL" }
+]

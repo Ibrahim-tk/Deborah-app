@@ -1,0 +1,73 @@
+/* Neutral prototype chrome — never product UI (docs/03-prototype-shell.md). */
+.root {
+  --shell-bg: #f2f2f4;
+  --shell-nav: #ffffff;
+  --shell-panel: #ffffff;
+  --shell-text: #1d1d1f;
+  --shell-muted: #6e6e73;
+  --shell-border: #d2d2d7;
+  --shell-hover: #f0f0f3;
+  --shell-selected: #e8eefc;
+  --shell-accent: #0a66d8;
+
+  position: fixed;
+  inset: 0;
+  background: var(--shell-bg);
+  color: var(--shell-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+}
+
+.root[data-theme='dark'] {
+  --shell-bg: #1d1d1f;
+  --shell-nav: #2a2a2d;
+  --shell-panel: #2c2c2f;
+  --shell-text: #f5f5f7;
+  --shell-muted: #a1a1a6;
+  --shell-border: #3d3d41;
+  --shell-hover: #38383c;
+  --shell-selected: #233a5e;
+  --shell-accent: #4c9bff;
+}
+
+/* The page never scrolls; the stage fills everything below the 56 px nav. */
+.stage {
+  position: absolute;
+  inset: 56px 0 0 0;
+  overflow: hidden;
+}
+
+.fullBleed {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+  background: #ffffff;
+}
+
+.caption {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  z-index: 10;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--shell-text);
+  opacity: 0.6;
+}
+
+button.caption:hover { opacity: 1; text-decoration: underline; }
+button.caption:focus-visible { opacity: 1; outline: 2px solid var(--shell-accent); outline-offset: 2px; }
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1100;
+  max-width: min(480px, calc(100vw - 32px));
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #1d1d1f;
+  color: #f5f5f7;
+  font-size: 13px;
+  border: 1px solid var(--shell-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}

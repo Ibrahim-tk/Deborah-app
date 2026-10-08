@@ -1,0 +1,12 @@
+/* src/styles/index.css — global entry, imported once by src/main.tsx. Order matters. */
+@import './reset.css';
+@import './fonts.css';
+@import './tokens.primitives.css';
+@import './motion.css';
+
+/* Shell backdrop: neutral prototype chrome, not product UI. */
+body {
+  background: #e9e7ec;
+  color: #1d1b20;
+  font-family: var(--font-ui);
+}

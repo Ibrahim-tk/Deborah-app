@@ -7,7 +7,7 @@ The design system itself lives in **`/DESIGN.md`** (Impeccable / DESIGN.md forma
 | From this bundle | To | Purpose |
 |---|---|---|
 | `design-tokens/tokens.primitives.css` | `src/styles/tokens.primitives.css` | Brand ramps, semantic additions, families, spacing, radius, motion |
-| `design-tokens/fonts.css` | `src/styles/fonts.css` | Self-hosted EB Garamond + Cormorant Garamond |
+| `design-tokens/fonts.css` | `src/styles/fonts.css` | Self-hosted Cormorant Garamond (SF Pro via the system stack) |
 | `design-tokens/mobile.tokens.css` | `src/apps/mobile/styles/mobile.tokens.css` | Semantic tokens, type scale with `--type-scale`, role classes |
 | `DESIGN.md`, `PRODUCT.md`, `.impeccable/design.json` | project root | Read by Claude Code and the Impeccable skill |
 
@@ -23,7 +23,7 @@ Put `class="phone-root"` on the root element of `MobileApp` inside the emulator.
 | Pink | Deborah's personal accent only (pink-700 as text) |
 | Semantic colours | Added muted red, green and amber, all ≥ 7:1 |
 | Dark mode | Not in v1 |
-| Fonts | EB Garamond for all reading text, sized up; Cormorant for display; SF Pro only for 13 pt labels and numbers |
+| Fonts | SF Pro for all reading and UI text at iOS Dynamic Type sizes; Cormorant Garamond for display roles only |
 | Body size | 19 px / 30 px |
 | Weights | 400 everywhere; 500 only on buttons, answer section titles, selected options, list row titles |
 | Text size | In-app control (0.9–1.3×); native build also follows iOS Dynamic Type |

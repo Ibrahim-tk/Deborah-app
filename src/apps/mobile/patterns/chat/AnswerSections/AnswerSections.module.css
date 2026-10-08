@@ -1,0 +1,27 @@
+.root { display: grid; }
+.tools { display: flex; justify-content: flex-end; margin-bottom: var(--space-1); }
+
+.section { border-top: 1px solid var(--color-border-hairline); }
+.section:last-child { border-bottom: 1px solid var(--color-border-hairline); }
+.section[data-pending] { opacity: 0.55; }
+
+.header { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: var(--row-min); padding: var(--space-3) 0; color: var(--color-ink); text-align: left; }
+.header:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-radius: var(--radius-sm); }
+.header:disabled { cursor: default; }
+
+.number { flex: none; width: 24px; font: var(--weight-regular) var(--fs-title-2) / 1 var(--font-display); color: var(--color-gold-ink); }
+.title { flex: 1; font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
+.chevron { flex: none; color: var(--color-ink-secondary); transition: transform var(--dur-base) var(--ease-out); }
+.header[aria-expanded='true'] .chevron { transform: rotate(180deg); }
+
+.content { display: grid; gap: var(--space-4); padding: 0 0 var(--space-5); }
+.body, .wordBody { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; }
+.wordBody { font-style: italic; }
+.signoff { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-deborah-rose); }
+
+.bullets { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.bullet { display: flex; align-items: flex-start; gap: var(--space-2); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); }
+.bullet::before { content: ''; flex: none; width: 8px; height: 8px; margin-top: calc(var(--lh-body) / 2 - 4px); border-radius: var(--radius-full); background: var(--color-accent); }
+.bulletText { flex: 1; min-width: 0; }
+.bullet em { font-style: italic; }
+.labsNote { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }

@@ -1,0 +1,88 @@
+/*
+ * Tonal cards. Each destination is a flat colour field (lilac · linen · rose) at --radius-card,
+ * with a big Cormorant title, plain-text meta and one dark round action in the bottom-right.
+ * They scroll, so no shadows (DESIGN.md: only floating things cast shadows) and no rims.
+ */
+.hero, .photo, .row { -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
+.hero:active, .photo:active, .row:active { transform: scale(0.98); }
+.hero:focus-visible, .photo:focus-visible, .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .hero:active, .photo:active, .row:active { transform: none; } }
+
+/* Hero: the one signature (midnight) surface on Home, so "Ask Deborah" reads first. */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  min-height: 96px;
+  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-signature);
+  color: var(--color-ink-on-signature);
+  text-align: left;
+}
+.heroText { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.heroTitle { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; }
+.heroHint { overflow: hidden; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-on-signature); opacity: 0.85; text-overflow: ellipsis; white-space: nowrap; }
+/* Inverted action on the dark hero: light circle, dark arrow. */
+.heroGo { display: grid; place-items: center; flex: none; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); background: var(--color-ink-on-signature); color: var(--color-surface-signature); }
+
+/* Destination cards: tone field + a faint photo wash for texture (kept ≤ 0.18 so text stays ≥ 7:1). */
+.photo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+  text-align: left;
+}
+.photo::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  background: var(--card-bg) var(--crop) / 260% auto no-repeat;
+  filter: blur(28px) saturate(80%) hue-rotate(var(--hue));
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+}
+.lilac { background: var(--card-tone-lilac); }
+.linen { background: var(--card-tone-linen); }
+.rose { background: var(--card-tone-rose); }
+
+.wide { min-height: 184px; }
+.square { aspect-ratio: 1 / 1.08; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5); }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+
+.title { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.015em; text-wrap: balance; }
+.square .title { font-size: var(--fs-title-1); line-height: var(--lh-title-1); }
+.foot { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
+.sub { min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+/* The single action: dark round button, the only high-contrast mark on the card. */
+.go { display: grid; place-items: center; flex: none; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }
+.square .go { width: 40px; height: 40px; }
+
+/* My info: quiet Paper row, hairline only. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-min);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-card);
+  background: var(--card-tone-paper);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+  color: var(--color-ink);
+  text-align: left;
+}
+.rowLabel { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.rowHint { flex: 1; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-tertiary); text-align: right; }
+.chev { flex: none; color: var(--color-ink-tertiary); }

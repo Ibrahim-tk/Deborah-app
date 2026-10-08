@@ -1,0 +1,39 @@
+/*
+ * Dev-toggle overlays (docs/03-prototype-shell.md §4). Global on purpose: they decorate app DOM.
+ * Apps opt in with attributes: data-placeholder on text from JSON with status "placeholder",
+ * data-xref="M-2.1 · Conversation" on screen and pattern roots.
+ */
+html.highlight-placeholders [data-placeholder] {
+  outline: 2px dashed #d08700;
+  outline-offset: 2px;
+}
+
+html.highlight-placeholders [data-placeholder]:hover::after {
+  content: 'Placeholder — needs Deborah’s approval';
+  position: absolute;
+  z-index: 70;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #1d1d1f;
+  color: #ffffff;
+  font: 400 12px/1.3 -apple-system, system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+html.show-ids [data-xref]:hover {
+  outline: 1px dashed #0a66d8;
+  outline-offset: -1px;
+}
+
+html.show-ids [data-xref]:hover::before {
+  content: attr(data-xref);
+  position: absolute;
+  z-index: 70;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #0a66d8;
+  color: #ffffff;
+  font: 400 11px/1.4 -apple-system, system-ui, sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
+}

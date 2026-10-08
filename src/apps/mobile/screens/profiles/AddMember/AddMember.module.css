@@ -1,0 +1,4 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-5); }
+.notice { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.hint { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

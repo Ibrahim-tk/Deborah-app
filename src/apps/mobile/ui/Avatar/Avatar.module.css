@@ -1,0 +1,14 @@
+.root {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-lilac);
+  color: var(--color-ink);
+}
+.ring { box-shadow: 0 0 0 2px var(--color-gold); }
+.image { width: 100%; height: 100%; object-fit: cover; }
+.initial { font: var(--weight-regular) calc(var(--avatar-size) * 0.55) / 1 var(--font-display); }

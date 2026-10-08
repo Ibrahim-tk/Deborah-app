@@ -1,0 +1,10 @@
+.root { display: flex; flex-direction: column; height: 100%; }
+.profile { display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); padding: 0 var(--space-2); border-radius: var(--radius-full); color: var(--color-ink-secondary); }
+.profile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+.column { display: grid; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6)); }
+
+/* Pull-to-refresh: visual only. Height follows the drag; settles while "refreshing". */
+.refresh { display: grid; place-items: center; height: var(--pull, 0); overflow: hidden; color: var(--color-accent); transition: height var(--dur-base) var(--ease-out); }
+.refresh[data-active] { transition: none; }

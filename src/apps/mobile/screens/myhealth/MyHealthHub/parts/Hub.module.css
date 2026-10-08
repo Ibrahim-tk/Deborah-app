@@ -1,0 +1,5 @@
+.stack { display: grid; gap: var(--space-4); }
+.section { display: grid; gap: var(--space-3); }
+.heading { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.list { display: grid; gap: var(--space-3); }
+.rowGroup { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }

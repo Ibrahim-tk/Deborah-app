@@ -1,0 +1,19 @@
+.root { display: flex; flex-wrap: wrap; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-md); background: var(--color-surface-tonal); }
+
+.segment {
+  /* At large text sizes segments wrap to a second row instead of overflowing (DESIGN.md › Text size control). */
+  flex: 1 1 auto;
+  /* 48 pt touch target (DESIGN.md › Layout); rows grow at larger text sizes. */
+  min-height: var(--tap-min);
+  padding: var(--space-1) var(--space-2);
+  border-radius: calc(var(--radius-md) - 4px);
+  color: var(--color-ink-secondary);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+}
+.segment[aria-selected='true'] {
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+  color: var(--color-ink);
+  font-weight: var(--weight-medium);
+}
+.segment:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }

@@ -1,0 +1,2 @@
+.root { display: grid; gap: var(--space-3); }
+.body { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; }

@@ -1,0 +1,4 @@
+.root { display: grid; justify-items: center; gap: var(--space-3); padding: var(--space-8) var(--space-5); border-radius: var(--radius-lg); background: var(--color-surface-tonal); text-align: center; }
+.icon { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--color-surface); color: var(--color-accent); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.text { max-width: 30ch; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }

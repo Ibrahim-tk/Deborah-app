@@ -1,0 +1,19 @@
+/* apps/mobile/styles/mobile.base.css — app-level base inside the phone (docs/09-styling.md §4). */
+.phone-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-size: 16px;
+  font-family: var(--font-body);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.phone-root * {
+  scrollbar-width: none;
+}
+
+.phone-root *::-webkit-scrollbar {
+  display: none;
+}

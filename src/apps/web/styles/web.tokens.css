@@ -1,0 +1,87 @@
+/* src/apps/web/styles/web.tokens.css — semantic tokens for the desktop web app. Components use ONLY these.
+ * Source: DESIGN.web.md (inherits DESIGN.md). Colour values mirror apps/mobile/styles/mobile.tokens.css
+ * by name and value but are declared here on purpose: the apps never share token files (docs/12 §6). */
+.web-root {
+  /* Surfaces */
+  --color-canvas: var(--gold-50);              /* Parchment */
+  --color-surface: var(--white);               /* Paper */
+  --color-surface-tonal: var(--gold-100);      /* Linen */
+  --color-surface-lilac: var(--purple-50);     /* Lilac Mist: user bubbles, secondary, selected, active nav */
+  --color-surface-signature: var(--midnight-500);
+  --color-scrim: rgba(18, 7, 33, 0.40);
+
+  /* Text */
+  --color-ink: var(--purple-900);              /* 15.7:1 */
+  --color-ink-secondary: var(--purple-600);    /* 9.4:1 */
+  --color-ink-tertiary: var(--purple-500);     /* 8.5:1 metadata */
+  --color-ink-placeholder: var(--purple-400);  /* 4.9:1 placeholders only */
+  --color-ink-on-accent: var(--white);
+  --color-ink-on-signature: var(--gold-50);
+
+  /* Action */
+  --color-accent: var(--purple-500);
+  --color-accent-pressed: var(--purple-600);
+  --color-accent-tint: var(--purple-50);
+  --color-accent-tint-pressed: var(--purple-100);
+  --color-focus: var(--purple-500);
+
+  /* Borders */
+  --color-border-hairline: var(--purple-100);
+  --color-border-control: var(--purple-300);
+  --color-border-selected: var(--purple-500);
+
+  /* Brand roles */
+  --color-gold: var(--gold-500);               /* Deborah signature only */
+  --color-gold-ink: var(--gold-900);           /* #615432 — gold as text; large text only on Linen */
+  --color-deborah-rose: var(--pink-700);       /* Deborah's sign-off only */
+
+  /* Semantic */
+  --color-danger-ink: var(--red-ink); --color-danger-tint: var(--red-tint);
+  --color-danger-border: var(--red-border); --color-danger-fill: var(--red-fill);
+  --color-success-ink: var(--green-ink); --color-success-tint: var(--green-tint);
+  --color-warning-ink: var(--amber-ink); --color-warning-tint: var(--amber-tint);
+
+  /* Desktop type scale (DESIGN.web.md › Typography). Browser zoom replaces the in-app text size. */
+  --fs-display: 44px;  --lh-display: 52px;
+  --fs-title-1: 34px;  --lh-title-1: 40px;
+  --fs-title-2: 28px;  --lh-title-2: 34px;
+  --fs-title-3: 20px;  --lh-title-3: 26px;
+  --fs-headline: 17px; --lh-headline: 24px;
+  --fs-body: 17px;     --lh-body: 26px;
+  --fs-callout: 16px;  --lh-callout: 24px;
+  --fs-button: 16px;   --lh-button: 22px;
+  --fs-subhead: 15px;  --lh-subhead: 22px;
+  --fs-footnote: 13px; --lh-footnote: 18px;
+  --fs-caption: 13px;  --lh-caption: 18px;
+  --fs-data: 15px;     --lh-data: 20px;
+  --weight-regular: 400;
+  --weight-medium: 500;          /* ceiling — never exceed */
+
+  /* Layout */
+  --sidebar-w: 264px;
+  --context-w: 320px;
+  --reading-max: 720px;
+  --chat-max: 760px;
+  --page-max: 1120px;
+  --page-pad: 32px;
+  --section-gap: 48px;
+  --grid-gutter: 24px;
+  --control-h: 44px;
+  --control-h-lg: 48px;
+  --row-min: 48px;
+  --nav-row-h: 44px;
+
+  /* Elevation (floating elements only) */
+  --shadow-float-sm: 0 2px 8px rgba(43, 16, 78, 0.08);
+  --shadow-float-md: 0 8px 24px rgba(43, 16, 78, 0.10), 0 1px 3px rgba(43, 16, 78, 0.08);
+  --shadow-float-lg: 0 16px 48px rgba(43, 16, 78, 0.16), 0 2px 6px rgba(43, 16, 78, 0.08);
+
+  /* Layering inside the web root */
+  --z-sticky: 10;
+  --z-overlay: 100;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .web-root { --dur-quick: 0ms; --dur-base: 120ms; --dur-screen: 120ms; --dur-sheet: 120ms; }
+}
+html.reduced-motion .web-root { --dur-quick: 0ms; --dur-base: 120ms; --dur-screen: 120ms; --dur-sheet: 120ms; }

@@ -1,0 +1,18 @@
+.root { position: relative; display: flex; flex-direction: column; height: 100%; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+/* 24 pt between turns, 12 pt within a turn (bubbles set their own internal gap). */
+/* Top padding clears the floating glass header (safe area + 40 pt controls + breathing room). */
+.column { display: grid; gap: var(--space-6); padding: calc(var(--safe-top) + 64px) var(--margin-screen) var(--space-6); }
+.cta { display: grid; }
+
+.bottom {
+  position: relative;
+  flex: none;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-3));
+  background: linear-gradient(to bottom, transparent, var(--color-canvas) var(--space-4));
+}
+.bench { display: grid; gap: var(--space-2); padding: var(--space-3); border: 1px dashed var(--color-border-control); border-radius: var(--radius-lg); }
+.benchLabel { justify-self: start; min-height: 32px; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); letter-spacing: 0.04em; color: var(--color-ink-tertiary); }

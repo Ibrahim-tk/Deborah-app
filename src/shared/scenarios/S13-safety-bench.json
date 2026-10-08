@@ -1,0 +1,21 @@
+{
+  "id": "S13",
+  "now": "2026-10-08T10:15:00-07:00",
+  "start": { "kind": "screen", "root": "main", "tab": "ask", "stack": ["M-2.1"] },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 1,
+    "followUpSnoozeUntil": 4,
+    "qa": { "safetyBench": true },
+    "profiles": {
+      "order": ["p-self"],
+      "byId": { "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "ageBand": "46-50", "conditions": ["none"], "medications": [], "cycle": "irregular" }, "createdAt": "2026-10-07T19:12:00-07:00" } }
+    }
+  },
+  "conversations": {
+    "c-001": { "profileId": "p-self", "scriptId": "hot-flashes-sleep", "messages": "@script:hot-flashes-sleep#answered", "daysAgo": 1 }
+  }
+}

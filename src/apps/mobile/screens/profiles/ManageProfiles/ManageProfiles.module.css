@@ -1,0 +1,44 @@
+.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8));
+}
+
+.count, .note { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+.rows { display: grid; border-radius: var(--radius-lg); background: var(--color-surface); overflow: hidden; }
+.rows > li + li { border-top: 1px solid var(--color-border-hairline); }
+.rows.rows button { padding-inline: var(--space-4); }
+
+/* Same dashed "slot" row as the switcher (M-6.1); the plan lock is plain text, never a badge. */
+.add {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-min);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--color-border-control);
+  border-radius: var(--radius-lg);
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.add:active:not(:disabled) { background: var(--color-accent-tint); }
+.add:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.add:disabled { cursor: default; color: var(--color-ink-secondary); }
+.addLabel { flex: 1; min-width: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.lock {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}

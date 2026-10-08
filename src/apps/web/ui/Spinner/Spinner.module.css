@@ -1,0 +1,20 @@
+.root {
+  display: inline-block;
+  flex: none;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--radius-full);
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Reduced motion: a slower turn still signals progress without sweeping movement. */
+@media (prefers-reduced-motion: reduce) {
+  .root { animation-duration: 2400ms; }
+}
+:global(html.reduced-motion) .root { animation-duration: 2400ms; }

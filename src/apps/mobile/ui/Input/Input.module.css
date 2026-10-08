@@ -1,0 +1,35 @@
+.root { display: grid; gap: var(--space-2); }
+
+.label {
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
+
+.field {
+  width: 100%;
+  min-height: var(--button-h);
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+  color: var(--color-ink);
+  transition: box-shadow var(--dur-quick) var(--ease-out);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  outline: none;
+}
+
+.field::placeholder { color: var(--color-ink-placeholder); }
+/* One focus ring only: beat the global .phone-root :focus-visible outline (it doubled the ring). */
+.root .field:focus, .root .field:focus-visible { box-shadow: inset 0 0 0 1.5px var(--color-border-selected); outline: none; }
+.root .invalid, .root .invalid:focus { box-shadow: inset 0 0 0 2px var(--color-danger-border); }
+
+.error, .hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+}
+.error { color: var(--color-danger-ink); }
+.hint { color: var(--color-ink-secondary); }

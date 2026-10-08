@@ -1,0 +1,49 @@
+.root { display: grid; gap: var(--space-2); }
+
+/* One seamless white container; rows are compact and only the selected one takes a fill. */
+.list { margin: 0; padding: 6px; list-style: none; display: grid; gap: 2px; border-radius: var(--radius-lg); background: var(--color-surface); }
+
+.row {
+  position: relative;
+  width: 100%;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  text-align: left;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+.row:hover { background: rgb(239 235 241 / 0.5); }
+.row:active, .row[data-on] { background: var(--color-surface-lilac); }
+.row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+
+/* "Other" becomes a field in place: same row box, no border, caret instead of outline. */
+input.row { border: 0; outline: none; cursor: text; }
+input.row::placeholder { color: var(--color-ink-tertiary); }
+
+.foot { display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-1); }
+.step { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-tertiary); }
+.skip {
+  position: relative;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.skip::after { content: ''; position: absolute; inset: -14px -8px; }
+.skip:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+.done {
+  position: relative;
+  margin-left: auto;
+  padding: 4px var(--space-1);
+  font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-accent);
+}
+.done::after { content: ''; position: absolute; inset: -10px -8px; }
+.done:disabled { color: var(--color-ink-tertiary); opacity: 0.6; cursor: default; }
+.done:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: var(--radius-sm); }

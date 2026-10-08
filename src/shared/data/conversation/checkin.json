@@ -1,0 +1,25 @@
+{
+  "opening": "Welcome back, {name}. Last time we talked about {topic}. Did you get a chance to try what we discussed?",
+  "openingNoTopic": "Welcome back, {name}. Did you get a chance to try what we discussed last time?",
+  "options": [
+    { "id": "yes", "label": "Yes" },
+    { "id": "partly", "label": "Partly" },
+    { "id": "notYet", "label": "Not yet" }
+  ],
+  "replies": {
+    "yes": "That's wonderful, {name}. Small, steady changes are exactly how your body learns to settle again.",
+    "partly": "That's completely normal — most of us manage some of it, some of the time. What got in the way?",
+    "partlyFollowUp": "Thank you for telling me. We can make the next steps smaller so they fit the life you actually have.",
+    "notYet": "No guilt at all, {name}. Life gets full. Would you like to restart your 90-day plan, or tell me what's been hard?",
+    "labsNotYet": "That's fine. Whenever you have them, tap + next to the message box and I'll take a look.",
+    "restartPlan": "Let's begin again, gently. I've opened your 90-day plan.",
+    "talk": "I'm listening. What's been the hardest part lately?"
+  },
+  "labRequest": "Did you have a chance to get your labs done? If you have the results, I'd love to look at them with you.",
+  "labRequestNotYet": { "id": "labsNotYet", "label": "Not yet" },
+  "notYetOptions": [
+    { "id": "restartPlan", "label": "Restart my 90-day plan" },
+    { "id": "talk", "label": "Talk about what's hard" }
+  ],
+  "status": "placeholder"
+}

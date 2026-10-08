@@ -1,0 +1,64 @@
+{
+  "id": "S08",
+  "now": "2026-11-12T09:30:00-08:00",
+  "start": { "kind": "screen", "root": "main", "tab": "health", "stack": ["M-7.2"] },
+  "state": {
+    "userName": "Maria",
+    "accountId": "acct-maria",
+    "accountEmail": "maria@icloud.com",
+    "consentAcceptedAt": "2026-10-05T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "notificationPermission": "granted",
+    "plan": "individual",
+    "billing": "monthly",
+    "freeConsultationsUsed": 3,
+    "renewsAt": "2026-12-07T19:30:00-08:00",
+    "followUpSnoozeUntil": 99,
+    "profiles": {
+      "order": ["p-self"],
+      "byId": { "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "ageBand": "46-50", "conditions": ["none"], "medications": [], "cycle": "irregular" }, "createdAt": "2026-10-05T19:12:00-07:00" } }
+    },
+    "labs": {
+      "reportsById": {
+        "lab-001": {
+          "id": "lab-001", "profileId": "p-self", "source": "photo", "labName": "Sample Lab", "collectedAt": "2026-10-20T12:00:00-07:00", "confirmed": true,
+          "values": [
+            { "id": "lv-1", "marker": "TSH", "value": "3.8", "unit": "mIU/L" },
+            { "id": "lv-2", "marker": "Free T3", "value": "2.4", "unit": "pg/mL" },
+            { "id": "lv-3", "marker": "Estradiol", "value": "45", "unit": "pg/mL" }
+          ]
+        }
+      }
+    },
+    "plan90": {
+      "p-self": {
+        "profileId": "p-self",
+        "startDate": "2026-10-26T09:00:00-07:00",
+        "goal": "Calmer nights and steadier energy",
+        "productId": "genesis-gold",
+        "productStartDate": "2026-10-26T09:00:00-07:00",
+        "habits": [
+          { "id": "h-1", "text": "Lights out by 10:30pm", "doneDates": ["2026-11-06", "2026-11-07", "2026-11-09", "2026-11-10", "2026-11-11"] },
+          { "id": "h-2", "text": "Protein at breakfast", "doneDates": ["2026-11-07", "2026-11-08", "2026-11-11"] },
+          { "id": "h-3", "text": "Ten-minute evening wind-down", "doneDates": ["2026-11-10"] }
+        ]
+      }
+    },
+    "notes": {
+      "byId": {
+        "n-001": { "id": "n-001", "profileId": "p-self", "kind": "questions", "title": "Questions for my next visit", "body": "• Could my thyroid explain the fatigue?\n• Should we recheck free T3 in three months?", "updatedAt": "2026-11-02T18:20:00-08:00" }
+      }
+    },
+    "notifications": {
+      "queue": [
+        { "id": "n-2", "title": "Your Oracle Clinician", "body": "Deborah: How are you feeling this week?", "deepLink": "followup:p-self", "deliverAt": "2026-11-16T09:00:00-08:00", "delivered": false, "read": false }
+      ],
+      "followUp": { "p-self": { "enabled": true, "intervalDays": 14 } }
+    }
+  },
+  "conversations": {
+    "c-001": { "profileId": "p-self", "scriptId": "hot-flashes-sleep", "messages": "@script:hot-flashes-sleep#answered", "daysAgo": 38 },
+    "c-002": { "profileId": "p-self", "scriptId": "lab-review", "messages": "@script:lab-review#answered", "daysAgo": 17, "active": true }
+  }
+}

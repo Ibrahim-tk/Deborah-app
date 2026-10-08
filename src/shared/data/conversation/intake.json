@@ -1,0 +1,140 @@
+{
+  "questions": [
+    {
+      "id": "age",
+      "prompt": "I hear you, {name}. A few quick questions so I can understand what's going on. How old are you?",
+      "options": [
+        {
+          "id": "under-40",
+          "label": "Under 40"
+        },
+        {
+          "id": "40-45",
+          "label": "40–45"
+        },
+        {
+          "id": "46-50",
+          "label": "46–50"
+        },
+        {
+          "id": "51-55",
+          "label": "51–55"
+        },
+        {
+          "id": "56+",
+          "label": "56+"
+        }
+      ],
+      "multi": false,
+      "profileField": "intake.ageBand",
+      "skipIfKnown": true,
+      "layout": "grid2"
+    },
+    {
+      "id": "meds",
+      "prompt": "Thank you. Are you taking any medications, or do you have any diagnosed conditions?",
+      "options": [
+        {
+          "id": "none",
+          "label": "None"
+        },
+        {
+          "id": "thyroid",
+          "label": "Thyroid"
+        },
+        {
+          "id": "blood-pressure",
+          "label": "Blood pressure"
+        },
+        {
+          "id": "hrt",
+          "label": "HRT / hormones"
+        },
+        {
+          "id": "other",
+          "label": "Other…"
+        }
+      ],
+      "multi": true,
+      "profileField": "intake.conditions",
+      "skipIfKnown": true,
+      "layout": "list"
+    },
+    {
+      "id": "cycle",
+      "prompt": "And how would you describe your cycle right now?",
+      "options": [
+        {
+          "id": "regular",
+          "label": "Regular"
+        },
+        {
+          "id": "irregular",
+          "label": "Irregular"
+        },
+        {
+          "id": "stopped",
+          "label": "Stopped"
+        },
+        {
+          "id": "unknown",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "intake.cycle",
+      "skipIfKnown": true,
+      "layout": "grid2"
+    },
+    {
+      "id": "teen-onset",
+      "prompt": "I hear you. A couple of quick questions about {name}. How long has {name} been having periods?",
+      "options": [
+        {
+          "id": "under-1y",
+          "label": "Less than a year"
+        },
+        {
+          "id": "1-2y",
+          "label": "1–2 years"
+        },
+        {
+          "id": "over-2y",
+          "label": "More than 2 years"
+        },
+        {
+          "id": "not-started",
+          "label": "Not started yet"
+        }
+      ],
+      "multi": false,
+      "profileField": "intake.onset",
+      "skipIfKnown": true,
+      "layout": "list"
+    },
+    {
+      "id": "teen-regularity",
+      "prompt": "Thank you. How would you describe {name}'s cycle right now?",
+      "options": [
+        {
+          "id": "regular",
+          "label": "Regular"
+        },
+        {
+          "id": "irregular",
+          "label": "Irregular"
+        },
+        {
+          "id": "unknown",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "intake.cycle",
+      "skipIfKnown": true,
+      "layout": "grid2"
+    }
+  ],
+  "maxQuestions": 3,
+  "status": "placeholder"
+}

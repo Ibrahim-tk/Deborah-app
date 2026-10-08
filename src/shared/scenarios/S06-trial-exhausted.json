@@ -1,0 +1,22 @@
+{
+  "id": "S06",
+  "now": "2026-10-20T19:30:00-07:00",
+  "start": { "kind": "screen", "root": "main", "tab": "ask", "stack": ["M-2.1"], "sheet": "M-4.1" },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-01T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 3,
+    "followUpSnoozeUntil": 6,
+    "profiles": {
+      "order": ["p-self"],
+      "byId": { "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "ageBand": "46-50", "conditions": ["none"], "medications": [], "cycle": "irregular" }, "createdAt": "2026-10-01T19:12:00-07:00" } }
+    }
+  },
+  "conversations": {
+    "c-001": { "profileId": "p-self", "scriptId": "sleep-3am", "messages": "@script:sleep-3am#answered", "daysAgo": 16 },
+    "c-002": { "profileId": "p-self", "scriptId": "thyroid-fatigue", "messages": "@script:thyroid-fatigue#answered", "daysAgo": 10 },
+    "c-003": { "profileId": "p-self", "scriptId": "hot-flashes-sleep", "messages": "@script:hot-flashes-sleep#answered", "daysAgo": 2 }
+  }
+}

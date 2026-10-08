@@ -1,0 +1,20 @@
+.root { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-1); }
+.day {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-height: 64px;
+  padding: var(--space-2) 0;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  color: var(--color-ink);
+  transition: background-color var(--dur-quick) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.day:active { background: var(--color-accent-tint); }
+.day:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.selected { background: var(--color-surface-lilac); box-shadow: inset 0 0 0 2px var(--color-border-selected); }
+.weekday { font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); color: var(--color-ink-secondary); }
+.date { font: var(--weight-regular) var(--fs-data) / var(--lh-data) var(--font-ui); font-variant-numeric: tabular-nums; }
+.selected .date { font-weight: var(--weight-medium); }

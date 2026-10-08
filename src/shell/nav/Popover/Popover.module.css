@@ -1,0 +1,39 @@
+.root { position: relative; }
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--shell-border);
+  border-radius: 8px;
+  background: var(--shell-panel);
+  color: var(--shell-text);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.trigger:hover { background: var(--shell-hover); }
+.trigger[aria-expanded='true'] { border-color: var(--shell-accent); }
+.trigger:focus-visible { outline: 2px solid var(--shell-accent); outline-offset: 2px; }
+
+.panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  z-index: 1000;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--shell-border);
+  border-radius: 12px;
+  background: var(--shell-panel);
+  color: var(--shell-text);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+.panel[data-align='end'] { right: 0; }
+.panel[data-align='start'] { left: 0; }
+.panel[data-width='sm'] { width: 240px; }
+.panel[data-width='md'] { width: 300px; }
+.panel[data-width='lg'] { width: 380px; }

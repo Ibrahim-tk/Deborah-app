@@ -1,0 +1,3 @@
+.body { display: grid; justify-items: start; gap: var(--space-3); padding-top: var(--space-2); }
+.title { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }

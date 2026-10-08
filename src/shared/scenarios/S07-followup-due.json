@@ -1,0 +1,33 @@
+{
+  "id": "S07",
+  "now": "2026-10-21T09:41:00-07:00",
+  "start": { "kind": "lockScreen" },
+  "state": {
+    "userName": "Maria",
+    "accountId": "acct-maria",
+    "accountEmail": "maria@icloud.com",
+    "consentAcceptedAt": "2026-10-05T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "isLocked": true,
+    "notificationPermission": "granted",
+    "plan": "individual",
+    "billing": "monthly",
+    "freeConsultationsUsed": 3,
+    "renewsAt": "2026-11-07T19:30:00-07:00",
+    "followUpSnoozeUntil": 99,
+    "profiles": {
+      "order": ["p-self"],
+      "byId": { "p-self": { "id": "p-self", "name": "Maria", "relationship": "self", "intake": { "ageBand": "46-50", "conditions": ["none"], "medications": [], "cycle": "irregular" }, "createdAt": "2026-10-05T19:12:00-07:00" } }
+    },
+    "notifications": {
+      "queue": [
+        { "id": "n-1", "title": "Your Oracle Clinician", "body": "Deborah: How are you feeling this week?", "deepLink": "followup:p-self", "deliverAt": "2026-10-21T16:00:00.000Z", "delivered": true, "read": false }
+      ],
+      "followUp": { "p-self": { "enabled": true, "intervalDays": 14 } }
+    }
+  },
+  "conversations": {
+    "c-001": { "profileId": "p-self", "scriptId": "hot-flashes-sleep", "messages": "@script:hot-flashes-sleep#answered", "daysAgo": 14, "active": true }
+  }
+}

@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--safe-top) var(--space-10) calc(var(--safe-bottom) + var(--space-6));
+  position: relative;
+  isolation: isolate;
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.brand { display: grid; justify-items: center; gap: var(--space-5); }
+.mark { width: 64px; height: 64px; color: var(--color-accent); }
+.wordmark { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
+.byline { color: var(--color-ink-secondary); }
+
+.byline {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--safe-bottom) + var(--space-4));
+  left: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+}

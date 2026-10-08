@@ -1,0 +1,32 @@
+{
+  "id": "hot-flashes-sleep",
+  "topic": "hot flashes and sleep",
+  "match": ["hot flash", "hot flush", "night sweat", "can't sleep", "insomnia", "exhausted", "brain fog"],
+  "intake": ["age", "meds", "cycle"],
+  "voiceSample": "I keep getting hot flashes at night and then I can't fall back asleep. During the day I feel foggy.",
+  "openingMessage": "I've been having hot flashes at night and I'm exhausted all the time. My brain feels foggy.",
+  "readyLine": "Thank you, {name}. I have a good picture now — tap below when you'd like to hear what I think, or ask me anything else first.",
+  "suggestedQuestions": ["Could this be perimenopause?", "Which labs should I ask for?"],
+  "answer": {
+    "sections": [
+      { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, you're waking up hot at night, struggling to get back to sleep, and carrying that tiredness and fog through your day. At {ageLabel}, that combination is something I hear about often — and it's real, not in your head." },
+      { "key": "hypothalamic", "title": "The Hypothalamic Connection", "body": "Your hypothalamus is your body's thermostat and its hormone conductor. When estrogen and progesterone start to shift, the thermostat can become more sensitive, which may trigger a flash of heat and wake you. Broken sleep then makes it harder for the hypothalamus to recover overnight, so the fog builds." },
+      { "key": "mayMean", "title": "What This May Mean", "body": "This pattern may point to the hormonal transition of perimenopause, but it's worth exploring other contributors too — thyroid function, blood sugar swings in the evening, and stress hormones can all play a part. Only your provider can tell what's driving it for you." },
+      { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["Could my symptoms be related to perimenopause?", "Would it help to look at my thyroid as well as my hormones?", "What options are there for night sweats that suit my health history?", "Is there anything in my current routine that could be making sleep worse?"] },
+      { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["Estradiol and progesterone — a snapshot of where your hormones may be in the transition.", "FSH — may help show whether perimenopause is underway.", "TSH, free T3 and free T4 — a fuller picture of thyroid function than TSH alone.", "Fasting glucose or HbA1c — blood sugar can affect night waking."] },
+      { "key": "doNow", "title": "What You Can Do Now", "body": "Small, steady habits give your hypothalamus the rhythm it loves. Start with these three from my Five Pillars:", "bullets": ["Keep your bedroom cool and dark, and go to bed at the same time each night.", "Have a small protein-rich snack in the evening to keep blood sugar steady overnight.", "Take ten minutes of morning daylight to help reset your body clock."] },
+      { "key": "word", "title": "A Word from Deborah", "body": "{name}, so many women push through nights like these and think they just have to cope. You don't. Your body is asking for a little support, and you're already listening. Let's keep going together." }
+    ],
+    "product": { "productId": "genesis-gold", "why": "Whole-food nutrition designed to support the hypothalamus as it adjusts to hormonal change.", "frame90": "Give your hypothalamus 90 days of steady support before judging the difference." },
+    "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+    "habitsForPlan": ["Cool, dark bedroom and a regular bedtime", "Protein-rich evening snack", "Ten minutes of morning daylight"],
+    "goal": "Calmer nights and steadier energy",
+    "summary": "Night-time hot flashes, broken sleep and daytime fog."
+  },
+  "followUps": [
+    { "match": ["perimenopause"], "reply": "It may well be part of it. Perimenopause can start years before periods stop, and night heat with broken sleep is one of its common signs. Your provider can help confirm it — the questions in my answer are a good place to start." },
+    { "match": ["lab", "test", "blood"], "reply": "I'd suggest asking about estradiol, progesterone and FSH, plus a full thyroid panel and a blood sugar check. Together they give a much clearer picture than any single number." }
+  ],
+  "fallbackReply": "That's a good question, {name}. I'll keep it in mind — when you're ready, I'll pull everything together in my answer.",
+  "status": "placeholder"
+}

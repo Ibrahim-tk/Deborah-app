@@ -1,0 +1,10 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-6); }
+.intro { display: grid; gap: var(--space-1); }
+.title { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
+.subtitle, .context { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+.billing { display: grid; gap: var(--space-2); }
+.save { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
+.cards { display: grid; gap: var(--space-3); }
+.note { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
+.links { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--space-2); }

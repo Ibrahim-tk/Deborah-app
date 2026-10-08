@@ -1,0 +1,24 @@
+[
+  {
+    "id": "genesis-gold",
+    "name": "Genesis Gold®",
+    "tagline": "Whole-food nutrition for your hypothalamus",
+    "description": "A blend of whole-food ingredients Deborah formulated to support the hypothalamus — the gland that conducts your hormones. Placeholder description.",
+    "image": "/images/products/genesis-gold.webp",
+    "url": "https://genesisgold.com/products/genesis-gold?ref=app",
+    "price": "Price on genesisgold.com",
+    "disclosure": "Formulated by Deborah",
+    "status": "placeholder"
+  },
+  {
+    "id": "sacred-seven",
+    "name": "Sacred 7®",
+    "tagline": "Seven adaptogenic herbs",
+    "description": "An adaptogen blend Deborah formulated to complement Genesis Gold®. Placeholder description.",
+    "image": "/images/products/sacred-seven.png",
+    "url": "https://genesisgold.com/products/sacred-7?ref=app",
+    "price": "Price on genesisgold.com",
+    "disclosure": "Formulated by Deborah",
+    "status": "placeholder"
+  }
+]

@@ -1,0 +1,1 @@
+export { PlatformTabs } from './PlatformTabs';

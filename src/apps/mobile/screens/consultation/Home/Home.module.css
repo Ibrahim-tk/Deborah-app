@@ -1,0 +1,15 @@
+.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: var(--space-5); padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8)); }
+
+.intro { display: grid; gap: var(--space-1); padding: var(--space-4) 0 var(--space-2); }
+.hello { font: var(--weight-regular) var(--fs-title-1, var(--fs-display)) / var(--lh-title-1, var(--lh-display)) var(--font-display); letter-spacing: -0.01em; }
+.sub { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+
+.shop button { outline: 1px solid rgb(255 255 255 / 0.95); outline-offset: -1px; }
+.shop button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+/* Overlay nav: transparent, full-bleed; only the glass controls take taps. */
+.top { position: absolute; top: 0; right: 0; left: 0; z-index: 5; pointer-events: none; }
+.top header > div { padding-inline: var(--margin-screen); }
+.top button { pointer-events: auto; }

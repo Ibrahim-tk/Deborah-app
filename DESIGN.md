@@ -20,7 +20,7 @@ colors:
   border-control: "#957aa4"
   gold: "#e6c776"
   gold-tint: "#f7eed5"
-  gold-ink: "#7f6d41"
+  gold-ink: "#615432"
   pink-ink: "#92345a"
   danger-ink: "#862323"
   danger-tint: "#fbeae7"
@@ -51,47 +51,47 @@ typography:
     lineHeight: "32px"
     letterSpacing: "0"
   title-3:
-    fontFamily: "EB Garamond, Georgia, serif"
-    fontSize: "22px"
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
+    fontSize: "20px"
     fontWeight: 400
-    lineHeight: "28px"
-    letterSpacing: "0"
+    lineHeight: "25px"
+    letterSpacing: "-0.02em"
   headline:
-    fontFamily: "EB Garamond, Georgia, serif"
-    fontSize: "19px"
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
+    fontSize: "17px"
     fontWeight: 500
-    lineHeight: "26px"
-    letterSpacing: "0.005em"
+    lineHeight: "22px"
+    letterSpacing: "-0.015em"
   body:
-    fontFamily: "EB Garamond, Georgia, serif"
-    fontSize: "19px"
-    fontWeight: 400
-    lineHeight: "30px"
-    letterSpacing: "0.005em"
-  callout:
-    fontFamily: "EB Garamond, Georgia, serif"
-    fontSize: "18px"
-    fontWeight: 400
-    lineHeight: "27px"
-    letterSpacing: "0.005em"
-  button:
-    fontFamily: "EB Garamond, Georgia, serif"
-    fontSize: "18px"
-    fontWeight: 500
-    lineHeight: "24px"
-    letterSpacing: "0.01em"
-  subhead:
-    fontFamily: "EB Garamond, Georgia, serif"
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
     fontSize: "17px"
     fontWeight: 400
-    lineHeight: "24px"
-    letterSpacing: "0.01em"
-  footnote:
-    fontFamily: "EB Garamond, Georgia, serif"
+    lineHeight: "22px"
+    letterSpacing: "-0.015em"
+  callout:
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
     fontSize: "16px"
     fontWeight: 400
+    lineHeight: "21px"
+    letterSpacing: "-0.015em"
+  button:
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
+    fontSize: "17px"
+    fontWeight: 500
     lineHeight: "22px"
-    letterSpacing: "0.01em"
+    letterSpacing: "-0.015em"
+  subhead:
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
+    fontSize: "15px"
+    fontWeight: 400
+    lineHeight: "20px"
+    letterSpacing: "-0.015em"
+  footnote:
+    fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
+    fontSize: "13px"
+    fontWeight: 400
+    lineHeight: "18px"
+    letterSpacing: "-0.015em"
   caption:
     fontFamily: "-apple-system, 'SF Pro Text', system-ui, sans-serif"
     fontSize: "13px"
@@ -193,13 +193,13 @@ components:
 
 The app should feel like sitting across from Deborah in a quiet, warm consulting room in the early evening: soft parchment light, deep aubergine ink, a few precious gold details, and nothing on the desk that doesn't need to be there. It is a reading-and-listening experience first. Deborah's words are the interface; everything around them recedes.
 
-The visual world is **restrained and literary**: a subtle beige canvas, dark purple type, generous margins, serif voice, soft rounded shapes and almost no decoration. Precision ("clinical") comes from alignment, consistent rhythm and honest data presentation, not from cold colours. Warmth and femininity come from the serif voice, the beige-and-aubergine palette and Deborah's photographic presence, not from ornaments, gradients, waves or florals.
+The visual world is **restrained and literary**: a subtle beige canvas, dark purple type, generous margins, a serif display voice over clean SF Pro text, soft rounded shapes and almost no decoration. Precision ("clinical") comes from alignment, consistent rhythm and honest data presentation, not from cold colours. Warmth and femininity come from the serif voice, the beige-and-aubergine palette and Deborah's photographic presence, not from ornaments, gradients, waves or florals.
 
 This is an **Operate surface on iOS**: users are in a task (understanding their health), so familiarity beats novelty. iOS structure, gestures and controls are kept; the brand lives in type, colour, spacing and Deborah's presence.
 
 **Key Characteristics:**
 - Beige canvas `#fdf9f1`, aubergine ink `#291832` (15.7:1); every readable text pair ≥ 7:1.
-- Serif everywhere people read (EB Garamond, Cormorant Garamond); SF Pro only for tiny functional text.
+- SF Pro for everything people read and tap, at iOS Dynamic Type sizes; Cormorant Garamond for display moments only.
 - Nothing heavier than Medium (500). Hierarchy is carried by size, family, colour and space.
 - Soft, rounded geometry: 16 pt cards, fully rounded buttons, 24 pt sheets and composer.
 - Flat tonal layering; shadows only on things that float.
@@ -216,10 +216,10 @@ A warm parchment-and-aubergine palette with gold reserved for Deborah and pink r
 
 ### Secondary
 - **Signature Gold** (#e6c776, gold-500): Deborah signature moments only — the ring around her portrait, the rule above "A Word from Deborah", plan highlights, and selected states on the dark signature surface (9.9:1 on #2b104e). Never as text on light surfaces (1.6:1). Never as a button on beige.
-- **Gold Ink** (#7f6d41, gold-800): the only gold allowed as text on light surfaces (answer section numerals, "Most chosen" line on plans). 4.8:1 — use at ≥ 19 px only.
+- **Gold Ink** (#615432, gold-900): the only gold allowed as text on light surfaces (answer section numerals, "Most chosen" line on plans). 7.1:1 on canvas, 7.4:1 on Paper; 6.4:1 on Linen, so on Linen use it only as large text (Cormorant ≥ 26 px).
 
 ### Tertiary
-- **Deborah's Rose** (#92345a, pink-700): Deborah's personal accent only — her written sign-off ("— Deborah") and her mark in About Deborah. 7.0:1 on canvas. Pink-500 #cd497f is never used for text (4.1:1).
+- **Deborah's Rose** (#92345a, pink-700): Deborah's personal accent only — her written sign-off ("— Deborah") and her mark in About Deborah. 7.0:1 on canvas; 6.3:1 on Linen, where it appears only as large text (the Cormorant 26 sign-off). Pink-500 #cd497f is never used for text (4.1:1).
 
 ### Neutral
 - **Parchment** (#fdf9f1, gold-50): the canvas behind every screen.
@@ -253,32 +253,31 @@ Information is never carried by colour alone: every semantic state also has an i
 
 ## Typography
 
-**Display Font:** Cormorant Garamond (fallback Georgia, serif) — weights 400, 500 loaded; 400 used.
-**Body Font:** EB Garamond (fallback Georgia, serif) — weights 400, 500.
-**Functional Font:** SF Pro via `-apple-system, system-ui` — 400 only.
+**Display Font:** Cormorant Garamond (fallback Georgia, serif) — 400 (+ italic) loaded and used.
+**Text Font:** SF Pro via `-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui` — weights 400, 500. Not bundled (Apple licence); non-Apple machines fall back to `system-ui`.
 
-**Character:** A literary, consulting-room pairing. Cormorant gives Deborah's moments a quiet elegance at large sizes; EB Garamond carries every sentence people read. SF Pro appears only where a serif becomes illegible: tiny labels and numbers.
+**Character:** Native iOS text with a literary accent. SF Pro carries every sentence, label and control so the app reads like a fluent iPhone app; Cormorant Garamond gives Deborah's moments (large titles, sheet titles, her name, her sign-off) a quiet elegance at large sizes.
 
 ### Type scale (mobile, at default text size)
 
-Built from Apple's iOS text styles (Dynamic Type at the default "Large" size, the standard native iOS scale), then adjusted upward because EB Garamond's x-height is roughly 20 % smaller than SF Pro's. Our 19 px body reads closer to a 15–16 pt SF Pro body; it is the smallest size that stays comfortable for this audience in a serif.
+Apple's iOS text styles at the default Dynamic Type size ("Large") for every SF Pro role. The Cormorant display roles keep sizes tuned for the serif. The one deviation from iOS: `caption` stays at 13 (the floor) instead of 12.
 
 | Token | iOS reference style (default) | Ours | Family | Weight | Line height | Tracking | Use |
 |---|---|---|---|---|---|---|---|
 | `display` | Large Title 34 / 41 | **36 / 42** | Cormorant | 400 | 42 | −0.01em | Large titles on tab roots, Welcome, plan success |
 | `title-1` | Title 1 28 / 34 | **30 / 36** | Cormorant | 400 | 36 | −0.005em | Sheet and modal titles, greeting line |
 | `title-2` | Title 2 22 / 28 | **26 / 32** | Cormorant | 400 | 32 | 0 | Card headings in hub, About Deborah name |
-| `title-3` | Title 3 20 / 25 | **22 / 28** | EB Garamond | 400 | 28 | 0 | Inline navigation titles, product name |
-| `headline` | Headline 17 / 22 (semibold) | **19 / 26** | EB Garamond | **500** | 26 | +0.005em | Answer section titles, list row titles |
-| `body` | Body 17 / 22 | **19 / 30** | EB Garamond | 400 | 30 (1.58) | +0.005em | Deborah's answers, all message text |
-| `callout` | Callout 16 / 21 | **18 / 27** | EB Garamond | 400 | 27 | +0.005em | Card body, option text, inputs, descriptions |
-| `button` | (Body / Headline) | **18 / 24** | EB Garamond | **500** | 24 | +0.01em | Every button label |
-| `subhead` | Subheadline 15 / 20 | **17 / 24** | EB Garamond | 400 | 24 | +0.01em | Secondary text, list subtitles, closing line |
-| `footnote` | Footnote 13 / 18 | **16 / 22** | EB Garamond | 400 | 22 | +0.01em | Disclaimers, helper text, legal |
+| `title-3` | Title 3 20 / 25 | **20 / 25** | SF Pro | 400 | 25 | −0.02em | Inline navigation titles, product name |
+| `headline` | Headline 17 / 22 (semibold) | **17 / 22** | SF Pro | **500** | 22 | −0.015em | Answer section titles, list row titles |
+| `body` | Body 17 / 22 | **17 / 22** | SF Pro | 400 | 22 | −0.015em | Deborah's answers, all message text |
+| `callout` | Callout 16 / 21 | **16 / 21** | SF Pro | 400 | 21 | −0.015em | Card body, option text, inputs, descriptions |
+| `button` | (Body / Headline) | **17 / 22** | SF Pro | **500** | 22 | −0.015em | Every button label |
+| `subhead` | Subheadline 15 / 20 | **15 / 20** | SF Pro | 400 | 20 | −0.015em | Secondary text, list subtitles, closing line |
+| `footnote` | Footnote 13 / 18 | **13 / 18** | SF Pro | 400 | 18 | −0.015em | Disclaimers, helper text, legal |
 | `caption` | Caption 1 12 / 16 | **13 / 18** | SF Pro | 400 | 18 | 0 | Tab labels, timestamps, character counter |
 | `data` | Body 17 / 22 | **17 / 22** | SF Pro, tabular figures | 400 | 22 | −0.01em | Lab values, prices, dates in lists |
 
-Floors: nothing below 13 px anywhere; nothing below 16 px in EB Garamond; no Cormorant below 26 px.
+Floors: nothing below 13 px anywhere; no Cormorant below 26 px.
 
 ### Text size control
 - The whole scale multiplies by `--type-scale`. In-app control (Account › Text size and the `Aa` action in the conversation header menu): **Smaller 0.9 · Default 1.0 · Larger 1.15 · Largest 1.3**.
@@ -288,12 +287,12 @@ Floors: nothing below 13 px anywhere; nothing below 16 px in EB Garamond; no Cor
 ### Named Rules
 **The Medium Ceiling Rule.** Nothing is heavier than 500. Medium is allowed only on buttons, answer section titles, selected options and list row titles. Everything else, including every Cormorant heading, is Regular. Emphasis inside sentences uses italic, never weight.
 
-**The Serif Speaks Rule.** Anything a person reads is in a serif. SF Pro is allowed only for `caption` and `data`.
+**The Display Serif Rule.** Cormorant Garamond appears only in display roles (`display`, `title-1`, `title-2`, Deborah's sign-off, profile initials) and never below 26 px, profile initials excepted. Everything else people read or tap is SF Pro.
 
 ## Layout
 
 - **Device frame:** 393 × 852 pt; safe area top 59, bottom 34.
-- **Margins:** 20 pt left/right on every screen. Deborah's answers run the full content width (353 pt ≈ 45–55 characters per line at 19 px).
+- **Margins:** 20 pt left/right on every screen. Deborah's answers run the full content width (353 pt ≈ 50–60 characters per line at 17 px).
 - **Spacing scale (4-pt base):** 4, 8, 12, 16, 20, 24, 32, 40, 48, 64. Tight groups 8–12; between components 16–24; between sections 32–40; more space above a heading than below it (32 above, 12 below).
 - **Touch targets:** minimum 48 × 48 pt; 8 pt minimum between adjacent targets. List rows ≥ 56 pt. Primary buttons 56 pt; emergency button 64 pt.
 - **Structure:** large-title tab roots; inline-title pushed screens; sheets for focused sub-tasks; one primary button per view, bottom-anchored on forms.
@@ -332,7 +331,7 @@ User bubbles use `xl` on three corners and 8 on the bottom-right (the speaker's 
 
 ### Buttons
 Calm, large and unmistakable.
-- **Shape:** fully rounded (`full`), 56 pt tall, label in `button` (EB Garamond 18/500), optional leading Hugeicon 22 pt.
+- **Shape:** fully rounded (`full`), 56 pt tall, label in `button` (SF Pro 17/500), optional leading Hugeicon 22 pt.
 - **Primary:** Deborah Purple fill, white text. Pressed: purple-600 plus scale 0.98 (120 ms). One per view.
 - **Secondary:** Lilac Mist fill, Aubergine text. Pressed: purple-100 fill.
 - **Tertiary (text button):** no fill, Deborah Purple text, underline offset 3 px on press; 48 pt hit area.
@@ -424,7 +423,7 @@ Calm iOS-standard motion with no bounce.
 - **Do** set every screen on Parchment (#fdf9f1) with Aubergine Ink (#291832) text.
 - **Do** keep all readable text at 7:1 or higher; check every new pair.
 - **Do** use option rows for every set of choices, at least 56 pt tall.
-- **Do** carry hierarchy with size, family (Cormorant vs EB Garamond), colour and space.
+- **Do** carry hierarchy with size, family (Cormorant vs SF Pro), colour and space.
 - **Do** leave 20 pt side margins and 32 pt between sections.
 - **Do** show Deborah's photo with its gold ring wherever she speaks.
 - **Do** pair every colour-coded state with an icon and words.
@@ -433,7 +432,7 @@ Calm iOS-standard motion with no bounce.
 - **Don't** use any weight above 500, or Medium outside buttons, answer section titles, selected options and list row titles.
 - **Don't** use pills, tags, badges or chips for labels, statuses, filters or suggestions.
 - **Don't** use wave, ripple, shimmer, bounce or pulse animations, including audio waveforms and typing dots.
-- **Don't** use gold as text on light surfaces (except Gold Ink at ≥ 19 px) or as a button on beige.
+- **Don't** use gold as text on light surfaces (except Gold Ink: ≥ 7:1 on canvas and Paper, large text only on Linen) or as a button on beige.
 - **Don't** use pink-500 for text; Deborah's Rose is for her signature only.
 - **Don't** put shadows on cards, options or inputs.
 - **Don't** use glass, blur or translucency for decoration; surfaces are solid.

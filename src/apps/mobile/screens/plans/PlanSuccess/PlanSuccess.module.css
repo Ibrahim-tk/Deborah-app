@@ -1,0 +1,23 @@
+/* Midnight signature surface (DESIGN.md › Neutral): Parchment text 15.5:1, gold ring 9.9:1. */
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: calc(var(--safe-top) + var(--space-8)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
+  background: var(--color-surface-signature);
+  color: var(--color-ink-on-signature);
+}
+.content { flex: 1; display: grid; align-content: center; justify-items: center; gap: var(--space-4); text-align: center; }
+.mark {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 2px var(--color-gold);
+  color: var(--color-gold);
+}
+.title { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
+.text { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); }
+.actions { display: grid; gap: var(--space-3); }

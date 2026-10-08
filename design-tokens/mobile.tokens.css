@@ -30,7 +30,7 @@
 
   /* Brand roles */
   --color-gold: var(--gold-500);               /* Deborah signature, plan highlight, selection on signature surface */
-  --color-gold-ink: var(--gold-800);           /* gold as text, ≥19px only */
+  --color-gold-ink: var(--gold-900);           /* gold as text: 7.1:1 canvas, 7.4:1 white; 6.4:1 on Linen → large text only there */
   --color-deborah-rose: var(--pink-700);       /* Deborah's sign-off only */
 
   /* Semantic */
@@ -39,18 +39,19 @@
   --color-success-ink: var(--green-ink); --color-success-tint: var(--green-tint);
   --color-warning-ink: var(--amber-ink); --color-warning-tint: var(--amber-tint);
 
-  /* Type scale — multiplied by the in-app text size control */
+  /* Type scale — iOS Dynamic Type defaults (Large) for SF Pro; Cormorant display roles keep their sizes.
+     Multiplied by the in-app text size control. */
   --type-scale: 1;               /* 0.9 | 1 | 1.15 | 1.3 */
   --fs-display: calc(36px * var(--type-scale));  --lh-display: calc(42px * var(--type-scale));
   --fs-title-1: calc(30px * var(--type-scale));  --lh-title-1: calc(36px * var(--type-scale));
   --fs-title-2: calc(26px * var(--type-scale));  --lh-title-2: calc(32px * var(--type-scale));
-  --fs-title-3: calc(22px * var(--type-scale));  --lh-title-3: calc(28px * var(--type-scale));
-  --fs-headline: calc(19px * var(--type-scale)); --lh-headline: calc(26px * var(--type-scale));
-  --fs-body: calc(19px * var(--type-scale));     --lh-body: calc(30px * var(--type-scale));
-  --fs-callout: calc(18px * var(--type-scale));  --lh-callout: calc(27px * var(--type-scale));
-  --fs-button: calc(18px * var(--type-scale));   --lh-button: calc(24px * var(--type-scale));
-  --fs-subhead: calc(17px * var(--type-scale));  --lh-subhead: calc(24px * var(--type-scale));
-  --fs-footnote: calc(16px * var(--type-scale)); --lh-footnote: calc(22px * var(--type-scale));
+  --fs-title-3: calc(20px * var(--type-scale));  --lh-title-3: calc(25px * var(--type-scale));
+  --fs-headline: calc(17px * var(--type-scale)); --lh-headline: calc(22px * var(--type-scale));
+  --fs-body: calc(17px * var(--type-scale));     --lh-body: calc(22px * var(--type-scale));
+  --fs-callout: calc(16px * var(--type-scale));  --lh-callout: calc(21px * var(--type-scale));
+  --fs-button: calc(17px * var(--type-scale));   --lh-button: calc(22px * var(--type-scale));
+  --fs-subhead: calc(15px * var(--type-scale));  --lh-subhead: calc(20px * var(--type-scale));
+  --fs-footnote: calc(13px * var(--type-scale)); --lh-footnote: calc(18px * var(--type-scale));
   --fs-caption: calc(13px * var(--type-scale));  --lh-caption: calc(18px * var(--type-scale));
   --fs-data: calc(17px * var(--type-scale));     --lh-data: calc(22px * var(--type-scale));
   --weight-regular: 400;
@@ -87,13 +88,13 @@
 .t-display  { font: var(--weight-regular) var(--fs-display)/var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
 .t-title-1  { font: var(--weight-regular) var(--fs-title-1)/var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; }
 .t-title-2  { font: var(--weight-regular) var(--fs-title-2)/var(--lh-title-2) var(--font-display); }
-.t-title-3  { font: var(--weight-regular) var(--fs-title-3)/var(--lh-title-3) var(--font-body); }
-.t-headline { font: var(--weight-medium) var(--fs-headline)/var(--lh-headline) var(--font-body); letter-spacing: 0.005em; }
-.t-body     { font: var(--weight-regular) var(--fs-body)/var(--lh-body) var(--font-body); letter-spacing: 0.005em; }
-.t-callout  { font: var(--weight-regular) var(--fs-callout)/var(--lh-callout) var(--font-body); letter-spacing: 0.005em; }
-.t-button   { font: var(--weight-medium) var(--fs-button)/var(--lh-button) var(--font-body); letter-spacing: 0.01em; }
-.t-subhead  { font: var(--weight-regular) var(--fs-subhead)/var(--lh-subhead) var(--font-body); letter-spacing: 0.01em; }
-.t-footnote { font: var(--weight-regular) var(--fs-footnote)/var(--lh-footnote) var(--font-body); letter-spacing: 0.01em; }
+.t-title-3  { font: var(--weight-regular) var(--fs-title-3)/var(--lh-title-3) var(--font-body); letter-spacing: -0.02em; }
+.t-headline { font: var(--weight-medium) var(--fs-headline)/var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
+.t-body     { font: var(--weight-regular) var(--fs-body)/var(--lh-body) var(--font-body); letter-spacing: -0.015em; }
+.t-callout  { font: var(--weight-regular) var(--fs-callout)/var(--lh-callout) var(--font-body); letter-spacing: -0.015em; }
+.t-button   { font: var(--weight-medium) var(--fs-button)/var(--lh-button) var(--font-body); letter-spacing: -0.015em; }
+.t-subhead  { font: var(--weight-regular) var(--fs-subhead)/var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; }
+.t-footnote { font: var(--weight-regular) var(--fs-footnote)/var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; }
 .t-caption  { font: var(--weight-regular) var(--fs-caption)/var(--lh-caption) var(--font-ui); }
 .t-data     { font: var(--weight-regular) var(--fs-data)/var(--lh-data) var(--font-ui); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
 

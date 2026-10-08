@@ -1,0 +1,26 @@
+.root {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 54px;
+  padding: 4px 30px 0 52px;
+  font: 500 17px/1 -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+}
+
+.root[data-tone='dark'] { color: #000000; }
+.root[data-tone='light'] { color: #ffffff; }
+
+.time { min-width: 54px; text-align: center; }
+
+.glyphs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.glyphs svg { fill: currentColor; }

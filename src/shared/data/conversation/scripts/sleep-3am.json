@@ -1,0 +1,32 @@
+{
+  "id": "sleep-3am",
+  "topic": "waking at 3am",
+  "match": ["3am", "3 am", "3 a.m", "wake up at night", "waking up at night", "can't stay asleep", "middle of the night"],
+  "intake": ["age", "meds", "cycle"],
+  "voiceSample": "I wake up at three in the morning almost every night and my mind starts racing.",
+  "openingMessage": "Why am I waking up at 3am every night?",
+  "readyLine": "Thank you, {name}. That helps me understand your nights. Tap below when you'd like my thoughts.",
+  "suggestedQuestions": ["Is this related to stress?", "Does what I eat in the evening matter?"],
+  "answer": {
+    "sections": [
+      { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, you're falling asleep but waking around 3am, and then your mind won't settle. Night after night, that wears you down." },
+      { "key": "hypothalamic", "title": "The Hypothalamic Connection", "body": "Around 3am your body naturally begins raising cortisol to prepare for morning. If blood sugar dips overnight, or stress hormones are already running high, the hypothalamus may sound the alarm early — and you wake up wired." },
+      { "key": "mayMean", "title": "What This May Mean", "body": "Early waking may reflect blood sugar dropping overnight, a stress response that's stuck on, or hormonal shifts affecting sleep depth. It's worth exploring these with your provider rather than assuming it's just how things are now." },
+      { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["Could blood sugar changes overnight be waking me?", "Is it worth checking my cortisol rhythm?", "Could my hormones be affecting how deeply I sleep?", "Are any of my current habits or supplements likely to affect sleep?"] },
+      { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["Fasting glucose and HbA1c — to look at overnight blood sugar patterns.", "Cortisol (morning, or a daily rhythm test) — to see how your stress hormones flow.", "Progesterone — it has a calming effect on sleep for many women."] },
+      { "key": "doNow", "title": "What You Can Do Now", "body": "Help your hypothalamus feel safe through the night with these steps from my Five Pillars:", "bullets": ["Eat a small protein-and-fat snack an hour before bed.", "Keep screens out of the bedroom and lights low after dinner.", "If you wake, breathe slowly with a longer out-breath instead of checking the clock."] },
+      { "key": "word", "title": "A Word from Deborah", "body": "{name}, waking at 3am can feel lonely. It's a signal, not a failure. With a little rhythm and the right questions, many women find their nights becoming kinder again." }
+    ],
+    "product": { "productId": "genesis-gold", "why": "Steady, whole-food nourishment for the hypothalamus can support a calmer night-time rhythm.", "frame90": "Give it 90 days alongside your new evening habits." },
+    "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+    "habitsForPlan": ["Protein-and-fat snack before bed", "Low lights and no screens after dinner", "Slow breathing if you wake"],
+    "goal": "Sleeping through the night",
+    "summary": "Waking at 3am with a racing mind."
+  },
+  "followUps": [
+    { "match": ["stress", "anxious", "anxiety"], "reply": "Stress very often plays a part. When the hypothalamus is on high alert, it can keep cortisol rising too early. Calming evenings and steady blood sugar are two of the gentlest ways to help." },
+    { "match": ["eat", "food", "snack", "dinner"], "reply": "It can matter a lot. A small snack with some protein and healthy fat before bed may help keep blood sugar steady, so your body has less reason to sound the alarm at 3am." }
+  ],
+  "fallbackReply": "Thank you for telling me, {name}. I'll fold that into my thinking.",
+  "status": "placeholder"
+}

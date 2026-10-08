@@ -1,0 +1,2 @@
+.root { display: grid; gap: var(--space-3); }
+.label { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

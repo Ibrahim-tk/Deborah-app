@@ -1,0 +1,41 @@
+.root { display: grid; gap: var(--space-2); }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+.field {
+  display: block;
+  width: 100%;
+  border: 0;
+  color: var(--color-ink);
+  resize: none;
+}
+.field::placeholder { color: var(--color-ink-placeholder); }
+.field:disabled { color: var(--color-ink-secondary); cursor: not-allowed; }
+
+.boxed {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  transition: box-shadow var(--dur-quick) var(--ease-out);
+}
+.boxed:hover:not(:disabled):not(:focus) { box-shadow: inset 0 0 0 1px var(--color-accent); }
+.boxed.boxed:focus, .boxed.boxed:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-selected); outline: none; }
+.boxed:disabled { background: var(--color-surface-tonal); box-shadow: none; }
+
+.bare {
+  padding: 0;
+  background: transparent;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.015em;
+}
+/* The container draws the focus state for a bare field. */
+.bare.bare:focus, .bare.bare:focus-visible { outline: none; }
+
+.invalid, .invalid.invalid:focus { box-shadow: inset 0 0 0 2px var(--color-danger-border); }
+
+.meta { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
+.error, .hint { display: flex; align-items: center; gap: var(--space-1); margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); }
+.error { color: var(--color-danger-ink); }
+.hint { color: var(--color-ink-secondary); }
+.counter { margin-left: auto; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); font-variant-numeric: tabular-nums; color: var(--color-ink-secondary); }

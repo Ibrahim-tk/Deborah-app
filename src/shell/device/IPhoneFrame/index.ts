@@ -1,0 +1,1 @@
+export { IPhoneFrame } from './IPhoneFrame';

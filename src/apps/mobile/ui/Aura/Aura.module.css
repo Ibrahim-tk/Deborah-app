@@ -1,0 +1,47 @@
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--color-canvas);
+  pointer-events: none;
+}
+
+/* Large blurred colour fields; each drifts on its own slow loop so the mix keeps shifting. */
+.blob {
+  position: absolute;
+  width: 120%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(56px);
+  opacity: 1;
+  animation: drift 22s ease-in-out infinite alternate;
+}
+.a { top: -20%; left: -45%; background: radial-gradient(closest-side, var(--purple-400), transparent); }
+.b { top: -25%; right: -50%; background: radial-gradient(closest-side, var(--purple-300), transparent); animation-duration: 28s; animation-delay: -9s; }
+.c { top: 5%; left: 0%; width: 100%; background: radial-gradient(closest-side, var(--gold-400), transparent); opacity: 0.9; animation-duration: 34s; animation-delay: -17s; }
+
+/* Extra fields: a dusky midnight-violet depth and a second warm gold glow. */
+.d { top: -45%; left: 10%; width: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--purple-500) 70%, var(--midnight-500)), transparent); opacity: 0.55; animation-duration: 40s; animation-delay: -5s; }
+.e { top: 20%; right: -30%; width: 80%; background: radial-gradient(closest-side, var(--gold-300), transparent); opacity: 0.75; animation-duration: 30s; animation-delay: -21s; }
+
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(8%, 5%, 0) scale(1.08); }
+  100% { transform: translate3d(-6%, 8%, 0) scale(0.96); }
+}
+
+/* Melt into the canvas from the bottom up, like frosted glass. */
+.fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    0deg,
+    var(--color-canvas) 0%,
+    var(--color-canvas) calc(100% - var(--aura-reach)),
+    color-mix(in srgb, var(--color-canvas) 45%, transparent) calc(100% - var(--aura-reach) * 0.8),
+    transparent calc(100% - var(--aura-reach) * 0.5)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) { .blob { animation: none; } }

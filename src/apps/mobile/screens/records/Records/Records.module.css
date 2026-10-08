@@ -1,0 +1,7 @@
+.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-4); padding: var(--space-2) 0 calc(var(--tabbar-space) + var(--space-4)); }
+.top { display: grid; gap: var(--space-3); padding-inline: var(--margin-screen); }
+.context { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.skeleton { display: grid; gap: var(--space-4); padding: var(--space-2) var(--margin-screen); }
+.skeletonRow { display: flex; align-items: center; gap: var(--space-3); }
+.skeletonText { flex: 1; display: grid; gap: var(--space-2); }

@@ -1,0 +1,27 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-4); }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.footnote { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); text-align: center; }
+
+/* A4 page (1 : 1.414); grows if the content is longer. Hairline edge, no shadow (not floating).
+   A definite width stops aspect-ratio from widening the page past the screen when content is long. */
+.page { width: 100%; min-width: 0; overflow-wrap: break-word; display: grid; align-content: start; gap: var(--space-5); aspect-ratio: 1 / 1.414; padding: var(--space-6) var(--space-5); border: 1px solid var(--color-border-hairline); border-radius: var(--radius-sm); background: var(--white); color: var(--color-ink); }
+.pageHeader { display: grid; gap: var(--space-1); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-border-hairline); }
+.brand { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.h2 { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
+.h3 { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }
+.small, .dt { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.block { display: grid; gap: var(--space-2); }
+.bullets { display: grid; gap: var(--space-1); margin: 0; padding-left: var(--space-5); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); }
+.summary { display: grid; gap: var(--space-3); margin: 0; }
+.dd { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); }
+/* DESIGN.md › Answer sections: the closing line is a Linen panel in subhead Aubergine (Rose is her sign-off only). */
+.closing { padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--color-surface-tonal); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.disclaimer { padding-top: var(--space-3); border-top: 1px solid var(--color-border-hairline); font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); color: var(--color-ink-secondary); }
+
+/* window.print(): only the page, full width, while this preview is open. */
+@media print {
+  :global(body):has(.page) * { visibility: hidden; }
+  :global(body):has(.page) .page, :global(body):has(.page) .page * { visibility: visible; }
+  .page { position: fixed; inset: 0; aspect-ratio: auto; border: 0; }
+}

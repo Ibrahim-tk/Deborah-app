@@ -1,0 +1,10 @@
+.root {
+  max-width: 100%;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-signature);
+  color: var(--color-ink-on-signature);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  box-shadow: var(--shadow-float-sm);
+  text-align: center;
+}

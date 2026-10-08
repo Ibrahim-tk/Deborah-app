@@ -1,0 +1,7 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-6); }
+.meta { display: grid; gap: var(--space-4); }
+.values { display: grid; gap: var(--space-2); }
+.empty { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+.disclaimer { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.error { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-danger-ink); text-align: center; }

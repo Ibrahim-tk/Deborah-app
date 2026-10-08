@@ -1,0 +1,44 @@
+.root {
+  display: grid;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+  color: var(--color-ink);
+  text-align: left;
+  transition: box-shadow var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+}
+.root[data-recommended] { background: var(--color-surface-tonal); }
+.root[data-selected] { box-shadow: inset 0 0 0 2px var(--color-border-selected); }
+.root:active { transform: scale(0.98); }
+.root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+.head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.name { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.check {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+}
+.root[data-selected] .check { background: var(--color-accent); box-shadow: none; color: var(--color-ink-on-accent); }
+
+.nameRow { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); min-width: 0; }
+/* Small white pill beside the plan name (user-requested exception to "no pills"). */
+.most {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-ink-secondary);
+  font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+}
+.current { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.price { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
+.features { display: grid; gap: var(--space-1); }
+.feature { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.profiles { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

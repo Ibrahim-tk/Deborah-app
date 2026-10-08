@@ -1,0 +1,121 @@
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: var(--color-scrim);
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 41;
+  display: flex;
+  flex-direction: column;
+  width: min(84%, 320px);
+  padding-top: var(--safe-top);
+  background: var(--color-canvas);
+  box-shadow: var(--shadow-float-md);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: var(--header-h);
+  padding: 0 var(--space-2) 0 var(--space-4);
+}
+.profile { display: flex; align-items: center; gap: var(--space-2); min-width: 0; min-height: var(--tap-min); color: var(--color-ink); }
+.profileName { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-ui); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.close { display: grid; place-items: center; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); color: var(--color-ink); }
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-2) var(--space-3) calc(var(--safe-bottom) + var(--space-4));
+}
+
+.newChat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  margin-bottom: var(--space-3);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-ui);
+}
+
+.list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+
+.row,
+.chat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.row:active,
+.chat:active { background: var(--color-accent-tint); }
+.row[aria-current='page'] { background: var(--color-surface-lilac); }
+.row:focus-visible,
+.chat:focus-visible,
+.newChat:focus-visible,
+.profile:focus-visible,
+.close:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+
+.rowLabel { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-ui); }
+.chat {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-ui);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.heading {
+  margin: var(--space-5) var(--space-3) var(--space-1);
+  font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-ui);
+  color: var(--color-ink-secondary);
+}
+.empty { margin: 0; padding: 0 var(--space-3); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+/* Genesis Gold feature card: warm tonal surface, product art, quiet external-link CTA. */
+.product {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(160deg, var(--color-surface-tonal), color-mix(in srgb, var(--gold-200) 55%, var(--color-surface-tonal)));
+  color: var(--color-ink);
+  text-align: left;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.product:active { transform: scale(0.98); }
+.product:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+/* The photo's pouch sits left of centre (powder pile on the right); nudge it so the pouch itself
+   is centred in the card. */
+.productImage { justify-self: center; width: 100%; max-height: 160px; object-fit: contain; margin-bottom: var(--space-3); mix-blend-mode: multiply; transform: translateX(12%); }
+.productName { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.productTagline { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.productCta { display: inline-flex; align-items: center; gap: var(--space-1); margin-top: var(--space-3); font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
