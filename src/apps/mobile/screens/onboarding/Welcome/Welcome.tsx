@@ -76,7 +76,7 @@ export default function Welcome() {
             </button>{' '}
             and{' '}
             <button type="button" className={styles.inlineLink} onClick={() => open('M-10.5', { section: 'privacy' })}>
-              Privacy Notice (HIPAA)
+              Privacy Notice
             </button>
             .
           </p>
