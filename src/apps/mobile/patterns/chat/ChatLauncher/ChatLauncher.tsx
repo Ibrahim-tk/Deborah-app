@@ -20,9 +20,13 @@ export function ChatLauncher({ placeholder = 'Describe how you’re feeling…',
     <button type="button" className={glow ? `${styles.root} ${styles.glow}` : styles.root} onClick={onOpen} aria-label="Message Deborah">
       <span className={styles.placeholder}>{placeholder}</span>
       <span className={styles.tools} aria-hidden>
-        <Icon name="plus" size={20} />
-        <Icon name="mic" size={20} />
-        <span className={styles.send}>
+        <span className={styles.tool}>
+          <Icon name="plus" size={20} />
+        </span>
+        <span className={styles.tool}>
+          <Icon name="mic" size={20} />
+        </span>
+        <span className={`${styles.tool} ${styles.send}`}>
           <Icon name="send" size={18} />
         </span>
       </span>
