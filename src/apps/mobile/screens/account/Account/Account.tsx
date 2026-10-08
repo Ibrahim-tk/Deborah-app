@@ -63,7 +63,7 @@ export default function Account() {
   return (
     <div className={styles.root} data-xref="M-10.1 · Account">
       <Header
-        title="Account"
+        title="Settings"
         large
         collapsed={collapsed}
         onBack={canGoBack ? nav.pop : goHome}

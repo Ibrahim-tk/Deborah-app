@@ -7,6 +7,7 @@ import { DeborahBlob } from '../DeborahBlob';
 import {
   Menu01Icon,
   Notification03Icon,
+  Settings01Icon,
   AiSearch02Icon,
   UserGroupIcon,
   Add01Icon,
@@ -61,6 +62,7 @@ const map = {
   account: UserIcon,
   mic: Mic01Icon,
   bell: Notification03Icon,
+  settings: Settings01Icon,
   send: ArrowUp02Icon,
   stop: StopIcon,
   back: ArrowLeft01Icon,

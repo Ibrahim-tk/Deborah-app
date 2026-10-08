@@ -1,5 +1,5 @@
 /**
- * @pattern SuggestionList — "Try asking:" + 3 starter prompts as borderless rows, each led by an
+ * @pattern SuggestionList — 3 starter prompts (no visible label; named for screen readers) as borderless rows, each led by an
  *          AI-search icon. Rows sit straight on the canvas; only the pressed row takes a lilac tint.
  * @usedBy  M-2.1 (focused + empty)
  * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › focused)
@@ -18,8 +18,7 @@ export function SuggestionList({ suggestions, onSelect }: SuggestionListProps) {
   return (
     // mousedown is swallowed so tapping a row doesn't blur the composer first.
     <div className={styles.root} onMouseDown={(e) => e.preventDefault()} data-placeholder>
-      <p className={styles.label} id="suggestions-label">Try asking</p>
-      <ul className={styles.list} aria-labelledby="suggestions-label">
+      <ul className={styles.list} aria-label="Suggested questions">
         {suggestions.map((s) => (
           <li key={s.id}>
             <button type="button" className={styles.row} onClick={() => onSelect(s)}>

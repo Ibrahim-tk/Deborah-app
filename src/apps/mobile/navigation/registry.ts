@@ -58,7 +58,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.6': { title: 'PDF preview', component: lazy(() => import('@mobile/screens/records/PdfPreview')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes' },
 
   // F10 Account, privacy & data
-  'M-10.1': { title: 'Account', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },
+  'M-10.1': { title: 'Settings', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },
   'M-10.2': { title: 'Privacy & data', component: lazy(() => import('@mobile/screens/account/PrivacyData')), presentation: 'push', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-102--privacy--data' },
   'M-10.3': { title: 'Subscription', component: lazy(() => import('@mobile/screens/account/Subscription')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-103--subscription-not-in-wireframes' },
   'M-10.4': { title: 'Notifications', component: lazy(() => import('@mobile/screens/account/Notifications')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-104--notifications-not-in-wireframes' },

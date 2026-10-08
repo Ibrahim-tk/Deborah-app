@@ -39,10 +39,6 @@ export function Sidebar() {
   const goTab = (tab: TabId) => {
     if (nav.activeTab !== tab) nav.switchTab(tab);
   };
-  const pushIn = (tab: TabId, id: string) => {
-    goTab(tab);
-    nav.push(id);
-  };
   const newChat = () => {
     const s = useAppStore.getState();
     s.archiveActive(s.activeProfileId);
@@ -56,28 +52,27 @@ export function Sidebar() {
     nav.openAsk();
   };
 
-  // The main destinations (Ask, My Health, Records, Family, My info) are cards on Home (M-2.0);
-  // the drawer keeps Home plus plan/settings items.
-  const main: Item[] = [
-    {
-      label: 'Home',
-      icon: 'deborah',
-      onSelect: () => {
-        goTab('ask');
-        nav.popToRoot();
-      },
-      current: nav.activeTab === 'ask',
+  // Drawer = conversations first: New conversation, Home, then chat history. Everything else
+  // (plans, notifications, privacy, About Deborah, disclaimer) lives in Settings (M-10.1), pinned at the bottom.
+  const home: Item = {
+    label: 'Home',
+    icon: 'deborah',
+    onSelect: () => {
+      goTab('ask');
+      nav.popToRoot();
     },
-    { label: 'Plans & subscription', icon: 'shop', onSelect: () => pushIn('account', 'M-10.3') },
-    { label: 'Notifications', icon: 'alert', onSelect: () => pushIn('account', 'M-10.4') },
-    { label: 'Privacy & data', icon: 'lock', onSelect: () => pushIn('account', 'M-10.2') },
-  ];
+    current: nav.activeTab === 'ask',
+  };
+  const settings: Item = {
+    label: 'Settings',
+    icon: 'settings',
+    onSelect: () => {
+      goTab('account');
+      nav.popToRoot();
+    },
+    current: nav.activeTab === 'account',
+  };
   const gold = findProduct('genesis-gold');
-  const about: Item[] = [
-    { label: 'About Deborah', icon: 'info', onSelect: () => nav.push('M-7.6') },
-    { label: 'Book Deborah', icon: 'calendar', onSelect: () => nav.push('M-8.2') },
-    { label: 'About this app & disclaimer', icon: 'note', onSelect: () => nav.presentModal('M-10.5') },
-  ];
 
   const row = (it: Item) => (
     <li key={it.label}>
@@ -125,7 +120,7 @@ export function Sidebar() {
                   New conversation
                 </button>
 
-                <ul className={styles.list}>{main.map(row)}</ul>
+                <ul className={styles.list}>{row(home)}</ul>
 
                 <h2 className={styles.heading}>Recent conversations</h2>
                 {history.length === 0 ? (
@@ -142,8 +137,6 @@ export function Sidebar() {
                   </ul>
                 )}
 
-                <h2 className={styles.heading}>About</h2>
-                <ul className={styles.list}>{about.map(row)}</ul>
 
                 {gold && (
                   <button
@@ -161,6 +154,8 @@ export function Sidebar() {
                   </button>
                 )}
               </div>
+
+              <ul className={`${styles.list} ${styles.bottom}`}>{row(settings)}</ul>
             </MotionDiv>
           </>
         )}
