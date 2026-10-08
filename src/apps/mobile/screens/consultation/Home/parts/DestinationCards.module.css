@@ -3,10 +3,10 @@
  * with a big Cormorant title, plain-text meta and one dark round action in the bottom-right.
  * They scroll, so no shadows (DESIGN.md: only floating things cast shadows) and no rims.
  */
-.photo, .row { -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
-.photo:active, .row:active { transform: scale(0.98); }
-.photo:focus-visible, .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) { .photo:active, .row:active { transform: none; } }
+.photo { -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
+.photo:active { transform: scale(0.98); }
+.photo:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .photo:active { transform: none; } }
 
 /* Destination cards: tone field + a faint photo wash for texture (kept ≤ 0.18 so text stays ≥ 7:1). */
 .photo {
@@ -50,20 +50,3 @@
 .go { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }
 .square .go { width: 36px; height: 36px; }
 
-/* My info: quiet Paper row, hairline only. */
-.row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  width: 100%;
-  min-height: var(--row-min);
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-card);
-  background: var(--card-tone-paper);
-  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
-  color: var(--color-ink);
-  text-align: left;
-}
-.rowLabel { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
-.rowHint { flex: 1; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-tertiary); text-align: right; }
-.chev { flex: none; color: var(--color-ink-tertiary); }

@@ -6,6 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react';
 import { DeborahBlob } from '../DeborahBlob';
 import {
   Menu01Icon,
+  Notification03Icon,
   AiSearch02Icon,
   UserGroupIcon,
   Add01Icon,
@@ -59,6 +60,7 @@ const map = {
   health: FavouriteIcon,
   account: UserIcon,
   mic: Mic01Icon,
+  bell: Notification03Icon,
   send: ArrowUp02Icon,
   stop: StopIcon,
   back: ArrowLeft01Icon,

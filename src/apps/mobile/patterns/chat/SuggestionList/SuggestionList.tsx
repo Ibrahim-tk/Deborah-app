@@ -24,7 +24,7 @@ export function SuggestionList({ suggestions, onSelect }: SuggestionListProps) {
           <li key={s.id}>
             <button type="button" className={styles.row} onClick={() => onSelect(s)}>
               <span className={styles.icon}>
-                <Icon name="aiSearch" size={20} />
+                <Icon name="aiSearch" size={18} />
               </span>
               <span className={styles.text}>{s.text}</span>
             </button>

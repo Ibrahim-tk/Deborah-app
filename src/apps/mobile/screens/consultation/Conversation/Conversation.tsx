@@ -26,6 +26,8 @@ import { useReturnFlows } from './parts/useReturnFlows';
 import { useMessageActions } from './parts/useMessageActions';
 import styles from './Conversation.module.css';
 
+const SHOW_TRIAL_COUNTER = false;
+
 export default function Conversation() {
   const chat = useConversation();
   const { conversation, profile, freeLeft, history, busy } = chat;
@@ -117,7 +119,7 @@ export default function Conversation() {
       >
         <div className={styles.column}>
           {isEmpty ? (
-            <Greeting line={g.line} question={g.question} welcomeBack={g.welcomeBack} onContinue={chat.continueLast} />
+            <Greeting welcomeBack={g.welcomeBack} onContinue={chat.continueLast} />
           ) : (
             conversation && (
               <MessageList
@@ -157,7 +159,8 @@ export default function Conversation() {
           placeholder={conversation?.status === 'intake' ? 'Or type your answer…' : 'Describe how you’re feeling…'}
           voiceSample={chat.voiceSample}
           onRecordingChange={setRecording}
-          banner={freeLeft !== null && <TrialCounter inline left={freeLeft} onChoosePlan={() => open('M-4.1')} />}
+          // Trial counter hidden for now (design direction 2026-10-08); the free-limit sheet still gates.
+          banner={SHOW_TRIAL_COUNTER && freeLeft !== null && <TrialCounter inline left={freeLeft} onChoosePlan={() => open('M-4.1')} />}
         />
       </div>
 

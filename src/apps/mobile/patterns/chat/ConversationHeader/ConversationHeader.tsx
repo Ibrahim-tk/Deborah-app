@@ -1,12 +1,12 @@
 /**
- * @pattern ConversationHeader — iOS glass menu button (→ Sidebar), "Ask Deborah", and on the right the
- *          active profile's initial + chevron, which opens the profile switcher (M-6.1).
+ * @pattern ConversationHeader — iOS glass menu button (→ Sidebar) on the left, optional centre title,
+ *          and a glass notifications bell on the right (→ M-10.4). Profile switching lives in the Sidebar.
  * @usedBy  M-2.0 (title-less)
- * @spec    docs/ux/F02-consultation.md#m-21-conversation (Layout 1)
+ * @spec    docs/ux/F02-consultation.md#m-21-conversation (Layout 1) — OPEN: bell replaces the profile
+ *          switcher per design direction 2026-10-08; spec still shows the switcher.
  * @xref    web: apps/web/patterns/chat/ConversationHeader — not built
  */
-import { Avatar, GlassButton, Header, Icon } from '@mobile/ui';
-import styles from './ConversationHeader.module.css';
+import { GlassButton, Header } from '@mobile/ui';
 
 export interface ConversationHeaderProps {
   onMenu: () => void;
@@ -14,31 +14,17 @@ export interface ConversationHeaderProps {
   title?: string;
   /** No bar background, so a screen backdrop (e.g. Home's Aura) runs under the status bar. */
   transparent?: boolean;
-  /** Active profile; the switcher is hidden when absent. */
-  profileName?: string;
-  onSwitchProfile?: () => void;
+  /** Opens notifications; the bell is hidden when absent. */
+  onNotifications?: () => void;
 }
 
-export function ConversationHeader({ onMenu, title = 'Ask Deborah', transparent, profileName, onSwitchProfile }: ConversationHeaderProps) {
+export function ConversationHeader({ onMenu, title = 'Ask Deborah', transparent, onNotifications }: ConversationHeaderProps) {
   return (
     <Header
       title={title}
       transparent={transparent}
       left={<GlassButton icon="menu" aria-label="Open menu" onClick={onMenu} />}
-      right={
-        profileName &&
-        onSwitchProfile && (
-          <GlassButton
-            className={styles.switcher}
-            onClick={onSwitchProfile}
-            aria-label={`Talking about ${profileName}. Switch profile`}
-            aria-haspopup="dialog"
-          >
-            <Avatar initial={profileName} size={32} />
-            <Icon name="chevronDown" size={16} />
-          </GlassButton>
-        )
-      }
+      right={onNotifications && <GlassButton icon="bell" aria-label="Notifications" onClick={onNotifications} />}
     />
   );
 }

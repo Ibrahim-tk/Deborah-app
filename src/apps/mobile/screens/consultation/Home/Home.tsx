@@ -15,7 +15,6 @@ import { nowFrom } from '@shared/utils';
 import { Aura, ScrollEdge } from '@mobile/ui';
 import { ConversationHeader } from '@mobile/patterns/chat';
 import { ShopTiles } from '@mobile/patterns/commerce';
-import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore } from '@mobile/navigation';
 import { DestinationCards } from './parts/DestinationCards';
 import { GreetingSheet } from './parts/GreetingSheet';
@@ -29,7 +28,6 @@ const GREETING_DELAY_MS = 1500;
 export default function Home() {
   const { open, push, setSidebarOpen } = useNav();
   const openAsk = useNavStore((s) => s.openAsk);
-  const openSwitcher = useProfileSwitcher();
   const profile = useAppStore((s) => s.profiles.byId[s.activeProfileId]);
   const active = useAppStore(selectActiveConversation);
   const history = useAppStore(useShallow(selectHistory));
@@ -75,8 +73,7 @@ export default function Home() {
           title=""
           transparent
           onMenu={() => setSidebarOpen(true)}
-          profileName={profile?.name}
-          onSwitchProfile={openSwitcher}
+          onNotifications={() => push('M-10.4')}
         />
       </div>
 
@@ -111,7 +108,6 @@ export default function Home() {
             crop: '75% 25%',
             hue: 14,
           }}
-          onInfo={go('M-10.1')}
           today={<HomeToday />}
         />
 

@@ -28,5 +28,5 @@
 .row:active { background: var(--color-accent-tint); }
 .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
-.icon { flex: none; display: grid; place-items: center; height: var(--lh-body); color: var(--color-accent); }
-.text { min-width: 0; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.01em; }
+.icon { flex: none; display: grid; place-items: center; height: var(--lh-callout); color: var(--color-accent); }
+.text { min-width: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-body); }

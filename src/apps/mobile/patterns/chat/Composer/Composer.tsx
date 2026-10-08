@@ -138,7 +138,7 @@ export function Composer({
                 onClick={sendRecording}
                 aria-label="Send voice message"
               >
-                <Icon name="send" size={20} />
+                <Icon name="send" size={18} />
               </button>
             </div>
           </div>
@@ -184,6 +184,7 @@ export function Composer({
           <div className={styles.toolbar}>
             <IconButton
               icon="plus"
+              size="sm"
               label="Attach lab results"
               onClick={onAttach}
               disabled={Boolean(lockedNote) || generating}
@@ -191,6 +192,7 @@ export function Composer({
             {!generating && (
               <IconButton
                 icon="mic"
+                size="sm"
                 label="Dictate"
                 onClick={startRecording}
                 disabled={Boolean(lockedNote)}
@@ -198,9 +200,9 @@ export function Composer({
             )}
             <div className={styles.send} data-ready={canSend || generating || undefined}>
               {generating ? (
-                <IconButton icon="stop" label="Stop" onClick={onStop} />
+                <IconButton icon="stop" size="sm" label="Stop" onClick={onStop} />
               ) : (
-                <IconButton icon="send" label="Send" onClick={() => onSend()} disabled={!canSend} />
+                <IconButton icon="send" size="sm" label="Send" onClick={() => onSend()} disabled={!canSend} />
               )}
             </div>
           </div>
