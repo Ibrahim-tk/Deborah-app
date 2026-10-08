@@ -31,7 +31,7 @@
 }
 
 /* Left inset = (44 px tap target − 24 px glyph) / 2, so the text starts on the + icon's edge. */
-.field { min-width: 0; display: grid; gap: 2px; padding: var(--space-1) var(--space-3) 0; }
+.field { min-width: 0; display: grid; gap: 2px; padding: var(--space-1) var(--space-2) 0; }
 /* Composer text one step under body, so the bar reads as a calm input, not a headline. */
 .field textarea { font-size: var(--fs-callout); line-height: var(--lh-callout); }
 /* Empty state reads as one line: the placeholder never wraps, it truncates. */
@@ -39,7 +39,7 @@
 .counter { justify-self: end; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); color: var(--color-ink-tertiary); }
 .counter[data-over] { color: var(--color-danger-ink); }
 
-.toolbar { display: flex; align-items: center; gap: var(--space-2); margin-bottom: -2px; }
+.toolbar { display: flex; align-items: center; gap: var(--space-1); }
 
 .send {
   margin-left: auto;
