@@ -13,7 +13,7 @@
 .root {
   display: grid;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-2) var(--space-1);
+  padding: var(--space-3) var(--space-2) var(--space-2);
   border-radius: var(--radius-xl);
   background: var(--glass-fill);
   border: 1px solid var(--glass-rim);
@@ -49,7 +49,10 @@
   color: var(--color-accent);
   transition: background-color var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
 }
-.send[data-ready] { background: var(--color-accent); color: var(--color-ink-on-accent); }
+/* Ready: a 36 pt filled disc drawn inside the 48 pt hit area, so it matches the other tools' scale
+   and sits with equal space to the card's right and bottom edges. */
+.send[data-ready] { color: var(--color-ink-on-accent); }
+.send[data-ready] button { background: radial-gradient(circle closest-side, var(--color-accent) 0 calc(100% - 6px), transparent calc(100% - 5.5px)); }
 .send[data-ready] button { color: inherit; }
 
 .bar[data-locked] .root { background: var(--purple-50); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
