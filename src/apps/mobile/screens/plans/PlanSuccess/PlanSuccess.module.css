@@ -19,5 +19,5 @@
   color: var(--color-gold);
 }
 .title { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
-.text { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); }
+.text { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }
 .actions { display: grid; gap: var(--space-3); }

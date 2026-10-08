@@ -19,9 +19,11 @@
 
 .lg { min-height: var(--button-h); padding: var(--space-3) 28px; }
 .md { min-height: var(--tap-min); padding: var(--space-2) var(--space-6); }
-.sm { min-height: 40px; padding: var(--space-1) var(--space-4); }
+.sm { min-height: 32px; padding: var(--space-1) var(--space-3); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
 /* Keep a 48 pt hit area around the smaller visual. */
-.sm::after { content: ''; position: absolute; inset: -4px 0; }
+.sm::after { content: ''; position: absolute; inset: -8px 0; }
+/* Small ghost = quiet utility (Expand all, Edit…): secondary ink, regular weight, so it never outranks content. */
+.ghost.sm { padding-inline: var(--space-2); font-weight: var(--weight-regular); color: var(--color-ink-secondary); }
 
 .fullWidth { width: 100%; }
 

@@ -1,6 +1,35 @@
-.root { grid-template-columns: auto minmax(0, 1fr); align-items: start; column-gap: var(--space-4); padding: var(--space-4); }
-.icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--color-surface-tonal); color: var(--color-accent); }
-.text { display: grid; gap: var(--space-1); }
-.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink); }
-.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-tertiary); }
+/* Tonal note card (same family as Home + answer sections): flat colour, no shadow, generous air. */
+.root {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-5) var(--space-4) var(--space-4) var(--space-5);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.root:active { transform: scale(0.98); }
+.root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .root:active { transform: none; } }
+.lilac { background: var(--card-tone-lilac); }
+.linen { background: var(--card-tone-linen); }
+.rose { background: var(--card-tone-rose); }
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-right: var(--space-1);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+  font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+.text { display: grid; gap: var(--space-2); padding-right: var(--space-1); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; text-wrap: balance; }
 .reason { font: italic var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.go { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }

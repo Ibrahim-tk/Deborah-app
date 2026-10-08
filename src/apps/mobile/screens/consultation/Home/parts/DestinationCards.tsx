@@ -38,7 +38,7 @@ export function DestinationCards({ askHint, onAsk, health, records, family, onIn
   return (
     <>
       <button type="button" className={styles.hero} onClick={onAsk}>
-        <DeborahBlob size={56} />
+        <DeborahBlob size={44} />
         <span className={styles.heroText}>
           <span className={styles.heroTitle}>Ask Deborah</span>
           <span className={styles.heroHint}>{askHint}</span>

@@ -3,5 +3,5 @@
 .image { flex: none; width: 64px; height: 64px; border-radius: var(--radius-md); object-fit: contain; background: var(--color-surface); }
 .titles { display: grid; gap: 2px; }
 .name { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
-.why { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.why { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .frame { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

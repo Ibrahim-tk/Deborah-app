@@ -1,7 +1,10 @@
-/** One numbered section: Gold Ink numeral, headline title, chevron; hairline-divided, no boxes. */
+/**
+ * One numbered section as a tonal card (same family as Home): serif numeral, headline title and a
+ * round chevron; opening reveals the body under a hairline. §7 is the signature midnight card.
+ */
 import { useId, type ReactNode } from 'react';
 import type { AnswerSection } from '@shared/types/domain';
-import { Icon, IconButton, Panel } from '@mobile/ui';
+import { Icon, IconButton } from '@mobile/ui';
 import { StreamingText } from '../MessageBubble';
 import styles from './AnswerSections.module.css';
 
@@ -27,6 +30,8 @@ function TestBullet({ text, streaming }: { text: string; streaming: boolean }) {
     </>
   );
 }
+
+const TONES = ['lilac', 'linen', 'rose'] as const;
 
 export function Section({ number, section, open, pending, streaming, onToggle, onAddQuestion, extra }: SectionProps) {
   const id = useId();
@@ -56,15 +61,21 @@ export function Section({ number, section, open, pending, streaming, onToggle, o
   );
 
   return (
-    <section className={styles.section} data-pending={pending || undefined}>
+    <section
+      className={`${styles.section} ${styles[isWord ? 'signature' : TONES[(number - 1) % TONES.length]]}`}
+      data-open={open || undefined}
+      data-pending={pending || undefined}
+    >
       <button type="button" className={styles.header} aria-expanded={open} aria-controls={id} onClick={onToggle} disabled={pending}>
         <span className={styles.number}>{number}</span>
         <span className={styles.title}>{section.title}</span>
-        <Icon name="chevronDown" size={20} className={styles.chevron} />
+        <span className={styles.toggle} aria-hidden>
+          <Icon name="chevronDown" size={20} className={styles.chevron} />
+        </span>
       </button>
       {open && !pending && (
         <div id={id} className={styles.content} aria-live={streaming ? 'polite' : undefined}>
-          {isWord ? <Panel tone="linen" goldRule>{body}</Panel> : body}
+          {body}
         </div>
       )}
     </section>

@@ -10,4 +10,4 @@
 .posterIcon { position: absolute; top: var(--space-4); left: var(--space-4); opacity: 0.6; }
 .demo { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-on-signature); }
 
-.text { display: grid; gap: var(--space-4); max-width: 34em; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink); }
+.text { display: grid; gap: var(--space-4); max-width: 34em; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); }

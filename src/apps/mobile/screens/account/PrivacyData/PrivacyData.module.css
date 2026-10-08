@@ -2,5 +2,5 @@
 .body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8)); }
 .group { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface-tonal); }
 .heading { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
-.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .note { margin-top: calc(var(--space-4) * -1); padding: 0 var(--space-5); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

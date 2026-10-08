@@ -17,12 +17,12 @@
   opacity: 1;
   animation: drift 22s ease-in-out infinite alternate;
 }
-.a { top: -20%; left: -45%; background: radial-gradient(closest-side, var(--purple-400), transparent); }
-.b { top: -25%; right: -50%; background: radial-gradient(closest-side, var(--purple-300), transparent); animation-duration: 28s; animation-delay: -9s; }
+.a { top: -20%; left: -45%; background: radial-gradient(closest-side, var(--purple-400), transparent); opacity: 0.8; }
+.b { top: -25%; right: -50%; background: radial-gradient(closest-side, var(--purple-300), transparent); opacity: 0.8; animation-duration: 28s; animation-delay: -9s; }
 .c { top: 5%; left: 0%; width: 100%; background: radial-gradient(closest-side, var(--gold-400), transparent); opacity: 0.9; animation-duration: 34s; animation-delay: -17s; }
 
 /* Extra fields: a dusky midnight-violet depth and a second warm gold glow. */
-.d { top: -45%; left: 10%; width: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--purple-500) 70%, var(--midnight-500)), transparent); opacity: 0.55; animation-duration: 40s; animation-delay: -5s; }
+.d { top: -45%; left: 10%; width: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--purple-500) 70%, var(--midnight-500)), transparent); opacity: 0.44; animation-duration: 40s; animation-delay: -5s; }
 .e { top: 20%; right: -30%; width: 80%; background: radial-gradient(closest-side, var(--gold-300), transparent); opacity: 0.75; animation-duration: 30s; animation-delay: -21s; }
 
 @keyframes drift {

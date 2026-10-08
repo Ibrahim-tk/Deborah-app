@@ -1,6 +1,6 @@
 .root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
 .body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8)); }
-.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .group { display: grid; gap: var(--space-3); padding: var(--space-2) var(--space-5) var(--space-4); border-radius: var(--radius-lg); background: var(--color-surface-tonal); }
 .interval { display: grid; gap: var(--space-2); min-width: 0; margin: 0; padding: 0; border: 0; }
 .legend { padding: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }

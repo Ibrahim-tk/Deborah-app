@@ -40,5 +40,5 @@
 .current { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 .price { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
 .features { display: grid; gap: var(--space-1); }
-.feature { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.feature { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .profiles { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

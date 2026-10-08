@@ -8,7 +8,7 @@
 
 .section { display: grid; gap: var(--space-3); }
 .heading { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
-.paragraph { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; }
+.paragraph { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); }
 
 .books { display: grid; overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
 .book { display: grid; gap: var(--space-1); padding: var(--space-4); }

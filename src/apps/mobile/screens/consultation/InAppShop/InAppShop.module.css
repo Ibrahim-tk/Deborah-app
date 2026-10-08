@@ -9,7 +9,7 @@
 .page { flex: 1; min-height: 0; display: grid; align-content: start; gap: var(--space-3); overflow-y: auto; padding: var(--space-5) var(--margin-screen) var(--space-8); }
 .hero { width: 100%; aspect-ratio: 1; border-radius: var(--radius-lg); object-fit: contain; background: #fff; }
 .name { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); }
-.tagline, .description { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.tagline, .description { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .price { font: var(--weight-regular) var(--fs-data) / var(--lh-data) var(--font-ui); color: var(--color-ink-secondary); }
 .actions { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
 

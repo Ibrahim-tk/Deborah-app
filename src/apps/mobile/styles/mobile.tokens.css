@@ -10,6 +10,7 @@
 
   /* Text */
   --color-ink: var(--purple-900);              /* 15.7:1 */
+  --color-ink-body: var(--purple-700);         /* ~11.9:1 — reading prose: a step under headings */
   --color-ink-secondary: var(--purple-600);    /* 9.4:1 */
   --color-ink-tertiary: var(--purple-500);     /* 8.5:1 metadata */
   --color-ink-placeholder: var(--purple-400);  /* 4.9:1 placeholders only */
@@ -74,12 +75,14 @@
 
   /* Tonal cards: flat colour fields (no shadow, no rim), large radius, one dark round action. */
   --radius-card: 28px;
-  --card-tone-lilac: var(--purple-50);
-  --card-tone-linen: var(--gold-100);
-  --card-tone-rose: var(--pink-50);
+  /* Whisper tints: just enough colour to tell cards apart, never enough to compete with text. */
+  --card-tone-lilac: color-mix(in srgb, var(--purple-50) 45%, var(--white));
+  --card-tone-linen: color-mix(in srgb, var(--gold-100) 40%, var(--white));
+  --card-tone-rose: color-mix(in srgb, var(--pink-50) 50%, var(--white));
   --card-tone-paper: var(--white);
-  --card-action-bg: var(--midnight-500);
-  --card-action-ink: var(--gold-50);
+  /* Quiet action: white circle + accent arrow. Midnight stays reserved for the Ask Deborah hero. */
+  --card-action-bg: var(--white);
+  --card-action-ink: var(--purple-500);
 
   background: var(--color-canvas);
   color: var(--color-ink);

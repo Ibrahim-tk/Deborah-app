@@ -1,2 +1,2 @@
 .body { display: grid; gap: var(--space-5); }
-.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }

@@ -12,20 +12,20 @@
 .hero {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   width: 100%;
-  min-height: 96px;
-  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5);
+  min-height: 72px;
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
   border-radius: var(--radius-card);
   background: var(--color-surface-signature);
   color: var(--color-ink-on-signature);
   text-align: left;
 }
 .heroText { flex: 1; min-width: 0; display: grid; gap: 2px; }
-.heroTitle { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; }
-.heroHint { overflow: hidden; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-on-signature); opacity: 0.85; text-overflow: ellipsis; white-space: nowrap; }
+.heroTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; }
+.heroHint { overflow: hidden; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-on-signature); opacity: 0.85; text-overflow: ellipsis; white-space: nowrap; }
 /* Inverted action on the dark hero: light circle, dark arrow. */
-.heroGo { display: grid; place-items: center; flex: none; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); background: var(--color-ink-on-signature); color: var(--color-surface-signature); }
+.heroGo { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--color-ink-on-signature); color: var(--color-surface-signature); }
 
 /* Destination cards: tone field + a faint photo wash for texture (kept ≤ 0.18 so text stays ≥ 7:1). */
 .photo {
@@ -56,18 +56,18 @@
 .linen { background: var(--card-tone-linen); }
 .rose { background: var(--card-tone-rose); }
 
-.wide { min-height: 184px; }
-.square { aspect-ratio: 1 / 1.08; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5); }
+.wide { min-height: 128px; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5); }
+.square { min-height: 128px; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5); }
 .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
 
-.title { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.015em; text-wrap: balance; }
-.square .title { font-size: var(--fs-title-1); line-height: var(--lh-title-1); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.015em; text-wrap: balance; }
+.square .title { font-size: calc(var(--fs-title-2) * 0.92); }
 .foot { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
 .sub { min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 
 /* The single action: dark round button, the only high-contrast mark on the card. */
-.go { display: grid; place-items: center; flex: none; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }
-.square .go { width: 40px; height: 40px; }
+.go { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }
+.square .go { width: 36px; height: 36px; }
 
 /* My info: quiet Paper row, hairline only. */
 .row {

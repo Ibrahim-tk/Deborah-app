@@ -3,7 +3,7 @@
 .topic { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
 .summary {
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
-  color: var(--color-ink);
+  color: var(--color-ink-body);
 }
 .meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-tertiary); }
 .chevron { color: var(--color-ink-secondary); }

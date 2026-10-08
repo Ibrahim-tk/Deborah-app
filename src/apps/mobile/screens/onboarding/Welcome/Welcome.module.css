@@ -14,7 +14,7 @@
   padding: calc(var(--safe-top) + var(--space-4)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
 }
 .portrait { display: grid; place-items: center; padding-top: var(--space-16, 64px); }
-.note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: center; }
+.note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: center; color: var(--color-ink-body); }
 .hello { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: balance; }
 .form { display: grid; gap: var(--space-3); }
 .signIn { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-1); margin-top: auto; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }

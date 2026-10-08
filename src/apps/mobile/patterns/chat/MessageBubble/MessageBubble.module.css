@@ -12,7 +12,7 @@
 
 .deborah { display: grid; gap: var(--space-3); }
 .speaker { display: flex; align-items: center; gap: var(--space-2); }
-.text { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; }
+.text { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; color: var(--color-ink-body); }
 
 .word { display: inline-block; white-space: nowrap; }
 /* Blur + fade per character (matches TextReveal). */

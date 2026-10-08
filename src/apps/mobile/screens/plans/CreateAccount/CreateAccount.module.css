@@ -4,4 +4,4 @@
 .title { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
 .why { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
 .group { display: grid; gap: var(--space-3); }
-.list { display: grid; gap: var(--space-2); padding-left: var(--space-5); list-style: disc; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.list { display: grid; gap: var(--space-2); padding-left: var(--space-5); list-style: disc; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }

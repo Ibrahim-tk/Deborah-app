@@ -10,4 +10,4 @@
 .pairs { display: grid; gap: var(--space-3); margin: 0; padding: 0 var(--space-4) var(--space-4); }
 .pair { display: grid; gap: var(--space-1); }
 .question { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
-.answer { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.answer { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }

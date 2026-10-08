@@ -1,26 +1,43 @@
-.root { display: grid; }
-.tools { display: flex; justify-content: flex-end; margin-bottom: var(--space-1); }
+.root { display: grid; gap: var(--space-2); }
+.tools { display: flex; justify-content: flex-end; }
 
-.section { border-top: 1px solid var(--color-border-hairline); }
-.section:last-child { border-bottom: 1px solid var(--color-border-hairline); }
+/* Tonal section cards: flat colour fields (they scroll, so no shadow), cycling lilac · linen · rose. */
+.section { border-radius: var(--radius-card); color: var(--color-ink); transition: opacity var(--dur-base) var(--ease-out); }
+.lilac { background: var(--card-tone-lilac); }
+.linen { background: var(--card-tone-linen); }
+.rose { background: var(--card-tone-rose); }
+.signature { background: var(--color-surface-signature); color: var(--color-ink-on-signature); }
 .section[data-pending] { opacity: 0.55; }
 
-.header { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: var(--row-min); padding: var(--space-3) 0; color: var(--color-ink); text-align: left; }
-.header:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-radius: var(--radius-sm); }
+.header { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 72px; padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5); border-radius: var(--radius-card); color: inherit; text-align: left; -webkit-tap-highlight-color: transparent; }
+.header:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .header:disabled { cursor: default; }
 
-.number { flex: none; width: 24px; font: var(--weight-regular) var(--fs-title-2) / 1 var(--font-display); color: var(--color-gold-ink); }
+/* Numerals are large display text, so Gold Ink stays legible on every tone. */
+.number { flex: none; min-width: 28px; font: var(--weight-regular) var(--fs-title-1) / 1 var(--font-display); color: var(--color-gold-ink); }
+.signature .number { color: var(--color-gold); }
 .title { flex: 1; font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
-.chevron { flex: none; color: var(--color-ink-secondary); transition: transform var(--dur-base) var(--ease-out); }
-.header[aria-expanded='true'] .chevron { transform: rotate(180deg); }
 
-.content { display: grid; gap: var(--space-4); padding: 0 0 var(--space-5); }
-.body, .wordBody { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; }
+/* Round toggle: soft when closed, the dark action circle when open. */
+.toggle { display: grid; place-items: center; flex: none; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-ink) 7%, transparent); color: var(--color-ink); transition: background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
+.section[data-open] .toggle { background: var(--card-action-bg); color: var(--card-action-ink); }
+.signature .toggle, .signature[data-open] .toggle { background: var(--color-ink-on-signature); color: var(--color-surface-signature); }
+.chevron { transition: transform var(--dur-base) var(--ease-out); }
+.header[aria-expanded='true'] .chevron { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .chevron, .toggle { transition: none; } }
+
+.content { display: grid; gap: var(--space-4); margin: 0 var(--space-5); padding: var(--space-4) 0 var(--space-5); border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); }
+.body, .wordBody { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); }
 .wordBody { font-style: italic; }
 .signoff { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-deborah-rose); }
+/* Prose on the midnight card keeps the card's light ink. */
+.signature .body, .signature .wordBody, .signature .bullet { color: inherit; }
+/* Rose fails contrast on midnight; the sign-off takes Deborah's gold there instead. */
+.signature .signoff { color: var(--color-gold); }
+.signature .bullet::before { background: var(--color-gold); }
 
 .bullets { display: grid; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
-.bullet { display: flex; align-items: flex-start; gap: var(--space-2); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); }
+.bullet { display: flex; align-items: flex-start; gap: var(--space-2); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }
 .bullet::before { content: ''; flex: none; width: 8px; height: 8px; margin-top: calc(var(--lh-body) / 2 - 4px); border-radius: var(--radius-full); background: var(--color-accent); }
 .bulletText { flex: 1; min-width: 0; }
 .bullet em { font-style: italic; }

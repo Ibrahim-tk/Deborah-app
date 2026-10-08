@@ -1,5 +1,5 @@
 .root { display: grid; justify-items: start; gap: var(--space-4); }
-.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .boxes { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-2); width: 100%; }
 .box {
   min-width: 0;
