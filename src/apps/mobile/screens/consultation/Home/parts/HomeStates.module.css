@@ -62,4 +62,7 @@
 /* Complete your profile hero: ring beside the title. Start with Deborah steps down to linen. */
 .heroHead { display: flex; align-items: center; gap: var(--space-3); }
 .heroHead .heroText { flex: 1; min-width: 0; }
-.secondary { display: grid; gap: var(--space-4); padding: 20px; border-radius: var(--radius-xl); background: var(--card-tone-linen); color: var(--color-ink); }
+.secondary { display: grid; gap: var(--space-4); padding: 20px; border-radius: var(--radius-xl); background: rgb(255 255 255 / 0.72); border: 1px solid rgb(255 255 255 / 0.95); color: var(--color-ink); }
+/* On the white card the prompts take the lilac quiz-row tint, so they still read as rows. */
+.secondary .prompt { background: color-mix(in srgb, var(--color-surface-lilac) 60%, var(--white)); }
+.secondary .prompt:active { background: var(--color-surface-lilac); }

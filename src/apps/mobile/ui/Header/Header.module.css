@@ -10,7 +10,8 @@
   left: 0;
   height: 20px;
   pointer-events: none;
-  background: linear-gradient(to bottom, var(--color-canvas), color-mix(in srgb, var(--color-canvas) 0%, transparent));
+  /* Blur only, no colour: a canvas-coloured fill painted a pale band over the violet photo. */
+  background: transparent;
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   -webkit-mask-image: linear-gradient(to bottom, #000, transparent);

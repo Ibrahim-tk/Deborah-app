@@ -1,3 +1,12 @@
 .root { display: flex; flex-direction: column; height: 100%; background: transparent; }
-.body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-2) var(--margin-screen) var(--space-8); }
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-2) var(--margin-screen) var(--space-8);
+  /* Content melts into the footer instead of being cut at a hard line. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 32px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 32px), transparent);
+}
 .footer { flex: none; display: grid; gap: var(--space-2); padding: var(--space-4) var(--margin-screen) calc(var(--safe-bottom) + var(--space-2)); }
