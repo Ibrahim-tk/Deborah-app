@@ -2,7 +2,7 @@
  * @screen  M-4.3 · Save your health history (create account / sign in)
  * @flow    F04 Free limit, plans & account (sign-in mode also from F01 M-1.2)
  * @presentation  modal (default) · bottom sheet when opened with `{ sheet: true }` (sign-in from Welcome)
- * @states  choose · Apple/Google system sheet · email (+ password, optional last name when creating) · verification code · verifying
+ * @states  choose · Apple/Google system sheet · email · verification code · set password (creating only) · verifying
  *          · merge (signing in over a guest who already chatted: keep or discard this phone's conversations)
  * @entry   also from M-2.1's save-your-profile card (`returnTo: 'chat'`, optional `provider`), F01 step 4;
  *          the Home avatar / save card and the hard account gates (sheet, create mode, optional `reason`)
@@ -22,7 +22,7 @@ import { MergeStep } from './parts/MergeStep';
 import { ProviderSheet, type Provider } from './parts/ProviderSheet';
 import styles from './CreateAccount.module.css';
 
-type Step = 'choose' | 'email' | 'code' | 'merge';
+type Step = 'choose' | 'email' | 'code' | 'password' | 'merge';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -47,7 +47,6 @@ export default function CreateAccount() {
   const [emailError, setEmailError] = useState<string>();
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string>();
-  const [lastName, setLastName] = useState('');
   const [whyOpen, setWhyOpen] = useState(false);
   const [mode, setMode] = useState(initialMode);
   const [switchedToCreate, setSwitchedToCreate] = useState(false);
@@ -72,19 +71,19 @@ export default function CreateAccount() {
       toast(`Welcome back, ${useAppStore.getState().userName}`);
     } else if (sheet) {
       // Guest save from Home (avatar, save card) or a hard gate: stay where she was.
-      s.createAccount(address, lastName.trim() || undefined);
+      s.createAccount(address);
       dismissSheet();
       toast('Your profile is saved');
       if (reason) resumeGate();
     } else if (returnTo === 'chat') {
-      s.createAccount(address, lastName.trim() || undefined);
+      s.createAccount(address);
       if (sheet) dismissSheet();
       else dismissModal();
       toast('Your profile is saved');
       // The notification ask follows saving, never at launch.
       if (s.notificationPermission === 'unknown') presentSheet('M-2.8');
     } else {
-      s.createAccount(address, lastName.trim() || undefined);
+      s.createAccount(address);
       presentSheet('M-4.4', { plan, billing, returnTo });
     }
   };
@@ -92,8 +91,6 @@ export default function CreateAccount() {
   const submitEmail = () => {
     if (!EMAIL.test(email.trim())) return setEmailError('Enter an email address like maria@example.com.');
     setEmailError(undefined);
-    if (!signin && password.length < 8) return setPasswordError('Use at least 8 characters.');
-    setPasswordError(undefined);
     setStep('code');
   };
 
@@ -149,17 +146,24 @@ export default function CreateAccount() {
           submitEmail();
         }} noValidate>
           <Input label="Email" type="email" autoComplete="email" placeholder={`${handle}@example.com`} autoFocus value={email} error={emailError} onChange={(e) => setEmail(e.target.value)} />
-          {!signin && (
-            <>
-              <Input label="Password" type="password" autoComplete="new-password" hint="At least 8 characters" value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} />
-              <Input label="Last name (optional)" autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-            </>
-          )}
           <Button type="submit" fullWidth>Continue</Button>
         </form>
       )}
 
-      {step === 'code' && <CodeStep email={email.trim()} onVerified={() => succeed(email.trim())} />}
+      {/* Email first, then the code; a new account sets its password only after the email is verified. */}
+      {step === 'code' && <CodeStep email={email.trim()} onChangeEmail={() => setStep('email')} onVerified={() => (signin ? succeed(email.trim()) : setStep('password'))} />}
+
+      {step === 'password' && (
+        <form className={styles.group} onSubmit={(e) => {
+          e.preventDefault();
+          if (password.length < 8) return setPasswordError('Use at least 8 characters.');
+          setPasswordError(undefined);
+          succeed(email.trim());
+        }} noValidate>
+          <Input label="Set a password" type="password" autoComplete="new-password" hint="At least 8 characters" autoFocus value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} />
+          <Button type="submit" fullWidth>Done</Button>
+        </form>
+      )}
 
       {step === 'merge' && (
         <MergeStep
@@ -208,7 +212,7 @@ export default function CreateAccount() {
       <GradientShift />
       <Header
         transparent
-        onBack={canGoBack ? (step === 'choose' ? pop : () => setStep(step === 'code' ? 'email' : 'choose')) : undefined}
+        onBack={canGoBack ? (step === 'choose' ? pop : () => setStep(step === 'password' ? 'code' : step === 'code' ? 'email' : 'choose')) : undefined}
         backLabel={step === 'choose' ? previousTitle : 'Back'}
         left={!canGoBack && step !== 'choose' ? <Button variant="link" onClick={() => setStep('choose')}>Back</Button> : undefined}
         right={!canGoBack && <IconButton icon="close" label="Close" onClick={dismissModal} />}

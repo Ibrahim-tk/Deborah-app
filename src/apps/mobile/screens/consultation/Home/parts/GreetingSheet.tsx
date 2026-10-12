@@ -1,5 +1,6 @@
 /**
- * First-visit greeting: a bottom sheet where Deborah's orb says hello, and one clear "Get started" button into the chat. Tapping the scrim (anywhere else) dismisses it.
+ * First-visit greeting: a bottom sheet where Deborah's orb says hello, and one clear "Complete your profile" button
+ * straight to her first profile question. Tapping the scrim (anywhere else) dismisses it.
  */
 import { Button, DeborahBlob, IconButton, TextReveal } from '@mobile/ui';
 import styles from './GreetingSheet.module.css';
@@ -12,7 +13,7 @@ export interface GreetingSheetProps {
 
 export function GreetingSheet({ name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. How are you feeling? Share with me, I’d love to hear from you.`;
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. Let’s complete your health profile first, so my guidance fits you. It takes about two minutes.`;
   return (
     <div className={styles.root}>
       <button type="button" className={styles.scrim} onClick={onDismiss} aria-label="Dismiss greeting" />
@@ -22,7 +23,7 @@ export function GreetingSheet({ name, onDismiss, onOpenChat }: GreetingSheetProp
         <DeborahBlob size={80} label="Deborah" />
         <TextReveal className={styles.hello} text={hello} delay={350} />
         <div className={styles.actions}>
-          <Button fullWidth onClick={onOpenChat}>Get started</Button>
+          <Button fullWidth onClick={onOpenChat}>Complete your profile</Button>
         </div>
       </div>
     </div>

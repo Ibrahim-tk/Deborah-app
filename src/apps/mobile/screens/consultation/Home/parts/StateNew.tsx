@@ -1,11 +1,12 @@
 /**
  * Home · State 1 — new user who skipped the chat (Figma 170:145). No journey, reports or
- * profile yet, so nothing that leads nowhere: Start with Deborah (3 ready-made prompts), Build
- * your health profile (ring), the 90 Day Journey as a locked preview, and a small family row.
+ * profile yet, so nothing that leads nowhere. First time, the hero is "Complete your profile"
+ * (design direction 2026-10-12: it opens the chat on Deborah's first onboarding question); then
+ * Start with Deborah (3 ready-made prompts), the 90 Day Journey as a locked preview, and a family row.
  * Prompt copy is placeholder until Deborah approves it.
  */
-import { Icon, ProgressRing } from '@mobile/ui';
-import { Action, LinkCard } from './HomeKit';
+import { Button, Icon, ProgressRing } from '@mobile/ui';
+import { LinkCard } from './HomeKit';
 import styles from './HomeStates.module.css';
 
 const PROMPTS = [
@@ -16,7 +17,7 @@ const PROMPTS = [
 
 export interface StateNewProps {
   onPrompt: (prefill: string) => void;
-  /** Absent when the profile card isn't offered (intake V2 off, or already complete). */
+  /** Hero: absent once the profile basics are done. */
   profile?: { progress: number; onOpen: () => void };
   onAddFamily: () => void;
 }
@@ -24,9 +25,22 @@ export interface StateNewProps {
 export function StateNew({ onPrompt, profile, onAddFamily }: StateNewProps) {
   return (
     <>
-      <section className={styles.hero} aria-labelledby="start-deborah" data-placeholder>
+      {profile && (
+        <section className={styles.hero} aria-labelledby="complete-profile">
+          <div className={styles.heroHead}>
+            <ProgressRing value={profile.progress} size={52} label="Health profile complete" />
+            <div className={styles.heroText}>
+              <h2 id="complete-profile" className={styles.heroTitle}>Complete your profile</h2>
+              <p className={styles.heroBody}>A few quick questions so Deborah’s guidance fits you. About 2 minutes.</p>
+            </div>
+          </div>
+          <Button fullWidth onClick={profile.onOpen}>Complete your profile</Button>
+        </section>
+      )}
+
+      <section className={profile ? styles.secondary : styles.hero} aria-labelledby="start-deborah" data-placeholder>
         <div className={styles.heroText}>
-          <h2 id="start-deborah" className={styles.heroTitle}>Start with Deborah</h2>
+          <h2 id="start-deborah" className={profile ? styles.cardTitle : styles.heroTitle}>Start with Deborah</h2>
           <p className={styles.heroBody}>Tell her what’s going on. She’ll ask a few questions, then share what she thinks.</p>
         </div>
         <ul className={styles.prompts}>
@@ -41,18 +55,7 @@ export function StateNew({ onPrompt, profile, onAddFamily }: StateNewProps) {
         </ul>
       </section>
 
-      {profile && (
-        <button type="button" className={styles.profileCard} onClick={profile.onOpen}>
-          <ProgressRing value={profile.progress} size={52} label="Health profile complete" />
-          <span className={styles.profileText}>
-            <span className={styles.cardTitle}>Build your health profile</span>
-            <span className={styles.cardMeta}>2 min · medications, allergies, date of birth</span>
-          </span>
-          <Action />
-        </button>
-      )}
-
-      <LinkCard tone="rose" title="90 Day Journey" meta="Your personalized plan unlocks after your first conversation." icon="lock" label="90 Day Journey, locked" />
+      <LinkCard tone="rose" lead="calendar" title="90 Day Journey" meta="Your personalized plan unlocks after your first conversation." icon="lock" label="90 Day Journey, locked" />
 
       <button type="button" className={styles.familyRow} onClick={onAddFamily}>
         <span className={styles.plus} aria-hidden>

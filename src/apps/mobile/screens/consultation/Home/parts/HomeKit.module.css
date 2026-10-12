@@ -21,8 +21,9 @@ button.card:active, .tile:active, .rec:active { transform: scale(0.99); }
 .rose { background: var(--card-tone-rose); }
 
 .text { flex: 1; min-width: 0; display: grid; gap: 2px; }
-.title { font: var(--weight-regular) 22px / 27px var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); }
-.meta { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-body); }
+/* Sans titles: the serif is reserved for the Home greeting (design direction 2026-10-12). */
+.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink); }
+.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .label { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-accent); }
 
 /* The single action: white round button. */
@@ -47,3 +48,7 @@ button.card:active, .tile:active, .rec:active { transform: scale(0.99); }
 .single > li { flex: 1; width: auto; }
 .rec { display: grid; gap: 4px; width: 100%; height: 100%; padding: var(--space-4); border-radius: var(--radius-xl); text-align: left; -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
 .because { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-accent); }
+
+/* Leading icon badge: white disc on the tonal card, accent glyph. */
+.badge { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: rgb(255 255 255 / 0.85); color: var(--color-accent); }
+.tileHead { display: grid; gap: var(--space-3); justify-items: start; }

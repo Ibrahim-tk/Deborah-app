@@ -40,6 +40,8 @@ export type UserInput =
   | { kind: 'acknowledgeEmergency'; messageId: string }
   /** Deep link `followup:<profileId>` opened the Conversation in check-in mode. */
   | { kind: 'startCheckIn' }
+  /** Home "Complete your profile": Deborah asks the onboarding questions straight away. */
+  | { kind: 'startProfile' }
   | { kind: 'checkInReply'; messageId: string; optionId: string }
   /** M-5.4 "Looks right — send to Deborah". */
   | { kind: 'shareLabs'; report: LabReport };

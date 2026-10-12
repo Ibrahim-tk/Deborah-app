@@ -208,6 +208,8 @@ export interface Conversation {
   gentleNext?: boolean;
   /** Medication patterns already answered with the safety card. */
   medsWarned?: string[];
+  /** Onboarding chat that only fills the health profile (Home "Complete your profile"); no topic yet. */
+  profileOnly?: boolean;
   /** Check-in progress (docs/ux/F05-followup-labs.md › M-2.1 state · Check-in). */
   checkInStage?: CheckInStage;
 }

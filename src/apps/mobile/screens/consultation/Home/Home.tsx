@@ -89,19 +89,19 @@ export default function Home() {
   const shop = (productId: string) => open('M-2.7', { productId });
   const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
   const tiles: [TileProps, TileProps] = [
-    { tone: 'linen', title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', progress: FLAGS.intakeV2 ? d.completion : undefined, onPress: go('M-7.2') },
-    { tone: 'rose', title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
+    { tone: 'linen', lead: 'health', title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', progress: FLAGS.intakeV2 ? d.completion : undefined, onPress: go('M-7.2') },
+    { tone: 'rose', lead: 'family', title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
   ];
 
   // Next steps fill the profile over time, one tap each (State 2).
   const steps: NextStep[] = [];
-  if (d.checkInDue) steps.push({ key: 'checkin', title: 'Check in with Deborah', sub: 'Tell her how things are going', onPress: () => openAsk({ mode: 'checkin' }) });
-  if (FLAGS.intakeV2 && !d.profile?.health?.medications) steps.push({ key: 'meds', title: 'Add your current medications', sub: 'So Deborah can check interactions', onPress: openProfile });
-  if (d.reports.length === 0) steps.push({ key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => open('M-5.3') });
+  if (d.checkInDue) steps.push({ key: 'checkin', icon: 'bell', title: 'Check in with Deborah', sub: 'Tell her how things are going', onPress: () => openAsk({ mode: 'checkin' }) });
+  if (FLAGS.intakeV2 && !d.profile?.health?.medications) steps.push({ key: 'meds', icon: 'medicine', title: 'Add your current medications', sub: 'So Deborah can check interactions', onPress: openProfile });
+  if (d.reports.length === 0) steps.push({ key: 'labs', icon: 'upload', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => open('M-5.3') });
   if (FLAGS.intakeV2 && d.intakeDone) {
-    for (const x of d.deferred) steps.push({ key: x.key, title: `Add ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, sub: 'Helps Deborah tailor her guidance', onPress: () => presentSheet('M-2.11', { topic: x.key }) });
+    for (const x of d.deferred) steps.push({ key: x.key, icon: 'note', title: `Add ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, sub: 'Helps Deborah tailor her guidance', onPress: () => presentSheet('M-2.11', { topic: x.key }) });
   }
-  for (const q of d.steps) steps.push({ key: `q:${q}`, title: q, sub: 'Ask Deborah', onPress: () => openAsk({ prefill: q }) });
+  for (const q of d.steps) steps.push({ key: `q:${q}`, icon: 'chat', title: q, sub: 'Ask Deborah', onPress: () => openAsk({ prefill: q }) });
 
   return (
     <div className={styles.root} data-xref="M-2.0 · Home">
@@ -125,7 +125,7 @@ export default function Home() {
         {d.state === 'new' && (
           <StateNew
             onPrompt={(prefill) => { closeSheet(); openAsk({ prefill }); }}
-            profile={FLAGS.intakeV2 && !d.intakeDone ? { progress: d.completion, onOpen: openProfile } : undefined}
+            profile={!d.intakeDone ? { progress: d.completion, onOpen: () => { closeSheet(); openAsk({ startIntake: true }); } } : undefined}
             onAddFamily={() => addMember(false)}
           />
         )}
@@ -164,7 +164,14 @@ export default function Home() {
         <ChatLauncher glow placeholder="Ask Deborah how you’re feeling…" onOpen={chat} />
       </div>
 
-      {sheet && <GreetingSheet name={name} onDismiss={closeSheet} onOpenChat={chat} />}
+      {sheet && (
+        <GreetingSheet
+          name={name}
+          onDismiss={closeSheet}
+          // Straight to Deborah's first onboarding question in the chat.
+          onOpenChat={() => { closeSheet(); openAsk({ startIntake: true }); }}
+        />
+      )}
     </div>
   );
 }

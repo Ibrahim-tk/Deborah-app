@@ -50,6 +50,8 @@ function handleUserInput(ctx: EngineContext, input: UserInput): EnginePlan {
       return acknowledgeEmergencySteps(ctx, input.messageId);
     case 'startCheckIn':
       return startCheckInSteps(ctx);
+    case 'startProfile':
+      return startProfileSteps(ctx);
     case 'checkInReply':
       return checkInReplySteps(ctx, input.messageId, input.optionId);
     case 'shareLabs':
@@ -135,6 +137,22 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
   return [userBubble(ctx, text), ...pause('Thinking about your question'), ...deborahText(ctx, followUpReply(conv.scriptId, text))];
 }
 
+/**
+ * Home "Complete your profile" (design direction 2026-10-12): an onboarding-only chat. Deborah asks
+ * the first onboarding question straight away; when the basics are in she says so and the chat
+ * waits for the user's first topic, which then starts a consultation in the same conversation.
+ */
+function startProfileSteps(ctx: EngineContext): EnginePlan {
+  const conv = ctx.conversation;
+  const plan = planConsultation(ctx, [], false);
+  const next: Conversation = { ...conv, status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [] };
+  return [
+    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [], startedAt: ctx.now } } },
+    ...pause('Getting ready', 400, 700),
+    ...nextIntakeOrReady(ctx, next, ctx.profile),
+  ];
+}
+
 function startConsultation(rawCtx: EngineContext, text: string, scriptId: string): EnginePlan {
   // Progressive intake: anything her message already answers (age, medicines, allergies…) is
   // filled first, so planning skips those questions.
@@ -147,7 +165,8 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
   ];
   const script = scripts[scriptId] ?? scripts[FALLBACK_SCRIPT_ID];
   const prev = ctx.conversation;
-  const reuse = prev.messages.length === 0;
+  // The onboarding chat carries on into her first consultation (its messages stay).
+  const reuse = prev.messages.length === 0 || Boolean(prev.profileOnly);
   const conv: Conversation = {
     id: reuse ? prev.id : uid('c'),
     profileId: ctx.profile.id,
@@ -161,7 +180,7 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
   };
   return [
     reuse
-      ? { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: conv } }
+      ? { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: prev.profileOnly ? { ...conv, messages: prev.messages, profileOnly: false } : conv } }
       : { type: 'store', action: { type: 'startConversation', conversation: conv } },
     ...inferSteps,
     userBubble(ctx, text),

@@ -40,7 +40,7 @@ export default function Conversation() {
   const offerNotifications = () => useAppStore.getState().notificationPermission === 'unknown' && presentSheet('M-2.8');
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
   // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
-  const { prefill, focus } = useScreenParams<{ prefill: string; focus: boolean }>();
+  const { prefill, focus, startIntake } = useScreenParams<{ prefill: string; focus: boolean; startIntake: boolean }>();
   const clock = useAppStore(useShallow((s) => ({ simulatedNow: s.simulatedNow, clockAnchor: s.clockAnchor })));
   const actions = useMessageActions(profile?.id);
   const openSwitcher = useProfileSwitcher();
@@ -77,13 +77,23 @@ export default function Conversation() {
   const { ref: scrollRef, onScroll, showLatest, toBottom } = useAutoScroll(`${intake.progress.step}:${messages.length}:${last?.text?.length}:${JSON.stringify(last?.answer?.sections.map((s) => s.body.length + (s.bullets?.length ?? 0)))}:${conversation?.thinking}`);
 
   useEffect(() => () => setChromeHidden(false), [setChromeHidden]);
+  // Home's first-visit sheet ("Complete your profile") lands straight on Deborah's first onboarding
+  // question (`startIntake`): no greeting screen in between (design direction 2026-10-12).
+  const profileStarted = useRef(false);
+  const startProfile = chat.startProfile;
+  useEffect(() => {
+    if (!startIntake || profileStarted.current || messages.length > 0 || busy) return;
+    profileStarted.current = true;
+    startProfile();
+  }, [startIntake, messages.length, busy, startProfile]);
+
   // Necessary profile info is in (intake questions done → ready): guests get the sign-up sheet,
   // once (design direction 2026-10-12). Sign-in is one tap away inside it.
   const wasProfiling = useRef(false);
   useEffect(() => {
     const status = conversation?.status;
     if (status === 'intake') wasProfiling.current = true;
-    else if (wasProfiling.current && status === 'ready') {
+    else if (wasProfiling.current && (status === 'ready' || status === 'empty')) {
       wasProfiling.current = false;
       const s = useAppStore.getState();
       if (!s.accountId && !s.saveProfileOfferedAt) {
@@ -144,7 +154,7 @@ export default function Conversation() {
 
   return (
     <div className={styles.root} data-xref="M-2.1 · Conversation">
-      <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} onInfo={() => setInfoOpen(true)} canStartNew={!isEmpty} scrolled={underBar} />
+      <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} onInfo={() => setInfoOpen(true)} canStartNew={!isEmpty && !profiling} scrolled={underBar} />
       {other && profile && (
         <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} onSwitch={openSwitcher} />
       )}

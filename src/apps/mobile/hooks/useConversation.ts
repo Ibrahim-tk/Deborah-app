@@ -76,6 +76,8 @@ export function useConversation() {
     acknowledgeEmergency: (messageId: string) => run({ kind: 'acknowledgeEmergency', messageId }),
     /** F05: opened from a follow-up notification (deep link `followup:<profileId>`). */
     startCheckIn: () => run({ kind: 'startCheckIn' }),
+    /** Home "Complete your profile": the first onboarding question, no user message first. */
+    startProfile: () => run({ kind: 'startProfile' }),
     checkInReply: (messageId: string, optionId: string) => run({ kind: 'checkInReply', messageId, optionId }),
     /** M-5.4 "Looks right — send to Deborah": lab-informed answer (counted). */
     shareLabs: (report: LabReport) => run({ kind: 'shareLabs', report }),

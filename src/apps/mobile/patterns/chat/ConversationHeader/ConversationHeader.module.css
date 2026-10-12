@@ -34,3 +34,5 @@
 }
 /* The initial sits straight on the glass: no fill of its own. */
 .avatar .avatarGlass { background: transparent; color: var(--color-ink); }
+/* Sans initial in the header (the serif is reserved for the Home greeting). */
+.avatar .avatarGlass > span { font: var(--weight-medium) 17px / 1 var(--font-body); letter-spacing: -0.01em; }

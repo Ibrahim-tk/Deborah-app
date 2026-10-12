@@ -11,6 +11,15 @@ import styles from './HomeKit.module.css';
 
 export type Tone = 'lilac' | 'linen' | 'rose';
 
+/** Leading icon in a soft tinted circle: names the card at a glance (visual hierarchy). */
+export function Badge({ icon }: { icon: IconName }) {
+  return (
+    <span className={styles.badge} aria-hidden>
+      <Icon name={icon} size={20} />
+    </span>
+  );
+}
+
 /** Thin progress line (0–1). */
 export function Bar({ value, className }: { value: number; className?: string }) {
   return (
@@ -39,14 +48,17 @@ export interface LinkCardProps {
   /** Extra line under the meta (e.g. a progress bar). */
   extra?: ReactNode;
   icon?: IconName;
+  /** Leading icon badge. */
+  lead?: IconName;
   /** Omit for a non-interactive card (locked preview). */
   onPress?: () => void;
   label?: string;
 }
 
-export function LinkCard({ tone, title, meta, extra, icon, onPress, label }: LinkCardProps) {
+export function LinkCard({ tone, title, meta, extra, icon, lead, onPress, label }: LinkCardProps) {
   const body = (
     <>
+      {lead && <Badge icon={lead} />}
       <span className={styles.text}>
         <span className={styles.title}>{title}</span>
         <span className={styles.meta}>{meta}</span>
@@ -69,6 +81,7 @@ export interface TileProps {
   meta: string;
   /** 0–1: thin bar above the meta (My Health completion). */
   progress?: number;
+  lead?: IconName;
   onPress: () => void;
 }
 
@@ -78,7 +91,10 @@ export function TilePair({ tiles, compact }: { tiles: [TileProps, TileProps]; co
     <div className={styles.pair}>
       {tiles.map((t) => (
         <button key={t.title} type="button" className={cx(styles.tile, styles[t.tone], compact && styles.compact)} onClick={t.onPress}>
-          <span className={styles.title}>{t.title}</span>
+          <span className={styles.tileHead}>
+            {t.lead && <Badge icon={t.lead} />}
+            <span className={styles.title}>{t.title}</span>
+          </span>
           <span className={styles.foot}>
             <span className={styles.tileMeta}>
               {t.progress !== undefined && <Bar value={t.progress} className={styles.tileBar} />}

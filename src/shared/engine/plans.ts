@@ -71,6 +71,13 @@ export function nextIntakeOrReady(ctx: EngineContext, conv: Conversation, profil
 }
 
 export function readySteps(ctx: EngineContext, conv: Conversation, profile: Profile): Step[] {
+  // Onboarding-only chat: the profile is set; wait for her first topic (status empty).
+  if (conv.profileOnly) {
+    return [
+      ...deborahText(ctx, `Thank you, ${profile.name}. Your profile is set. What would you like help with today?`),
+      { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'empty' } } },
+    ];
+  }
   const script = scriptOf(conv);
   return [
     ...deborahText(ctx, interpolate(script.readyLine, { name: profile.name }), { suggestions: script.suggestedQuestions }),

@@ -9,6 +9,9 @@ import styles from './SaveProgressCard.module.css';
 export function SaveProgressCard({ onSave, onDismiss }: { onSave: () => void; onDismiss: () => void }) {
   return (
     <section className={styles.root} aria-labelledby="save-progress-title">
+      <span className={styles.icon} aria-hidden>
+        <Icon name="lock" size={18} />
+      </span>
       <p id="save-progress-title" className={styles.text}>Save your progress with Deborah</p>
       <Button size="md" onClick={onSave}>Save</Button>
       <button type="button" className={styles.close} aria-label="Dismiss" onClick={onDismiss}>

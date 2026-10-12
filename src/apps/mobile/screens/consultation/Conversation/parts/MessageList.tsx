@@ -4,6 +4,7 @@ import { ANSWER_REQUEST_LABEL } from '@shared/engine';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
 import type { Conversation, Message } from '@shared/types/domain';
+import { DeborahBlob } from '@mobile/ui';
 import { ProductCard, ShopTiles } from '@mobile/patterns/commerce';
 import {
   AnswerActions,
@@ -189,6 +190,8 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
         i === firstAnswer && !disclaimerSeen && (
           <CareDisclaimer key="care" text={consentDoc.careLine} actionLabel="Got it" onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
         ),
+        // A chat that opens with Deborah (first-visit onboarding) shows her orb once, top left.
+        i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="Deborah" className={styles.firstOrb} />,
         renderOne(m, i),
       ])}
 

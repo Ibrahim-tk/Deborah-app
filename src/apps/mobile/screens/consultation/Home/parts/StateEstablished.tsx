@@ -31,7 +31,10 @@ export function StateEstablished(p: StateEstablishedProps) {
     <>
       <section className={styles.hero} aria-labelledby="today-habits" data-placeholder>
         <div className={styles.heroText}>
-          <p className={styles.kicker}>Today · Day {p.day} of 90</p>
+          <p className={styles.kicker}>
+            <Icon name="calendar" size={16} />
+            Today · Day {p.day} of 90
+          </p>
           <h2 id="today-habits" className={styles.heroTitle}>Your habits for today</h2>
         </div>
         {p.habits.length > 0 && (
@@ -54,9 +57,9 @@ export function StateEstablished(p: StateEstablishedProps) {
         </div>
       </section>
 
-      <LinkCard tone="linen" title="Continue with Deborah" meta={p.continueMeta ?? 'Pick up where you left off'} onPress={p.onContinue} />
-      <LinkCard tone="rose" title="90 Day Journey" meta={`Day ${p.day} of 90 · On track`} onPress={p.onJourney} />
-      {p.reports && <LinkCard tone="lilac" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />}
+      <LinkCard tone="linen" lead="chat" title="Continue with Deborah" meta={p.continueMeta ?? 'Pick up where you left off'} onPress={p.onContinue} />
+      <LinkCard tone="rose" lead="calendar" title="90 Day Journey" meta={`Day ${p.day} of 90 · On track`} onPress={p.onJourney} />
+      {p.reports && <LinkCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />}
       <TilePair tiles={p.tiles} compact />
       <Recommendations items={p.recommendations} onShop={p.onShop} />
     </>
