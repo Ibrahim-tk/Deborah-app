@@ -30,11 +30,11 @@ export function StateNew({ onPrompt, profile, onAddFamily }: StateNewProps) {
           <div className={styles.heroHead}>
             <ProgressRing value={profile.progress} size={52} label="Health profile complete" />
             <div className={styles.heroText}>
-              <h2 id="complete-profile" className={styles.heroTitle}>Complete your profile</h2>
+              <h2 id="complete-profile" className={styles.heroTitle}>Complete your health profile</h2>
               <p className={styles.heroBody}>A few quick questions so Deborah’s guidance fits you. About 2 minutes.</p>
             </div>
           </div>
-          <Button fullWidth onClick={profile.onOpen}>Complete your profile</Button>
+          <Button fullWidth onClick={profile.onOpen}>Complete your health profile</Button>
         </section>
       )}
 

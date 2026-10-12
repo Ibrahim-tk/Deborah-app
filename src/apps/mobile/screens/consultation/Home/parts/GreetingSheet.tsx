@@ -23,7 +23,7 @@ export function GreetingSheet({ name, onDismiss, onOpenChat }: GreetingSheetProp
         <DeborahBlob size={80} label="Deborah" />
         <TextReveal className={styles.hello} text={hello} delay={350} />
         <div className={styles.actions}>
-          <Button fullWidth onClick={onOpenChat}>Complete your profile</Button>
+          <Button fullWidth onClick={onOpenChat}>Complete your health profile</Button>
         </div>
       </div>
     </div>

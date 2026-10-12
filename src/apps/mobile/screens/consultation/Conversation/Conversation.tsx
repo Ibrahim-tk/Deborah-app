@@ -67,7 +67,10 @@ export default function Conversation() {
   // Onboarding (health profile): the composer steps aside; multiple-choice questions show their
   // options in the answer card at the bottom, "Other…" typed there (design direction 2026-10-12).
   // The about-you step still needs free text, so it keeps the composer.
-  const profiling = (conversation?.status === 'intake' || (intakeMode && !aboutStep)) && !emergencyOpen;
+  // Opened from "Complete your health profile": stay blank until Deborah's first question lands,
+  // never flashing the empty-chat greeting or suggestions.
+  const profileOpening = Boolean(startIntake) && isEmpty;
+  const profiling = (conversation?.status === 'intake' || (intakeMode && !aboutStep) || profileOpening) && !emergencyOpen;
   const quizMsg = [...messages].reverse().find((m) => m.kind === 'intakeQuestion');
   const quiz =
     conversation?.status === 'intake' && !busy && Boolean(quizMsg?.intake) && !quizMsg?.intake?.input &&
@@ -171,7 +174,7 @@ export default function Conversation() {
           {intakeMode ? (
             <IntakeFlow flow={intake} onScan={(field) => presentSheet('M-2.9', { field })} onPick={(t) => send(t)} />
           ) : isEmpty ? (
-            <Greeting />
+            !profileOpening && <Greeting />
           ) : (
             conversation && (
               <MessageList
@@ -201,7 +204,7 @@ export default function Conversation() {
 
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
-        {isEmpty && !intakeMode && !recording && <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />}
+        {isEmpty && !intakeMode && !profileOpening && !recording && <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
         {quiz && profiling && (
           <AnswerPanel

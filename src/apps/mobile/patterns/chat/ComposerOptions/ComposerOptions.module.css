@@ -45,3 +45,7 @@
 .otherSend { flex: none; display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--color-accent); color: var(--color-ink-on-accent); }
 .otherSend:disabled { background: transparent; color: var(--color-ink-tertiary); }
 .otherField:focus, .otherField:focus-visible { outline: none; box-shadow: none; }
+/* Answer card spacing: a little more air inside the rows than the docked composer options. */
+.panel { padding: 10px; }
+.panel .row { padding: 0 var(--space-5); min-height: 44px; }
+.panel .otherRow { padding-left: var(--space-5); min-height: 44px; }
