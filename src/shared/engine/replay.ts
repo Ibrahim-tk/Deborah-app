@@ -86,6 +86,8 @@ export function replayScript(scriptId: string, checkpoint: Checkpoint, opts: Rep
       flags: { failNext: false },
       now: opts.now,
       labs: opts.labs,
+      // Seeded histories predate the in-chat health profile (F01).
+      profileGates: false,
     };
     for (const step of engine.handleUserInput(ctx, input)) [conv, profile] = applyInstant(conv, profile, step);
   };

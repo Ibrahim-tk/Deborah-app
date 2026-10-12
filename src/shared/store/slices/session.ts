@@ -9,6 +9,9 @@ type Actions = Pick<
   SessionSlice,
   | 'setName'
   | 'acceptConsent'
+  | 'acceptHealthConsent'
+  | 'dismissDisclaimer'
+  | 'offerSaveProfile'
   | 'switchProfile'
   | 'advanceClock'
   | 'setPermission'
@@ -16,6 +19,11 @@ type Actions = Pick<
   | 'snoozeFollowUp'
   | 'createAccount'
   | 'restoreAccount'
+  | 'dismissSaveNudge'
+  | 'setReferralSource'
+  | 'acceptTerms'
+  | 'setGenesisGoldCustomer'
+  | 'discardGuestData'
   | 'requestDeepLink'
   | 'clearDeepLink'
 >;
@@ -45,6 +53,9 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
       };
     }),
   acceptConsent: (version) => set((s) => ({ consentAcceptedAt: nowFrom(s).toISOString(), consentVersion: version })),
+  acceptHealthConsent: () => set((s) => ({ healthConsentAt: s.healthConsentAt ?? nowFrom(s).toISOString() })),
+  dismissDisclaimer: () => set((s) => ({ disclaimerSeenAt: s.disclaimerSeenAt ?? nowFrom(s).toISOString() })),
+  offerSaveProfile: () => set((s) => ({ saveProfileOfferedAt: s.saveProfileOfferedAt ?? nowFrom(s).toISOString() })),
   switchProfile: (id) => set({ activeProfileId: id }),
   advanceClock: (days) => {
     const s = get();
@@ -54,7 +65,7 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
   setPermission: (notificationPermission) => set({ notificationPermission }),
   setLocked: (isLocked) => set({ isLocked }),
   snoozeFollowUp: (followUpSnoozeUntil) => set({ followUpSnoozeUntil }),
-  createAccount: (email) => set({ accountId: uid('acct'), accountEmail: email }),
+  createAccount: (email, lastName) => set({ accountId: uid('acct'), accountEmail: email, accountLastName: lastName }),
   restoreAccount: (email) => {
     if (!get().userName) get().setName(nameFromEmail(email));
     set((s) => ({
@@ -68,6 +79,19 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
       limitReachedPending: false,
     }));
   },
+  setReferralSource: (referralSource) => set((s) => (s.referralSource ? {} : { referralSource })),
+  acceptTerms: () => set((s) => ({ termsAcceptedAt: s.termsAcceptedAt ?? nowFrom(s).toISOString() })),
+  setGenesisGoldCustomer: (isGenesisGoldCustomer) => set({ isGenesisGoldCustomer }),
+  dismissSaveNudge: () =>
+    set((s) => ({ saveNudgeDismissedAt: Object.values(s.conversations.byId).filter((c) => c.messages.length).length })),
+  discardGuestData: () =>
+    set({
+      conversations: { byId: {}, activeByProfile: {} },
+      labs: { reportsById: {} },
+      notes: { byId: {} },
+      plan90: {},
+      freeConsultationsUsed: 0,
+    }),
   requestDeepLink: (link) => set((s) => ({ deepLink: { link, nonce: (s.deepLink?.nonce ?? 0) + 1 } })),
   clearDeepLink: () => set({ deepLink: undefined }),
 });

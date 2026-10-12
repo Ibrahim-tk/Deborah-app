@@ -1,6 +1,6 @@
 /** Sheet and modal layers above Main (docs/04-navigation.md §2, §5). */
 import { useRef } from 'react';
-import { MotionDiv, useReducedMotionPref, type PanInfo } from '@mobile/ui';
+import { DURATION, MotionDiv, useReducedMotionPref, type PanInfo } from '@mobile/ui';
 import { useNavStore } from '../nav.store';
 import { modalTransition, sheetTransition } from '../transitions';
 import type { Layer, NavAction } from '../types';
@@ -21,7 +21,9 @@ export function SheetLayer({ layer }: { layer: Extract<Layer, { kind: 'sheet' }>
   };
 
   return (
-    <div className={styles.layer}>
+    // The root is a motion element too, so AnimatePresence always finishes the exit and removes the
+    // layer (a plain div could leave the scrim behind when sheets close back to back).
+    <MotionDiv className={styles.layer} initial={false} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { delay: DURATION.sheet, duration: 0 } }}>
       <MotionDiv
         className={styles.scrim}
         initial={{ opacity: 0 }}
@@ -43,7 +45,7 @@ export function SheetLayer({ layer }: { layer: Extract<Layer, { kind: 'sheet' }>
       >
         <ScreenHost route={layer.route} container="sheet" />
       </MotionDiv>
-    </div>
+    </MotionDiv>
   );
 }
 

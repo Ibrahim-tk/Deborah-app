@@ -5,9 +5,17 @@
 **Scenarios:** S01
 
 ```
-M-1.1 Splash ──(auto 1.6 s)──► M-1.2 Welcome ──Get started (accepts terms)──► M-2.1 Conversation (empty)
+M-1.1 Splash ──(auto 1.6 s)──► M-1.2 Welcome ──Get started (accepts terms)──► M-2.1 Conversation (empty, disclaimer line)
                                    └─ Sign in ──► M-4.3 (sign-in mode, as modal) ──► M-2.1 with restored history
+
+M-2.1 first message ──► health-data consent ──► safety gates* ──► topic questions ──► country check ──► answer
+                            └─ Not now: no health questions, general answer, no supplement card
+answer (first useful one) ──► "Save your profile" card ──► M-4.3 (Apple · Google · email + password) ──► M-2.8 notifications
+                                   └─ Not now ──► M-2.8 notifications
+* date of birth, sex at birth, medications & supplements, allergies — only when the answer would recommend a supplement.
 ```
+
+> **Change 2026-10-12 (design):** the health profile is collected in the chat, not as a form (see "Health profile in chat" and "4 · After the first useful answer" below).
 
 > **Change 2026-10-08 (design):** consent is merged into M-1.2. "Get started" saves the name, accepts the Terms & Privacy notice (timestamp + version) and opens M-2.1. A small line under the button reads "By tapping Get started, you agree to the Terms & Disclaimer and Privacy Notice (HIPAA)." with underlined links opening M-10.5. M-1.3 is kept in code but no longer in the flow. OPEN: legal to confirm a checkbox is not required.
 
@@ -111,3 +119,28 @@ M-1.1 Splash ──(auto 1.6 s)──► M-1.2 Welcome ──Get started (accept
 - [ ] Summary readable in under 20 seconds (≤ 60 words).
 
 **Open:** attorney-drafted copy (brief, SOW). Whether the privacy notice needs its own checkbox (legal).
+
+---
+
+## M-2.1 · First-chat disclaimer
+
+One quiet dismissible line above the suggestions on the empty chat: "Not a substitute for professional care. In an emergency, call local services." (`legal/consent.json › careLine`, placeholder). Shown once: dismissing it or sending the first message retires it (`disclaimerSeenAt`).
+
+## Health profile in chat
+
+The profile is built around the problem: fields are asked only when they become relevant, as intake questions (`conversation/intake.json`).
+
+| When | Fields | Rule |
+|---|---|---|
+| First time the chat asks about health | **Consent to process health data** ("Yes, that's okay" / "Not now") | Separate from the T&C; stored as `healthConsentAt`. No Skip. "Not now" drops every health question in that consultation; the answer stays general with no supplement card. OPEN: ask again next consultation (default) or only from Account › Privacy? |
+| Before any answer that recommends a supplement or medication | Date of birth, sex at birth, current medications & supplements, allergies (`safetyGates`) | Skipping is allowed, but any missing gate removes the supplement card from that answer. Date of birth also sets the age band, so the topic's age question isn't repeated. |
+| Later, when the topic needs it | Known conditions (topic intake), height & weight (thyroid script) | Topic intake stays capped at 3 questions. |
+| Once | Country | Inferred from the device locale; only asked to confirm ("Yes, United States" / "Somewhere else…"). No Skip. |
+
+Questions already answered are never asked again. Consent and the country check aren't numbered in the "n of N" footer. Scenario replays skip all of this so seeded histories stay unchanged.
+
+## 4 · After the first useful answer
+
+- **Save your profile** card in the chat right after the first answer, shown once (`saveProfileOfferedAt`) and only without an account: Continue with Apple, Continue with Google, Continue with email, Not now. A name-only user is anonymous; health data needs an account behind it.
+- The buttons open M-4.3 (`returnTo: 'chat'`). Email asks for email, password (8+ characters) and an optional last name, then the code check. On success the modal closes, the card reads "Profile saved to …" and a toast confirms.
+- **Notification permission** (M-2.8) is asked right after the card is resolved (saved or Not now), never at launch.

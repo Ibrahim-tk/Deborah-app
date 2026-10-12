@@ -1,11 +1,12 @@
 .root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; container-type: size; }
 
-.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; align-content: start; gap: var(--space-5); padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8)); }
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent); display: grid; align-content: start; gap: var(--space-5); padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--space-6) + 56px); }
+/* Bottom padding clears the 48 px bottom fade, so the last card can scroll fully into view. */
 
-/* Greeting sits low so the composer (next in flow) starts at ~45% of the screen: easy reach, calm top. */
-.intro { display: grid; align-content: end; gap: var(--space-1); min-height: calc(45cqh - var(--safe-top) - var(--header-h) - var(--space-2) - var(--space-5)); padding: var(--space-4) 0 var(--space-2); }
-.hello { font: var(--weight-regular) var(--fs-title-1, var(--fs-display)) / var(--lh-title-1, var(--lh-display)) var(--font-display); letter-spacing: -0.01em; }
-.sub { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+/* Heading sits a little below the lifted backdrop; cards follow, the composer is docked below. */
+.intro { display: grid; align-content: end; gap: var(--space-1); min-height: calc(26cqh - var(--safe-top) - var(--header-h)); padding: var(--space-4) 0 var(--space-2); }
+.date { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-secondary); }
+.hello { font: var(--weight-regular) var(--fs-title-1, var(--fs-display)) / var(--lh-title-1, var(--lh-display)) var(--font-display); letter-spacing: -0.01em; text-wrap: balance; }
 
 .shop button { outline: 1px solid rgb(255 255 255 / 0.95); outline-offset: -1px; }
 .shop button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
@@ -14,3 +15,14 @@
 .top { position: absolute; top: 0; right: 0; left: 0; z-index: 5; pointer-events: none; }
 .top header > div { padding-inline: var(--margin-screen); }
 .top button { pointer-events: auto; }
+
+/* Fixed composer dock: content melts into the canvas above it instead of cutting at a line. */
+.dock {
+  position: relative;
+  z-index: 4;
+  flex: none;
+  padding: var(--space-4) var(--margin-screen) calc(var(--safe-bottom) + var(--space-1));
+  margin-top: calc(var(--space-6) * -1);
+  /* No wash: the warm parchment backdrop runs unbroken behind the composer; content fades via .scroll's mask. */
+}
+.subline { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); }

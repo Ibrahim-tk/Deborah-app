@@ -7,7 +7,7 @@ import { uid } from '../utils/ids';
 import { interpolate } from '../utils/text';
 import { buildAnswer, emptyAnswer } from './answer';
 import { shouldOfferFollowUp } from './counting';
-import { question } from './intake';
+import { countryName, missingGates, optionsFor, question, recommendsProduct, stillOpen } from './intake';
 import { between, CPS } from './streamer';
 
 export const ANSWER_REQUEST_LABEL = 'Tell me what you think';
@@ -41,19 +41,31 @@ export function deborahText(ctx: EngineContext, text: string, extra: Partial<Mes
 
 /** Next intake question, or the ready line when intake is complete. */
 export function nextIntakeOrReady(ctx: EngineContext, conv: Conversation, profile: Profile): Step[] {
-  const plan = conv.intakePlan ?? [];
   const done = conv.intakeDone ?? [];
+  const plan = stillOpen(conv.intakePlan ?? [], done, profile);
   const nextId = plan.find((id) => !done.includes(id));
   const q = nextId ? question(nextId) : undefined;
   if (!q) return readySteps(ctx, conv, profile);
 
-  const step = done.length + 1;
-  const text = interpolate(q.prompt, { name: profile.name });
+  // Consent and the country check aren't numbered steps.
+  const numbered = plan.filter((id) => !question(id)?.hideStep);
+  const step = numbered.filter((id) => done.includes(id)).length + 1;
+  const text = interpolate(q.prompt, { name: profile.name, country: countryName(ctx.region ?? 'US') });
   return [
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake' } } },
     ...deborahText(ctx, text, {
       kind: 'intakeQuestion',
-      intake: { questionId: q.id, options: q.options, multi: q.multi, step, of: plan.length },
+      intake: {
+        questionId: q.id,
+        options: optionsFor(q, ctx),
+        multi: q.multi,
+        step,
+        of: numbered.length,
+        input: q.input,
+        noSkip: q.noSkip,
+        hideStep: q.hideStep,
+        presentation: q.presentation,
+      },
     }),
   ];
 }
@@ -93,8 +105,10 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
   }
 
   const built = buildAnswer(script, profile, opts.labs ?? ctx.labs);
-  // Crisis earlier in this conversation suppresses products (docs/ux/F03-safety.md).
-  const answer = conv.noProduct ? { ...built, product: undefined } : built;
+  // Crisis earlier in this conversation suppresses products (docs/ux/F03-safety.md). F01: so does
+  // a missing safety gate (date of birth, sex at birth, medications, allergies).
+  const gated = ctx.profileGates !== false && recommendsProduct(ctx, Boolean(built.product)) && missingGates(profile).length > 0;
+  const answer = conv.noProduct || gated ? { ...built, product: undefined } : built;
   const m = msg(ctx, {
     role: 'deborah',
     kind: 'answer',
@@ -129,6 +143,16 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
       },
     },
   );
+  // F01 step 4: after the first useful answer, offer to save the profile. The notification ask
+  // (M-2.8) follows once the card is resolved, so it never interrupts the card.
+  if (ctx.profileGates !== false && !ctx.hasAccount && !ctx.saveProfileOffered) {
+    steps.push(
+      { type: 'delay', ms: 900 },
+      { type: 'store', action: { type: 'offerSaveProfile' } },
+      { type: 'message', message: msg(ctx, { role: 'deborah', kind: 'saveProfile', text: '' }) },
+    );
+    return steps;
+  }
   if (shouldOfferFollowUp(ctx, answeredAfter)) steps.push({ type: 'delay', ms: 1500 }, { type: 'prompt', prompt: 'followUpOptIn' });
   return steps;
 }

@@ -1,7 +1,7 @@
 /**
- * @pattern SuggestionList — 3 starter prompts (no visible label; named for screen readers) as borderless rows, each led by an
- *          AI-search icon. Rows sit straight on the canvas; only the pressed row takes a lilac tint.
- * @usedBy  M-2.1 (focused + empty)
+ * @pattern SuggestionList — 3 starter prompts (no visible label; named for screen readers) as a horizontal,
+ *          swipeable rail of warm-glass cards, an AI-search icon left of each prompt. Cards snap and bleed to the screen edge.
+ * @usedBy  M-2.1 (empty — always shown on a new chat, focused or not)
  * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › focused)
  * @xref    web: apps/web/patterns/chat/SuggestionList — not built
  */

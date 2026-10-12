@@ -8,6 +8,7 @@ import { ConsultationRow, EmptyState, NoteRow } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import styles from '../Records.module.css';
 import own from './RecordsList.module.css';
+import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
 export type Segment = 'consultations' | 'notes' | 'labs';
 
@@ -25,12 +26,13 @@ const hasLabs = (c: Conversation) => c.messages.some((m) => (m.answer?.labsRefer
 
 export function RecordsList({ segment, profileId, isActiveProfile }: RecordsListProps) {
   const { open, openAsk } = useNav();
+  const gate = useAccountGate();
   const conversations = useAppStore(useShallow((s) => selectProfileConversations(s, profileId)));
   const notes = useAppStore(useShallow((s) => selectProfileNotes(s, profileId)));
   const labs = useAppStore(useShallow((s) => selectProfileLabs(s, profileId)));
   const newNote = () => open('M-9.4', { kind: 'questions', profileId });
   // ASSUMPTION: viewing another profile's records offers no Ask / Add labs (they act on the active profile).
-  const addLabs = isActiveProfile ? () => open('M-5.3') : undefined;
+  const addLabs = isActiveProfile ? () => gate('documents', () => open('M-5.3')) : undefined;
 
   if (segment === 'consultations') {
     if (conversations.length === 0) {

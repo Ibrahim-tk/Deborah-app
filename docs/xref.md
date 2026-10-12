@@ -8,6 +8,9 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-1.2 | Welcome | F01 | `onboarding/Welcome` | W-1.2 — not built | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
 | M-1.3 | Consent | F01 | `onboarding/Consent` | W-1.3 — not built | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
 | M-2.0 | Home (landing, first-visit greeting sheet) | F02 | `consultation/Home` | W-2.0 — not built | — | design direction 2026-10-08 (OPEN: add to ux/F02) | built |
+| M-2.9 | Scan a label (intake V2 Step E) | F02 | `consultation/ScanLabel` | W-2.9 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
+| M-2.10 | Build your health profile (intake V2 card on its own) | F02 | `consultation/HealthProfile` | W-2.10 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
+| M-2.11 | Profile question (deferred fields) | F02 | `consultation/ProfileQuestion` | W-2.11 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
 | M-2.1 | Conversation (all chat states) | F02 | `consultation/Conversation` | W-2.1 — not built | [F02](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361) | [ux/F02-consultation.md](ux/F02-consultation.md) | built (phases 3–6) |
 | M-2.7 | Shop — in-app browser | F02 | `consultation/InAppShop` | W-2.7 — not built | [F02](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361) | [ux/F02-consultation.md](ux/F02-consultation.md) | built (phase 3) |
 | M-2.8 | Follow-up opt-in | F02 | `consultation/FollowUpOptIn` | W-2.8 — not built | [F02](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361) | [ux/F02-consultation.md](ux/F02-consultation.md) | built (phase 3) |

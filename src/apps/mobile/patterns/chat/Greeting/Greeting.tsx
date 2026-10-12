@@ -1,6 +1,7 @@
 /**
- * @pattern Greeting — one direct question ("How are you feeling today?"), no time-of-day line or body
- *          text; a returning user also gets "Continue that conversation".
+ * @pattern Greeting — a big Deborah orb centred with one question ("How are you feeling today?").
+ *          No buttons, suggestions or disclaimer (design direction 2026-10-12); the disclaimer waits for
+ *          the first medical answer.
  *          OPEN: replaces the spec's time-of-day greeting per design direction 2026-10-08.
  * @usedBy  M-2.1 (empty state)
  * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › empty)
@@ -18,7 +19,7 @@ export interface GreetingProps {
 export function Greeting({ welcomeBack, onContinue }: GreetingProps) {
   return (
     <div className={styles.root} data-placeholder>
-      <DeborahBlob size={72} label="Deborah" />
+      <DeborahBlob size={140} label="Deborah" />
       <h2 className={styles.line}>How are you feeling today?</h2>
       {welcomeBack && onContinue && (
         <div className={styles.continue}>

@@ -1,12 +1,11 @@
 /**
  * @pattern MessageBubble — user: Lilac Mist bubble, right-aligned. Deborah: unboxed full-width
- *          text, avatar + "Deborah" at the start of each turn only. Long-press opens actions.
+ *          text, no avatar ("Deborah" is announced to screen readers at the start of each turn). Long-press opens actions.
  * @usedBy  M-2.1, M-9.2
  * @spec    DESIGN.md › Messages · docs/ux/F02-consultation.md#m-21-conversation
  * @xref    web: apps/web/patterns/chat/MessageBubble — not built
  */
 import { useRef, type MouseEvent, type ReactNode } from 'react';
-import { DeborahBlob } from '@mobile/ui';
 import { StreamingText } from './StreamingText';
 import styles from './MessageBubble.module.css';
 
@@ -46,12 +45,8 @@ export function MessageBubble({ role, text, streaming, turnStart, placeholder, o
   }
   return (
     <div className={styles.deborah}>
-      {turnStart && (
-        <div className={styles.speaker}>
-          {/* The orb alone identifies Deborah; the name stays for screen readers. */}
-          <DeborahBlob size={32} label="Deborah" />
-        </div>
-      )}
+      {/* No orb before replies (design direction 2026-10-12); the speaker stays for screen readers. */}
+      {turnStart && <span className={styles.srOnly}>Deborah</span>}
       {text !== undefined && (
         <p className={styles.text} aria-live={streaming ? 'polite' : undefined} data-placeholder={placeholder || undefined} {...press}>
           <StreamingText text={text} streaming={streaming} />

@@ -1,26 +1,18 @@
 /**
- * @ui Aura — soft, slowly drifting brand gradient (lilac · purple · gold) that melts into the
- * canvas toward the bottom. Decorative backdrop for Splash (M-1.1) and Welcome (M-1.2).
- * Motion is a very slow drift (no pulse/wave) and stops under reduced motion.
+ * @ui Aura — the shared screen backdrop: the Splash photo (Figma 139:876), a grainy violet/gold
+ * sky melting into parchment, lifted by --backdrop-lift so content gets more calm space.
+ * `rise` starts it in the Splash position and glides it up once, so a Splash → screen hand-off
+ * reads as one continuous backdrop. Used by Welcome (M-1.2) and Home (M-2.0).
  */
 import { cx } from '@shared/utils';
 import styles from './Aura.module.css';
 
 export interface AuraProps {
-  /** Share of the screen the colour occupies before fading to canvas (0–1). */
-  reach?: number;
+  /** Glide up from the unshifted Splash position on mount. */
+  rise?: boolean;
   className?: string;
 }
 
-export function Aura({ reach = 0.6, className }: AuraProps) {
-  return (
-    <span className={cx(styles.root, className)} style={{ '--aura-reach': `${reach * 100}%` } as React.CSSProperties} aria-hidden>
-      <span className={cx(styles.blob, styles.a)} />
-      <span className={cx(styles.blob, styles.b)} />
-      <span className={cx(styles.blob, styles.c)} />
-      <span className={cx(styles.blob, styles.d)} />
-      <span className={cx(styles.blob, styles.e)} />
-      <span className={styles.fade} />
-    </span>
-  );
+export function Aura({ rise, className }: AuraProps) {
+  return <span className={cx(styles.root, rise && styles.rise, className)} aria-hidden />;
 }

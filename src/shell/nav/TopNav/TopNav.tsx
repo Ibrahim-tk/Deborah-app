@@ -3,6 +3,7 @@ import { PlatformTabs } from '../PlatformTabs';
 import { StateMenu } from '../StateMenu';
 import { ResetButton } from '../ResetButton';
 import { DevToggles } from '../DevToggles';
+import { VariantMenu } from '../VariantMenu';
 import styles from './TopNav.module.css';
 
 const VERSION = __APP_VERSION__.split('.').slice(0, 2).join('.');
@@ -17,6 +18,7 @@ export function TopNav() {
         <PlatformTabs />
       </nav>
       <div className={styles.actions}>
+        <VariantMenu />
         <StateMenu />
         <ResetButton />
         <DevToggles />

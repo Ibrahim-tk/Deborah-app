@@ -33,7 +33,7 @@ export const SCENARIO_GROUPS: ScenarioGroup[] = [
 ];
 
 export const SCENARIOS: ScenarioMeta[] = [
-  { id: 'S01', label: 'New user — first launch', group: 'Onboarding', description: 'Empty store.', startsAt: 'M-1.1 Splash', phase: 2 },
+  { id: 'S01', label: 'New user — first launch', group: 'Onboarding', description: 'Someone opening the app for the very first time.', startsAt: 'M-1.1 Splash', phase: 2 },
   { id: 'S02', label: 'Onboarded — first home', group: 'Trial', description: 'Maria has accepted consent. No consultations yet. Lands on Home with the greeting sheet.', startsAt: 'M-2.0', phase: 2 },
   { id: 'S03', label: 'Mid-intake', group: 'Trial', description: 'First message about hot flashes and sleep; Deborah asked her first question.', startsAt: 'M-2.1 (intake)', phase: 3 },
   { id: 'S04', label: 'First answer delivered', group: 'Trial', description: 'One counted consultation with a full seven-section answer. Follow-up not set.', startsAt: 'M-2.1 (answered)', phase: 3 },

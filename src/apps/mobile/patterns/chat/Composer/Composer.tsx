@@ -14,7 +14,7 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { Icon, IconButton, TextArea } from '@mobile/ui';
+import { EdgeLight, Icon, IconButton, TextArea } from '@mobile/ui';
 import styles from './Composer.module.css';
 
 export const COUNTER_FROM = 1800;
@@ -38,6 +38,8 @@ export interface ComposerProps {
   inputRef?: RefObject<HTMLTextAreaElement>;
   /** Inline strip docked to the top of the composer card (e.g. the TrialCounter banner). */
   banner?: ReactNode;
+  /** Answer options docked above the text field (intake quiz questions); typing is "Other". */
+  options?: ReactNode;
   /** Quiet footnote under the card (educational disclaimer). */
   disclaimer?: string;
   /** Lets the screen hide suggestions while dictating. */
@@ -57,6 +59,7 @@ export function Composer({
   voiceSample,
   inputRef,
   banner,
+  options,
   disclaimer,
   onRecordingChange,
 }: ComposerProps) {
@@ -161,7 +164,10 @@ export function Composer({
         }}
       >
         <div className={styles.root}>
+          {/* The travelling light is decoration for an idle bar: off while answering options. */}
+          {!options && <EdgeLight />}
           {banner && <div className={styles.banner}>{banner}</div>}
+          {options}
           <div className={styles.field}>
             <TextArea
               ref={area}

@@ -6,11 +6,13 @@ import { useCallback } from 'react';
 import { selectCanAddProfile, useAppStore } from '@shared/store';
 import type { AddMemberState } from '@mobile/patterns/profile';
 import { useNav } from '@mobile/navigation';
+import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
 export const MAX_PROFILES = 5;
 
 export function useAddMember() {
   const { presentModal, presentSheet, dismissSheet } = useNav();
+  const gate = useAccountGate();
   const canAdd = useAppStore(selectCanAddProfile);
   const family = useAppStore((s) => s.plan === 'family');
   // ASSUMPTION: a Family subscriber at 5 profiles sees the row disabled with "5 of 5" rather than the
@@ -21,10 +23,12 @@ export function useAddMember() {
     (fromSheet: boolean) => {
       if (addState === 'full') return;
       if (fromSheet) dismissSheet();
-      if (addState === 'available') presentModal('M-6.2');
-      else presentSheet('M-6.3');
+      gate('family', () => {
+        if (addState === 'available') presentModal('M-6.2');
+        else presentSheet('M-6.3');
+      });
     },
-    [addState, dismissSheet, presentModal, presentSheet],
+    [addState, dismissSheet, gate, presentModal, presentSheet],
   );
 
   return { addState, add };

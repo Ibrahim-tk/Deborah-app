@@ -26,8 +26,13 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
 }
-/* Gentle canvas tint so text under the bar never fights the controls. */
-.fade { background: linear-gradient(to bottom, color-mix(in srgb, var(--color-canvas) 72%, transparent) 0%, color-mix(in srgb, var(--color-canvas) 35%, transparent) 60%, transparent 100%); }
+/* Instead of a parchment tint, repaint the screen's own sky (same image and lift as Aura) over
+   the scrolled content, so the bar stays as vivid as at rest and content dissolves beneath it. */
+.fade {
+  background: url('/images/splash/splash-bg.png') center var(--backdrop-lift) / 100% auto no-repeat;
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, rgb(0 0 0 / 0.6) 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 45%, rgb(0 0 0 / 0.6) 75%, transparent 100%);
+}
 
 @media (prefers-reduced-transparency: reduce) {
   .blurStrong, .blurSoft { -webkit-backdrop-filter: none; backdrop-filter: none; }

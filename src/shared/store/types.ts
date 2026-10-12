@@ -16,6 +16,7 @@ import type {
   PlanTier,
   Profile,
 } from '../types/domain';
+import type { HealthProfile, IntakeProgress } from '../types/health';
 import type { ScenarioStart } from '../types/scenario';
 
 export interface SessionSlice {
@@ -23,8 +24,23 @@ export interface SessionSlice {
   accountId?: string;
   /** Shown on the store sheet's account row (M-4.4). */
   accountEmail?: string;
+  /** Optional at sign-up (F01 step 4). */
+  accountLastName?: string;
   consentAcceptedAt?: string;
   consentVersion?: string;
+  /** Consent to process health data, asked in chat the first time it asks about health (F01). */
+  healthConsentAt?: string;
+  /** "Not a substitute for professional care" line above the first chat; shown once. */
+  disclaimerSeenAt?: string;
+  /** Save-your-profile card shown after the first useful answer (once). */
+  saveProfileOfferedAt?: string;
+  /** Home "Save your progress" card: dismissed at this consultation count; returns after the next one. */
+  saveNudgeDismissedAt?: number;
+  /** Deep-link attribution captured silently at launch (genesis-gold | newsletter | social | direct). */
+  referralSource?: string;
+  /** Welcome "Get started": agreeing to Terms and Privacy Policy. */
+  termsAcceptedAt?: string;
+  isGenesisGoldCustomer?: boolean;
   activeProfileId: ID;
   isLocked: boolean;
   simulatedNow: string;
@@ -34,18 +50,27 @@ export interface SessionSlice {
   followUpSnoozeUntil: number;
   setName: (name: string) => void;
   acceptConsent: (version: string) => void;
+  acceptHealthConsent: () => void;
+  dismissDisclaimer: () => void;
+  offerSaveProfile: () => void;
   switchProfile: (id: ID) => void;
   advanceClock: (days: number) => void;
   setPermission: (p: NotificationPermission) => void;
   setLocked: (locked: boolean) => void;
   snoozeFollowUp: (untilAnswerCount: number) => void;
   /** M-4.3 create mode: the trial history simply stays with the new account. */
-  createAccount: (email: string) => void;
+  createAccount: (email: string, lastName?: string) => void;
   /**
    * M-4.3 sign-in mode from Welcome: restores an S11-like world (plan active, consent on file,
    * no history on this device) so Main is reachable (docs/ux/F01-onboarding.md › Sign in).
    */
   restoreAccount: (email: string) => void;
+  dismissSaveNudge: () => void;
+  setReferralSource: (source: string) => void;
+  acceptTerms: () => void;
+  setGenesisGoldCustomer: (on: boolean) => void;
+  /** Sign-in over a guest who already chatted, "Discard": this phone's guest history is dropped. */
+  discardGuestData: () => void;
   /**
    * Deep link requested from outside the app (lock screen, notification banner). The mobile
    * navigator consumes it; `nonce` lets the same link fire twice.
@@ -82,6 +107,12 @@ export interface ProfilesSlice {
   addProfile: (p: Profile) => void;
   updateProfile: (id: ID, patch: Partial<Profile>) => void;
   updateIntake: (id: ID, patch: Partial<Intake>) => void;
+  /**
+   * Intake V2: merge health fields (each with source + updatedAt). Ignored until health-data
+   * consent exists. Mirrors into the legacy profile/intake fields so the engine's safety gates see them.
+   */
+  setHealth: (id: ID, patch: Partial<HealthProfile>) => void;
+  setIntakeProgress: (id: ID, patch: Partial<IntakeProgress>) => void;
   /** Deletes the profile and all of its data; switches to self if it was active (M-6.5). */
   deleteProfile: (id: ID) => void;
 }

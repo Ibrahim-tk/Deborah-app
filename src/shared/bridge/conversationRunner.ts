@@ -50,6 +50,15 @@ function applyAction(action: StoreAction, cid: string): string {
     case 'createPlanFromAnswer':
       s.createPlanFromAnswer(action.profileId, action.goal, action.habits, action.productId, action.status);
       break;
+    case 'updateProfile':
+      s.updateProfile(action.profileId, action.patch);
+      break;
+    case 'acceptHealthConsent':
+      s.acceptHealthConsent();
+      break;
+    case 'offerSaveProfile':
+      s.offerSaveProfile();
+      break;
     case 'clearFailNext':
       s.setDev({ failNext: false });
       break;

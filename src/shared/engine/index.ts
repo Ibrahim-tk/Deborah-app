@@ -21,12 +21,15 @@ import {
 import { isGated } from './counting';
 import { checkInDetailSteps, checkInReplySteps, isAwaitingCheckInDetail, startCheckInSteps } from './checkin';
 import { shareLabsSteps } from './labs';
-import { intakePatch, optionLabels, planIntake, question } from './intake';
+import { answerPatch, CONSENT_ID, optionLabels, planConsultation, question } from './intake';
+import { inferFromMessage } from './extract';
 import { ANSWER_REQUEST_LABEL, answerSteps, deborahText, nextIntakeOrReady, pause, scriptOf, userBubble } from './plans';
+export { CONSENT_ID } from './intake';
 
 export { ANSWER_REQUEST_LABEL } from './plans';
 export { greeting } from './memory';
 export { ageBandFor, ageOn, isMinor } from './profile';
+export { extractionPatch, extractProfile, handOffSuggestions, healthKitPatch, profileCompletion } from './extract';
 export { chunkText, CPS } from './streamer';
 export { FREE_LIMIT, isGated } from './counting';
 export { replayScript, streamInto } from './replay';
@@ -132,7 +135,16 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
   return [userBubble(ctx, text), ...pause('Thinking about your question'), ...deborahText(ctx, followUpReply(conv.scriptId, text))];
 }
 
-function startConsultation(ctx: EngineContext, text: string, scriptId: string): EnginePlan {
+function startConsultation(rawCtx: EngineContext, text: string, scriptId: string): EnginePlan {
+  // Progressive intake: anything her message already answers (age, medicines, allergies…) is
+  // filled first, so planning skips those questions.
+  const inferred = inferFromMessage(rawCtx.profile, text, new Date(rawCtx.now));
+  const profile = { ...rawCtx.profile, ...inferred.profile, intake: { ...rawCtx.profile.intake, ...inferred.intake } };
+  const ctx = { ...rawCtx, profile };
+  const inferSteps: EnginePlan = [
+    ...(Object.keys(inferred.intake).length ? [{ type: 'store' as const, action: { type: 'updateIntake' as const, profileId: profile.id, patch: inferred.intake } }] : []),
+    ...(Object.keys(inferred.profile).length ? [{ type: 'store' as const, action: { type: 'updateProfile' as const, profileId: profile.id, patch: inferred.profile } }] : []),
+  ];
   const script = scripts[scriptId] ?? scripts[FALLBACK_SCRIPT_ID];
   const prev = ctx.conversation;
   const reuse = prev.messages.length === 0;
@@ -144,13 +156,14 @@ function startConsultation(ctx: EngineContext, text: string, scriptId: string): 
     status: 'intake',
     messages: [],
     startedAt: ctx.now,
-    intakePlan: planIntake(script.intake, ctx.profile),
+    intakePlan: planConsultation(ctx, script.intake, Boolean(script.answer.product)),
     intakeDone: [],
   };
   return [
     reuse
       ? { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: conv } }
       : { type: 'store', action: { type: 'startConversation', conversation: conv } },
+    ...inferSteps,
     userBubble(ctx, text),
     ...pause('Reading your message'),
     ...nextIntakeOrReady(ctx, conv, ctx.profile),
@@ -162,15 +175,48 @@ function handleIntakeAnswer(ctx: EngineContext, questionId: string, optionIds: s
   const q = question(questionId);
   if (!q || optionIds.length === 0) return [];
   const qMsg = [...conv.messages].reverse().find((m) => m.intake?.questionId === questionId);
-  const patch = intakePatch(q, optionIds);
+  const markAnswered: EnginePlan = qMsg ? [{ type: 'patch', messageId: qMsg.id, patch: { intake: { ...qMsg.intake!, answered: optionIds } } }] : [];
+  const bubble = userBubble(ctx, optionLabels(q, optionIds, otherText, qMsg?.intake?.options));
+
+  if (questionId === CONSENT_ID) return [...markAnswered, bubble, ...consentSteps(ctx, conv, optionIds[0] === 'agree')];
+
+  const patch = answerPatch(q, optionIds, otherText, new Date(ctx.now), ctx.profile);
+  const profile = { ...ctx.profile, ...patch.profile, intake: { ...ctx.profile.intake, ...patch.intake } };
   const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), questionId] };
   return [
-    ...(qMsg ? [{ type: 'patch' as const, messageId: qMsg.id, patch: { intake: { ...qMsg.intake!, answered: optionIds } } }] : []),
-    userBubble(ctx, optionLabels(q, optionIds, otherText)),
-    { type: 'store', action: { type: 'updateIntake', profileId: ctx.profile.id, patch } },
+    ...markAnswered,
+    bubble,
+    { type: 'store', action: { type: 'updateIntake', profileId: ctx.profile.id, patch: patch.intake } },
+    ...(Object.keys(patch.profile).length ? [{ type: 'store' as const, action: { type: 'updateProfile' as const, profileId: ctx.profile.id, patch: patch.profile } }] : []),
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone } } },
     ...pause('Reading your answer', 600, 1000),
-    ...nextIntakeOrReady(ctx, next, { ...ctx.profile, intake: { ...ctx.profile.intake, ...patch } }),
+    ...nextIntakeOrReady({ ...ctx, profile }, next, profile),
+  ];
+}
+
+/**
+ * Health-data consent (F01): agreeing continues the questions; "Not now" drops every health
+ * question in this consultation and the answer stays general (no supplement card).
+ * OPEN: "ask again next consultation, or only from Account › Privacy?" — documented default: ask again.
+ */
+function consentSteps(ctx: EngineContext, conv: Conversation, agreed: boolean): EnginePlan {
+  const done = [...(conv.intakeDone ?? []), CONSENT_ID];
+  if (agreed) {
+    const next: Conversation = { ...conv, intakeDone: done };
+    return [
+      { type: 'store', action: { type: 'acceptHealthConsent' } },
+      { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: done } } },
+      ...pause('Reading your answer', 400, 700),
+      ...nextIntakeOrReady({ ...ctx, healthConsent: true }, next, ctx.profile),
+    ];
+  }
+  const all = [...new Set([...done, ...(conv.intakePlan ?? []).filter((id) => id !== 'country')])];
+  const next: Conversation = { ...conv, intakeDone: all, noProduct: true };
+  return [
+    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: all, noProduct: true } } },
+    ...pause('Reading your answer', 400, 700),
+    ...deborahText(ctx, "That's completely fine. I won't ask about your health details, and I'll keep my thoughts general."),
+    ...nextIntakeOrReady(ctx, next, ctx.profile),
   ];
 }
 

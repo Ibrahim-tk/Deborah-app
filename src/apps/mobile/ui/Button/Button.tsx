@@ -8,7 +8,7 @@ import { Icon, type IconName } from '../Icon';
 import { Spinner } from '../Spinner';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'emergency' | 'link';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'emergency' | 'link' | 'outline';
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   children: ReactNode;

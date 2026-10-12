@@ -33,6 +33,9 @@ import checkin from './conversation/checkin.json';
 import plans from './commerce/plans.json';
 import labSamples from './labs/sample-reports.json';
 import labMarkers from './labs/markers.json';
+import healthKit from './intake/healthkit.json';
+import intakeSuggestions from './intake/suggestions.json';
+import scanSamples from './intake/scans.json';
 
 export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
@@ -71,3 +74,9 @@ export function findPlan(id: string | undefined): PlanOption | undefined {
 export function findLibraryItem(id: string | undefined): LibraryItem | undefined {
   return libraryItems.find((i) => i.id === id);
 }
+
+/** Intake V2 mock sources (simulated Apple Health read, search suggestions, camera OCR samples). */
+export const healthKitMock = healthKit;
+export const intakeSuggestionData = intakeSuggestions as Record<'medications' | 'supplements' | 'allergies' | 'conditions', string[]> & { status: string };
+export type ScanSample = { id: string; label: string; field: 'medications' | 'allergies' | 'conditions'; ocr: string };
+export const scanSampleData = scanSamples.samples as ScanSample[];

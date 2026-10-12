@@ -33,7 +33,12 @@ const GENERIC_MED = /^(medication|meds|prescri|dose|dosage|stop taking|start tak
 const GENERIC_KEY = 'any-medication';
 
 /** Medication keys to warn about: shown once per conversation unless a new medication name appears. */
-function newMedicationMatches(text: string, warned: string[]): string[] {
+// "I don't take any meds" answers the intake; it isn't a medication question. Only the generic
+// words are negated — a named medication still shows the safety card.
+const NEGATED_GENERIC = /\b(?:don'?t|do not|not|never|no)\s+(?:take\s+|taking\s+|on\s+)?(?:any\s+)?(?:meds|medications?|prescriptions?)\b/gi;
+
+function newMedicationMatches(raw: string, warned: string[]): string[] {
+  const text = raw.replace(NEGATED_GENERIC, ' ');
   const keys = new Set(RULES.medication.filter((r) => r.re.test(text)).map((r) => (GENERIC_MED.test(r.p) ? GENERIC_KEY : r.p)));
   const names = [...keys].filter((k) => k !== GENERIC_KEY && !warned.includes(k));
   if (names.length) return names;

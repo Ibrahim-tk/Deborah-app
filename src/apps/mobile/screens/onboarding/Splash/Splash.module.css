@@ -1,27 +1,54 @@
 .root {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
   height: 100%;
-  padding: var(--safe-top) var(--space-10) calc(var(--safe-bottom) + var(--space-6));
   position: relative;
   isolation: isolate;
   color: var(--color-ink);
   text-align: center;
 }
 
-.brand { display: grid; justify-items: center; gap: var(--space-5); }
-.mark { width: 64px; height: 64px; color: var(--color-accent); }
-.wordmark { font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display); letter-spacing: -0.01em; }
-.byline { color: var(--color-ink-secondary); }
-
+/* Absolute placement from Figma 161:386, expressed against the 844 pt frame height. */
+.tree { position: absolute; top: calc(351 / 844 * 100%); left: 50%; width: 141px; height: 141px; margin-left: -70.5px; }
+.wordmark {
+  position: absolute;
+  top: calc(524 / 844 * 100%);
+  right: 0;
+  left: 0;
+  font: var(--weight-regular) 32px / 42px var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--purple-900);
+  text-align: center;
+}
 .byline {
   position: absolute;
+  top: calc(780 / 844 * 100%);
   right: 0;
-  bottom: calc(var(--safe-bottom) + var(--space-4));
   left: 0;
-  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
-  letter-spacing: -0.015em;
+  font: var(--weight-regular) 13px / 18px var(--font-body);
+  color: var(--purple-600);
+  text-align: center;
+}
+
+/* Photo backdrop exported from Figma (161:386 · image 85, texture effect baked in), already
+   cropped to the 390×844 frame; the Figma bottom hue is multiplied onto the very bottom edge. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    url('/images/splash/splash-bg.png') top center / cover no-repeat,
+    var(--color-canvas);
+}
+/* Lilac foot, pushed 25% of its height past the bottom edge; multiply drops its white. */
+.backdrop::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  aspect-ratio: 780 / 636;
+  background: url('/images/splash/bottom-hue.png') center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
+  transform: translateY(25%);
 }

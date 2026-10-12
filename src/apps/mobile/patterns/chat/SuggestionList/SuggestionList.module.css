@@ -1,26 +1,44 @@
-.root { display: grid; gap: var(--space-1); }
+.root { display: grid; }
 
-.list { display: grid; gap: 2px; list-style: none; margin: 0; padding: 0; }
+/* Horizontal rail: bleeds to the screen edges, snaps card by card, scrollbar hidden. */
+.list {
+  display: flex;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0 calc(var(--margin-screen) * -1);
+  padding: 2px var(--margin-screen);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--margin-screen);
+  scrollbar-width: none;
+}
+.list::-webkit-scrollbar { display: none; }
+.list > li { flex: none; width: 68%; scroll-snap-align: start; }
 
-/* Strokeless rows straight on the canvas; the tint appears only on hover/press. */
+/* Warm-glass card, same family as the composer and intake options. */
 .row {
   width: 100%;
-  min-height: var(--tap-min);
+  height: 100%;
+  min-height: 72px;
   display: flex;
   align-items: flex-start;
-  gap: var(--space-3);
+  gap: var(--space-2);
   padding: var(--space-3);
-  border: 0;
   border-radius: var(--radius-lg);
-  background: transparent;
+  /* Light lilac card (design direction 2026-10-12): reads as a tappable suggestion on the parchment. */
+  background: linear-gradient(170deg, color-mix(in srgb, var(--purple-50) 85%, var(--white)), color-mix(in srgb, var(--purple-50) 60%, var(--white)));
+  border: 1px solid color-mix(in srgb, var(--purple-100) 45%, var(--white));
+  -webkit-backdrop-filter: var(--glass-warm-blur);
+  backdrop-filter: var(--glass-warm-blur);
   color: var(--color-ink);
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--dur-quick) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
 }
-.row:hover { background: rgb(239 235 241 / 0.6); }
-.row:active { background: var(--color-accent-tint); }
+.row:active { transform: scale(0.98); background: var(--purple-50); }
 .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
-.icon { flex: none; display: grid; place-items: center; height: var(--lh-callout); color: var(--color-accent); }
-.text { min-width: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-body); }
+.text { min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-body); }
+.icon { flex: none; display: grid; place-items: center; height: var(--lh-subhead); color: var(--color-accent); }

@@ -1,0 +1,18 @@
+/* Quiet tonal line (Panel language): no border, no shadow, sits above the suggestions. */
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-tonal);
+  color: var(--color-ink);
+}
+.icon { flex: none; color: var(--color-ink-secondary); }
+.text {
+  flex: 1;
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-body);
+}
+.close { flex: none; margin: -6px 0; }

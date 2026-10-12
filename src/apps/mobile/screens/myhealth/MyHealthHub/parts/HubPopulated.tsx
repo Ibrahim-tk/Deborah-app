@@ -8,11 +8,13 @@ import { useNav } from '@mobile/navigation';
 import { useForYou } from '@mobile/hooks/useForYou';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import styles from './Hub.module.css';
+import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
 type Segment = 'consultations' | 'notes' | 'labs';
 
 export function HubPopulated() {
   const { push, openAsk } = useNav();
+  const gate = useAccountGate();
   const { profileId, focus, plan, checkIn, upcoming, counts } = useHubData();
   const forYou = useForYou().slice(0, 3);
 
@@ -40,7 +42,7 @@ export function HubPopulated() {
           day={plan.day}
           habitsDone={plan.done}
           habitsTotal={plan.total}
-          onPress={() => (plan.day > 90 ? openAsk({ mode: 'checkin' }) : push('M-7.3'))}
+          onPress={() => (plan.day > 90 ? openAsk({ mode: 'checkin' }) : gate('journey', () => push('M-7.3')))}
         />
       )}
       <CheckInCard state={checkIn} upcoming={upcoming} onCheckIn={() => openAsk({ mode: 'checkin' })} onReminders={() => push('M-10.4')} />

@@ -5,7 +5,7 @@
  * @spec    design direction 2026-10-08 (Home)
  * @xref    web: apps/web/patterns/chat/ChatLauncher — not built
  */
-import { Icon } from '@mobile/ui';
+import { EdgeLight, Icon } from '@mobile/ui';
 import styles from './ChatLauncher.module.css';
 
 export interface ChatLauncherProps {
@@ -16,8 +16,10 @@ export interface ChatLauncherProps {
 }
 
 export function ChatLauncher({ placeholder = 'Describe how you’re feeling…', glow, onOpen }: ChatLauncherProps) {
-  const button = (
+  return (
     <button type="button" className={glow ? `${styles.root} ${styles.glow}` : styles.root} onClick={onOpen} aria-label="Message Deborah">
+      {/* Hero use: a small violet light travels around the edge. */}
+      {glow && <EdgeLight />}
       <span className={styles.placeholder}>{placeholder}</span>
       <span className={styles.tools} aria-hidden>
         <span className={styles.tool}>
@@ -31,13 +33,5 @@ export function ChatLauncher({ placeholder = 'Describe how you’re feeling…',
         </span>
       </span>
     </button>
-  );
-  if (!glow) return button;
-  // The ambient glow lives on its own layer behind the button, so it never tints the field.
-  return (
-    <div className={styles.wrap}>
-      <span className={styles.halo} aria-hidden />
-      {button}
-    </div>
   );
 }

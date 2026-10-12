@@ -1,4 +1,4 @@
-.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.root { display: flex; flex-direction: column; height: 100%; background: transparent; }
 .body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8)); }
 
 .confirmed { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; padding: 0 var(--margin-screen) calc(var(--tabbar-space) + var(--space-4)); }

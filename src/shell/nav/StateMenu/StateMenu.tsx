@@ -55,8 +55,8 @@ export function StateMenu() {
                   {SCENARIOS.filter((s) => s.group === group).map((s) => (
                     <MenuItem
                       key={s.id}
-                      label={`${s.id} · ${s.label}`}
-                      description={isLoadable(s.id) ? `${s.description} Starts at ${s.startsAt}.` : `Available from phase ${s.phase}.`}
+                      label={s.label}
+                      description={isLoadable(s.id) ? s.description : 'Coming soon.'}
                       disabled={!isLoadable(s.id)}
                       active={s.id === scenario?.id}
                       onSelect={() => {

@@ -8,6 +8,8 @@ import { DEFAULT_SCENARIO_ID } from '@shared/scenarios';
 export type DeviceScale = 'fit' | '100' | '75';
 export type NetworkSpeed = 'normal' | 'slow' | 'instant';
 export type ShellTheme = 'light' | 'dark';
+/** Design variation for Splash, Consent and Home backgrounds (1 = original). */
+export type DesignVariant = 1 | 2 | 3 | 4;
 
 export interface DevToggles {
   highlightPlaceholders: boolean;
@@ -32,6 +34,7 @@ interface ShellState {
   /** Sticky screen-story note beside the phone (remembered in this browser). */
   showNotes: boolean;
   theme: ShellTheme;
+  variant: DesignVariant;
   webFullBleed: boolean;
   lastWebPath: string;
   toggles: DevToggles;
@@ -44,6 +47,7 @@ interface ShellState {
   setShowCaption: (on: boolean) => void;
   setShowNotes: (on: boolean) => void;
   setTheme: (theme: ShellTheme) => void;
+  setVariant: (variant: DesignVariant) => void;
   setWebFullBleed: (on: boolean) => void;
   setLastWebPath: (path: string) => void;
   setToggle: <K extends keyof DevToggles>(key: K, value: DevToggles[K]) => void;
@@ -68,6 +72,7 @@ export const useShellStore = create<ShellState>()((set) => ({
   showCaption: true,
   showNotes: readShowNotes(),
   theme: 'light',
+  variant: 1,
   webFullBleed: false,
   lastWebPath: '/web',
   toggles: {
@@ -93,6 +98,7 @@ export const useShellStore = create<ShellState>()((set) => ({
     set({ showNotes });
   },
   setTheme: (theme) => set({ theme }),
+  setVariant: (variant) => set({ variant }),
   setWebFullBleed: (webFullBleed) => set({ webFullBleed }),
   setLastWebPath: (lastWebPath) => set({ lastWebPath }),
   setToggle: (key, value) => set((s) => ({ toggles: { ...s.toggles, [key]: value } })),

@@ -1,6 +1,6 @@
 .root { position: absolute; inset: 0; overflow: clip; background: var(--midnight-900); }
 
-.base { position: absolute; inset: 0; overflow: clip; background: var(--color-canvas); transform-origin: 50% 0; }
+.base { position: absolute; inset: 0; overflow: clip; background: var(--surface-canvas); transform-origin: 50% 0; }
 .rootView { position: absolute; inset: 0; }
 
 /* Screens leave room for the floating tab bar via this variable. */
@@ -10,7 +10,7 @@
 .stack { position: absolute; inset: 0; }
 .stack[data-active='false'] { display: none; }
 
-.screen { position: absolute; inset: 0; overflow: clip; background: var(--color-canvas); }
+.screen { position: absolute; inset: 0; overflow: clip; background: var(--surface-canvas); }
 .screen[data-hidden] { visibility: hidden; }
 
 .edge { position: absolute; top: 0; bottom: 0; left: 0; z-index: 5; width: 12px; touch-action: none; }
@@ -22,7 +22,7 @@
 .sheet { position: relative; width: 100%; max-height: calc(100% - var(--safe-top) - 12px); touch-action: none; }
 .sheet[data-detent='large'] { height: calc(100% - var(--safe-top) - 12px); }
 
-.modal { position: absolute; inset: 0; z-index: 40; overflow: clip; background: var(--color-canvas); box-shadow: var(--shadow-float-lg); }
+.modal { position: absolute; inset: 0; z-index: 40; overflow: clip; background: var(--surface-canvas); box-shadow: var(--shadow-float-lg); }
 
 .toastHost {
   position: absolute;

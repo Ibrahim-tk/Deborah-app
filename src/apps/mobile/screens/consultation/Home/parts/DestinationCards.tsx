@@ -4,7 +4,6 @@
  */
 import type { CSSProperties, ReactNode } from 'react';
 import { Icon } from '@mobile/ui';
-import { ChatLauncher } from '@mobile/patterns/chat';
 import styles from './DestinationCards.module.css';
 
 const BG = '/images/home/my-health-bg.png';
@@ -20,10 +19,9 @@ export interface PhotoCard {
 }
 
 export interface DestinationCardsProps {
-  askHint: string;
-  onAsk: () => void;
   health: PhotoCard;
-  records: PhotoCard;
+  /** Reports: hidden when there's nothing to show. */
+  records?: PhotoCard;
   family: PhotoCard;
   /** Slot between the hero and the section cards (Home "For you today"). */
   today?: ReactNode;
@@ -33,11 +31,9 @@ function bg(c: PhotoCard) {
   return { '--card-bg': `url('${BG}')`, '--crop': c.crop, '--hue': `${c.hue ?? 0}deg` } as CSSProperties;
 }
 
-export function DestinationCards({ askHint, onAsk, health, records, family, today }: DestinationCardsProps) {
+export function DestinationCards({ health, records, family, today }: DestinationCardsProps) {
   return (
     <>
-      <ChatLauncher glow placeholder={askHint} onOpen={onAsk} />
-
       {today}
 
       <button type="button" className={`${styles.photo} ${styles.wide} ${styles.lilac}`} style={bg(health)} onClick={health.onSelect}>
@@ -52,7 +48,7 @@ export function DestinationCards({ askHint, onAsk, health, records, family, toda
 
       <div className={styles.pair}>
         {[
-          { c: records, tone: styles.linen },
+          ...(records ? [{ c: records, tone: styles.linen }] : []),
           { c: family, tone: styles.rose },
         ].map(({ c, tone }) => (
           <button key={c.title} type="button" className={`${styles.photo} ${styles.square} ${tone}`} style={bg(c)} onClick={c.onSelect}>

@@ -12,6 +12,7 @@ import { Button, Header, Panel, Segmented, Toggle, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './Notifications.module.css';
+import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
 const INTERVALS = [
   { value: '7', label: '1 week' },
@@ -23,6 +24,7 @@ const DEFAULT_DAYS = 14;
 
 export default function Notifications() {
   const { pop } = useNav();
+  const gate = useAccountGate();
   const { previousTitle } = useRoute();
   const alert = useAlert();
   const toast = useToast();
@@ -71,6 +73,7 @@ export default function Notifications() {
 
   const setCheckIns = async (on: boolean) => {
     if (!on) return reschedule(false, days);
+    if (!useAppStore.getState().accountId) return gate('reminders', () => void setCheckIns(true));
     if (!(await ensurePermission())) return;
     reschedule(true, days);
     toast('Check-in reminders on');
@@ -79,6 +82,7 @@ export default function Notifications() {
   const changeInterval = (value: string) => reschedule(true, Number(value));
 
   const setBooking = async (on: boolean) => {
+    if (on && !useAppStore.getState().accountId) return gate('reminders', () => void setBooking(true));
     if (on && !(await ensurePermission())) return;
     useAppStore.getState().setBookingReminders(on);
   };

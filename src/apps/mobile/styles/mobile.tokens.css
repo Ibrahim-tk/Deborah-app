@@ -1,8 +1,19 @@
 /* src/apps/mobile/styles/mobile.tokens.css — semantic tokens for the phone. Components use ONLY these. Source: DESIGN.md. */
 .phone-root {
   /* Surfaces */
-  --color-canvas: color-mix(in srgb, var(--gold-50) 55%, var(--white));   /* softened Parchment */
+  /* Matches the splash photo's lower edge (#FEF9EF), so the backdrop blends into the fill with no pale band. */
+  --color-canvas: rgb(254 249 239);
   --color-surface: var(--white);
+  /* Warm frosted glass for floating chat surfaces (composer, intake options): white melting into parchment. */
+  --glass-warm-fill: linear-gradient(170deg, rgb(255 255 255 / 0.8), rgb(253 249 241 / 0.7));
+  --glass-warm-rim: rgb(255 255 255 / 0.85);
+  --glass-warm-blur: blur(24px) saturate(150%);
+  /* Screen backdrop: the Splash photo (Figma 139:876), lifted so the calm parchment area
+     below it leaves more room for content. Splash itself shows it unshifted. */
+  --backdrop-lift: -160px;
+  --surface-canvas:
+    url('/images/splash/splash-bg.png') center var(--backdrop-lift) / 100% auto no-repeat,
+    var(--color-canvas);
   --color-surface-tonal: color-mix(in srgb, var(--gold-100) 45%, var(--gold-50));   /* softened Linen */
   --color-surface-lilac: var(--purple-50);     /* user bubbles, secondary buttons, selected */
   --color-surface-signature: var(--midnight-500);
@@ -13,7 +24,7 @@
   --color-ink-body: var(--purple-700);         /* ~11.9:1 — reading prose: a step under headings */
   --color-ink-secondary: var(--purple-600);    /* 9.4:1 */
   --color-ink-tertiary: var(--purple-500);     /* 8.5:1 metadata */
-  --color-ink-placeholder: var(--purple-400);  /* 4.9:1 placeholders only */
+  --color-ink-placeholder: var(--purple-300);  /* ~3.6:1 placeholders + fine print — OPEN: below 7:1, lightened per design request 2026-10-12 */
   --color-ink-on-accent: var(--white);
   --color-ink-on-signature: var(--gold-50);
 
@@ -62,7 +73,9 @@
   --margin-screen: var(--space-5);
   --tap-min: 48px;
   --row-min: 56px;
-  --button-h: 56px;
+  --button-h: 44px;
+  /* Text fields and selects keep their own height (buttons went slimmer, 2026-10-12). */
+  --field-h: 56px;
   --button-h-emergency: 64px;
   --tabbar-h: 64px;
   --tabbar-inset: 16px;
@@ -84,7 +97,7 @@
   --card-action-bg: var(--white);
   --card-action-ink: var(--purple-500);
 
-  background: var(--color-canvas);
+  background: var(--surface-canvas);
   color: var(--color-ink);
   font-family: var(--font-body);
   font-size: var(--fs-body);

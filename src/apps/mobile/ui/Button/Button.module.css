@@ -17,10 +17,11 @@
 
 .label { overflow-wrap: anywhere; }
 
-.lg { min-height: var(--button-h); padding: var(--space-3) 28px; }
-.md { min-height: var(--tap-min); padding: var(--space-2) var(--space-6); }
+.lg { min-height: var(--button-h); padding: var(--space-2) var(--space-6); }
+.md { min-height: 36px; padding: 6px var(--space-4); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
 .sm { min-height: 32px; padding: var(--space-1) var(--space-3); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
-/* Keep a 48 pt hit area around the smaller visual. */
+/* Keep a 48 pt hit area around the smaller visuals. */
+.md::after { content: ''; position: absolute; inset: -6px 0; }
 .sm::after { content: ''; position: absolute; inset: -8px 0; }
 /* Small ghost = quiet utility (Expand all, Edit…): secondary ink, regular weight, so it never outranks content. */
 .ghost.sm { padding-inline: var(--space-2); font-weight: var(--weight-regular); color: var(--color-ink-secondary); }
@@ -32,6 +33,9 @@
 
 .secondary { background: var(--color-accent-tint); color: var(--color-ink); }
 .secondary:active:not(:disabled) { background: var(--color-accent-tint-pressed); }
+
+.outline { background: transparent; color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
+.outline:active:not(:disabled) { background: var(--color-accent-tint); }
 
 .ghost, .link { background: transparent; color: var(--color-accent); }
 .ghost:active:not(:disabled), .link:active:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; transform: none; }

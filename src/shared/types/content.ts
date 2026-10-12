@@ -39,6 +39,8 @@ export interface Consent {
   summaryBullets: string[];
   aiDisclosure: string;
   aiDisclosureShort: string;
+  /** One line above the first chat, shown once (F01). */
+  careLine: string;
   terms: LegalDoc;
   privacy: LegalDoc;
   status: ContentStatus;
@@ -66,11 +68,24 @@ export interface IntakeQuestion {
   skipIfKnown: boolean;
   /** 2-column grid for short answers (DESIGN.md › Option rows). */
   layout?: 'list' | 'grid2';
+  /** Field-style answer (F01 health profile): a date, or height + weight. */
+  input?: 'date' | 'measure' | 'year' | 'height' | 'weight';
+  noSkip?: boolean;
+  hideStep?: boolean;
+  /**
+   * How the answer looks inline in the chat (progressive intake, design direction 2026-10-12):
+   * pills = yes/no and short single answers · quiz = numbered card for lists with "Other".
+   */
+  presentation?: 'pills' | 'quiz';
 }
 
 export interface IntakeData {
   questions: IntakeQuestion[];
   maxQuestions: number;
+  /** Asked before any answer that recommends a supplement or medication (F01). */
+  safetyGates: string[];
+  /** Asked once, in order, at the start of the first consultation (onboarding through conversation). */
+  onboarding?: string[];
   status: ContentStatus;
 }
 

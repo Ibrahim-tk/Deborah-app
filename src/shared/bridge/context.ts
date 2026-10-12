@@ -45,7 +45,21 @@ export function contextFor(s: AppState, conversation: Conversation): EngineConte
     now: nowFrom(s).toISOString(),
     lastTopic: selectLastTopic(s, profile.id),
     labs: selectLatestLabs(s, profile.id),
+    profileGates: true,
+    healthConsent: Boolean(s.healthConsentAt),
+    region: localeRegion(),
+    hasAccount: Boolean(s.accountId),
+    saveProfileOffered: Boolean(s.saveProfileOfferedAt),
   };
+}
+
+/** "en-GB" → "GB". The prototype never asks the OS; it reads the browser locale. */
+function localeRegion(): string | undefined {
+  try {
+    return new Intl.Locale(navigator.language).maximize().region;
+  } catch {
+    return undefined;
+  }
 }
 
 /** Run one user input through the engine for the active profile. Resolves false if gated. */

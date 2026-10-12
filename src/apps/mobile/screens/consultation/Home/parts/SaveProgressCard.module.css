@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-radius: var(--radius-xl);
+  background: var(--glass-warm-fill);
+  border: 1px solid var(--glass-warm-rim);
+}
+.text { flex: 1; min-width: 0; font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); }
+.close { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; color: var(--color-ink-secondary); border-radius: var(--radius-full); }
+.close:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }

@@ -13,7 +13,7 @@
 import { useState, type FormEvent } from 'react';
 import { consentDoc, persona } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Aura, Button, DeborahBlob, Input, TextReveal } from '@mobile/ui';
+import { Aura, Button, DeborahBlob, GradientShift, Input, TextReveal } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
 import styles from './Welcome.module.css';
 
@@ -21,7 +21,7 @@ const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 const MAX_NAME = 30;
 
 export default function Welcome() {
-  const { open, resetTo } = useNav();
+  const { open, presentSheet, resetTo } = useNav();
   const storedName = useAppStore((s) => s.userName);
   const setName = useAppStore((s) => s.setName);
   const acceptConsent = useAppStore((s) => s.acceptConsent);
@@ -38,57 +38,76 @@ export default function Welcome() {
     }
     setName(trimmed);
     acceptConsent(consentDoc.version);
+    useAppStore.getState().acceptTerms();
     resetTo('main', 'M-2.0');
   };
 
   return (
     <div className={styles.root} data-xref="M-1.2 · Welcome">
-      <Aura reach={0.55} />
+      <Aura rise />
+      <GradientShift />
       <div className={styles.scroll}>
-        <div className={styles.portrait}>
-          <DeborahBlob size={168} label={persona.name} />
+        <div className={styles.intro}>
+          <div className={styles.portrait}>
+            <DeborahBlob size={112} label={persona.name} />
+          </div>
+          <div
+            className={styles.note}
+            data-placeholder={persona.status === 'placeholder' || undefined}
+          >
+            <TextReveal className={styles.hello} text={persona.welcomeNote} delay={500} />
+          </div>
         </div>
-        <div className={styles.note} data-placeholder={persona.status === 'placeholder' || undefined}>
-          <TextReveal className={styles.hello} text={persona.welcomeNote} delay={500} />
-        </div>
-        <form className={styles.form} onSubmit={submit} noValidate>
-          <Input
-            label="What should I call you?"
-            placeholder="First name"
-            value={name}
-            maxLength={MAX_NAME}
-            autoCapitalize="words"
-            autoComplete="given-name"
-            enterKeyHint="go"
-            error={error}
-            onChange={(e) => {
-              setDraft(e.target.value);
-              setError(undefined);
-            }}
-          />
-          <Button type="submit" fullWidth disabled={!trimmed}>
-            Get started
-          </Button>
-          <p className={styles.legal} data-placeholder={consentDoc.status === 'placeholder' || undefined}>
-            By tapping Get started, you agree to the{' '}
-            <button type="button" className={styles.inlineLink} onClick={() => open('M-10.5', { section: 'terms' })}>
-              {consentDoc.terms.title}
-            </button>{' '}
-            and{' '}
-            <button type="button" className={styles.inlineLink} onClick={() => open('M-10.5', { section: 'privacy' })}>
-              Privacy Notice
-            </button>
-            .
+        <div className={styles.bottom}>
+          <form className={styles.form} onSubmit={submit} noValidate>
+            <Input
+              label="What should I call you?"
+              placeholder="First name"
+              value={name}
+              maxLength={MAX_NAME}
+              autoCapitalize="words"
+              autoComplete="given-name"
+              enterKeyHint="go"
+              error={error}
+              onChange={(e) => {
+                setDraft(e.target.value);
+                setError(undefined);
+              }}
+            />
+            <Button type="submit" fullWidth disabled={!trimmed}>
+              Get started
+            </Button>
+            <p
+              className={styles.legal}
+              data-placeholder={consentDoc.status === 'placeholder' || undefined}
+            >
+              By continuing you agree to the{' '}
+              <button
+                type="button"
+                className={styles.inlineLink}
+                onClick={() => open('M-10.5', { section: 'terms' })}
+              >
+                Terms
+              </button>{' '}
+              and{' '}
+              <button
+                type="button"
+                className={styles.inlineLink}
+                onClick={() => open('M-10.5', { section: 'privacy' })}
+              >
+                Privacy Policy
+              </button>
+              .
+            </p>
+          </form>
+          <p className={styles.signIn}>
+            Already have an account?{' '}
+            <Button variant="link" className={styles.inlineLink} onClick={() => presentSheet('M-4.3', { mode: 'signin', sheet: true })}>
+              Sign in
+            </Button>
           </p>
-        </form>
-        <p className={styles.signIn}>
-          Already have an account?{' '}
-          <Button variant="link" onClick={() => open('M-4.3', { mode: 'signin' })}>
-            Sign in
-          </Button>
-        </p>
+        </div>
       </div>
     </div>
   );
 }
-

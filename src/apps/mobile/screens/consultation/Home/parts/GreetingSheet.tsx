@@ -12,7 +12,7 @@ export interface GreetingSheetProps {
 
 export function GreetingSheet({ name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. Tell me what’s on your mind. I’m here to listen.`;
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. How are you feeling? Share with me, I’d love to hear from you.`;
   return (
     <div className={styles.root}>
       <button type="button" className={styles.scrim} onClick={onDismiss} aria-label="Dismiss greeting" />

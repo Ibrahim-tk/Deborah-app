@@ -9,7 +9,9 @@ export function stackTransition(reduced: boolean, action: NavAction, isTop: bool
   return {
     initial,
     animate: isTop ? { x: 0, opacity: 1, filter: 'brightness(1)' } : { x: '-30%', opacity: 1, filter: 'brightness(0.94)' },
-    exit: action === 'pop' ? { x: '100%', transition: t } : { opacity: 0, transition: { duration: DURATION.fade } },
+    // Fades: the outgoing screen stays opaque while the new one fades in on top, then drops out —
+    // so two half-transparent screens never let the backdrop behind them bleed through.
+    exit: action === 'pop' ? { x: '100%', transition: t } : { opacity: 0, transition: { delay: DURATION.fade, duration: 0 } },
     transition: action === 'fade' ? { duration: DURATION.fade } : t,
   };
 }

@@ -18,6 +18,17 @@ export interface EngineContext {
   lastTopic?: string;
   /** Latest confirmed lab report for the profile; answers use a script's withLabs variant. */
   labs?: LabReport;
+  /**
+   * F01 health profile in chat. Off for scenario replays so seeded histories stay as they were.
+   * `healthConsent` is the separate consent to process health data (not the T&C).
+   */
+  profileGates?: boolean;
+  healthConsent?: boolean;
+  /** Region from the device locale ("US"), confirmed in chat before it is stored. */
+  region?: string;
+  hasAccount?: boolean;
+  /** The save-your-profile card was already shown once. */
+  saveProfileOffered?: boolean;
 }
 
 export type UserInput =
@@ -41,6 +52,9 @@ export type StoreAction =
   | { type: 'setSummary'; conversationId: ID; summary: string; topic: string }
   | { type: 'createPlanFromAnswer'; profileId: ID; goal: string; habits: string[]; productId?: ID; status?: ContentStatus }
   | { type: 'clearFailNext' }
+  | { type: 'updateProfile'; profileId: ID; patch: Partial<Profile> }
+  | { type: 'acceptHealthConsent' }
+  | { type: 'offerSaveProfile' }
   /** Archive the current conversation and continue the plan in this new one. */
   | { type: 'startConversation'; conversation: Conversation };
 

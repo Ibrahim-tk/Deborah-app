@@ -1,4 +1,5 @@
 /** Domain types (docs/06-data-model.md §2). */
+import type { HealthProfile, IntakeProgress } from './health';
 
 export type ID = string;
 export type ISODate = string;
@@ -21,6 +22,17 @@ export interface Intake {
   /** Teen bank: how long periods have been happening (docs/ux/F06-family-profiles.md › 6.4). */
   onset?: string;
   notes?: string;
+  /** Safety gate (F01 health profile): allergy groups, or ['none']. */
+  allergies?: string[];
+  /** Onboarding (in chat): who the profile is for. */
+  profileFor?: 'self' | 'dependent';
+  /** Onboarding (in chat): hormonal / reproductive status. */
+  reproductive?: string;
+  /** ISO 3166 region confirmed in chat; inferred from the device locale. */
+  country?: string;
+  /** Asked only when relevant to the topic (e.g. thyroid): free text with units. */
+  height?: string;
+  weight?: string;
 }
 
 export interface Profile {
@@ -28,8 +40,11 @@ export interface Profile {
   name: string;
   relationship: Relationship;
   dob?: ISODate;
-  sexAtBirth?: 'female' | 'male';
+  sexAtBirth?: 'female' | 'male' | 'intersex';
   intake: Intake;
+  /** Intake V2: structured health profile with per-field source (types/health.ts). */
+  health?: HealthProfile;
+  intakeV2?: IntakeProgress;
   createdAt: ISODate;
   guardianConsentAt?: ISODate;
 }
@@ -48,7 +63,9 @@ export type MessageKind =
   | 'escalation'
   | 'checkIn'
   | 'labRequest'
-  | 'followUpPrompt';
+  | 'followUpPrompt'
+  /** After the first useful answer: save the profile to an account (F01 step 4). */
+  | 'saveProfile';
 
 export interface Option {
   id: string;
@@ -63,6 +80,16 @@ export interface IntakeMeta {
   of: number;
   answered?: string[];
   skipped?: boolean;
+  /** Field-style answer instead of option rows: a date, or height + weight. */
+  input?: 'date' | 'measure' | 'year' | 'height' | 'weight';
+  /** Consent and confirmations can't be skipped and don't count as numbered steps. */
+  noSkip?: boolean;
+  hideStep?: boolean;
+  /**
+   * How the answer looks inline in the chat (progressive intake, design direction 2026-10-12):
+   * pills = yes/no and short single answers · quiz = numbered card for lists with "Other".
+   */
+  presentation?: 'pills' | 'quiz';
 }
 
 export type SectionKey =

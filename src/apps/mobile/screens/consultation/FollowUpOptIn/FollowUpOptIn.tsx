@@ -13,6 +13,7 @@ import { Button, OptionList, OptionRow, Sheet, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
 import styles from './FollowUpOptIn.module.css';
+import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
 // OPEN: "default interval tied to 90-day framing?" — documented default is 2 weeks.
 const INTERVALS = [
@@ -22,12 +23,18 @@ const INTERVALS = [
 ];
 
 export default function FollowUpOptIn() {
-  const { dismissSheet } = useNav();
+  const { dismissSheet, presentSheet } = useNav();
+  const gate = useAccountGate();
   const alert = useAlert();
   const toast = useToast();
   const [days, setDays] = useState(14);
 
   const yes = async () => {
+    // Guests save first; the sheet gives way to M-4.3 and the ask comes back after saving.
+    if (!useAppStore.getState().accountId) {
+      dismissSheet();
+      return gate('reminders', () => presentSheet('M-2.8'));
+    }
     // The custom prompt always precedes the system alert.
     const choice = await alert({
       title: '“Your Oracle Clinician” Would Like to Send You Notifications',

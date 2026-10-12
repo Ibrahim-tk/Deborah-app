@@ -17,3 +17,6 @@ export * from './Composer';
 export * from './QuickReplies';
 export * from './ChatHeader';
 export * from './ChatLauncher';
+export * from './SaveProfileCard';
+export * from './CareDisclaimer';
+export * from './ComposerOptions';

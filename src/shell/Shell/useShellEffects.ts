@@ -7,6 +7,7 @@ import { useScenario } from '../useScenario';
 
 export function useShellEffects() {
   const toggles = useShellStore((s) => s.toggles);
+  const variant = useShellStore((s) => s.variant);
   const setLastWebPath = useShellStore((s) => s.setLastWebPath);
   const { pathname } = useLocation();
   const [params] = useSearchParams();
@@ -19,6 +20,11 @@ export function useShellEffects() {
     html.toggle('highlight-placeholders', toggles.highlightPlaceholders);
     html.toggle('show-ids', toggles.showIds);
   }, [toggles.reducedMotion, toggles.highlightPlaceholders, toggles.showIds]);
+
+  // Screens style their variation from html[data-variant] (CSS only, no shell import).
+  useEffect(() => {
+    document.documentElement.dataset.variant = String(variant);
+  }, [variant]);
 
   // The engine bridge reads network speed from the app store's (non-persisted) dev slice.
   useEffect(() => {

@@ -9,7 +9,7 @@
 import { useState } from 'react';
 import { consentDoc } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Button, Card, Checkbox, Header, ListRow, Panel } from '@mobile/ui';
+import { Button, Card, GradientShift, Checkbox, Header, ListRow, Panel } from '@mobile/ui';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './Consent.module.css';
 
@@ -27,6 +27,7 @@ export default function Consent() {
 
   return (
     <div className={styles.root} data-xref="M-1.3 · Before we begin">
+      <GradientShift />
       <Header title="Before we begin" onBack={pop} backLabel={previousTitle} />
       <div className={styles.scroll}>
         <Card>

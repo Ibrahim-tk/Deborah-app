@@ -1,7 +1,191 @@
 {
   "questions": [
     {
+      "id": "profile-for",
+      "presentation": "pills",
+      "prompt": "Hi {name}, before we start: who is this profile for?",
+      "options": [
+        {
+          "id": "self",
+          "label": "Myself"
+        },
+        {
+          "id": "dependent",
+          "label": "Someone I care for"
+        }
+      ],
+      "multi": false,
+      "profileField": "intake.profileFor",
+      "skipIfKnown": true,
+      "noSkip": true,
+      "hideStep": true
+    },
+    {
+      "id": "health-consent",
+      "presentation": "pills",
+      "prompt": "Can I use your health details to personalise things, {name}? They stay private to you and are never sold.",
+      "options": [
+        {
+          "id": "agree",
+          "label": "Yes"
+        },
+        {
+          "id": "decline",
+          "label": "No"
+        }
+      ],
+      "multi": false,
+      "profileField": "session.healthConsent",
+      "skipIfKnown": true,
+      "layout": "list",
+      "noSkip": true,
+      "hideStep": true
+    },
+    {
+      "id": "dob",
+      "presentation": "pills",
+      "prompt": "What year were you born?",
+      "options": [],
+      "multi": false,
+      "profileField": "profile.dob",
+      "skipIfKnown": true,
+      "input": "year"
+    },
+    {
+      "id": "sex",
+      "presentation": "pills",
+      "prompt": "What was your sex at birth?",
+      "options": [
+        {
+          "id": "female",
+          "label": "Female"
+        },
+        {
+          "id": "male",
+          "label": "Male"
+        },
+        {
+          "id": "intersex",
+          "label": "Intersex"
+        }
+      ],
+      "multi": false,
+      "profileField": "profile.sexAtBirth",
+      "skipIfKnown": true,
+      "layout": "list"
+    },
+    {
+      "id": "reproductive",
+      "presentation": "quiz",
+      "prompt": "Which best describes where you are hormonally right now?",
+      "options": [
+        {
+          "id": "cycling",
+          "label": "Regular cycles"
+        },
+        {
+          "id": "perimenopausal",
+          "label": "Perimenopausal"
+        },
+        {
+          "id": "postmenopausal",
+          "label": "Postmenopausal"
+        },
+        {
+          "id": "pregnant",
+          "label": "Pregnant or breastfeeding"
+        },
+        {
+          "id": "na",
+          "label": "Not sure / doesn’t apply"
+        }
+      ],
+      "multi": false,
+      "profileField": "intake.reproductive",
+      "skipIfKnown": true,
+      "layout": "list"
+    },
+    {
+      "id": "medications",
+      "presentation": "quiz",
+      "prompt": "Are you taking any medications or supplements right now?",
+      "options": [
+        {
+          "id": "none",
+          "label": "None"
+        },
+        {
+          "id": "thyroid-med",
+          "label": "Thyroid medication"
+        },
+        {
+          "id": "bp-med",
+          "label": "Blood pressure medication"
+        },
+        {
+          "id": "hrt",
+          "label": "HRT / hormones"
+        },
+        {
+          "id": "supplements",
+          "label": "Vitamins or supplements"
+        },
+        {
+          "id": "other",
+          "label": "Other…"
+        }
+      ],
+      "multi": true,
+      "profileField": "intake.medications",
+      "skipIfKnown": true,
+      "layout": "list"
+    },
+    {
+      "id": "allergies",
+      "presentation": "quiz",
+      "prompt": "Any allergies I should know about?",
+      "options": [
+        {
+          "id": "none",
+          "label": "None"
+        },
+        {
+          "id": "medication",
+          "label": "Medications"
+        },
+        {
+          "id": "herbal",
+          "label": "Supplements or herbs"
+        },
+        {
+          "id": "food",
+          "label": "Foods"
+        },
+        {
+          "id": "other",
+          "label": "Other…"
+        }
+      ],
+      "multi": true,
+      "profileField": "intake.allergies",
+      "skipIfKnown": true,
+      "layout": "list"
+    },
+    {
+      "id": "country",
+      "presentation": "pills",
+      "prompt": "Your phone is set to {country}. Is that where you live?",
+      "options": [],
+      "multi": false,
+      "profileField": "intake.country",
+      "skipIfKnown": true,
+      "layout": "list",
+      "noSkip": true,
+      "hideStep": true
+    },
+    {
       "id": "age",
+      "presentation": "pills",
       "prompt": "I hear you, {name}. A few quick questions so I can understand what's going on. How old are you?",
       "options": [
         {
@@ -32,7 +216,8 @@
     },
     {
       "id": "meds",
-      "prompt": "Thank you. Are you taking any medications, or do you have any diagnosed conditions?",
+      "presentation": "quiz",
+      "prompt": "Thank you. Have you been diagnosed with any conditions?",
       "options": [
         {
           "id": "none",
@@ -47,10 +232,6 @@
           "label": "Blood pressure"
         },
         {
-          "id": "hrt",
-          "label": "HRT / hormones"
-        },
-        {
           "id": "other",
           "label": "Other…"
         }
@@ -62,6 +243,7 @@
     },
     {
       "id": "cycle",
+      "presentation": "pills",
       "prompt": "And how would you describe your cycle right now?",
       "options": [
         {
@@ -88,6 +270,7 @@
     },
     {
       "id": "teen-onset",
+      "presentation": "quiz",
       "prompt": "I hear you. A couple of quick questions about {name}. How long has {name} been having periods?",
       "options": [
         {
@@ -114,6 +297,7 @@
     },
     {
       "id": "teen-regularity",
+      "presentation": "pills",
       "prompt": "Thank you. How would you describe {name}'s cycle right now?",
       "options": [
         {
@@ -133,8 +317,44 @@
       "profileField": "intake.cycle",
       "skipIfKnown": true,
       "layout": "grid2"
+    },
+    {
+      "id": "height",
+      "presentation": "pills",
+      "prompt": "How tall are you?",
+      "options": [],
+      "multi": false,
+      "profileField": "intake.height",
+      "skipIfKnown": true,
+      "input": "height"
+    },
+    {
+      "id": "weight",
+      "presentation": "pills",
+      "prompt": "What’s your weight?",
+      "options": [],
+      "multi": false,
+      "profileField": "intake.weight",
+      "skipIfKnown": true,
+      "input": "weight"
     }
   ],
   "maxQuestions": 3,
-  "status": "placeholder"
+  "status": "placeholder",
+  "safetyGates": [
+    "dob",
+    "sex",
+    "height",
+    "weight",
+    "medications",
+    "allergies"
+  ],
+  "onboarding": [
+    "profile-for",
+    "dob",
+    "sex",
+    "reproductive",
+    "medications",
+    "allergies"
+  ]
 }

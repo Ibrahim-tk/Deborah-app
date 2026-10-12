@@ -30,6 +30,7 @@ export function Sidebar() {
   const profile = useAppStore((s) => s.profiles.byId[s.activeProfileId]);
   const profileCount = useAppStore((s) => s.profiles.order.length);
   const history = useAppStore(useShallow(selectHistory));
+  const guest = useAppStore((s) => !s.accountId);
 
   const close = () => nav.setSidebarOpen(false);
   const run = (fn: () => void) => () => {
@@ -71,6 +72,12 @@ export function Sidebar() {
       nav.popToRoot();
     },
     current: nav.activeTab === 'account',
+  };
+  // Guests can sign in from the bottom of the menu too (design direction 2026-10-12).
+  const signIn: Item = {
+    label: 'Sign in',
+    icon: 'account',
+    onSelect: () => nav.presentSheet('M-4.3', { mode: 'signin', sheet: true }),
   };
   const gold = findProduct('genesis-gold');
 
@@ -155,7 +162,7 @@ export function Sidebar() {
                 )}
               </div>
 
-              <ul className={`${styles.list} ${styles.bottom}`}>{row(settings)}</ul>
+              <ul className={`${styles.list} ${styles.bottom}`}>{row(settings)}{guest && row(signIn)}</ul>
             </MotionDiv>
           </>
         )}

@@ -2,13 +2,49 @@ import type { StateCreator } from 'zustand';
 import { SELF_PROFILE_ID } from '../defaults';
 import type { AppState, ProfilesSlice } from '../types';
 
-type Actions = Pick<ProfilesSlice, 'addProfile' | 'updateProfile' | 'updateIntake' | 'deleteProfile'>;
+import type { HealthProfile } from '../../types/health';
+import type { Intake, Profile } from '../../types/domain';
+import { ageBandFor } from '../../engine/profile';
+import { nowFrom } from '../../utils/dates';
+
+type Actions = Pick<ProfilesSlice, 'addProfile' | 'updateProfile' | 'updateIntake' | 'deleteProfile' | 'setHealth' | 'setIntakeProgress'>;
+
+/** Legacy fields the conversation engine reads (safety gates, product rules), kept in step with V2. */
+function mirror(h: HealthProfile, now: Date): { profile: Partial<Profile>; intake: Partial<Intake> } {
+  const none = (xs: unknown[] | undefined) => (xs && xs.length === 0 ? ['none'] : undefined);
+  const intake: Partial<Intake> = {};
+  if (h.birthYear) intake.ageBand = ageBandFor(now.getFullYear() - h.birthYear.value);
+  if (h.medications) intake.medications = none(h.medications.value) ?? h.medications.value.map((m) => m.name);
+  if (h.allergies) intake.allergies = none(h.allergies.value) ?? h.allergies.value.map((a) => a.substance);
+  if (h.conditions) intake.conditions = none(h.conditions.value) ?? h.conditions.value.map((c) => c.name);
+  if (h.heightCm) intake.height = `${h.heightCm.value} cm`;
+  if (h.weightKg) intake.weight = `${h.weightKg.value} kg`;
+  if (h.country) intake.country = h.country.value;
+  return { profile: h.sexAtBirth ? { sexAtBirth: h.sexAtBirth.value } : {}, intake };
+}
 
 /** Keep only the entries of a record whose value doesn't belong to `profileId`. */
 const without = <T extends { profileId: string }>(byId: Record<string, T>, profileId: string) =>
   Object.fromEntries(Object.entries(byId).filter(([, v]) => v.profileId !== profileId));
 
 export const profilesActions: StateCreator<AppState, [], [], Actions> = (set) => ({
+  setHealth: (id, patch) =>
+    set((s) => {
+      const p = s.profiles.byId[id];
+      // Health data is stored only after explicit consent to process it.
+      if (!p || !s.healthConsentAt) return {};
+      const health = { ...p.health, ...patch };
+      const m = mirror(health, nowFrom(s));
+      const next = { ...p, ...m.profile, health, intake: { ...p.intake, ...m.intake } };
+      return { profiles: { ...s.profiles, byId: { ...s.profiles.byId, [id]: next } } };
+    }),
+  setIntakeProgress: (id, patch) =>
+    set((s) => {
+      const p = s.profiles.byId[id];
+      if (!p) return {};
+      const intakeV2 = { step: 'consent' as const, ...p.intakeV2, ...patch };
+      return { profiles: { ...s.profiles, byId: { ...s.profiles.byId, [id]: { ...p, intakeV2 } } } };
+    }),
   addProfile: (p) =>
     set((s) => ({ profiles: { byId: { ...s.profiles.byId, [p.id]: p }, order: [...s.profiles.order, p.id] } })),
   updateProfile: (id, patch) =>

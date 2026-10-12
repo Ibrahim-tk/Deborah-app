@@ -22,36 +22,13 @@
 .tool { display: grid; place-items: center; width: var(--tap-min); height: var(--tap-min); }
 .send { margin-left: auto; color: var(--color-accent); }
 
-/*
- * Hero glow: (1) a light travelling around a 1.5px border, (2) a soft ambient colour glow behind.
- * OPEN: DESIGN.md bans shimmer animations; added on the designer's request 2026-10-08 for the
- * Home hero only. Both layers hold still under prefers-reduced-motion.
- */
-@property --glow-angle { syntax: '<angle>'; initial-value: 0deg; inherits: true; }
-
-.wrap { position: relative; isolation: isolate; --glow-angle: 0deg; animation: glow-spin 6s linear infinite; }
-.halo {
-  position: absolute;
-  inset: 8% 6%;
-  z-index: 0;
-  border-radius: var(--radius-xl);
-  background: conic-gradient(from var(--glow-angle), var(--gold-400), var(--pink-200), var(--purple-200), var(--gold-400));
-  filter: blur(28px);
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* Solid field (so nothing shows through) with a border-box gradient as the moving rim. */
+/* Hero (Home): solid field, no rim, soft lift; EdgeLight draws the travelling light and its bloom.
+   Not a stacking context (no z-index), so the bloom can sit behind the fill. */
 .glow {
   position: relative;
-  z-index: 1;
-  border: 1.5px solid transparent;
-  background:
-    linear-gradient(var(--color-surface), var(--color-surface)) padding-box,
-    conic-gradient(from var(--glow-angle), var(--purple-100) 0deg, var(--gold-500) 50deg, var(--pink-300) 110deg, var(--purple-100) 170deg, var(--purple-100) 360deg) border-box;
-  box-shadow: none;
+  border: 1px solid transparent;
+  background: var(--color-surface);
+  box-shadow: 0 8px 24px rgb(97 57 119 / 0.1), 0 1px 3px rgb(97 57 119 / 0.06);
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
-@keyframes glow-spin { to { --glow-angle: 360deg; } }
-@media (prefers-reduced-motion: reduce) { .wrap { animation: none; } }

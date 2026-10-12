@@ -18,6 +18,9 @@ export const registry: Record<string, ScreenMeta> = {
   'M-2.1': { title: 'Conversation', component: lazy(() => import('@mobile/screens/consultation/Conversation')), presentation: 'push', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-21-conversation' },
   'M-2.7': { title: 'Shop', component: lazy(() => import('@mobile/screens/consultation/InAppShop')), presentation: 'modal', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-27--shop-in-app-browser' },
   'M-2.8': { title: 'Follow-up opt-in', component: lazy(() => import('@mobile/screens/consultation/FollowUpOptIn')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-28--follow-up-opt-in' },
+  'M-2.9': { title: 'Scan a label', component: lazy(() => import('@mobile/screens/consultation/ScanLabel')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'intake V2 brief §3 Step E (OPEN: add to ux/F02)' },
+  'M-2.10': { title: 'Your health profile', component: lazy(() => import('@mobile/screens/consultation/HealthProfile')), presentation: 'modal', figma: '', spec: 'intake V2 brief §7 (OPEN: add to ux/F02)' },
+  'M-2.11': { title: 'Profile question', component: lazy(() => import('@mobile/screens/consultation/ProfileQuestion')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: '', spec: 'intake V2 brief §4 (OPEN: add to ux/F02)' },
 
   // F04 Free limit, plans & account
   'M-4.1': { title: 'Free limit', component: lazy(() => import('@mobile/screens/plans/FreeLimit')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: `${FIGMA}49-353`, spec: 'docs/ux/F04-plans-account.md#m-41--free-limit-reached' },

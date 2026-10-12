@@ -4,7 +4,8 @@
  * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › intake, ready)
  * @xref    web: apps/web/patterns/chat/AnswerCTA — not built
  */
-import { Button } from '@mobile/ui';
+import { Button, Icon } from '@mobile/ui';
+import styles from './AnswerCTA.module.css';
 
 export interface AnswerCTAProps {
   label: string;
@@ -14,9 +15,20 @@ export interface AnswerCTAProps {
 }
 
 export function AnswerCTA({ label, emphasis, disabled, onPress }: AnswerCTAProps) {
+  if (emphasis === 'primary') {
+    return (
+      <Button variant="primary" fullWidth disabled={disabled} onClick={onPress}>
+        {label}
+      </Button>
+    );
+  }
+  // Secondary: a quiet glass action row that sits in the same family as the intake options and composer.
   return (
-    <Button variant={emphasis} fullWidth disabled={disabled} onClick={onPress}>
-      {label}
-    </Button>
+    <button type="button" className={styles.quiet} disabled={disabled} onClick={onPress}>
+      <span className={styles.label}>{label}</span>
+      <span className={styles.arrow} aria-hidden="true">
+        <Icon name="chevron" size={18} />
+      </span>
+    </button>
   );
 }

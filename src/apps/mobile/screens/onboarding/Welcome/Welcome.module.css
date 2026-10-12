@@ -7,17 +7,29 @@
 .scroll {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  justify-content: space-between;
+  gap: var(--space-10);
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: calc(var(--safe-top) + var(--space-4)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
 }
-.portrait { display: grid; place-items: center; padding-top: var(--space-16, 64px); }
-.note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: center; color: var(--color-ink-body); }
-.hello { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: balance; }
+/* Arrival from Splash: the backdrop glides up (Aura rise) while the content resolves out of a blur. */
+.scroll > * { animation: content-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.scroll > :nth-child(1) { animation-delay: 0.6s; }
+.scroll > :nth-child(2) { animation-delay: 0.8s; }
+@keyframes content-in { from { opacity: 0; filter: blur(12px); transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) { .scroll > * { animation: none; } }
+.intro { display: grid; gap: var(--space-6); padding-top: var(--space-12); }
+.portrait { display: flex; }
+.bottom { display: grid; gap: var(--space-6); }
+.note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: left; color: var(--color-ink-body); }
+.hello { font: var(--weight-regular) calc(24px * var(--type-scale)) / calc(31px * var(--type-scale)) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
 .form { display: grid; gap: var(--space-3); }
-.signIn { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-1); margin-top: auto; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
-.legal { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
-.inlineLink { color: inherit; font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.signIn { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-1); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+/* Fine print shares the placeholder colour (see --color-ink-placeholder OPEN note). */
+.legal { font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body); color: var(--color-ink-placeholder); text-align: center; }
+.inlineLink { color: inherit; font: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); text-underline-offset: 3px; }
 .inlineLink:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 4px; }
+/* Same type as 'Already have an account?'; only the colour marks it as the action. */
+.signIn .inlineLink { font: inherit; min-width: 0; padding-inline: 0; text-decoration: underline; text-underline-offset: 3px; }

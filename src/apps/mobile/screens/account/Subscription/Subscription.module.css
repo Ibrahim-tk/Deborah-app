@@ -1,4 +1,4 @@
-.root { display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.root { display: flex; flex-direction: column; height: 100%; background: transparent; }
 .body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8)); }
 .title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
 .price { font: var(--weight-regular) var(--fs-data) / var(--lh-data) var(--font-ui); font-variant-numeric: tabular-nums; }
