@@ -1,9 +1,36 @@
-.root { position: relative; height: calc(44px * 3); overflow: hidden; mask-image: linear-gradient(to bottom, transparent, black 35%, black 65%, transparent); }
-.band { position: absolute; left: var(--space-2); right: var(--space-2); top: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-lilac); pointer-events: none; }
-.wheel { position: relative; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, black 35%, black 65%, transparent); }
+.root { --rows: 3; --pad: calc(44px * (var(--rows) - 1) / 2); position: relative; overflow: hidden; }
+.band { position: absolute; left: var(--space-2); right: var(--space-2); top: var(--pad); height: 44px; border-radius: var(--radius-sm); background: var(--color-surface-lilac); pointer-events: none; }
+.wheel { position: relative; height: calc(44px * var(--rows)); overflow-x: hidden; overflow-y: auto; overscroll-behavior-x: none; touch-action: pan-y; scroll-snap-type: y mandatory; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, black 35%, black 65%, transparent); }
 .wheel::-webkit-scrollbar { display: none; }
 .wheel:focus-visible { outline: none; }
 .wheel:focus-visible ~ .band, .root:focus-within .band { background: var(--color-accent-tint-pressed); }
-.pad { height: 44px; }
-.item { display: block; width: 100%; height: 44px; border: 0; background: transparent; scroll-snap-align: center; color: var(--color-ink-secondary); font: var(--weight-regular) var(--fs-title-3) / 44px var(--font-body); font-variant-numeric: tabular-nums; }
+.pad { height: var(--pad); }
+.year { display: inline-block; }
+.item { display: block; width: 100%; height: 44px; overflow: hidden; border: 0; background: transparent; scroll-snap-align: center; color: var(--color-ink-secondary); font: var(--weight-regular) var(--fs-title-3) / 44px var(--font-body); font-variant-numeric: tabular-nums; }
 .item[data-on] { color: var(--color-ink); font-weight: var(--weight-medium); }
+
+/* Cinematic drum: --d is the signed distance from the centre in rows, --ad its absolute value (0–3). */
+.cinematic .band { left: 0; right: 0; height: 56px; margin-top: -6px; border-radius: var(--radius-md); background: linear-gradient(90deg, transparent, var(--color-surface-lilac) 18%, var(--color-surface-lilac) 82%, transparent); }
+.cinematic .wheel { mask-image: linear-gradient(to bottom, transparent, black 22%, black 78%, transparent); }
+/* The row stays full width and clipped (no sideways scroll); only the year inside it is transformed. */
+.cinematic .item { overflow-x: clip; overflow-y: visible; perspective: 520px; }
+.cinematic .item {
+  --ad: 3;
+  --d: 0;
+  font: var(--weight-regular) var(--fs-title-2) / 44px var(--font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  text-align: center;
+}
+.cinematic .year {
+  transform-origin: 50% 50%;
+  transform: rotateX(calc(var(--d) * -28deg)) scale(calc(1.45 - min(var(--ad), 1) * 0.45 - var(--ad) * 0.05));
+  opacity: calc(1 - var(--ad) * 0.45);
+  filter: blur(calc(max(var(--ad) - 0.6, 0) * 0.6px));
+  will-change: transform, opacity, filter;
+}
+.cinematic .item[data-on] { font-weight: var(--weight-regular); }
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic .year { transform: none; filter: none; }
+}

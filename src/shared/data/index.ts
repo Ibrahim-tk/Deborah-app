@@ -13,6 +13,7 @@ import type {
   Product,
   Script,
   SuggestionsData,
+  HealthBasicsData,
 } from '../types/content';
 import deborah from './persona/deborah.json';
 import consent from './legal/consent.json';
@@ -36,6 +37,9 @@ import labMarkers from './labs/markers.json';
 import healthKit from './intake/healthkit.json';
 import intakeSuggestions from './intake/suggestions.json';
 import scanSamples from './intake/scans.json';
+import healthBasics from './intake/healthBasics.json';
+import firstConsult from './conversation/flows/firstConsult.json';
+import type { Flow } from '../types/flow';
 
 export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
@@ -80,3 +84,6 @@ export const healthKitMock = healthKit;
 export const intakeSuggestionData = intakeSuggestions as Record<'medications' | 'supplements' | 'allergies' | 'conditions', string[]> & { status: string };
 export type ScanSample = { id: string; label: string; field: 'medications' | 'allergies' | 'conditions'; ocr: string };
 export const scanSampleData = scanSamples.samples as ScanSample[];
+export const healthBasicsData = healthBasics as HealthBasicsData;
+/** Scripted first consultation after onboarding (OPEN: all copy is DRAFT, needs Deborah's sign-off). */
+export const firstConsultFlow = firstConsult as unknown as Flow;

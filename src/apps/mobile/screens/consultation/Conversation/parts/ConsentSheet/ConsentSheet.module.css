@@ -1,0 +1,31 @@
+.root { position: absolute; inset: 0; z-index: 30; display: flex; flex-direction: column; justify-content: flex-end; }
+.scrim { position: absolute; inset: 0; border: 0; background: var(--color-scrim); animation: fade var(--dur-base) var(--ease-out) both; }
+.sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 88%;
+  padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
+  border-radius: 32px 32px 0 0;
+  background: var(--color-canvas);
+  box-shadow: 0 -12px 40px rgb(18 7 33 / 0.12);
+  animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both;
+}
+.handle { align-self: center; flex: none; width: 36px; height: 5px; margin-bottom: var(--space-4); border-radius: var(--radius-full); background: var(--color-border-hairline); }
+.view { flex: 1; display: flex; flex-direction: column; gap: var(--space-3); min-height: 0; text-align: start; animation: fade var(--dur-base) var(--ease-out) both; }
+
+/* Consent */
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); }
+.body { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); text-wrap: pretty; }
+.link { display: inline; padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; cursor: pointer; }
+.link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+.actions { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+
+/* Document: plain text inside the sheet */
+.docHead { display: flex; align-items: center; gap: var(--space-2); margin-left: calc(var(--space-2) * -1); }
+.docTitle { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); color: var(--color-ink); }
+.docBody { flex: 1; min-height: 0; display: grid; align-content: start; gap: var(--space-3); overflow-y: auto; overscroll-behavior: contain; padding-bottom: var(--space-2); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .scrim, .sheet, .view { animation: none; } }

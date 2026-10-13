@@ -1,0 +1,22 @@
+/* Column layout: the question takes the height it needs; the bloom fills (and shrinks to) what is left. */
+.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.root > :not(span) { position: relative; } /* everything but the Aura / GradientShift backdrop spans */
+.step { display: flex; flex-direction: column; gap: var(--space-5); animation: step-in 0.4s ease-out both; }
+@keyframes step-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .step { animation: none; } }
+.title { font: var(--weight-regular) calc(28px * var(--type-scale)) / calc(34px * var(--type-scale)) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.footer { display: flex; align-items: flex-end; padding: 0 var(--margin-screen) calc(var(--safe-bottom) + var(--space-2)); }
+
+/* Header band: just the back button; progress is the growing plant below. */
+.header { flex: none; display: flex; align-items: center; gap: var(--space-3); padding: var(--safe-top) var(--margin-screen) 0; }
+.backSlot { flex: none; width: 44px; height: 44px; }
+/* Bloom band: takes all space above the question, so the question always sits at the bottom. */
+.art { flex: 1 1 0; display: flex; justify-content: center; align-items: center; min-height: 96px; overflow: hidden; }
+/* 1.35× the original 320px; the art has wide transparent margins, so the band clips only empty edges. The canvas sets its own width:100%, hence !important. */
+.bloom { flex: none; width: 432px !important; max-width: none; }
+/* Question band: natural height; only scrolls if it cannot fit even with the bloom at its floor. */
+.body { flex: 0 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-2) var(--margin-screen) var(--space-4); }
+
+.heading { text-align: start; }
+.title { text-wrap: balance; }
+.footer { flex: none; min-height: calc(var(--safe-bottom) + var(--space-6)); padding-top: var(--space-3); }

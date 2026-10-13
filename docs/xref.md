@@ -7,10 +7,14 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-1.1 | Splash | F01 | `onboarding/Splash` | W-1.1 — not built | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
 | M-1.2 | Welcome | F01 | `onboarding/Welcome` | W-1.2 — not built | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
 | M-1.3 | Consent | F01 | `onboarding/Consent` | W-1.3 — not built | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
+| M-1.4 | Create your profile (sheet: email + password, code, you're in) | F01 | `onboarding/CreateProfile` | W-1.4 — not built | — | [ux/F01-onboarding.md](ux/F01-onboarding.md) (OPEN: add) | built |
+| M-1.8 | Health basics (full screen) | F01 | `onboarding/HealthBasics` | W-1.8 — not built | — | [ux/F01-onboarding.md](ux/F01-onboarding.md) (OPEN: add) | built |
+| M-1.9 | Deborah's "let's talk" (sheet over the last question) | F01 | `onboarding/DeborahWelcome` | W-1.9 — not built | — | [ux/F01-onboarding.md](ux/F01-onboarding.md) (OPEN: add) | built |
 | M-2.0 | Home (landing, first-visit greeting sheet) | F02 | `consultation/Home` | W-2.0 — not built | — | design direction 2026-10-08 (OPEN: add to ux/F02) | built |
 | M-2.9 | Scan a label (intake V2 Step E) | F02 | `consultation/ScanLabel` | W-2.9 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
 | M-2.10 | Build your health profile (intake V2 card on its own) | F02 | `consultation/HealthProfile` | W-2.10 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
 | M-2.11 | Profile question (deferred fields) | F02 | `consultation/ProfileQuestion` | W-2.11 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
+| M-2.12 | First consultation (scripted, genesis_first_consult_v1) | F02 | `consultation/FirstConsult` | W-2.12 — not built | — | `src/shared/data/conversation/flows/firstConsult.json` (OPEN: add to ux/F02) | built |
 | M-2.1 | Conversation (all chat states) | F02 | `consultation/Conversation` | W-2.1 — not built | [F02](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361) | [ux/F02-consultation.md](ux/F02-consultation.md) | built (phases 3–6) |
 | M-2.7 | Shop — in-app browser | F02 | `consultation/InAppShop` | W-2.7 — not built | [F02](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361) | [ux/F02-consultation.md](ux/F02-consultation.md) | built (phase 3) |
 | M-2.8 | Follow-up opt-in | F02 | `consultation/FollowUpOptIn` | W-2.8 — not built | [F02](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361) | [ux/F02-consultation.md](ux/F02-consultation.md) | built (phase 3) |

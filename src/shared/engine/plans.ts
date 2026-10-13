@@ -45,6 +45,9 @@ export function nextIntakeOrReady(ctx: EngineContext, conv: Conversation, profil
   const plan = stillOpen(conv.intakePlan ?? [], done, profile);
   const nextId = plan.find((id) => !done.includes(id));
   const q = nextId ? question(nextId) : undefined;
+  // Nothing to ask (the profile already covers it, e.g. sign-up's health basics): answer straight away
+  // instead of pausing on "Tap below when you'd like my thoughts". Profile-only chats still wait for a topic.
+  if (!q && !done.length && !conv.profileOnly && conv.scriptId) return answerSteps(ctx, conv, profile);
   if (!q) return readySteps(ctx, conv, profile);
 
   // Consent and the country check aren't numbered steps.

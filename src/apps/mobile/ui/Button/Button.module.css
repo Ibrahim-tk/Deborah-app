@@ -8,7 +8,7 @@
   font: var(--weight-medium) var(--fs-button) / var(--lh-button) var(--font-body);
   letter-spacing: -0.015em;
   text-align: center;
-  transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -28,11 +28,17 @@
 
 .fullWidth { width: 100%; }
 
-.primary { background: var(--color-accent); color: var(--color-ink-on-accent); }
+.primary { background: var(--button-primary-fill); color: var(--color-ink-on-accent); box-shadow: var(--button-primary-shadow); }
 .primary:active:not(:disabled) { background: var(--color-accent-pressed); }
 
-.secondary { background: var(--color-accent-tint); color: var(--color-ink); }
-.secondary:active:not(:disabled) { background: var(--color-accent-tint-pressed); }
+.secondary {
+  background: var(--surface-1);
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px var(--surface-border), var(--surface-highlight);
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+}
+.secondary:active:not(:disabled) { background: var(--surface-1-pressed); }
 
 .outline { background: transparent; color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
 .outline:active:not(:disabled) { background: var(--color-accent-tint); }

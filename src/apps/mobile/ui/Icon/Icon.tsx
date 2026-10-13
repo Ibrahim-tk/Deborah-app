@@ -54,6 +54,8 @@ import {
   UserIcon,
   Video01Icon,
   VolumeHighIcon,
+  ViewIcon,
+  ViewOffSlashIcon,
 } from '@hugeicons/core-free-icons';
 
 const map = {
@@ -72,6 +74,8 @@ const map = {
   chevron: ArrowRight01Icon,
   chevronDown: ArrowDown01Icon,
   plus: Add01Icon,
+  eye: ViewIcon,
+  eyeOff: ViewOffSlashIcon,
   lock: SquareLock02Icon,
   shop: ShoppingBag02Icon,
   calendar: Calendar03Icon,

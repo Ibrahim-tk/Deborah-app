@@ -350,9 +350,9 @@
     "allergies"
   ],
   "onboarding": [
-    "profile-for",
     "dob",
     "sex",
+    "profile-for",
     "reproductive",
     "medications",
     "allergies"

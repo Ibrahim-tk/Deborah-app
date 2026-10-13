@@ -225,3 +225,25 @@ export interface BookingInfo {
   unavailable: [number, string][];
   status: ContentStatus;
 }
+
+/** Sign-up health basics (data/intake/healthBasics.json): conditional question map. */
+export type ShowIf = Record<string, { in?: string[]; notIn?: string[] }>;
+export type HealthBasicsKind = 'year' | 'measure' | 'choice' | 'text' | 'profileFor';
+export interface HealthBasicsStep {
+  key: string;
+  kind: HealthBasicsKind;
+  title: string;
+  choices?: { value: string; label: string }[];
+  placeholder?: string;
+  /** Text steps: the one-tap empty answer. */
+  none?: string;
+  /** Text steps: common answers, one tap to add or remove; each can be conditional too. */
+  suggestions?: { label: string; showIf?: ShowIf }[];
+  optional?: boolean;
+  /** Hidden unless every listed answer matches. */
+  showIf?: ShowIf;
+}
+export interface HealthBasicsData {
+  status: string;
+  steps: HealthBasicsStep[];
+}

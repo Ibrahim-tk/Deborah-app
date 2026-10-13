@@ -25,6 +25,7 @@ import { SafetyBench } from './parts/SafetyBench';
 import { useAutoScroll } from './parts/useAutoScroll';
 import { useReturnFlows } from './parts/useReturnFlows';
 import { useMessageActions } from './parts/useMessageActions';
+import { useHealthConsent } from './parts/useHealthConsent';
 import styles from './Conversation.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
@@ -110,6 +111,8 @@ export default function Conversation() {
   }, [focus, prefill]);
 
   const chatSend = chat.send;
+  const consent = useHealthConsent();
+  const askConsent = consent.ask;
   const send = useCallback(
     async (text: string, scriptId?: string) => {
       const t = text.trim();
@@ -123,11 +126,13 @@ export default function Conversation() {
       setDraft('');
       toBottom();
       if (quiz?.options.some((o) => o.id === 'other')) return void chat.answerIntake(quiz.questionId, ['other'], t);
+      // After sign-up's health basics: consent alert first, so Deborah can answer directly.
+      await askConsent();
       // Gated by the free limit: the message stays in the composer (F04).
       const accepted = await chatSend(t, scriptId);
       if (!accepted) setDraft(t);
     },
-    [chatSend, toBottom, aboutStep, intakeMode, intake, quiz, chat],
+    [chatSend, toBottom, aboutStep, intakeMode, intake, quiz, chat, askConsent],
   );
 
   const { interceptFocus } = useReturnFlows({ startCheckIn: chat.startCheckIn, send, status: conversation?.status, busy, atBottom: !showLatest });
@@ -250,6 +255,7 @@ export default function Conversation() {
           { label: 'Save to Visit Notes', onSelect: () => pressed && actions.saveMessage(pressed) },
         ]}
       />
+      {consent.sheet}
     </div>
   );
 }

@@ -1,0 +1,67 @@
+{
+  "status": "placeholder",
+  "note": "Sign-up health basics (M-1.8), in order. `showIf` hides a question or a suggestion unless every listed answer matches: { \"<key>\": { \"in\": [..] } } or { \"<key>\": { \"notIn\": [..] } }. Unanswered keys never match `in` and always pass `notIn`. Wording and options are placeholder until Deborah approves them.",
+  "steps": [
+    { "key": "profileFor", "kind": "profileFor", "title": "Who is this profile for?" },
+    { "key": "birthYear", "kind": "year", "title": "What year were you born?" },
+    {
+      "key": "sex", "kind": "choice", "title": "Sex at birth",
+      "choices": [{ "value": "female", "label": "Female" }, { "value": "male", "label": "Male" }, { "value": "intersex", "label": "Intersex" }]
+    },
+    {
+      "key": "gender", "kind": "choice", "title": "How do you identify?",
+      "choices": [{ "value": "woman", "label": "Woman" }, { "value": "man", "label": "Man" }, { "value": "nonbinary", "label": "Non-binary" }, { "value": "undisclosed", "label": "Prefer not to say" }]
+    },
+    {
+      "key": "reproductive", "kind": "choice", "title": "Where are you hormonally right now?",
+      "showIf": { "sex": { "notIn": ["male"] } },
+      "choices": [
+        { "value": "cycling", "label": "Regular cycles" },
+        { "value": "perimenopausal", "label": "Perimenopausal" },
+        { "value": "postmenopausal", "label": "Postmenopausal" },
+        { "value": "pregnant", "label": "Pregnant or breastfeeding" },
+        { "value": "na", "label": "Not sure or doesn’t apply" }
+      ]
+    },
+    {
+      "key": "hrt", "kind": "choice", "title": "Are you on HRT?",
+      "showIf": { "reproductive": { "in": ["perimenopausal", "postmenopausal"] } },
+      "choices": [{ "value": "no", "label": "No" }, { "value": "yes", "label": "Yes" }, { "value": "unsure", "label": "Not sure" }]
+    },
+    {
+      "key": "medications", "kind": "text", "title": "Any current medications?", "placeholder": "e.g. Levothyroxine", "none": "None",
+      "suggestions": [
+        { "label": "Levothyroxine" },
+        { "label": "Metformin" },
+        { "label": "Blood pressure medication" },
+        { "label": "Birth control", "showIf": { "sex": { "notIn": ["male"] } } },
+        { "label": "Testosterone", "showIf": { "sex": { "in": ["male", "intersex"] } } },
+        { "label": "Antidepressant" }
+      ]
+    },
+    {
+      "key": "supplements", "kind": "text", "title": "Any supplements?", "placeholder": "e.g. Magnesium, Vitamin D", "none": "None",
+      "suggestions": [
+        { "label": "Magnesium" }, { "label": "Vitamin D" }, { "label": "Omega-3" },
+        { "label": "Iron", "showIf": { "sex": { "notIn": ["male"] } } },
+        { "label": "Zinc", "showIf": { "sex": { "in": ["male"] } } },
+        { "label": "B12" }
+      ]
+    },
+    {
+      "key": "allergies", "kind": "text", "title": "Any medication allergies?", "placeholder": "e.g. Penicillin", "none": "None",
+      "suggestions": [{ "label": "Penicillin" }, { "label": "Sulfa drugs" }, { "label": "Aspirin" }, { "label": "NSAIDs" }]
+    },
+    {
+      "key": "conditions", "kind": "text", "title": "Any known conditions?", "placeholder": "e.g. Hypothyroidism", "none": "None",
+      "suggestions": [
+        { "label": "Hypothyroidism" },
+        { "label": "PCOS", "showIf": { "sex": { "notIn": ["male"] } } },
+        { "label": "Endometriosis", "showIf": { "sex": { "notIn": ["male"] } } },
+        { "label": "Low testosterone", "showIf": { "sex": { "in": ["male", "intersex"] } } },
+        { "label": "High blood pressure" },
+        { "label": "Type 2 diabetes" }
+      ]
+    }
+  ]
+}

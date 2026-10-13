@@ -6,6 +6,7 @@ import type { CSSProperties } from 'react';
 import { useAppStore } from '@shared/store';
 import { Navigator } from './navigation/Navigator';
 import './styles/mobile.tokens.css';
+import './styles/mobile.refresh.css';
 import './styles/mobile.base.css';
 
 export default function MobileApp() {

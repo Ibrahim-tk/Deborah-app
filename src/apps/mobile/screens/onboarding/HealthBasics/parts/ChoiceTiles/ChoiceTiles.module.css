@@ -1,0 +1,29 @@
+.root { display: grid; gap: var(--space-3); }
+/* Five or more options: tighter rhythm so the set fits with the bloom. */
+.root[data-dense] { gap: var(--space-2); }
+.root[data-dense] .option { min-height: 52px; }
+
+/* Quiz-style pill, label left-aligned. */
+.option {
+  display: flex; align-items: center;
+  min-height: 56px; padding: var(--space-2) var(--space-6);
+  border: 0; border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.75);
+  box-shadow: inset 0 0 0 1px var(--surface-border);
+  -webkit-backdrop-filter: var(--surface-blur); backdrop-filter: var(--surface-blur);
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em;
+  color: var(--color-ink); text-align: start; cursor: pointer;
+  animation: option-in 500ms ease-out calc(var(--i, 0) * 70ms) both;
+  transition: background 300ms ease-out, box-shadow 300ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+.option:hover { background: rgb(255 255 255 / 0.95); }
+.option:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.label { flex: 1; min-width: 0; }
+
+.option[aria-checked='true'] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
+
+/* Calm entrance for older eyes: a gentle fade, one option after another; no movement, scaling or bounce. */
+@keyframes option-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .option { animation: none; transition: none; } }

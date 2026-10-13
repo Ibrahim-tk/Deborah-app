@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Other pill interaction check</title></head><body><div id="root"></div><script type="module">
+import React, {useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {ChipPicker} from '/src/apps/mobile/screens/onboarding/HealthBasics/parts/ChipPicker/ChipPicker.tsx';
+import '/src/styles/index.css';
+import '/src/apps/mobile/styles/mobile.tokens.css';
+import '/src/apps/mobile/styles/mobile.refresh.css';
+import '/src/apps/mobile/styles/mobile.base.css';
+function Preview(){const [picked,setPicked]=useState([]);return React.createElement('main',{className:'phone-root',style:{maxWidth:393,minHeight:'100vh',margin:'0 auto',padding:'48px 20px','--type-scale':1}},React.createElement('h1',{style:{fontFamily:'var(--font-display)',fontWeight:400,fontSize:28,lineHeight:'34px',marginBottom:24}},'Any current medications?'),React.createElement(ChipPicker,{label:'Any current medications?',picked,suggestions:['Levothyroxine','Metformin','Blood pressure medication','Birth control','Antidepressant'],none:'None',noneSelected:false,onToggle:(name)=>setPicked(p=>p.includes(name)?p.filter(n=>n!==name):[...p,name]),onAdd:(name)=>setPicked(p=>[...p,name]),onNone:()=>setPicked([])}));}
+createRoot(document.getElementById('root')).render(React.createElement(Preview));
+</script></body></html>

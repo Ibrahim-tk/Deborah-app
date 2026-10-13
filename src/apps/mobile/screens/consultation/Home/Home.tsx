@@ -39,7 +39,8 @@ export default function Home() {
   const { profileId, focus } = useHubData();
   const guest = useAppStore((s) => !s.accountId);
   const nudgeDismissedAt = useAppStore((s) => s.saveNudgeDismissedAt);
-  const eligible = isNew && !!profile && !greeted.has(profile.id);
+  // Not after sign-up's health basics (M-1.8): that form already hands over to the chat.
+  const eligible = isNew && !!profile && !greeted.has(profile.id) && !d.intakeDone && !profile.intake.profileFor;
   const [sheet, setSheet] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -164,11 +165,11 @@ export default function Home() {
         <ChatLauncher glow placeholder="Ask Deborah how you’re feeling…" onOpen={chat} />
       </div>
 
-      {sheet && (
+      {sheet && eligible && (
         <GreetingSheet
           name={name}
           onDismiss={closeSheet}
-          // Straight to Deborah's first onboarding question in the chat.
+          // Sign-up only collects name and email, so Deborah opens with her onboarding questions (age, gender).
           onOpenChat={() => { closeSheet(); openAsk({ startIntake: true }); }}
         />
       )}

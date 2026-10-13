@@ -1,0 +1,1 @@
+export { GrowthArt } from './GrowthArt';

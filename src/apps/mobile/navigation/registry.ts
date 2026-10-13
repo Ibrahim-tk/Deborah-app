@@ -12,6 +12,9 @@ export const registry: Record<string, ScreenMeta> = {
   'M-1.1': { title: 'Splash', component: lazy(() => import('@mobile/screens/onboarding/Splash')), presentation: 'root', stack: 'preauth', statusBar: 'light', figma: `${FIGMA}47-184`, spec: 'docs/ux/F01-onboarding.md#m-11--splash' },
   'M-1.2': { title: 'Welcome', component: lazy(() => import('@mobile/screens/onboarding/Welcome')), presentation: 'root', stack: 'preauth', figma: `${FIGMA}47-184`, spec: 'docs/ux/F01-onboarding.md#m-12--welcome' },
   'M-1.3': { title: 'Before we begin', component: lazy(() => import('@mobile/screens/onboarding/Consent')), presentation: 'push', stack: 'preauth', figma: `${FIGMA}47-184`, spec: 'docs/ux/F01-onboarding.md#m-13--before-we-begin-consent' },
+  'M-1.4': { title: 'Create profile', component: lazy(() => import('@mobile/screens/onboarding/CreateProfile')), presentation: 'sheet', detent: 'medium', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.4)' },
+  'M-1.8': { title: 'Health basics', component: lazy(() => import('@mobile/screens/onboarding/HealthBasics')), presentation: 'push', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.8)' },
+  'M-1.9': { title: "Deborah's welcome", component: lazy(() => import('@mobile/screens/onboarding/DeborahWelcome')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.9)' },
 
   // F02 Consultation
   'M-2.0': { title: 'Home', component: lazy(() => import('@mobile/screens/consultation/Home')), presentation: 'tabRoot', tab: 'ask', stack: 'main', figma: '', spec: 'docs/ux/F02-consultation.md#m-20-home' },
@@ -21,6 +24,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-2.9': { title: 'Scan a label', component: lazy(() => import('@mobile/screens/consultation/ScanLabel')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'intake V2 brief §3 Step E (OPEN: add to ux/F02)' },
   'M-2.10': { title: 'Your health profile', component: lazy(() => import('@mobile/screens/consultation/HealthProfile')), presentation: 'modal', figma: '', spec: 'intake V2 brief §7 (OPEN: add to ux/F02)' },
   'M-2.11': { title: 'Profile question', component: lazy(() => import('@mobile/screens/consultation/ProfileQuestion')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: '', spec: 'intake V2 brief §4 (OPEN: add to ux/F02)' },
+  'M-2.12': { title: 'First consultation', component: lazy(() => import('@mobile/screens/consultation/FirstConsult')), presentation: 'push', figma: '', spec: 'data/conversation/flows/firstConsult.json (OPEN: add to ux/F02)' },
 
   // F04 Free limit, plans & account
   'M-4.1': { title: 'Free limit', component: lazy(() => import('@mobile/screens/plans/FreeLimit')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: `${FIGMA}49-353`, spec: 'docs/ux/F04-plans-account.md#m-41--free-limit-reached' },

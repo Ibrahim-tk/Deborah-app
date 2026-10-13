@@ -1,0 +1,2 @@
+.hello { display: grid; justify-items: center; gap: var(--space-5); padding: var(--space-2) 0; text-align: center; }
+.text { max-width: 100%; font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); /* Deborah's own words stay serif */ color: var(--color-ink); text-wrap: pretty; /* natural lines, only avoids a lone last word */ }

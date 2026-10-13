@@ -1,113 +1,71 @@
 /**
  * @screen  M-1.2 · Welcome
  * @flow    F01 First launch & onboarding
- * @states  default · name filled · keyboard open · reading terms (modal)
+ * @states  default · name entered
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184
  * @spec    docs/ux/F01-onboarding.md#m-12--welcome
  * @xref    web: W-1.2 (apps/web/screens/onboarding/Welcome) — not built
  *
- * OPEN: Spec F01 has a separate M-1.3 consent screen with a checkbox. Per design direction (2026-10-08),
- * consent is merged here: "Get started" accepts the Terms & Privacy notice, linked inline. Needs legal sign-off
- * that click-to-accept without a checkbox satisfies the brief/SOW.
+ * Design direction (2026-10-13, rev 5): Deborah's orb and note, then "What should I call you?" (first name)
+ * and Get Started, which opens the sign-up sheet (M-1.4: email + password, code, "you're in"). Terms and
+ * Privacy open the legal page; "Sign in" opens the sign-in page (M-4.3).
  */
 import { useState, type FormEvent } from 'react';
-import { consentDoc, persona } from '@shared/data';
-import { useAppStore } from '@shared/store';
+import { persona } from '@shared/data';
 import { Aura, Button, DeborahBlob, GradientShift, Input, TextReveal } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
 import styles from './Welcome.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
-const MAX_NAME = 30;
 
 export default function Welcome() {
-  const { open, presentSheet, resetTo } = useNav();
-  const storedName = useAppStore((s) => s.userName);
-  const setName = useAppStore((s) => s.setName);
-  const acceptConsent = useAppStore((s) => s.acceptConsent);
-  const [name, setDraft] = useState(storedName);
+  const { presentSheet, presentModal } = useNav();
+  const [name, setName] = useState('');
   const [error, setError] = useState<string>();
-  const trimmed = name.trim();
 
-  const submit = (e: FormEvent) => {
+  const start = (e: FormEvent) => {
     e.preventDefault();
-    if (!trimmed) return;
-    if (!NAME_PATTERN.test(trimmed)) {
-      setError('Just your first name is perfect.');
-      return;
-    }
-    setName(trimmed);
-    acceptConsent(consentDoc.version);
-    useAppStore.getState().acceptTerms();
-    resetTo('main', 'M-2.0');
+    const first = name.trim();
+    if (!first) return;
+    if (!NAME_PATTERN.test(first)) return setError('Letters only, please.');
+    presentSheet('M-1.4', { first });
   };
 
   return (
     <div className={styles.root} data-xref="M-1.2 · Welcome">
       <Aura rise />
       <GradientShift />
-      <div className={styles.scroll}>
+      <form className={styles.scroll} onSubmit={start} noValidate>
         <div className={styles.intro}>
-          <div className={styles.portrait}>
-            <DeborahBlob size={112} label={persona.name} />
-          </div>
-          <div
-            className={styles.note}
-            data-placeholder={persona.status === 'placeholder' || undefined}
-          >
+          <DeborahBlob size={112} label={persona.name} />
+          <div className={styles.note} data-placeholder={persona.status === 'placeholder' || undefined}>
             <TextReveal className={styles.hello} text={persona.welcomeNote} delay={500} />
           </div>
         </div>
         <div className={styles.bottom}>
-          <form className={styles.form} onSubmit={submit} noValidate>
-            <Input
-              label="What should I call you?"
-              placeholder="First name"
-              value={name}
-              maxLength={MAX_NAME}
-              autoCapitalize="words"
-              autoComplete="given-name"
-              enterKeyHint="go"
-              error={error}
-              onChange={(e) => {
-                setDraft(e.target.value);
-                setError(undefined);
-              }}
-            />
-            <Button type="submit" fullWidth disabled={!trimmed}>
-              Get started
-            </Button>
-            <p
-              className={styles.legal}
-              data-placeholder={consentDoc.status === 'placeholder' || undefined}
-            >
-              By continuing you agree to the{' '}
-              <button
-                type="button"
-                className={styles.inlineLink}
-                onClick={() => open('M-10.5', { section: 'terms' })}
-              >
-                Terms
-              </button>{' '}
-              and{' '}
-              <button
-                type="button"
-                className={styles.inlineLink}
-                onClick={() => open('M-10.5', { section: 'privacy' })}
-              >
-                Privacy Policy
-              </button>
-              .
-            </p>
-          </form>
+          <Input
+            label="What should I call you?"
+            placeholder="First name"
+            value={name}
+            autoComplete="given-name"
+            autoCapitalize="words"
+            maxLength={40}
+            enterKeyHint="go"
+            error={error}
+            onChange={(e) => { setName(e.target.value); setError(undefined); }}
+          />
+          <Button type="submit" fullWidth disabled={!name.trim()}>Get Started</Button>
+          <p className={styles.legal}>
+            By continuing you agree to our{' '}
+            <button type="button" className={styles.link} onClick={() => presentModal('M-10.5', { section: 'terms' })}>Terms</button> and{' '}
+            <button type="button" className={styles.link} onClick={() => presentModal('M-10.5', { section: 'privacy' })}>Privacy</button>.
+          </p>
           <p className={styles.signIn}>
             Already have an account?{' '}
-            <Button variant="link" className={styles.inlineLink} onClick={() => presentSheet('M-4.3', { mode: 'signin', sheet: true })}>
-              Sign in
-            </Button>
+            <button type="button" className={styles.signInLink} onClick={() => presentModal('M-4.3', { mode: 'signin' })}>Sign in</button>
           </p>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

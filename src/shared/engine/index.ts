@@ -29,6 +29,8 @@ export { CONSENT_ID } from './intake';
 export { ANSWER_REQUEST_LABEL } from './plans';
 export { greeting } from './memory';
 export { ageBandFor, ageOn, isMinor } from './profile';
+export { shows } from './showIf';
+export { nextNodeId, personalise, type FlowValue } from './flow';
 export { extractionPatch, extractProfile, handOffSuggestions, healthKitPatch, profileCompletion } from './extract';
 export { chunkText, CPS } from './streamer';
 export { FREE_LIMIT, isGated } from './counting';

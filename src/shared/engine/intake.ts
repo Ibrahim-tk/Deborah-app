@@ -22,7 +22,7 @@ function isKnown(profile: Profile, q: IntakeQuestion): boolean {
   if (q.id === 'dob') return Boolean(profile.dob || profile.health?.birthYear);
   if (q.id === 'sex') return Boolean(profile.sexAtBirth);
   // A known date of birth answers the age band too.
-  if (q.id === 'age' && profile.dob) return true;
+  if (q.id === 'age' && (profile.dob || profile.health?.birthYear)) return true;
   const field = q.profileField.replace(/^intake\./, '') as keyof Intake;
   const value = profile.intake[field];
   return Array.isArray(value) ? value.length > 0 : Boolean(value);

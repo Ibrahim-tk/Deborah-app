@@ -40,6 +40,7 @@ export * from './SocialButton';
 export * from './ChoiceGroup';
 export * from './YearWheel';
 export * from './RulerSlider';
+export * from './KnobSlider';
 export * from './ProgressRing';
 export * from './DateWheel';
 export * from './EdgeLight';
