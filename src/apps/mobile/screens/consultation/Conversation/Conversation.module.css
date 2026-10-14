@@ -1,4 +1,13 @@
-.root { position: relative; display: flex; flex-direction: column; height: 100%; }
+.root { position: relative; display: flex; flex-direction: column; height: 100%; background: var(--chat-canvas); }
+/* Chat atmosphere (Deborah skin): warm off-white with a lavender glow top-right and a peach glow bottom-left.
+   Extra mid stops ease each glow out so there is no visible ring; the centre stays off-white for reading.
+   On .root, which does not scroll, so the glow stays put while the thread scrolls over it. */
+.root {
+  --chat-canvas:
+    radial-gradient(ellipse at 87% -10%, rgb(233 219 238 / 0.47), rgb(233 219 238 / 0.24) 22%, rgb(233 219 238 / 0.08) 36%, transparent 45%),
+    radial-gradient(ellipse at 8% 100%, rgb(255 221 163 / 0.27), rgb(255 221 163 / 0.14) 22%, rgb(255 221 163 / 0.04) 36%, transparent 45%),
+    #f9f7f5;
+}
 
 .scroll {
   flex: 1;

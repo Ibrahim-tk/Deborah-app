@@ -8,6 +8,10 @@ import { Navigator } from './navigation/Navigator';
 import './styles/mobile.tokens.css';
 import './styles/mobile.refresh.css';
 import './styles/mobile.base.css';
+// EXPLORATION skin (deborah-design-system.md): remove these three lines to go back.
+import '@fontsource/dm-sans/400.css';
+import '@fontsource/dm-sans/500.css';
+import './styles/mobile.skin.deborah.css';
 
 export default function MobileApp() {
   const textSize = useAppStore((s) => s.settings.textSize);

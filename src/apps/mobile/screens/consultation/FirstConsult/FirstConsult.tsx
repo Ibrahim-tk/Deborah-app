@@ -13,13 +13,13 @@
  * OPEN: "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off."
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { firstConsultFlow as flow } from '@shared/data';
 import { personalise } from '@shared/engine';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
-import { Button } from '@mobile/ui';
-import { ChatHeader, ThinkingIndicator } from '@mobile/patterns/chat';
+import { Button, DeborahBlob } from '@mobile/ui';
+import { ChatHeader, Composer, ThinkingIndicator } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
 import { useHealthConsent } from '@mobile/screens/consultation/Conversation/parts/useHealthConsent';
@@ -40,6 +40,7 @@ export default function FirstConsult() {
   const { entries, typing } = player;
   const scrollRef = useRef<HTMLDivElement>(null);
   const asked = useRef(false);
+  const [draft, setDraft] = useState('');
   const say = (s?: string) => personalise(flow, s, name);
 
   // What she already told us at intake, shown on the "I already know" message.
@@ -74,6 +75,10 @@ export default function FirstConsult() {
     if (value === 'exit_product') return open('M-2.7', { productId: 'genesis-gold' });
     toast(value === 'find_care' ? 'Finding care near you (simulated)' : value === 'pdf' ? 'PDF ready to share' : 'Saved to My Health');
   };
+  // Typing instead of tapping leaves the script for free chat, carrying what she typed.
+  const typeInstead = (text: string) => {
+    if (text.trim()) openAsk({ prefill: text.trim(), focus: true });
+  };
   const waiting = [...entries].reverse().find((e) => (e.kind === 'bot' || e.kind === 'answer') && !e.answered);
 
   return (
@@ -81,6 +86,8 @@ export default function FirstConsult() {
       <ChatHeader onBack={pop} onNewChat={() => openAsk()} onInfo={() => open('M-10.5', { section: 'ai' })} canStartNew={false} />
       <div ref={scrollRef} className={styles.scroll}>
         <div className={styles.column} data-placeholder>
+          {/* Deborah's orb opens the consultation, as on the empty chat (M-2.1). */}
+          <div className={styles.orb}><DeborahBlob size={112} label="Deborah" /></div>
           {entries.map((e) => (
             <EntryView
               key={e.id}
@@ -107,6 +114,19 @@ export default function FirstConsult() {
             <Button fullWidth onClick={() => openAsk({ focus: true })}>Keep talking with Deborah</Button>
           )}
         </div>
+      </div>
+      <div className={styles.bottom}>
+        <Composer
+          value={draft}
+          onChange={setDraft}
+          onSend={(text) => typeInstead(text ?? draft)}
+          onStop={() => {}}
+          onAttach={() => open('M-5.3')}
+          onFocusChange={() => {}}
+          generating={typing}
+          placeholder="Or tell me in your own words…"
+          voiceSample=""
+        />
       </div>
       {consent.sheet}
     </div>

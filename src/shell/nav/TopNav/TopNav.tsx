@@ -1,8 +1,9 @@
-/** @shell TopNav — fixed 56 px bar: brand · platform tabs · state menu · reset · toggles. */
+/** @shell TopNav — fixed 56 px bar: brand · platform tabs · auto demo · state menu · reset · toggles. */
 import { PlatformTabs } from '../PlatformTabs';
 import { StateMenu } from '../StateMenu';
 import { ResetButton } from '../ResetButton';
 import { DevToggles } from '../DevToggles';
+import { AutoDemo } from '../AutoDemo';
 import { VariantMenu } from '../VariantMenu';
 import styles from './TopNav.module.css';
 
@@ -18,6 +19,7 @@ export function TopNav() {
         <PlatformTabs />
       </nav>
       <div className={styles.actions}>
+        <AutoDemo />
         <VariantMenu />
         <StateMenu />
         <ResetButton />

@@ -8,7 +8,7 @@
  *
  * Design direction (2026-10-13, rev 5): Deborah's orb and note, then "What should I call you?" (first name)
  * and Get Started, which opens the sign-up sheet (M-1.4: email + password, code, "you're in"). Terms and
- * Privacy open the legal page; "Sign in" opens the sign-in page (M-4.3).
+ * Privacy open the legal page; "Sign in" opens the same sheet in sign-in mode (email + password, code, Home).
  */
 import { useState, type FormEvent } from 'react';
 import { persona } from '@shared/data';
@@ -62,7 +62,7 @@ export default function Welcome() {
           </p>
           <p className={styles.signIn}>
             Already have an account?{' '}
-            <button type="button" className={styles.signInLink} onClick={() => presentModal('M-4.3', { mode: 'signin' })}>Sign in</button>
+            <button type="button" className={styles.signInLink} onClick={() => presentSheet('M-1.4', { mode: 'signin' })}>Sign in</button>
           </p>
         </div>
       </form>

@@ -23,7 +23,7 @@
 .intro { flex: 1; display: grid; align-content: center; justify-items: start; gap: var(--space-6); }
 .bottom { display: grid; gap: var(--space-3); }
 .note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: start; color: var(--color-ink-body); }
-.hello { font: var(--weight-regular) calc(24px * var(--type-scale)) / calc(31px * var(--type-scale)) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
+.hello { font: var(--weight-regular) calc(24px * var(--type-scale)) / calc(31px * var(--type-scale)) var(--font-artistic, var(--font-display)); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
 .legal { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
 .link { padding: 0; border: 0; background: none; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .signIn { margin-top: var(--space-3); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); text-align: center; }

@@ -1,4 +1,9 @@
-.root { position: relative; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.root { position: relative; display: flex; flex-direction: column; height: 100%; background:
+  radial-gradient(ellipse at 87% -10%, rgb(233 219 238 / 0.47), rgb(233 219 238 / 0.24) 22%, rgb(233 219 238 / 0.08) 36%, transparent 45%),
+  radial-gradient(ellipse at 8% 100%, rgb(255 221 163 / 0.27), rgb(255 221 163 / 0.14) 22%, rgb(255 221 163 / 0.04) 36%, transparent 45%),
+  #f9f7f5; } /* same atmosphere as the chat (M-2.1) */
 .scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.column { display: grid; gap: var(--space-6); padding: calc(var(--safe-top) + 64px) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8)); }
+.column { display: grid; gap: var(--space-6); padding: calc(var(--safe-top) + 64px) var(--margin-screen) var(--space-6); } /* the composer below handles the safe area */
+.orb { display: flex; justify-content: center; padding-top: var(--space-4); }
 .known { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.bottom { flex: none; padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
