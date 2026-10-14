@@ -15,10 +15,13 @@
 /* Opening greeting: Deborah's first line in serif, no bubble (design direction 2026-10-14). */
 .greetingLine { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-align: center; text-wrap: balance; }
 /* Reduced motion everywhere (design direction 2026-10-14): widgets and greetings only fade in, no movement. */
-.widget, .greetingLine, .entry { animation: widget-in 320ms ease-out both; }
+.widget, .entry { animation: widget-in 320ms ease-out both; }
 @keyframes widget-in { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .widget, .greetingLine, .entry { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .widget, .entry { animation: none; } }
 .after { margin-top: var(--space-4); }
 .afterLine { margin-top: var(--space-5); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }
 .afterReveal { display: grid; gap: var(--space-4); animation: widget-in 360ms ease-out 1250ms both; }
 @media (prefers-reduced-motion: reduce) { .afterReveal { animation: none; } }
+/* Opening: the starters wait for the greeting's reveal, then fade in (no movement). */
+.starters { animation: widget-in 400ms ease-out 1100ms both; }
+@media (prefers-reduced-motion: reduce) { .starters { animation: none; } }

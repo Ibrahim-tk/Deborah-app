@@ -1,7 +1,7 @@
 /** One line of the scripted consult, drawn with the chat's own patterns (M-2.1) plus a few flow widgets. */
 import { findProduct } from '@shared/data';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
-import { Button, Panel } from '@mobile/ui';
+import { Button, Panel, TextReveal } from '@mobile/ui';
 import { AnswerSections, ClosingLine, MessageBubble, SuggestedQuestions } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
@@ -102,7 +102,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep }: 
 
   const custom = w && FlowWidget.handles(w.type);
   // The opening line: large serif greeting, no bubble; its starters dock above the composer (FirstConsult).
-  if (node.display === 'greeting' && active) return <p className={styles.greetingLine}>{entry.text}</p>;
+  if (node.display === 'greeting' && active) return <TextReveal className={styles.greetingLine} text={entry.text} delay={250} />;
 
   const choices = custom ? undefined : w?.options;
   return (

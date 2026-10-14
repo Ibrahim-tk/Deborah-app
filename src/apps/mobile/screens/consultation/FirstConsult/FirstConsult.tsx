@@ -143,10 +143,12 @@ export default function FirstConsult() {
       </div>
       <div className={styles.bottom}>
         {opener && starters.length > 0 && (
+          <div className={styles.starters}>
           <SuggestionList
             suggestions={starters.map((o) => ({ id: o.label, text: say(o.label), scriptId: '' }))}
             onSelect={(x) => pick(opener.id, opener.node, starters.filter((o) => o.label === x.id))}
           />
+          </div>
         )}
         <Composer
           value={draft}

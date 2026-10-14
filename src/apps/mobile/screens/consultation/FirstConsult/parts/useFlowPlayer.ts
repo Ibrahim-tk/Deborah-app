@@ -66,7 +66,8 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
           if (held) later(() => push({ id: uid(), kind: 'bot', nodeId: held.id, text: say(held.node.bot), node: held.node }), typingMs);
           return;
         }
-        setTyping(true);
+        // The opening greeting is already on screen in spirit: no "writing…", it reveals in place (EntryView).
+        if (node.display !== 'greeting') setTyping(true);
         later(() => {
           setTyping(false);
           push({ id: uid(), kind: 'bot', nodeId: id, text: say(node.bot), node });
@@ -76,7 +77,7 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
           // thread, and Deborah carries on to her full answer. OPEN: confirm with Deborah's safety review.
           const waits = node.type === 'question' || node.type === 'emergency' || Boolean(node.widget?.options?.length);
           if (!waits) later(() => go(nextNodeId(node, vars.current)), 500);
-        }, typingMs);
+        }, node.display === 'greeting' ? 0 : typingMs);
     }
   }
 
