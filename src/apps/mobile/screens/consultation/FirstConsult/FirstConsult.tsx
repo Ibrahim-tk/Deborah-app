@@ -14,7 +14,7 @@
  * OPEN: "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off."
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { firstConsultFlow, returningConsultFlow } from '@shared/data';
 import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
@@ -52,12 +52,6 @@ export default function FirstConsult() {
   const [symptomsOpen, setSymptomsOpen] = useState(false);
   const say = player.say;
 
-  // What she already told us at intake, shown on the "I already know" message.
-  const known = useMemo(() => {
-    if (which !== 'returning') return profileCtx.known;
-    const c = flow.carriedFromIntake as { meds?: { name: string }[] };
-    return ['Night sweats', 'Low energy', ...(c.meds?.slice(0, 1).map((m) => m.name) ?? [])];
-  }, [flow.carriedFromIntake, which, profileCtx.known]);
   const prep = visitPrepItems(flow.nodes.answer_1);
 
 
@@ -84,6 +78,7 @@ export default function FirstConsult() {
     player.respond(entryId, node, picked);
   };
   const action = (value: string) => {
+    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with Deborah`); return push('M-8.2'); }
     if (value === 'visit_notes') {
       // §7's "Save to Visit notes": the answer goes into Visit Notes, as from the chat's answer actions.
       const answer = buildAnswer(flow.nodes.answer_1, say);
@@ -124,8 +119,6 @@ export default function FirstConsult() {
               entry={e}
               active={e === waiting}
               say={say}
-              known={known}
-              earlyExit={flow.uiDefaults.earlyExitLabel}
               onPick={(node, picked) => pick(e.id, node, picked)}
               onAction={action}
               renderPrep={() => (

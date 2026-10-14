@@ -114,6 +114,8 @@
 }
 
 /* "Symptoms": a quiet text button next to attach; opens the SymptomPicker sheet. */
-.symptoms { margin-left: var(--space-2); display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1px var(--surface-border); font: var(--weight-regular) var(--fs-footnote) / 1 var(--font-body); color: var(--color-ink); }
+.symptoms { margin-left: auto; margin-right: var(--space-2); display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1px var(--surface-border); font: var(--weight-regular) var(--fs-footnote) / 1 var(--font-body); color: var(--color-ink); }
 .symptoms:disabled { opacity: 0.45; }
 .symptoms:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+/* With Symptoms present it takes the auto margin, sitting just left of send. */
+.symptoms + .send { margin-left: 0; }

@@ -23,11 +23,13 @@ export interface EscalationCardProps {
   dismissed?: boolean;
   onBook: () => void;
   onDismiss: () => void;
+  /** Open as a bottom sheet on arrival (default). `false`: only the inline row; the sheet opens on tap. */
+  sheet?: boolean;
 }
 
-export function EscalationCard({ body, reasons, details, dismissed, onBook, onDismiss }: EscalationCardProps) {
+export function EscalationCard({ body, reasons, details, dismissed, onBook, onDismiss, sheet = true }: EscalationCardProps) {
   // Opens on arrival; closing (Not now or the scrim) leaves the inline record.
-  const [open, setOpen] = useState(!dismissed);
+  const [open, setOpen] = useState(sheet && !dismissed);
   const book = () => { setOpen(false); onBook(); };
   const notNow = () => { setOpen(false); if (!dismissed) onDismiss(); };
 

@@ -198,11 +198,6 @@ export function Composer({
               onClick={onAttach}
               disabled={Boolean(lockedNote) || generating}
             />
-            {onSymptoms && (
-              <button type="button" className={styles.symptoms} onClick={onSymptoms} disabled={Boolean(lockedNote) || generating}>
-                <Icon name="plus" size={16} /> Symptoms
-              </button>
-            )}
             {!generating && (
               <IconButton
                 icon="mic"
@@ -211,6 +206,11 @@ export function Composer({
                 onClick={startRecording}
                 disabled={Boolean(lockedNote)}
               />
+            )}
+            {onSymptoms && (
+              <button type="button" className={styles.symptoms} onClick={onSymptoms} disabled={Boolean(lockedNote) || generating}>
+                <Icon name="plus" size={16} /> Symptoms
+              </button>
             )}
             <div className={styles.send} data-ready={canSend || generating || undefined}>
               {generating ? (

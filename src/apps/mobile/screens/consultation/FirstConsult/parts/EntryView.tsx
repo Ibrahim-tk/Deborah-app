@@ -6,6 +6,12 @@ import { AnswerSections, ClosingLine, MessageBubble, SuggestedQuestions } from '
 import { ProductCard } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
 import { buildAnswer } from './buildAnswer';
+import { SlotPicker } from '@mobile/patterns/widgets';
+
+// Deborah's next two weeks (placeholder): weekends and full days have no openings.
+const WEEKDAYS = ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed'];
+const SLOTS = [['9:30 am', '1:00 pm', '3:00 pm'], ['10:00 am', '2:30 pm'], [], [], ['8:30 am', '11:00 am', '4:00 pm'], ['9:00 am'], []];
+const FORTNIGHT = Array.from({ length: 14 }, (_, i) => ({ value: `d${i}`, label: `${WEEKDAYS[i % 7]} ${16 + i}`, times: SLOTS[i % 7] }));
 import { FlowWidget } from './FlowWidget';
 import { FlowChoice } from './FlowChoice';
 import { FlowText } from './FlowText';
@@ -18,14 +24,12 @@ export interface EntryViewProps {
   /** Only the newest waiting entry takes input. */
   active: boolean;
   say: (s?: string) => string;
-  known: string[];
-  earlyExit?: string;
   onPick: (node: FlowNode, picked: FlowOption[]) => void;
   onAction: (value: string) => void;
   renderPrep: () => React.ReactNode;
 }
 
-export function EntryView({ entry, active, say, known, earlyExit, onPick, onAction, renderPrep }: EntryViewProps) {
+export function EntryView({ entry, active, say, onPick, onAction, renderPrep }: EntryViewProps) {
   if (entry.kind === 'user') return <MessageBubble role="user" text={entry.text} />;
   if (entry.kind === 'thinking') return <ThinkingSteps steps={entry.steps} durationMs={entry.durationMs} />;
   if (entry.kind === 'end') return null;
@@ -42,8 +46,12 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
         <AnswerSections
           answer={answer}
           wordSlot={<Button variant="secondary" leadingIcon="note" fullWidth onClick={() => onAction('visit_notes')}>Save to Visit notes</Button>}
-          productSlot={product && answer.product && <ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} />} />
+        />
         <ClosingLine text={answer.closingLine} />
+        {/* After the framework (design direction 2026-10-14): the product, then Deborah herself, then her times. */}
+        {product && answer.product && <div className={styles.after}><ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} /></div>}
+        <p className={styles.afterLine}>If you’d like to go through this with me in person, I have time this week.</p>
+        <SlotPicker title="Book with Deborah" meta="30 min · Video or phone" days={FORTNIGHT} onPick={(day, time) => onAction(`book:${day}, ${time}`)} />
         {active && <SuggestedQuestions questions={replies.map((r) => say(r.label))} onSelect={(q) => onPick(node, replies.filter((r) => say(r.label) === q))} />}
       </MessageBubble>
     );
@@ -67,8 +75,7 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
   if (node.type === 'safety') {
     return (
       <MessageBubble role="deborah" turnStart>
-        <EscalationCard body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Book with Deborah', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
-        {active && <Button variant="ghost" fullWidth onClick={() => onAction('find_care')}>Find care near me</Button>}
+        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Book with Deborah', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
       </MessageBubble>
     );
   }
@@ -81,7 +88,6 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
   return (
     <MessageBubble role="deborah" text={entry.text} turnStart>
       {/* What Deborah already knows from intake, as plain text (no tags). */}
-      {entry.nodeId.startsWith('context') && <p className={styles.known}>{known.join(' · ')}</p>}
       {custom && <FlowWidget widget={w} active={active} say={say} onPick={(picked) => onPick(node, picked)} />}
       {choices && active && (
         <FlowChoice
@@ -89,10 +95,7 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
           options={choices}
           multi={w?.multi}
           exclusive={w?.exclusiveOption}
-          step={node.progress}
           onPick={(picked) => onPick(node, picked)}
-          onSkip={node.type === 'question' && node.progress ? () => onPick(node, [{ label: 'Skip' }]) : undefined}
-          earlyExit={node.progress?.startsWith('1 of') && earlyExit ? { label: earlyExit, onPress: () => onPick(node, [{ label: earlyExit, next: 'thinking' }]) } : undefined}
         />
       )}
       {w?.type === 'free_text' && active && (

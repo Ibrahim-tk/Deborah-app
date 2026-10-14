@@ -59,7 +59,10 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
           push({ id: uid(), kind: 'bot', nodeId: id, text: say(node.bot), node });
           if (node.sideEffect?.appendToVisitPrep) setExtraPrep((xs) => [...xs, say(node.sideEffect!.appendToVisitPrep)]);
           // Waits for a tap when the node has choices; otherwise moves on by itself.
-          const waits = node.type === 'question' || node.type === 'safety' || node.type === 'emergency' || Boolean(node.widget?.options?.length);
+          // A safety note does not stop the consult (design direction 2026-10-14): the human path stays in the
+          // thread, and Deborah carries on to her full answer. OPEN: confirm with Deborah's safety review.
+          if (node.type === 'safety') return later(() => go(node.next ?? (flow.nodes.thinking ? 'thinking' : undefined)), 1400);
+          const waits = node.type === 'question' || node.type === 'emergency' || Boolean(node.widget?.options?.length);
           if (!waits) later(() => go(nextNodeId(node, vars.current)), 500);
         }, typingMs);
     }

@@ -6,6 +6,8 @@
 .orb { display: flex; justify-content: center; }
 .column[data-started] .orb { justify-content: flex-start; margin-bottom: calc(var(--space-6) * -1 + var(--space-3)); }
 .entry { display: grid; min-width: 0; }
+/* Back-to-back Deborah lines read as one reply: tighter than the gap between turns. */
+.entry[data-entry='bot'] + .entry[data-entry='bot'] { margin-top: calc(var(--space-6) * -1 + var(--space-3)); }
 .known { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 .bottom { flex: none; display: grid; gap: var(--space-4); /* breathing room between suggestions and the composer */ padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
 .widget { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
@@ -16,3 +18,5 @@
 .widget, .greetingLine, .entry { animation: widget-in 320ms ease-out both; }
 @keyframes widget-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .widget, .greetingLine, .entry { animation: none; } }
+.after { margin-top: var(--space-4); }
+.afterLine { margin-top: var(--space-5); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }

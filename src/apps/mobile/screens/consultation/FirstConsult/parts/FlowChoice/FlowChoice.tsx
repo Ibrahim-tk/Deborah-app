@@ -20,9 +20,8 @@ export interface FlowChoiceProps {
   earlyExit?: { label: string; onPress: () => void };
 }
 
-/** A short single-choice yes/no question (≤3 answers, one starting with Yes or No). */
-const isYesNo = (options: FlowOption[], multi?: boolean) =>
-  !multi && options.length <= 3 && options.some((o) => /^(yes|no)\b/i.test(o.label.trim()));
+/** Short answers (up to 6, each a few words) show as compact pills; long ones keep full rows. */
+const isShort = (options: FlowOption[]) => options.length <= 6 && options.every((o) => o.label.length <= 32);
 
 export function FlowChoice({ label, options, multi, exclusive, step, onPick, onSkip, earlyExit }: FlowChoiceProps) {
   const [on, setOn] = useState<string[]>([]);
@@ -38,7 +37,7 @@ export function FlowChoice({ label, options, multi, exclusive, step, onPick, onS
       {step && <p className={styles.step}>Question {step}</p>}
       {multi ? (
         <ChoicePills label={label} options={options.map((o) => o.label)} onPick={() => {}} selected={options.filter((o) => on.includes(key(o))).map((o) => o.label)} onToggle={(l) => toggle(options.find((o) => o.label === l)!)} />
-      ) : isYesNo(options, multi) ? (
+      ) : isShort(options) ? (
         <ChoicePills label={label} options={options.map((o) => o.label)} onPick={(_, i) => onPick([options[i]])} />
       ) : (
         <OptionList label={label}>
