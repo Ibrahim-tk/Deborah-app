@@ -20,3 +20,5 @@
 @media (prefers-reduced-motion: reduce) { .widget, .greetingLine, .entry { animation: none; } }
 .after { margin-top: var(--space-4); }
 .afterLine { margin-top: var(--space-5); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }
+.afterReveal { display: grid; gap: var(--space-4); animation: widget-in 360ms ease-out 1250ms both; }
+@media (prefers-reduced-motion: reduce) { .afterReveal { animation: none; } }

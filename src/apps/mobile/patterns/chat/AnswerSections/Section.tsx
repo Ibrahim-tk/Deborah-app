@@ -2,7 +2,7 @@
  * One numbered section as a tonal card (same family as Home): serif numeral, headline title and a
  * round chevron, plus a minimal line glyph; opening reveals the body under a hairline. §7 is the signature midnight card.
  */
-import { useId, type ReactNode } from 'react';
+import { useId, type CSSProperties, type ReactNode } from 'react';
 import type { AnswerSection } from '@shared/types/domain';
 import { Icon, IconButton } from '@mobile/ui';
 import { StreamingText } from '../MessageBubble';
@@ -63,6 +63,8 @@ export function Section({ number, section, open, pending, streaming, onToggle, o
   return (
     <section
       className={`${styles.section} ${styles[isWord ? 'signature' : TONES[(number - 1) % TONES.length]]}`}
+      // Reveal order for the staggered entrance (a dynamic value, so inline).
+      style={{ '--i': number - 1 } as CSSProperties}
       data-open={open || undefined}
       data-pending={pending || undefined}
     >

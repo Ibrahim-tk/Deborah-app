@@ -455,7 +455,24 @@
         "appendToVisitPrep": "Is Genesis Gold safe with {medMine}, and how far apart should I take them?"
       },
       "footer": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
-      "next": "save_visit_prep"
+      "next": "talk_direct"
+    },
+    "talk_direct": {
+      "type": "question",
+      "bot": "Your sleep has been off for {duration}. If you'd like, we can go through it together, one to one.",
+      "widget": {
+        "type": "escalation",
+        "options": [
+          {
+            "label": "Book with Deborah",
+            "next": "offer_booking"
+          },
+          {
+            "label": "Not now",
+            "next": "save_visit_prep"
+          }
+        ]
+      }
     },
     "save_visit_prep": {
       "type": "message",
@@ -490,7 +507,7 @@
         "options": [
           {
             "label": "Maybe later",
-            "next": "offer_booking"
+            "next": "offer_checkin"
           }
         ]
       },
@@ -500,11 +517,11 @@
     "labs_ack": {
       "type": "message",
       "bot": "Got it, thank you. I'll keep your thyroid markers right next to your sleep story, so nothing gets looked at in isolation.",
-      "next": "offer_booking"
+      "next": "offer_checkin"
     },
     "offer_booking": {
       "type": "question",
-      "bot": "And if you'd ever like to go deeper, I can see you myself. These are my next openings.",
+      "bot": "Lovely. These are my next openings.",
       "widget": {
         "type": "slot_picker",
         "title": "Book with Deborah",
@@ -512,7 +529,7 @@
         "options": [
           {
             "label": "Not right now",
-            "next": "offer_checkin"
+            "next": "save_visit_prep"
           }
         ]
       },
@@ -536,7 +553,7 @@
     "booked": {
       "type": "message",
       "bot": "You're booked. I'll have your notes and questions in front of me when we talk.",
-      "next": "offer_checkin"
+      "next": "save_visit_prep"
     },
     "offer_checkin": {
       "type": "question",

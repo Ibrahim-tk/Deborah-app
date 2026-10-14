@@ -8,7 +8,9 @@ export interface FlowOption {
 export interface FlowWidget {
   type: 'suggested_replies' | 'quick_replies' | 'pill_select' | 'safety_card' | 'thinking_steps' | 'inline_tip' | 'visit_prep_card' | 'reminder_chip' | 'free_text'
     /** On-the-fly widgets (patterns/widgets, docs/ux/F02c). */
-    | 'mood_scale' | 'scale_check' | 'upload_card' | 'slot_picker' | 'confirm_card' | 'reminder_card';
+    | 'mood_scale' | 'scale_check' | 'upload_card' | 'slot_picker' | 'confirm_card' | 'reminder_card'
+    /** The human path (EscalationCard) as an inline tile; options = [book, not now]. */
+    | 'escalation';
   options?: FlowOption[];
   actions?: FlowOption[];
   multi?: boolean;

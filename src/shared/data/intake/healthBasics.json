@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Sign-up health basics (M-1.8), in order. `showIf` hides a question or a suggestion unless every listed answer matches: { \"<key>\": { \"in\": [..] } } or { \"<key>\": { \"notIn\": [..] } }. Unanswered keys never match `in` and always pass `notIn`. Wording and options are placeholder until Deborah approves them.",
+  "note": "Sign-up health basics (M-1.8), in order. `showIf` hides a question or a suggestion unless every listed answer matches: { \"<key>\": { \"in\": [..] } } or { \"<key>\": { \"notIn\": [..] } }. Unanswered keys never match `in` and always pass `notIn`. Wording and options are placeholder until Deborah approves them. The hormonal-stage question and Birth control also hide when she identifies as a man (design direction 2026-10-14). OPEN: a trans man may still cycle; confirm with Deborah whether sex at birth alone should decide.",
   "steps": [
     { "key": "profileFor", "kind": "profileFor", "title": "Who is this profile for?" },
     { "key": "birthYear", "kind": "year", "title": "What year were you born?" },
@@ -14,7 +14,7 @@
     },
     {
       "key": "reproductive", "kind": "choice", "title": "Where are you hormonally right now?",
-      "showIf": { "sex": { "notIn": ["male"] } },
+      "showIf": { "sex": { "notIn": ["male"] }, "gender": { "notIn": ["man"] } },
       "choices": [
         { "value": "cycling", "label": "Regular cycles" },
         { "value": "perimenopausal", "label": "Perimenopausal" },
@@ -34,7 +34,7 @@
         { "label": "Levothyroxine" },
         { "label": "Metformin" },
         { "label": "Blood pressure medication" },
-        { "label": "Birth control", "showIf": { "sex": { "notIn": ["male"] } } },
+        { "label": "Birth control", "showIf": { "sex": { "notIn": ["male"] }, "gender": { "notIn": ["man"] } } },
         { "label": "Testosterone", "showIf": { "sex": { "in": ["male", "intersex"] } } },
         { "label": "Antidepressant" }
       ]
