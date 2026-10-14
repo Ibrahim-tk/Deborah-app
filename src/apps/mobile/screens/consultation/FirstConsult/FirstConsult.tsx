@@ -95,7 +95,8 @@ export default function FirstConsult() {
     if (text.trim()) openAsk({ prefill: text.trim(), focus: true });
   };
   const started = entries.some((e) => e.kind === 'user');
-  const waiting = [...entries].reverse().find((e) => (e.kind === 'bot' || e.kind === 'answer') && !e.answered);
+  // The held safety note sits after the answer but never takes the turn: the answer's follow-ups stay live.
+  const waiting = [...entries].reverse().find((e) => (e.kind === 'bot' || e.kind === 'answer') && !e.answered && !(e.kind === 'bot' && e.node.type === 'safety'));
   // Standard chat scrolling, shared with M-2.1: follow new content unless she scrolled up.
   const { ref: scrollRef, onScroll } = useAutoScroll(`${entries.length}:${typing}:${Boolean(consent.widget)}`);
   // The opening greeting's starters dock above the composer until she answers.

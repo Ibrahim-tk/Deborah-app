@@ -31,6 +31,10 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
   const say = (s?: string) => fill(personalise(flow, s, name), { ...ctx?.tokens, ...labels.current });
   const typingMs = flow.uiDefaults.typingIndicatorMs;
 
+  // A safety note met before the answer is held and shown right after the 7-section answer (design direction
+  // 2026-10-14): the framework first, then the human path. OPEN: confirm the order with Deborah's safety review.
+  const heldSafety = useRef<{ id: string; node: FlowNode } | null>(null);
+
   function go(id: string | undefined): void {
     const node = id ? flow.nodes[id] : undefined;
     if (!id || !node) return;
@@ -51,8 +55,17 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
       case 'end':
         return push({ id: uid(), kind: 'end', route: node.route });
       default:
+        if (node.type === 'safety' && !heldSafety.current) {
+          heldSafety.current = { id, node };
+          return go(node.next ?? (flow.nodes.thinking ? 'thinking' : undefined));
+        }
         // The full 7-section answer renders at once; conversational answers are a short Deborah reply.
-        if (node.type === 'answer' && node.layout === 'progressive') return push({ id: uid(), kind: 'answer', nodeId: id, node });
+        if (node.type === 'answer' && node.layout === 'progressive') {
+          push({ id: uid(), kind: 'answer', nodeId: id, node });
+          const held = heldSafety.current;
+          if (held) later(() => push({ id: uid(), kind: 'bot', nodeId: held.id, text: say(held.node.bot), node: held.node }), typingMs);
+          return;
+        }
         setTyping(true);
         later(() => {
           setTyping(false);
@@ -61,7 +74,6 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
           // Waits for a tap when the node has choices; otherwise moves on by itself.
           // A safety note does not stop the consult (design direction 2026-10-14): the human path stays in the
           // thread, and Deborah carries on to her full answer. OPEN: confirm with Deborah's safety review.
-          if (node.type === 'safety') return later(() => go(node.next ?? (flow.nodes.thinking ? 'thinking' : undefined)), 1400);
           const waits = node.type === 'question' || node.type === 'emergency' || Boolean(node.widget?.options?.length);
           if (!waits) later(() => go(nextNodeId(node, vars.current)), 500);
         }, typingMs);

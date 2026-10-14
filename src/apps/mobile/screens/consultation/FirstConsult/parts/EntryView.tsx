@@ -88,7 +88,14 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep }: 
     const [book, notNow] = w.options ?? [];
     return (
       <MessageBubble role="deborah" text={entry.text} turnStart>
-        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => book && onPick(node, [book])} onDismiss={() => notNow && onPick(node, [notNow])} />
+        {/* Without options (the safety note) the tile stays as a standing path to Deborah while the chat moves on. */}
+        <EscalationCard
+          sheet={false}
+          body={entry.text}
+          dismissed={!book || !active}
+          onBook={() => onPick(node, [book ?? { label: 'Book with Deborah', next: 'exit_booking' }])}
+          onDismiss={() => notNow && onPick(node, [notNow])}
+        />
       </MessageBubble>
     );
   }

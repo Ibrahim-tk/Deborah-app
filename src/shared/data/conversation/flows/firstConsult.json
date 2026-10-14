@@ -261,7 +261,11 @@
       "branches": [
         {
           "if": "redFlags.includes('none') || redFlags.length == 0",
-          "next": "thinking"
+          "next": "check_more"
+        },
+        {
+          "if": "redFlags.includes('chest')",
+          "next": "safety_urgent"
         },
         {
           "else": true,
@@ -271,28 +275,14 @@
       "uiNote": "Safety screen disguised as a normal question. Night sweats + fever/weight loss must not get a hormone-only answer."
     },
     "safety_see_provider": {
-      "type": "safety",
+      "type": "message",
       "flow": "F03",
-      "bot": "Thank you for telling me, Linda. Night sweats together with fever or unexplained weight loss are worth getting checked by a provider soon, before we look at hormones. This doesn't count toward your free answers.",
+      "bot": "Thank you for telling me, Linda. Night sweats together with fever, chills or weight loss you can't explain are worth getting checked by a provider soon, before we look at hormones. This doesn't count toward your free answers.",
       "widget": {
-        "type": "safety_card",
-        "tone": "calm",
-        "actions": [
-          {
-            "label": "Book with Deborah",
-            "next": "exit_booking"
-          },
-          {
-            "label": "Find care near me",
-            "value": "find_care"
-          },
-          {
-            "label": "I understand, continue",
-            "next": "thinking"
-          }
-        ]
+        "type": "escalation"
       },
-      "countsTowardFreeLimit": false
+      "countsTowardFreeLimit": false,
+      "next": "check_more"
     },
     "thinking": {
       "type": "loading",
@@ -605,6 +595,48 @@
     "chat": {
       "type": "end",
       "route": "/chat"
+    },
+    "safety_urgent": {
+      "type": "message",
+      "flow": "F03",
+      "bot": "Thank you for telling me, Linda. Chest pain or fainting always deserves a proper check, and soon. If it's happening right now, please call 911 or go to the nearest emergency room. Otherwise, let's get you seen by a provider this week. This doesn't count toward your free answers.",
+      "widget": {
+        "type": "escalation"
+      },
+      "countsTowardFreeLimit": false,
+      "next": "check_more"
+    },
+    "check_more": {
+      "type": "question",
+      "bot": "Thank you, Linda. I have a good picture now. Is there anything else on your mind before I share what I'm seeing?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "That's everything, go ahead",
+            "next": "thinking"
+          },
+          {
+            "label": "There's something else",
+            "next": "add_more"
+          }
+        ]
+      }
+    },
+    "add_more": {
+      "type": "question",
+      "bot": "Of course. Tell me in your own words, there's no wrong answer.",
+      "widget": {
+        "type": "free_text",
+        "placeholder": "What else is going on…"
+      },
+      "saveAs": "extra",
+      "next": "add_ack"
+    },
+    "add_ack": {
+      "type": "message",
+      "bot": "Thank you for sharing that with me. I'll keep it in mind as we look at this together.",
+      "next": "thinking"
     }
   },
   "freeLimit": {
