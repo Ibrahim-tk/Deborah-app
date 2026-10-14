@@ -1,5 +1,5 @@
 /**
- * @pattern Composer — card composer: optional top banner, auto-growing text area (1–5 lines), attach, mic, send → Stop while
+ * @pattern Composer — card composer: optional top banner, auto-growing text area (1–5 lines), attach, Symptoms (opens SymptomPicker), mic, send → Stop while
  *          generating, counter from 1,800, send disabled above 2,000. Simulated voice recording
  *          shows ✕ (cancel) · live wave · timer · Stop (to field) · Send.
  * @usedBy  M-2.1
@@ -42,6 +42,8 @@ export interface ComposerProps {
   options?: ReactNode;
   /** Quiet footnote under the card (educational disclaimer). */
   disclaimer?: string;
+  /** Shows the "Symptoms" button; the screen opens the SymptomPicker sheet. */
+  onSymptoms?: () => void;
   /** Lets the screen hide suggestions while dictating. */
   onRecordingChange?: (recording: boolean) => void;
 }
@@ -52,6 +54,7 @@ export function Composer({
   onSend,
   onStop,
   onAttach,
+  onSymptoms,
   onFocusChange,
   generating,
   lockedNote,
@@ -195,6 +198,11 @@ export function Composer({
               onClick={onAttach}
               disabled={Boolean(lockedNote) || generating}
             />
+            {onSymptoms && (
+              <button type="button" className={styles.symptoms} onClick={onSymptoms} disabled={Boolean(lockedNote) || generating}>
+                <Icon name="plus" size={16} /> Symptoms
+              </button>
+            )}
             {!generating && (
               <IconButton
                 icon="mic"

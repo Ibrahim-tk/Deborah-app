@@ -68,9 +68,12 @@ export default function Home() {
     if (profile) greeted.add(profile.id);
     setSheet(false);
   };
+  // Signed-in demo (seed R01): Ask Deborah plays the scripted returning consultation (M-2.12).
+  const returningDemo = useAppStore((s) => s.scenario.id === 'R01');
   const chat = () => {
     closeSheet();
-    if (active?.messages.length) push('M-2.1');
+    if (returningDemo) push('M-2.12', { flow: 'returning' });
+    else if (active?.messages.length) push('M-2.1');
     else openAsk({ focus: true });
   };
   // Continue with Deborah: a half-answered intake question resumes exactly where it stopped.

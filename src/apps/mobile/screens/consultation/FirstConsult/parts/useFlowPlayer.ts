@@ -16,27 +16,33 @@ export type Entry =
 let seq = 0;
 const uid = () => `f${++seq}`;
 
-export function useFlowPlayer(flow: Flow, name: string) {
+/** Fills `{token}` from the profile context and from earlier answers (their labels, as she tapped them). */
+const fill = (text: string, values: Record<string, string>) => text.replace(/\{(\w+)\}/g, (m, k: string) => values[k] ?? m);
+
+export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<string, string>; vars: Record<string, FlowValue> }) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [typing, setTyping] = useState(false);
   const [extraPrep, setExtraPrep] = useState<string[]>([]);
-  const vars = useRef<Record<string, FlowValue>>({});
+  const vars = useRef<Record<string, FlowValue>>({ ...ctx?.vars });
+  const labels = useRef<Record<string, string>>({});
   const timers = useRef<number[]>([]);
   const later = (fn: () => void, ms: number) => { timers.current.push(window.setTimeout(fn, ms)); };
   const push = (e: Entry) => setEntries((xs) => [...xs, e]);
-  const say = (s?: string) => personalise(flow, s, name);
+  const say = (s?: string) => fill(personalise(flow, s, name), { ...ctx?.tokens, ...labels.current });
   const typingMs = flow.uiDefaults.typingIndicatorMs;
 
   function go(id: string | undefined): void {
     const node = id ? flow.nodes[id] : undefined;
     if (!id || !node) return;
+    // Never re-ask: a question the profile already answers is passed over without a word.
+    if (node.skipIfKnown && vars.current[node.skipIfKnown] !== undefined) return go(nextNodeId(node, vars.current));
     switch (node.type) {
       case 'user_message':
         push({ id: uid(), kind: 'user', text: say(node.user) });
         return go(node.next);
       case 'loading': {
         const w = node.widget!;
-        push({ id: uid(), kind: 'thinking', steps: w.steps ?? [say(node.bot)], durationMs: w.durationMs ?? 2500 });
+        push({ id: uid(), kind: 'thinking', steps: w.steps?.map((x) => say(x)) ?? [say(node.bot)], durationMs: w.durationMs ?? 2500 });
         return later(() => {
           setEntries((xs) => xs.filter((x) => x.kind !== 'thinking'));
           go(node.next);
@@ -51,32 +57,54 @@ export function useFlowPlayer(flow: Flow, name: string) {
         later(() => {
           setTyping(false);
           push({ id: uid(), kind: 'bot', nodeId: id, text: say(node.bot), node });
-          if (node.sideEffect?.appendToVisitPrep) setExtraPrep((xs) => [...xs, node.sideEffect!.appendToVisitPrep!]);
+          if (node.sideEffect?.appendToVisitPrep) setExtraPrep((xs) => [...xs, say(node.sideEffect!.appendToVisitPrep)]);
           // Waits for a tap when the node has choices; otherwise moves on by itself.
-          const waits = node.type === 'question' || node.type === 'safety' || Boolean(node.widget?.options?.length);
+          const waits = node.type === 'question' || node.type === 'safety' || node.type === 'emergency' || Boolean(node.widget?.options?.length);
           if (!waits) later(() => go(nextNodeId(node, vars.current)), 500);
         }, typingMs);
     }
   }
 
+  // Start on a timer: React dev runs this effect twice (mount → cleanup → mount), and the cleanup cancels
+  // the first run's timer, so the script starts exactly once whether its first line is hers or Deborah's.
   useEffect(() => {
-    go(flow.startNode);
+    later(() => go(flow.startNode), 0);
     const t = timers.current;
     return () => t.forEach(window.clearTimeout);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /** A tap on a choice: echo it as her message, save it, and follow the script. */
-  const respond = (entryId: string, node: FlowNode, picked: FlowOption[]) => {
+  const echo = (entryId: string, picked: FlowOption[]) => {
     setEntries((xs) => xs.map((x) => (x.id === entryId ? { ...x, answered: true } : x)));
     push({ id: uid(), kind: 'user', text: picked.map((p) => say(p.label)).join(', ') });
+  };
+
+  /** An off-script Deborah line (typing first), e.g. before the consent card. Resolves once it shows. */
+  const aside = (text: string) =>
+    new Promise<void>((done) => {
+      setTyping(true);
+      later(() => {
+        setTyping(false);
+        push({ id: uid(), kind: 'bot', nodeId: 'aside', text, node: { type: 'message' }, answered: true });
+        later(done, 400);
+      }, typingMs);
+    });
+
+  /** A tap on a choice: echo it as her message (unless already echoed), save it, and follow the script. */
+  const respond = (entryId: string, node: FlowNode, picked: FlowOption[], echoed = false) => {
+    if (!echoed) echo(entryId, picked);
     if (node.saveAs) {
       const values = picked.map((p) => p.value).filter((v) => v !== undefined);
       vars.current[node.saveAs] = node.widget?.multi ? (values as string[]) : (values[0] as FlowValue);
+      // Words she tapped become `{saveAs}` in later lines: pills in lower case ("night sweats and brain fog"),
+      // a scale as its number, a slot as written. A skip leaves the profile's fallback wording.
+      const type = node.widget?.type;
+      const words = picked.map((p) => (type === 'scale_check' ? String(p.value) : type === 'pill_select' ? p.label.toLowerCase() : p.label));
+      if (values.length) labels.current[node.saveAs] = words.join(', ').replace(/, ([^,]*)$/, ' and $1');
     }
     const single = picked.length === 1 ? picked[0] : undefined;
     go(single?.next ?? nextNodeId(node, vars.current));
   };
 
-  return { entries, typing, extraPrep, respond, go };
+  return { entries, typing, extraPrep, respond, echo, aside, go, say };
 }

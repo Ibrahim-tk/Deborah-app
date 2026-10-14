@@ -66,3 +66,4 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | ProfileSwitcherList / ProfileBanner | `patterns/profile/*` | not built | ux/F06-family-profiles.md |
 | FocusCard / PlanProgressCard / CheckInCard / QuickLinks / ContentCard / HabitRow | `patterns/health/*` | not built | ux/F07-my-health-hub.md |
 | ConsultationRow / NoteRow / EmptyState | `patterns/health/*` | not built | ux/F09-records.md |
+| InlineConsent / ChoicePills / ConfirmCard / SlotPicker / MoodScale / ScaleCheck / ReminderCard / UploadCard | `patterns/widgets/*` | not built | Widget lab `/wid` (`screens/lab/WidgetLab`, design tool, 2026-10-14) |

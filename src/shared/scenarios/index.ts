@@ -16,9 +16,11 @@ import s10 from './S10-individual-wants-family.json';
 import s11 from './S11-myhealth-empty.json';
 import s12 from './S12-escalation-ready.json';
 import s13 from './S13-safety-bench.json';
+// Also what "Sign in" (M-1.4) restores for a returning user.
+import r01 from './R01-returning-signin.json';
 
 export const SEEDS: Record<string, ScenarioSeed> = Object.fromEntries(
-  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13] as ScenarioSeed[]).map((s) => [s.id, s]),
+  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, r01] as ScenarioSeed[]).map((s) => [s.id, s]),
 );
 
 export const SCENARIO_GROUPS: ScenarioGroup[] = [
@@ -34,11 +36,12 @@ export const SCENARIO_GROUPS: ScenarioGroup[] = [
 
 export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S01', label: 'New user — first launch', group: 'Onboarding', description: 'Someone opening the app for the very first time.', startsAt: 'M-1.1 Splash', phase: 2 },
-  { id: 'S02', label: 'Onboarded — first home', group: 'Trial', description: 'Maria has accepted consent. No consultations yet. Lands on Home with the greeting sheet.', startsAt: 'M-2.0', phase: 2 },
-  { id: 'S03', label: 'Mid-intake', group: 'Trial', description: 'First message about hot flashes and sleep; Deborah asked her first question.', startsAt: 'M-2.1 (intake)', phase: 3 },
-  { id: 'S04', label: 'First answer delivered', group: 'Trial', description: 'One counted consultation with a full seven-section answer. Follow-up not set.', startsAt: 'M-2.1 (answered)', phase: 3 },
+  { id: 'S03', label: 'Signed up — health questions', group: 'Onboarding', description: 'Account created. The full-screen health questions are open, starting with who the profile is for.', startsAt: 'M-1.8 Health basics', phase: 2 },
+  { id: 'S02', label: 'Health profile done — Deborah’s welcome', group: 'Onboarding', description: 'Health questions answered. Home with Deborah’s welcome sheet; Start my journey opens the scripted first consultation.', startsAt: 'M-2.0 + M-1.9 sheet', phase: 2 },
+  { id: 'S04', label: 'First answer delivered', group: 'Trial', description: 'Health profile on file; one counted consultation with a full seven-section answer. Follow-up not set.', startsAt: 'M-2.1 (answered)', phase: 3 },
   { id: 'S05', label: 'Last free consultation', group: 'Trial', description: 'Two of three free consultations used.', startsAt: 'M-2.1 (empty), 1 left', phase: 3 },
   { id: 'S06', label: 'Trial exhausted', group: 'Conversion', description: 'All three free consultations used. The free-limit sheet shows; any new question is held until a plan is chosen.', startsAt: 'M-2.1 + M-4.1 sheet', phase: 5 },
+  { id: 'R01', label: 'Returning — signed in', group: 'Return', description: 'Signed back in: health profile on file, a consultation from 3 days ago. Home shows Continue; Ask Deborah plays the 2am heart-flutter demo.', startsAt: 'M-2.0 Home', phase: 2 },
   { id: 'S07', label: 'Subscriber — follow-up due', group: 'Return', description: 'Individual plan, one consultation two weeks ago. A follow-up reminder is waiting on the lock screen.', startsAt: 'M-5.1 Lock screen', phase: 5 },
   { id: 'S08', label: 'Labs reviewed', group: 'Return', description: 'Labs confirmed, lab-informed answer delivered, 90-day plan on day 18.', startsAt: 'M-7.2 My Health', phase: 6 },
   { id: 'S09', label: 'Family plan — daughter added', group: 'Family', description: 'Family plan with Maria and her teen daughter, whose conversation has started.', startsAt: 'M-2.1 as Daughter', phase: 6 },

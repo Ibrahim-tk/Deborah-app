@@ -1,0 +1,13 @@
+.root { composes: card from '../widget.module.css'; }
+.title { composes: title from '../widget.module.css'; }
+.faces { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-1); }
+.face { display: grid; justify-items: center; gap: var(--space-1); min-height: 72px; padding: var(--space-2) 0; border: 0; border-radius: var(--radius-md); background: none; cursor: pointer; transition: opacity var(--dur-base) var(--ease-out), background var(--dur-base) var(--ease-out); }
+.face svg { fill: rgb(255 255 255 / 0.5); stroke: var(--purple-400); stroke-width: 1.4; stroke-linecap: round; transition: fill var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); }
+.face .eye { fill: var(--purple-400); stroke: none; }
+.face[aria-checked='true'] svg { fill: var(--color-accent-tint-pressed); stroke: var(--color-accent); transform: scale(1.08); }
+.face[aria-checked='true'] .eye { fill: var(--color-accent); }
+.face:disabled { opacity: 0.4; cursor: default; }
+.face:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.label { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+@media (prefers-reduced-motion: reduce) { .face, .face svg { transition: none; } }
+.bare { display: grid; margin-top: var(--space-2); }

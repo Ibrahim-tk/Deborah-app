@@ -48,7 +48,7 @@ export function ChipPicker({ label, picked, suggestions, none, noneSelected, onT
       <button type="button" className={styles.chip} aria-pressed={noneSelected} onClick={onNone}>{none}</button>
       {[...suggestions, ...custom].map((name) => (
         <button key={name} type="button" className={styles.chip} aria-pressed={picked.includes(name)} onClick={() => onToggle(name)}>
-          <span className={styles.tick} aria-hidden><Icon name="check" size={14} strokeWidth={2} /></span>
+          <span className={styles.tick} aria-hidden><Icon name="check" size={16} /></span>
           {name}
         </button>
       ))}

@@ -6,7 +6,9 @@ export interface FlowOption {
 }
 
 export interface FlowWidget {
-  type: 'suggested_replies' | 'quick_replies' | 'pill_select' | 'safety_card' | 'thinking_steps' | 'inline_tip' | 'visit_prep_card' | 'reminder_chip';
+  type: 'suggested_replies' | 'quick_replies' | 'pill_select' | 'safety_card' | 'thinking_steps' | 'inline_tip' | 'visit_prep_card' | 'reminder_chip' | 'free_text'
+    /** On-the-fly widgets (patterns/widgets, docs/ux/F02c). */
+    | 'mood_scale' | 'scale_check' | 'upload_card' | 'slot_picker' | 'confirm_card' | 'reminder_card';
   options?: FlowOption[];
   actions?: FlowOption[];
   multi?: boolean;
@@ -16,7 +18,16 @@ export interface FlowWidget {
   text?: string;
   title?: string;
   label?: string;
+  /** free_text: hint inside the field. */
+  placeholder?: string;
   itemsFrom?: string[];
+  /** scale_check end labels. */
+  low?: string;
+  high?: string;
+  /** slot_picker / confirm_card / reminder_card detail lines. */
+  meta?: string;
+  detail?: string;
+  value?: string;
 }
 
 export type FlowSectionBody = string | (string | { test: string; why: string })[];
@@ -31,7 +42,7 @@ export interface FlowSection {
 }
 
 export interface FlowNode {
-  type: 'message' | 'question' | 'safety' | 'loading' | 'answer' | 'user_message' | 'end';
+  type: 'message' | 'question' | 'safety' | 'emergency' | 'loading' | 'answer' | 'user_message' | 'end';
   bot?: string;
   user?: string;
   widget?: FlowWidget;
@@ -45,6 +56,10 @@ export interface FlowNode {
   suggestedReplies?: FlowOption[];
   sideEffect?: { appendToVisitPrep?: string };
   route?: string;
+  /** Skip this node silently when the profile already answers this variable (never re-ask). */
+  skipIfKnown?: string;
+  /** `greeting`: the chat's opening line, set large in serif with no bubble (design direction 2026-10-14). */
+  display?: 'greeting';
 }
 
 export interface Flow {

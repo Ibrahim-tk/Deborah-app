@@ -3,9 +3,9 @@
 
 /* Tonal section cards: flat colour fields (they scroll, so no shadow), cycling lilac · linen · rose. */
 .section { border-radius: var(--radius-card); color: var(--color-ink); transition: opacity var(--dur-base) var(--ease-out); }
-.lilac { background: var(--card-tone-lilac); }
-.linen { background: var(--card-tone-linen); }
-.rose { background: var(--card-tone-rose); }
+.lilac { background: linear-gradient(150deg, color-mix(in srgb, #fff 40%, var(--card-tone-lilac)) 0%, var(--card-tone-lilac) 55%, color-mix(in srgb, var(--color-accent) 6%, var(--card-tone-lilac)) 100%); }
+.linen { background: linear-gradient(150deg, color-mix(in srgb, #fff 40%, var(--card-tone-linen)) 0%, var(--card-tone-linen) 55%, color-mix(in srgb, var(--color-gold) 8%, var(--card-tone-linen)) 100%); }
+.rose { background: linear-gradient(150deg, color-mix(in srgb, #fff 40%, var(--card-tone-rose)) 0%, var(--card-tone-rose) 55%, color-mix(in srgb, var(--color-deborah-rose) 6%, var(--card-tone-rose)) 100%); }
 .signature { background: var(--color-surface-signature); color: var(--color-ink-on-signature); }
 .section[data-pending] { opacity: 0.55; }
 
@@ -14,9 +14,19 @@
 .header:disabled { cursor: default; }
 
 /* Numerals are large display text, so Gold Ink stays legible on every tone. */
-.number { flex: none; min-width: 28px; font: var(--weight-regular) var(--fs-title-1) / 1 var(--font-display); color: var(--color-gold-ink); }
-.signature .number { color: var(--color-gold); }
-.title { flex: 1; font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
+.section { position: relative; isolation: isolate; overflow: hidden; }
+.header { position: relative; min-height: 88px; padding-left: var(--space-4); }
+.heading { flex: 1; display: grid; gap: 2px; min-width: 0; }
+.number { font: var(--weight-medium) var(--fs-footnote) / 1 var(--font-body); color: var(--color-ink-secondary); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.signature .number { color: inherit; opacity: 0.85; }
+.of { font: inherit; color: inherit; }
+
+/* Minimal glyph: hairline art in accent ink on a barely-there disc. */
+.medallion { display: grid; place-items: center; flex: none; width: 44px; height: 44px; border-radius: var(--radius-full); background: color-mix(in srgb, #fff 45%, transparent); color: var(--color-accent); }
+.medallionArt { width: 24px; height: 24px; }
+.signature .medallion { background: color-mix(in srgb, var(--color-gold) 12%, transparent); color: var(--color-gold); }
+
+.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
 
 /* Round toggle: soft when closed, the dark action circle when open. */
 .toggle { display: grid; place-items: center; flex: none; width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-ink) 7%, transparent); color: var(--color-ink); transition: background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
@@ -29,7 +39,7 @@
 .content { display: grid; gap: var(--space-4); margin: 0 var(--space-5); padding: var(--space-4) 0 var(--space-5); border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent); }
 .body, .wordBody { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); }
 .wordBody { font-style: italic; }
-.signoff { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-deborah-rose); }
+.signoff { font: var(--weight-medium) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-deborah-rose); }
 /* Prose on the midnight card keeps the card's light ink. */
 .signature .body, .signature .wordBody, .signature .bullet { color: inherit; }
 /* Rose fails contrast on midnight; the sign-off takes Deborah's gold there instead. */
@@ -42,3 +52,44 @@
 .bulletText { flex: 1; min-width: 0; }
 .bullet em { font-style: italic; }
 .labsNote { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+
+/* §7 signature card, Rapunzel-style (design direction 2026-10-14): soft violet light drifts slowly through
+   the midnight card, with a faint warm glint. One slow drift, no pulse or shimmer; still under reduced motion. */
+.signature { position: relative; isolation: isolate; overflow: hidden; }
+.signature::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 32% at 28% 30%, rgb(170 110 230 / 0.38), transparent 70%),
+    radial-gradient(34% 30% at 72% 68%, rgb(214 132 255 / 0.26), transparent 70%),
+    radial-gradient(16% 14% at 62% 26%, rgb(255 205 110 / 0.14), transparent 70%);
+  animation: signature-drift 16s ease-in-out infinite alternate;
+}
+@keyframes signature-drift {
+  from { transform: translate(-6%, -4%) rotate(0deg); }
+  to { transform: translate(6%, 5%) rotate(14deg); }
+}
+.wordAction { margin-top: var(--space-4); }
+@media (prefers-reduced-motion: reduce) { .signature::before { animation: none; } }
+
+/* Compact hierarchy (design direction 2026-10-14): the title leads; the number is a quiet tag beside it;
+   the glyph and toggle step back so seven cards scan as one list, not seven buttons. */
+.root { gap: 6px; }
+.header { min-height: 60px; gap: var(--space-3); padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3); }
+.medallion { width: 36px; height: 36px; }
+.medallionArt { width: 20px; height: 20px; }
+.heading { display: flex; align-items: baseline; gap: var(--space-2); }
+.number { flex: none; order: -1; font: var(--weight-regular) var(--fs-caption) / 1 var(--font-body); letter-spacing: 0.02em; color: var(--color-ink-secondary); }
+.title { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body); letter-spacing: -0.01em; text-wrap: balance; }
+/* Quiet toggle: just the chevron until the card opens. */
+.toggle { width: 36px; height: 36px; background: transparent; }
+.section[data-open] .toggle { background: var(--card-action-bg); }
+.content { margin: 0 var(--space-4); padding: var(--space-3) 0 var(--space-4); gap: var(--space-3); }
+.body, .wordBody { font-size: var(--fs-callout); line-height: var(--lh-callout); }
+
+/* Numbered discs instead of icons (2026-10-14): a soft white disc with the section number in accent ink. */
+.numeral { display: grid; flex: none; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-full); background: color-mix(in srgb, #fff 55%, transparent); font: var(--weight-medium) var(--fs-subhead) / 1 var(--font-body); color: var(--color-accent); font-variant-numeric: tabular-nums; }
+.signature .numeral { background: color-mix(in srgb, var(--color-gold) 16%, transparent); color: var(--color-gold); }

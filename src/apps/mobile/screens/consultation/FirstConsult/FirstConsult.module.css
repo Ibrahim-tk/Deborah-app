@@ -7,3 +7,12 @@
 .orb { display: flex; justify-content: center; padding-top: var(--space-4); }
 .known { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 .bottom { flex: none; padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
+.widget { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+.widget[data-done] { pointer-events: none; }
+/* Opening greeting: Deborah's first line in serif, no bubble (design direction 2026-10-14). */
+.greeting { display: grid; gap: var(--space-3); }
+.greetingLine { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-align: center; text-wrap: balance; }
+/* Reduced motion everywhere (design direction 2026-10-14): widgets and greetings only fade in, no movement. */
+.widget, .greeting { animation: widget-in 320ms ease-out both; }
+@keyframes widget-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .widget, .greeting { animation: none; } }

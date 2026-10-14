@@ -1,0 +1,26 @@
+.root { position: absolute; inset: 0; z-index: 80; display: flex; align-items: flex-end; pointer-events: auto; }
+.scrim { position: absolute; inset: 0; background: var(--color-scrim); }
+/* Floating sheet, so a soft shadow is allowed. */
+.panel { position: relative; display: flex; flex-direction: column; width: 100%; max-height: 86%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--color-surface); box-shadow: var(--shadow-float-sm); padding-bottom: var(--safe-bottom); }
+.grabber { align-self: center; width: 36px; height: 5px; margin-top: var(--space-2); border-radius: var(--radius-full); background: var(--color-border-hairline); }
+.head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-5) var(--space-2); }
+.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.close { min-height: var(--tap-min); padding: 0 var(--space-1); font: var(--weight-regular) var(--fs-callout) / 1 var(--font-body); color: var(--color-accent); }
+.search { display: flex; align-items: center; gap: var(--space-2); margin: 0 var(--space-5) var(--space-3); padding: 0 var(--space-4); min-height: 48px; border-radius: var(--radius-pill); background: var(--color-surface-sunken, color-mix(in srgb, var(--color-ink) 5%, transparent)); color: var(--color-ink-secondary); }
+.search:focus-within { box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
+.input { flex: 1; min-width: 0; border: 0; background: transparent; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); caret-color: var(--color-accent); outline: none; }
+.input::placeholder { color: var(--color-ink-placeholder); }
+.list { flex: 1; overflow-y: auto; display: grid; align-content: start; gap: var(--space-5); padding: var(--space-2) var(--space-5) var(--space-4); }
+.addOwn { display: flex; align-items: center; gap: var(--space-2); min-height: var(--row-min); padding: 0 var(--space-4); border-radius: var(--radius-md); background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); text-align: left; }
+.group { display: grid; gap: var(--space-2); }
+.groupTitle { font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.pills { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* Same toggle pill as ChoicePills / onboarding ChipPicker: tint + line check when picked. */
+.pill { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; padding: 0 var(--space-4); border-radius: var(--radius-pill); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--surface-border); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); text-align: left; transition: background var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.pill[aria-pressed='true'] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
+.pill:focus-visible, .addOwn:focus-visible, .close:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.tick { display: inline-grid; place-items: center; width: 0; overflow: hidden; opacity: 0; transition: width var(--dur-base) var(--ease-out), margin var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out); }
+.pill[aria-pressed='true'] .tick { width: 16px; margin-right: var(--space-2); opacity: 1; }
+.empty { color: var(--color-ink-secondary); }
+.foot { padding: var(--space-3) var(--space-5) var(--space-4); border-top: 1px solid var(--color-border-hairline); }
+@media (prefers-reduced-motion: reduce) { .pill, .tick { transition: none; } }

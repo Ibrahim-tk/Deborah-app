@@ -17,13 +17,15 @@ export interface AnswerSectionsProps {
   /** Rendered at the end of §6 once that section has finished streaming. */
   productSlot?: ReactNode;
   onAddQuestion?: (question: string) => void;
+  /** Rendered inside §7 (Deborah's word), e.g. the Visit notes action. */
+  wordSlot?: ReactNode;
   /** Lab-informed answer: "Based on your labs from {date}" as plain text (no tag). */
   labsNote?: string;
 }
 
 const DEFAULT_OPEN: SectionKey[] = ['hearing'];
 
-export function AnswerSections({ answer, streaming, activeSection, productSlot, onAddQuestion, labsNote }: AnswerSectionsProps) {
+export function AnswerSections({ answer, streaming, activeSection, productSlot, wordSlot, onAddQuestion, labsNote }: AnswerSectionsProps) {
   const [userOpen, setOpen] = useState<SectionKey[]>(DEFAULT_OPEN);
   // While streaming, the streaming section is open and the previous one collapses (except §1).
   const open = streaming && activeSection ? ['hearing', activeSection] : userOpen;
@@ -57,7 +59,7 @@ export function AnswerSections({ answer, streaming, activeSection, productSlot, 
           streaming={Boolean(streaming) && section.key === activeSection}
           onToggle={() => setOpen((o) => (o.includes(section.key) ? o.filter((k) => k !== section.key) : [...o, section.key]))}
           onAddQuestion={section.key === 'providerQuestions' ? onAddQuestion : undefined}
-          extra={section.key === 'doNow' && productReady ? productSlot : undefined}
+          extra={section.key === 'doNow' && productReady ? productSlot : section.key === 'word' && !streaming ? wordSlot : undefined}
         />
       ))}
     </div>

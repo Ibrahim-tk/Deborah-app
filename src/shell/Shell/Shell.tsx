@@ -1,5 +1,6 @@
-/** @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: BrowserFrame or full-bleed. */
+/** @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: BrowserFrame or full-bleed. Widgets: the widget lab (/wid) in the IPhoneFrame. */
 import MobileApp from '@mobile/MobileApp';
+import WidgetLabApp from '@mobile/WidgetLabApp';
 import WebApp from '@web/WebApp';
 import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
@@ -13,7 +14,8 @@ import './dev-overlays.css';
 import styles from './Shell.module.css';
 
 export interface ShellProps {
-  platform: 'mobile' | 'web';
+  /** `widgets`: the widget lab (/wid), shown in the phone frame. */
+  platform: 'mobile' | 'web' | 'widgets';
 }
 
 export function Shell({ platform }: ShellProps) {
@@ -27,7 +29,11 @@ export function Shell({ platform }: ShellProps) {
     <div className={styles.root} data-theme={theme}>
       <TopNav />
       <main className={styles.stage}>
-        {platform === 'mobile' ? (
+        {platform === 'widgets' ? (
+          <IPhoneFrame>
+            <WidgetLabApp />
+          </IPhoneFrame>
+        ) : platform === 'mobile' ? (
           <>
             <IPhoneFrame>
               <MobileApp />

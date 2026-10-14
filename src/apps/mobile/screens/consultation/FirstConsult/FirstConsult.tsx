@@ -1,6 +1,7 @@
 /**
  * @screen  M-2.12 · First consultation (scripted)
- * @flow    F02 Core consultation — genesis_first_consult_v1, right after onboarding's "Let's talk" (M-1.9)
+ * @flow    F02 Core consultation — genesis_first_consult_v1 after onboarding (M-1.9), or with `flow: 'returning'`
+ *          the signed-in demo genesis_returning_consult_demo (from Home's Ask Deborah, seed R01)
  * @states  opener · context · clarifier 1–3 · safety (red flag) · thinking · 7-section answer · follow-up ·
  *          visit prep · check-in opt-in · close
  * @figma   —
@@ -14,40 +15,48 @@
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { firstConsultFlow as flow } from '@shared/data';
-import { personalise } from '@shared/engine';
+import { firstConsultFlow, returningConsultFlow } from '@shared/data';
+import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, DeborahBlob } from '@mobile/ui';
-import { ChatHeader, Composer, ThinkingIndicator } from '@mobile/patterns/chat';
+import { ChatHeader, Composer, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
-import { useNav } from '@mobile/navigation';
+import { useNav, useScreenParams } from '@mobile/navigation';
 import { useHealthConsent } from '@mobile/screens/consultation/Conversation/parts/useHealthConsent';
 import { EntryView } from './parts/EntryView';
 import { VisitPrepCard } from './parts/VisitPrepCard';
-import { visitPrepItems } from './parts/buildAnswer';
+import { buildAnswer, visitPrepItems } from './parts/buildAnswer';
 import { useFlowPlayer } from './parts/useFlowPlayer';
+import { useProfileContext } from './parts/profileContext';
 import styles from './FirstConsult.module.css';
 
 const EXITS: Record<string, string> = { '/labs/upload': 'M-5.3', '/book': 'M-8.2', '/shop/genesis-gold': 'M-2.7' };
 
 export default function FirstConsult() {
+  // `flow: 'returning'`: the signed-in demo (Maria, seed R01) instead of the first consultation.
+  const { flow: which } = useScreenParams<{ flow: 'returning' }>();
+  const flow = which === 'returning' ? returningConsultFlow : firstConsultFlow;
   const { pop, open, push, openAsk } = useNav();
   const toast = useToast();
   const consent = useHealthConsent();
   const name = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
-  const player = useFlowPlayer(flow, name);
+  // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
+  const profileCtx = useProfileContext();
+  const player = useFlowPlayer(flow, name, which === 'returning' ? undefined : profileCtx);
   const { entries, typing } = player;
   const scrollRef = useRef<HTMLDivElement>(null);
   const asked = useRef(false);
   const [draft, setDraft] = useState('');
-  const say = (s?: string) => personalise(flow, s, name);
+  const [symptomsOpen, setSymptomsOpen] = useState(false);
+  const say = player.say;
 
   // What she already told us at intake, shown on the "I already know" message.
   const known = useMemo(() => {
+    if (which !== 'returning') return profileCtx.known;
     const c = flow.carriedFromIntake as { meds?: { name: string }[] };
     return ['Night sweats', 'Low energy', ...(c.meds?.slice(0, 1).map((m) => m.name) ?? [])];
-  }, []);
+  }, [flow.carriedFromIntake, which, profileCtx.known]);
   const prep = visitPrepItems(flow.nodes.answer_1);
 
   useEffect(() => {
@@ -64,16 +73,29 @@ export default function FirstConsult() {
   }, [last, open, push]);
 
   const pick = async (entryId: string, node: FlowNode, picked: FlowOption[]) => {
-    if (!asked.current) {
-      asked.current = true;
-      await consent.ask();
-    }
     if (picked[0]?.next === 'chat_free') return openAsk({ focus: true });
+    if (!asked.current && consent.needed()) {
+      // Her words land first, Deborah answers in a line, and only then the consent card (design direction 2026-10-14).
+      asked.current = true;
+      player.echo(entryId, picked);
+      await player.aside('Thank you for telling me. Before I look at this with you, I’d like to use the health details you shared, so my guidance fits you.');
+      await consent.ask();
+      return player.respond(entryId, node, picked, true);
+    }
+    asked.current = true;
     player.respond(entryId, node, picked);
   };
   const action = (value: string) => {
+    if (value === 'visit_notes') {
+      // §7's "Save to Visit notes": the answer goes into Visit Notes, as from the chat's answer actions.
+      const answer = buildAnswer(flow.nodes.answer_1, say);
+      const body = answer.sections.map((x) => [x.title, x.body, ...(x.bullets ?? [])].filter(Boolean).join('\n')).join('\n\n');
+      const s = useAppStore.getState();
+      s.addNote({ id: uid('n'), profileId: s.activeProfileId, kind: 'saved-answer', title: 'First consultation with Deborah', body, updatedAt: nowFrom(s).toISOString() });
+      return toast('Saved to Visit Notes');
+    }
     if (value === 'exit_product') return open('M-2.7', { productId: 'genesis-gold' });
-    toast(value === 'find_care' ? 'Finding care near you (simulated)' : value === 'pdf' ? 'PDF ready to share' : 'Saved to My Health');
+    toast(value === 'call' ? 'Calling 911 (simulated)' : value === 'find_care' ? 'Finding care near you (simulated)' : value === 'pdf' ? 'PDF ready to share' : 'Saved to My Health');
   };
   // Typing instead of tapping leaves the script for free chat, carrying what she typed.
   const typeInstead = (text: string) => {
@@ -83,7 +105,7 @@ export default function FirstConsult() {
 
   return (
     <div className={styles.root} data-xref="M-2.12 · First consultation">
-      <ChatHeader onBack={pop} onNewChat={() => openAsk()} onInfo={() => open('M-10.5', { section: 'ai' })} canStartNew={false} />
+      <ChatHeader onBack={pop} onNewChat={() => openAsk()} canStartNew />
       <div ref={scrollRef} className={styles.scroll}>
         <div className={styles.column} data-placeholder>
           {/* Deborah's orb opens the consultation, as on the empty chat (M-2.1). */}
@@ -109,6 +131,7 @@ export default function FirstConsult() {
               )}
             />
           ))}
+          {consent.widget}
           {typing && <ThinkingIndicator label="Deborah is writing…" />}
           {last?.kind === 'end' && last.route === '/chat' && (
             <Button fullWidth onClick={() => openAsk({ focus: true })}>Keep talking with Deborah</Button>
@@ -122,13 +145,14 @@ export default function FirstConsult() {
           onSend={(text) => typeInstead(text ?? draft)}
           onStop={() => {}}
           onAttach={() => open('M-5.3')}
+          onSymptoms={() => setSymptomsOpen(true)}
           onFocusChange={() => {}}
           generating={typing}
           placeholder="Or tell me in your own words…"
           voiceSample=""
         />
       </div>
-      {consent.sheet}
+      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => setDraft((d) => withSymptoms(d, xs))} />
     </div>
   );
 }

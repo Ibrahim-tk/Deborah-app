@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { persona } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { GradientShift, GrowReveal, TextReveal } from '@mobile/ui';
-import { useNav } from '@mobile/navigation';
+import { useNav, useNavStore } from '@mobile/navigation';
 import styles from './Splash.module.css';
 
 // OPEN: spec says ~1.6 s; extended to 3 s per design direction (2026-10-08) so the mark can form.
@@ -39,6 +39,9 @@ export default function Splash() {
 
   useEffect(() => {
     const id = window.setTimeout(() => {
+      // Only while Splash is still on top: a scenario that starts elsewhere (e.g. S03 on the health
+      // questions) replaces it, and this timer must not then override that start.
+      if (useNavStore.getState().preauth.at(-1)?.id !== 'M-1.1' || useNavStore.getState().root !== 'preauth') return;
       // Returning users who already consented go straight to Main.
       if (consented) resetTo('main', 'M-2.0');
       else replace('M-1.2', undefined, 'fade');

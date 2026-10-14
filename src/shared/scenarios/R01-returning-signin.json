@@ -1,0 +1,42 @@
+{
+  "id": "R01",
+  "now": "2026-10-14T19:30:00-07:00",
+  "start": { "kind": "screen", "root": "main", "tab": "ask", "stack": ["M-2.0"] },
+  "state": {
+    "userName": "Maria",
+    "accountId": "acct-returning",
+    "accountEmail": "maria@example.com",
+    "consentAcceptedAt": "2026-10-01T09:00:00-07:00",
+    "consentVersion": "0.1-draft",
+    "healthConsentAt": "2026-10-01T09:05:00-07:00",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 1,
+    "profiles": {
+      "order": ["p-self"],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "sexAtBirth": "female",
+          "intake": { "ageBand": "46-50", "profileFor": "self", "reproductive": "perimenopausal", "cycle": "irregular", "conditions": ["none"], "medications": ["hrt"], "allergies": ["none"], "country": "US", "height": "165 cm", "weight": "68 kg" },
+          "health": {
+            "birthYear": { "value": 1978, "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "sexAtBirth": { "value": "female", "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "genderIdentity": { "value": "woman", "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "heightCm": { "value": 165, "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "weightKg": { "value": 68, "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "medications": { "value": [{ "name": "Estradiol patch" }, { "name": "Progesterone" }], "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "allergies": { "value": [], "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
+            "conditions": { "value": [], "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" }
+          },
+          "intakeV2": { "step": "done", "completedAt": "2026-10-01T09:05:00-07:00", "closedAt": "2026-10-01T09:05:00-07:00" },
+          "createdAt": "2026-10-01T09:00:00-07:00"
+        }
+      }
+    }
+  },
+  "conversations": {
+    "c-r01": { "profileId": "p-self", "scriptId": "sleep-3am", "messages": "@script:sleep-3am#answered", "active": true, "daysAgo": 3 }
+  }
+}

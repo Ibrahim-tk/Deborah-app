@@ -1,0 +1,12 @@
+/* Shared shell for on-the-fly chat widgets: a frosted card that sits inside Deborah's message. */
+.card { display: grid; gap: var(--space-3); margin-top: var(--space-3); padding: var(--space-5); border-radius: var(--radius-card-sm, 20px); background: var(--surface-1); box-shadow: inset 0 0 0 1px var(--surface-border), var(--surface-highlight); -webkit-backdrop-filter: var(--surface-blur); backdrop-filter: var(--surface-blur); animation: widget-in var(--dur-base) var(--ease-out) both; }
+.eyebrow { display: inline-flex; align-items: center; gap: var(--space-1); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.title { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); color: var(--color-ink); }
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
+.done { display: inline-flex; align-items: center; gap: var(--space-1); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.actions { display: grid; gap: var(--space-3); }
+@keyframes widget-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+/* Icon + heading label, the same treatment as ConfirmCard's "Confirm booking" (design direction 2026-10-14):
+   a small rounded tint holding a 16px icon and a short medium label. Light-card version. */
+.label { justify-self: start; display: inline-flex; align-items: center; gap: var(--space-1); padding: var(--space-1) var(--space-2); border-radius: 10px; background: rgb(58 3 83 / 0.06); font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink); }

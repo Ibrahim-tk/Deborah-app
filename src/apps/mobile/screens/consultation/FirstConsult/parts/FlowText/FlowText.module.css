@@ -1,0 +1,7 @@
+.root { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+.step { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.row { display: flex; align-items: center; gap: var(--space-2); }
+.field { flex: 1; }
+.send { flex: none; display: grid; place-items: center; width: var(--field-h, 48px); height: var(--field-h, 48px); border: 0; border-radius: var(--radius-full); background: var(--color-accent); color: var(--color-ink-on-accent); cursor: pointer; }
+.send:disabled { opacity: 0.4; cursor: default; }
+.skip { justify-self: start; min-height: 32px; padding: 0; border: 0; background: none; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-accent); cursor: pointer; }

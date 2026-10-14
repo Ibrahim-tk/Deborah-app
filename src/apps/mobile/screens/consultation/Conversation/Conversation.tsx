@@ -14,7 +14,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
 import { ActionSheet } from '@mobile/ui';
-import { AnswerPanel, ChatHeader, Composer, ComposerOptions, Greeting, ScrollToLatest, SuggestionList, TrialCounter } from '@mobile/patterns/chat';
+import { AnswerPanel, ChatHeader, Composer, ComposerOptions, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { ProfileBanner, relationshipLabel } from '@mobile/patterns/profile';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
@@ -46,7 +46,7 @@ export default function Conversation() {
   const actions = useMessageActions(profile?.id);
   const openSwitcher = useProfileSwitcher();
   const [recording, setRecording] = useState(false);
-  const [infoOpen, setInfoOpen] = useState(false);
+  const [symptomsOpen, setSymptomsOpen] = useState(false);
   const [underBar, setUnderBar] = useState(false);
   const safetyBench = useAppStore((s) => s.qa.safetyBench);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -162,7 +162,7 @@ export default function Conversation() {
 
   return (
     <div className={styles.root} data-xref="M-2.1 · Conversation">
-      <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} onInfo={() => setInfoOpen(true)} canStartNew={!isEmpty && !profiling} scrolled={underBar} />
+      <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} canStartNew={!isEmpty && !profiling} scrolled={underBar} />
       {other && profile && (
         <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} onSwitch={openSwitcher} />
       )}
@@ -204,6 +204,7 @@ export default function Conversation() {
               />
             )
           )}
+          {consent.widget}
         </div>
       </div>
 
@@ -225,6 +226,7 @@ export default function Conversation() {
           onSend={(text) => send(text ?? draft)}
           onStop={chat.stop}
           onAttach={() => gate('documents', () => open('M-5.3'))}
+          onSymptoms={() => setSymptomsOpen(true)}
           onFocusChange={onFocusChange}
           generating={generating}
           lockedNote={emergencyOpen ? 'Please get help first.' : undefined}
@@ -238,15 +240,7 @@ export default function Conversation() {
         />}
       </div>
 
-      <ActionSheet
-        open={infoOpen}
-        onClose={() => setInfoOpen(false)}
-        actions={[
-          { label: 'About Deborah', onSelect: () => push('M-7.6') },
-          { label: 'Book Deborah', onSelect: () => push('M-8.2') },
-          { label: 'About this app & disclaimer', onSelect: () => open('M-10.5') },
-        ]}
-      />
+      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => { setDraft((d) => withSymptoms(d, xs)); inputRef.current?.focus(); }} />
       <ActionSheet
         open={Boolean(pressed)}
         onClose={() => setPressed(null)}
@@ -255,7 +249,6 @@ export default function Conversation() {
           { label: 'Save to Visit Notes', onSelect: () => pressed && actions.saveMessage(pressed) },
         ]}
       />
-      {consent.sheet}
     </div>
   );
 }

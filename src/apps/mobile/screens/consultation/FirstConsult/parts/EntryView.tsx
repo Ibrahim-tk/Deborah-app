@@ -2,11 +2,13 @@
 import { findProduct } from '@shared/data';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, Panel } from '@mobile/ui';
-import { AnswerSections, ClosingLine, MessageBubble, SuggestedQuestions } from '@mobile/patterns/chat';
+import { AnswerSections, ClosingLine, MessageBubble, SuggestedQuestions, SuggestionList } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
-import { EscalationCard } from '@mobile/patterns/safety';
+import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
 import { buildAnswer } from './buildAnswer';
+import { FlowWidget } from './FlowWidget';
 import { FlowChoice } from './FlowChoice';
+import { FlowText } from './FlowText';
 import { ThinkingSteps } from './ThinkingSteps';
 import type { Entry } from './useFlowPlayer';
 import styles from '../FirstConsult.module.css';
@@ -37,10 +39,27 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
     const replies = node.suggestedReplies ?? [];
     return (
       <MessageBubble role="deborah" turnStart>
-        <AnswerSections answer={answer} productSlot={product && answer.product && <ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} />} />
+        <AnswerSections
+          answer={answer}
+          wordSlot={<Button variant="secondary" leadingIcon="note" fullWidth onClick={() => onAction('visit_notes')}>Save to Visit notes</Button>}
+          productSlot={product && answer.product && <ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} />} />
         <ClosingLine text={answer.closingLine} />
-        {active && <SuggestedQuestions questions={replies.map((r) => r.label)} onSelect={(q) => onPick(node, replies.filter((r) => r.label === q))} />}
+        {active && <SuggestedQuestions questions={replies.map((r) => say(r.label))} onSelect={(q) => onPick(node, replies.filter((r) => say(r.label) === q))} />}
       </MessageBubble>
+    );
+  }
+
+  // Emergency (F03): the existing interrupt replaces the consultation; "I'm safe" continues the script.
+  if (node.type === 'emergency') {
+    return (
+      <EmergencyInterrupt
+        title="Please get help now"
+        body={entry.text}
+        acknowledged={!active}
+        onCall={() => onAction('call')}
+        onFindER={() => onAction('find_care')}
+        onSafe={() => onPick(node, [{ label: 'I’m safe, this isn’t happening now' }])}
+      />
     );
   }
 
@@ -54,11 +73,28 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
     );
   }
 
-  const choices = w?.options;
+  const custom = w && FlowWidget.handles(w.type);
+  // The opening line: large serif greeting, no bubble, with starter suggestions beneath (no faces).
+  if (node.display === 'greeting') {
+    const starters = w?.options ?? [];
+    return (
+      <div className={styles.greeting}>
+        <p className={styles.greetingLine}>{entry.text}</p>
+        {active && starters.length > 0 && (
+          <SuggestionList
+            suggestions={starters.map((o) => ({ id: o.label, text: say(o.label), scriptId: '' }))}
+            onSelect={(x) => onPick(node, starters.filter((o) => o.label === x.id))}
+          />
+        )}
+      </div>
+    );
+  }
+  const choices = custom ? undefined : w?.options;
   return (
     <MessageBubble role="deborah" text={entry.text} turnStart>
       {/* What Deborah already knows from intake, as plain text (no tags). */}
-      {entry.nodeId === 'context_ack' && <p className={styles.known}>{known.join(' · ')}</p>}
+      {entry.nodeId.startsWith('context') && <p className={styles.known}>{known.join(' · ')}</p>}
+      {custom && <FlowWidget widget={w} active={active} say={say} onPick={(picked) => onPick(node, picked)} />}
       {choices && active && (
         <FlowChoice
           label={entry.text}
@@ -68,7 +104,16 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
           step={node.progress}
           onPick={(picked) => onPick(node, picked)}
           onSkip={node.type === 'question' && node.progress ? () => onPick(node, [{ label: 'Skip' }]) : undefined}
-          earlyExit={node.progress === '1 of 3' && earlyExit ? { label: earlyExit, onPress: () => onPick(node, [{ label: earlyExit, next: 'thinking' }]) } : undefined}
+          earlyExit={node.progress?.startsWith('1 of') && earlyExit ? { label: earlyExit, onPress: () => onPick(node, [{ label: earlyExit, next: 'thinking' }]) } : undefined}
+        />
+      )}
+      {w?.type === 'free_text' && active && (
+        <FlowText
+          label={entry.text}
+          placeholder={w.placeholder}
+          step={node.progress}
+          onSend={(text) => onPick(node, [{ label: text, value: text }])}
+          onSkip={node.progress ? () => onPick(node, [{ label: 'Skip' }]) : undefined}
         />
       )}
       {w?.type === 'inline_tip' && <Panel tone="lilac" icon="check">{w.text}</Panel>}

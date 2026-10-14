@@ -1,10 +1,12 @@
 /**
- * A scripted question's answers as option rows (DESIGN.md: rows, not pills). Single choice answers on tap;
- * multi choice ticks rows and confirms, with an exclusive "None of these". Optional Skip and early exit.
+ * A scripted question's answers as option rows. Yes/no questions instead get small pills, the same as
+ * the onboarding health questions (design direction 2026-10-14; OPEN: DESIGN.md bans pills). Single choice answers on tap;
+ * multi choice toggles pills (with a line check) and confirms, with an exclusive "None of these". Optional Skip and early exit.
  */
 import { useState } from 'react';
 import type { FlowOption } from '@shared/types/flow';
 import { Button, OptionList, OptionRow } from '@mobile/ui';
+import { ChoicePills } from '@mobile/patterns/widgets';
 import styles from './FlowChoice.module.css';
 
 export interface FlowChoiceProps {
@@ -18,6 +20,10 @@ export interface FlowChoiceProps {
   earlyExit?: { label: string; onPress: () => void };
 }
 
+/** A short single-choice yes/no question (≤3 answers, one starting with Yes or No). */
+const isYesNo = (options: FlowOption[], multi?: boolean) =>
+  !multi && options.length <= 3 && options.some((o) => /^(yes|no)\b/i.test(o.label.trim()));
+
 export function FlowChoice({ label, options, multi, exclusive, step, onPick, onSkip, earlyExit }: FlowChoiceProps) {
   const [on, setOn] = useState<string[]>([]);
   const key = (o: FlowOption) => String(o.value ?? o.label);
@@ -30,13 +36,19 @@ export function FlowChoice({ label, options, multi, exclusive, step, onPick, onS
   return (
     <div className={styles.root}>
       {step && <p className={styles.step}>Question {step}</p>}
-      <OptionList label={label}>
-        {options.map((o) => (
-          <OptionRow key={key(o)} multi={multi} selected={multi ? on.includes(key(o)) : undefined} onSelect={() => (multi ? toggle(o) : onPick([o]))}>
-            {o.label}
-          </OptionRow>
-        ))}
-      </OptionList>
+      {multi ? (
+        <ChoicePills label={label} options={options.map((o) => o.label)} onPick={() => {}} selected={options.filter((o) => on.includes(key(o))).map((o) => o.label)} onToggle={(l) => toggle(options.find((o) => o.label === l)!)} />
+      ) : isYesNo(options, multi) ? (
+        <ChoicePills label={label} options={options.map((o) => o.label)} onPick={(_, i) => onPick([options[i]])} />
+      ) : (
+        <OptionList label={label}>
+          {options.map((o) => (
+            <OptionRow key={key(o)} multi={multi} selected={multi ? on.includes(key(o)) : undefined} onSelect={() => (multi ? toggle(o) : onPick([o]))}>
+              {o.label}
+            </OptionRow>
+          ))}
+        </OptionList>
+      )}
       {multi && <Button fullWidth disabled={!on.length} onClick={() => onPick(options.filter((o) => on.includes(key(o))))}>Continue</Button>}
       {(onSkip || earlyExit) && (
         <div className={styles.links}>

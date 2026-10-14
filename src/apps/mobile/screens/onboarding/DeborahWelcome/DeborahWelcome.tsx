@@ -18,7 +18,7 @@ import styles from './DeborahWelcome.module.css';
 export default function DeborahWelcome() {
   const { dismissSheet, resetTo, push } = useNav();
   const name = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
-  const hello = `Thank you${name ? `, ${name}` : ''}. I’m so glad you’re here. Now tell me, how are you feeling today?`;
+  const hello = `Thank you${name ? `, ${name}` : ''}. I’m so glad you’re here. I have everything I need to get started. Let’s talk.`;
 
   const ask = () => {
     // The scripted first consultation (M-2.12) opens on top of Home, so Back lands there.

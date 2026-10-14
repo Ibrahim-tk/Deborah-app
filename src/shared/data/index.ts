@@ -38,7 +38,9 @@ import healthKit from './intake/healthkit.json';
 import intakeSuggestions from './intake/suggestions.json';
 import scanSamples from './intake/scans.json';
 import healthBasics from './intake/healthBasics.json';
+import symptoms from './intake/symptoms.json';
 import firstConsult from './conversation/flows/firstConsult.json';
+import returningConsult from './conversation/flows/returningConsult.json';
 import type { Flow } from '../types/flow';
 
 export const persona = deborah as Persona;
@@ -85,5 +87,9 @@ export const intakeSuggestionData = intakeSuggestions as Record<'medications' | 
 export type ScanSample = { id: string; label: string; field: 'medications' | 'allergies' | 'conditions'; ocr: string };
 export const scanSampleData = scanSamples.samples as ScanSample[];
 export const healthBasicsData = healthBasics as HealthBasicsData;
+/** Composer symptom picker: grouped plain-language symptoms (placeholder). */
+export const symptomGroups: { title: string; items: string[] }[] = symptoms.groups;
 /** Scripted first consultation after onboarding (OPEN: all copy is DRAFT, needs Deborah's sign-off). */
 export const firstConsultFlow = firstConsult as unknown as Flow;
+/** Demo consultation for a signed-in returning user (seed R01). OPEN: DRAFT copy, needs Deborah's sign-off. */
+export const returningConsultFlow = returningConsult as unknown as Flow;

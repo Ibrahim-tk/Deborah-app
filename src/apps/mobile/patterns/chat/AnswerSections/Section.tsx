@@ -1,6 +1,6 @@
 /**
  * One numbered section as a tonal card (same family as Home): serif numeral, headline title and a
- * round chevron; opening reveals the body under a hairline. §7 is the signature midnight card.
+ * round chevron, plus a minimal line glyph; opening reveals the body under a hairline. §7 is the signature midnight card.
  */
 import { useId, type ReactNode } from 'react';
 import type { AnswerSection } from '@shared/types/domain';
@@ -67,10 +67,13 @@ export function Section({ number, section, open, pending, streaming, onToggle, o
       data-pending={pending || undefined}
     >
       <button type="button" className={styles.header} aria-expanded={open} aria-controls={id} onClick={onToggle} disabled={pending}>
-        <span className={styles.number}>{number}</span>
-        <span className={styles.title}>{section.title}</span>
+        {/* Numbers, not icons (design direction 2026-10-14): the number sits where the glyph was. */}
+        <span className={styles.numeral} aria-hidden>{number}</span>
+        <span className={styles.heading}>
+          <span className={styles.title}>{section.title}</span>
+        </span>
         <span className={styles.toggle} aria-hidden>
-          <Icon name="chevronDown" size={20} className={styles.chevron} />
+          <Icon name="chevronDown" size={18} className={styles.chevron} />
         </span>
       </button>
       {open && !pending && (

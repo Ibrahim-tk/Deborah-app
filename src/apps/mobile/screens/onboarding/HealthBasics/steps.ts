@@ -23,16 +23,13 @@ export function list(value: string | undefined, none?: string): string[] {
   return value.split(',').map((v) => v.trim()).filter(Boolean);
 }
 
-/**
- * Where the jacaranda should be at question i of n. The art's trunk eases in slowly, so a straight i/(n-1)
- * barely moves on the first questions. The opening questions get fixed stops instead (grass only, then the
- * trunk in three visible stages; then the canopy blooms and the flowers fall last); the last question is full bloom.
- */
-const OPENING = [0, 0.15, 0.3, 0.45];
+/** Authored growth stops: a visible root on entry, branches first, then a continuous bloom. */
+const OPENING = [0.08, 0.19, 0.3, 0.4];
 export function bloomProgress(i: number, n: number): number {
-  if (n <= OPENING.length + 1) return n > 1 ? i / (n - 1) : 1;
-  if (i < OPENING.length) return OPENING[i];
+  if (n <= 1) return 1;
+  const index = Math.max(0, Math.min(n - 1, i));
+  if (n <= OPENING.length + 1) return OPENING[0] + (1 - OPENING[0]) * index / (n - 1);
+  if (index < OPENING.length) return OPENING[index];
   const start = OPENING[OPENING.length - 1];
-  const rest = n - OPENING.length; // canopy questions, the last one included
-  return start + ((1 - start) * (i - OPENING.length + 1)) / rest;
+  return start + (1 - start) * (index - OPENING.length + 1) / (n - OPENING.length);
 }

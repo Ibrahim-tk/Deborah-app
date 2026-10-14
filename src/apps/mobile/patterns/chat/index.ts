@@ -20,3 +20,4 @@ export * from './ChatLauncher';
 export * from './SaveProfileCard';
 export * from './CareDisclaimer';
 export * from './ComposerOptions';
+export * from './SymptomPicker';

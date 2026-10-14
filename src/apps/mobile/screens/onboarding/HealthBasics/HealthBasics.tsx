@@ -77,8 +77,8 @@ export default function HealthBasics() {
           <GlassButton icon="back" aria-label={i > 0 ? 'Previous question' : 'Back'} onClick={() => (i > 0 ? setI(i - 1) : pop())} />
         </span>
       </header>
-      {/* The progress indicator: a jacaranda that grows with every answer; its transparent background sits straight on the backdrop. */}
-      <div className={styles.art} aria-label={`Question ${i + 1} of ${steps.length}`}>
+      {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
+      <div className={styles.art} role="progressbar" aria-label="Health profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={i + 1} aria-valuetext={`Question ${i + 1} of ${steps.length}`}>
         <BloomReveal className={styles.bloom} progress={bloomProgress(i, steps.length)} />
       </div>
       <div className={styles.body}>

@@ -1,7 +1,10 @@
-.root { display: grid; gap: var(--space-3); padding: var(--space-5); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
-.top { display: flex; align-items: center; gap: var(--space-4); }
-.image { flex: none; width: 64px; height: 64px; border-radius: var(--radius-md); object-fit: contain; background: var(--color-surface); }
-.titles { display: grid; gap: 2px; }
-.name { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
-.why { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
-.frame { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+/* Compact card: big visual on the left, name + one line + Shop on the right; the personal note sits under it. */
+.wrap { display: grid; gap: var(--space-2); min-width: 0; }
+.root { display: grid; grid-template-columns: 112px 1fr; gap: var(--space-2) var(--space-4); padding: var(--space-3); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
+.media { display: grid; place-items: center; aspect-ratio: 1; border-radius: var(--radius-md); background: radial-gradient(70% 70% at 50% 40%, var(--color-accent-tint), transparent 80%), var(--card-tone-lilac); overflow: hidden; }
+.image { width: 92%; height: 92%; object-fit: contain; }
+.info { display: grid; align-content: center; gap: var(--space-1); min-width: 0; }
+.name { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.why { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-body); }
+.shop { justify-self: start; margin-top: var(--space-1); }
+.frame { padding: 0 var(--space-2); font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body); color: var(--color-ink-secondary); }

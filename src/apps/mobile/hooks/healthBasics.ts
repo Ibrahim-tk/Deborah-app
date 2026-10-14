@@ -15,6 +15,8 @@ let pending: HealthBasicsAnswers | undefined;
 
 export const holdHealthBasics = (a: HealthBasicsAnswers) => { pending = a; };
 export const hasPendingHealthBasics = () => Boolean(pending);
+/** The held answers, read-only: the first chat reads them as context before consent saves them. */
+export const peekHealthBasics = (): HealthBasicsAnswers | undefined => pending;
 
 const list = (v?: string) => (v ?? '').split(',').map((x) => x.trim()).filter(Boolean);
 const CYCLE: Record<string, Cycle> = { cycling: 'regular', perimenopausal: 'irregular', postmenopausal: 'stopped' };
