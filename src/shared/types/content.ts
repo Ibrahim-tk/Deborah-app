@@ -239,6 +239,8 @@ export interface HealthBasicsStep {
   none?: string;
   /** Text steps: common answers, one tap to add or remove; each can be conditional too. */
   suggestions?: { label: string; showIf?: ShowIf }[];
+  /** Text steps: one answer only — a tap (or Other) replaces the current pick. */
+  single?: boolean;
   optional?: boolean;
   /** Hidden unless every listed answer matches. */
   showIf?: ShowIf;

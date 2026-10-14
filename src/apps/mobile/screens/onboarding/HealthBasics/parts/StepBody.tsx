@@ -23,7 +23,8 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
   const value = answers[step.key] ?? '';
   // Chips add or remove a name in the comma list, so typing and tapping mix freely.
   const picked = list(value, step.none);
-  const toggle = (name: string) => set(step.key, (picked.includes(name) ? picked.filter((n) => n !== name) : [...picked, name]).join(', '));
+  const toggle = (name: string) =>
+    set(step.key, step.single ? (picked.includes(name) ? '' : name) : (picked.includes(name) ? picked.filter((n) => n !== name) : [...picked, name]).join(', '));
 
   switch (step.kind) {
     case 'year':
@@ -46,10 +47,10 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
           label={step.title}
           picked={picked}
           suggestions={visibleSuggestions(step, answers)}
-          none={step.none ?? 'None'}
+          none={step.single ? undefined : step.none ?? 'None'}
           noneSelected={value === step.none}
           onToggle={toggle}
-          onAdd={(name) => set(step.key, [...picked, name].join(', '))}
+          onAdd={(name) => set(step.key, step.single ? name : [...picked, name].join(', '))}
           onNone={() => advance(step.none ?? '')}
         />
       );

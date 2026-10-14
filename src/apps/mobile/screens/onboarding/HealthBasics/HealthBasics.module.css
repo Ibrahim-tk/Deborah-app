@@ -59,3 +59,16 @@
   mask-image: linear-gradient(to right, #000 0%, #000 55%, rgb(0 0 0 / 0.55) 85%, rgb(0 0 0 / 0.2) 100%);
 }
 .header, .body, .footer { z-index: 1; }
+
+/* Legibility veil (design direction 2026-10-14): a soft whitish fade behind the question and answers, feathered
+   upward into the bloom so the branches never sit hard behind the text. It follows the block's height, so it
+   grows and shrinks with each question. Not a surface: no edge, no shadow. */
+.body {
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(var(--space-12, 48px) * -1);
+  padding-top: calc(var(--space-12, 48px) + var(--space-2));
+  background:
+    linear-gradient(to bottom, rgb(253 250 246 / 0) 0%, rgb(253 250 246 / 0.72) 22%, rgb(253 250 246 / 0.86) 55%, rgb(253 250 246 / 0.6) 100%);
+  transition: background 360ms ease-out;
+}

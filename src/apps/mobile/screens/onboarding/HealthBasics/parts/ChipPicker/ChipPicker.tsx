@@ -12,7 +12,8 @@ export interface ChipPickerProps {
   /** Selected names. */
   picked: string[];
   suggestions: string[];
-  none: string;
+  /** The one-tap empty answer; omitted on single-choice steps. */
+  none?: string;
   noneSelected: boolean;
   onToggle: (name: string) => void;
   onAdd: (name: string) => void;
@@ -45,7 +46,7 @@ export function ChipPicker({ label, picked, suggestions, none, noneSelected, onT
 
   return (
     <div className={styles.root} role="group" aria-label={label}>
-      <button type="button" className={styles.chip} aria-pressed={noneSelected} onClick={onNone}>{none}</button>
+      {none && <button type="button" className={styles.chip} aria-pressed={noneSelected} onClick={onNone}>{none}</button>}
       {[...suggestions, ...custom].map((name) => (
         <button key={name} type="button" className={styles.chip} aria-pressed={picked.includes(name)} onClick={() => onToggle(name)}>
           <span className={styles.tick} aria-hidden><Icon name="check" size={16} /></span>
