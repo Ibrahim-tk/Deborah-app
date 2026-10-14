@@ -14,6 +14,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
 import { ActionSheet } from '@mobile/ui';
+import { Aura, GradientShift } from '@mobile/ui';
 import { AnswerPanel, ChatHeader, Composer, ComposerOptions, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { ProfileBanner, relationshipLabel } from '@mobile/patterns/profile';
 import { useConversation } from '@mobile/hooks/useConversation';
@@ -162,6 +163,9 @@ export default function Conversation() {
 
   return (
     <div className={styles.root} data-xref="M-2.1 · Conversation">
+      {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
+      <Aura />
+      <GradientShift />
       <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} canStartNew={!isEmpty && !profiling} scrolled={underBar} />
       {other && profile && (
         <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} onSwitch={openSwitcher} />

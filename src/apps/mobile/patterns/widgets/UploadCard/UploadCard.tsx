@@ -3,7 +3,7 @@
  *          then the file as a one-line record. Prototype only: no file is read or sent.
  * @usedBy  widget lab (/wid)
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Icon, ProgressBar } from '@mobile/ui';
 import styles from './UploadCard.module.css';
 
@@ -20,9 +20,15 @@ export function UploadCard({ onUploaded }: UploadCardProps) {
     const id = window.setTimeout(() => setProgress((p) => Math.min(1, (p ?? 0) + 0.2)), 260);
     return () => window.clearTimeout(id);
   }, [progress]);
+  // Reports the upload exactly once, even if the parent passes a new callback on every render.
+  const reported = useRef(false);
+  const latest = useRef(onUploaded);
+  useEffect(() => { latest.current = onUploaded; });
   useEffect(() => {
-    if (progress === 1) onUploaded(FILE);
-  }, [progress, onUploaded]);
+    if (progress !== 1 || reported.current) return;
+    reported.current = true;
+    latest.current(FILE);
+  }, [progress]);
 
   if (progress === undefined)
     return (

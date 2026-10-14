@@ -57,7 +57,8 @@
         "options": [
           {
             "label": "Yes, a little",
-            "value": "some"
+            "value": "some",
+            "next": "plan_good"
           },
           {
             "label": "Not really",
@@ -71,6 +72,11 @@
       },
       "saveAs": "plan",
       "next": "plan_ack"
+    },
+    "plan_good": {
+      "type": "message",
+      "bot": "I'm so glad. Even a little better is your body responding, and that tells us something.",
+      "next": "sleep_score"
     },
     "plan_ack": {
       "type": "message",

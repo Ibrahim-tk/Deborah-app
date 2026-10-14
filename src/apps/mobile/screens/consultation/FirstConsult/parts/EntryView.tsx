@@ -2,7 +2,7 @@
 import { findProduct } from '@shared/data';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, Panel } from '@mobile/ui';
-import { AnswerSections, ClosingLine, MessageBubble, SuggestedQuestions, SuggestionList } from '@mobile/patterns/chat';
+import { AnswerSections, ClosingLine, MessageBubble, SuggestedQuestions } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
 import { buildAnswer } from './buildAnswer';
@@ -74,21 +74,9 @@ export function EntryView({ entry, active, say, known, earlyExit, onPick, onActi
   }
 
   const custom = w && FlowWidget.handles(w.type);
-  // The opening line: large serif greeting, no bubble, with starter suggestions beneath (no faces).
-  if (node.display === 'greeting') {
-    const starters = w?.options ?? [];
-    return (
-      <div className={styles.greeting}>
-        <p className={styles.greetingLine}>{entry.text}</p>
-        {active && starters.length > 0 && (
-          <SuggestionList
-            suggestions={starters.map((o) => ({ id: o.label, text: say(o.label), scriptId: '' }))}
-            onSelect={(x) => onPick(node, starters.filter((o) => o.label === x.id))}
-          />
-        )}
-      </div>
-    );
-  }
+  // The opening line: large serif greeting, no bubble; its starters dock above the composer (FirstConsult).
+  if (node.display === 'greeting' && active) return <p className={styles.greetingLine}>{entry.text}</p>;
+
   const choices = custom ? undefined : w?.options;
   return (
     <MessageBubble role="deborah" text={entry.text} turnStart>

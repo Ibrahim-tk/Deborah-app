@@ -1,7 +1,7 @@
 /**
  * Auto-scroll follows new content unless the user scrolled up; then a scroll-to-latest button
  * appears (docs/07-ai-simulation.md §2). Pinned to the bottom, the list also keeps its position
- * when the keyboard resizes the viewport.
+ * when the keyboard resizes the viewport. Used by M-2.1 and M-2.12 (standard chat scrolling everywhere).
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
@@ -38,6 +38,8 @@ export function useAutoScroll(contentKey: unknown) {
     if (!el) return;
     const observer = new ResizeObserver(() => pinned.current && toBottom());
     observer.observe(el);
+    // …and when the content itself grows (a widget opening, text streaming, a card expanding).
+    if (el.firstElementChild) observer.observe(el.firstElementChild);
     return () => observer.disconnect();
   }, [toBottom]);
 

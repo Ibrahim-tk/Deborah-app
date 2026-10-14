@@ -20,7 +20,8 @@ import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, DeborahBlob } from '@mobile/ui';
-import { ChatHeader, Composer, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
+import { Aura, GradientShift } from '@mobile/ui';
+import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { useHealthConsent } from '@mobile/screens/consultation/Conversation/parts/useHealthConsent';
@@ -28,6 +29,7 @@ import { EntryView } from './parts/EntryView';
 import { VisitPrepCard } from './parts/VisitPrepCard';
 import { buildAnswer, visitPrepItems } from './parts/buildAnswer';
 import { useFlowPlayer } from './parts/useFlowPlayer';
+import { useAutoScroll } from '@mobile/screens/consultation/Conversation/parts/useAutoScroll';
 import { useProfileContext } from './parts/profileContext';
 import styles from './FirstConsult.module.css';
 
@@ -45,7 +47,6 @@ export default function FirstConsult() {
   const profileCtx = useProfileContext();
   const player = useFlowPlayer(flow, name, which === 'returning' ? undefined : profileCtx);
   const { entries, typing } = player;
-  const scrollRef = useRef<HTMLDivElement>(null);
   const asked = useRef(false);
   const [draft, setDraft] = useState('');
   const [symptomsOpen, setSymptomsOpen] = useState(false);
@@ -59,9 +60,6 @@ export default function FirstConsult() {
   }, [flow.carriedFromIntake, which, profileCtx.known]);
   const prep = visitPrepItems(flow.nodes.answer_1);
 
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  }, [entries.length, typing]);
 
   // Leaving the script: free chat opens the normal conversation; labs, booking and shop open their screens.
   const last = entries.at(-1);
@@ -101,18 +99,28 @@ export default function FirstConsult() {
   const typeInstead = (text: string) => {
     if (text.trim()) openAsk({ prefill: text.trim(), focus: true });
   };
+  const started = entries.some((e) => e.kind === 'user');
   const waiting = [...entries].reverse().find((e) => (e.kind === 'bot' || e.kind === 'answer') && !e.answered);
+  // Standard chat scrolling, shared with M-2.1: follow new content unless she scrolled up.
+  const { ref: scrollRef, onScroll } = useAutoScroll(`${entries.length}:${typing}:${Boolean(consent.widget)}`);
+  // The opening greeting's starters dock above the composer until she answers.
+  const opener = !started && waiting?.kind === 'bot' && waiting.node.display === 'greeting' ? waiting : undefined;
+  const starters = opener?.node.widget?.options ?? [];
 
   return (
     <div className={styles.root} data-xref="M-2.12 · First consultation">
+      {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
+      <Aura />
+      <GradientShift />
       <ChatHeader onBack={pop} onNewChat={() => openAsk()} canStartNew />
-      <div ref={scrollRef} className={styles.scroll}>
-        <div className={styles.column} data-placeholder>
-          {/* Deborah's orb opens the consultation, as on the empty chat (M-2.1). */}
-          <div className={styles.orb}><DeborahBlob size={112} label="Deborah" /></div>
+      <div ref={scrollRef} className={styles.scroll} onScroll={onScroll}>
+        <div className={styles.column} data-started={started || undefined} data-placeholder>
+          {/* Before she answers: the orb and serif greeting sit centred, as on the empty chat (M-2.1). Once she
+              answers, a small orb moves top left, the greeting becomes the first message and the chat runs on. */}
+          <div className={styles.orb}><DeborahBlob size={started ? 48 : 112} label="Deborah" /></div>
           {entries.map((e) => (
+            <div key={e.id} data-entry={e.kind} className={styles.entry}>
             <EntryView
-              key={e.id}
               entry={e}
               active={e === waiting}
               say={say}
@@ -123,13 +131,14 @@ export default function FirstConsult() {
               renderPrep={() => (
                 <VisitPrepCard
                   title={(e.kind === 'bot' && e.node.widget?.title) || 'For my next appointment'}
-                  questions={[...prep.questions, ...player.extraPrep]}
+                  questions={[...prep.questions.map((q) => say(q)), ...player.extraPrep]}
                   tests={prep.tests}
                   onShare={() => action('pdf')}
                   onSave={() => action('save')}
                 />
               )}
             />
+            </div>
           ))}
           {consent.widget}
           {typing && <ThinkingIndicator label="Deborah is writing…" />}
@@ -139,6 +148,12 @@ export default function FirstConsult() {
         </div>
       </div>
       <div className={styles.bottom}>
+        {opener && starters.length > 0 && (
+          <SuggestionList
+            suggestions={starters.map((o) => ({ id: o.label, text: say(o.label), scriptId: '' }))}
+            onSelect={(x) => pick(opener.id, opener.node, starters.filter((o) => o.label === x.id))}
+          />
+        )}
         <Composer
           value={draft}
           onChange={setDraft}

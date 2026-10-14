@@ -5,7 +5,7 @@
 .text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .done { display: inline-flex; align-items: center; gap: var(--space-1); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 .actions { display: grid; gap: var(--space-3); }
-@keyframes widget-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes widget-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .card { animation: none; } }
 /* Icon + heading label, the same treatment as ConfirmCard's "Confirm booking" (design direction 2026-10-14):
    a small rounded tint holding a 16px icon and a short medium label. Light-card version. */

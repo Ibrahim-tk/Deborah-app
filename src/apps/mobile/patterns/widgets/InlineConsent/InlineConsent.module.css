@@ -5,8 +5,6 @@
 .actions { composes: actions from '../widget.module.css'; margin-top: var(--space-1); }
 .link { display: inline; padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
-.doc { display: grid; gap: var(--space-2); max-height: 180px; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--color-accent-tint); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink); }
-.docTitle { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }
 /* Very subtle fill so "Not now" reads as a button, without competing with Agree. */
 .notNow { background: rgb(48 35 53 / 0.04); }
 .notNow:hover, .notNow:active { background: rgb(48 35 53 / 0.08); }
@@ -32,4 +30,15 @@
 .root[data-variant='dark'] .link { color: #fff; }
 .root[data-variant='dark'] .agree { background: #fff; color: #1d1424; box-shadow: none; }
 .root[data-variant='dark'] .notNow { background: rgb(255 255 255 / 0.1); color: #fff; }
-.root[data-variant='dark'] .doc { background: rgb(255 255 255 / 0.08); color: #fff; }
+
+/* Privacy policy / Terms and disclaimer: a bottom sheet over the chat. */
+.layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+.scrim { position: absolute; inset: 0; border: 0; background: var(--color-scrim); animation: fade var(--dur-base) var(--ease-out) both; }
+.sheet { position: relative; display: flex; flex-direction: column; max-height: 82%; padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4)); border-radius: 32px 32px 0 0; background: var(--color-canvas); box-shadow: 0 -12px 40px rgb(18 7 33 / 0.12); animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both; }
+.grabber { align-self: center; flex: none; width: 36px; height: 5px; margin-bottom: var(--space-3); border-radius: var(--radius-full); background: var(--color-border-hairline); }
+.sheetHead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); }
+.sheetTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.sheetBody { display: grid; gap: var(--space-3); min-height: 0; overflow-y: auto; overscroll-behavior: contain; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }

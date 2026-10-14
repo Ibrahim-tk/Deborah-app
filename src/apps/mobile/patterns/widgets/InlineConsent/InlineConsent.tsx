@@ -1,20 +1,20 @@
 /**
  * @pattern InlineConsent — health-data consent + disclaimer as an inline chat widget, not a bottom sheet
- *          (design direction 2026-10-14). Privacy policy and Terms open as plain text inside the card.
+ *          (design direction 2026-10-14). Privacy policy and Terms (with the disclaimer) open in a bottom sheet.
  * @usedBy  M-2.1, M-2.12 (first message after sign-up), widget lab (/wid)
  * @xref    web: — not built
  * OPEN: consent and data-protection wording is placeholder until Deborah and legal approve it.
  */
 import { useState } from 'react';
 import { consentDoc } from '@shared/data';
-import { Button, Icon } from '@mobile/ui';
+import { Button, Icon, IconButton, Overlay } from '@mobile/ui';
 import styles from './InlineConsent.module.css';
 
 type Doc = 'privacy' | 'terms';
 const DOCS: Record<Doc, { link: string; title: string; body: string[] }> = {
   privacy: { link: 'Privacy policy', title: consentDoc.privacy.title, body: consentDoc.privacy.body },
   // Terms carries the medical disclaimer; the AI disclosure is part of it here.
-  terms: { link: 'Terms', title: consentDoc.terms.title, body: [...consentDoc.terms.body, consentDoc.aiDisclosure] },
+  terms: { link: 'Terms', title: 'Terms and disclaimer', body: [...consentDoc.terms.body, consentDoc.aiDisclosure] },
 };
 
 export interface InlineConsentProps {
@@ -33,7 +33,7 @@ export interface InlineConsentProps {
 export function InlineConsent({ onAgree, onDecline, answered, variant = 'row' }: InlineConsentProps) {
   const [doc, setDoc] = useState<Doc>();
   const link = (d: Doc) => (
-    <button type="button" className={styles.link} aria-expanded={doc === d} onClick={() => setDoc(doc === d ? undefined : d)}>{DOCS[d].link}</button>
+    <button type="button" className={styles.link} aria-haspopup="dialog" onClick={() => setDoc(d)}>{DOCS[d].link}</button>
   );
 
   return (
@@ -42,12 +42,6 @@ export function InlineConsent({ onAgree, onDecline, answered, variant = 'row' }:
       <p className={styles.body}>
         Only to tailor my guidance. You accept our {link('privacy')} and {link('terms')}.
       </p>
-      {doc && (
-        <div key={doc} className={styles.doc}>
-          <p className={styles.docTitle}>{DOCS[doc].title}</p>
-          {DOCS[doc].body.map((p) => <p key={p}>{p}</p>)}
-        </div>
-      )}
       {answered ? (
         <p className={styles.done}><Icon name="check" size={16} /> {answered === 'agreed' ? 'You agreed. Thank you.' : 'Not now. Your answers stay on this phone.'}</p>
       ) : (
@@ -65,6 +59,23 @@ export function InlineConsent({ onAgree, onDecline, answered, variant = 'row' }:
           )}
         </div>
       )}
+      <Overlay>
+        {doc && (
+          <div className={styles.layer}>
+            <button type="button" className={styles.scrim} aria-label="Close" onClick={() => setDoc(undefined)} />
+            <div className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby="legal-title">
+              <span className={styles.grabber} aria-hidden />
+              <div className={styles.sheetHead}>
+                <h2 id="legal-title" className={styles.sheetTitle}>{DOCS[doc].title}</h2>
+                <IconButton icon="close" label="Close" onClick={() => setDoc(undefined)} />
+              </div>
+              <div className={styles.sheetBody}>
+                {DOCS[doc].body.map((p) => <p key={p}>{p}</p>)}
+              </div>
+            </div>
+          </div>
+        )}
+      </Overlay>
     </section>
   );
 }

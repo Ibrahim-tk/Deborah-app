@@ -61,7 +61,10 @@ export function useProfileContext(): ProfileContext {
       knownFacts: `I know ${joinAnd(facts)}.`,
       stage: stage && STAGE[stage] ? STAGE[stage] : 'where you are hormonally',
       stageShort: stage && STAGE_SHORT[stage] ? STAGE_SHORT[stage] : 'Your hormones',
-      med: firstMed ?? 'anything else I take',
+      // Her voice (suggested replies, visit prep) and Deborah's voice need different fallbacks.
+      medMine: firstMed ?? 'my other supplements',
+      medYours: firstMed ?? 'anything you already take',
+      medClause: firstMed ? `, and I'm keeping ${firstMed} in mind` : '',
       medShort: firstMed ?? 'Your daily routine',
       medNote: firstMed
         ? `Because you take ${firstMed}, check timing with your prescriber before starting.`

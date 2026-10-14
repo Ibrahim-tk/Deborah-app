@@ -29,8 +29,12 @@ export function useHealthConsent() {
 
   // Bring the card into view when it appears at the end of the thread.
   const anchor = useRef<HTMLDivElement>(null);
+  // Only the thread's own scroller moves: scrollIntoView would also shift the phone's overflow-hidden
+  // ancestors, leaving the whole screen scrolled up.
   useEffect(() => {
-    if (open) anchor.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    let el = anchor.current?.parentElement;
+    while (el && !/(auto|scroll)/.test(getComputedStyle(el).overflowY)) el = el.parentElement;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   }, [open]);
 
   const widget = open ? (

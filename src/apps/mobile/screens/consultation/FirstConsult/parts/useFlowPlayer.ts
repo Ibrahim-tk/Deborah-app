@@ -100,7 +100,7 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
       // a scale as its number, a slot as written. A skip leaves the profile's fallback wording.
       const type = node.widget?.type;
       const words = picked.map((p) => (type === 'scale_check' ? String(p.value) : type === 'pill_select' ? p.label.toLowerCase() : p.label));
-      if (values.length) labels.current[node.saveAs] = words.join(', ').replace(/, ([^,]*)$/, ' and $1');
+      if (values.length) labels.current[node.saveAs] = words.length > 1 ? `${words.slice(0, -1).join(', ')} and ${words.at(-1)}` : words[0];
     }
     const single = picked.length === 1 ? picked[0] : undefined;
     go(single?.next ?? nextNodeId(node, vars.current));

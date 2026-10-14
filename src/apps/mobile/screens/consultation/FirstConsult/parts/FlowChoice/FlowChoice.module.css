@@ -1,3 +1,6 @@
 .root { display: grid; gap: var(--space-3); margin-top: var(--space-3); }
 .step { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .links { display: flex; justify-content: space-between; gap: var(--space-2); }
+/* The pills sit right under her question: the group's own top margin would double the gap. */
+.root > div[role='group'] { margin-top: 0; }
+.root { margin-top: var(--space-2); }
