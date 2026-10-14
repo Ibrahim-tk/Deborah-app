@@ -278,11 +278,9 @@
       "type": "message",
       "flow": "F03",
       "bot": "Thank you for telling me, Linda. Night sweats together with fever, chills or weight loss you can't explain are worth getting checked by a provider soon, before we look at hormones. This doesn't count toward your free answers.",
-      "widget": {
-        "type": "escalation"
-      },
       "countsTowardFreeLimit": false,
-      "next": "check_more"
+      "next": "check_more",
+      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); Deborah's tile is offered after the answer (talk_direct)."
     },
     "thinking": {
       "type": "loading",
@@ -600,11 +598,9 @@
       "type": "message",
       "flow": "F03",
       "bot": "Thank you for telling me, Linda. Chest pain or fainting always deserves a proper check, and soon. If it's happening right now, please call 911 or go to the nearest emergency room. Otherwise, let's get you seen by a provider this week. This doesn't count toward your free answers.",
-      "widget": {
-        "type": "escalation"
-      },
       "countsTowardFreeLimit": false,
-      "next": "check_more"
+      "next": "check_more",
+      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); Deborah's tile is offered after the answer (talk_direct)."
     },
     "check_more": {
       "type": "question",
