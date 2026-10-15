@@ -1,0 +1,52 @@
+/*
+ * Tonal cards. Each destination is a flat colour field (lilac · linen · rose) at --radius-card,
+ * with a big Cormorant title, plain-text meta and one dark round action in the bottom-right.
+ * They scroll, so no shadows (DESIGN.md: only floating things cast shadows) and no rims.
+ */
+.photo { -webkit-tap-highlight-color: transparent; transition: transform var(--dur-quick) var(--ease-out); }
+.photo:active { transform: scale(0.98); }
+.photo:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .photo:active { transform: none; } }
+
+/* Destination cards: tone field + a faint photo wash for texture (kept ≤ 0.18 so text stays ≥ 7:1). */
+.photo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-5);
+  border-radius: var(--radius-card);
+  color: var(--color-ink);
+  text-align: left;
+}
+.photo::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  background: var(--card-bg) var(--crop) / 260% auto no-repeat;
+  filter: blur(28px) saturate(80%) hue-rotate(var(--hue));
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+}
+.lilac { background: var(--card-tone-lilac); }
+.linen { background: var(--card-tone-linen); }
+.rose { background: var(--card-tone-rose); }
+
+.wide { min-height: 128px; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5); }
+.square { min-height: 128px; padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5); }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.015em; text-wrap: balance; }
+.square .title { font-size: calc(var(--fs-title-2) * 0.92); }
+.foot { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-3); }
+.sub { min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+/* The single action: dark round button, the only high-contrast mark on the card. */
+.go { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }
+.square .go { width: 36px; height: 36px; }
+

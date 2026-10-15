@@ -1,0 +1,33 @@
+/* Design system page building blocks. Everything reads the app's live tokens (DESIGN.md + Deborah skin). */
+
+/* Sections */
+.section { display: grid; gap: var(--space-6); padding-block: var(--space-12) var(--space-4); scroll-margin-top: var(--space-6); }
+.section + .section { border-top: 1px solid var(--color-border-hairline); }
+.sectionTitle { font: var(--weight-regular) 40px / 46px var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.lede { max-width: 68ch; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
+.lede code, .groupNote code, .metaNote code { font: 0.92em ui-monospace, 'SF Mono', Menlo, monospace; color: var(--color-ink); }
+.sectionBody { display: grid; gap: var(--space-10); }
+
+.group { display: grid; gap: var(--space-4); }
+.groupTitle { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.groupNote { max-width: 72ch; margin-top: calc(var(--space-2) * -1); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+/* Specimens: a stage on the app canvas + a caption strip. Flat (it scrolls with the page). */
+.specimen { display: grid; border: 1px solid var(--color-border-hairline); border-radius: var(--radius-lg); overflow: hidden; background: var(--white); }
+.stage { position: relative; display: grid; justify-items: center; padding: var(--space-8) var(--space-6); background: var(--surface-canvas); overflow: hidden; }
+.stage[data-stage='paper'] { background: var(--color-surface); }
+.stage[data-stage='signature'] { background: var(--color-surface-signature); color: var(--color-ink-on-signature); }
+.stageInner { width: 100%; display: grid; gap: var(--space-4); }
+.phoneWidth { max-width: 393px; }
+.meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); padding: var(--space-3) var(--space-4); border-top: 1px solid var(--color-border-hairline); }
+.metaName { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.metaPath { font: 12px / 18px ui-monospace, 'SF Mono', Menlo, monospace; color: var(--color-ink-secondary); }
+.metaNote { flex-basis: 100%; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+
+.variant { display: grid; gap: var(--space-2); align-content: start; }
+.variantLabel { font: var(--weight-regular) 12px / 16px ui-monospace, 'SF Mono', Menlo, monospace; color: var(--color-ink-secondary); }
+.stage[data-stage='signature'] .variantLabel { color: var(--color-ink-on-signature); }
+.row { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+
+/* Grids of specimens */
+.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); gap: var(--space-6); align-items: start; }

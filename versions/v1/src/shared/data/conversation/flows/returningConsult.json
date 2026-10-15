@@ -1,0 +1,480 @@
+{
+  "flowId": "genesis_returning_consult_demo",
+  "version": "1.0",
+  "status": "placeholder",
+  "description": "Returning user (seed R01, Maria, 48, perimenopausal, on HRT), docs/ux/F02c › Returning. Unlike the first consult, Deborah opens from memory: welcome back, how last time's plan went, a sleep score, then the new concern. She never re-asks the profile: safety check first, 4 new questions (one free text), then Maria decides when to see the 7-section answer. Ends with booking and a check-in.",
+  "contentStatus": "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off before any user-facing use.",
+  "startNode": "welcome_back",
+  "carriedFromIntake": {
+    "note": "From the returning profile (seed R01). Never re-asked.",
+    "firstName": "Maria",
+    "age": 48,
+    "reproductive": "perimenopausal",
+    "hrt": [
+      "Estradiol patch",
+      "Progesterone"
+    ],
+    "symptoms": [
+      "night sweats",
+      "poor sleep",
+      "stress"
+    ],
+    "reproductiveHistory": "heavy days, around 7 pads at peak"
+  },
+  "uiDefaults": {
+    "typingIndicatorMs": 900,
+    "showSkipOnClarifiers": true,
+    "earlyExitLabel": "Show me what you found"
+  },
+  "nodes": {
+    "welcome_back": {
+      "type": "question",
+      "display": "greeting",
+      "bot": "Welcome back, Maria. How have you been since we last talked?",
+      "widget": {
+        "type": "suggested_replies",
+        "options": [
+          {
+            "label": "Something new is happening",
+            "next": "user_open"
+          },
+          {
+            "label": "Following up on my sleep",
+            "next": "plan_check"
+          },
+          {
+            "label": "I have new lab results",
+            "next": "exit_labs"
+          }
+        ]
+      }
+    },
+    "plan_check": {
+      "type": "question",
+      "bot": "Last time we talked about your night sweats and broken sleep. Did the changes help at all? The cooler bedroom, an earlier dinner, and morning light.",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "Yes, a little",
+            "value": "some",
+            "next": "plan_good"
+          },
+          {
+            "label": "Not really",
+            "value": "no"
+          },
+          {
+            "label": "I didn't get to try",
+            "value": "untried"
+          }
+        ]
+      },
+      "saveAs": "plan",
+      "next": "plan_ack"
+    },
+    "plan_good": {
+      "type": "message",
+      "bot": "I'm so glad. Even a little better is your body responding, and that tells us something.",
+      "next": "sleep_score"
+    },
+    "plan_ack": {
+      "type": "message",
+      "bot": "Thank you for being honest. Small changes take a few weeks to show, so none of that is wasted.",
+      "next": "sleep_score"
+    },
+    "sleep_score": {
+      "type": "question",
+      "bot": "Quick one so I can track it over time: how would you rate your sleep this week?",
+      "widget": {
+        "type": "scale_check",
+        "title": "Sleep this week",
+        "low": "Awful",
+        "high": "Restful"
+      },
+      "saveAs": "sleepScore",
+      "next": "memory"
+    },
+    "memory": {
+      "type": "message",
+      "bot": "I'll keep that next to last time's score. I still have your estradiol patch and progesterone on file, and the heavy days you mentioned, so we don't need to go over any of that again.",
+      "next": "whats_new"
+    },
+    "whats_new": {
+      "type": "question",
+      "bot": "So, what's on your mind today?",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "Something new is happening",
+            "next": "user_open"
+          },
+          {
+            "label": "More about my sleep",
+            "next": "chat_free"
+          }
+        ]
+      }
+    },
+    "user_open": {
+      "type": "user_message",
+      "user": "I keep waking at 2am with my heart fluttering.",
+      "next": "safety_q"
+    },
+    "safety_q": {
+      "type": "question",
+      "bot": "Oh, I'm sorry, Maria. Waking at 2am with your heart fluttering is unsettling, especially when you're already short on sleep. One quick safety check first: when it happens, do you ever have chest pain or pressure, trouble breathing, or feel like you might faint?",
+      "uiNote": "Always first for heart symptoms. 'Yes' shows the F03 emergency card, stops the consultation and never counts toward the free limit.",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "No, none of these",
+            "next": "q_duration"
+          },
+          {
+            "label": "Yes, sometimes",
+            "next": "emergency"
+          }
+        ]
+      }
+    },
+    "emergency": {
+      "type": "emergency",
+      "bot": "Chest pain, trouble breathing or feeling faint with a racing heart needs care right now, not a chat. If it's happening now, call 911.",
+      "next": "after_emergency"
+    },
+    "after_emergency": {
+      "type": "message",
+      "bot": "I'm glad you're safe right now, Maria. Please have this checked by a provider soon. This conversation doesn't count toward your free answers.",
+      "next": "chat"
+    },
+    "q_duration": {
+      "type": "question",
+      "progress": "1 of 4",
+      "bot": "Good. How long does an episode last, and does it come with a wave of heat or sweat? You mentioned night sweats in your profile, so I want to see if they're linked.",
+      "uiNote": "Uses her symptom checklist instead of asking about night sweats again.",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "Seconds, with heat or sweat",
+            "value": "seconds_heat"
+          },
+          {
+            "label": "Seconds, no heat",
+            "value": "seconds"
+          },
+          {
+            "label": "Minutes or longer",
+            "value": "minutes"
+          }
+        ]
+      },
+      "saveAs": "duration",
+      "next": "q_onset"
+    },
+    "q_onset": {
+      "type": "question",
+      "progress": "2 of 4",
+      "bot": "When did this start? You've been on your estradiol patch and progesterone for about a year. Did the flutters begin around a dose change, on patch-change days, or on their own?",
+      "uiNote": "Uses her HRT detail fields. Deborah never asks 'Are you on any medication?'",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "After a dose change",
+            "value": "dose"
+          },
+          {
+            "label": "Around patch days",
+            "value": "patch"
+          },
+          {
+            "label": "Not linked that I can tell",
+            "value": "none"
+          }
+        ]
+      },
+      "saveAs": "onset",
+      "next": "q_evening"
+    },
+    "q_evening": {
+      "type": "question",
+      "progress": "3 of 4",
+      "bot": "What do your evenings usually look like after 7pm? For example, dinner time, wine, sweets, or screens.",
+      "uiNote": "The only free-text question: the profile captures diet in general, not her evening routine.",
+      "widget": {
+        "type": "free_text",
+        "placeholder": "e.g. dinner at 8, a glass of wine…"
+      },
+      "saveAs": "evening",
+      "next": "q_iron"
+    },
+    "q_iron": {
+      "type": "question",
+      "progress": "4 of 4",
+      "bot": "Last one. Your profile notes some heavy days, around 7 pads at their peak. Have you had your iron or ferritin checked in the past year?",
+      "uiNote": "Turns an old reproductive-history answer into a lead: heavy bleeding can deplete iron, and low iron can contribute to palpitations.",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "Yes, normal",
+            "value": "normal"
+          },
+          {
+            "label": "Yes, it was low",
+            "value": "low"
+          },
+          {
+            "label": "No / not sure",
+            "value": "unsure"
+          }
+        ]
+      },
+      "saveAs": "iron",
+      "next": "ready"
+    },
+    "ready": {
+      "type": "message",
+      "bot": "Thank you, that's what I need. Do you want my findings now, or is there anything you'd like to add first?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Show me what you found",
+            "next": "thinking"
+          },
+          {
+            "label": "I want to add something",
+            "next": "add_more"
+          }
+        ]
+      }
+    },
+    "add_more": {
+      "type": "question",
+      "bot": "Of course. What would you like me to know?",
+      "widget": {
+        "type": "free_text",
+        "placeholder": "Anything else…"
+      },
+      "next": "thinking"
+    },
+    "thinking": {
+      "type": "loading",
+      "bot": "Looking at this through Deborah's upstream lens…",
+      "widget": {
+        "type": "thinking_steps",
+        "steps": [
+          "Your 2am wake-ups",
+          "Your HRT",
+          "Your heavy days"
+        ],
+        "durationMs": 2500
+      },
+      "next": "answer"
+    },
+    "answer": {
+      "type": "answer",
+      "layout": "progressive",
+      "sections": [
+        {
+          "id": 1,
+          "title": "What I'm Hearing",
+          "body": "Maria, you're 48, in perimenopause and about a year into HRT. Around 2am you wake drenched, with a brief flutter in your chest, on very little sleep and a lot of stress. That's exhausting, and it makes sense it's worrying you."
+        },
+        {
+          "id": 2,
+          "title": "The Hypothalamic Connection",
+          "body": "Your hypothalamus runs your thermostat, your sleep and your stress response. Shifting hormones in perimenopause can unsettle all three at once, and a 2am wake-up often comes with a stress-hormone surge you may feel as your heart racing."
+        },
+        {
+          "id": 3,
+          "title": "What This May Mean",
+          "body": [
+            "Hormone swings that your current HRT timing may not cover overnight are worth exploring.",
+            "A blood sugar dip after evening wine may play a part.",
+            "Heavy days may have lowered your iron, which can contribute to a fluttering heart.",
+            "Thyroid function is worth a fresh look."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Questions for Your Provider",
+          "body": [
+            "Could my HRT dose or timing be adjusted for my night sweats?",
+            "Could my heavy periods have lowered my iron?",
+            "Should I have an ECG or a heart rhythm monitor to rule out an arrhythmia?",
+            "Is my progesterone timed well for sleep?"
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Tests Worth Discussing",
+          "body": [
+            {
+              "test": "Ferritin and CBC",
+              "why": "Checks whether heavy days have depleted your iron."
+            },
+            {
+              "test": "Full thyroid panel with free T3",
+              "why": "Looks beyond TSH at how your thyroid is really working."
+            },
+            {
+              "test": "Fasting glucose or HbA1c",
+              "why": "Shows whether blood sugar dips could be waking you."
+            },
+            {
+              "test": "ECG",
+              "why": "Rules out a heart rhythm problem."
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "What You Can Do Now",
+          "body": [
+            "Try pausing evening wine for two weeks and notice your nights.",
+            "Have a small protein snack before bed to keep blood sugar steady.",
+            "Keep your bedroom cool and dark.",
+            "Log each episode in Visit Notes: time, how long, and what came before."
+          ],
+          "productCard": {
+            "name": "Genesis Gold®",
+            "line": "Plant-based nutrition designed to support the hypothalamus. Most women give it at least 90 days.",
+            "personalNote": "You're on HRT, so check with your prescriber before starting."
+          }
+        },
+        {
+          "id": 7,
+          "title": "A Word from Deborah",
+          "body": "Maria, a fluttering heart at 2am is frightening, and you were right to bring it up. Let's rule out the serious causes first, then work with your hormones, not against them."
+        }
+      ],
+      "footer": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+      "suggestedReplies": [
+        {
+          "label": "Work out my Genesis Gold amount",
+          "next": "ask_weight"
+        },
+        {
+          "label": "Save for my doctor",
+          "next": "saved"
+        }
+      ]
+    },
+    "ask_weight": {
+      "type": "question",
+      "bot": "Genesis Gold is dosed by body weight. Want me to work out your amount?",
+      "uiNote": "Weight is asked only here, at the product, never during intake.",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Enter weight",
+            "next": "weight"
+          },
+          {
+            "label": "Skip",
+            "next": "saved"
+          }
+        ]
+      }
+    },
+    "weight": {
+      "type": "question",
+      "bot": "What's your weight? Pounds or kilograms are both fine.",
+      "widget": {
+        "type": "free_text",
+        "placeholder": "e.g. 150 lb"
+      },
+      "saveAs": "weight",
+      "next": "weight_done"
+    },
+    "weight_done": {
+      "type": "message",
+      "bot": "Thanks, I've saved that. The amount for your weight is on the Genesis Gold guide. Because you're on HRT, please check with your prescriber before you start.",
+      "uiNote": "OPEN: no dose is shown until Deborah supplies the weight table (never invent dosing).",
+      "next": "saved"
+    },
+    "saved": {
+      "type": "message",
+      "bot": "I've saved your questions and tests to Visit Notes so they're ready for your appointment.",
+      "widget": {
+        "type": "inline_tip",
+        "text": "Saved to Visit Notes"
+      },
+      "next": "offer_booking"
+    },
+    "offer_booking": {
+      "type": "question",
+      "bot": "Because the flutters are new, I'd really like to hear about them myself. Here are my next openings, if you'd like one.",
+      "widget": {
+        "type": "slot_picker",
+        "title": "Book with Deborah",
+        "meta": "30 min · Video",
+        "options": [
+          {
+            "label": "Not right now",
+            "next": "offer_checkin"
+          }
+        ]
+      },
+      "saveAs": "slot",
+      "next": "confirm_booking"
+    },
+    "confirm_booking": {
+      "type": "question",
+      "bot": "Lovely. Just check this looks right.",
+      "widget": {
+        "type": "confirm_card",
+        "title": "Deborah · 30 min",
+        "value": "$150",
+        "detail": "{slot} · Video",
+        "label": "Booked. You'll get a reminder."
+      },
+      "saveAs": "booked",
+      "next": "booked",
+      "uiNote": "Price is placeholder; no payment, simulated."
+    },
+    "booked": {
+      "type": "message",
+      "bot": "You're booked. Bring your flutter notes if you can: what time, how long, and what you'd eaten.",
+      "next": "offer_checkin"
+    },
+    "offer_checkin": {
+      "type": "question",
+      "bot": "Shall I check in next week to see whether the 2am wake-ups have eased?",
+      "widget": {
+        "type": "reminder_card",
+        "title": "Flutter check-in",
+        "detail": "Next Thursday · 8:00 pm",
+        "options": [
+          {
+            "label": "No thanks",
+            "next": "close"
+          }
+        ]
+      },
+      "saveAs": "checkIn",
+      "next": "close"
+    },
+    "close": {
+      "type": "message",
+      "bot": "Take care of yourself tonight, Maria. I'm right here if anything changes.",
+      "next": "chat"
+    },
+    "chat": {
+      "type": "end",
+      "route": "/chat"
+    },
+    "exit_labs": {
+      "type": "end",
+      "route": "/labs/upload",
+      "note": "F05 Labs flow."
+    }
+  }
+}

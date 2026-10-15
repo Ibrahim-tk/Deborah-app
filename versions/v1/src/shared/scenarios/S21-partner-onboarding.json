@@ -1,0 +1,38 @@
+{
+  "id": "S21",
+  "now": "2026-10-15T12:00:00Z",
+  "start": {
+    "kind": "screen",
+    "root": "preauth",
+    "stack": [
+      "M-1.2",
+      "M-1.8"
+    ]
+  },
+  "state": {
+    "userName": "Helen",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Helen",
+          "relationship": "self",
+          "intake": {
+            "conditions": [],
+            "medications": []
+          },
+          "createdAt": "2026-10-07T19:12:00-07:00"
+        }
+      }
+    },
+    "accountId": "acct-s21",
+    "accountEmail": "helen@example.com"
+  },
+  "conversations": {}
+}

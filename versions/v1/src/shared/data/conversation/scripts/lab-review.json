@@ -1,0 +1,32 @@
+{
+  "id": "lab-review",
+  "topic": "your lab results",
+  "match": [],
+  "intake": [],
+  "usesLabs": true,
+  "voiceSample": "I have my lab results back and I'd like you to look at them.",
+  "openingMessage": "I have my lab results back.",
+  "readyLine": "Thank you, {name}. I have your results in front of me.",
+  "suggestedQuestions": ["What should I ask at my next appointment?", "When should I recheck my labs?"],
+  "answer": {
+    "sections": [
+      { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, thank you for sharing your labs from {labDate}. I looked at all {labCount} values you confirmed, including {labHighlight}. Numbers only tell part of the story, so I'm reading them alongside what you've told me about how you feel." },
+      { "key": "hypothalamic", "title": "The Hypothalamic Connection", "body": "Lab values are a snapshot of a conversation between your hypothalamus, your pituitary and your glands. A result inside the usual range can still sit at the edge of what feels good for you, which is why I look at patterns rather than single numbers." },
+      { "key": "mayMean", "title": "What This May Mean", "body": "Taken together, these results may be worth exploring further with your provider — especially how they line up with your energy, your sleep and your cycle. They might point to areas worth watching over the next few months rather than anything to act on by yourself." },
+      { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["How do these results compare with my earlier labs?", "Is my {labMarker} where you'd like it to be, given how I've been feeling?", "Would it help to recheck any of these in about three months?", "Are there other markers worth adding next time?"] },
+      { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["Repeating the same panel in about 90 days, so you can compare like with like", "Whether ferritin, vitamin D or Free T4 would round out the picture"] },
+      { "key": "doNow", "title": "What You Can Do Now", "body": "Your next 90 days: keep the foundations steady so your next labs reflect real change.", "bullets": ["Same bedtime and wake time, even on weekends", "Protein with breakfast within an hour of waking", "A ten-minute walk outside after lunch"] },
+      { "key": "word", "title": "A Word from Deborah", "body": "{name}, bringing your labs back to me was a real act of care for yourself. Let's keep going, one steady step at a time." }
+    ],
+    "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+    "habitsForPlan": ["Same bedtime and wake time, even on weekends", "Protein with breakfast within an hour of waking", "A ten-minute walk outside after lunch"],
+    "goal": "Steady energy and sleep, checked again with labs in 90 days",
+    "summary": "Lab results reviewed alongside symptoms; recheck in about 90 days."
+  },
+  "followUps": [
+    { "match": ["recheck", "again", "when"], "reply": "Many people recheck the same panel after about 90 days, so the comparison is fair. Your provider can tell you what timing makes sense for you." },
+    { "match": ["appointment", "ask", "provider"], "reply": "Open Visit Notes before your appointment — the questions from my answer are a good place to start." }
+  ],
+  "fallbackReply": "That's a good question to bring to your provider alongside these results. I'm glad you're looking at the whole picture.",
+  "status": "placeholder"
+}

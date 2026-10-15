@@ -1,0 +1,154 @@
+{
+  "id": "S19",
+  "now": "2026-10-15T19:30:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "ask",
+    "stack": [
+      "M-2.0",
+      "M-2.1"
+    ]
+  },
+  "state": {
+    "userName": "Elena",
+    "consentAcceptedAt": "2026-10-15T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "termsAcceptedAt": "2026-10-15T19:12:00-07:00",
+    "healthConsentAt": "2026-10-15T19:12:00-07:00",
+    "activeProfileId": "p-self",
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Elena",
+          "relationship": "self",
+          "createdAt": "2026-10-15T19:12:00-07:00",
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-15T19:12:00-07:00",
+            "closedAt": "2026-10-15T19:12:00-07:00"
+          },
+          "dob": "1978-04-04",
+          "sexAtBirth": "female",
+          "intake": {
+            "ageBand": "46-50",
+            "conditions": [],
+            "medications": [],
+            "country": "US"
+          }
+        }
+      }
+    },
+    "conversations": {
+      "byId": {
+        "c-s19": {
+          "id": "c-s19",
+          "profileId": "p-self",
+          "scriptId": "sleep-3am",
+          "topic": "Waking at 3am",
+          "status": "answered",
+          "startedAt": "2026-10-15T19:20:00-07:00",
+          "symptomGroup": "sleep",
+          "journey": "female-peri",
+          "intakePlan": [
+            "reproductive",
+            "period-changes",
+            "symptoms-peri",
+            "how-long",
+            "red-flags-female"
+          ],
+          "intakeDone": [
+            "reproductive",
+            "period-changes",
+            "symptoms-peri",
+            "how-long",
+            "red-flags-female"
+          ],
+          "facts": [
+            {
+              "id": "f-s19-1",
+              "key": "reproductive",
+              "questionId": "reproductive",
+              "label": "Hormonal stage",
+              "value": "Perimenopausal",
+              "patch": {
+                "intake": {
+                  "reproductive": "perimenopausal"
+                }
+              },
+              "source": "answer",
+              "status": "pending"
+            },
+            {
+              "id": "f-s19-2",
+              "key": "symptoms",
+              "questionId": "symptoms-peri",
+              "label": "Symptoms",
+              "value": "Night sweats, Waking around 3am",
+              "patch": {
+                "intake": {
+                  "symptoms": [
+                    "Night sweats",
+                    "Waking around 3am"
+                  ]
+                }
+              },
+              "source": "answer",
+              "status": "pending"
+            },
+            {
+              "id": "f-s19-3",
+              "key": "medications",
+              "label": "Medications",
+              "value": "Levothyroxine",
+              "patch": {
+                "intake": {
+                  "medications": [
+                    "Levothyroxine"
+                  ]
+                }
+              },
+              "source": "message",
+              "status": "pending"
+            }
+          ],
+          "messages": [
+            {
+              "id": "m-s19-1",
+              "role": "user",
+              "kind": "text",
+              "createdAt": "2026-10-15T19:20:00-07:00",
+              "text": "I keep waking at 3am. I take levothyroxine every morning."
+            },
+            {
+              "id": "m-s19-2",
+              "role": "deborah",
+              "kind": "text",
+              "createdAt": "2026-10-15T19:24:00-07:00",
+              "text": "Thank you for walking me through all of that. Before you go, here is what I noted.",
+              "meta": {
+                "status": "placeholder"
+              }
+            },
+            {
+              "id": "m-s19-3",
+              "role": "deborah",
+              "kind": "reviewFacts",
+              "createdAt": "2026-10-15T19:24:10-07:00",
+              "text": ""
+            }
+          ]
+        }
+      },
+      "activeByProfile": {
+        "p-self": "c-s19"
+      }
+    },
+    "accountId": "acct-s19",
+    "accountEmail": "elena@example.com"
+  }
+}

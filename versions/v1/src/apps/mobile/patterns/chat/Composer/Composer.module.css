@@ -1,0 +1,121 @@
+.wrap { display: grid; gap: var(--space-2); }
+.wrap:has(.disclaimer) { gap: var(--space-1); }
+
+/* Card composer: optional inset banner on top, text area, then a tool row (attach · mic … send).
+   Floating element, so the soft shadow is allowed. `.bar` is the stacking context EdgeLight's
+   bloom sits in (behind the card's fill). */
+.bar { position: relative; isolation: isolate; }
+
+/* Solid field, no rim: the travelling light is the only edge (design direction 2026-10-12,
+   matches the Home launcher). */
+.root {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) 2px 2px;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px rgb(97 57 119 / 0.1), 0 1px 3px rgb(97 57 119 / 0.06);
+}
+
+/* EdgeLight (inside .root) draws the travelling light; hidden while locked. */
+.bar[data-locked] .root > svg { display: none; }
+/* …and off while typing: the bar is in use. */
+.root:focus-within > svg { display: none; }
+
+/* Inset strip docked to the card's top edge; its radius nests inside the card's. */
+.banner {
+  border-radius: var(--radius-lg);
+  background: var(--color-accent-tint);
+}
+
+/* Left inset = (44 px tap target − 24 px glyph) / 2, so the text starts on the + icon's edge. */
+.field { min-width: 0; display: grid; gap: 2px; padding: var(--space-1) 14px 0; }
+/* Composer text one step under body, so the bar reads as a calm input, not a headline. */
+.field textarea { font-size: var(--fs-callout); line-height: var(--lh-callout); }
+/* Empty state reads as one line: the placeholder never wraps, it truncates. */
+.field textarea:placeholder-shown { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.counter { justify-self: end; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); color: var(--color-ink-tertiary); }
+.counter[data-over] { color: var(--color-danger-ink); }
+
+/* Attach and mic read as one pair: their 48 pt hit areas overlap slightly so the glyphs sit ~16 pt apart. */
+.toolbar { display: flex; align-items: center; gap: 0; }
+.toolbar > :first-child { margin-right: -8px; }
+
+.send {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--color-accent);
+  transition: background-color var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
+}
+/* Ready: a 36 pt filled disc drawn inside the 48 pt hit area, so it matches the other tools' scale
+   and sits with equal space to the card's right and bottom edges. */
+.send[data-ready] { color: var(--color-ink-on-accent); }
+.send[data-ready] button { background: radial-gradient(circle closest-side, var(--color-accent) 0 calc(100% - 6px), transparent calc(100% - 5.5px)); }
+.send[data-ready] button { color: inherit; }
+
+.bar[data-locked] .root { background: var(--purple-50); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+.locked { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-danger-ink); text-align: center; }
+
+/* Recording lives inside the same glass card: ✕ · wave · timer · Stop · Send. */
+.recordingRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding-right: 2px;
+}
+
+/* Live level bars, centred in the free space. */
+.wave { flex: 1; min-width: 0; height: 28px; display: flex; align-items: center; justify-content: center; gap: 3px; overflow: hidden; color: var(--color-accent); }
+.wave > span {
+  flex: none;
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  transform: scaleY(0.2);
+  animation: level 900ms var(--ease-out) infinite alternate;
+}
+@keyframes level { 0% { transform: scaleY(0.15); } 60% { transform: scaleY(0.8); } 100% { transform: scaleY(0.35); } }
+@media (prefers-reduced-motion: reduce) { .wave > span { animation: none; transform: scaleY(0.35); } }
+
+.timer { flex: none; min-width: 4ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-ui); font-variant-numeric: tabular-nums; color: var(--color-ink-secondary); text-align: right; }
+
+.stopRec, .sendRec {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+.stopRec { background: var(--color-accent-tint); color: var(--color-accent); }
+.stopRec:active { background: var(--color-accent-tint-pressed); }
+.sendRec { background: var(--color-accent); color: var(--color-ink-on-accent); }
+.sendRec:active { background: var(--color-accent-pressed); }
+.stopRec:focus-visible, .sendRec:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+/* Quiet disclaimer: smallest type step (footnote), tertiary ink — still ≥ 7:1 on the canvas. */
+.disclaimer {
+  padding: 0 var(--space-4);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-tertiary);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* "Symptoms": a quiet text button next to attach; opens the SymptomPicker sheet. */
+.symptoms { margin-left: auto; margin-right: var(--space-2); display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; padding: 0 var(--space-3); border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1px var(--surface-border); font: var(--weight-regular) var(--fs-footnote) / 1 var(--font-body); color: var(--color-ink); }
+.symptoms:disabled { opacity: 0.45; }
+.symptoms:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+/* With Symptoms present it takes the auto margin, sitting just left of send. */
+.symptoms + .send { margin-left: 0; }

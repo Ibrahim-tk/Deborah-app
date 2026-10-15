@@ -1,0 +1,62 @@
+/* Fills the stage; the sizer reserves the scaled footprint so centring and overflow behave. */
+.stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+}
+
+.sizer {
+  position: relative;
+  width: var(--sized-w);
+  height: var(--sized-h);
+  margin: auto;
+}
+
+.device {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 419px;  /* 393 + 2 × 13 bezel */
+  height: 878px; /* 852 + 2 × 13 bezel */
+  padding: 13px;
+  border-radius: 68px;
+  background: #1b1b1d;
+  box-shadow:
+    inset 0 0 0 2px #3a3a3e,
+    inset 0 0 0 5px #0d0d0e,
+    0 30px 60px rgba(0, 0, 0, 0.25),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+  transform: scale(var(--device-scale));
+  transform-origin: top left;
+}
+
+/* Decorative side buttons. */
+.button {
+  position: absolute;
+  width: 4px;
+  border-radius: 2px;
+  background: #2a2a2d;
+}
+.action { left: -3px; top: 150px; height: 32px; }
+.volUp { left: -3px; top: 210px; height: 62px; }
+.volDown { left: -3px; top: 286px; height: 62px; }
+.power { right: -3px; top: 240px; height: 100px; }
+
+.screen {
+  position: relative;
+  width: 393px;
+  height: 852px;
+  overflow: clip;
+  border-radius: 55px;
+  background: #ffffff;
+  isolation: isolate;
+}
+
+/* The app always lays out at device points; the keyboard shrinks it from the bottom. */
+.app {
+  position: absolute;
+  inset: 0 0 var(--keyboard-height) 0;
+  overflow: clip;
+}

@@ -1,0 +1,68 @@
+/* Home states (Figma 191:3398). Lilac hero at 20 pt padding; inner rows on white at 85%. */
+.hero { display: grid; gap: var(--space-4); padding: 20px; border-radius: var(--radius-xl); background: var(--card-tone-lilac); color: var(--color-ink); }
+.heroText { display: grid; gap: 6px; }
+.kicker { display: flex; align-items: center; gap: 6px; font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-accent); }
+/* Sans titles: the serif is reserved for the Home greeting (design direction 2026-10-12). */
+.heroTitle { font: var(--weight-medium) var(--fs-title-3) / var(--lh-title-3) var(--font-body); letter-spacing: -0.02em; color: var(--color-ink); }
+.heroBody { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-secondary); }
+
+.prompts, .habits, .list { display: grid; margin: 0; padding: 0; list-style: none; }
+.prompts { gap: var(--space-2); }
+.prompt {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 12px 12px 12px var(--space-4);
+  border-radius: var(--radius-lg);
+  background: rgb(255 255 255 / 0.85);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+.prompt:active { background: rgb(255 255 255 / 0.6); }
+.prompt:focus-visible, .step:focus-visible, .habit:focus-visible, .familyRow:focus-visible, .profileCard:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.pending { padding: 12px var(--space-4); border-radius: var(--radius-lg); background: rgb(255 255 255 / 0.85); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); }
+
+/* Build your health profile: ring · text · action on linen. */
+.profileCard { display: flex; align-items: center; gap: var(--space-3); width: 100%; padding: var(--space-4); border-radius: var(--radius-xl); background: var(--card-tone-linen); color: var(--color-ink); text-align: left; -webkit-tap-highlight-color: transparent; }
+.profileText { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.cardTitle { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cardMeta { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-body); }
+
+/* Add a family member: a plain row, no card. */
+.familyRow { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 44px; padding: 4px; color: var(--color-ink); text-align: left; -webkit-tap-highlight-color: transparent; }
+.plus { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--card-tone-rose); }
+.familyText { flex: 1; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; }
+
+/* Next steps: one glass list, rows with a title and a reason. */
+.section { display: grid; gap: 10px; }
+.list { gap: 2px; padding: 6px; border-radius: var(--radius-xl); background: rgb(255 255 255 / 0.6); border: 1px solid rgb(255 255 255 / 0.85); }
+.step { display: flex; align-items: center; gap: var(--space-3); width: 100%; padding: 10px 10px 10px 10px; border-radius: var(--radius-lg); color: var(--color-ink); text-align: left; -webkit-tap-highlight-color: transparent; transition: background-color var(--dur-quick) var(--ease-out); }
+.step:active { background: var(--color-surface-lilac); }
+.stepText { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.stepTitle { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; }
+.stepSub { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.stepIcon { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--color-surface-lilac); color: var(--color-accent); }
+
+/* Today's habits: tap to mark. */
+.habits { gap: 2px; padding: 4px; border-radius: var(--radius-lg); background: rgb(255 255 255 / 0.85); }
+.habit { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 44px; padding: 0 var(--space-3); border-radius: var(--radius-md); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); text-align: left; -webkit-tap-highlight-color: transparent; }
+.mark { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: var(--radius-full); border: 1.5px solid color-mix(in srgb, var(--color-accent) 50%, transparent); color: var(--white); transition: background-color var(--dur-quick) var(--ease-out); }
+.mark[data-on] { border-color: var(--color-accent); background: var(--color-accent); }
+.todayFoot { display: flex; align-items: center; gap: var(--space-3); }
+.todayBar { flex: 1; max-width: none; margin-top: 0; }
+
+/* Complete your profile hero: ring beside the title. Start with Deborah steps down to linen. */
+.heroHead { display: flex; align-items: center; gap: var(--space-3); }
+.heroHead .heroText { flex: 1; min-width: 0; }
+.secondary { display: grid; gap: var(--space-4); padding: 20px; border-radius: var(--radius-xl); background: rgb(255 255 255 / 0.72); border: 1px solid rgb(255 255 255 / 0.95); color: var(--color-ink); }
+/* On the white card the prompts take the lilac quiz-row tint, so they still read as rows. */
+.secondary .prompt { background: color-mix(in srgb, var(--color-surface-lilac) 60%, var(--white)); }
+.secondary .prompt:active { background: var(--color-surface-lilac); }

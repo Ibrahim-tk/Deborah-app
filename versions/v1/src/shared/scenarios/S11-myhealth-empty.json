@@ -1,0 +1,105 @@
+{
+  "id": "S11",
+  "now": "2026-10-30T08:10:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "health",
+    "stack": [
+      "M-7.2"
+    ]
+  },
+  "state": {
+    "userName": "Maria",
+    "accountId": "acct-maria",
+    "accountEmail": "maria@icloud.com",
+    "consentAcceptedAt": "2026-10-30T08:02:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "notificationPermission": "unknown",
+    "plan": "individual",
+    "billing": "monthly",
+    "freeConsultationsUsed": 0,
+    "renewsAt": "2026-11-29T08:02:00-08:00",
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "intake": {
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "none"
+            ],
+            "ageBand": "46-50",
+            "profileFor": "self",
+            "reproductive": "perimenopausal",
+            "cycle": "irregular",
+            "allergies": [
+              "none"
+            ],
+            "country": "US",
+            "height": "165 cm",
+            "weight": "68 kg"
+          },
+          "createdAt": "2026-10-30T08:02:00-07:00",
+          "sexAtBirth": "female",
+          "health": {
+            "birthYear": {
+              "value": 1978,
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "sexAtBirth": {
+              "value": "female",
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "genderIdentity": {
+              "value": "woman",
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "heightCm": {
+              "value": 165,
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "weightKg": {
+              "value": 68,
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "medications": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "allergies": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            },
+            "conditions": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-30T08:02:00-07:00"
+            }
+          },
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-30T08:02:00-07:00",
+            "closedAt": "2026-10-30T08:02:00-07:00"
+          }
+        }
+      }
+    },
+    "healthConsentAt": "2026-10-30T08:02:00-07:00"
+  }
+}

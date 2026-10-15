@@ -1,0 +1,11 @@
+.root { position: relative; height: 100%; }
+.body { display: grid; gap: var(--space-5); }
+.kindText, .source, .label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.field { display: grid; gap: var(--space-2); }
+.field > textarea { padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border-control); border-radius: var(--radius-md); background: var(--color-surface); }
+.field:focus-within > textarea { padding: calc(var(--space-3) - 1px) calc(var(--space-4) - 1px); border: 2px solid var(--color-border-selected); }
+
+.checklist { display: grid; gap: var(--space-2); }
+.items { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.item { display: flex; align-items: flex-start; gap: var(--space-3); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.box { flex: none; width: 20px; height: 20px; margin-top: 4px; border: 1.5px solid var(--color-border-control); border-radius: var(--radius-sm); background: var(--color-surface); }

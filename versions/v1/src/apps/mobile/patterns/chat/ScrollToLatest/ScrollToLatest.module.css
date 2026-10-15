@@ -1,0 +1,1 @@
+.root { position: absolute; bottom: calc(100% + var(--space-3)); left: 50%; transform: translateX(-50%); }

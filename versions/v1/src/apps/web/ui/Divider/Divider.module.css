@@ -1,0 +1,2 @@
+.root { height: 1px; margin: 0; border: 0; background: var(--color-border-hairline); }
+.inset { margin-inline: var(--space-4); }

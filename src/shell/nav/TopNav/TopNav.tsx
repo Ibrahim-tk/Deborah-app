@@ -1,4 +1,5 @@
 /** @shell TopNav — fixed 56 px bar: brand · platform tabs · auto demo · journeys · state menu · reset · toggles. */
+import { FlowVersionSwitch } from '../FlowVersionSwitch/FlowVersionSwitch';
 import { PlatformTabs } from '../PlatformTabs';
 import { StateMenu } from '../StateMenu';
 import { ResetButton } from '../ResetButton';
@@ -17,6 +18,7 @@ export function TopNav() {
         <span aria-hidden="true">◆</span> Oracle Clinician · prototype v{VERSION}
       </span>
       <nav className={styles.center} aria-label="Prototype">
+        <FlowVersionSwitch />
         <PlatformTabs />
       </nav>
       <div className={styles.actions}>

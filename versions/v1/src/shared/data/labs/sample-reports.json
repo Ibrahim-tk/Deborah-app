@@ -1,0 +1,11 @@
+{
+  "sample-a": {
+    "labName": "Sample Lab",
+    "collectedDaysAgo": 3,
+    "values": [
+      { "marker": "TSH", "value": "3.8", "unit": "mIU/L" },
+      { "marker": "Free T3", "value": "2.4", "unit": "pg/mL" },
+      { "marker": "Estradiol", "value": "45", "unit": "pg/mL" }
+    ]
+  }
+}

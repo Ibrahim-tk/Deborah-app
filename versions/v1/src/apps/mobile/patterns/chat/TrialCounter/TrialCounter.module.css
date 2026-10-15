@@ -1,0 +1,7 @@
+.root { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); text-align: center; }
+.hint { display: flex; justify-content: center; }
+
+/* Inline banner: sits inside the composer card's top strip. */
+.inline { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3); }
+.inlineText { min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink); }
+.upgrade { flex: none; min-height: 36px; font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); text-decoration: underline; text-underline-offset: 3px; }

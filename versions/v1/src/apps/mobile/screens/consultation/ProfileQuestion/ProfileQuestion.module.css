@@ -1,0 +1,3 @@
+.body { display: grid; gap: var(--space-4); padding-bottom: calc(var(--safe-bottom) + var(--space-2)); }
+.step { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.prompt { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); color: var(--color-ink); }

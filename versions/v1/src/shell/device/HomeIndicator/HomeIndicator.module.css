@@ -1,0 +1,14 @@
+.root {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  z-index: 50;
+  width: 134px;
+  height: 5px;
+  border-radius: 999px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.root[data-tone='dark'] { background: #000000; }
+.root[data-tone='light'] { background: #ffffff; }

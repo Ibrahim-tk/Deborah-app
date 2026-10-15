@@ -1,0 +1,27 @@
+.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); } /* Aura + GradientShift paint the backdrop, as on Home */
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.column { display: grid; gap: var(--space-6); padding: calc(var(--safe-top) + 64px) var(--margin-screen) var(--space-6); } /* the composer below handles the safe area */
+/* Not started: orb + greeting in the optical middle. Started: small orb top left, messages from the top. */
+.column:not([data-started]) { min-height: 100%; align-content: center; }
+.orb { display: flex; justify-content: center; }
+.column[data-started] .orb { justify-content: flex-start; margin-bottom: calc(var(--space-6) * -1 + var(--space-3)); }
+.entry { display: grid; min-width: 0; }
+/* Back-to-back Deborah lines read as one reply: tighter than the gap between turns. */
+.entry[data-entry='bot'] + .entry[data-entry='bot'] { margin-top: calc(var(--space-6) * -1 + var(--space-3)); }
+.known { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.bottom { flex: none; display: grid; gap: var(--space-4); /* breathing room between suggestions and the composer */ padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
+.widget { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+.widget[data-done] { pointer-events: none; }
+/* Opening greeting: Deborah's first line in serif, no bubble (design direction 2026-10-14). */
+.greetingLine { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-align: center; text-wrap: balance; }
+/* Reduced motion everywhere (design direction 2026-10-14): widgets and greetings only fade in, no movement. */
+.widget, .entry { animation: widget-in 320ms ease-out both; }
+@keyframes widget-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .widget, .entry { animation: none; } }
+.after { margin-top: var(--space-4); }
+.afterLine { margin-top: var(--space-5); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }
+.afterReveal { display: grid; gap: var(--space-4); animation: widget-in 360ms ease-out 1250ms both; }
+@media (prefers-reduced-motion: reduce) { .afterReveal { animation: none; } }
+/* Opening: the starters wait for the greeting's reveal, then fade in (no movement). */
+.starters { animation: widget-in 400ms ease-out 1100ms both; }
+@media (prefers-reduced-motion: reduce) { .starters { animation: none; } }

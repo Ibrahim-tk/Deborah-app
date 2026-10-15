@@ -1,0 +1,116 @@
+{
+  "id": "S05",
+  "now": "2026-10-14T19:30:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "ask",
+    "stack": [
+      "M-2.1"
+    ]
+  },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-01T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 2,
+    "followUpSnoozeUntil": 4,
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "intake": {
+            "ageBand": "46-50",
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "none"
+            ],
+            "cycle": "irregular",
+            "profileFor": "self",
+            "reproductive": "perimenopausal",
+            "allergies": [
+              "none"
+            ],
+            "country": "US",
+            "height": "165 cm",
+            "weight": "68 kg"
+          },
+          "createdAt": "2026-10-01T19:12:00-07:00",
+          "sexAtBirth": "female",
+          "health": {
+            "birthYear": {
+              "value": 1978,
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "sexAtBirth": {
+              "value": "female",
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "genderIdentity": {
+              "value": "woman",
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "heightCm": {
+              "value": 165,
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "weightKg": {
+              "value": 68,
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "medications": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "allergies": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            },
+            "conditions": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-01T19:12:00-07:00"
+            }
+          },
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-01T19:12:00-07:00",
+            "closedAt": "2026-10-01T19:12:00-07:00"
+          }
+        }
+      }
+    },
+    "accountId": "acct-s05",
+    "accountEmail": "maria@example.com",
+    "healthConsentAt": "2026-10-01T19:12:00-07:00"
+  },
+  "conversations": {
+    "c-001": {
+      "profileId": "p-self",
+      "scriptId": "sleep-3am",
+      "messages": "@script:sleep-3am#answered",
+      "daysAgo": 10
+    },
+    "c-002": {
+      "profileId": "p-self",
+      "scriptId": "thyroid-fatigue",
+      "messages": "@script:thyroid-fatigue#answered",
+      "daysAgo": 4
+    }
+  }
+}

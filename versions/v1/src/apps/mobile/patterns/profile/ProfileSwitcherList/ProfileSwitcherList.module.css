@@ -1,0 +1,42 @@
+.root { display: grid; gap: var(--space-3); }
+.list { display: grid; gap: var(--space-2); }
+
+.row,
+.add {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-min);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  color: var(--color-ink);
+  text-align: left;
+  transition: background-color var(--dur-quick) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.row { background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-control); }
+.row[data-active='true'] { background: var(--color-surface-lilac); box-shadow: inset 0 0 0 2px var(--color-border-selected); }
+.row:active, .add:active:not(:disabled) { background: var(--color-accent-tint); }
+.row:focus-visible, .add:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+.text { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.name { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
+.relation { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.check { flex: none; color: var(--color-accent); }
+
+/* Dashed outline marks "a slot you can fill" (F06 M-6.1); no badge for the plan lock. */
+.add { border: 1px dashed var(--color-border-control); background: transparent; }
+.add:disabled { cursor: default; color: var(--color-ink-secondary); }
+.addIcon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-full); background: var(--color-surface-tonal); }
+.addLabel { flex: 1; min-width: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.lock {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

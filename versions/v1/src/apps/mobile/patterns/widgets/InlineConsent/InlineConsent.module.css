@@ -1,0 +1,44 @@
+.root { composes: card from '../widget.module.css'; }
+.title { composes: title from '../widget.module.css'; }
+.body { composes: text from '../widget.module.css'; text-wrap: pretty; }
+.done { composes: done from '../widget.module.css'; }
+.actions { composes: actions from '../widget.module.css'; margin-top: var(--space-1); }
+.link { display: inline; padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.link:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+/* Very subtle fill so "Not now" reads as a button, without competing with Agree. */
+.notNow { background: rgb(48 35 53 / 0.04); }
+.notNow:hover, .notNow:active { background: rgb(48 35 53 / 0.08); }
+
+/* ── Variations (2026-10-14) ── compare in /wid. */
+/* Row: compact. Sans title, smaller body, both actions on one line with Agree on the right (thumb side). */
+.root[data-variant='row'], .root[data-variant='strip'], .root[data-variant='dark'] { gap: var(--space-2); padding: var(--space-4); }
+.root[data-variant='row'] .title, .root[data-variant='strip'] .title, .root[data-variant='dark'] .title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.01em; }
+.root[data-variant='row'] .body, .root[data-variant='strip'] .body, .root[data-variant='dark'] .body { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.root[data-variant='row'] .actions, .root[data-variant='dark'] .actions { grid-template-columns: 1fr 1fr; margin-top: var(--space-2); }
+.root[data-variant='row'] .agree, .root[data-variant='dark'] .agree { order: 2; }
+
+/* Strip: a plum rule on the left carries the importance; one action, "Not now" as a quiet text link. */
+.root[data-variant='strip'] { box-shadow: inset 3px 0 0 var(--color-accent), inset 0 0 0 1px var(--surface-border), var(--surface-highlight); }
+.root[data-variant='strip'] .actions { display: flex; align-items: center; gap: var(--space-4); margin-top: var(--space-2); }
+.textLink { min-height: 44px; padding: 0 var(--space-1); border: 0; background: none; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.textLink:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+
+/* Dark: midnight glass like the confirm card; white Agree, translucent Not now. All text ≥7:1. */
+.root[data-variant='dark'] { color: #fff; background: radial-gradient(120% 90% at 85% 110%, rgb(128 74 138 / 0.45), transparent 60%), linear-gradient(160deg, #2e1d3a, #1d1424); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 12px 32px rgb(29 20 36 / 0.22); }
+.root[data-variant='dark'] .title { color: #fff; }
+.root[data-variant='dark'] .body { color: #e2d8e8; }
+.root[data-variant='dark'] .link { color: #fff; }
+.root[data-variant='dark'] .agree { background: #fff; color: #1d1424; box-shadow: none; }
+.root[data-variant='dark'] .notNow { background: rgb(255 255 255 / 0.1); color: #fff; }
+
+/* Privacy policy / Terms and disclaimer: a bottom sheet over the chat. */
+.layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+.scrim { position: absolute; inset: 0; border: 0; background: var(--color-scrim); animation: fade var(--dur-base) var(--ease-out) both; }
+.sheet { position: relative; display: flex; flex-direction: column; max-height: 82%; padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4)); border-radius: 32px 32px 0 0; background: var(--color-canvas); box-shadow: 0 -12px 40px rgb(18 7 33 / 0.12); animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both; }
+.grabber { align-self: center; flex: none; width: 36px; height: 5px; margin-bottom: var(--space-3); border-radius: var(--radius-full); background: var(--color-border-hairline); }
+.sheetHead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); }
+.sheetTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.sheetBody { display: grid; gap: var(--space-3); min-height: 0; overflow-y: auto; overscroll-behavior: contain; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }

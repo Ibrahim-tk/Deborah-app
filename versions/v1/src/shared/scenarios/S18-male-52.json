@@ -1,0 +1,56 @@
+{
+  "id": "S18",
+  "now": "2026-10-15T19:30:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "ask",
+    "stack": [
+      "M-2.0",
+      "M-2.1"
+    ]
+  },
+  "state": {
+    "userName": "James",
+    "consentAcceptedAt": "2026-10-15T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "termsAcceptedAt": "2026-10-15T19:12:00-07:00",
+    "healthConsentAt": "2026-10-15T19:12:00-07:00",
+    "activeProfileId": "p-self",
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "James",
+          "relationship": "self",
+          "createdAt": "2026-10-15T19:12:00-07:00",
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-15T19:12:00-07:00",
+            "closedAt": "2026-10-15T19:12:00-07:00"
+          },
+          "dob": "1974-02-09",
+          "sexAtBirth": "male",
+          "intake": {
+            "ageBand": "51-55",
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "none"
+            ],
+            "allergies": [
+              "none"
+            ],
+            "country": "US"
+          }
+        }
+      }
+    },
+    "accountId": "acct-s18",
+    "accountEmail": "james@example.com"
+  }
+}

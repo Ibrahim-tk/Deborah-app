@@ -1,0 +1,18 @@
+/* src/styles/motion.css — shared motion hooks.
+ * ASSUMPTION: duration/easing tokens live in tokens.primitives.css (DESIGN.md values:
+ * 160/240/320/360 ms). docs/09-styling.md §5 lists older values (120/240/380); DESIGN.md wins.
+ * The shell's reduced-motion toggle adds `.reduced-motion` on <html>; it mirrors the
+ * prefers-reduced-motion block in apps/mobile/styles/mobile.tokens.css. */
+html.reduced-motion {
+  --dur-quick: 0ms;
+  --dur-base: 120ms;
+  --dur-screen: 120ms;
+  --dur-sheet: 120ms;
+}
+
+html.reduced-motion .phone-root {
+  --dur-quick: 0ms;
+  --dur-base: 120ms;
+  --dur-screen: 120ms;
+  --dur-sheet: 120ms;
+}

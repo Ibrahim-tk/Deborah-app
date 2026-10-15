@@ -1,0 +1,19 @@
+.root { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
+.link {
+  display: grid;
+  justify-items: start;
+  align-content: space-between;
+  gap: var(--space-3);
+  min-height: 88px;
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+  color: var(--color-ink);
+  text-align: left;
+  transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+}
+.link:active { transform: scale(0.98); background: var(--color-accent-tint); }
+.link:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.icon { color: var(--color-accent); }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; }

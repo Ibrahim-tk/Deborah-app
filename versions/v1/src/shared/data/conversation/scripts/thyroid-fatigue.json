@@ -1,0 +1,32 @@
+{
+  "id": "thyroid-fatigue",
+  "topic": "your thyroid and tiredness",
+  "match": ["thyroid", "tsh", "always tired", "fatigue", "cold all the time", "hair thinning", "weight gain"],
+  "intake": ["age", "meds", "cycle"],
+  "voiceSample": "I'm tired all the time, I feel cold, and I wonder if it's my thyroid.",
+  "openingMessage": "Should I get my thyroid checked? I'm tired all the time.",
+  "readyLine": "Thank you, {name}. I have what I need. Tap below whenever you're ready for my thoughts.",
+  "suggestedQuestions": ["My TSH was normal — could it still be my thyroid?", "What else causes tiredness like this?"],
+  "answer": {
+    "sections": [
+      { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, you're running on empty most days, and you're wondering whether your thyroid could be behind it. That's a thoughtful question to ask." },
+      { "key": "hypothalamic", "title": "The Hypothalamic Connection", "body": "Your thyroid takes its cues from the hypothalamus and pituitary. If that chain of signals is strained — by stress, poor sleep or hormonal change — your thyroid may not get the message clearly, and your energy can drop even when one lab looks fine." },
+      { "key": "mayMean", "title": "What This May Mean", "body": "Ongoing tiredness may be related to thyroid function, but it might also reflect iron levels, blood sugar, sleep quality or the hormonal transition. It's worth exploring the whole picture with your provider." },
+      { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["Could we look at a full thyroid panel, not only TSH?", "Should we check my iron and ferritin?", "Could my sleep or stress be affecting my energy?", "How will we decide what's normal for me?"] },
+      { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["TSH, free T3 and free T4 — free T3 shows the active thyroid hormone.", "Thyroid antibodies — may show whether the immune system is involved.", "Ferritin and iron — low iron is a common, overlooked cause of fatigue.", "Vitamin D — often low, and linked with low energy."] },
+      { "key": "doNow", "title": "What You Can Do Now", "body": "While you gather answers, these steps from my Five Pillars support steady energy:", "bullets": ["Eat breakfast with protein within an hour of waking.", "Walk outside for ten minutes after lunch.", "Keep a simple energy diary to share with your provider."] },
+      { "key": "word", "title": "A Word from Deborah", "body": "{name}, tiredness that won't lift deserves attention, not a shrug. Asking good questions is how you get real answers. I'm proud of you for starting." }
+    ],
+    "product": { "productId": "genesis-gold", "why": "Supports the hypothalamus that sends signals to your thyroid, with whole-food nutrition.", "frame90": "Give your body 90 days of steady nourishment while you work with your provider." },
+    "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+    "habitsForPlan": ["Protein breakfast within an hour of waking", "Ten-minute walk after lunch", "Daily energy diary"],
+    "goal": "Steadier daily energy",
+    "summary": "Ongoing tiredness and a question about thyroid function."
+  },
+  "followUps": [
+    { "match": ["normal", "tsh"], "reply": "It's possible. TSH is only one signal in the chain. Asking about free T3, free T4 and antibodies may give a fuller picture of how your thyroid is really working." },
+    { "match": ["else", "other", "cause"], "reply": "Iron and ferritin, vitamin D, blood sugar swings, sleep and hormonal shifts are all common contributors. That's why I suggest looking at the whole picture." }
+  ],
+  "fallbackReply": "Good question, {name}. I'll keep it in mind as I put my thoughts together.",
+  "status": "placeholder"
+}

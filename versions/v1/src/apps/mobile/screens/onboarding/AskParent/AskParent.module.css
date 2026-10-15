@@ -1,0 +1,14 @@
+.root { position: relative; height: 100%; isolation: isolate; background: var(--color-canvas); }
+.scroll {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-10);
+  height: 100%;
+  overflow-y: auto;
+  padding: calc(var(--safe-top) + var(--space-4)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
+}
+.intro { flex: 1; display: grid; align-content: center; justify-items: start; gap: var(--space-5); }
+.title { margin: 0; font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); color: var(--color-ink); text-wrap: balance; }
+.text { margin: 0; max-width: 34ch; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); }
+.bottom { display: grid; gap: var(--space-3); }

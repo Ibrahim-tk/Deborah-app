@@ -1,0 +1,78 @@
+/* Transparent so the shared photo backdrop (--surface-canvas) runs behind the bar. */
+.root { position: relative; z-index: 3; flex: none; background: transparent; }
+/* iOS scroll-edge feather: content scrolling up dissolves into the bar (progressive blur + fade)
+   instead of being cut at a hard line. Invisible at rest over empty canvas. */
+.root:not(.transparent)::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 20px;
+  pointer-events: none;
+  /* Blur only, no colour: a canvas-coloured fill painted a pale band over the violet photo. */
+  background: transparent;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+  mask-image: linear-gradient(to bottom, #000, transparent);
+}
+.safeTop { padding-top: var(--safe-top); }
+.transparent { background: transparent; }
+
+.bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: var(--header-h);
+  padding: 0 var(--margin-screen);
+}
+.side { display: flex; align-items: center; min-width: 0; container-type: inline-size; }
+.right { grid-column: 3; justify-content: flex-end; }
+
+.title {
+  max-width: 220px;
+  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
+  text-align: center;
+  overflow-wrap: break-word;
+}
+/* The inline twin of a large title fades in as the large title folds away. */
+.title[data-inline-large] { opacity: 0; transition: opacity var(--dur-quick) var(--ease-out); }
+.title[data-inline-large][data-shown] { opacity: 1; }
+
+.largeWrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--dur-base) var(--ease-ios), opacity var(--dur-base) var(--ease-out);
+}
+.largeWrap[data-collapsed] { grid-template-rows: 0fr; opacity: 0; }
+.largeWrap > .large { overflow: hidden; min-height: 0; }
+
+.large {
+  padding: 0 var(--margin-screen) var(--space-2);
+  font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+
+/* Every action in the bar is native iOS 26 glass: 44 pt round, clear lens (barely blurred), specular rim
+   (matches GlassButton). Applies to the IconButtons screens pass in left/right. */
+.side > [data-icon-button] {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  color: var(--color-ink);
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.04) 55%, rgb(255 255 255 / 0.1));
+  box-shadow:
+    inset 1px 1px 0.5px -0.5px rgb(255 255 255 / 0.95),
+    inset -1px -1px 0.5px -0.5px rgb(255 255 255 / 0.6),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.35),
+    inset 0 0 8px rgb(255 255 255 / 0.18),
+    0 4px 14px rgb(18 7 33 / 0.08);
+  -webkit-backdrop-filter: blur(1.5px) saturate(185%) brightness(1.08) contrast(1.05);
+  backdrop-filter: blur(1.5px) saturate(185%) brightness(1.08) contrast(1.05);
+  transition: transform 220ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.side > [data-icon-button]:active { transform: scale(1.06); }
+.right { gap: var(--space-2); }

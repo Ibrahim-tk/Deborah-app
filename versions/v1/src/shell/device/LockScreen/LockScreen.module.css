@@ -1,0 +1,57 @@
+/* iOS lock screen (system chrome, not product UI). Sits below the status bar and island. */
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  padding: 72px 12px 40px;
+  color: #ffffff;
+  /* Static wallpaper (docs/03-prototype-shell.md §3); nothing animates on it. */
+  background: linear-gradient(165deg, #3b1a5e 0%, #2b104e 45%, #140726 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  touch-action: none;
+  user-select: none;
+  animation: lock-in 160ms ease-out;
+  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1), opacity 120ms linear;
+}
+.root[data-unlocking] { transform: translateY(-100%); pointer-events: none; }
+
+@keyframes lock-in { from { opacity: 0; } }
+
+.clock { display: grid; justify-items: center; gap: 2px; margin-bottom: 40px; }
+.lock { margin-bottom: 8px; opacity: 0.9; }
+.date { font-size: 21px; font-weight: 500; line-height: 26px; opacity: 0.92; }
+.time { font-size: 92px; font-weight: 500; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+
+.list { display: grid; gap: 8px; align-content: start; flex: 1; min-height: 0; overflow-y: auto; }
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 22px;
+  background: rgba(245, 242, 248, 0.94);
+  color: #000000;
+  text-align: left;
+}
+.card:active { transform: scale(0.98); }
+.card:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }
+.icon { flex: none; width: 38px; height: 38px; border-radius: 9px; background: #291832; }
+.cardText { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.cardHead { display: flex; justify-content: space-between; gap: 8px; }
+.app { font-size: 15px; font-weight: 500; line-height: 20px; }
+.when { flex: none; font-size: 13px; line-height: 20px; color: #3c3c43; }
+.body { font-size: 15px; line-height: 20px; }
+
+.hint { align-self: center; min-height: 44px; padding: 0 16px; color: #ffffff; font-size: 15px; opacity: 0.85; }
+.hint:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; border-radius: 8px; }
+
+:global(.reduced-motion) .root { animation: none; }
+:global(.reduced-motion) .root[data-unlocking] { transform: none; opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .root { animation: none; }
+  .root[data-unlocking] { transform: none; opacity: 0; }
+}

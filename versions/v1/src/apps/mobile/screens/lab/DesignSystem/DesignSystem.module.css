@@ -1,0 +1,51 @@
+/* Design system page: sidebar + scrolling content, inside phone-root so every token is the app's own. */
+.root {
+  --safe-top: 0px;
+  --safe-bottom: 0px;
+  --keyboard-height: 0px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  height: 100%;
+  background: var(--surface-canvas);
+}
+
+.sidebar {
+  display: flex; flex-direction: column; gap: var(--space-6); min-height: 0; overflow-y: auto;
+  padding: var(--space-6) var(--space-4);
+  border-right: 1px solid var(--color-border-hairline);
+  background: rgb(255 255 255 / 0.55);
+  /* Page chrome stays put when the text size control scales the content. */
+  --fs-headline: 17px; --lh-headline: 22px; --fs-subhead: 15px; --lh-subhead: 20px; --fs-footnote: 13px; --lh-footnote: 18px;
+}
+.brand { display: flex; align-items: center; gap: var(--space-3); padding-inline: var(--space-2); }
+.brandName { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.brandSub { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+
+.nav { display: grid; gap: var(--space-5); }
+.navGroup { display: grid; gap: 2px; }
+.navTitle { padding: 0 var(--space-3) var(--space-1); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.navItem {
+  min-height: 36px; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); text-align: left;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body);
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+.navItem:hover { background: var(--color-accent-tint); }
+.navActive { background: var(--color-accent-tint); color: var(--color-ink); font-weight: var(--weight-medium); }
+
+.scroll { min-height: 0; overflow-y: auto; scroll-behavior: smooth; }
+.content { width: 100%; max-width: 1120px; margin-inline: auto; padding: var(--space-4) var(--space-10) var(--space-16); }
+
+.overlayHost { position: absolute; inset: 0; z-index: 100; pointer-events: none; }
+.overlayHost > * { pointer-events: auto; }
+
+@media (max-width: 860px) {
+  .root { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  .sidebar { flex-direction: row; align-items: center; overflow-x: auto; overflow-y: hidden; padding: var(--space-3) var(--space-4); border-right: 0; border-bottom: 1px solid var(--color-border-hairline); }
+  .brand { display: none; }
+  .nav { display: flex; gap: var(--space-1); }
+  .navGroup { display: flex; gap: var(--space-1); }
+  .navTitle { display: none; }
+  .navItem { white-space: nowrap; }
+  .content { padding-inline: var(--space-4); }
+}

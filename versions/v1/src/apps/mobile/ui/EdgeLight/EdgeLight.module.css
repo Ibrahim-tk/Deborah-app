@@ -1,0 +1,12 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+/* Behind the card's fill, so only light thrown outward shows. */
+.bloom { z-index: -1; }
+
+/* Motion runs through the Web Animations API (see EdgeLight.tsx) so all segments share one clock. */

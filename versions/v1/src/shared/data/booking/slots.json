@@ -1,0 +1,11 @@
+{
+  "durationMin": 50,
+  "price": null,
+  "format": "Video call",
+  "prepare": ["Your recent lab results", "A list of your medications and supplements", "The questions you most want answered"],
+  "statesLicensed": [],
+  "states": ["Arizona", "California", "Colorado", "Florida", "Illinois", "Massachusetts", "New York", "Oregon", "Texas", "Washington", "Other"],
+  "dailyTimes": ["09:00", "10:30", "13:00", "14:30", "16:00"],
+  "unavailable": [[1, "09:00"], [1, "13:00"], [2, "10:30"], [3, "14:30"], [3, "16:00"], [4, "09:00"], [5, "13:00"]],
+  "status": "placeholder"
+}

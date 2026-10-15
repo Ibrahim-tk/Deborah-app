@@ -1,0 +1,49 @@
+{
+  "version": "0.1-draft",
+  "summaryBullets": [
+    "This app offers health education and wellness guidance.",
+    "It does not diagnose, prescribe or replace your provider.",
+    "It is not emergency care. In an emergency, call 911.",
+    "Your health data stays private and is never sold."
+  ],
+  "aiDisclosure": "You're talking to an AI trained only on Deborah's published work.",
+  "careLine": "Not a substitute for professional care. In an emergency, call local services.",
+  "aiDisclosureShort": "I'm an AI version of Deborah, built only from her published work.",
+  "terms": {
+    "title": "Terms & Disclaimer",
+    "body": [
+      "Your Oracle Clinician provides general health education based on the published work of Deborah Maragopoulos FNP. It is not medical advice, diagnosis or treatment.",
+      "Always talk with a qualified provider before making decisions about your health, medications or treatment. Never ignore professional advice or delay seeking it because of something you read here.",
+      "If you think you may have a medical emergency, call 911 or go to the nearest emergency room immediately.",
+      "Placeholder text — attorney-drafted terms will replace this before launch."
+    ]
+  },
+  "privacy": {
+    "title": "How your health data is protected",
+    "body": [
+      "We treat everything you share as protected health information under HIPAA, CCPA and CMIA.",
+      "Your conversations are never used to train AI models without your explicit consent.",
+      "Notifications on your lock screen never show symptoms, conditions or product names.",
+      "You can download or delete your data at any time from Account › Privacy & data.",
+      "Placeholder text — the final privacy notice will replace this before launch."
+    ]
+  },
+  "status": "placeholder",
+  "profileConsent": {
+    "status": "placeholder",
+    "open": "Exact child and teen consent rules and wording are pending legal review (meeting 2026-10-12 · D). Shared by onboarding (M-1.8) and Add family member (M-6.2).",
+    "title": "Before we set up {name}’s profile",
+    "child": {
+      "body": "Profiles for children under 13 are set up and managed by a parent or legal guardian. Their information stays in your account, and you can delete it at any time.",
+      "check": "I am {name}’s parent or legal guardian"
+    },
+    "teen": {
+      "body": "Profiles for teens aged 13 to 17 come with extra privacy protections. The exact rules are still being finalised, and we’ll explain them before anything changes.",
+      "check": "I am {name}’s parent or legal guardian, and {name} knows I’m setting this up"
+    },
+    "adult": {
+      "body": "{name} is an adult, so their health information belongs to them. Only add them if they’ve agreed.",
+      "check": "{name} knows I’m adding them and agrees"
+    }
+  }
+}

@@ -1,0 +1,3 @@
+.root { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap-min); color: var(--color-ink-secondary); }
+.labelWrap { display: grid; }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; }

@@ -1,0 +1,4 @@
+.icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: var(--radius-md); background: var(--color-surface-tonal); color: var(--color-ink-secondary); }
+.meta { display: block; }
+/* The note's first line, wrapped rather than cut mid-word (DESIGN.md › Text size control). */
+.preview { display: block; color: var(--color-ink-tertiary); overflow-wrap: break-word; }

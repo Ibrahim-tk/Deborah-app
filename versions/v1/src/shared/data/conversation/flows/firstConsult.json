@@ -1,0 +1,698 @@
+{
+  "flowId": "genesis_first_consult_v1",
+  "version": "1.0",
+  "status": "placeholder",
+  "description": "Scripted first consultation after sign-up (docs/ux/F02c). Reads the health basics as context and never re-asks them: mood check-in -> what she already knows -> topic -> 3 clarifiers (symptoms, impact, duration) -> safety screen -> 7-section answer -> follow-up -> visit prep -> labs -> booking -> check-in reminder. {tokens} come from the profile and earlier answers. Prebuilt Q&A, no live LLM.",
+  "startNode": "opener",
+  "contentStatus": "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off before any user-facing use.",
+  "carriedFromIntake": {
+    "note": "Never re-ask any of these. Use them to personalize.",
+    "firstName": "Linda",
+    "age": 62,
+    "gender": "female",
+    "concerns": [
+      "sleep",
+      "energy"
+    ],
+    "followUp.sleep": "sweats",
+    "flag.hormoneLink": true,
+    "meds": [
+      {
+        "name": "Levothyroxine",
+        "dose": "50mcg"
+      },
+      {
+        "name": "Magnesium",
+        "dose": "400mg"
+      }
+    ],
+    "interactionAlertShown": "levothyroxine + magnesium spacing"
+  },
+  "newVariables": [
+    "duration",
+    "cycleStatus",
+    "redFlags",
+    "freeAnswersUsed"
+  ],
+  "uiDefaults": {
+    "minFontPx": 18,
+    "minTapTargetPx": 56,
+    "allowVoice": true,
+    "typingIndicatorMs": 1100,
+    "oneQuestionAtATime": true,
+    "showSkipOnClarifiers": true,
+    "earlyExitLabel": "Show me what you found"
+  },
+  "nodes": {
+    "opener": {
+      "type": "question",
+      "display": "greeting",
+      "bot": "How are you feeling today, Linda?",
+      "widget": {
+        "type": "suggested_replies",
+        "options": [
+          {
+            "label": "I can't sleep through the night",
+            "value": "sleep",
+            "next": "starter_ack"
+          },
+          {
+            "label": "I'm tired all the time",
+            "value": "energy",
+            "next": "starter_ack"
+          },
+          {
+            "label": "My mood is all over the place",
+            "value": "mood",
+            "next": "starter_ack"
+          }
+        ]
+      }
+    },
+    "context_ack": {
+      "type": "message",
+      "bot": "I've read everything you shared when you signed up, so you won't need to repeat any of it. Here's what I'm keeping in mind:",
+      "next": "ask_topic"
+    },
+    "starter_ack": {
+      "type": "message",
+      "bot": "Oh, I'm sorry. That wears you down in every part of your day. Thank you for telling me.",
+      "next": "context_topic"
+    },
+    "context_topic": {
+      "type": "message",
+      "bot": "I've read everything you shared when you signed up, so you won't need to repeat any of it. Here's what I'm keeping in mind:",
+      "next": "ask_symptoms"
+    },
+    "ask_topic": {
+      "type": "question",
+      "bot": "So tell me, what would you most like help with right now?",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "Sleep and night sweats",
+            "value": "sleep"
+          },
+          {
+            "label": "Low energy",
+            "value": "energy"
+          },
+          {
+            "label": "Mood or anxiety",
+            "value": "mood"
+          },
+          {
+            "label": "Weight changes",
+            "value": "weight"
+          },
+          {
+            "label": "Something else",
+            "next": "chat_free"
+          }
+        ]
+      },
+      "saveAs": "topic",
+      "next": "ask_symptoms",
+      "uiNote": "OPEN: only the sleep answer is scripted; other topics reuse it (docs/ux/F02c › Open)."
+    },
+    "ask_symptoms": {
+      "type": "question",
+      "progress": "1 of 3",
+      "bot": "That's one of the most common things women bring to me, and it's very real. Which of these have you noticed too?",
+      "widget": {
+        "type": "pill_select",
+        "multi": true,
+        "exclusiveOption": "none",
+        "options": [
+          {
+            "label": "Night sweats",
+            "value": "sweats"
+          },
+          {
+            "label": "Waking around 3am",
+            "value": "3am"
+          },
+          {
+            "label": "Racing thoughts",
+            "value": "racing"
+          },
+          {
+            "label": "An afternoon slump",
+            "value": "slump"
+          },
+          {
+            "label": "Brain fog",
+            "value": "fog"
+          },
+          {
+            "label": "None of these",
+            "value": "none"
+          }
+        ]
+      },
+      "saveAs": "symptoms",
+      "next": "ask_impact"
+    },
+    "ask_impact": {
+      "type": "question",
+      "progress": "2 of 3",
+      "bot": "Thank you. And how much is all of this getting in the way of your days?",
+      "widget": {
+        "type": "scale_check",
+        "title": "Getting in the way",
+        "low": "Not at all",
+        "high": "Completely"
+      },
+      "saveAs": "impact",
+      "next": "ask_duration"
+    },
+    "ask_duration": {
+      "type": "question",
+      "progress": "3 of 3",
+      "bot": "I hear you. How long has it been like this?",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "A few weeks",
+            "value": "weeks"
+          },
+          {
+            "label": "1–6 months",
+            "value": "months"
+          },
+          {
+            "label": "More than 6 months",
+            "value": "6mplus"
+          },
+          {
+            "label": "Years",
+            "value": "years"
+          }
+        ]
+      },
+      "saveAs": "duration",
+      "next": "ask_cycle"
+    },
+    "ask_cycle": {
+      "type": "question",
+      "bot": "One thing I don't know yet: where are you with your periods?",
+      "widget": {
+        "type": "pill_select",
+        "options": [
+          {
+            "label": "Still getting them",
+            "value": "cycling"
+          },
+          {
+            "label": "Stopped less than a year ago",
+            "value": "peri"
+          },
+          {
+            "label": "Stopped over a year ago",
+            "value": "post"
+          },
+          {
+            "label": "Had a hysterectomy",
+            "value": "surgical"
+          }
+        ]
+      },
+      "saveAs": "cycleStatus",
+      "simulatedAnswer": "post",
+      "next": "ask_redflags",
+      "skipIfKnown": "cycleStatus"
+    },
+    "ask_redflags": {
+      "type": "question",
+      "bot": "Last one, just to be safe. Have you had any of these lately?",
+      "widget": {
+        "type": "pill_select",
+        "multi": true,
+        "exclusiveOption": "none",
+        "options": [
+          {
+            "label": "Fever",
+            "value": "fever"
+          },
+          {
+            "label": "Weight loss I can't explain",
+            "value": "weightloss"
+          },
+          {
+            "label": "Soaking sweats with chills",
+            "value": "chills"
+          },
+          {
+            "label": "Chest pain or fainting",
+            "value": "chest"
+          },
+          {
+            "label": "None of these",
+            "value": "none"
+          }
+        ]
+      },
+      "saveAs": "redFlags",
+      "simulatedAnswer": [
+        "none"
+      ],
+      "branches": [
+        {
+          "if": "redFlags.includes('none') || redFlags.length == 0",
+          "next": "check_more"
+        },
+        {
+          "if": "redFlags.includes('chest')",
+          "next": "safety_urgent"
+        },
+        {
+          "else": true,
+          "next": "safety_see_provider"
+        }
+      ],
+      "uiNote": "Safety screen disguised as a normal question. Night sweats + fever/weight loss must not get a hormone-only answer."
+    },
+    "safety_see_provider": {
+      "type": "message",
+      "flow": "F03",
+      "bot": "Thank you for telling me, Linda. Night sweats together with fever, chills or weight loss you can't explain are worth getting checked by a provider soon, before we look at hormones. This doesn't count toward your free answers.",
+      "countsTowardFreeLimit": false,
+      "next": "check_more",
+      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); Deborah's tile is offered after the answer (talk_direct)."
+    },
+    "thinking": {
+      "type": "loading",
+      "bot": "Looking at this through my upstream lens…",
+      "widget": {
+        "type": "thinking_steps",
+        "steps": [
+          "Your {symptoms}",
+          "{medShort}",
+          "{stageShort}"
+        ],
+        "durationMs": 2500
+      },
+      "uiNote": "Steps reflect HER inputs, not generic 'Analyzing…'. Builds trust that answers are personal.",
+      "next": "answer_1"
+    },
+    "answer_1": {
+      "type": "answer",
+      "set": {
+        "freeAnswersUsed": 1
+      },
+      "layout": "progressive",
+      "uiNote": "Sections 1–2 open by default. 3–7 are collapsed cards with a one-line preview. Sticky 'Save for my doctor' button.",
+      "sections": [
+        {
+          "id": 1,
+          "title": "What I'm Hearing",
+          "defaultOpen": true,
+          "body": "You've been living with {symptoms} for {duration}, and it's sitting at about {impact} out of 10 in your days. You're {age} and {stage}{medClause}. That's a lot to carry, and it makes complete sense that you're tired."
+        },
+        {
+          "id": 2,
+          "title": "The Hypothalamic Connection",
+          "defaultOpen": true,
+          "body": "Think of your hypothalamus as your body's thermostat and sleep clock in one. When estrogen drops after menopause, that thermostat can misfire at night and trigger a sweat. Broken sleep then leaves less energy for the day. So your sweats and your tiredness may share one upstream cause."
+        },
+        {
+          "id": 3,
+          "title": "What This May Mean",
+          "preview": "Three things worth exploring",
+          "body": [
+            "Low estrogen may be making your temperature control less steady at night.",
+            "Your thyroid may be worth a fresh look. I often meet women who are 'in range' on TSH and still don't feel like themselves.",
+            "A night-time hormone called prolactin may be out of rhythm, which can affect both sleep and energy."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Questions to Ask Your Provider",
+          "preview": "4 questions, ready to save",
+          "body": [
+            "Could my {symptoms} be linked to my hormones changing?",
+            "Can we check free T3 and free T4, not just TSH?",
+            "Are my hormones and thyroid where they should be at {age}?",
+            "Would a morning prolactin test make sense for my sleep?"
+          ],
+          "action": {
+            "label": "Save for my doctor",
+            "next": "save_visit_prep"
+          }
+        },
+        {
+          "id": 5,
+          "title": "Tests Worth Discussing",
+          "preview": "5 tests and why they matter",
+          "body": [
+            {
+              "test": "TSH, free T4, free T3",
+              "why": "Shows if your thyroid hormones are actually reaching your cells."
+            },
+            {
+              "test": "FSH and estradiol",
+              "why": "Confirms where your estrogen levels are now."
+            },
+            {
+              "test": "Prolactin, drawn 8–9am",
+              "why": "Checks if your night-time hormone switches off properly in the morning."
+            },
+            {
+              "test": "Hemoglobin A1C",
+              "why": "Blood sugar swings can also cause night sweats."
+            },
+            {
+              "test": "Vitamin D",
+              "why": "Helps your hormones work at the cell level."
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "What You Can Do Now",
+          "preview": "Small steps for tonight",
+          "body": [
+            "Keep your bedroom cool (around 60–67°F) and fully dark.",
+            "Put screens away at dusk. Blue light delays your sleep hormone.",
+            "Have a light, early dinner so digestion isn't working overnight.",
+            "Get 20 minutes of morning daylight to reset your body clock."
+          ],
+          "productCard": {
+            "label": "From Deborah's own line",
+            "disclosure": "Deborah created this product. It's optional, and you don't need it to use the app.",
+            "name": "Genesis Gold®",
+            "line": "Plant-based nutrition designed to support the hypothalamus. Most women give it at least 90 days.",
+            "personalNote": "{medNote}",
+            "actions": [
+              {
+                "label": "Learn more",
+                "next": "exit_product"
+              },
+              {
+                "label": "Ask about my thyroid medicine",
+                "next": "followup_q"
+              }
+            ]
+          }
+        },
+        {
+          "id": 7,
+          "title": "A Word from Deborah",
+          "preview": "A note for you",
+          "body": "Linda, so many women are told this is 'just hormones' and to wait it out. You don't have to. Understanding the why is the first step to sleeping through the night again."
+        }
+      ],
+      "footer": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+      "suggestedReplies": [
+        {
+          "label": "Is Genesis Gold safe with {medMine}?",
+          "next": "followup_q"
+        },
+        {
+          "label": "Why does prolactin matter?",
+          "next": "chat_free"
+        },
+        {
+          "label": "Save for my doctor",
+          "next": "save_visit_prep"
+        }
+      ],
+      "simulatedAnswer": "Can I take Genesis Gold with my thyroid medicine?"
+    },
+    "followup_q": {
+      "type": "user_message",
+      "user": "Is Genesis Gold safe with {medMine}?",
+      "next": "answer_2"
+    },
+    "answer_2": {
+      "type": "answer",
+      "set": {
+        "freeAnswersUsed": 2
+      },
+      "layout": "conversational",
+      "uiNote": "Follow-ups are short chat replies, NOT another 7-section report.",
+      "bot": "I'm glad you asked before starting. Keep {medYours} exactly as your prescriber told you, and take Genesis Gold at a different time of day. It contains sea vegetables, which naturally carry iodine, and iodine talks to your thyroid. So tell your prescriber before you start, and recheck your thyroid labs after a couple of months.",
+      "widget": {
+        "type": "inline_tip",
+        "tone": "gentle",
+        "text": "I've added this to your doctor questions."
+      },
+      "sideEffect": {
+        "appendToVisitPrep": "Is Genesis Gold safe with {medMine}, and how far apart should I take them?"
+      },
+      "footer": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+      "next": "talk_direct"
+    },
+    "talk_direct": {
+      "type": "question",
+      "bot": "Your sleep has been off for {duration}. If you'd like, we can go through it together, one to one.",
+      "widget": {
+        "type": "escalation",
+        "options": [
+          {
+            "label": "Book with Deborah",
+            "next": "offer_booking"
+          },
+          {
+            "label": "Not now",
+            "next": "save_visit_prep"
+          }
+        ]
+      }
+    },
+    "save_visit_prep": {
+      "type": "message",
+      "bot": "I've put your questions and tests on one page you can show your provider.",
+      "widget": {
+        "type": "visit_prep_card",
+        "title": "For my next appointment",
+        "itemsFrom": [
+          "answer_1.section4",
+          "answer_1.section5",
+          "answer_2.sideEffect"
+        ],
+        "actions": [
+          {
+            "label": "Share as PDF",
+            "value": "pdf"
+          },
+          {
+            "label": "Save to My Health",
+            "value": "save"
+          }
+        ]
+      },
+      "uiNote": "Lands in F09 My Health records.",
+      "next": "offer_labs"
+    },
+    "offer_labs": {
+      "type": "question",
+      "bot": "If you have any recent lab results, I'd love to read them alongside everything you've told me.",
+      "widget": {
+        "type": "upload_card",
+        "options": [
+          {
+            "label": "Maybe later",
+            "next": "offer_checkin"
+          }
+        ]
+      },
+      "saveAs": "labFile",
+      "next": "labs_ack"
+    },
+    "labs_ack": {
+      "type": "message",
+      "bot": "Got it, thank you. I'll keep your thyroid markers right next to your sleep story, so nothing gets looked at in isolation.",
+      "next": "offer_checkin"
+    },
+    "offer_booking": {
+      "type": "question",
+      "bot": "Lovely. These are my next openings.",
+      "widget": {
+        "type": "slot_picker",
+        "title": "Book with Deborah",
+        "meta": "30 min · Video",
+        "options": [
+          {
+            "label": "Not right now",
+            "next": "save_visit_prep"
+          }
+        ]
+      },
+      "saveAs": "slot",
+      "next": "confirm_booking"
+    },
+    "confirm_booking": {
+      "type": "question",
+      "bot": "Lovely. Just check this looks right.",
+      "widget": {
+        "type": "confirm_card",
+        "title": "Deborah · 30 min",
+        "value": "$150",
+        "detail": "{slot} · Video",
+        "label": "Booked. You'll get a reminder."
+      },
+      "saveAs": "booked",
+      "next": "booked",
+      "uiNote": "Price is placeholder; no payment, simulated."
+    },
+    "booked": {
+      "type": "message",
+      "bot": "You're booked. I'll have your notes and questions in front of me when we talk.",
+      "next": "save_visit_prep"
+    },
+    "offer_checkin": {
+      "type": "question",
+      "bot": "One last thing. Would you like me to check in on your sleep in two weeks?",
+      "widget": {
+        "type": "reminder_card",
+        "title": "Sleep check-in",
+        "detail": "In 2 weeks · 8:00 pm",
+        "options": [
+          {
+            "label": "No thanks",
+            "next": "close_no"
+          }
+        ]
+      },
+      "saveAs": "checkInOptIn",
+      "next": "close_yes"
+    },
+    "close_yes": {
+      "type": "message",
+      "bot": "Done. I'll check in with you then. Be gentle with yourself tonight, Linda. Sleep well.",
+      "next": "chat"
+    },
+    "close_no": {
+      "type": "message",
+      "bot": "That's completely fine. I'm here whenever you want to pick this up, Linda.",
+      "next": "chat"
+    },
+    "chat_free": {
+      "type": "end",
+      "route": "/chat",
+      "note": "Out of scope for this script."
+    },
+    "exit_labs": {
+      "type": "end",
+      "route": "/labs/upload",
+      "note": "F05 Labs flow."
+    },
+    "exit_booking": {
+      "type": "end",
+      "route": "/book",
+      "note": "F08 Book Deborah."
+    },
+    "exit_product": {
+      "type": "end",
+      "route": "/shop/genesis-gold",
+      "note": "In-app shop."
+    },
+    "chat": {
+      "type": "end",
+      "route": "/chat"
+    },
+    "safety_urgent": {
+      "type": "message",
+      "flow": "F03",
+      "bot": "Thank you for telling me, Linda. Chest pain or fainting always deserves a proper check, and soon. If it's happening right now, please call 911 or go to the nearest emergency room. Otherwise, let's get you seen by a provider this week. This doesn't count toward your free answers.",
+      "countsTowardFreeLimit": false,
+      "next": "check_more",
+      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); Deborah's tile is offered after the answer (talk_direct)."
+    },
+    "check_more": {
+      "type": "question",
+      "bot": "Thank you, Linda. I have a good picture now. Is there anything else on your mind before I share what I'm seeing?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "That's everything, go ahead",
+            "next": "thinking"
+          },
+          {
+            "label": "There's something else",
+            "next": "add_more"
+          }
+        ]
+      }
+    },
+    "add_more": {
+      "type": "question",
+      "bot": "Of course. Tell me in your own words, there's no wrong answer.",
+      "widget": {
+        "type": "free_text",
+        "placeholder": "What else is going on…"
+      },
+      "saveAs": "extra",
+      "next": "add_ack"
+    },
+    "add_ack": {
+      "type": "message",
+      "bot": "Thank you for sharing that with me. I'll keep it in mind as we look at this together.",
+      "next": "thinking"
+    }
+  },
+  "freeLimit": {
+    "max": 3,
+    "rule": "Paywall only after the 3rd answer is read, never mid-conversation. Safety replies never count.",
+    "stateAtEndOfScript": "2 of 3 used"
+  },
+  "testScenarios": [
+    {
+      "name": "Happy path (profile known)",
+      "path": [
+        "opener",
+        "mood_ack",
+        "context_ack",
+        "ask_topic",
+        "ask_symptoms",
+        "ask_impact",
+        "ask_duration",
+        "ask_redflags",
+        "thinking",
+        "answer_1",
+        "followup_q",
+        "answer_2",
+        "save_visit_prep",
+        "offer_labs",
+        "labs_ack",
+        "offer_booking",
+        "confirm_booking",
+        "booked",
+        "offer_checkin",
+        "close_yes"
+      ],
+      "expect": [
+        "ask_cycle skipped (stage on file)",
+        "no profile question repeated"
+      ]
+    },
+    {
+      "name": "Red flag selected",
+      "inputs": {
+        "redFlags": [
+          "fever"
+        ]
+      },
+      "expect": [
+        "safety_see_provider shown",
+        "does not count toward free limit"
+      ]
+    },
+    {
+      "name": "Skips all clarifiers",
+      "expect": "answer_1 still renders, using intake data only"
+    },
+    {
+      "name": "Taps 'Show me what you found' after Q1",
+      "expect": "jumps to thinking -> answer_1"
+    },
+    {
+      "name": "Declines check-in",
+      "expect": "close_no, no reminder created"
+    }
+  ]
+}

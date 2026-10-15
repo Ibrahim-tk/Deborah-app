@@ -1,0 +1,26 @@
+/* Inline record: one quiet frosted row (icon · title + meta · chevron) that reopens the sheet. */
+.record { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 64px; margin-top: var(--space-2); padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-card-sm, 20px); background: var(--surface-1, var(--color-surface)); box-shadow: inset 0 0 0 1px var(--surface-border, var(--color-border-hairline)); text-align: left; cursor: pointer; transition: background var(--dur-base) var(--ease-out); }
+.record:active { background: var(--color-accent-tint); }
+.record:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.recordIcon { display: grid; flex: none; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--color-accent-tint); color: var(--color-accent); }
+.recordText { display: grid; flex: 1; min-width: 0; }
+.recordTitle { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.recordMeta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.recordChevron { flex: none; color: var(--color-ink-secondary); }
+
+/* Bottom sheet */
+.layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+.scrim { position: absolute; inset: 0; border: 0; background: var(--color-scrim); animation: fade var(--dur-base) var(--ease-out) both; }
+.sheet { position: relative; display: grid; gap: var(--space-3); padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4)); border-radius: 32px 32px 0 0; background: var(--color-canvas); box-shadow: 0 -12px 40px rgb(18 7 33 / 0.12); animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both; }
+.grabber { justify-self: center; width: 36px; height: 5px; margin-bottom: var(--space-2); border-radius: var(--radius-full); background: var(--color-border-hairline); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; }
+.reasons { display: grid; gap: var(--space-1); padding-left: var(--space-5); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); list-style: disc; }
+/* What booking means, as light lilac info pills (design direction 2026-10-14; OPEN: DESIGN.md bans tags). */
+.details { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.detail { display: inline-flex; align-items: center; min-height: 28px; padding: 0 var(--space-3); border-radius: var(--radius-full); background: var(--color-accent-tint); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink); }
+.actions { display: grid; gap: var(--space-3); margin-top: var(--space-2); }
+.actions > * { white-space: nowrap; }
+.notNow { background: rgb(48 35 53 / 0.04); }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }

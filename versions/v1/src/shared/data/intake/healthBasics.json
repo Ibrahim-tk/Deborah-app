@@ -1,0 +1,96 @@
+{
+  "status": "placeholder",
+  "note": "Onboarding profile (M-1.8), in order — after sign-up (M-1.4), before the chat. Who the profile is for, then age and sex at birth: only what decides who Deborah talks to and which questions apply. Health details (stage, medications, allergies…) are never asked here; Deborah asks them in the conversation and saves them through Review and Confirm. `showIf` hides a step unless every listed answer matches; `ageGroup` (child · teen · adult) is derived from `birthYear`. `titleOther` is used when the profile is for someone else, with {name} as their first name. Decisions D-1 (birth year wheel) and D-2 (sex at birth only) from the onboarding plan. Wording is placeholder.",
+  "steps": [
+    {
+      "key": "profileFor",
+      "kind": "profileFor",
+      "title": "Who is this profile for?"
+    },
+    {
+      "key": "relationship",
+      "kind": "choice",
+      "title": "Who are they to you?",
+      "showIf": {
+        "profileFor": {
+          "in": [
+            "dependent"
+          ]
+        }
+      },
+      "choices": [
+        {
+          "value": "daughter",
+          "label": "Daughter"
+        },
+        {
+          "value": "son",
+          "label": "Son"
+        },
+        {
+          "value": "partner",
+          "label": "Partner"
+        },
+        {
+          "value": "parent",
+          "label": "Parent"
+        },
+        {
+          "value": "other",
+          "label": "Someone else"
+        }
+      ]
+    },
+    {
+      "key": "memberName",
+      "kind": "name",
+      "title": "What’s their first name?",
+      "placeholder": "First name",
+      "showIf": {
+        "profileFor": {
+          "in": [
+            "dependent"
+          ]
+        }
+      }
+    },
+    {
+      "key": "birthYear",
+      "kind": "year",
+      "title": "What year were you born?",
+      "titleOther": "What year was {name} born?"
+    },
+    {
+      "key": "consent",
+      "kind": "consent",
+      "title": "Before we set up {name}’s profile",
+      "showIf": {
+        "profileFor": {
+          "in": [
+            "dependent"
+          ]
+        }
+      }
+    },
+    {
+      "key": "sex",
+      "kind": "choice",
+      "title": "Sex at birth",
+      "titleOther": "{name}’s sex at birth",
+      "choices": [
+        {
+          "value": "female",
+          "label": "Female"
+        },
+        {
+          "value": "male",
+          "label": "Male"
+        },
+        {
+          "value": "intersex",
+          "label": "Intersex"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "S03",
+  "now": "2026-10-07T19:34:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "preauth",
+    "stack": [
+      "M-1.2",
+      "M-1.8"
+    ]
+  },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "intake": {
+            "conditions": [],
+            "medications": []
+          },
+          "createdAt": "2026-10-07T19:12:00-07:00"
+        }
+      }
+    },
+    "accountId": "acct-s03",
+    "accountEmail": "maria@example.com"
+  },
+  "conversations": {}
+}

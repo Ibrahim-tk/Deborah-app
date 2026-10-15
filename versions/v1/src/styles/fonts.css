@@ -1,0 +1,5 @@
+/* src/styles/fonts.css — self-host the display serif from public/fonts (Cormorant Garamond 400 + italic 400).
+ * Body and UI text use SF Pro through the system stack (-apple-system); it is not bundled (Apple licence).
+ * On non-Apple machines the prototype falls back to system-ui. */
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }

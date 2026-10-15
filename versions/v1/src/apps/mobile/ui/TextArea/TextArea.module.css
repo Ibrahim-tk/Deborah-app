@@ -1,0 +1,16 @@
+.root {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.015em;
+  resize: none;
+  outline: none;
+}
+
+.root.root:focus, .root.root:focus-visible { outline: none; } /* beats the global .phone-root :focus-visible */
+.root::placeholder { color: var(--color-ink-placeholder); }
+.root:disabled { color: var(--color-ink-secondary); }

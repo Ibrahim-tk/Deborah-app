@@ -1,0 +1,32 @@
+{
+  "id": "generic",
+  "topic": "how you've been feeling",
+  "match": [],
+  "intake": ["age", "meds", "cycle"],
+  "voiceSample": "I just haven't been feeling like myself lately.",
+  "openingMessage": "I haven't been feeling like myself lately.",
+  "readyLine": "Thank you, {name}. I have a clearer picture now. Tap below when you'd like my thoughts, or tell me more first.",
+  "suggestedQuestions": ["Where should I start?", "What should I tell my provider?"],
+  "answer": {
+    "sections": [
+      { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, something has shifted and you don't feel like yourself. That feeling is worth listening to, even when it's hard to put into words." },
+      { "key": "hypothalamic", "title": "The Hypothalamic Connection", "body": "Your hypothalamus links your hormones, sleep, mood, appetite and temperature. When it's under strain, changes can show up in many small ways at once — which is why it can be hard to pin down." },
+      { "key": "mayMean", "title": "What This May Mean", "body": "General changes like this may relate to hormonal shifts, sleep, stress, nutrition or thyroid function. It's worth exploring them one by one with your provider rather than guessing." },
+      { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["What could explain the changes I've noticed?", "Which tests would give us a useful baseline?", "Could my hormones be shifting?", "What should I track before our next visit?"] },
+      { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["A full thyroid panel — TSH, free T3 and free T4.", "Hormone levels appropriate to your age and cycle.", "Ferritin and vitamin D — common, simple checks.", "Fasting glucose — a baseline for blood sugar."] },
+      { "key": "doNow", "title": "What You Can Do Now", "body": "Start with the foundations from my Five Pillars:", "bullets": ["Keep regular sleep and wake times.", "Include protein at every meal.", "Write down what you notice each day for two weeks."] },
+      { "key": "word", "title": "A Word from Deborah", "body": "{name}, you know your body better than anyone. Trust that feeling, ask your questions, and be patient with yourself while you find the answers." }
+    ],
+    "product": { "productId": "genesis-gold", "why": "Whole-food support for the hypothalamus, the system that ties these changes together.", "frame90": "Give your hypothalamus 90 days of steady support." },
+    "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+    "habitsForPlan": ["Regular sleep and wake times", "Protein at every meal", "Two-week symptom diary"],
+    "goal": "Feeling like yourself again",
+    "summary": "A general sense of not feeling like herself."
+  },
+  "followUps": [
+    { "match": ["start"], "reply": "Start with sleep and steady meals — they're the foundation everything else rests on. And jot down what you notice, so your provider can see the pattern." },
+    { "match": ["tell", "provider", "doctor"], "reply": "Tell them what's changed, when it started, and how it affects your days. The questions in my answer are a good list to bring." }
+  ],
+  "fallbackReply": "Thank you, {name}. Tell me as much or as little as you like.",
+  "status": "placeholder"
+}

@@ -1,0 +1,6 @@
+.root { gap: var(--space-3); }
+.head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.chevron { flex: none; color: var(--color-ink-secondary); }
+.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.complete { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }

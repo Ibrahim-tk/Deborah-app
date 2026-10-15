@@ -1,0 +1,7 @@
+{
+  "status": "placeholder",
+  "medications": ["Levothyroxine", "Metformin", "Lisinopril", "Sertraline", "Estradiol", "Progesterone", "Atorvastatin", "Omeprazole"],
+  "supplements": ["Vitamin D", "Magnesium", "Omega-3", "Iron", "B12", "Probiotic", "Melatonin", "Ashwagandha"],
+  "allergies": ["Penicillin", "Sulfa drugs", "Ibuprofen", "Latex", "Peanuts", "Shellfish", "Pollen", "Iodine"],
+  "conditions": ["Hypothyroidism", "High blood pressure", "Diabetes", "Anxiety", "Depression", "Migraines", "PCOS", "Endometriosis"]
+}

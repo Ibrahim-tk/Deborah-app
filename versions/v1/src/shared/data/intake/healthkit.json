@@ -1,0 +1,13 @@
+{
+  "status": "placeholder",
+  "note": "Simulated Apple Health / Health Connect read: DOB, biological sex, height, weight and clinical records.",
+  "dob": "1978-04-12",
+  "sexAtBirth": "female",
+  "heightCm": 165,
+  "weightKg": 68,
+  "clinicalRecords": {
+    "medications": [{ "name": "Levothyroxine", "dose": "50 mcg", "frequency": "daily" }],
+    "allergies": [{ "substance": "Penicillin", "reaction": "rash" }],
+    "conditions": []
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "status": "placeholder",
+  "note": "Symptom picker in the composer (M-2.1, M-2.12). Plain-language names grouped by area; anything not listed can be typed and added as-is. Needs Deborah's review.",
+  "groups": [
+    { "title": "Sleep & energy", "items": ["Trouble falling asleep", "Waking around 3am", "Night sweats", "Afternoon slump", "Tired after a full night", "Restless legs"] },
+    { "title": "Temperature", "items": ["Hot flashes", "Always cold", "Cold hands and feet", "Chills"] },
+    { "title": "Mood & mind", "items": ["Anxiety", "Low mood", "Irritability", "Racing thoughts", "Brain fog", "Forgetfulness"] },
+    { "title": "Cycle & hormones", "items": ["Irregular periods", "Heavy periods", "Painful periods", "Spotting", "Breast tenderness", "Low libido", "Vaginal dryness"] },
+    { "title": "Weight & digestion", "items": ["Weight gain around the middle", "Sugar cravings", "Bloating", "Constipation", "Nausea", "Food sensitivities"] },
+    { "title": "Skin, hair & body", "items": ["Hair thinning", "Dry skin", "Acne", "Brittle nails", "Joint aches", "Muscle cramps", "Headaches", "Heart palpitations", "Dizziness", "Tinnitus", "Frequent urination", "Puffy face or eyes"] }
+  ]
+}

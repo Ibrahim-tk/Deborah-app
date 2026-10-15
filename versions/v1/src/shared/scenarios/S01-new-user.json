@@ -1,0 +1,6 @@
+{
+  "id": "S01",
+  "now": "2026-10-07T19:30:00-07:00",
+  "start": { "kind": "screen", "root": "preauth", "stack": ["M-1.1"] },
+  "state": {}
+}

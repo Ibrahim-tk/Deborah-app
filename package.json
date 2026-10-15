@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc -b",
-    "test:journeys": "node scripts/test-journey-contracts.cjs"
+    "test:journeys": "node scripts/test-journey-contracts.cjs",
+    "test:versions": "node scripts/test-flow-versions.cjs"
   },
   "dependencies": {
     "@fontsource/dm-sans": "^5.3.0",

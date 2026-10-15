@@ -6,6 +6,7 @@ const { test } = require('node:test');
 const ts = require('typescript');
 const cache = new Map();
 function source(file) {
+  if (process.env.FLOW_TEST_VERSION === 'v1' && file.startsWith('src/')) file = 'versions/v1/' + file;
   let resolved = path.resolve(__dirname, '..', file);
   if (!fs.existsSync(resolved) || fs.statSync(resolved).isDirectory()) {
     resolved = [resolved + '.ts', resolved + '.tsx', path.join(resolved, 'index.ts')].find(fs.existsSync);
@@ -15,7 +16,7 @@ function source(file) {
   if (cache.has(resolved)) return cache.get(resolved).exports;
   const module = { exports: {} }; cache.set(resolved, module);
   const js = ts.transpileModule(fs.readFileSync(resolved, 'utf8'), { fileName: resolved, compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
-  const localRequire = (id) => id.startsWith('.') ? source(path.resolve(path.dirname(resolved), id)) : id.startsWith('@shared/') ? source('src/shared/' + id.slice(8)) : require(id);
+  const localRequire = (id) => id.startsWith('@flow-v1/') ? source('versions/v1/src/' + id.slice(9)) : id.startsWith('.') ? source(path.resolve(path.dirname(resolved), id)) : id.startsWith('@shared/') ? source('src/shared/' + id.slice(8)) : require(id);
   new Function('require', 'module', 'exports', js)(localRequire, module, module.exports);
   return module.exports;
 }

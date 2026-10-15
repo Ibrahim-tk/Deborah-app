@@ -1,0 +1,28 @@
+.root {
+  display: inline-flex;
+  gap: 4px;
+  height: 100%;
+}
+
+.tab {
+  position: relative;
+  padding: 0 14px;
+  font-size: 14px;
+  color: var(--shell-muted);
+}
+
+.tab:hover { color: var(--shell-text); }
+.tab:focus-visible { outline: 2px solid var(--shell-accent); outline-offset: -6px; border-radius: 8px; }
+
+.tab[aria-selected='true'] { color: var(--shell-text); }
+
+.tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  bottom: 0;
+  left: 10px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--shell-accent);
+}

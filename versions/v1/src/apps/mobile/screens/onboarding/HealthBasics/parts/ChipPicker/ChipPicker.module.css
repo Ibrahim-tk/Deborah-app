@@ -1,0 +1,35 @@
+.root { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 40px; padding: 0 var(--space-4); border: 0; box-shadow: inset 0 0 0 1px var(--surface-border); border-radius: var(--radius-md); background: var(--color-surface); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); cursor: pointer; transition: background var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
+.chip[aria-pressed='true'] { box-shadow: inset 0 0 0 1.5px var(--color-border-selected); background: var(--purple-100); }
+.chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+/* A dedicated row keeps the answer chips still while Other opens into a field. */
+.otherRow { flex-basis: 100%; min-width: 0; margin-top: var(--space-1); }
+.adder { display: flex; align-items: center; box-sizing: border-box; width: 104px; max-width: 100%; min-height: 44px; border-radius: var(--radius-md); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--surface-border); transition: width 240ms var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
+.adder[data-expanded='true'] { width: 100%; padding-left: var(--space-4); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
+.other { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-1); width: 100%; min-height: 44px; padding: 0 var(--space-4); border: 0; border-radius: inherit; background: transparent; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); cursor: pointer; white-space: nowrap; }
+.other:hover { background: var(--purple-100); }
+.other:focus-visible, .add:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.root .field { flex: 1; width: 0; min-width: 0; padding: 0; border: 0; background: transparent; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); caret-color: var(--color-accent); outline: none; box-shadow: none; }
+.root .field:focus, .root .field:focus-visible { outline: none; box-shadow: none; }
+.field::placeholder { color: var(--color-ink-placeholder); }
+.add { display: grid; flex: 0 0 44px; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: var(--radius-md); background: var(--color-accent); color: var(--color-ink-on-accent); cursor: pointer; transition: opacity var(--dur-quick) var(--ease-out); }
+.add:disabled { opacity: 0.35; cursor: default; }
+.chip { max-width: 100%; overflow-wrap: anywhere; text-align: left; }
+@media (prefers-reduced-motion: reduce) {
+  .adder, .chip, .add { transition: none; }
+}
+
+/* EXPLORATION (2026-10-13): frosted pills; picked = accent tint with a plain line check that slides in (matches ChoicePills). */
+.chip { min-height: 44px; padding: 0 var(--space-4); border-radius: var(--radius-pill); background: var(--surface-1); box-shadow: inset 0 0 0 1px var(--surface-border), var(--surface-highlight); -webkit-backdrop-filter: var(--surface-blur); backdrop-filter: var(--surface-blur); gap: 0; transition: background var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+.chip[aria-pressed='true'] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); color: var(--color-ink); }
+.tick { display: inline-grid; place-items: center; width: 0; height: 18px; overflow: hidden; color: var(--color-ink); opacity: 0; transition: width var(--dur-base) var(--ease-out), margin var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out); }
+.chip[aria-pressed='true'] .tick { width: 18px; margin-right: var(--space-2); opacity: 1; }
+.adder { border-radius: var(--radius-pill); background: var(--surface-1); }
+.add { border-radius: var(--radius-pill); }
+
+/* Calm entrance: chips fade in one after another, no movement. */
+.chip, .otherRow { animation: chip-in 500ms ease-out both; }
+.chip:nth-child(2) { animation-delay: 50ms; } .chip:nth-child(3) { animation-delay: 100ms; } .chip:nth-child(4) { animation-delay: 150ms; }
+.chip:nth-child(5) { animation-delay: 200ms; } .chip:nth-child(6) { animation-delay: 250ms; } .chip:nth-child(n+7), .otherRow { animation-delay: 300ms; }
+@keyframes chip-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .chip, .otherRow { animation: none; } }

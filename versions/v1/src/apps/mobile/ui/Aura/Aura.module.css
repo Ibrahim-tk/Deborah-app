@@ -1,0 +1,39 @@
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--color-canvas);
+  pointer-events: none;
+}
+/* The photo as its own layer, lifted with a transform so a rise animates on the GPU (no repaints). */
+.root::before {
+  content: '';
+  position: absolute;
+  /* Twice the screen tall: the photo, then its mirror, so the lift never exposes a hard foot edge. */
+  inset: 0 0 -100%;
+  background:
+    url('/images/splash/splash-bg.png') top center / 100% 50% no-repeat,
+    url('/images/splash/splash-bg-foot.png') bottom center / 100% 50% no-repeat;
+  transform: translate3d(0, var(--backdrop-lift), 0);
+  will-change: transform;
+}
+
+/* Lilac foot pinned to the bottom, pushed 25% of its height past the edge (not lifted); multiply drops its white. */
+.root::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  aspect-ratio: 780 / 636;
+  background: url('/images/splash/bottom-hue.png') center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
+  transform: translateY(25%);
+}
+
+/* Rise: start exactly where Splash left the photo, then drift up slowly and settle softly. */
+.rise::before { animation: aura-rise 1.8s cubic-bezier(0.33, 0, 0.15, 1) both; }
+@keyframes aura-rise { from { transform: translate3d(0, 0, 0); } }
+
+@media (prefers-reduced-motion: reduce) { .rise::before { animation: none; } }

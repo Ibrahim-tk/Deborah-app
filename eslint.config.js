@@ -62,7 +62,7 @@ const policies = [
 ];
 
 export default tseslint.config(
-  { ignores: ['dist', 'node_modules', 'design-tokens', 'public'] },
+  { ignores: ['dist', 'node_modules', 'design-tokens', 'public', 'versions/v1/**'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],

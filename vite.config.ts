@@ -10,6 +10,7 @@ export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   resolve: {
     alias: {
+      '@flow-v1': fileURLToPath(new URL('./versions/v1/src', import.meta.url)),
       '@shell': src('shell'),
       '@shared': src('shared'),
       '@styles': src('styles'),

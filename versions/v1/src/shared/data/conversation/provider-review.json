@@ -1,0 +1,15 @@
+{
+  "status": "placeholder",
+  "note": "Provider-review ending for a reported non-emergency red flag. Educational draft pending Deborah review. Not a diagnosis or a hormone-only explanation; no products or automatic wellness plan.",
+  "lead": "Thank you for telling me. This deserves a provider's assessment. Here is how to prepare for that conversation.",
+  "sections": [
+    { "key": "hearing", "body": "You reported: {concerns}. I hear your concern, and it is worth bringing directly to a healthcare professional." },
+    { "key": "hypothalamic", "body": "The hypothalamus helps coordinate many body functions, but that does not establish a hormonal cause for what you reported. This conversation cannot determine the cause." },
+    { "key": "mayMean", "body": "There can be different explanations. A provider can assess your history and the symptom itself; a general hormone-focused answer would not settle that question." },
+    { "key": "providerQuestions", "body": "Questions you can bring to your provider:", "bullets": ["How should the concern I reported be assessed?", "What details about when it started and how it has changed would help you?", "What changes should prompt me to seek more urgent help?"] },
+    { "key": "tests", "body": "Ask your provider whether an examination or any tests are appropriate. The choice depends on their assessment; this chat is not recommending a routine hormone panel for this concern." },
+    { "key": "doNow", "body": "Contact your provider about the concern you reported. Note when you first noticed it, any changes, and questions you want to ask. Do not use a supplement recommendation from this app as a substitute for assessment." },
+    { "key": "word", "body": "Thank you for speaking up about what you noticed. You deserve a clear assessment and a chance to ask your questions. These notes can help you prepare; they do not replace care." }
+  ],
+  "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions."
+}

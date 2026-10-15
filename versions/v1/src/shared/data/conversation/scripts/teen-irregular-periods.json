@@ -1,0 +1,32 @@
+{
+  "id": "teen-irregular-periods",
+  "topic": "irregular periods",
+  "match": ["period", "cycle", "menstrua", "cramps"],
+  "intake": ["teen-onset", "teen-regularity"],
+  "voiceSample": "My daughter's periods are all over the place. Is that normal at her age?",
+  "openingMessage": "Are irregular periods normal at her age?",
+  "readyLine": "Thank you. I have a good picture of what's going on for {name}. Tap below when you'd like my thoughts, or ask me anything first.",
+  "suggestedQuestions": ["When should we see a provider?", "What can she track?"],
+  "answer": {
+    "sections": [
+      { "key": "hearing", "title": "What I'm Hearing", "body": "{name}'s cycle hasn't settled into a steady rhythm yet, and you'd like to know whether that's part of growing up or something to look into." },
+      { "key": "hypothalamic", "title": "The Hypothalamic Connection", "body": "In the first years after periods begin, the hypothalamus is still learning to time its signals to the ovaries. Sleep, stress, growth and nutrition all influence how quickly that rhythm settles." },
+      { "key": "mayMean", "title": "What This May Mean", "body": "Irregular cycles are often part of the first few years. It may still be worth exploring with a provider if cycles are very far apart, very heavy, or come with pain that keeps her from her day." },
+      { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["Is this pattern typical for how long she's been having periods?", "Which signs would mean we should look further?", "Could her sleep, stress or activity be playing a part?", "What should we track before the next visit?"] },
+      { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["Whether any tests are useful yet, given her age.", "Iron and ferritin if her periods are heavy.", "A thyroid check if she's also tired or her weight has changed."] },
+      { "key": "doNow", "title": "What You Can Do Now", "body": "Gentle foundations help a young hypothalamus find its rhythm:", "bullets": ["A steady bedtime, even on weekends.", "Breakfast with some protein.", "A simple cycle diary she keeps herself."] },
+      { "key": "word", "title": "A Word from Deborah", "body": "Thank you for paying attention. Talking openly about cycles at this age helps {name} learn to listen to her own body — that's a gift for life." }
+    ],
+    "product": { "productId": "genesis-gold", "why": "Placeholder — not shown for minors.", "frame90": "Placeholder." },
+    "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
+    "habitsForPlan": ["Steady bedtime, even on weekends", "Breakfast with some protein", "Keep a simple cycle diary"],
+    "goal": "Helping {name}'s cycle find its rhythm",
+    "summary": "Irregular cycles in the first years after periods began."
+  },
+  "followUps": [
+    { "match": ["provider", "doctor", "see"], "reply": "If cycles are more than three months apart, very heavy, or painful enough that she misses school, that's a good time to book a visit." },
+    { "match": ["track", "diary"], "reply": "The first day of each period, how heavy it is, and how she feels. A few weeks of notes makes a provider visit much more useful." }
+  ],
+  "fallbackReply": "Thank you. Tell me as much as you'd like about how things are for {name}.",
+  "status": "placeholder"
+}

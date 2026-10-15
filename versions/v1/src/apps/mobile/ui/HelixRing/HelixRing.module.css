@@ -1,0 +1,2 @@
+/* Soft gold bloom behind the glyphs (floating mark, so the glow is allowed). */
+.root { display: block; filter: drop-shadow(0 0 8px rgb(230 199 118 / 0.55)) drop-shadow(0 1px 1px rgb(97 84 50 / 0.25)); }

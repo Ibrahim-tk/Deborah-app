@@ -1,0 +1,37 @@
+{
+  "default": [
+    {
+      "id": "s1",
+      "text": "Why am I waking up at 3am every night?",
+      "scriptId": "sleep-3am"
+    },
+    {
+      "id": "s2",
+      "text": "Hot flashes and brain fog — are they connected?",
+      "scriptId": "hot-flashes-sleep"
+    },
+    {
+      "id": "s3",
+      "text": "Should I get my thyroid checked?",
+      "scriptId": "thyroid-fatigue"
+    }
+  ],
+  "teen": [
+    {
+      "id": "t1",
+      "text": "Are irregular periods normal at her age?",
+      "scriptId": "teen-irregular-periods"
+    },
+    {
+      "id": "t2",
+      "text": "Her periods are very painful — what should we ask?",
+      "scriptId": "teen-irregular-periods"
+    },
+    {
+      "id": "t3",
+      "text": "She's tired all the time. Could it be her cycle?",
+      "scriptId": "teen-irregular-periods"
+    }
+  ],
+  "status": "placeholder"
+}
