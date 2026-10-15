@@ -1,7 +1,11 @@
 # F02b · Profile-aware chat intake (female & male journeys)
 
-> **Status: THEORY / DRAFT for review.** Nothing here is built yet. Every question, option and red flag
-> is placeholder copy and needs Deborah's clinical sign-off before it is used (CLAUDE.md › clinical copy).
+> **Status: BUILT as placeholder (core experience, 2026-10-15).** The journeys run from
+> `src/shared/data/conversation/chatIntake.json` through `src/shared/engine/journey.ts`. Every question, option and
+> red flag is still placeholder copy and needs Deborah's clinical sign-off (CLAUDE.md › clinical copy).
+> Changes from the draft below: medications and allergies are asked as product safety gates *after* the topic
+> questions; height and weight are no longer gates; the female stage is asked in chat (Basic details no longer
+> asks it); a non-emergency red flag leads to a provider-directed seven-section answer after review, with no product or consultation charge. Emergency selections keep the urgent safety intervention.
 
 ## 1. The idea
 
@@ -105,7 +109,7 @@ The answer re-routes to 3a / 3b / 3c and is saved back to the profile.
 
 Bleeding after menopause · A new breast lump · Fever with night sweats · Weight loss I can't explain · Chest pain or fainting · None of these
 
-Any red flag → **F03 safety card** ("worth getting checked by a provider soon"), does not count toward the free limit.
+A non-emergency red flag → review and truthful saved/not-saved confirmation → provider-directed seven-section answer. No product or trial charge. Emergency selections → existing F03 urgent intervention.
 
 ---
 
@@ -156,7 +160,7 @@ Options: Energy · Sleep · Weight · Mood or stress · Libido · Something else
 
 Chest pain or shortness of breath · Blood in urine · A testicular lump · Weight loss I can't explain · Fever with night sweats · None of these
 
-Any red flag → **F03 safety card**, not counted.
+Non-emergency red flags use the provider-directed framework after review; emergency selections retain F03 intervention. Neither consumes a consultation.
 
 ---
 
@@ -243,6 +247,46 @@ Flow at chat start:
 Editing a question, adding a branch or changing who sees what is then a JSON change, not code.
 
 ---
+
+## Review and Confirm
+
+Meeting 2026-10-12 · B: the AI must not silently update the health profile.
+
+- The engine never writes the profile. Every answer to a profile question, and anything picked up from what she
+  typed (`extract.ts`), becomes a **pending fact** on the conversation (`Conversation.facts`). Pending facts count
+  as known inside that conversation, so nothing is asked twice, but they are not on the profile.
+- After a normal answer (or before the provider-review framework), Deborah shows the **ReviewFactsCard**: one row per fact with a checkbox,
+  **Save to my profile** (ticked rows), **Edit** (opens M-2.13), **Don't save**. Afterwards it is one line saying
+  what was saved.
+- **M-2.13 · What Deborah noted** (large sheet): tap a fact to change it (the same options as the question, or text
+  for facts from a message), then Save to my profile or Don't save.
+- Only `confirmFacts` writes the profile. Confirmed facts are listed on M-2.10 under "From your conversations" with
+  the date; list facts also fill the structured health profile marked "confirmed in chat".
+- Declining health-data consent drops every pending fact in that conversation.
+- Scenario replays (seeded histories) settle their facts: no card in seeded conversations.
+
+## Decision nodes and sources
+
+Every node traces to the 12 October meeting (MTG), a safety rule (SAFETY) or an existing spec (SPEC).
+
+| Node | Decision | Source | Code |
+|---|---|---|---|
+| DN-01 | Welcome, first name | MTG-A | `M-1.2 Welcome` |
+| DN-02 | Basic details: date of birth, sex, identity | MTG-A | `M-1.8`, `healthBasics.json` |
+| DN-03 | Age gate: under 18 → M-1.10 | SPEC F06 · OPEN O-2 | `ageGroupFor` |
+| DN-04 | Meet Deborah → first conversation | MTG-A | `M-1.9`, `firstConsultFor` |
+| DN-05 | Health-data consent, decline drops facts | SPEC F01 | `InlineConsent`, `consentSteps` |
+| DN-06 | Safety classify | SAFETY | `guardrails.classify` |
+| DN-07 | Symptom group | MTG persona 1 · SPEC symptoms.json | `symptomGroupOf` |
+| DN-08 | Journey | SPEC (this doc) | `journeyFor` |
+| DN-09 | Missing basic (stage), product gates (medications, allergies) | MTG-A | `missingBasics`, `planConsultation` |
+| DN-10 | Up to 3 clarifiers | MTG persona 1 · SPEC | `planClarifiers` |
+| DN-11 | Red-flag screen, always last | SAFETY | `redFlagSteps` |
+| DN-12 | Answer, product gate | SAFETY · SPEC F02c | `productAllowed` |
+| DN-13 | Review and Confirm | MTG-B | `ReviewFactsCard`, `M-2.13`, `confirmFacts` |
+| DN-14 | Leave: conversation kept, confirmed facts on profile | MTG persona 1 | `conversations` slice |
+
+Test each path with scenarios **S14–S19** (group "Journeys") and Toggles › **Show journey readout**.
 
 ## 8. Open questions for Deborah
 

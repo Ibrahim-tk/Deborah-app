@@ -33,6 +33,7 @@ export function DevToggles() {
             <MenuCheck label="Highlight placeholder content" checked={toggles.highlightPlaceholders} onChange={(v) => setToggle('highlightPlaceholders', v)} />
             <MenuCheck label="Show tap targets" checked={toggles.showTapTargets} onChange={(v) => setToggle('showTapTargets', v)} />
             <MenuCheck label="Show IDs on hover" checked={toggles.showIds} onChange={(v) => setToggle('showIds', v)} />
+            <MenuCheck label="Show journey readout" checked={toggles.showJourney} onChange={(v) => setToggle('showJourney', v)} />
             <MenuCheck label="Reduced motion" checked={toggles.reducedMotion} onChange={(v) => setToggle('reducedMotion', v)} />
             <MenuChoice label="Network" value={toggles.network} options={SPEEDS} onChange={(v) => setToggle('network', v)} />
           </MenuSection>

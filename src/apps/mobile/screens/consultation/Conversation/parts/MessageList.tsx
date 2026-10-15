@@ -1,7 +1,8 @@
 /** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
-import { consentDoc, findProduct, intakeData, productList } from '@shared/data';
-import { ANSWER_REQUEST_LABEL } from '@shared/engine';
-import { useAppStore } from '@shared/store';
+import { consentDoc, findProduct, productList } from '@shared/data';
+import { ANSWER_REQUEST_LABEL, isMinor } from '@shared/engine';
+import { selectActiveProfile, useAppStore } from '@shared/store';
+import { nowFrom } from '@shared/utils';
 import { formatShortDate } from '@shared/utils';
 import type { Conversation, Message } from '@shared/types/domain';
 import { DeborahBlob } from '@mobile/ui';
@@ -16,7 +17,7 @@ import {
   IntakeQuestion,
   MessageBubble,
   QuickReplies,
-  SaveProfileCard,
+  ReviewFactsCard,
   SuggestedQuestions,
   ThinkingIndicator,
 } from '@mobile/patterns/chat';
@@ -38,17 +39,16 @@ export interface MessageListProps {
   onRestartPlan: () => void;
   onLongPress: (m: Message) => void;
   onFocusComposer: () => void;
-  /** F01 step 4: save-your-profile card. */
-  onSaveProfile: (provider: 'apple' | 'google' | 'email') => void;
-  onSaveProfileNotNow: (m: Message) => void;
+  /** DN-13: Edit on the Review and Confirm card (M-2.13). */
+  onEditFacts: () => void;
 }
 
-const layoutFor = (questionId: string) => intakeData.questions.find((q) => q.id === questionId)?.layout ?? 'list';
 
-export function MessageList({ conversation, busy, chat, actions, onShop, onBook, onUploadLabs, onRestartPlan, onLongPress, onFocusComposer, onSaveProfile, onSaveProfileNotNow }: MessageListProps) {
+export function MessageList({ conversation, busy, chat, actions, onShop, onBook, onUploadLabs, onRestartPlan, onLongPress, onFocusComposer, onEditFacts }: MessageListProps) {
   const { messages, status } = conversation;
   const reports = useAppStore((s) => s.labs.reportsById);
-  const accountEmail = useAppStore((s) => s.accountEmail);
+  // DN-12: no products for anyone under 18, the shop tiles included.
+  const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
 
   // Check-in quick replies: the engine answers; some options also act in the UI.
   const reply = (messageId: string, optionId: string) => {
@@ -86,10 +86,16 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
       );
     }
 
-    if (m.kind === 'saveProfile') {
+    if (m.kind === 'reviewFacts') {
+      const s = useAppStore.getState();
       return (
         <MessageBubble key={m.id} role="deborah" turnStart={turnStart}>
-          <SaveProfileCard savedAs={accountEmail} dismissed={m.meta?.dismissed} onProvider={onSaveProfile} onNotNow={() => onSaveProfileNotNow(m)} />
+          <ReviewFactsCard
+            facts={conversation.facts ?? []}
+            onConfirm={(keep, drop) => { s.confirmFacts(conversation.id, keep); s.discardFacts(conversation.id, drop); }}
+            onEdit={onEditFacts}
+            onDiscard={(ids) => s.discardFacts(conversation.id, ids)}
+          />
         </MessageBubble>
       );
     }
@@ -131,11 +137,11 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
                 onFeedback={actions.feedback}
                 onBook={lab ? onBook : undefined}
               />
-              <ShopTiles
+              {!minor && !conversation.noProduct && !conversation.redFlag && <ShopTiles
                 products={productList.filter((p) => p.id !== product?.id)}
                 title="Deborah’s formulations"
                 onShop={onShop}
-              />
+              />}
             </>
           )}
           {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}
@@ -153,17 +159,17 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
       <MessageBubble
         key={m.id}
         role="deborah"
-        text={m.text}
+        text={intake?.questionId === 'health-consent' && !m.meta?.streaming ? undefined : m.text}
         streaming={m.meta?.streaming}
         turnStart={turnStart}
         placeholder={placeholder}
         onLongPress={() => onLongPress(m)}
       >
-        {/* Quiz questions answer inside the composer; only pills and fields stay inline. */}
-        {intake && !(intakeActive && !intake.input) && (
+        {/* The actual /wid widgets answer inline; only this question is interactive. */}
+        {intake && !m.meta?.streaming && (
           <IntakeQuestion
             intake={intake}
-            layout={layoutFor(intake.questionId)}
+            prompt={m.text}
             active={intakeActive}
             onAnswer={(ids, other) => chat.answerIntake(intake.questionId, ids, other)}
             onSkip={() => chat.skip(intake.questionId)}

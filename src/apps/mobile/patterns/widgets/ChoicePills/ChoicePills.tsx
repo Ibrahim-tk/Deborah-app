@@ -17,29 +17,33 @@ export interface ChoicePillsProps {
   keepAnswer?: boolean;
   /** Multi-select: controlled selection; tapping toggles instead of answering. */
   selected?: string[];
-  onToggle?: (option: string) => void;
+  onToggle?: (option: string, index: number) => void;
+  disabled?: boolean;
+  optionIds?: string[];
 }
 
-export function ChoicePills({ label, options, onPick, keepAnswer, selected, onToggle }: ChoicePillsProps) {
+export function ChoicePills({ label, options, onPick, keepAnswer, selected, onToggle, disabled, optionIds }: ChoicePillsProps) {
   const [picked, setPicked] = useState<number>();
   return (
     <div className={styles.root} role="group" aria-label={label}>
       {options.map((o, i) => (
         <button
-          key={o}
+          key={`${i}-${o}`}
+          data-choice-id={optionIds?.[i]}
           type="button"
           className={styles.pill}
           style={{ '--i': i } as CSSProperties}
-          aria-pressed={onToggle ? Boolean(selected?.includes(o)) : keepAnswer ? picked === i : undefined}
-          disabled={!onToggle && keepAnswer && picked !== undefined && picked !== i}
+          aria-pressed={selected ? selected.includes(o) : keepAnswer ? picked === i : undefined}
+          disabled={disabled || (!onToggle && keepAnswer && picked !== undefined && picked !== i)}
           onClick={() => {
-            if (onToggle) return onToggle(o);
+            if (disabled) return;
+            if (onToggle) return onToggle(o, i);
             if (picked !== undefined && keepAnswer) return;
             setPicked(i);
             onPick(o, i);
           }}
         >
-          {(onToggle ? selected?.includes(o) : keepAnswer && picked === i) && <Icon name="check" size={16} />}
+          {(selected ? selected.includes(o) : keepAnswer && picked === i) && <Icon name="check" size={16} />}
           {o}
         </button>
       ))}

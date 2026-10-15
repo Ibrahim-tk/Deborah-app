@@ -2,7 +2,7 @@
  * @screen  M-2.0 · Home
  * @flow    F02 Core consultation (landing)
  * @states  1 new / skipped chat · 2 returning after a chat · 3 a few weeks in (see parts/State*.tsx)
- *          · guest (avatar dot; save card after the first chat) · account
+ *          · account (sign-up comes before onboarding, so there's no guest save prompt — plan P-10)
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=191-3398
  * @spec    intake V2 brief §7 (design direction 2026-10-12) — OPEN: not in docs/ux/F02 yet
  * @xref    web: W-2.0 — not built
@@ -15,7 +15,6 @@ import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
 import { useNav, useNavStore } from '@mobile/navigation';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 import { GreetingSheet } from './parts/GreetingSheet';
-import { SaveProgressCard } from './parts/SaveProgressCard';
 import { StateNew } from './parts/StateNew';
 import { StateReturning, type NextStep } from './parts/StateReturning';
 import { StateEstablished } from './parts/StateEstablished';
@@ -37,8 +36,6 @@ export default function Home() {
   const d = useHomeView();
   const { profile, active, history, isNew } = d;
   const { profileId, focus } = useHubData();
-  const guest = useAppStore((s) => !s.accountId);
-  const nudgeDismissedAt = useAppStore((s) => s.saveNudgeDismissedAt);
   // Not after sign-up's health basics (M-1.8): that form already hands over to the chat.
   const eligible = isNew && !!profile && !greeted.has(profile.id) && !d.intakeDone && !profile.intake.profileFor;
   const [sheet, setSheet] = useState(false);
@@ -60,9 +57,6 @@ export default function Home() {
   const heading = `Good ${part}${name ? `, ${name}` : ''}.`;
   const subline = d.state === 'returning' ? `Ready to pick up on ${d.topic.charAt(0).toLowerCase()}${d.topic.slice(1)}?` : undefined;
 
-  const chats = history.length + (active?.messages.length ? 1 : 0);
-  const showSaveCard = guest && chats > 0 && (nudgeDismissedAt === undefined || chats > nudgeDismissedAt);
-  const saveProfile = () => presentSheet('M-4.3', { sheet: true });
 
   const closeSheet = () => {
     if (profile) greeted.add(profile.id);
@@ -114,7 +108,7 @@ export default function Home() {
       <ScrollEdge active={scrolled} />
       <div className={styles.top}>
         <ConversationHeader title="" transparent onMenu={() => setSidebarOpen(true)} onNotifications={() => push('M-10.4')}
-          profile={{ name, guest, onPress: guest ? saveProfile : () => switchTab('account') }} />
+          profile={{ name, guest: false, onPress: () => switchTab('account') }} />
       </div>
 
       <div className={styles.scroll} onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 4)}>
@@ -124,7 +118,6 @@ export default function Home() {
           {subline && <p className={styles.subline}>{subline}</p>}
         </div>
 
-        {showSaveCard && <SaveProgressCard onSave={saveProfile} onDismiss={() => useAppStore.getState().dismissSaveNudge()} />}
 
         {d.state === 'new' && (
           <StateNew

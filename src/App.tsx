@@ -8,6 +8,7 @@ export default function App() {
       <Route path="/mobile" element={<Shell platform="mobile" />} />
       <Route path="/web/*" element={<Shell platform="web" />} />
       <Route path="/wid" element={<Shell platform="widgets" />} />
+      <Route path="/design-system" element={<Shell platform="design-system" />} />
       <Route path="*" element={<Navigate to="/mobile" replace />} />
     </Routes>
   );

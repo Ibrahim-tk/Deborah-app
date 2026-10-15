@@ -1,5 +1,5 @@
 import type { StateCreator } from 'zustand';
-import type { Conversation, ID, Message } from '../../types/domain';
+import type { ConfirmedFact, Conversation, ID, Message, PendingFact } from '../../types/domain';
 import { nowFrom } from '../../utils/dates';
 import type { AppState, ConversationsSlice } from '../types';
 
@@ -13,6 +13,10 @@ type Actions = Pick<
   | 'setActiveConversation'
   | 'archiveActive'
   | 'completeConsultation'
+  | 'proposeFacts'
+  | 'confirmFacts'
+  | 'discardFacts'
+  | 'editFact'
 >;
 
 const withConversation = (
@@ -30,7 +34,12 @@ const mapMessages = (c: Conversation, id: ID, fn: (m: Message) => Message): Conv
   messages: c.messages.map((m) => (m.id === id ? fn(m) : m)),
 });
 
-export const conversationsActions: StateCreator<AppState, [], [], Actions> = (set) => ({
+const setFacts = (c: Conversation, ids: ID[], fn: (f: PendingFact) => PendingFact): Conversation => ({
+  ...c,
+  facts: (c.facts ?? []).map((f) => (ids.includes(f.id) && f.status === 'pending' ? fn(f) : f)),
+});
+
+export const conversationsActions: StateCreator<AppState, [], [], Actions> = (set, get) => ({
   startConversation: (c) =>
     set((s) => ({
       conversations: {
@@ -70,4 +79,38 @@ export const conversationsActions: StateCreator<AppState, [], [], Actions> = (se
         limitReachedPending: s.plan === 'trial' && used >= 3,
       };
     }),
+  // DN-13: a newer note on the same field replaces the older pending one.
+  proposeFacts: (cid, facts) =>
+    set((s) =>
+      withConversation(s, cid, (c) => {
+        const keys = new Set(facts.map((f) => f.key));
+        return { ...c, facts: [...(c.facts ?? []).filter((f) => f.status !== 'pending' || !keys.has(f.key)), ...facts] };
+      }),
+    ),
+  // The only path from a conversation to the profile (plan guardrail F-6).
+  confirmFacts: (cid, ids) => {
+    const s = get();
+    const c = s.conversations.byId[cid];
+    const picked = (c?.facts ?? []).filter((f) => ids.includes(f.id) && f.status === 'pending');
+    if (!c || !picked.length) return;
+    const at = nowFrom(s).toISOString();
+    for (const f of picked) {
+      // Lists also land in the structured health profile (M-2.10, Home), marked as confirmed in chat.
+      // First, so the intake patch below keeps the option ids the engine's rules read ("hrt", "thyroid-med").
+      if (f.key === 'medications' || f.key === 'allergies' || f.key === 'conditions') {
+        const names = f.value === 'None' ? [] : f.value.split(',').map((x) => x.trim()).filter(Boolean);
+        const value = f.key === 'allergies' ? names.map((substance) => ({ substance })) : names.map((name) => ({ name }));
+        s.setHealth(c.profileId, { [f.key]: { value, source: 'chat', updatedAt: at } });
+      }
+      if (f.patch.intake && Object.keys(f.patch.intake).length) s.updateIntake(c.profileId, f.patch.intake);
+      if (f.patch.profile && Object.keys(f.patch.profile).length) s.updateProfile(c.profileId, f.patch.profile);
+    }
+    const profile = get().profiles.byId[c.profileId];
+    const log: ConfirmedFact[] = picked.map((f) => ({ key: f.key, label: f.label, value: f.value, conversationId: cid, confirmedAt: at }));
+    const kept = (profile?.confirmedFacts ?? []).filter((x) => !picked.some((f) => f.key === x.key));
+    if (profile) s.updateProfile(c.profileId, { confirmedFacts: [...kept, ...log] });
+    set((st) => withConversation(st, cid, (conv) => setFacts(conv, ids, (f) => ({ ...f, status: 'confirmed' }))));
+  },
+  discardFacts: (cid, ids) => set((s) => withConversation(s, cid, (c) => setFacts(c, ids, (f) => ({ ...f, status: 'discarded' })))),
+  editFact: (cid, id, change) => set((s) => withConversation(s, cid, (c) => setFacts(c, [id], (f) => ({ ...f, ...change })))),
 });

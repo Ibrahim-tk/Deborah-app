@@ -9,13 +9,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { suggestionsData } from '@shared/data';
-import { isMinor } from '@shared/engine';
+import { ageOf, isMinor, pendingFacts } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
 import { ActionSheet } from '@mobile/ui';
 import { Aura, GradientShift } from '@mobile/ui';
-import { AnswerPanel, ChatHeader, Composer, ComposerOptions, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
+import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { ProfileBanner, relationshipLabel } from '@mobile/patterns/profile';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
@@ -38,8 +38,6 @@ export default function Conversation() {
   const { open, push, pop, switchTab, presentSheet } = useNav();
   const gate = useAccountGate();
   const intake = useIntakeFlow();
-  // F01 step 4: the notification ask (M-2.8) comes after the save-your-profile card, never at launch.
-  const offerNotifications = () => useAppStore.getState().notificationPermission === 'unknown' && presentSheet('M-2.8');
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
   // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
   const { prefill, focus, startIntake } = useScreenParams<{ prefill: string; focus: boolean; startIntake: boolean }>();
@@ -66,8 +64,8 @@ export default function Conversation() {
   // Emergency locks the composer until the user acknowledges it (docs/ux/F03-safety.md).
   const emergencyOpen = conversation?.status === 'safety' && messages.some((m) => m.kind === 'emergency' && !m.meta?.acknowledged);
   const last = messages.at(-1);
-  // Onboarding (health profile): the composer steps aside; multiple-choice questions show their
-  // options in the answer card at the bottom, "Other…" typed there (design direction 2026-10-12).
+  // Active question widgets live beside the question in the transcript. The composer remains
+  // available for the existing typed-answer path; other intake screens retain their own controls.
   // The about-you step still needs free text, so it keeps the composer.
   // Opened from "Complete your health profile": stay blank until Deborah's first question lands,
   // never flashing the empty-chat greeting or suggestions.
@@ -82,6 +80,20 @@ export default function Conversation() {
   const { ref: scrollRef, onScroll, showLatest, toBottom } = useAutoScroll(`${intake.progress.step}:${messages.length}:${last?.text?.length}:${JSON.stringify(last?.answer?.sections.map((s) => s.body.length + (s.bullets?.length ?? 0)))}:${conversation?.thinking}`);
 
   useEffect(() => () => setChromeHidden(false), [setChromeHidden]);
+  // The follow-up opt-in (M-2.8) waited for Review and Confirm; offer it once every fact is handled.
+  const reviewOpen = pendingFacts(conversation).length > 0;
+  const finishReview = chat.finishReview;
+  useEffect(() => {
+    if (busy || reviewOpen || conversation?.status === 'error' || conversation?.status === 'safety' || conversation?.gentleNext || conversation?.providerReview?.state !== 'waiting') return;
+    finishReview();
+  }, [busy, reviewOpen, conversation?.status, conversation?.gentleNext, conversation?.providerReview?.state, finishReview]);
+
+  useEffect(() => {
+    if (!conversation?.followUpAfterReview || reviewOpen) return;
+    const s = useAppStore.getState();
+    s.setConversation(conversation.id, { followUpAfterReview: false });
+    if (s.notificationPermission === 'unknown') presentSheet('M-2.8');
+  }, [conversation?.followUpAfterReview, conversation?.id, reviewOpen, presentSheet]);
   // Home's first-visit sheet ("Complete your profile") lands straight on Deborah's first onboarding
   // question (`startIntake`): no greeting screen in between (design direction 2026-10-12).
   const profileStarted = useRef(false);
@@ -92,21 +104,6 @@ export default function Conversation() {
     startProfile();
   }, [startIntake, messages.length, busy, startProfile]);
 
-  // Necessary profile info is in (intake questions done → ready): guests get the sign-up sheet,
-  // once (design direction 2026-10-12). Sign-in is one tap away inside it.
-  const wasProfiling = useRef(false);
-  useEffect(() => {
-    const status = conversation?.status;
-    if (status === 'intake') wasProfiling.current = true;
-    else if (wasProfiling.current && (status === 'ready' || status === 'empty')) {
-      wasProfiling.current = false;
-      const s = useAppStore.getState();
-      if (!s.accountId && !s.saveProfileOfferedAt) {
-        s.offerSaveProfile();
-        presentSheet('M-4.3', { sheet: true, mode: 'create', returnTo: 'chat' });
-      }
-    }
-  }, [conversation?.status, presentSheet]);
   useEffect(() => {
     if (focus || prefill) inputRef.current?.focus();
   }, [focus, prefill]);
@@ -168,7 +165,7 @@ export default function Conversation() {
       <GradientShift />
       <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} canStartNew={!isEmpty && !profiling} scrolled={underBar} />
       {other && profile && (
-        <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} onSwitch={openSwitcher} />
+        <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} child={(ageOf(profile, now) ?? 99) < 13} onSwitch={openSwitcher} />
       )}
 
       <div
@@ -200,11 +197,7 @@ export default function Conversation() {
                 })}
                 onLongPress={setPressed}
                 onFocusComposer={() => inputRef.current?.focus()}
-                onSaveProfile={(provider) => open('M-4.3', { mode: 'create', provider, returnTo: 'chat' })}
-                onSaveProfileNotNow={(m) => {
-                  useAppStore.getState().patchMessage(conversation.id, m.id, { meta: { dismissed: true } });
-                  offerNotifications();
-                }}
+                onEditFacts={() => presentSheet('M-2.13', { conversationId: conversation.id })}
               />
             )
           )}
@@ -216,15 +209,7 @@ export default function Conversation() {
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
         {isEmpty && !intakeMode && !profileOpening && !recording && <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
-        {quiz && profiling && (
-          <AnswerPanel
-            key={quiz.questionId}
-            intake={quiz}
-            onAnswer={(ids) => chat.answerIntake(quiz.questionId, ids)}
-            onOther={(t) => send(t)}
-          />
-        )}
-        {!profiling && <Composer
+        {(!profiling || Boolean(quiz)) && <Composer
           value={draft}
           onChange={setDraft}
           onSend={(text) => send(text ?? draft)}
@@ -239,7 +224,6 @@ export default function Conversation() {
           onRecordingChange={setRecording}
           voiceSample={aboutStep ? ABOUT_VOICE_SAMPLE : chat.voiceSample}
           // Trial counter hidden for now (design direction 2026-10-08); the free-limit sheet still gates.
-          options={quiz && <ComposerOptions intake={quiz} onAnswer={(ids) => chat.answerIntake(quiz.questionId, ids)} onSkip={() => chat.skip(quiz.questionId)} />}
           banner={SHOW_TRIAL_COUNTER && freeLeft !== null && <TrialCounter inline left={freeLeft} onChoosePlan={() => open('M-4.1')} />}
         />}
       </div>

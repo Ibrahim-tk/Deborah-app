@@ -17,6 +17,8 @@ export interface DevToggles {
   reducedMotion: boolean;
   showTapTargets: boolean;
   showIds: boolean;
+  /** Plan C-20: the decision nodes the active conversation took, beside the phone. */
+  showJourney: boolean;
 }
 
 /** What the top-most visible screen reports through useDevice().setScreen(). */
@@ -81,6 +83,7 @@ export const useShellStore = create<ShellState>()((set) => ({
     reducedMotion: false,
     showTapTargets: false,
     showIds: false,
+    showJourney: false,
   },
   screen: null,
   toast: null,

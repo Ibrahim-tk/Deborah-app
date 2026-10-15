@@ -20,6 +20,15 @@ const setBusy = (cid: string, busy: boolean) => useRunnerStore.setState((s) => (
 
 const tokens = new Map<string, { cancelled: boolean }>();
 
+// Scenario reset must invalidate background plans before their next store write or prompt.
+// The subscription also covers resets initiated outside the journey dashboard.
+useAppStore.subscribe((s, previous) => {
+  if (s.scenario.loadNonce === previous.scenario.loadNonce) return;
+  for (const token of tokens.values()) token.cancelled = true;
+  tokens.clear();
+  useRunnerStore.setState({ busy: {} });
+});
+
 const speedFactor = () => ({ normal: 1, slow: 3, instant: 0 })[useAppStore.getState().dev.speed];
 
 async function wait(ms: number, token: { cancelled: boolean }) {
@@ -56,8 +65,8 @@ function applyAction(action: StoreAction, cid: string): string {
     case 'acceptHealthConsent':
       s.acceptHealthConsent();
       break;
-    case 'offerSaveProfile':
-      s.offerSaveProfile();
+    case 'proposeFacts':
+      s.proposeFacts(action.conversationId, action.facts);
       break;
     case 'clearFailNext':
       s.setDev({ failNext: false });
@@ -134,8 +143,10 @@ export async function runPlan(plan: EnginePlan, conversationId: string, handlers
       }
     }
   } finally {
-    tokens.delete(cid);
-    setBusy(cid, false);
+    if (tokens.get(cid) === token) {
+      tokens.delete(cid);
+      setBusy(cid, false);
+    }
   }
   return true;
 }

@@ -38,8 +38,9 @@ function backdate(c: Conversation, now: string, days: number): Conversation {
 }
 
 function expandConversations(seed: ScenarioSeed, data: AppData): AppData['conversations'] {
-  const byId: Record<string, Conversation> = {};
-  const activeByProfile: Record<string, string | undefined> = {};
+  // Conversations written out in full in `state` (S19: facts waiting for Confirm) are kept as they are.
+  const byId: Record<string, Conversation> = { ...data.conversations.byId };
+  const activeByProfile: Record<string, string | undefined> = { ...data.conversations.activeByProfile };
   for (const [id, cs] of Object.entries(seed.conversations ?? {})) {
     const profile = data.profiles.byId[cs.profileId];
     const match = /^@script:([\w-]+)#(intake-1|ready|answered)$/.exec(cs.messages);

@@ -41,7 +41,7 @@ export function FlowWidget({ widget: w, active, say, onPick }: FlowWidgetProps) 
     }
   })();
   return (
-    <div className={styles.widget} data-done={!active || undefined}>
+    <div className={styles.widget} data-done={!active || undefined} {...(!active ? { inert: '' } : {})}>
       {body}
       {active && w.options?.map((o) => (
         <Button key={o.label} variant="ghost" fullWidth onClick={() => onPick([o])}>{o.label}</Button>

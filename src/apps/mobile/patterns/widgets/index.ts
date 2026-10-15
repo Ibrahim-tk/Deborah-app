@@ -7,3 +7,4 @@ export * from './MoodScale';
 export * from './ScaleCheck';
 export * from './ReminderCard';
 export * from './UploadCard';
+export * from './QuestionChoices';

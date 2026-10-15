@@ -7,6 +7,7 @@ import { intakeData } from '../data';
 import type { IntakeQuestion } from '../types/content';
 import type { Intake, Option, Profile } from '../types/domain';
 import type { EngineContext } from '../types/engine';
+import { CLARIFY, chatQuestion, journeyAllowsProduct, journeyFor, missingBasics } from './journey';
 import { ageBandFor, ageOn, isMinor } from './profile';
 
 export const CONSENT_ID = 'health-consent';
@@ -14,7 +15,7 @@ export const COUNTRY_ID = 'country';
 export const SAFETY_GATES = intakeData.safetyGates;
 
 export function question(id: string): IntakeQuestion | undefined {
-  return intakeData.questions.find((q) => q.id === id);
+  return intakeData.questions.find((q) => q.id === id) ?? chatQuestion(id);
 }
 
 function isKnown(profile: Profile, q: IntakeQuestion): boolean {
@@ -23,6 +24,7 @@ function isKnown(profile: Profile, q: IntakeQuestion): boolean {
   if (q.id === 'sex') return Boolean(profile.sexAtBirth);
   // A known date of birth answers the age band too.
   if (q.id === 'age' && (profile.dob || profile.health?.birthYear)) return true;
+  if (q.profileField.startsWith('conversation.')) return false;
   const field = q.profileField.replace(/^intake\./, '') as keyof Intake;
   const value = profile.intake[field];
   return Array.isArray(value) ? value.length > 0 : Boolean(value);
@@ -57,34 +59,41 @@ export function missingGates(profile: Profile): string[] {
   return SAFETY_GATES.filter(unknown(profile));
 }
 
-/** Onboarding basics still unknown: asked in the first consultation, before the topic. */
+/** Onboarding basics still unknown (date of birth, sex at birth): asked in the consultation, before the topic. */
 export function missingOnboarding(profile: Profile): string[] {
-  const ids = (intakeData.onboarding ?? []).filter(unknown(profile));
-  // "Who is this profile for" only makes sense on the account holder's own profile.
-  return profile.relationship === 'self' ? ids : ids.filter((id) => id !== 'profile-for');
+  return (intakeData.onboarding ?? []).filter(unknown(profile));
 }
 
 /**
- * Full plan for a new consultation: consent first (only if any health question follows), then
- * the safety gates when the answer recommends a supplement, the country check, then the topic.
+ * Full plan for a new consultation: consent first (only if any health question follows), then the
+ * missing basics and safety gates, then the topic, then the country check.
+ * Core experience (DN-09 · DN-10): adults get the journey's missing basics and a `@clarify` slot that
+ * expands into the journey × symptom-group clarifiers once the questions before it are answered.
+ * Teens and children keep the script's own questions (no bank yet, plan § Scope).
  */
 export function planConsultation(ctx: EngineContext, scriptIntake: string[], hasProduct: boolean): string[] {
-  let topic = planIntake(scriptIntake, ctx.profile);
+  const now = new Date(ctx.now);
+  const journey = journeyFor(ctx.profile, now);
+  const usesBank = ctx.profileGates !== false && !isMinor(ctx.profile, now) && journey !== 'teen' && journey !== 'child';
+  // OPEN: "child and male-teen question banks" (plan § Scope) — documented default: a boy under 18 gets only
+  // the neutral how-long / how-often questions, never the scripts' cycle questions.
+  const minorBoy = isMinor(ctx.profile, now) && (ctx.profile.sexAtBirth ?? ctx.profile.health?.sexAtBirth?.value) === 'male';
+  let topic = usesBank ? [...missingBasics(ctx.profile, now), CLARIFY] : minorBoy ? ['how-long', 'how-often'] : planIntake(scriptIntake, ctx.profile);
   if (ctx.profileGates === false) return topic;
-  // Onboarding through conversation: "who is this for" first, then the health basics.
-  // OPEN: "Someone I care for" only records the answer; hand-off to F06 Add member is not specified.
-  const onboarding = missingOnboarding(ctx.profile);
-  const intro = onboarding.filter((id) => id === 'profile-for');
-  const basics = onboarding.filter((id) => id !== 'profile-for');
-  const gates = [...new Set([...basics, ...(recommendsProduct(ctx, hasProduct) ? missingGates(ctx.profile) : [])])];
-  topic = topic.filter((id) => !gates.includes(id));
+  // Basics first (date of birth, sex at birth), then the topic, then the product safety gates
+  // (medications, allergies) so she's asked about her own concern before her medicine cabinet.
+  const basics = missingOnboarding(ctx.profile);
+  // No gates when the journey never carries a product (pregnancy, breastfeeding).
+  const product = recommendsProduct(ctx, hasProduct) && journeyAllowsProduct(journey);
+  const gates = product ? missingGates(ctx.profile).filter((id) => !basics.includes(id)) : [];
+  topic = topic.filter((id) => !gates.includes(id) && !basics.includes(id));
   // Date of birth answers the age band, so the topic's age question would repeat it.
-  if (gates.includes('dob')) topic = topic.filter((id) => id !== 'age');
+  if (basics.includes('dob')) topic = topic.filter((id) => id !== 'age');
   const self = ctx.profile.relationship === 'self';
   const country = self && !ctx.profile.intake.country ? [COUNTRY_ID] : [];
-  const health = [...gates, ...topic];
-  if (!health.length) return [...intro, ...country];
-  return [...intro, ...(ctx.healthConsent ? [] : [CONSENT_ID]), ...health, ...country];
+  const health = [...basics, ...topic, ...gates];
+  if (!health.length) return country;
+  return [...(ctx.healthConsent ? [] : [CONSENT_ID]), ...health, ...country];
 }
 
 /** "US" → "the United States" style label; falls back to the code. */
@@ -130,7 +139,14 @@ export function answerPatch(q: IntakeQuestion, optionIds: string[], otherText: s
   if (q.id === 'sex') return { profile: { sexAtBirth: optionIds[0] as Profile['sexAtBirth'] }, intake: {} };
   if (q.id === 'body') return { profile: {}, intake: { height: optionIds[0], weight: optionIds[1] } };
   if (q.id === COUNTRY_ID) return { profile: {}, intake: { country: optionIds[0] === 'other' ? otherText?.trim() || 'other' : optionIds[0] } };
+  // Clarifier answers that only matter to this conversation never touch the profile.
+  if (q.profileField.startsWith('conversation.')) return { profile: {}, intake: {} };
   const field = q.profileField.replace(/^intake\./, '');
+  // Symptoms collect across questions and conversations; "None of these" adds nothing.
+  if (field === 'symptoms') {
+    const picked = optionIds.filter((id) => id !== 'none');
+    return { profile: {}, intake: picked.length ? { symptoms: [...new Set([...(current?.intake.symptoms ?? []), ...picked])] } : {} };
+  }
   return { profile: {}, intake: { [field]: q.multi ? optionIds : optionIds[0] } as Partial<Intake> };
 }
 

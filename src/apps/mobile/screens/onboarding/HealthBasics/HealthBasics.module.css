@@ -72,3 +72,7 @@
     linear-gradient(to bottom, rgb(253 250 246 / 0) 0%, rgb(253 250 246 / 0.72) 22%, rgb(253 250 246 / 0.86) 55%, rgb(253 250 246 / 0.6) 100%);
   transition: background 360ms ease-out;
 }
+
+/* Consent step (someone else's profile): the age-group note, then the attestation checkbox. */
+.consent { display: grid; gap: var(--space-4); }
+.consentText { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }

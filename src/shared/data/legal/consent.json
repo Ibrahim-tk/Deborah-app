@@ -28,5 +28,22 @@
       "Placeholder text — the final privacy notice will replace this before launch."
     ]
   },
-  "status": "placeholder"
+  "status": "placeholder",
+  "profileConsent": {
+    "status": "placeholder",
+    "open": "Exact child and teen consent rules and wording are pending legal review (meeting 2026-10-12 · D). Shared by onboarding (M-1.8) and Add family member (M-6.2).",
+    "title": "Before we set up {name}’s profile",
+    "child": {
+      "body": "Profiles for children under 13 are set up and managed by a parent or legal guardian. Their information stays in your account, and you can delete it at any time.",
+      "check": "I am {name}’s parent or legal guardian"
+    },
+    "teen": {
+      "body": "Profiles for teens aged 13 to 17 come with extra privacy protections. The exact rules are still being finalised, and we’ll explain them before anything changes.",
+      "check": "I am {name}’s parent or legal guardian, and {name} knows I’m setting this up"
+    },
+    "adult": {
+      "body": "{name} is an adult, so their health information belongs to them. Only add them if they’ve agreed.",
+      "check": "{name} knows I’m adding them and agrees"
+    }
+  }
 }

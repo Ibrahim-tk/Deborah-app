@@ -1,4 +1,4 @@
-/** @shell PlatformTabs — Mobile | Web. Remembers the last web route. Keyboard: 1 / 2. */
+/** @shell PlatformTabs — Mobile | Web | Design system. Remembers the last web route. Keyboard: 1 / 2 / 3. */
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShellStore } from '../../shell.store';
@@ -12,6 +12,7 @@ export function PlatformTabs() {
   const { pathname } = useLocation();
   const lastWebPath = useShellStore((s) => s.lastWebPath);
   const isWeb = pathname.startsWith('/web');
+  const isSystem = pathname.startsWith('/design-system');
 
   const goMobile = () => navigate('/mobile');
   const goWeb = () => navigate(lastWebPath);
@@ -21,6 +22,7 @@ export function PlatformTabs() {
       if (e.metaKey || e.ctrlKey || e.altKey || isTyping(e.target)) return;
       if (e.key === '1') navigate('/mobile');
       if (e.key === '2') navigate(lastWebPath);
+      if (e.key === '3') navigate('/design-system');
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -28,11 +30,14 @@ export function PlatformTabs() {
 
   return (
     <div className={styles.root} role="tablist" aria-label="Platform">
-      <button type="button" role="tab" aria-selected={!isWeb} className={styles.tab} onClick={goMobile} title="Mobile (1)">
+      <button type="button" role="tab" aria-selected={!isWeb && !isSystem} className={styles.tab} onClick={goMobile} title="Mobile (1)">
         Mobile
       </button>
       <button type="button" role="tab" aria-selected={isWeb} className={styles.tab} onClick={goWeb} title="Web (2)">
         Web
+      </button>
+      <button type="button" role="tab" aria-selected={isSystem} className={styles.tab} onClick={() => navigate('/design-system')} title="Design system (3)">
+        Design system
       </button>
     </div>
   );

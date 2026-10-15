@@ -10,10 +10,14 @@ import styles from './UploadCard.module.css';
 const FILE = 'Thyroid panel, March.pdf';
 
 export interface UploadCardProps {
-  onUploaded: (file: string) => void;
+  onUploaded?: (file: string) => void;
+  /** Real app consumers open the existing picker/review flow instead of running the lab simulation. */
+  onAdd?: () => void;
+  label?: string;
+  disabled?: boolean;
 }
 
-export function UploadCard({ onUploaded }: UploadCardProps) {
+export function UploadCard({ onUploaded, onAdd, label = 'Add a lab report', disabled }: UploadCardProps) {
   const [progress, setProgress] = useState<number>();
   useEffect(() => {
     if (progress === undefined || progress >= 1) return;
@@ -27,14 +31,14 @@ export function UploadCard({ onUploaded }: UploadCardProps) {
   useEffect(() => {
     if (progress !== 1 || reported.current) return;
     reported.current = true;
-    latest.current(FILE);
+    latest.current?.(FILE);
   }, [progress]);
 
   if (progress === undefined)
     return (
-      <button type="button" className={styles.drop} onClick={() => setProgress(0)}>
+      <button type="button" className={styles.drop} disabled={disabled} onClick={() => onAdd ? onAdd() : setProgress(0)}>
         <Icon name="upload" size={24} />
-        <span className={styles.label}>Add a lab report</span>
+        <span className={styles.label}>{label}</span>
         <span className={styles.hint}>PDF or photo · stays private</span>
       </button>
     );

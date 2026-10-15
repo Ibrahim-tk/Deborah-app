@@ -6,6 +6,7 @@ import type { Conversation, Intake, LabReport, Message, Profile } from '../types
 import type { EngineContext, Step } from '../types/engine';
 import { createConversationEngine } from './index';
 import { question } from './intake';
+import { mergeFacts } from './facts';
 import { scripts } from '../data';
 
 export type Checkpoint = 'intake-1' | 'ready' | 'answered';
@@ -32,6 +33,7 @@ function applyInstant(conv: Conversation, profile: Profile, step: Step): [Conver
       const a = step.action;
       if (a.type === 'setConversation') return [{ ...conv, ...a.patch }, profile];
       if (a.type === 'updateIntake') return [conv, { ...profile, intake: { ...profile.intake, ...a.patch } }];
+      if (a.type === 'proposeFacts') return [{ ...conv, facts: mergeFacts(conv.facts, a.facts) }, profile];
       if (a.type === 'completeConsultation') return [{ ...conv, countedAt: conv.countedAt ?? conv.startedAt }, profile];
       if (a.type === 'setSummary') return [{ ...conv, summary: a.summary, topic: a.topic }, profile];
       return [conv, profile];
@@ -92,10 +94,12 @@ export function replayScript(scriptId: string, checkpoint: Checkpoint, opts: Rep
     for (const step of engine.handleUserInput(ctx, input)) [conv, profile] = applyInstant(conv, profile, step);
   };
 
+  // Seeded histories are already on the profile: no Review and Confirm card or pending facts in them.
+  const settled = () => ({ ...conv, facts: undefined, messages: conv.messages.filter((m) => m.kind !== 'reviewFacts') });
   run({ kind: 'text', text: script.openingMessage, scriptId: script.id });
-  if (checkpoint === 'intake-1') return conv;
+  if (checkpoint === 'intake-1') return settled();
   for (const qid of conv.intakePlan ?? []) run({ kind: 'intakeAnswer', questionId: qid, optionIds: answerFor(qid, seedIntake) });
-  if (checkpoint === 'ready') return conv;
+  if (checkpoint === 'ready') return settled();
   run({ kind: 'requestAnswer' });
-  return conv;
+  return settled();
 }

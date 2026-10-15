@@ -1,83 +1,60 @@
 /**
- * @pattern IntakeQuestion — progressive intake inline in the chat (design direction 2026-10-12).
- *          `pills` = yes/no and short answers, one tap · `quiz` = plain option card for lists with
- *          "Other…". Every tap answers at once — no Done buttons, no "n of N".
- *          "Other…" turns into a text field in place; return sends it. Field mode: an iOS-style
- *          date wheel, or height + weight rulers, which commit with a Select button.
- *          Pills are the user's explicit call here, overriding DESIGN.md's pill ban for intake answers.
- *          No Skip link (design direction 2026-10-12): every question ends with "Other…" instead, so
- *          the user can answer in their own words (or say they'd rather not) — typed in the chat's
- *          input bar, which "Other…" focuses.
- * @usedBy  M-2.1 (intake)
- * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › intake)
- * @xref    web: apps/web/patterns/chat/IntakeQuestion — not built
+ * @pattern IntakeQuestion — /wid widgets bound to existing engine question IDs and answer events.
+ * Only the current question accepts input. Question copy, ordering and profile writes stay in the engine.
+ * Specialized year/date/measurement fields remain unchanged; no current intake question is a 0–10 or
+ * five-face mood question, so ScaleCheck and MoodScale are not substituted for categorical answers.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { IntakeMeta } from '@shared/types/domain';
+import { Button, Input } from '@mobile/ui';
+import { InlineConsent, QuestionChoices } from '@mobile/patterns/widgets';
 import { IntakeFields } from './IntakeFields';
 import styles from './IntakeQuestion.module.css';
 
-const OTHER_ID = 'other';
-
 export interface IntakeQuestionProps {
   intake: IntakeMeta;
-  /** Kept for API compatibility. */
+  prompt?: string;
   layout?: 'list' | 'grid2';
-  /** Only the latest unanswered question is interactive. */
   active: boolean;
   onAnswer: (optionIds: string[], otherText?: string) => void;
-  /** "Other…": hand off to the chat's input bar (the typed message answers the question). Without it, the row becomes a field in place. */
   onOther?: () => void;
-  /** Kept for API compatibility: the inline question has no Skip link ("Other…" replaces it). */
   onSkip?: () => void;
 }
 
-export function IntakeQuestion({ intake, active, onAnswer, onOther }: IntakeQuestionProps) {
+export function IntakeQuestion({ intake, prompt, active, onAnswer }: IntakeQuestionProps) {
   const [otherOn, setOtherOn] = useState(false);
   const [otherText, setOtherText] = useState('');
-  const otherRef = useRef<HTMLInputElement>(null);
-  const quiz = intake.presentation === 'quiz';
-
-  // Every question ends with "Other…"; questions that don't list one get it added.
-  const options = intake.options.some((o) => o.id === OTHER_ID) ? intake.options : [...intake.options, { id: OTHER_ID, label: 'Other…' }];
-  const select = (id: string) => (id !== OTHER_ID ? onAnswer([id]) : onOther ? onOther() : setOtherOn(true));
-
-  useEffect(() => {
-    if (otherOn) otherRef.current?.focus();
-  }, [otherOn]);
-
-  if (!active) return intake.skipped ? <p className={styles.step}>Skipped</p> : null;
-  if (intake.input) return <IntakeFields input={intake.input} onAnswer={onAnswer} />;
-
+  const [sent, setSent] = useState(false);
+  const submitting = useRef(false);
+  const [otherIds, setOtherIds] = useState<string[]>([]);
+  const locked = !active || sent;
+  if (intake.skipped) return <p className={styles.step}>Skipped</p>;
+  if (intake.input) return active ? <IntakeFields input={intake.input} onAnswer={onAnswer} /> : null;
+  if (intake.questionId === 'health-consent') {
+    return <InlineConsent title={prompt} description={null} agreeLabel={intake.options.find((o) => o.id === 'agree')?.label} declineLabel={intake.options.find((o) => o.id === 'decline')?.label} disabled={!active} answered={intake.answered ? (intake.answered.includes('agree') ? 'agreed' : 'declined') : undefined} onAgree={() => onAnswer(['agree'])} onDecline={() => onAnswer(['decline'])} />;
+  }
+  // Preserve the standard chat's existing Other-text escape hatch. Question data is untouched.
+  const options = intake.options.some((o) => o.id === 'other') ? intake.options : [...intake.options, { id: 'other', label: 'Other…' }];
+  const submit = (ids: string[]) => {
+    if (locked) return;
+    if (ids.includes('other')) { setOtherIds(ids); setOtherOn(true); return; }
+    setSent(true);
+    onAnswer(ids);
+  };
   return (
     <div className={styles.root}>
-      <ul className={quiz ? styles.list : styles.pills} data-quiz={quiz || undefined} role="radiogroup" aria-label="Answer options">
-        {options.map((o) => (
-          <li key={o.id}>
-            {o.id === OTHER_ID && otherOn ? (
-              <input
-                ref={otherRef}
-                className={styles.row}
-                data-on
-                value={otherText}
-                enterKeyHint="send"
-                onChange={(e) => setOtherText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && otherText.trim()) onAnswer([OTHER_ID], otherText);
-                  if (e.key === 'Escape') setOtherOn(false);
-                }}
-                onBlur={() => !otherText.trim() && setOtherOn(false)}
-                placeholder="Type it and press return…"
-                aria-label="Other answer"
-              />
-            ) : (
-              <button type="button" className={styles.row} role="radio" aria-checked={false} onClick={() => select(o.id)}>
-                {o.label}
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
+      <QuestionChoices key={otherOn ? 'other' : 'choices'} label="Answer options" options={options} multi={intake.multi} exclusive="none" disabled={locked || otherOn} initialSelected={otherIds} answered={intake.answered ?? (otherOn ? otherIds : undefined)} onSubmit={submit} />
+      {otherOn && active && <form className={styles.otherForm} onSubmit={(e) => {
+        e.preventDefault();
+        if (!otherText.trim() || submitting.current) return;
+        submitting.current = true;
+        setSent(true);
+        onAnswer(otherIds.length ? otherIds : ['other'], otherText.trim());
+      }}>
+        <Input label="Other answer" value={otherText} autoFocus placeholder="Type your answer…" onChange={(e) => setOtherText(e.target.value)} />
+        <Button type="submit" fullWidth disabled={!otherText.trim() || sent}>Send</Button>
+        <Button variant="ghost" disabled={sent} onClick={() => setOtherOn(false)}>Back to options</Button>
+      </form>}
     </div>
   );
 }

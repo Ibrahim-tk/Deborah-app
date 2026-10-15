@@ -17,7 +17,7 @@ type Step =
   | { type: 'thinking'; on: boolean; label?: string }
   | { type: 'message'; message: Message }                         // instant
   | { type: 'stream'; messageId: ID; field: 'text' | `section:${SectionKey}`; text: string; cps: number }
-  | { type: 'store'; action: StoreAction }                        // e.g. updateIntake, completeConsultation
+  | { type: 'store'; action: StoreAction }                        // e.g. proposeFacts, setConversation, completeConsultation
   | { type: 'gate'; reason: 'freeLimit' }                         // bridge presents M-4.1 instead
   | { type: 'error'; retryable: true };
 ```
@@ -52,8 +52,17 @@ user text
 ```
 
 ### Intake rules
-- Ask at most `maxQuestions` (3), one at a time, from the script's `intake` list, **skipping fields already known** in the profile (returning users answer fewer questions).
-- Each question: Deborah text + option rows (DESIGN.md › Option rows) + "Quick question n of N · Skip". Free text is accepted as an answer (stored verbatim in `intake.notes`).
+- **Core experience (2026-10-15):** adults get the journey bank in `chatIntake.json` (docs/ux/F02b): missing basics
+  (the female stage), then up to 3 clarifiers for the journey × symptom group, then the product safety gates
+  (medications, allergies) when the answer carries a product, then the red-flag screen last. The plan holds a
+  `@clarify` slot that expands once the questions before it are answered. Teens and children keep the script's list.
+- Ask at most `maxQuestions` (3) topic questions, one at a time, **skipping fields already known** in the profile or
+  noted earlier in the conversation (returning users answer fewer questions).
+- Each question: Deborah text with the existing /wid choice widget where suitable, or option rows for long answers. Multiple-choice selections submit together; specialized fields remain unchanged. Free text is
+  accepted as an answer; anything it names (a medicine, an allergy) is noted as a pending fact, not stored.
+- **The engine never writes the profile.** Answers become pending facts (`proposeFacts`); only the user's Confirm on
+  the Review and Confirm card writes them (`confirmFacts`). See docs/ux/F02b › Review and Confirm.
+- When the red-flag screen is clear Deborah answers straight away. A non-emergency red flag waits for Review and Confirm, then delivers a provider-directed seven-section answer with no product, plan creation, reminder offer or consultation charge. Emergency selections retain the urgent safety intervention. See ENDING_FLOW_PLAN.md and scenario S22.
 - After the last question (or skip), Deborah sends the script's `readyLine` + suggested questions + the **"Tell me what you think"** button. The user may also ask for the answer at any time during intake (button visible from question 1 onward as a secondary action).
 
 ### Answer construction (`answer.ts`)

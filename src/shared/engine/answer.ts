@@ -2,6 +2,7 @@
  * Answer construction (docs/07-ai-simulation.md §2): start from the script, interpolate the
  * profile (and confirmed labs), always 7 sections in fixed order, closing line always last.
  */
+import providerReview from '../data/conversation/provider-review.json';
 import type { Script } from '../types/content';
 import { SECTION_ORDER, type Answer, type AnswerSection, type LabReport, type Profile } from '../types/domain';
 import { formatShortDate } from '../utils/dates';
@@ -63,4 +64,18 @@ export function buildAnswer(script: Script, profile: Profile, labs?: LabReport):
 /** Empty shell of the answer: titles visible, bodies filled by streaming. */
 export function emptyAnswer(answer: Answer): Answer {
   return { ...answer, sections: answer.sections.map((s) => ({ ...s, body: '', bullets: s.bullets ? [] : undefined })) };
+}
+
+/** Same seven headings as the selected script; provider-directed placeholder content only. */
+export function buildProviderReview(script: Script, concerns: string[]): Answer {
+  const values = { concerns: concerns.join(', ') || 'a concern that needs a provider’s assessment' };
+  return {
+    sections: SECTION_ORDER.map((key) => {
+      const content = providerReview.sections.find((s) => s.key === key)!;
+      const title = script.answer.sections.find((s) => s.key === key)!.title;
+      return { key, title, body: interpolate(content.body, values), bullets: content.bullets };
+    }),
+    closingLine: providerReview.closingLine,
+    status: 'placeholder',
+  };
 }

@@ -122,6 +122,44 @@ answer (first useful one) ──► "Save your profile" card ──► M-4.3 (Ap
 
 ---
 
+## Onboarding order (design direction 2026-10-15, onboarding plan P-01 to P-10)
+
+**Splash (M-1.1) → Welcome (M-1.2) → sign-up sheet (M-1.4: email + password, 6-digit code, You're in) →
+Onboarding profile (M-1.8) → Deborah's welcome (M-1.9) → first conversation (M-2.1).**
+This reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed on 15 Oct. The account
+exists before the chat, so there is no save-your-profile card or guest sign-up sheet anywhere after it (P-10).
+
+Two profiles, built at different times:
+- **Onboarding profile** (M-1.8, before the chat): who it's for, relationship and first name for someone else,
+  birth year, consent for someone else, sex at birth. Saved straight to the profile; these are basics the person
+  typed into a form, not health facts (decision D-4).
+- **Health profile** (in the chat): stage, medications, allergies, conditions, symptoms. Asked only when needed,
+  saved only through Review and Confirm (F02b).
+
+## M-1.8 · Onboarding profile
+
+Full screen, one step at a time, the tree grows as you go (`data/intake/healthBasics.json`, `showIf` branches):
+
+| Branch | Steps | Then |
+|---|---|---|
+| Myself, 18+ | Who is this for → birth year → sex at birth | M-1.9 "Start chatting" → chat as you |
+| Myself, under 18 | Who is this for → birth year | **M-1.10** Ask a parent (OPEN O-2) |
+| Someone else, 18+ | Who → relationship → first name → their birth year → "They know I'm adding them and agree" → sex at birth | M-1.9 "Start talking about {name}" → switch profile → chat about them |
+| Someone else, 13–17 | … → teen privacy note + guardian consent → sex at birth | same; teen script, no product |
+| Someone else, under 13 | … → guardian attestation → sex at birth | same; minor rules, no product |
+
+- Birth year wheel (D-1) and sex at birth only (D-2); identity can be asked later in chat if wording needs it.
+- Consent copy by age group lives in `legal/consent.json › profileConsent` (placeholder pending legal review).
+- Someone else is allowed on any plan as the first person added (D-3); M-6.1 still asks to upgrade for more.
+- Boys under 18 get only neutral how-long / how-often questions (no cycle questions). OPEN: child and male-teen banks.
+
+## M-1.10 · Ask a parent
+
+Root screen in the pre-auth stack, replacing M-1.8 when **your own** birth year is under 18. Deborah's orb, "Let's bring in a parent", a short line that a
+parent or guardian sets things up for anyone under 18, and **Back to the start** (→ M-1.2).
+OPEN (O-2): "Can someone under 18 sign up for themselves?" Documented default: no, until the family consent work
+(meeting · D) settles self sign-up for teens. A parent can already add a teen or child as "someone I care for". Copy is placeholder pending legal review.
+
 ## M-2.1 · First-chat disclaimer
 
 One quiet dismissible line above the suggestions on the empty chat: "Not a substitute for professional care. In an emergency, call local services." (`legal/consent.json › careLine`, placeholder). Shown once: dismissing it or sending the first message retires it (`disclaimerSeenAt`).

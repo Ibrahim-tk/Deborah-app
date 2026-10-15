@@ -11,6 +11,7 @@
  * "Male" is offered as sex at birth but the engine has no male-specific content.
  */
 import { useState } from 'react';
+import { consentDoc } from '@shared/data';
 import { ageBandFor } from '@shared/engine';
 import { useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
@@ -37,12 +38,6 @@ const SEXES: { value: Sex; label: string }[] = [
   { value: 'male', label: 'Male' },
 ];
 
-// ASSUMPTION: adults are asked to confirm they know and agree (spec marks this an ASSUMPTION).
-const CONSENT = {
-  minor: 'I am their parent/legal guardian and have their consent',
-  adult: 'They know I’m adding them and agree',
-};
-
 export default function AddMember() {
   const { dismissModal, switchProfile, openAsk } = useNav();
   const alert = useAlert();
@@ -50,6 +45,8 @@ export default function AddMember() {
   const form = useMemberForm();
   const { values, set, age, minor, dobError, underThirteen, valid, dirty, today } = form;
   const [creating, setCreating] = useState(false);
+  const consentCopy = consentDoc.profileConsent[minor ? 'teen' : 'adult'];
+  const consentName = values.name.trim() || 'this person';
 
   const close = async () => {
     if (!dirty) return dismissModal();
@@ -78,6 +75,7 @@ export default function AddMember() {
       intake: { ageBand: ageBandFor(age), conditions: [], medications: [] },
       createdAt: now,
       guardianConsentAt: minor ? now : undefined,
+      consent: { path: minor ? 'guardian-teen' : 'adult-agreement', attestedAt: now, attestedBy: s.accountId ?? s.profiles.order[0] },
     });
     // switchProfile closes the modal and resets Ask + My Health; openAsk lands on a fresh
     // Conversation, which is empty for the new profile ("Let's talk about {name}." + teen suggestions).
@@ -118,11 +116,14 @@ export default function AddMember() {
           )}
           <Select label="Sex at birth" options={SEXES} value={values.sex} onChange={(sex) => set({ sex })} />
           {!underThirteen && (
+            <div data-placeholder>
+            <p className={styles.hint}>{consentCopy.body.replaceAll('{name}', consentName)}</p>
             <Checkbox
               checked={form.consented}
               onChange={form.setConsent}
-              label={minor ? CONSENT.minor : CONSENT.adult}
+              label={consentCopy.check.replaceAll('{name}', consentName)}
             />
+            </div>
           )}
           <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>
         </form>

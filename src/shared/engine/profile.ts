@@ -1,10 +1,29 @@
 /** Profile rules shared by the engine and the app (docs/ux/F06-family-profiles.md). */
-import type { AgeBand, Profile } from '../types/domain';
+import type { AgeBand, AgeGroup, Profile } from '../types/domain';
 
-/** Teen or child profile: teen script, third-person intake, no product card (ASSUMPTION, F06 OPEN). */
-export function isMinor(profile: Pick<Profile, 'intake' | 'relationship' | 'dob'>, now: Date = new Date()): boolean {
-  if (profile.intake.ageBand === 'teen') return true;
-  if (profile.dob) return ageOn(profile.dob, now) < 18;
+/** DN-03: under 13 is a child, 13–17 a teen, 18 and over an adult. */
+export function ageGroupFor(age: number): AgeGroup {
+  if (age < 13) return 'child';
+  if (age < 18) return 'teen';
+  return 'adult';
+}
+
+/** Best-known age: full date of birth, else birth year, else undefined. */
+export function ageOf(profile: Pick<Profile, 'dob' | 'health'>, now: Date): number | undefined {
+  if (profile.dob) return ageOn(profile.dob, now);
+  const year = profile.health?.birthYear?.value;
+  return year ? now.getFullYear() - year : undefined;
+}
+
+/**
+ * Teen or child profile: teen script, third-person intake, no product card (ASSUMPTION, F06 OPEN).
+ * Decided by age when it is known; the relationship alone never makes an adult daughter a minor.
+ */
+export function isMinor(profile: Pick<Profile, 'intake' | 'relationship' | 'dob'> & Partial<Pick<Profile, 'health'>>, now: Date = new Date()): boolean {
+  const age = ageOf(profile, now);
+  if (age !== undefined) return ageGroupFor(age) !== 'adult';
+  if (profile.intake.ageBand) return profile.intake.ageBand === 'teen';
+  // OPEN: "child profile with no date of birth" — documented default (F06): a daughter or son is a minor.
   return profile.relationship === 'daughter' || profile.relationship === 'son';
 }
 

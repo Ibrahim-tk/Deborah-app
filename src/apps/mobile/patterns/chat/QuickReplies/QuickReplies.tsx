@@ -6,7 +6,9 @@
  * @xref    web: apps/web/patterns/chat/QuickReplies — not built
  */
 import type { Option } from '@shared/types/domain';
-import { Button, OptionList, OptionRow, type IconName } from '@mobile/ui';
+import type { IconName } from '@mobile/ui';
+import { QuestionChoices, UploadCard } from '@mobile/patterns/widgets';
+import { Button } from '@mobile/ui';
 import styles from './QuickReplies.module.css';
 
 export interface QuickRepliesProps {
@@ -20,18 +22,10 @@ export interface QuickRepliesProps {
 export function QuickReplies({ options, onSelect, primary, label = 'Reply' }: QuickRepliesProps) {
   return (
     <div className={styles.root}>
-      {primary && (
-        <Button fullWidth leadingIcon={primary.icon} onClick={primary.onPress}>
-          {primary.label}
-        </Button>
-      )}
-      <OptionList label={label}>
-        {options.map((o) => (
-          <OptionRow key={o.id} onSelect={() => onSelect(o.id)}>
-            {o.label}
-          </OptionRow>
-        ))}
-      </OptionList>
+      {primary && (primary.icon === 'upload'
+        ? <UploadCard label={primary.label} onAdd={primary.onPress} />
+        : <Button fullWidth leadingIcon={primary.icon} onClick={primary.onPress}>{primary.label}</Button>)}
+      <QuestionChoices label={label} options={options} onSubmit={(ids) => onSelect(ids[0])} />
     </div>
   );
 }

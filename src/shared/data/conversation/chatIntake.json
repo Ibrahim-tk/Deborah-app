@@ -1,0 +1,206 @@
+{
+  "status": "placeholder",
+  "note": "Core experience question bank (plan C-05, nodes DN-07 to DN-11). Journey × symptom group → up to 3 clarifiers in priority order, then the journey's red-flag screen. Questions whose profileField starts with intake./profile. become pending facts (Review and Confirm); conversation.* answers stay in the conversation. Every question and red flag is placeholder copy from docs/ux/F02b where it exists, otherwise new; all need Deborah's sign-off. Teen and child journeys have no bank yet: they keep the script's own questions (Phase 3).",
+  "maxClarifiers": 3,
+  "groups": [
+    { "id": "sleep", "title": "Sleep & energy", "match": ["sleep", "insomnia", "tired", "fatigue", "exhausted", "energy", "3am", "wake", "waking", "restless"] },
+    { "id": "temperature", "title": "Temperature", "match": ["hot flash", "hot flush", "sweat", "cold", "chills", "temperature", "warm"] },
+    { "id": "mood", "title": "Mood & mind", "match": ["anxi", "mood", "depress", "low", "irritab", "racing thoughts", "brain fog", "forget", "stress", "overwhelm", "motivation"] },
+    { "id": "cycle", "title": "Cycle & hormones", "match": ["period", "cycle", "spotting", "pms", "libido", "sex drive", "dryness", "breast", "erection", "testosterone", "hormone"] },
+    { "id": "weight", "title": "Weight & digestion", "match": ["weight", "belly", "bloat", "crav", "constipat", "nausea", "digest", "food", "appetite"] },
+    { "id": "body", "title": "Skin, hair & body", "match": ["headache", "migraine", "hair", "skin", "acne", "nails", "joint", "ache", "cramp", "palpitation", "dizz", "tinnitus", "urinat", "puffy", "pain"] }
+  ],
+  "missingBasics": [
+    { "questionId": "reproductive", "showIf": { "sex": { "in": ["female", "intersex"] }, "stage": { "unknown": true } } }
+  ],
+  "journeys": [
+    {
+      "id": "female-cycling",
+      "clarifiers": {
+        "sleep": ["symptoms-sleep", "cycle-worst", "birth-control"],
+        "temperature": ["symptoms-temperature", "temp-when", "birth-control"],
+        "mood": ["symptoms-mood", "cycle-worst", "birth-control"],
+        "cycle": ["cycle-length", "cycle-regularity", "symptoms-cycle", "birth-control"],
+        "weight": ["symptoms-weight", "cycle-worst", "birth-control"],
+        "body": ["symptoms-body", "how-often", "cycle-worst"],
+        "general": ["how-long", "cycle-regularity", "birth-control"]
+      },
+      "redFlags": "red-flags-female"
+    },
+    {
+      "id": "female-peri",
+      "clarifiers": {
+        "sleep": ["period-changes", "symptoms-peri", "how-long"],
+        "temperature": ["period-changes", "symptoms-peri", "how-long"],
+        "mood": ["period-changes", "symptoms-peri", "how-long"],
+        "cycle": ["period-changes", "symptoms-peri", "hrt-talk"],
+        "weight": ["symptoms-weight", "period-changes", "how-long"],
+        "body": ["symptoms-body", "how-often", "period-changes"],
+        "general": ["period-changes", "symptoms-peri", "how-long"]
+      },
+      "redFlags": "red-flags-female"
+    },
+    {
+      "id": "female-post",
+      "clarifiers": {
+        "sleep": ["years-since", "symptoms-post", "hrt-check"],
+        "temperature": ["years-since", "symptoms-post", "hrt-check"],
+        "mood": ["symptoms-mood", "years-since", "hrt-check"],
+        "cycle": ["years-since", "symptoms-post", "hrt-check"],
+        "weight": ["years-since", "symptoms-post", "hrt-check"],
+        "body": ["symptoms-body", "years-since", "bone-scan"],
+        "general": ["years-since", "symptoms-post", "hrt-check"]
+      },
+      "redFlags": "red-flags-female"
+    },
+    {
+      "id": "female-pregnant",
+      "clarifiers": {
+        "general": ["pregnant-which", "provider-aware"]
+      },
+      "redFlags": "red-flags-female",
+      "noProduct": true
+    },
+    {
+      "id": "female-unsure",
+      "note": "Asks the last period, saves the stage through Review and Confirm, then re-plans on the stage it found (F02b 3e).",
+      "clarifiers": {
+        "general": ["last-period", "how-long", "how-often"]
+      },
+      "reroute": true,
+      "redFlags": "red-flags-female"
+    },
+    {
+      "id": "male-under-40",
+      "clarifiers": {
+        "sleep": ["snoring", "sleep-hours", "how-long"],
+        "temperature": ["symptoms-temperature", "how-often", "how-long"],
+        "mood": ["symptoms-male", "how-long", "t-checked", "trt-check"],
+        "cycle": ["symptoms-male", "how-long", "t-checked", "trt-check"],
+        "weight": ["weight-where", "bloodsugar-chol", "movement"],
+        "body": ["symptoms-body", "how-often", "how-long"],
+        "general": ["symptoms-male", "how-long", "t-checked"]
+      },
+      "redFlags": "red-flags-male"
+    },
+    {
+      "id": "male-40-54",
+      "extends": "male-under-40",
+      "extra": "urination-change",
+      "redFlags": "red-flags-male"
+    },
+    {
+      "id": "male-55-plus",
+      "extends": "male-under-40",
+      "extra": "psa-check",
+      "redFlags": "red-flags-male"
+    }
+  ],
+  "questions": [
+    { "id": "symptoms-sleep", "prompt": "Which of these have you noticed?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Trouble falling asleep", "label": "Trouble falling asleep" }, { "id": "Waking around 3am", "label": "Waking around 3am" }, { "id": "Night sweats", "label": "Night sweats" }, { "id": "Tired after a full night", "label": "Tired after a full night" }, { "id": "Afternoon slump", "label": "Afternoon slump" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-temperature", "prompt": "Which of these have you noticed?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Hot flashes", "label": "Hot flashes" }, { "id": "Night sweats", "label": "Night sweats" }, { "id": "Always cold", "label": "Always cold" }, { "id": "Cold hands and feet", "label": "Cold hands and feet" }, { "id": "Chills", "label": "Chills" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-mood", "prompt": "Which of these have you noticed?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Anxiety", "label": "Anxiety" }, { "id": "Low mood", "label": "Low mood" }, { "id": "Irritability", "label": "Irritability" }, { "id": "Brain fog", "label": "Brain fog" }, { "id": "Forgetfulness", "label": "Forgetfulness" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-cycle", "prompt": "Which of these have you noticed?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Heavy periods", "label": "Heavy periods" }, { "id": "Painful periods", "label": "Painful periods" }, { "id": "Spotting", "label": "Spotting" }, { "id": "Breast tenderness", "label": "Breast tenderness" }, { "id": "Low libido", "label": "Low libido" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-weight", "prompt": "Which of these have you noticed?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Weight gain around the middle", "label": "Weight gain around the middle" }, { "id": "Sugar cravings", "label": "Sugar cravings" }, { "id": "Bloating", "label": "Bloating" }, { "id": "Constipation", "label": "Constipation" }, { "id": "Food sensitivities", "label": "Food sensitivities" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-body", "prompt": "Which of these have you noticed?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Headaches", "label": "Headaches" }, { "id": "Joint aches", "label": "Joint aches" }, { "id": "Hair thinning", "label": "Hair thinning" }, { "id": "Dry skin", "label": "Dry skin" }, { "id": "Dizziness", "label": "Dizziness" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-peri", "prompt": "Which of these are you noticing?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Hot flashes", "label": "Hot flashes" }, { "id": "Night sweats", "label": "Night sweats" }, { "id": "Waking around 3am", "label": "Waking around 3am" }, { "id": "Brain fog", "label": "Brain fog" }, { "id": "Anxiety", "label": "Anxiety" }, { "id": "Low libido", "label": "Low libido" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-post", "prompt": "Which of these are you noticing?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Night sweats", "label": "Night sweats" }, { "id": "Poor sleep", "label": "Poor sleep" }, { "id": "Vaginal dryness", "label": "Vaginal dryness" }, { "id": "Urinary urgency", "label": "Urinary urgency" }, { "id": "Joint aches", "label": "Joint aches" }, { "id": "Weight around the middle", "label": "Weight around the middle" }, { "id": "none", "label": "None of these" }] },
+    { "id": "symptoms-male", "prompt": "Which of these sound like you?", "multi": true, "profileField": "intake.symptoms", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "Tired by mid-afternoon", "label": "Tired by mid-afternoon" }, { "id": "Lower sex drive", "label": "Lower sex drive" }, { "id": "Fewer morning erections", "label": "Fewer morning erections" }, { "id": "Losing muscle", "label": "Losing muscle" }, { "id": "Less motivation", "label": "Less motivation" }, { "id": "none", "label": "None of these" }] },
+
+    { "id": "how-often", "prompt": "How often does this happen?", "multi": false, "profileField": "conversation.frequency", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "daily", "label": "Every day" }, { "id": "few-week", "label": "A few times a week" }, { "id": "weekly", "label": "About once a week" }, { "id": "less", "label": "Less often" }] },
+    { "id": "how-long", "prompt": "How long has this been going on?", "multi": false, "profileField": "conversation.duration", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "weeks", "label": "A few weeks" }, { "id": "1-6m", "label": "1–6 months" }, { "id": "6m+", "label": "More than 6 months" }, { "id": "years", "label": "Years" }] },
+    { "id": "temp-when", "prompt": "When do you notice it most?", "multi": false, "profileField": "conversation.tempWhen", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "night", "label": "At night" }, { "id": "day", "label": "During the day" }, { "id": "before-period", "label": "The week before my period" }, { "id": "no-pattern", "label": "No pattern" }] },
+
+    { "id": "cycle-regularity", "prompt": "How regular are your periods?", "multi": false, "profileField": "conversation.regularity", "skipIfKnown": false, "presentation": "quiz",
+      "showIf": { "conditions": { "lacks": ["PCOS", "pcos"] } },
+      "options": [{ "id": "clockwork", "label": "Like clockwork" }, { "id": "few-days", "label": "A few days off" }, { "id": "unpredictable", "label": "Unpredictable" }, { "id": "heavy-painful", "label": "Very heavy or painful" }] },
+    { "id": "cycle-length", "prompt": "Have your cycles been longer than 35 days lately?", "multi": false, "profileField": "conversation.cycleLength", "skipIfKnown": false, "presentation": "quiz",
+      "showIf": { "conditions": { "has": ["PCOS", "pcos"] } },
+      "options": [{ "id": "yes", "label": "Yes" }, { "id": "no", "label": "No" }, { "id": "unsure", "label": "Not sure" }] },
+    { "id": "cycle-worst", "prompt": "When do you feel worst in your cycle?", "multi": false, "profileField": "conversation.cycleWorst", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "before", "label": "The week before my period" }, { "id": "during", "label": "During my period" }, { "id": "mid", "label": "Mid-cycle" }, { "id": "no-pattern", "label": "No pattern" }] },
+    { "id": "birth-control", "prompt": "Are you using hormonal birth control?", "multi": false, "profileField": "intake.birthControl", "skipIfKnown": true, "presentation": "quiz",
+      "options": [{ "id": "no", "label": "No" }, { "id": "pill", "label": "The pill" }, { "id": "iud", "label": "Hormonal IUD" }, { "id": "implant", "label": "Implant or injection" }, { "id": "other", "label": "Something else" }] },
+
+    { "id": "period-changes", "prompt": "How have your periods changed?", "multi": false, "profileField": "conversation.periodChanges", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "closer", "label": "Closer together" }, { "id": "further", "label": "Further apart" }, { "id": "heavier", "label": "Heavier" }, { "id": "skipping", "label": "Skipping months" }] },
+    { "id": "hrt-talk", "prompt": "Have you talked to anyone about HRT?", "multi": false, "profileField": "conversation.hrtTalk", "skipIfKnown": false, "presentation": "quiz",
+      "showIf": { "meds": { "lacks": ["hrt"] } },
+      "options": [{ "id": "not-yet", "label": "Not yet" }, { "id": "considering", "label": "Considering it" }, { "id": "stopped", "label": "Tried it and stopped" }] },
+    { "id": "years-since", "prompt": "How long ago did your periods stop?", "multi": false, "profileField": "intake.menopauseSince", "skipIfKnown": true, "presentation": "quiz",
+      "options": [{ "id": "under-1y", "label": "Under a year" }, { "id": "1-5y", "label": "1–5 years" }, { "id": "over-5y", "label": "Over 5 years" }, { "id": "hysterectomy", "label": "I had a hysterectomy" }] },
+    { "id": "hrt-check", "prompt": "How is your HRT working for you?", "multi": false, "profileField": "conversation.hrtCheck", "skipIfKnown": false, "presentation": "quiz",
+      "showIf": { "meds": { "has": ["hrt"] } },
+      "options": [{ "id": "well", "label": "Well" }, { "id": "some-back", "label": "Some symptoms are back" }, { "id": "side-effects", "label": "Side effects" }, { "id": "stopping", "label": "Thinking of stopping" }] },
+    { "id": "bone-scan", "prompt": "Have you had a bone density scan?", "multi": false, "profileField": "intake.boneScan", "skipIfKnown": true, "presentation": "quiz",
+      "showIf": { "age": { "min": 60 } },
+      "options": [{ "id": "normal", "label": "Yes, it was normal" }, { "id": "low", "label": "Yes, it was low" }, { "id": "never", "label": "Never" }] },
+
+    { "id": "pregnant-which", "prompt": "Are you pregnant or breastfeeding right now?", "multi": false, "profileField": "conversation.pregnantWhich", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "pregnant", "label": "Pregnant" }, { "id": "breastfeeding", "label": "Breastfeeding" }] },
+    { "id": "provider-aware", "prompt": "Is your midwife or OB aware of what you’re feeling?", "multi": false, "profileField": "conversation.providerAware", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "yes", "label": "Yes" }, { "id": "not-yet", "label": "Not yet" }] },
+    { "id": "last-period", "prompt": "When was your last period?", "multi": false, "profileField": "intake.reproductive", "skipIfKnown": false, "presentation": "quiz", "noSkip": true,
+      "options": [{ "id": "cycling", "label": "This month" }, { "id": "perimenopausal", "label": "1–12 months ago" }, { "id": "postmenopausal", "label": "Over a year ago" }, { "id": "na", "label": "I don’t have periods" }] },
+
+    { "id": "snoring", "prompt": "Has anyone told you that you snore or stop breathing in your sleep?", "multi": false, "profileField": "conversation.snoring", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "yes", "label": "Yes" }, { "id": "no", "label": "No" }, { "id": "alone", "label": "I sleep alone" }] },
+    { "id": "sleep-hours", "prompt": "How many hours do you usually sleep?", "multi": false, "profileField": "conversation.sleepHours", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "under-5", "label": "Under 5" }, { "id": "5-6", "label": "5–6" }, { "id": "7-8", "label": "7–8" }, { "id": "over-8", "label": "Over 8" }] },
+    { "id": "t-checked", "prompt": "Have you ever had your testosterone checked?", "multi": false, "profileField": "intake.testosteroneChecked", "skipIfKnown": true, "presentation": "quiz",
+      "showIf": { "meds": { "lacks": ["testosterone"] } },
+      "options": [{ "id": "low", "label": "Yes, it was low" }, { "id": "normal", "label": "Yes, it was normal" }, { "id": "never", "label": "Never" }] },
+    { "id": "trt-check", "prompt": "How is your TRT going?", "multi": false, "profileField": "conversation.trtCheck", "skipIfKnown": false, "presentation": "quiz",
+      "showIf": { "meds": { "has": ["testosterone"] } },
+      "options": [{ "id": "well", "label": "Well" }, { "id": "back", "label": "Symptoms are back" }, { "id": "side-effects", "label": "Side effects" }] },
+    { "id": "weight-where", "prompt": "Where do you carry most of the weight?", "multi": false, "profileField": "conversation.weightWhere", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "waist", "label": "Around my waist" }, { "id": "all-over", "label": "All over" }, { "id": "changing", "label": "It’s been changing" }] },
+    { "id": "bloodsugar-chol", "prompt": "Has a doctor mentioned blood sugar or cholesterol?", "multi": false, "profileField": "conversation.bloodSugarChol", "skipIfKnown": false, "presentation": "quiz",
+      "showIf": { "conditions": { "lacks": ["blood-pressure", "Type 2 diabetes", "High blood pressure"] } },
+      "options": [{ "id": "sugar", "label": "Blood sugar" }, { "id": "chol", "label": "Cholesterol" }, { "id": "both", "label": "Both" }, { "id": "no", "label": "No" }] },
+    { "id": "movement", "prompt": "How much do you move in a typical week?", "multi": false, "profileField": "conversation.movement", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "rarely", "label": "Rarely" }, { "id": "1-2", "label": "1–2 times" }, { "id": "3+", "label": "3 or more times" }] },
+    { "id": "urination-change", "prompt": "Any changes in how often you urinate, or a weaker stream?", "multi": false, "profileField": "conversation.urination", "skipIfKnown": false, "presentation": "quiz",
+      "options": [{ "id": "no", "label": "No" }, { "id": "sometimes", "label": "Sometimes" }, { "id": "yes", "label": "Yes" }] },
+    { "id": "psa-check", "prompt": "When did you last have a PSA or prostate check?", "multi": false, "profileField": "intake.psaCheck", "skipIfKnown": true, "presentation": "quiz", "open": "Is screening in scope for education-only guidance? (F02b §8)",
+      "options": [{ "id": "this-year", "label": "This year" }, { "id": "1-3y", "label": "1–3 years ago" }, { "id": "never", "label": "Never" }] },
+
+    { "id": "red-flags-female", "prompt": "Last one, just to be safe. Have you had any of these lately?", "multi": true, "profileField": "conversation.redFlags", "skipIfKnown": false, "presentation": "quiz", "noSkip": true, "redFlags": true,
+      "options": [{ "id": "postmenopausal-bleeding", "label": "Bleeding after menopause" }, { "id": "breast-lump", "label": "A new breast lump" }, { "id": "fever-sweats", "label": "Fever with night sweats" }, { "id": "weight-loss", "label": "Weight loss I can’t explain" }, { "id": "chest-fainting", "label": "Chest pain or fainting" }, { "id": "none", "label": "None of these" }] },
+    { "id": "red-flags-male", "prompt": "Last one, just to be safe. Have you had any of these lately?", "multi": true, "profileField": "conversation.redFlags", "skipIfKnown": false, "presentation": "quiz", "noSkip": true, "redFlags": true,
+      "options": [{ "id": "chest-breath", "label": "Chest pain or shortness of breath" }, { "id": "urine-blood", "label": "Blood in urine" }, { "id": "testicular-lump", "label": "A testicular lump" }, { "id": "weight-loss", "label": "Weight loss I can’t explain" }, { "id": "fever-sweats", "label": "Fever with night sweats" }, { "id": "none", "label": "None of these" }] },
+    { "id": "red-flags-intersex", "prompt": "Last one, just to be safe. Have you had any of these lately?", "multi": true, "profileField": "conversation.redFlags", "skipIfKnown": false, "presentation": "quiz", "noSkip": true, "redFlags": true, "open": "Intersex journey definition (F02b §5): both lists merged until Deborah defines it.",
+      "options": [{ "id": "unexpected-bleeding", "label": "Unexpected bleeding" }, { "id": "new-lump", "label": "A new lump anywhere" }, { "id": "chest-breath", "label": "Chest pain, fainting or shortness of breath" }, { "id": "urine-blood", "label": "Blood in urine" }, { "id": "weight-loss", "label": "Weight loss I can’t explain" }, { "id": "fever-sweats", "label": "Fever with night sweats" }, { "id": "none", "label": "None of these" }] }
+  ],
+  "redFlagReply": "Thank you for telling me. What you’ve noticed is worth getting checked by a provider soon, so I won’t give you hormone-only guidance on this. Please contact your doctor, or call 911 if it feels urgent.",
+  "factLabels": {
+    "reproductive": "Hormonal stage",
+    "medications": "Medications",
+    "allergies": "Allergies",
+    "conditions": "Conditions",
+    "symptoms": "Symptoms",
+    "birthControl": "Birth control",
+    "menopauseSince": "Periods stopped",
+    "boneScan": "Bone density scan",
+    "testosteroneChecked": "Testosterone checked",
+    "psaCheck": "Last PSA check",
+    "dob": "Date of birth",
+    "sex": "Sex at birth",
+    "height": "Height",
+    "weight": "Weight",
+    "ageBand": "Age",
+    "country": "Country"
+  }
+}

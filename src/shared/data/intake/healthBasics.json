@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Sign-up health basics (M-1.8), in order. `showIf` hides a question or a suggestion unless every listed answer matches: { \"<key>\": { \"in\": [..] } } or { \"<key>\": { \"notIn\": [..] } }. Unanswered keys never match `in` and always pass `notIn`. Wording and options are placeholder until Deborah approves them. The hormonal-stage question and Birth control also hide when she identifies as a man (design direction 2026-10-14). OPEN: a trans man may still cycle; confirm with Deborah whether sex at birth alone should decide.",
+  "note": "Onboarding profile (M-1.8), in order — after sign-up (M-1.4), before the chat. Who the profile is for, then age and sex at birth: only what decides who Deborah talks to and which questions apply. Health details (stage, medications, allergies…) are never asked here; Deborah asks them in the conversation and saves them through Review and Confirm. `showIf` hides a step unless every listed answer matches; `ageGroup` (child · teen · adult) is derived from `birthYear`. `titleOther` is used when the profile is for someone else, with {name} as their first name. Decisions D-1 (birth year wheel) and D-2 (sex at birth only) from the onboarding plan. Wording is placeholder.",
   "steps": [
     {
       "key": "profileFor",
@@ -8,14 +8,75 @@
       "title": "Who is this profile for?"
     },
     {
+      "key": "relationship",
+      "kind": "choice",
+      "title": "Who are they to you?",
+      "showIf": {
+        "profileFor": {
+          "in": [
+            "dependent"
+          ]
+        }
+      },
+      "choices": [
+        {
+          "value": "daughter",
+          "label": "Daughter"
+        },
+        {
+          "value": "son",
+          "label": "Son"
+        },
+        {
+          "value": "partner",
+          "label": "Partner"
+        },
+        {
+          "value": "parent",
+          "label": "Parent"
+        },
+        {
+          "value": "other",
+          "label": "Someone else"
+        }
+      ]
+    },
+    {
+      "key": "memberName",
+      "kind": "name",
+      "title": "What’s their first name?",
+      "placeholder": "First name",
+      "showIf": {
+        "profileFor": {
+          "in": [
+            "dependent"
+          ]
+        }
+      }
+    },
+    {
       "key": "birthYear",
       "kind": "year",
-      "title": "What year were you born?"
+      "title": "What year were you born?",
+      "titleOther": "What year was {name} born?"
+    },
+    {
+      "key": "consent",
+      "kind": "consent",
+      "title": "Before we set up {name}’s profile",
+      "showIf": {
+        "profileFor": {
+          "in": [
+            "dependent"
+          ]
+        }
+      }
     },
     {
       "key": "sex",
       "kind": "choice",
       "title": "Sex at birth",
+      "titleOther": "{name}’s sex at birth",
       "choices": [
         {
           "value": "female",
@@ -28,254 +89,6 @@
         {
           "value": "intersex",
           "label": "Intersex"
-        }
-      ]
-    },
-    {
-      "key": "gender",
-      "kind": "text",
-      "title": "How do you identify?",
-      "placeholder": "Add your own",
-      "suggestions": [
-        {
-          "label": "Man"
-        },
-        {
-          "label": "Woman"
-        },
-        {
-          "label": "Prefer not to say"
-        },
-        {
-          "label": "Transgender"
-        },
-        {
-          "label": "Non-binary"
-        }
-      ],
-      "single": true
-    },
-    {
-      "key": "reproductive",
-      "kind": "choice",
-      "title": "Where are you hormonally right now?",
-      "showIf": {
-        "sex": {
-          "notIn": [
-            "male"
-          ]
-        },
-        "gender": {
-          "notIn": [
-            "man"
-          ]
-        }
-      },
-      "choices": [
-        {
-          "value": "cycling",
-          "label": "Premenopausal (regular cycles)"
-        },
-        {
-          "value": "perimenopausal",
-          "label": "Perimenopausal"
-        },
-        {
-          "value": "postmenopausal",
-          "label": "Postmenopausal"
-        },
-        {
-          "value": "pregnant",
-          "label": "Pregnant or breastfeeding"
-        },
-        {
-          "value": "na",
-          "label": "Not sure or doesn’t apply"
-        }
-      ]
-    },
-    {
-      "key": "hrt",
-      "kind": "choice",
-      "title": "Are you on HRT?",
-      "showIf": {
-        "reproductive": {
-          "in": [
-            "perimenopausal",
-            "postmenopausal"
-          ]
-        }
-      },
-      "choices": [
-        {
-          "value": "no",
-          "label": "No"
-        },
-        {
-          "value": "yes",
-          "label": "Yes"
-        },
-        {
-          "value": "unsure",
-          "label": "Not sure"
-        }
-      ]
-    },
-    {
-      "key": "medications",
-      "kind": "text",
-      "title": "Any current medications?",
-      "placeholder": "e.g. Levothyroxine",
-      "none": "None",
-      "suggestions": [
-        {
-          "label": "Levothyroxine"
-        },
-        {
-          "label": "Metformin"
-        },
-        {
-          "label": "Blood pressure medication"
-        },
-        {
-          "label": "Birth control",
-          "showIf": {
-            "sex": {
-              "notIn": [
-                "male"
-              ]
-            },
-            "gender": {
-              "notIn": [
-                "man"
-              ]
-            }
-          }
-        },
-        {
-          "label": "Testosterone",
-          "showIf": {
-            "sex": {
-              "in": [
-                "male",
-                "intersex"
-              ]
-            }
-          }
-        },
-        {
-          "label": "Antidepressant"
-        }
-      ]
-    },
-    {
-      "key": "supplements",
-      "kind": "text",
-      "title": "Any supplements?",
-      "placeholder": "e.g. Magnesium, Vitamin D",
-      "none": "None",
-      "suggestions": [
-        {
-          "label": "Magnesium"
-        },
-        {
-          "label": "Vitamin D"
-        },
-        {
-          "label": "Omega-3"
-        },
-        {
-          "label": "Iron",
-          "showIf": {
-            "sex": {
-              "notIn": [
-                "male"
-              ]
-            }
-          }
-        },
-        {
-          "label": "Zinc",
-          "showIf": {
-            "sex": {
-              "in": [
-                "male"
-              ]
-            }
-          }
-        },
-        {
-          "label": "B12"
-        }
-      ]
-    },
-    {
-      "key": "allergies",
-      "kind": "text",
-      "title": "Any medication allergies?",
-      "placeholder": "e.g. Penicillin",
-      "none": "None",
-      "suggestions": [
-        {
-          "label": "Penicillin"
-        },
-        {
-          "label": "Sulfa drugs"
-        },
-        {
-          "label": "Aspirin"
-        },
-        {
-          "label": "NSAIDs"
-        }
-      ]
-    },
-    {
-      "key": "conditions",
-      "kind": "text",
-      "title": "Any known conditions?",
-      "placeholder": "e.g. Hypothyroidism",
-      "none": "None",
-      "suggestions": [
-        {
-          "label": "Hypothyroidism"
-        },
-        {
-          "label": "PCOS",
-          "showIf": {
-            "sex": {
-              "notIn": [
-                "male"
-              ]
-            }
-          }
-        },
-        {
-          "label": "Endometriosis",
-          "showIf": {
-            "sex": {
-              "notIn": [
-                "male"
-              ]
-            }
-          }
-        },
-        {
-          "label": "Low testosterone",
-          "showIf": {
-            "sex": {
-              "in": [
-                "male",
-                "intersex"
-              ]
-            }
-          }
-        },
-        {
-          "label": "High blood pressure"
-        },
-        {
-          "label": "Type 2 diabetes"
         }
       ]
     }

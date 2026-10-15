@@ -2,7 +2,7 @@
  * @pattern SaveProfileCard — after the first useful answer: "Save your profile" with Apple, Google
  *          or email. A name-only user is anonymous; health data needs an account behind it.
  *          Resolved states: saved (account exists) · dismissed ("Not now").
- * @usedBy  M-2.1 (message kind `saveProfile`)
+ * @usedBy  design system page only. Retired from M-2.1 (plan P-10: sign-up now comes before onboarding).
  * @spec    docs/ux/F01-onboarding.md#4--after-the-first-useful-answer
  * @xref    web: apps/web/patterns/chat/SaveProfileCard — not built
  */

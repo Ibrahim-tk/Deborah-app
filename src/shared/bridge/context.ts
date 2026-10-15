@@ -15,7 +15,7 @@ import {
 import type { Conversation } from '../types/domain';
 import type { EngineContext, UserInput } from '../types/engine';
 import { nowFrom, uid } from '../utils';
-import { runPlan, type RunHandlers } from './conversationRunner';
+import { runPlan, useRunnerStore, type RunHandlers } from './conversationRunner';
 
 const engine = createConversationEngine();
 
@@ -49,7 +49,6 @@ export function contextFor(s: AppState, conversation: Conversation): EngineConte
     healthConsent: Boolean(s.healthConsentAt),
     region: localeRegion(),
     hasAccount: Boolean(s.accountId),
-    saveProfileOffered: Boolean(s.saveProfileOfferedAt),
   };
 }
 
@@ -65,6 +64,7 @@ function localeRegion(): string | undefined {
 /** Run one user input through the engine for the active profile. Resolves false if gated. */
 export async function runInput(input: UserInput, handlers: RunHandlers): Promise<boolean> {
   const conv = ensureConversation(useAppStore.getState());
+  if (input.kind === 'finishReview' && useRunnerStore.getState().busy[conv.id]) return false;
   const s = useAppStore.getState();
   const ctx = contextFor(s, s.conversations.byId[conv.id] ?? conv);
   if (!ctx) return false;

@@ -7,7 +7,9 @@ import { isMinor } from './profile';
 import type { Conversation } from '../types/domain';
 import type { EngineContext, EnginePlan, UserInput } from '../types/engine';
 import { uid } from '../utils/ids';
-import { asksForAnswer, detectScript, followUpReply } from './classifier';
+import { asksForAnswer, detectScript, followUpReply, symptomGroupOf } from './classifier';
+import { factFromAnswer, factsFromMessage, mergeFacts, pendingFacts, withFacts } from './facts';
+import { CLARIFY, journeyFor } from './journey';
 import { classify } from './guardrails';
 import {
   acknowledgeEmergencySteps,
@@ -23,14 +25,20 @@ import { checkInDetailSteps, checkInReplySteps, isAwaitingCheckInDetail, startCh
 import { shareLabsSteps } from './labs';
 import { answerPatch, CONSENT_ID, optionLabels, planConsultation, question } from './intake';
 import { inferFromMessage } from './extract';
-import { ANSWER_REQUEST_LABEL, answerSteps, deborahText, nextIntakeOrReady, pause, scriptOf, userBubble } from './plans';
+import { ANSWER_REQUEST_LABEL, answerSteps, deborahText, nextIntakeOrReady, pause, redFlagSteps, scriptOf, userBubble } from './plans';
+import type { PendingFact } from '../types/domain';
 export { CONSENT_ID } from './intake';
 
 export { ANSWER_REQUEST_LABEL } from './plans';
 export { greeting } from './memory';
-export { ageBandFor, ageOn, isMinor } from './profile';
+export { ageBandFor, ageGroupFor, ageOf, ageOn, isMinor } from './profile';
+export { journeyFor, missingBasics, planClarifiers, CLARIFY } from './journey';
+export { symptomGroupOf } from './classifier';
+export { factFromAnswer, pendingFacts, withFacts } from './facts';
+export { answerPatch, optionLabels, question } from './intake';
+export { productAllowed } from './plans';
 export { shows } from './showIf';
-export { nextNodeId, personalise, type FlowValue } from './flow';
+export { firstConsultFor, nextNodeId, personalise, type FlowValue } from './flow';
 export { extractionPatch, extractProfile, handOffSuggestions, healthKitPatch, profileCompletion } from './extract';
 export { chunkText, CPS } from './streamer';
 export { FREE_LIMIT, isGated } from './counting';
@@ -40,12 +48,15 @@ export function createConversationEngine() {
   return { handleUserInput };
 }
 
-function handleUserInput(ctx: EngineContext, input: UserInput): EnginePlan {
+function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
+  // DN-13: facts noted in this conversation count as known here, though they're not saved yet.
+  const ctx = { ...rawCtx, profile: withFacts(rawCtx.profile, rawCtx.conversation.facts) };
   switch (input.kind) {
     case 'text':
       return handleText(ctx, input.text, input.scriptId);
     case 'intakeAnswer':
-      return handleIntakeAnswer(ctx, input.questionId, input.optionIds, input.otherText);
+      // DN-05 Decline: the consultation goes on without anything she said in it.
+      return handleIntakeAnswer(input.questionId === CONSENT_ID && input.optionIds[0] !== 'agree' ? rawCtx : ctx, input.questionId, input.optionIds, input.otherText);
     case 'skip':
       return handleSkip(ctx, input.questionId);
     case 'acknowledgeEmergency':
@@ -58,6 +69,9 @@ function handleUserInput(ctx: EngineContext, input: UserInput): EnginePlan {
       return checkInReplySteps(ctx, input.messageId, input.optionId);
     case 'shareLabs':
       return shareLabsSteps(ctx, input.report);
+    case 'finishReview':
+      return ctx.conversation.providerReview?.state === 'waiting' && !pendingFacts(ctx.conversation).length
+        ? answerSteps(ctx, ctx.conversation, ctx.profile) : [];
     case 'requestAnswer':
       return [
         ...(input.retry ? [] : [userBubble(ctx, ANSWER_REQUEST_LABEL)]),
@@ -101,8 +115,10 @@ function insertAfterUser(plan: EnginePlan, steps: EnginePlan): EnginePlan {
 
 function normalText(ctx: EngineContext, text: string, suggestionScript?: string): EnginePlan {
   const conv = ctx.conversation;
-  // Minor profiles always use the teen script (docs/ux/F06-family-profiles.md › 6.4).
-  const detected = isMinor(ctx.profile, new Date(ctx.now)) ? TEEN_SCRIPT_ID : (suggestionScript ?? detectScript(text));
+  // Minor profiles use the teen script (docs/ux/F06-family-profiles.md › 6.4) — it's about periods, so only
+  // for girls. OPEN: "child and male-teen question banks" — documented default: boys keep the topic's script.
+  const minorGirl = isMinor(ctx.profile, new Date(ctx.now)) && (ctx.profile.sexAtBirth ?? ctx.profile.health?.sexAtBirth?.value) !== 'male';
+  const detected = minorGirl ? TEEN_SCRIPT_ID : (suggestionScript ?? detectScript(text));
 
   // Asking "what do you think" during intake/ready jumps to the answer.
   if ((conv.status === 'intake' || conv.status === 'ready' || conv.status === 'error') && asksForAnswer(text)) {
@@ -122,16 +138,19 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
   }
 
   if (conv.status === 'intake') {
-    // Free text answers the current question; stored verbatim in intake.notes.
+    // Free text answers the current question. Anything it names (a medicine, an allergy) is noted for
+    // Review and Confirm (DN-13); the words themselves stay in the conversation only.
     const current = (conv.intakePlan ?? []).find((id) => !(conv.intakeDone ?? []).includes(id));
-    const notes = [ctx.profile.intake.notes, text].filter(Boolean).join('\n');
-    const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), ...(current ? [current] : [])] };
+    const inferred = inferFromMessage(ctx.profile, text, new Date(ctx.now));
+    const facts = factsFromMessage(inferred);
+    const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), ...(current ? [current] : [])], facts: mergeFacts(conv.facts, facts) };
+    const profile = withFacts(ctx.profile, facts);
     return [
       userBubble(ctx, text),
-      { type: 'store', action: { type: 'updateIntake', profileId: ctx.profile.id, patch: { notes } } },
+      ...proposeSteps(conv.id, facts),
       { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone } } },
       ...pause('Reading your answer'),
-      ...nextIntakeOrReady(ctx, next, ctx.profile),
+      ...nextIntakeOrReady({ ...ctx, profile }, next, profile),
     ];
   }
 
@@ -146,7 +165,8 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
  */
 function startProfileSteps(ctx: EngineContext): EnginePlan {
   const conv = ctx.conversation;
-  const plan = planConsultation(ctx, [], false);
+  // Profile only: the basics, never topic clarifiers or a red-flag screen (there's no topic yet).
+  const plan = planConsultation(ctx, [], false).filter((id) => id !== CLARIFY);
   const next: Conversation = { ...conv, status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [] };
   return [
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [], startedAt: ctx.now } } },
@@ -156,15 +176,11 @@ function startProfileSteps(ctx: EngineContext): EnginePlan {
 }
 
 function startConsultation(rawCtx: EngineContext, text: string, scriptId: string): EnginePlan {
-  // Progressive intake: anything her message already answers (age, medicines, allergies…) is
-  // filled first, so planning skips those questions.
-  const inferred = inferFromMessage(rawCtx.profile, text, new Date(rawCtx.now));
-  const profile = { ...rawCtx.profile, ...inferred.profile, intake: { ...rawCtx.profile.intake, ...inferred.intake } };
+  // Progressive intake: anything her message already answers (age, medicines, allergies…) is noted
+  // first, so planning skips those questions. Noted, not saved: Review and Confirm comes after (DN-13).
+  const facts = factsFromMessage(inferFromMessage(rawCtx.profile, text, new Date(rawCtx.now)));
+  const profile = withFacts(rawCtx.profile, facts);
   const ctx = { ...rawCtx, profile };
-  const inferSteps: EnginePlan = [
-    ...(Object.keys(inferred.intake).length ? [{ type: 'store' as const, action: { type: 'updateIntake' as const, profileId: profile.id, patch: inferred.intake } }] : []),
-    ...(Object.keys(inferred.profile).length ? [{ type: 'store' as const, action: { type: 'updateProfile' as const, profileId: profile.id, patch: inferred.profile } }] : []),
-  ];
   const script = scripts[scriptId] ?? scripts[FALLBACK_SCRIPT_ID];
   const prev = ctx.conversation;
   // The onboarding chat carries on into her first consultation (its messages stay).
@@ -177,18 +193,26 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
     status: 'intake',
     messages: [],
     startedAt: ctx.now,
+    // DN-07 · DN-08: what she's asking about and which question bank fits her.
+    symptomGroup: symptomGroupOf(text),
+    journey: journeyFor(profile, new Date(ctx.now)) ?? undefined,
     intakePlan: planConsultation(ctx, script.intake, Boolean(script.answer.product)),
     intakeDone: [],
+    facts,
   };
   return [
     reuse
       ? { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: prev.profileOnly ? { ...conv, messages: prev.messages, profileOnly: false } : conv } }
       : { type: 'store', action: { type: 'startConversation', conversation: conv } },
-    ...inferSteps,
     userBubble(ctx, text),
     ...pause('Reading your message'),
     ...nextIntakeOrReady(ctx, conv, ctx.profile),
   ];
+}
+
+/** Store step for newly noted facts (the bridge merges them into the conversation). */
+function proposeSteps(conversationId: string, facts: PendingFact[]): EnginePlan {
+  return facts.length ? [{ type: 'store', action: { type: 'proposeFacts', conversationId, facts } }] : [];
 }
 
 function handleIntakeAnswer(ctx: EngineContext, questionId: string, optionIds: string[], otherText?: string): EnginePlan {
@@ -201,14 +225,30 @@ function handleIntakeAnswer(ctx: EngineContext, questionId: string, optionIds: s
 
   if (questionId === CONSENT_ID) return [...markAnswered, bubble, ...consentSteps(ctx, conv, optionIds[0] === 'agree')];
 
+  const done = [...(conv.intakeDone ?? []), questionId];
+  // DN-11: preserve urgent intervention; other concerns get an uncounted provider-review ending.
+  if (q.redFlags && optionIds.some((id) => id !== 'none')) {
+    return [
+      ...markAnswered,
+      bubble,
+      { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: done, redFlag: true, noProduct: true } } },
+      ...pause('Reading your answer', 600, 1000),
+      ...(classify(optionLabels(q, optionIds, otherText, qMsg?.intake?.options), ctx).replace === 'emergency'
+        ? emergencySteps({ ...ctx, conversation: { ...conv, redFlag: true, noProduct: true } })
+        : redFlagSteps(ctx, { ...conv, intakeDone: done, redFlag: true, providerReview: { state: 'waiting', concerns: optionIds.filter((id) => id !== 'none').map((id) => id === 'other' ? otherText?.trim() || 'Other concern' : q.options.find((o) => o.id === id)?.label ?? id) } })),
+    ];
+  }
+
+  // DN-13: the answer is noted for Review and Confirm, and used right away in this conversation.
   const patch = answerPatch(q, optionIds, otherText, new Date(ctx.now), ctx.profile);
-  const profile = { ...ctx.profile, ...patch.profile, intake: { ...ctx.profile.intake, ...patch.intake } };
-  const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), questionId] };
+  const fact = factFromAnswer(q, patch, optionLabels(q, optionIds, otherText, qMsg?.intake?.options));
+  const facts = fact ? [fact] : [];
+  const profile = withFacts(ctx.profile, facts);
+  const next: Conversation = { ...conv, intakeDone: done, facts: mergeFacts(conv.facts, facts) };
   return [
     ...markAnswered,
     bubble,
-    { type: 'store', action: { type: 'updateIntake', profileId: ctx.profile.id, patch: patch.intake } },
-    ...(Object.keys(patch.profile).length ? [{ type: 'store' as const, action: { type: 'updateProfile' as const, profileId: ctx.profile.id, patch: patch.profile } }] : []),
+    ...proposeSteps(conv.id, facts),
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone } } },
     ...pause('Reading your answer', 600, 1000),
     ...nextIntakeOrReady({ ...ctx, profile }, next, profile),
@@ -232,9 +272,11 @@ function consentSteps(ctx: EngineContext, conv: Conversation, agreed: boolean): 
     ];
   }
   const all = [...new Set([...done, ...(conv.intakePlan ?? []).filter((id) => id !== 'country')])];
-  const next: Conversation = { ...conv, intakeDone: all, noProduct: true };
+  // DN-05 Decline: nothing she said is used or offered for saving.
+  const facts = (conv.facts ?? []).map((f) => (f.status === 'pending' ? { ...f, status: 'discarded' as const } : f));
+  const next: Conversation = { ...conv, intakeDone: all, noProduct: true, facts };
   return [
-    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: all, noProduct: true } } },
+    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: all, noProduct: true, facts } } },
     ...pause('Reading your answer', 400, 700),
     ...deborahText(ctx, "That's completely fine. I won't ask about your health details, and I'll keep my thoughts general."),
     ...nextIntakeOrReady(ctx, next, ctx.profile),

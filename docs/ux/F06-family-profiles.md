@@ -42,6 +42,10 @@ Avatar ─► M-6.1 switcher ─ tap profile ─► switch (ask & health stacks 
 
 **Open:** teen privacy (can the teen have her own login?), adult consent model (husband), whether male health is in scope.
 
+**Onboarding (2026-10-15):** the first person someone cares for can also be added during onboarding (M-1.8 "Someone
+I care for"), with consent by age group from `legal/consent.json › profileConsent` and `Profile.consent` recorded.
+M-6.2 still uses its own checkbox copy; OPEN: move M-6.2 to the shared consent copy and allow under-13 there too.
+
 ---
 
 ## M-6.3 · Upgrade to Family

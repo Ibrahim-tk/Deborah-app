@@ -344,17 +344,12 @@
   "safetyGates": [
     "dob",
     "sex",
-    "height",
-    "weight",
     "medications",
     "allergies"
   ],
   "onboarding": [
     "dob",
-    "sex",
-    "profile-for",
-    "reproductive",
-    "medications",
-    "allergies"
-  ]
+    "sex"
+  ],
+  "note": "`onboarding`: basics still asked in the first consultation when missing (date of birth, sex at birth). Core experience (meeting 2026-10-12 · A): the hormonal stage is asked by the journey (chatIntake.json › missingBasics); medications and allergies only as safety gates before a product (F01). `safetyGates` (plan DN-09): asked before an answer that carries a product, after the topic questions. Height and weight are no longer gates (meeting 2026-10-12 · A: collect only what the conversation needs)."
 }

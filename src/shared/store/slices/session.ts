@@ -11,7 +11,6 @@ type Actions = Pick<
   | 'acceptConsent'
   | 'acceptHealthConsent'
   | 'dismissDisclaimer'
-  | 'offerSaveProfile'
   | 'switchProfile'
   | 'advanceClock'
   | 'setPermission'
@@ -19,7 +18,6 @@ type Actions = Pick<
   | 'snoozeFollowUp'
   | 'createAccount'
   | 'restoreAccount'
-  | 'dismissSaveNudge'
   | 'setReferralSource'
   | 'acceptTerms'
   | 'setGenesisGoldCustomer'
@@ -55,7 +53,6 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
   acceptConsent: (version) => set((s) => ({ consentAcceptedAt: nowFrom(s).toISOString(), consentVersion: version })),
   acceptHealthConsent: () => set((s) => ({ healthConsentAt: s.healthConsentAt ?? nowFrom(s).toISOString() })),
   dismissDisclaimer: () => set((s) => ({ disclaimerSeenAt: s.disclaimerSeenAt ?? nowFrom(s).toISOString() })),
-  offerSaveProfile: () => set((s) => ({ saveProfileOfferedAt: s.saveProfileOfferedAt ?? nowFrom(s).toISOString() })),
   switchProfile: (id) => set({ activeProfileId: id }),
   advanceClock: (days) => {
     const s = get();
@@ -82,8 +79,6 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
   setReferralSource: (referralSource) => set((s) => (s.referralSource ? {} : { referralSource })),
   acceptTerms: () => set((s) => ({ termsAcceptedAt: s.termsAcceptedAt ?? nowFrom(s).toISOString() })),
   setGenesisGoldCustomer: (isGenesisGoldCustomer) => set({ isGenesisGoldCustomer }),
-  dismissSaveNudge: () =>
-    set((s) => ({ saveNudgeDismissedAt: Object.values(s.conversations.byId).filter((c) => c.messages.length).length })),
   discardGuestData: () =>
     set({
       conversations: { byId: {}, activeByProfile: {} },

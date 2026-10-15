@@ -52,6 +52,8 @@ export function useConversation() {
     if (c && m) s.removeMessage(c.id, m.id);
   };
 
+  const finishReview = useCallback(() => run({ kind: 'finishReview' }), [run]);
+
   return {
     conversation,
     profile,
@@ -63,6 +65,7 @@ export function useConversation() {
       run({ kind: 'intakeAnswer', questionId, optionIds, otherText }),
     skip: (questionId: string) => run({ kind: 'skip', questionId }),
     requestAnswer: () => run({ kind: 'requestAnswer' }),
+    finishReview,
     /** Error bubble "tap to try again" and stopped answer "Continue" both re-run the answer. */
     retry: () => {
       removeMessage('error');

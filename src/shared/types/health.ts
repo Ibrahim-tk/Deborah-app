@@ -1,5 +1,6 @@
 /** Health profile for intake V2 (frictionless intake). Every field remembers where it came from. */
-export type FieldSource = 'healthkit' | 'inferred' | 'manual' | 'scan';
+/** `chat`: confirmed through Review and Confirm (plan DN-13). */
+export type FieldSource = 'healthkit' | 'inferred' | 'manual' | 'scan' | 'chat';
 export type SexAtBirth = 'female' | 'male' | 'intersex';
 
 export interface HealthField<T> {

@@ -6,9 +6,11 @@
  * @spec    docs/ux/F01-onboarding.md#m-12--welcome
  * @xref    web: W-1.2 (apps/web/screens/onboarding/Welcome) — not built
  *
- * Design direction (2026-10-13, rev 5): Deborah's orb and note, then "What should I call you?" (first name)
- * and Get Started, which opens the sign-up sheet (M-1.4: email + password, code, "you're in"). Terms and
- * Privacy open the legal page; "Sign in" opens the same sheet in sign-in mode (email + password, code, Home).
+ * Onboarding plan P-05 (design direction 2026-10-15): Deborah's orb and note, then "What should I call you?"
+ * (first name) and Get Started, which opens the sign-up sheet (M-1.4: email + password, code, "you're in"),
+ * then the onboarding profile (M-1.8). M-1.4 accepts the Terms and Privacy and creates the account on verify.
+ * "Sign in" opens the same sheet in sign-in mode (email + password, code, Home).
+ * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
  */
 import { useState, type FormEvent } from 'react';
 import { persona } from '@shared/data';

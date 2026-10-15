@@ -5,7 +5,7 @@
  * @xref    web: — not built
  * OPEN: consent and data-protection wording is placeholder until Deborah and legal approve it.
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { consentDoc } from '@shared/data';
 import { Button, Icon, IconButton, Overlay } from '@mobile/ui';
 import styles from './InlineConsent.module.css';
@@ -18,6 +18,12 @@ const DOCS: Record<Doc, { link: string; title: string; body: string[] }> = {
 };
 
 export interface InlineConsentProps {
+  title?: string;
+  /** null preserves a question's original wording without adding the lab's explanation. */
+  description?: string | null;
+  agreeLabel?: string;
+  declineLabel?: string;
+  disabled?: boolean;
   onAgree: () => void;
   onDecline: () => void;
   /** After a choice: the card stays in the thread as a quiet record. */
@@ -30,31 +36,37 @@ export interface InlineConsentProps {
   variant?: 'stacked' | 'row' | 'strip' | 'dark';
 }
 
-export function InlineConsent({ onAgree, onDecline, answered, variant = 'row' }: InlineConsentProps) {
+export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', title, description, agreeLabel, declineLabel, disabled }: InlineConsentProps) {
   const [doc, setDoc] = useState<Doc>();
+  const submitted = useRef(false);
+  const act = (agree: boolean) => {
+    if (disabled || submitted.current) return;
+    submitted.current = true;
+    (agree ? onAgree : onDecline)();
+  };
   const link = (d: Doc) => (
     <button type="button" className={styles.link} aria-haspopup="dialog" onClick={() => setDoc(d)}>{DOCS[d].link}</button>
   );
 
   return (
     <section className={styles.root} data-variant={variant} aria-label="Health data consent" data-placeholder>
-      <h3 className={styles.title}>Can I use your health details?</h3>
-      <p className={styles.body}>
-        Only to tailor my guidance. You accept our {link('privacy')} and {link('terms')}.
-      </p>
+      <h3 className={styles.title}>{title ?? 'Can I use your health details?'}</h3>
+      {description !== null && <p className={styles.body}>
+        {description ?? <>Only to tailor my guidance. You accept our {link('privacy')} and {link('terms')}.</>}
+      </p>}
       {answered ? (
         <p className={styles.done}><Icon name="check" size={16} /> {answered === 'agreed' ? 'You agreed. Thank you.' : 'Not now. Your answers stay on this phone.'}</p>
       ) : (
         <div className={styles.actions}>
           {variant === 'strip' ? (
             <>
-              <Button size="md" className={styles.agree} onClick={onAgree}>Agree and continue</Button>
-              <button type="button" className={styles.textLink} onClick={onDecline}>Not now</button>
+              <Button size="md" disabled={disabled} className={styles.agree} onClick={() => act(true)}>{agreeLabel ?? 'Agree and continue'}</Button>
+              <button type="button" disabled={disabled} className={styles.textLink} onClick={() => act(false)}>{declineLabel ?? 'Not now'}</button>
             </>
           ) : (
             <>
-              <Button size={variant === 'stacked' ? 'lg' : 'md'} fullWidth className={styles.agree} onClick={onAgree}>{variant === 'stacked' ? 'Agree and continue' : 'Agree'}</Button>
-              <Button size={variant === 'stacked' ? 'lg' : 'md'} variant="ghost" fullWidth className={styles.notNow} onClick={onDecline}>Not now</Button>
+              <Button size={variant === 'stacked' ? 'lg' : 'md'} disabled={disabled} fullWidth className={styles.agree} onClick={() => act(true)}>{agreeLabel ?? (variant === 'stacked' ? 'Agree and continue' : 'Agree')}</Button>
+              <Button size={variant === 'stacked' ? 'lg' : 'md'} disabled={disabled} variant="ghost" fullWidth className={styles.notNow} onClick={() => act(false)}>{declineLabel ?? 'Not now'}</Button>
             </>
           )}
         </div>

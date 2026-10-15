@@ -128,7 +128,7 @@ export default function CreateProfile() {
           <div key="done" className={styles.done} role="status">
             <span className={styles.check}><Icon name="check" size={32} /></span>
             <h2 className={styles.title}>{signin ? `Welcome back, ${nameFromEmail(email)}.` : `You’re in${first ? `, ${first}` : ''}.`}</h2>
-            <p className={styles.sub}>{signin ? 'Taking you home…' : 'Just a few questions so I can get to know you.'}</p>
+            <p className={styles.sub}>{signin ? 'Taking you home…' : 'A few quick questions so I know who I’m talking to.'}</p>
           </div>
         )}
       </Sheet>

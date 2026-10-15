@@ -11,6 +11,50 @@ export type Billing = 'monthly' | 'annual';
 export type Relationship = 'self' | 'daughter' | 'son' | 'partner' | 'parent' | 'other';
 export type NotificationPermission = 'unknown' | 'granted' | 'denied';
 
+/** Core experience age groups (DN-03): sign-up and chat behave differently for each. */
+export type AgeGroup = 'child' | 'teen' | 'adult';
+
+/** DN-07: the six groups in data/intake/symptoms.json. */
+export type SymptomGroupId = 'sleep' | 'temperature' | 'mood' | 'cycle' | 'weight' | 'body';
+
+/** DN-08: which question bank a consultation uses (docs/ux/F02b-profile-aware-chat-intake.md). */
+export type JourneyId =
+  | 'female-cycling'
+  | 'female-peri'
+  | 'female-post'
+  | 'female-pregnant'
+  | 'female-unsure'
+  | 'male-under-40'
+  | 'male-40-54'
+  | 'male-55-plus'
+  | 'teen'
+  | 'child';
+
+/** A fact Deborah noted in a conversation, waiting for the user's Confirm (DN-13). */
+export interface PendingFact {
+  id: ID;
+  /** Profile field it fills (`medications`, `reproductive`…); one pending fact per key. */
+  key: string;
+  /** The question that asked for it, so Edit can offer the same options. */
+  questionId?: string;
+  label: string;
+  /** What the user sees, e.g. "Levothyroxine". */
+  value: string;
+  /** Applied to the profile only when confirmed. */
+  patch: { intake?: Partial<Intake>; profile?: Partial<Profile> };
+  /** `answer` = she answered Deborah's question · `message` = picked up from what she typed. */
+  source: 'answer' | 'message';
+  status: 'pending' | 'confirmed' | 'discarded';
+}
+
+export interface ConfirmedFact {
+  key: string;
+  label: string;
+  value: string;
+  conversationId: ID;
+  confirmedAt: ISODate;
+}
+
 export type AgeBand = 'under-40' | '40-45' | '46-50' | '51-55' | '56+' | 'teen';
 export type Cycle = 'regular' | 'irregular' | 'stopped' | 'unknown';
 
@@ -33,6 +77,13 @@ export interface Intake {
   /** Asked only when relevant to the topic (e.g. thyroid): free text with units. */
   height?: string;
   weight?: string;
+  /** Core experience facts (confirmed through Review and Confirm). Symptoms are labels, merged. */
+  symptoms?: string[];
+  birthControl?: string;
+  menopauseSince?: string;
+  boneScan?: string;
+  testosteroneChecked?: string;
+  psaCheck?: string;
 }
 
 export interface Profile {
@@ -47,6 +98,10 @@ export interface Profile {
   intakeV2?: IntakeProgress;
   createdAt: ISODate;
   guardianConsentAt?: ISODate;
+  /** Set up by someone else in onboarding or M-6.2: which consent they gave, by age group (plan P-01). */
+  consent?: { path: 'adult-agreement' | 'guardian-teen' | 'guardian-child'; attestedAt: ISODate; attestedBy?: ID };
+  /** DN-14: facts the user confirmed from a conversation (shown on M-2.10 with where they came from). */
+  confirmedFacts?: ConfirmedFact[];
 }
 
 export type MessageRole = 'user' | 'deborah' | 'system';
@@ -64,8 +119,8 @@ export type MessageKind =
   | 'checkIn'
   | 'labRequest'
   | 'followUpPrompt'
-  /** After the first useful answer: save the profile to an account (F01 step 4). */
-  | 'saveProfile';
+  /** Review and Confirm (meeting 2026-10-12 · B): facts noted in this conversation, saved only on Confirm. */
+  | 'reviewFacts';
 
 export interface Option {
   id: string;
@@ -212,6 +267,17 @@ export interface Conversation {
   profileOnly?: boolean;
   /** Check-in progress (docs/ux/F05-followup-labs.md › M-2.1 state · Check-in). */
   checkInStage?: CheckInStage;
+  /** Core experience (DN-07 · DN-08): symptom group and journey this consultation was planned for. */
+  symptomGroup?: SymptomGroupId;
+  journey?: JourneyId;
+  /** DN-11: a red flag was reported; no product and provider-directed framework or urgent safety intervention. */
+  redFlag?: boolean;
+  /** Uncounted provider-directed framework, generated only after pending facts are resolved. */
+  providerReview?: { state: 'waiting' | 'generating' | 'done'; concerns: string[] };
+  /** DN-13: facts Deborah noted here. Used in this conversation; saved to the profile only on Confirm. */
+  facts?: PendingFact[];
+  /** M-2.8 is due but waits until the Review and Confirm card is resolved. */
+  followUpAfterReview?: boolean;
 }
 
 export type CheckInStage = 'opening' | 'awaitingDetail' | 'labs' | 'done';

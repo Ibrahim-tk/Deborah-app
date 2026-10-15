@@ -9,6 +9,8 @@ export type ScenarioGroup =
   | 'Family'
   | 'Subscriber'
   | 'Booking'
+  /** Core experience paths (plan C-21): one per journey and decision node. */
+  | 'Journeys'
   | 'QA';
 
 export type TabId = 'ask' | 'health' | 'account';

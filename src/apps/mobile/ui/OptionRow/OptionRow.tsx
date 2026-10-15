@@ -16,13 +16,15 @@ export interface OptionRowProps {
   disabled?: boolean;
   onSelect?: () => void;
   className?: string;
+  choiceId?: string;
 }
 
-export function OptionRow({ children, selected, multi = false, leadingIcon, chevron, disabled, onSelect, className }: OptionRowProps) {
+export function OptionRow({ children, selected, multi = false, leadingIcon, chevron, disabled, onSelect, className, choiceId }: OptionRowProps) {
   const role = multi ? 'checkbox' : selected !== undefined ? 'radio' : undefined;
   return (
     <button
       type="button"
+      data-choice-id={choiceId}
       role={role}
       aria-checked={role ? selected : undefined}
       disabled={disabled}

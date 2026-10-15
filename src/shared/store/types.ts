@@ -12,6 +12,7 @@ import type {
   Note,
   NoteKind,
   NotificationPermission,
+  PendingFact,
   Plan90,
   PlanTier,
   Profile,
@@ -32,10 +33,6 @@ export interface SessionSlice {
   healthConsentAt?: string;
   /** "Not a substitute for professional care" line above the first chat; shown once. */
   disclaimerSeenAt?: string;
-  /** Save-your-profile card shown after the first useful answer (once). */
-  saveProfileOfferedAt?: string;
-  /** Home "Save your progress" card: dismissed at this consultation count; returns after the next one. */
-  saveNudgeDismissedAt?: number;
   /** Deep-link attribution captured silently at launch (genesis-gold | newsletter | social | direct). */
   referralSource?: string;
   /** Welcome "Get started": agreeing to Terms and Privacy Policy. */
@@ -52,7 +49,6 @@ export interface SessionSlice {
   acceptConsent: (version: string) => void;
   acceptHealthConsent: () => void;
   dismissDisclaimer: () => void;
-  offerSaveProfile: () => void;
   switchProfile: (id: ID) => void;
   advanceClock: (days: number) => void;
   setPermission: (p: NotificationPermission) => void;
@@ -65,7 +61,6 @@ export interface SessionSlice {
    * no history on this device) so Main is reachable (docs/ux/F01-onboarding.md › Sign in).
    */
   restoreAccount: (email: string) => void;
-  dismissSaveNudge: () => void;
   setReferralSource: (source: string) => void;
   acceptTerms: () => void;
   setGenesisGoldCustomer: (on: boolean) => void;
@@ -128,6 +123,14 @@ export interface ConversationsSlice {
   /** Archive the active conversation (kept in records) and show the empty state. */
   archiveActive: (profileId: ID) => void;
   completeConsultation: (conversationId: ID) => void;
+  /** DN-13 Review and Confirm: facts noted in a conversation wait here; only confirm writes the profile. */
+  proposeFacts: (conversationId: ID, facts: PendingFact[]) => void;
+  /** Saves these facts to the conversation's profile (with where they came from); the rest stay pending. */
+  confirmFacts: (conversationId: ID, factIds: ID[]) => void;
+  /** "Don't save": these facts are dropped and never reach the profile. */
+  discardFacts: (conversationId: ID, factIds: ID[]) => void;
+  /** Edit before confirming: replaces the fact's value and patch. */
+  editFact: (conversationId: ID, factId: ID, change: Pick<PendingFact, 'value' | 'patch'>) => void;
 }
 
 export interface LabsSlice {

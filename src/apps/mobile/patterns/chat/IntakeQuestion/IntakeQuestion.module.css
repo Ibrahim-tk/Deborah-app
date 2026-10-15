@@ -108,3 +108,5 @@ input.row::placeholder { color: var(--color-ink-placeholder); }
 .fieldWrap { display: grid; gap: var(--space-4); }
 .select { justify-self: center; min-width: 160px; }
 
+
+.otherForm { display: grid; gap: var(--space-3); margin-top: var(--space-3); }

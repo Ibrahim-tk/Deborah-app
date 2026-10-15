@@ -43,6 +43,12 @@ export interface Consent {
   careLine: string;
   terms: LegalDoc;
   privacy: LegalDoc;
+  /** Consent for a profile set up for someone else, by age group (plan P-01). `{name}` is theirs. */
+  profileConsent: {
+    status: ContentStatus;
+    open: string;
+    title: string;
+  } & Record<'child' | 'teen' | 'adult', { body: string; check: string }>;
   status: ContentStatus;
 }
 
@@ -77,6 +83,39 @@ export interface IntakeQuestion {
    * pills = yes/no and short single answers · quiz = numbered card for lists with "Other".
    */
   presentation?: 'pills' | 'quiz';
+  /** Core experience bank: asked only when the profile matches. */
+  showIf?: ShowIf;
+  /** DN-11: the red-flag screen; any option except "none" stops the hormone-only answer. */
+  redFlags?: boolean;
+  /** Unresolved product question quoted from the spec (kept next to the content). */
+  open?: string;
+}
+
+/** Core experience question bank (data/conversation/chatIntake.json). */
+export interface ChatJourney {
+  id: import('./domain').JourneyId;
+  /** Symptom group (or `general`) → clarifier ids in priority order. */
+  clarifiers?: Partial<Record<import('./domain').SymptomGroupId | 'general', string[]>>;
+  /** Reuse another journey's clarifiers. */
+  extends?: import('./domain').JourneyId;
+  /** Age-specific question that replaces the lowest-priority clarifier (F02b 4d). */
+  extra?: string;
+  /** Re-plan once the stage this journey asks for is known (F02b 3e). */
+  reroute?: boolean;
+  noProduct?: boolean;
+  redFlags: string;
+  note?: string;
+}
+
+export interface ChatIntakeData {
+  status: ContentStatus;
+  maxClarifiers: number;
+  groups: { id: import('./domain').SymptomGroupId; title: string; match: string[] }[];
+  missingBasics: { questionId: string; showIf?: ShowIf }[];
+  journeys: ChatJourney[];
+  questions: IntakeQuestion[];
+  redFlagReply: string;
+  factLabels: Record<string, string>;
 }
 
 export interface IntakeData {
@@ -227,12 +266,18 @@ export interface BookingInfo {
 }
 
 /** Sign-up health basics (data/intake/healthBasics.json): conditional question map. */
-export type ShowIf = Record<string, { in?: string[]; notIn?: string[] }>;
-export type HealthBasicsKind = 'year' | 'measure' | 'choice' | 'text' | 'profileFor';
+/**
+ * `in` / `notIn` match one value · `has` / `lacks` match a list value (any of) · `min` / `max` bound a
+ * number (age) · `unknown: true` passes only while the key has no answer.
+ */
+export type ShowIf = Record<string, { in?: string[]; notIn?: string[]; has?: string[]; lacks?: string[]; min?: number; max?: number; unknown?: boolean }>;
+export type HealthBasicsKind = 'date' | 'year' | 'measure' | 'choice' | 'text' | 'profileFor' | 'name' | 'consent';
 export interface HealthBasicsStep {
   key: string;
   kind: HealthBasicsKind;
   title: string;
+  /** Title when the profile is for someone else; `{name}` is their first name. */
+  titleOther?: string;
   choices?: { value: string; label: string }[];
   placeholder?: string;
   /** Text steps: the one-tap empty answer. */

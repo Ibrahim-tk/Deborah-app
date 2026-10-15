@@ -11,7 +11,7 @@ const DEMO = { name: 'Maria', email: 'maria@example.com', password: 'demo-passwo
 const END = /^M-2\.(0|1|12)\b/;
 
 /** Tap order: the forward action a presenter would pick on each kind of screen. */
-const FORWARD = [/^none$/i, /^myself/i, /continue/i, /get started/i, /start my journey/i, /^next/i, /^done/i, /^save/i, /^agree|accept/i, /^sign in$/i];
+const FORWARD = [/^none$/i, /^myself/i, /continue/i, /get started/i, /start my journey/i, /^start chatting|^start talking/i, /^next/i, /^done/i, /^save/i, /^agree|accept/i, /^sign in$/i];
 const NEVER = /back|previous|close|dismiss|info|menu|terms|privacy|cancel|skip/i;
 
 const visible = (el: HTMLElement) => {
@@ -29,6 +29,8 @@ function type(input: HTMLInputElement, value: string) {
 }
 
 function demoValue(input: HTMLInputElement) {
+  // The 6-digit email code (M-1.4): any digits verify in the prototype.
+  if (input.inputMode === 'numeric') return '4';
   if (input.type === 'password') return DEMO.password;
   if (input.type === 'email' || /email/i.test(input.autocomplete)) return DEMO.email;
   return DEMO.name;

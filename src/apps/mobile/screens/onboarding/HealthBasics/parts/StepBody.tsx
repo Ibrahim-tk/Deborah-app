@@ -1,6 +1,8 @@
-/** The control for one health-basics step: year wheel, rulers, option rows, chips (+ Other), or the profile tiles. */
-import { RulerSlider, YearWheel } from '@mobile/ui';
-import { list, visibleSuggestions, type Answers, type Step } from '../steps';
+/** The control for one onboarding step: who-for tiles, name, year wheel, consent, choice tiles (and older kinds still in the data model). */
+import { consentDoc } from '@shared/data';
+import { Checkbox, DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
+import { list, visibleSuggestions, withDerived, type Answers, type Step } from '../steps';
+import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
 import { ChoiceTiles } from './ChoiceTiles';
@@ -27,8 +29,27 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
     set(step.key, step.single ? (picked.includes(name) ? '' : name) : (picked.includes(name) ? picked.filter((n) => n !== name) : [...picked, name]).join(', '));
 
   switch (step.kind) {
+    case 'date':
+      return <DateWheel label="Date of birth" value={value} minYear={THIS_YEAR - 100} maxYear={THIS_YEAR} onChange={(d) => set(step.key, d)} />;
     case 'year':
-      return <YearWheel cinematic label="Year of birth" value={Number(value)} min={THIS_YEAR - 100} max={THIS_YEAR - 13} onChange={(y) => set(step.key, String(y))} />;
+      // Down to this year − 1: children can be added for someone else; adults under 18 meet the age gate.
+      return <YearWheel cinematic label="Year of birth" value={Number(value)} min={THIS_YEAR - 100} max={THIS_YEAR - 1} onChange={(y) => set(step.key, String(y))} />;
+    case 'name':
+      return (
+        <Input label="First name" placeholder={step.placeholder ?? 'First name'} value={value} autoComplete="off" autoCapitalize="words" maxLength={40} enterKeyHint="next" onChange={(e) => set(step.key, e.target.value)} />
+      );
+    case 'consent': {
+      // Copy by age group (child · teen · adult) from legal/consent.json; placeholder until legal review.
+      const group = (withDerived(answers).ageGroup ?? 'adult') as 'child' | 'teen' | 'adult';
+      const copy = consentDoc.profileConsent[group];
+      const name = answers.memberName?.trim() || 'them';
+      return (
+        <div className={styles.consent} data-placeholder>
+          <p className={styles.consentText}>{copy.body.replaceAll('{name}', name)}</p>
+          <Checkbox checked={value === 'yes'} onChange={(on) => set(step.key, on ? 'yes' : '')} label={copy.check.replaceAll('{name}', name)} />
+        </div>
+      );
+    }
     case 'measure':
       return (
         <>

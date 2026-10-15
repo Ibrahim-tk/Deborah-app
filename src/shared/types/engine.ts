@@ -1,5 +1,5 @@
 /** Engine contract (docs/07-ai-simulation.md §1). */
-import type { ContentStatus, Conversation, ID, Intake, LabReport, Message, NotificationPermission, PlanTier, Profile, SectionKey } from './domain';
+import type { ContentStatus, Conversation, ID, Intake, LabReport, Message, NotificationPermission, PendingFact, PlanTier, Profile, SectionKey } from './domain';
 
 export interface EngineContext {
   profile: Profile;
@@ -27,8 +27,6 @@ export interface EngineContext {
   /** Region from the device locale ("US"), confirmed in chat before it is stored. */
   region?: string;
   hasAccount?: boolean;
-  /** The save-your-profile card was already shown once. */
-  saveProfileOffered?: boolean;
 }
 
 export type UserInput =
@@ -36,6 +34,7 @@ export type UserInput =
   | { kind: 'intakeAnswer'; questionId: string; optionIds: string[]; /** Free text typed into an "other" option. */ otherText?: string }
   | { kind: 'skip'; questionId: string }
   | { kind: 'requestAnswer'; retry?: boolean }
+  | { kind: 'finishReview' }
   /** Emergency card: "I'm safe — this isn't happening now". */
   | { kind: 'acknowledgeEmergency'; messageId: string }
   /** Deep link `followup:<profileId>` opened the Conversation in check-in mode. */
@@ -56,7 +55,8 @@ export type StoreAction =
   | { type: 'clearFailNext' }
   | { type: 'updateProfile'; profileId: ID; patch: Partial<Profile> }
   | { type: 'acceptHealthConsent' }
-  | { type: 'offerSaveProfile' }
+  /** DN-13: facts noted in a conversation, waiting for Review and Confirm. Never written to the profile here. */
+  | { type: 'proposeFacts'; conversationId: ID; facts: PendingFact[] }
   /** Archive the current conversation and continue the plan in this new one. */
   | { type: 'startConversation'; conversation: Conversation };
 

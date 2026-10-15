@@ -2,14 +2,15 @@
  * @screen  M-2.10 · Build your health profile
  * @flow    F02 intake V2 — Step D on its own, from Home, for people who'd rather not chat
  * @presentation modal
- * @states  consent (once; can't be skipped) · card · saved
+ * @states  consent (once; can't be skipped) · card · saved · to review (n) · from your conversations
  * @figma   — not in wireframes yet
  * @spec    intake V2 brief §7 (design direction 2026-10-12) — OPEN: not in docs/ux yet
  * @xref    web: W-2.10 — not built
  */
-import { selectActiveProfile, useAppStore } from '@shared/store';
-import { nowFrom } from '@shared/utils';
-import { Aura, Button, Header, IconButton } from '@mobile/ui';
+import { pendingFacts } from '@shared/engine';
+import { selectActiveConversation, selectActiveProfile, useAppStore } from '@shared/store';
+import { formatShortDate, nowFrom } from '@shared/utils';
+import { Aura, Button, Header, IconButton, ListRow } from '@mobile/ui';
 import { ProfileCard, regionFromLocale } from '@mobile/patterns/intake';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
@@ -20,6 +21,9 @@ export default function HealthProfile() {
   const toast = useToast();
   const profile = useAppStore(selectActiveProfile);
   const consented = useAppStore((s) => Boolean(s.healthConsentAt));
+  // DN-13 · DN-14: facts still waiting for Confirm, and what was confirmed from conversations.
+  const conversation = useAppStore(selectActiveConversation);
+  const toReview = pendingFacts(conversation).length;
   const now = nowFrom(useAppStore.getState());
   if (!profile) return null;
 
@@ -37,6 +41,9 @@ export default function HealthProfile() {
       <div className={styles.body}>
         <h1 className={styles.title}>Your health profile</h1>
         <p className={styles.sub}>Under a minute. Deborah uses it to keep suggestions safe for you.</p>
+        {conversation && toReview > 0 && (
+          <ListRow title="To review" subtitle="Noted in your conversation, not saved yet" value={String(toReview)} onPress={() => presentSheet('M-2.13', { conversationId: conversation.id })} />
+        )}
         {!consented ? (
           <div className={styles.consent}>
             <p className={styles.text}>To save health details I need your OK to process them. You can change this in Privacy at any time.</p>
@@ -55,6 +62,14 @@ export default function HealthProfile() {
               dismissModal();
             }}
           />
+        )}
+        {(profile.confirmedFacts?.length ?? 0) > 0 && (
+          <section className={styles.facts} aria-labelledby="from-chats">
+            <h2 id="from-chats" className={styles.heading}>From your conversations</h2>
+            {profile.confirmedFacts!.map((f) => (
+              <ListRow key={f.key} title={f.label} subtitle={`${f.value} · Confirmed in chat, ${formatShortDate(f.confirmedAt)}`} trailing={null} />
+            ))}
+          </section>
         )}
       </div>
     </div>

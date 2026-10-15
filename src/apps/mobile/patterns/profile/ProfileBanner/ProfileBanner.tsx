@@ -10,14 +10,16 @@ export interface ProfileBannerProps {
   /** Who the chat is about, e.g. "Daughter". */
   who: string;
   minor?: boolean;
+  /** Under 13 reads "(child)"; otherwise a minor reads "(teen)". */
+  child?: boolean;
   onSwitch: () => void;
 }
 
-export function ProfileBanner({ who, minor = false, onSwitch }: ProfileBannerProps) {
+export function ProfileBanner({ who, minor = false, child = false, onSwitch }: ProfileBannerProps) {
   return (
     <div className={styles.root} role="status">
       <p className={styles.text}>
-        Asking for: <span className={styles.who}>{who}{minor && ' (teen)'}</span>
+        Asking for: <span className={styles.who}>{who}{minor && (child ? ' (child)' : ' (teen)')}</span>
       </p>
       <span className={styles.dot} aria-hidden="true">·</span>
       <button type="button" className={styles.switch} onClick={onSwitch}>

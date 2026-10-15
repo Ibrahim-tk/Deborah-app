@@ -5,9 +5,13 @@ import type { Conversation, LabReport, Message, Profile } from '../types/domain'
 import type { EngineContext, Step } from '../types/engine';
 import { uid } from '../utils/ids';
 import { interpolate } from '../utils/text';
-import { buildAnswer, emptyAnswer } from './answer';
+import providerReviewCopy from '../data/conversation/provider-review.json';
+import { buildAnswer, buildProviderReview, emptyAnswer } from './answer';
 import { shouldOfferFollowUp } from './counting';
-import { countryName, missingGates, optionsFor, question, recommendsProduct, stillOpen } from './intake';
+import { pendingFacts } from './facts';
+import { countryName, missingGates, optionsFor, planIntake, question, recommendsProduct, stillOpen } from './intake';
+import { CLARIFY, journeyAllowsProduct, journeyFor, planClarifiers } from './journey';
+import { isMinor } from './profile';
 import { between, CPS } from './streamer';
 
 export const ANSWER_REQUEST_LABEL = 'Tell me what you think';
@@ -39,22 +43,55 @@ export function deborahText(ctx: EngineContext, text: string, extra: Partial<Mes
   ];
 }
 
+/**
+ * DN-10: the `@clarify` slot becomes the journey × symptom-group clarifiers once everything before it is
+ * answered (the stage may only just have been given). A re-routing journey (stage "not sure") leaves a new
+ * slot after its stage question. No bank (teen, child): the script's own questions.
+ */
+function expandClarifiers(ctx: EngineContext, conv: Conversation, profile: Profile): { conv: Conversation; steps: Step[] } {
+  const plan = conv.intakePlan ?? [];
+  const at = plan.indexOf(CLARIFY);
+  const now = new Date(ctx.now);
+  const asked = [...plan.filter((id) => id !== CLARIFY), ...(conv.intakeDone ?? [])];
+  const picked = planClarifiers(profile, now, conv.symptomGroup, asked) ?? planIntake(scriptOf(conv).intake, profile);
+  // The red-flag screen is always the last question (DN-11), after any safety gates.
+  const flags = picked.filter((id) => question(id)?.redFlags);
+  const rest = plan.slice(at + 1);
+  const intakePlan = [...plan.slice(0, at), ...picked.filter((id) => !flags.includes(id)), ...rest, ...flags];
+  const journey = journeyFor(profile, now) ?? undefined;
+  return {
+    conv: { ...conv, intakePlan, journey },
+    steps: [{ type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakePlan, journey } } }],
+  };
+}
+
 /** Next intake question, or the ready line when intake is complete. */
-export function nextIntakeOrReady(ctx: EngineContext, conv: Conversation, profile: Profile): Step[] {
+export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, profile: Profile): Step[] {
+  let conv = rawConv;
+  const pre: Step[] = [];
+  const firstOpen = (c: Conversation) => (c.intakePlan ?? []).find((id) => !(c.intakeDone ?? []).includes(id));
+  while (firstOpen(conv) === CLARIFY) {
+    const expanded = expandClarifiers(ctx, conv, profile);
+    conv = expanded.conv;
+    pre.push(...expanded.steps);
+  }
   const done = conv.intakeDone ?? [];
   const plan = stillOpen(conv.intakePlan ?? [], done, profile);
   const nextId = plan.find((id) => !done.includes(id));
   const q = nextId ? question(nextId) : undefined;
   // Nothing to ask (the profile already covers it, e.g. sign-up's health basics): answer straight away
   // instead of pausing on "Tap below when you'd like my thoughts". Profile-only chats still wait for a topic.
-  if (!q && !done.length && !conv.profileOnly && conv.scriptId) return answerSteps(ctx, conv, profile);
-  if (!q) return readySteps(ctx, conv, profile);
+  if (!q && !done.length && !conv.profileOnly && conv.scriptId) return [...pre, ...answerSteps(ctx, conv, profile)];
+  // DN-11 → DN-12: the red-flag screen is the last question; once it is clear, Deborah answers.
+  if (!q && done.some((id) => question(id)?.redFlags) && !conv.profileOnly) return [...pre, ...answerSteps(ctx, conv, profile)];
+  if (!q) return [...pre, ...readySteps(ctx, conv, profile)];
 
   // Consent and the country check aren't numbered steps.
-  const numbered = plan.filter((id) => !question(id)?.hideStep);
+  const numbered = plan.filter((id) => id !== CLARIFY && !question(id)?.hideStep);
   const step = numbered.filter((id) => done.includes(id)).length + 1;
   const text = interpolate(q.prompt, { name: profile.name, country: countryName(ctx.region ?? 'US') });
   return [
+    ...pre,
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake' } } },
     ...deborahText(ctx, text, {
       kind: 'intakeQuestion',
@@ -70,6 +107,34 @@ export function nextIntakeOrReady(ctx: EngineContext, conv: Conversation, profil
         presentation: q.presentation,
       },
     }),
+  ];
+}
+
+/**
+ * DN-12: the product card shows only for an adult who is not pregnant or breastfeeding, with no crisis or
+ * red flag in this conversation, and with the safety gates (medications, allergies…) known.
+ */
+export function productAllowed(ctx: EngineContext, conv: Conversation, profile: Profile): boolean {
+  const now = new Date(ctx.now);
+  if (conv.noProduct || conv.redFlag) return false;
+  if (isMinor(profile, now) || !journeyAllowsProduct(conv.journey ?? journeyFor(profile, now))) return false;
+  return !(ctx.profileGates !== false && missingGates(profile).length > 0);
+}
+
+/** DN-13: Review and Confirm card, when this conversation noted anything for the profile. */
+export function reviewFactsSteps(ctx: EngineContext, conv: Conversation): Step[] {
+  if (!pendingFacts(conv).length) return [];
+  return [{ type: 'delay', ms: 600 }, { type: 'message', message: msg(ctx, { role: 'deborah', kind: 'reviewFacts', text: '' }) }];
+}
+
+/** A provider-review ending waits for confirmation, then delivers an uncounted framework. */
+export function redFlagSteps(ctx: EngineContext, conv: Conversation): Step[] {
+  const next: Conversation = { ...conv, redFlag: true, noProduct: true, status: 'answered', providerReview: conv.providerReview ?? { state: 'waiting', concerns: [] } };
+  return [
+    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { redFlag: true, noProduct: true, status: 'answered', providerReview: next.providerReview } } },
+    ...(pendingFacts(next).length
+      ? [...deborahText(ctx, providerReviewCopy.lead), ...reviewFactsSteps(ctx, next)]
+      : answerSteps(ctx, next, ctx.profile)),
   ];
 }
 
@@ -90,12 +155,17 @@ export function readySteps(ctx: EngineContext, conv: Conversation, profile: Prof
 
 /** Answer phase: lead line → thinking → 7 sections streamed → count, summary, plan, prompts. */
 export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Profile, opts: { retry?: boolean; labs?: LabReport } = {}): Step[] {
+  // Every answer entry point shares the same safety and review policy.
+  if (conv.status === 'safety' || conv.gentleNext) return [];
+  const provider = conv.redFlag === true;
+  if (provider && (pendingFacts(conv).length || conv.providerReview?.state === 'done')) return [];
+  const providerState = conv.providerReview ?? { state: 'waiting' as const, concerns: [] };
   const script = scriptOf(conv);
   const [reviewing, handbook, writing] = persona.voice.reviewing;
   const steps: Step[] = [
-    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'generating' } } },
+    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'generating', ...(provider && { providerReview: { ...providerState, state: 'generating' } }) } } },
     // A retry resumes the answer without repeating the lead line.
-    ...(opts.retry ? [] : deborahText(ctx, persona.voice.answerLead)),
+    ...(opts.retry ? [] : deborahText(ctx, provider ? providerReviewCopy.lead : persona.voice.answerLead)),
     { type: 'thinking', on: true, label: reviewing },
     { type: 'delay', ms: between(600, 800) },
     { type: 'thinking', on: true, label: handbook },
@@ -114,11 +184,11 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
     ];
   }
 
-  const built = buildAnswer(script, profile, opts.labs ?? ctx.labs);
-  // Crisis earlier in this conversation suppresses products (docs/ux/F03-safety.md). F01: so does
-  // a missing safety gate (date of birth, sex at birth, medications, allergies).
-  const gated = ctx.profileGates !== false && recommendsProduct(ctx, Boolean(built.product)) && missingGates(profile).length > 0;
-  const answer = conv.noProduct || gated ? { ...built, product: undefined } : built;
+  const built = provider ? buildProviderReview(script, providerState.concerns) : buildAnswer(script, profile, opts.labs ?? ctx.labs);
+  // DN-12: crisis or a red flag earlier in this conversation, pregnancy, a minor, or a missing safety
+  // gate (date of birth, sex at birth, medications, allergies) suppresses the product (F03, F01).
+  const allowed = !built.product || !recommendsProduct(ctx, true) ? true : productAllowed(ctx, conv, profile);
+  const answer = conv.noProduct || !allowed ? { ...built, product: undefined } : built;
   const m = msg(ctx, {
     role: 'deborah',
     kind: 'answer',
@@ -133,6 +203,15 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
     section.bullets?.forEach((b, i) => {
       steps.push({ type: 'stream', messageId: m.id, field: `bullet:${section.key}:${i}`, text: b, cps: CPS.section });
     });
+  }
+
+  if (provider) {
+    steps.push(
+      { type: 'patch', messageId: m.id, patch: { meta: { streaming: false, activeSection: undefined, counted: false } } },
+      { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'answered', providerReview: { ...providerState, state: 'done' } } } },
+    );
+    // Safety education does not consume trial quota, create a product plan or ask for reminders.
+    return steps;
   }
 
   const answeredAfter = ctx.answeredCount + 1;
@@ -153,16 +232,13 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
       },
     },
   );
-  // F01 step 4: after the first useful answer, offer to save the profile. The notification ask
-  // (M-2.8) follows once the card is resolved, so it never interrupts the card.
-  if (ctx.profileGates !== false && !ctx.hasAccount && !ctx.saveProfileOffered) {
-    steps.push(
-      { type: 'delay', ms: 900 },
-      { type: 'store', action: { type: 'offerSaveProfile' } },
-      { type: 'message', message: msg(ctx, { role: 'deborah', kind: 'saveProfile', text: '' }) },
-    );
-    return steps;
+  // DN-13: anything noted in this conversation waits for Confirm before it reaches the profile.
+  steps.push(...reviewFactsSteps(ctx, conv));
+  // The account already exists (sign-up before onboarding, plan P-10): no save-your-profile card.
+  if (shouldOfferFollowUp(ctx, answeredAfter)) {
+    // The follow-up opt-in (M-2.8) never covers the Review and Confirm card: it waits until that's resolved.
+    if (pendingFacts(conv).length) steps.push({ type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { followUpAfterReview: true } } });
+    else steps.push({ type: 'delay', ms: 1500 }, { type: 'prompt', prompt: 'followUpOptIn' });
   }
-  if (shouldOfferFollowUp(ctx, answeredAfter)) steps.push({ type: 'delay', ms: 1500 }, { type: 'prompt', prompt: 'followUpOptIn' });
   return steps;
 }

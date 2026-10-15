@@ -9,6 +9,7 @@ const SOURCE: Record<FieldSource, string> = {
   inferred: 'from what you said',
   manual: '',
   scan: 'from your scan',
+  chat: 'confirmed in chat',
 };
 
 export interface RowProps {

@@ -14,11 +14,13 @@ import type {
   Script,
   SuggestionsData,
   HealthBasicsData,
+  ChatIntakeData,
 } from '../types/content';
 import deborah from './persona/deborah.json';
 import consent from './legal/consent.json';
 import suggestions from './conversation/suggestions.json';
 import intake from './conversation/intake.json';
+import chatIntake from './conversation/chatIntake.json';
 import products from './commerce/products.json';
 import guardrails from './conversation/guardrails.json';
 import hotFlashesSleep from './conversation/scripts/hot-flashes-sleep.json';
@@ -47,6 +49,8 @@ export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
 export const suggestionsData = suggestions as SuggestionsData;
 export const intakeData = intake as IntakeData;
+/** Core experience bank: journeys × symptom groups → clarifiers and red flags (plan C-05). */
+export const chatIntakeData = chatIntake as unknown as ChatIntakeData;
 export const productList = products as Product[];
 export const guardrailsData = guardrails as GuardrailsData;
 export const checkInScript = checkin as CheckInScript;
