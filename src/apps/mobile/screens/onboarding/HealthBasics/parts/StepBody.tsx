@@ -32,7 +32,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
     case 'date':
       return <DateWheel label="Date of birth" value={value} minYear={THIS_YEAR - 100} maxYear={THIS_YEAR} onChange={(d) => set(step.key, d)} />;
     case 'year':
-      // Down to this year − 1: children can be added for someone else; adults under 18 meet the age gate.
+      // Down to this year − 1: children can be added for someone else; self under 13 meets the age gate.
       return <YearWheel cinematic label="Year of birth" value={Number(value)} min={THIS_YEAR - 100} max={THIS_YEAR - 1} onChange={(y) => set(step.key, String(y))} />;
     case 'name':
       return (

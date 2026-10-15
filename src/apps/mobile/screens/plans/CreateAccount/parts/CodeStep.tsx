@@ -20,22 +20,30 @@ export function CodeStep({ email, onVerified, onChangeEmail }: { email: string; 
   const boxes = useRef<(HTMLInputElement | null)[]>([]);
   const verified = useLatest(onVerified);
 
+  const update = (next: string[]) => {
+    setDigits(next);
+    if (next.every(Boolean)) setVerifying(true);
+  };
+
   useEffect(() => {
     if (wait <= 0) return;
     const id = window.setTimeout(() => setWait((w) => w - 1), 1000);
     return () => window.clearTimeout(id);
   }, [wait]);
 
+  // PDF persona auto-run: fill OTP immediately when the shell sets data-yoc-fast-signup.
+  useEffect(() => {
+    if (document.documentElement.dataset.yocFastSignup !== '1') return;
+    update(Array.from({ length: LENGTH }, () => '4'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot on mount for journey pilot
+  }, []);
+
   useEffect(() => {
     if (!verifying) return;
-    const id = window.setTimeout(() => verified.current(), simMs(900));
+    const fast = document.documentElement.dataset.yocFastSignup === '1';
+    const id = window.setTimeout(() => verified.current(), fast ? 40 : simMs(900));
     return () => window.clearTimeout(id);
   }, [verifying, verified]);
-
-  const update = (next: string[]) => {
-    setDigits(next);
-    if (next.every(Boolean)) setVerifying(true);
-  };
 
   const onType = (i: number, raw: string) => {
     const d = raw.replace(/\D/g, '').slice(-1);

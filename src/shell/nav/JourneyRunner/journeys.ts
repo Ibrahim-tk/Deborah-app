@@ -6,12 +6,14 @@
  */
 export type ReviewAction = 'save' | 'edit' | 'discard';
 
-/** Onboarding profile answers for a run that starts at M-1.8 (S03). */
+/** Onboarding profile answers for a run that starts at M-1.8 (S03) or continues after sign-up on S01. */
 export interface ProfileAnswers {
-  /** Tile, relationship and sex options to tap, matched in order. */
+  /** Tile, relationship, gender and branch options to tap, matched in order. */
   picks: RegExp[];
   name?: string;
   age: number;
+  /** Values typed into required Health Basics text steps (e.g. pubertyStart). */
+  textDefaults?: Record<string, string>;
 }
 
 export interface JourneyRun {
@@ -23,6 +25,11 @@ export interface JourneyRun {
   onboarding?: boolean;
   /** Fill the onboarding profile (M-1.8) with these answers, then start the chat from M-1.9. */
   profile?: ProfileAnswers;
+  /**
+   * Early exit for PDF matrix runs: stop at the under-13 gate or once Ask Deborah (M-2.1) is open.
+   * When unset, the run continues through chat answers and Review and Confirm.
+   */
+  stopAt?: 'gate' | 'deborah';
   message: string;
   /** Preferred answers, matched against option labels in order. */
   answers: RegExp[];
@@ -73,11 +80,12 @@ export const JOURNEYS: JourneyRun[] = [
     review: 'save',
   },
   {
-    id: 'self-teen',
-    label: 'Myself, 16 · age gate',
-    description: 'Signed up. Myself → born 16 years ago → Ask a parent (M-1.10). No chat.',
+    id: 'self-child',
+    label: 'Myself, 8 · under-13 gate',
+    description: 'Signed up. Myself → born 8 years ago → Ask adult to add you (M-1.10). No chat.',
     scenario: 'S03',
-    profile: { picks: [/^Myself/], age: 16 },
+    profile: { picks: [/^Myself/], age: 8 },
+    stopAt: 'gate',
     message: '',
     answers: [],
     review: 'save',

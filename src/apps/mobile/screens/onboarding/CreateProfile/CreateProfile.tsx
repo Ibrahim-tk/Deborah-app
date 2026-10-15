@@ -27,6 +27,8 @@ import styles from './CreateProfile.module.css';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_LENGTH = 8;
 const DONE_MS = 1600;
+/** PDF persona auto-run: skip the “You’re in” hold so Health Basics starts immediately. */
+const fastDoneMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 40 : DONE_MS);
 
 type Stage = 'form' | 'code' | 'forgot' | 'done';
 
@@ -96,7 +98,7 @@ export default function CreateProfile() {
       dismissSheet();
       if (signin) restoreReturning(email.trim());
       else push('M-1.8');
-    }, DONE_MS);
+    }, fastDoneMs());
     return () => window.clearTimeout(id);
   }, [stage, signin, email, dismissSheet, push]);
 

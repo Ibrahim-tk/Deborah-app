@@ -146,9 +146,52 @@ test('onboarding saves the same profile context for self, teen, child and adult 
   const {saveOnboarding}=source('src/apps/mobile/screens/onboarding/HealthBasics/saveOnboarding');
   for(const [age,relationship,pathName] of [[28,'self',null],[15,'daughter','guardian-teen'],[9,'son','guardian-child'],[52,'partner','adult-agreement']]) {
     seed('S03');const year=2026-age;
-    const id=saveOnboarding({profileFor:relationship==='self'?'self':'dependent',relationship,memberName:'Demo',birthYear:String(year),sex:relationship==='daughter'?'female':'male',consent:'yes'});
+    const gender=relationship==='daughter'?'female':'male';
+    // Pass both keys: V2 reads `gender`, frozen V1 still reads `sex`.
+    const id=saveOnboarding({profileFor:relationship==='self'?'self':'dependent',relationship,memberName:'Demo',birthYear:String(year),gender,sex:gender,consent:'yes',medications:'None',supplements:'None',genesisGold:'no'});
     const s=store.getState();const p=s.profiles.byId[id];assert.equal(p.health.birthYear.value,year);
-    if(pathName){assert.equal(p.consent.path,pathName);assert.equal(p.consent.attestedBy,s.accountId);assert.equal(s.profiles.byId['p-self'].health,undefined);}
+    if(pathName){assert.equal(p.consent.path,pathName);assert.equal(p.consent.attestedBy,s.accountId);}
     else assert.equal(id,'p-self');
   }
 });
+// Version 2 only — frozen V1 healthBasics has no gender × age meds branches.
+if (process.env.FLOW_TEST_VERSION !== 'v1') {
+  test('V2 healthBasics visibleSteps branch by gender and age', () => {
+    const {visibleSteps}=source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
+    const keys=(a)=>visibleSteps(a).map((s)=>s.key);
+    const yearFor=(age)=>String(new Date().getFullYear()-age);
+    assert.deepEqual(keys({profileFor:'self',birthYear:yearFor(35),gender:'female'}).filter((k)=>!['profileFor','birthYear','gender'].includes(k)),
+      ['reproductive','medications','supplements','genesisGold']);
+    assert.deepEqual(keys({profileFor:'self',birthYear:yearFor(35),gender:'male'}).filter((k)=>!['profileFor','birthYear','gender'].includes(k)),
+      ['medications','supplements','genesisGold']);
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'male'}).includes('pubertyStart'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'male'}).includes('pubertyNotes'));
+    assert.ok(!keys({profileFor:'self',birthYear:yearFor(15),gender:'male'}).includes('reproductive'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'female'}).includes('reproductiveTeen'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('transIdentity'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('pubertyStart'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(40),gender:'transgender'}).includes('reproductive'));
+    assert.ok(!keys({profileFor:'self',birthYear:yearFor(40),gender:'prefer-not'}).includes('reproductive'));
+    assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthYear:yearFor(9),consent:'yes',gender:'male'}).includes('guardianNames'));
+    assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthYear:yearFor(9),consent:'yes',gender:'male'}).includes('childMedications'));
+    assert.ok(!keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthYear:yearFor(9),consent:'yes',gender:'male'}).includes('medications'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'prefer-not'}).includes('pubertyStart'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'intersex'}).includes('pubertyStart'));
+  });
+
+  test('all 24 PDF personas match healthBasics visibleSteps', () => {
+    const { PDF_PERSONA_RUNS, seedAnswersFor } = source('src/shell/nav/JourneyRunner/pdfPersonas');
+    const { visibleStepKeys } = source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
+    assert.equal(PDF_PERSONA_RUNS.length, 24);
+    for (const run of PDF_PERSONA_RUNS) {
+      if (run.ageBand === 'lt13') {
+        assert.deepEqual(run.expectedSteps, ['profileFor', 'birthYear'], run.id);
+        assert.equal(run.stopAt, 'gate', run.id);
+        continue;
+      }
+      const seeded = seedAnswersFor(run.gender, run.ageBand);
+      assert.deepEqual(visibleStepKeys(seeded), run.expectedSteps, run.id);
+      assert.equal(run.stopAt, 'deborah', run.id);
+    }
+  });
+}

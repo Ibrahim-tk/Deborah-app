@@ -10,9 +10,10 @@ The runnable snapshot is `versions/v1/src`. It contains its own screens, widgets
 
 ## Version 2 — editable copy
 
-The main `src` tree is now Version 2. It begins with the same flow and behavior as Version 1. No new question-engine rules or interaction steps have been introduced for Version 2 yet; those await the user's next specification.
+The main `src` tree is Version 2. HealthBasics (M-1.8) follows the age × gender intake PDF: after birth year and gender, `showIf` branches ask reproductive status, puberty, child basics, and medications (including Genesis Gold). Version 1 keeps the shorter age + sex-at-birth form.
 
 - Question engine: `src/shared/engine/`.
+- Onboarding steps: `src/shared/data/intake/healthBasics.json`.
 - Question content and flow data: `src/shared/data/conversation/`.
 - Screens: `src/apps/mobile/screens/`.
 - Widget interactions: `src/apps/mobile/patterns/`.

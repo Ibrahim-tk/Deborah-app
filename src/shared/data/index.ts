@@ -92,7 +92,7 @@ export type ScanSample = { id: string; label: string; field: 'medications' | 'al
 export const scanSampleData = scanSamples.samples as ScanSample[];
 export const healthBasicsData = healthBasics as HealthBasicsData;
 /** Composer symptom picker: grouped plain-language symptoms (placeholder). */
-export const symptomGroups: { title: string; items: string[] }[] = symptoms.groups;
+export const symptomGroups: { id?: string; title: string; items: string[] }[] = symptoms.groups;
 /** Scripted first consultation after onboarding (OPEN: all copy is DRAFT, needs Deborah's sign-off). */
 export const firstConsultFlow = firstConsult as unknown as Flow;
 /** Demo consultation for a signed-in returning user (seed R01). OPEN: DRAFT copy, needs Deborah's sign-off. */

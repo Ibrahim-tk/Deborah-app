@@ -1,10 +1,10 @@
 /**
  * The onboarding profile steps come from data/intake/healthBasics.json, in order. Each step can carry a
- * `showIf` rule (e.g. "someone else" adds relationship, name and consent); edit the JSON, not code.
- * `ageGroup` is derived from the birth year so rules can branch on child · teen · adult.
+ * `showIf` rule (e.g. gender × age branches); edit the JSON, not code.
+ * `age` (number) and `ageGroup` are derived from the birth year so rules can branch.
  */
 import { healthBasicsData } from '@shared/data';
-import { ageGroupFor, shows } from '@shared/engine';
+import { ageGroupFor, shows, type ShowIfValue } from '@shared/engine';
 import type { HealthBasicsStep } from '@shared/types/content';
 
 export type Step = HealthBasicsStep;
@@ -14,12 +14,18 @@ export const STEPS: Step[] = healthBasicsData.steps;
 
 const THIS_YEAR = new Date().getFullYear();
 
-/** Answers plus what's derived from them (`ageGroup`). */
-export const withDerived = (a: Answers): Answers =>
-  a.birthYear ? { ...a, ageGroup: ageGroupFor(THIS_YEAR - Number(a.birthYear)) } : a;
+/** Answers plus what's derived from them (`age`, `ageGroup`). */
+export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
+  if (!a.birthYear) return a;
+  const age = THIS_YEAR - Number(a.birthYear);
+  return { ...a, age, ageGroup: ageGroupFor(age) };
+};
 
 /** Questions to ask, given the answers so far. */
 export const visibleSteps = (a: Answers) => STEPS.filter((s) => shows(s.showIf, withDerived(a)));
+
+/** Step keys visible for a complete answer set (PDF matrix / contract tests). */
+export const visibleStepKeys = (a: Answers) => visibleSteps(a).map((s) => s.key);
 
 /** True when the profile being set up is for someone else. */
 export const forSomeoneElse = (a: Answers) => a.profileFor === 'dependent';

@@ -1,21 +1,38 @@
 /**
- * @shell JourneyRunner — "▶ Journeys" menu: plays one core-experience path by itself (load scenario, type,
- * answer, confirm), one tap at a time. While running, the trigger becomes Stop and shows the current step.
+ * @shell JourneyRunner — "▶ Journeys" menu: plays one core-experience path, or runs all PDF age×gender
+ * personas one by one (load scenario → Health Basics → Ask Deborah / under-13 gate).
+ * PDF persona runs enable fast sign-up (splash/Welcome/M-1.4 + OTP) so the sheet clears in a few ticks.
  */
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { setFastSignup } from '../../fastSignup';
 import { useScenario } from '../../useScenario';
 import { useShellStore } from '../../shell.store';
 import { Popover } from '../Popover';
 import { MenuItem, MenuSection } from '../MenuParts';
 import { JOURNEYS, type JourneyRun } from './journeys';
 import { journeyTick, type PilotState } from './journeyPilot';
+import { PDF_PERSONA_RUNS, type PdfPersonaRun } from './pdfPersonas';
 import styles from './JourneyRunner.module.css';
 
-/** Time per action: long enough to read each message and see the tap land. */
+/** Time per action during Health Basics / chat (readable). */
 const STEP_MS = 1400;
+/** Sign-up path only: Splash → Welcome → M-1.4 form + OTP. */
+const SIGNUP_MS = 50;
 /** Ticks with nothing to do (and nothing changing on screen) before the run gives up. */
 const IDLE_LIMIT = 10;
+const IDLE_SIGNUP = 40;
+
+type BatchResult = { id: string; label: string; ok: boolean; at: string };
+
+const usesFastSignup = (j: JourneyRun) => Boolean(j.onboarding && j.profile);
+
+function onSignupScreen() {
+  const phone = document.querySelector('.phone-root');
+  if (!phone) return true;
+  const top = [...phone.querySelectorAll<HTMLElement>('[data-xref]')].at(-1)?.dataset.xref ?? '';
+  return /^M-1\.(1|2|4)\b/.test(top);
+}
 
 export function JourneyRunner() {
   const isWeb = useLocation().pathname.startsWith('/web');
@@ -23,52 +40,130 @@ export function JourneyRunner() {
   const showToast = useShellStore((s) => s.showToast);
   const [run, setRun] = useState<JourneyRun>();
   const [step, setStep] = useState('');
-  const state = useRef<PilotState>({ sent: false, typed: false, editing: false });
+  const [queue, setQueue] = useState<PdfPersonaRun[]>();
+  const [batchIndex, setBatchIndex] = useState(0);
+  const results = useRef<BatchResult[]>([]);
+  const state = useRef<PilotState>({ sent: false, typed: false, editing: false, pickIndex: 0 });
+
+  const clearRun = () => {
+    setFastSignup(false);
+    setRun(undefined);
+    setQueue(undefined);
+    setBatchIndex(0);
+  };
 
   useEffect(() => {
     if (!run) return;
+    setFastSignup(usesFastSignup(run));
     let idle = 0;
     let lastText = '';
-    const id = window.setInterval(() => {
+    let timer = 0;
+
+    const schedule = (ms: number) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(tick, ms);
+    };
+
+    const tick = () => {
       const t = journeyTick(run, state.current);
       if (t.step) setStep(t.step);
-      // Streaming answers count as progress even though nothing is tapped.
       const now = document.querySelector('.phone-root')?.textContent ?? '';
       idle = t.acted || now !== lastText ? 0 : idle + 1;
       lastText = now;
-      if (t.done || idle >= IDLE_LIMIT) {
-        showToast(t.done ? `Journey finished: ${run.label}` : `Journey stopped at: ${t.step ?? 'unknown step'}`);
-        setRun(undefined);
+      const signingUp = usesFastSignup(run) && onSignupScreen();
+      const idleCap = signingUp ? IDLE_SIGNUP : IDLE_LIMIT;
+
+      if (!(t.done || idle >= idleCap)) {
+        schedule(signingUp ? SIGNUP_MS : STEP_MS);
+        return;
       }
-    }, STEP_MS);
-    return () => window.clearInterval(id);
-  }, [run, showToast]);
+
+      const ok = Boolean(t.done && t.passed !== false);
+      const at = t.step ?? (t.done ? 'done' : 'idle timeout');
+      if (queue) {
+        results.current = [...results.current, { id: run.id, label: run.label, ok, at }];
+        const next = batchIndex + 1;
+        if (next < queue.length) {
+          showToast(`${ok ? 'Pass' : 'Fail'} · ${run.label} (${next}/${queue.length})`);
+          state.current = { sent: false, typed: false, editing: false, pickIndex: 0 };
+          setFastSignup(true);
+          select(queue[next].scenario);
+          setBatchIndex(next);
+          setStep('');
+          setRun(queue[next]);
+          return;
+        }
+        const passed = results.current.filter((r) => r.ok).length;
+        const failed = results.current.length - passed;
+        showToast(`PDF personas done: ${passed} passed, ${failed} failed`);
+        clearRun();
+        return;
+      }
+      showToast(t.done ? `Journey finished: ${run.label}` : `Journey stopped at: ${at}`);
+      setFastSignup(false);
+      setRun(undefined);
+    };
+
+    schedule(usesFastSignup(run) ? SIGNUP_MS : STEP_MS);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [run, queue, batchIndex, select, showToast]);
 
   if (isWeb) return null;
 
   if (run) {
+    const progress = queue ? `${batchIndex + 1} / ${queue.length} · ` : '';
     return (
-      <button type="button" className={styles.stop} title={`Playing ${run.label}`} onClick={() => setRun(undefined)}>
-        <span aria-hidden="true">■</span> Stop · {step || run.label}
+      <button type="button" className={styles.stop} title={`Playing ${run.label}`} onClick={clearRun}>
+        <span aria-hidden="true">■</span> Stop · {progress}{step || run.label}
       </button>
     );
   }
 
   const start = (j: JourneyRun) => {
-    state.current = { sent: false, typed: false, editing: false };
+    state.current = { sent: false, typed: false, editing: false, pickIndex: 0 };
+    results.current = [];
+    setQueue(undefined);
+    setBatchIndex(0);
+    setFastSignup(usesFastSignup(j));
     select(j.scenario);
     setStep('');
     setRun(j);
   };
 
+  const startAllPdf = () => {
+    const list = PDF_PERSONA_RUNS;
+    state.current = { sent: false, typed: false, editing: false, pickIndex: 0 };
+    results.current = [];
+    setQueue(list);
+    setBatchIndex(0);
+    setFastSignup(true);
+    select(list[0].scenario);
+    setStep('');
+    setRun(list[0]);
+  };
+
   return (
     <Popover trigger={<><span aria-hidden="true">▶</span> Journeys <span aria-hidden="true">▾</span></>} width="lg">
       {(close) => (
-        <MenuSection title="Play a journey by itself">
-          {JOURNEYS.map((j) => (
-            <MenuItem key={j.id} label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
-          ))}
-        </MenuSection>
+        <>
+          <MenuSection title="PDF personas (age × gender)">
+            <MenuItem
+              label="Run all PDF personas"
+              description={`Play all ${PDF_PERSONA_RUNS.length} gender × age paths one by one; sign-up + OTP is burst-filled.`}
+              onSelect={() => { close(); startAllPdf(); }}
+            />
+            {PDF_PERSONA_RUNS.map((j) => (
+              <MenuItem key={j.id} label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
+            ))}
+          </MenuSection>
+          <MenuSection title="Play a journey by itself">
+            {JOURNEYS.map((j) => (
+              <MenuItem key={j.id} label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
+            ))}
+          </MenuSection>
+        </>
       )}
     </Popover>
   );

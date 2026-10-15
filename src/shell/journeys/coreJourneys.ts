@@ -13,14 +13,14 @@ export const CORE_JOURNEYS: ManualJourney[] = [
     steps: [
       s('Welcome', 'Wait for Splash, enter Sarah and choose Get Started.', 'The sign-up sheet opens; it does not skip to the questions.', 'M-1.4'),
       s('Create demo account', 'Enter sarah@example.com, demo-password-1 in both password fields, then Create account. Enter 444444.', 'You’re in appears, followed by Onboarding profile.', 'M-1.8', ['Invalid email or mismatched passwords → inline error', 'Sign in → returning-user path']),
-      s('Choose profile basics', 'Choose Myself. Set birth year to 1998 and Continue. Choose Female.', 'Only basics are collected before chat; no health-history questionnaire.', 'M-1.9', ['Self under 18 → Ask a parent', 'Family member → relationship, name, consent']),
+      s('Choose profile basics', 'Choose Myself. Set birth year to 1998 and Continue. Choose Female.', 'Only basics are collected before chat; no health-history questionnaire.', 'M-1.9', ['Self under 13 → Ask adult to add you', 'Family member → relationship, name, consent']),
       s('Start chatting', 'Choose Start chatting.', 'Conversation opens with Sarah as the active profile.', 'M-2.1'), ask, review,
     ],
   },
   {
-    id: 'self-age-gate', name: 'Self under 18 — age gate', persona: 'Sarah', scenario: 'S03', status: 'IMPLEMENTED',
-    goal: 'Verify a 16-year-old cannot start their own consultation.', behavior: 'Local age gate; year-of-birth approximation.', evidence: onboardingEvidence, gaps: [consentGap],
-    steps: [s('Choose Myself', 'Choose Myself.', 'Birth-year wheel appears.', 'M-1.8'), s('Under-18 birth year', 'Set birth year to 2010 and Continue.', 'Ask a parent replaces onboarding. No chat or self age/sex basics are saved.', 'M-1.10')],
+    id: 'self-age-gate', name: 'Self under 13 — age gate', persona: 'Sarah', scenario: 'S03', status: 'IMPLEMENTED',
+    goal: 'Verify an under-13 cannot start their own consultation (PDF Health Intake Logic).', behavior: 'Local age gate; year-of-birth approximation. Teens 13–17 continue intake.', evidence: onboardingEvidence, gaps: [consentGap],
+    steps: [s('Choose Myself', 'Choose Myself.', 'Birth-year wheel appears.', 'M-1.8'), s('Under-13 birth year', 'Set birth year to 2018 and Continue.', 'Ask adult to add you replaces onboarding. No chat or self age/gender basics are saved.', 'M-1.10')],
   },
   ...([
     ['teen-onboarding', 'Teen dependent onboarding', 'Emily', 'S20', 'Daughter', 'Maya', '2011', 'Female', 'guardian-teen', 'Her periods have been really irregular'],

@@ -37,7 +37,7 @@ export { symptomGroupOf } from './classifier';
 export { factFromAnswer, pendingFacts, withFacts } from './facts';
 export { answerPatch, optionLabels, question } from './intake';
 export { productAllowed } from './plans';
-export { shows } from './showIf';
+export { shows, type ShowIfValue } from './showIf';
 export { firstConsultFor, nextNodeId, personalise, type FlowValue } from './flow';
 export { extractionPatch, extractProfile, handOffSuggestions, healthKitPatch, profileCompletion } from './extract';
 export { chunkText, CPS } from './streamer';

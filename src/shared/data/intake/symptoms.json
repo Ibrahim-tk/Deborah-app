@@ -1,12 +1,90 @@
 {
   "status": "placeholder",
-  "note": "Symptom picker in the composer (M-2.1, M-2.12). Plain-language names grouped by area; anything not listed can be typed and added as-is. Needs Deborah's review.",
+  "note": "Hypothalamus Symptom Check list for the composer SymptomPicker (M-2.1, M-2.12). From YOC App developer PDF. `id` links a group to chatIntake journey groups when present. Needs Deborah's review.",
   "groups": [
-    { "title": "Sleep & energy", "items": ["Trouble falling asleep", "Waking around 3am", "Night sweats", "Afternoon slump", "Tired after a full night", "Restless legs"] },
-    { "title": "Temperature", "items": ["Hot flashes", "Always cold", "Cold hands and feet", "Chills"] },
-    { "title": "Mood & mind", "items": ["Anxiety", "Low mood", "Irritability", "Racing thoughts", "Brain fog", "Forgetfulness"] },
-    { "title": "Cycle & hormones", "items": ["Irregular periods", "Heavy periods", "Painful periods", "Spotting", "Breast tenderness", "Low libido", "Vaginal dryness"] },
-    { "title": "Weight & digestion", "items": ["Weight gain around the middle", "Sugar cravings", "Bloating", "Constipation", "Nausea", "Food sensitivities"] },
-    { "title": "Skin, hair & body", "items": ["Hair thinning", "Dry skin", "Acne", "Brittle nails", "Joint aches", "Muscle cramps", "Headaches", "Heart palpitations", "Dizziness", "Tinnitus", "Frequent urination", "Puffy face or eyes"] }
+    {
+      "id": "sleep",
+      "title": "Energy & sleep",
+      "items": [
+        "Fatigue / exhaustion",
+        "Trouble falling asleep",
+        "Waking through the night",
+        "Excessive daytime sleepiness",
+        "Lack of motivation"
+      ]
+    },
+    {
+      "id": "temperature",
+      "title": "Temperature & sweat",
+      "items": [
+        "Hot flashes",
+        "Night sweats",
+        "Cold all the time",
+        "Low-grade fevers"
+      ]
+    },
+    {
+      "id": "mood",
+      "title": "Mood & mind",
+      "items": [
+        "Anxiety",
+        "Depression",
+        "Brain fog / forgetfulness",
+        "Panic attacks / palpitations",
+        "Maladaptive stress response",
+        "Difficulty bonding with others"
+      ]
+    },
+    {
+      "id": "weight",
+      "title": "Weight & appetite",
+      "items": [
+        "Unexplained weight gain",
+        "Unexplained weight loss",
+        "Loss of appetite",
+        "Overeating / constant hunger",
+        "Water retention / bloating",
+        "Excessive thirst / urination"
+      ]
+    },
+    {
+      "id": "body",
+      "title": "Body & pain",
+      "items": [
+        "Trigger point tenderness / pain",
+        "Muscle weakness / sarcopenia",
+        "Osteoporosis / bone loss",
+        "Premature aging",
+        "Skin rashes / acne / eczema"
+      ]
+    },
+    {
+      "title": "Cardiovascular",
+      "items": [
+        "High blood pressure",
+        "Low blood pressure",
+        "Heart palpitations / racing heart",
+        "Arrhythmias / irregular heartbeat",
+        "Edema / swelling in hands, feet, face"
+      ]
+    },
+    {
+      "title": "Digestion",
+      "items": [
+        "IBS / constipation / diarrhea",
+        "Maldigestion / malabsorption",
+        "Delayed digestion"
+      ]
+    },
+    {
+      "id": "cycle",
+      "title": "Hormonal / reproductive",
+      "items": [
+        "Low libido",
+        "Irregular or absent periods",
+        "Infertility",
+        "Delayed puberty"
+      ]
+    }
   ]
 }

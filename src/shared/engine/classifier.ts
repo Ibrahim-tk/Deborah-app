@@ -36,7 +36,7 @@ export function symptomGroupOf(text: string): SymptomGroupId | undefined {
   const lower = text.toLowerCase();
   let best: { id: SymptomGroupId; hits: number } | undefined;
   for (const g of chatIntakeData.groups) {
-    const names = symptomGroups.find((x) => x.title === g.title)?.items ?? [];
+    const names = symptomGroups.find((x) => x.id === g.id || x.title === g.title)?.items ?? [];
     const hits = [...g.match, ...names.map((n) => n.toLowerCase())].filter((k) => lower.includes(k)).length;
     if (hits && (!best || hits > best.hits)) best = { id: g.id, hits };
   }

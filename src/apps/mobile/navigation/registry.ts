@@ -14,7 +14,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-1.3': { title: 'Before we begin', component: lazy(() => import('@mobile/screens/onboarding/Consent')), presentation: 'push', stack: 'preauth', figma: `${FIGMA}47-184`, spec: 'docs/ux/F01-onboarding.md#m-13--before-we-begin-consent' },
   'M-1.4': { title: 'Create profile', component: lazy(() => import('@mobile/screens/onboarding/CreateProfile')), presentation: 'sheet', detent: 'medium', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.4)' },
   'M-1.8': { title: 'Health basics', component: lazy(() => import('@mobile/screens/onboarding/HealthBasics')), presentation: 'push', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.8)' },
-  'M-1.10': { title: 'Ask a parent', component: lazy(() => import('@mobile/screens/onboarding/AskParent')), presentation: 'root', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md#m-110--ask-a-parent' },
+  'M-1.10': { title: 'Ask an adult', component: lazy(() => import('@mobile/screens/onboarding/AskParent')), presentation: 'root', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md#m-110--ask-a-parent' },
   'M-1.9': { title: "Deborah's welcome", component: lazy(() => import('@mobile/screens/onboarding/DeborahWelcome')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.9)' },
 
   // F02 Consultation

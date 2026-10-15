@@ -2,19 +2,17 @@
  * @screen  M-1.8 · Onboarding profile
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
- * @states  who is this for · [someone else: relationship · first name] · birth year · [self under 18 → M-1.10]
- *          · [someone else: consent by age group — child · teen · adult] · sex at birth
+ * @states  who is this for · [someone else: relationship · first name] · birth year · [self under 13 → M-1.10]
+ *          · [someone else: consent by age group] · gender · age×gender branches (reproductive / puberty / meds)
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * The onboarding profile only: who Deborah will talk to or about, their age and sex at birth. No health
- * details here — Deborah asks those in the conversation and saves them through Review and Confirm.
- * Steps and their `showIf` branches live in data/intake/healthBasics.json. Choices advance on tap.
+ * Version 2 onboarding profile: who Deborah will talk to, age, gender, then conditional health-intake
+ * steps from the age × gender PDF. Steps and `showIf` branches live in data/intake/healthBasics.json.
  */
 import { useState, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';
-import { ageGroupFor } from '@shared/engine';
 import { nowFrom } from '@shared/utils';
 import { Aura, Button, GlassButton, GradientShift } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
@@ -47,10 +45,10 @@ export default function HealthBasics() {
 
   const set = (key: string, v: string) => setAnswers((a) => ({ ...a, [key]: v }));
   const next = (final: Answers) => {
-    // DN-03 age gate for your own profile. OPEN (O-2): "can someone under 18 sign up for themselves?" —
-    // documented default: no; a parent adds them as someone they care for.
-    if (step.kind === 'year' && !forSomeoneElse(final) && ageGroupFor(nowFrom(useAppStore.getState()).getFullYear() - Number(final.birthYear)) !== 'adult') {
-      return replace('M-1.10');
+    // PDF age gate: only under-13 selves need a parent; teens continue the form.
+    if (step.kind === 'year' && !forSomeoneElse(final)) {
+      const age = nowFrom(useAppStore.getState()).getFullYear() - Number(final.birthYear);
+      if (age < 13) return replace('M-1.10');
     }
     return last ? finish(final) : setI(i + 1);
   };
@@ -65,6 +63,7 @@ export default function HealthBasics() {
   };
 
   const canContinue =
+    step.optional === true ||
     step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
     (step.kind === 'text' && Boolean(value.trim())) ||
     (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||

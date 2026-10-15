@@ -14,7 +14,7 @@ export type NotificationPermission = 'unknown' | 'granted' | 'denied';
 /** Core experience age groups (DN-03): sign-up and chat behave differently for each. */
 export type AgeGroup = 'child' | 'teen' | 'adult';
 
-/** DN-07: the six groups in data/intake/symptoms.json. */
+/** DN-07: journey symptom groups (chatIntake.json); the Symptoms sheet may list more. */
 export type SymptomGroupId = 'sleep' | 'temperature' | 'mood' | 'cycle' | 'weight' | 'body';
 
 /** DN-08: which question bank a consultation uses (docs/ux/F02b-profile-aware-chat-intake.md). */
@@ -72,6 +72,18 @@ export interface Intake {
   profileFor?: 'self' | 'dependent';
   /** Onboarding (in chat): hormonal / reproductive status. */
   reproductive?: string;
+  /** Onboarding form (M-1.8 V2): gender identity when distinct from sex at birth. */
+  genderIdentity?: string;
+  /** Trans teen branch: trans-woman | trans-man. */
+  transIdentity?: string;
+  /** Optional puberty notes from the teen development free-text step. */
+  pubertyNotes?: string;
+  /** When puberty started (free text: age or year). */
+  pubertyStart?: string;
+  /** Genesis Gold product question from the meds block. */
+  genesisGold?: 'yes' | 'no';
+  /** Parent / guardian names collected on a child (under-13 dependent) profile. */
+  guardianNames?: string;
   /** ISO 3166 region confirmed in chat; inferred from the device locale. */
   country?: string;
   /** Asked only when relevant to the topic (e.g. thyroid): free text with units. */

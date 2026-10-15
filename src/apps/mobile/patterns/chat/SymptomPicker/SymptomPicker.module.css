@@ -5,7 +5,7 @@
 .grabber { align-self: center; width: 36px; height: 5px; margin-top: var(--space-2); border-radius: var(--radius-full); background: var(--color-border-hairline); }
 .head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-5) var(--space-2); }
 .title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
-.close { min-height: var(--tap-min); padding: 0 var(--space-1); font: var(--weight-regular) var(--fs-callout) / 1 var(--font-body); color: var(--color-accent); }
+.close { color: var(--color-ink-secondary); }
 .search { display: flex; align-items: center; gap: var(--space-2); margin: 0 var(--space-5) var(--space-3); padding: 0 var(--space-4); min-height: 48px; border-radius: var(--radius-pill); background: var(--color-surface-sunken, color-mix(in srgb, var(--color-ink) 5%, transparent)); color: var(--color-ink-secondary); }
 .search:focus-within { box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
 .input { flex: 1; min-width: 0; border: 0; background: transparent; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); caret-color: var(--color-accent); outline: none; }
@@ -22,5 +22,5 @@
 .tick { display: inline-grid; place-items: center; width: 0; overflow: hidden; opacity: 0; transition: width var(--dur-base) var(--ease-out), margin var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out); }
 .pill[aria-pressed='true'] .tick { width: 16px; margin-right: var(--space-2); opacity: 1; }
 .empty { color: var(--color-ink-secondary); }
-.foot { padding: var(--space-3) var(--space-5) var(--space-4); border-top: 1px solid var(--color-border-hairline); }
+.foot { padding: var(--space-3) var(--space-5) var(--space-4); }
 @media (prefers-reduced-motion: reduce) { .pill, .tick { transition: none; } }

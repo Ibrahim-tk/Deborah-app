@@ -9,7 +9,7 @@
  */
 import { useMemo, useState } from 'react';
 import { symptomGroups } from '@shared/data';
-import { AnimatePresence, Button, DURATION, EASE_IOS, Icon, MotionDiv, Overlay, REDUCED_FADE, useReducedMotionPref } from '@mobile/ui';
+import { AnimatePresence, Button, DURATION, EASE_IOS, Icon, IconButton, MotionDiv, Overlay, REDUCED_FADE, useReducedMotionPref } from '@mobile/ui';
 import styles from './SymptomPicker.module.css';
 
 export interface SymptomPickerProps {
@@ -58,7 +58,7 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
               <div className={styles.grabber} aria-hidden />
               <header className={styles.head}>
                 <h2 className={styles.title}>Symptoms</h2>
-                <button type="button" className={styles.close} onClick={close}>Cancel</button>
+                <IconButton icon="close" label="Close" className={styles.close} onClick={close} />
               </header>
               <label className={styles.search}>
                 <Icon name="search" size={18} />
