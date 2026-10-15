@@ -15,8 +15,8 @@ import styles from './Splash.module.css';
 
 // OPEN: spec says ~1.6 s; extended to 3 s per design direction (2026-10-08) so the mark can form.
 const SPLASH_MS = 3000;
-/** PDF persona auto-run: leave Splash immediately (sign-up sheet is the focus). */
-const splashMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 40 : SPLASH_MS);
+/** PDF persona auto-run: shorter Splash (~0.5× of a normal journey step). */
+const splashMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 700 : SPLASH_MS);
 
 /** Silent deep-link attribution (?ref= or utm_source=); never asked. */
 function referralFrom(search: string): string {

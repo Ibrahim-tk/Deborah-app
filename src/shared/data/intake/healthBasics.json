@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Version 2 onboarding profile (M-1.8). Who the profile is for, birth year, then gender — then age × gender branches from the Health Intake Logic PDF: reproductive / puberty / child basics / medications. All steps mandatory except pubertyNotes. `showIf` uses answers plus derived `age` (number). Wording is placeholder.",
+  "note": "Version 2 onboarding (M-1.8) — exact branches from Genesis Health (2).pdf Health Intake Logic wrt Age & Gender. Mandatory: Age (birth year) + Gender. All questions mandatory except free text after puberty. Transgender: one puberty question (Trans-woman / Trans-man). Wording is placeholder pending Deborah.",
   "steps": [
     {
       "key": "profileFor",
@@ -12,9 +12,7 @@
       "kind": "choice",
       "title": "Who are they to you?",
       "showIf": {
-        "profileFor": {
-          "in": ["dependent"]
-        }
+        "profileFor": { "in": ["dependent"] }
       },
       "choices": [
         { "value": "daughter", "label": "Daughter" },
@@ -30,32 +28,28 @@
       "title": "What’s their first name?",
       "placeholder": "First name",
       "showIf": {
-        "profileFor": {
-          "in": ["dependent"]
-        }
+        "profileFor": { "in": ["dependent"] }
       }
     },
     {
       "key": "birthYear",
       "kind": "year",
-      "title": "What year were you born?",
-      "titleOther": "What year was {name} born?"
+      "title": "Age",
+      "titleOther": "{name}’s age (year of birth)"
     },
     {
       "key": "consent",
       "kind": "consent",
       "title": "Before we set up {name}’s profile",
       "showIf": {
-        "profileFor": {
-          "in": ["dependent"]
-        }
+        "profileFor": { "in": ["dependent"] }
       }
     },
     {
       "key": "gender",
       "kind": "choice",
-      "title": "How do you describe yourself?",
-      "titleOther": "How does {name} describe themselves?",
+      "title": "Gender",
+      "titleOther": "{name}’s gender",
       "choices": [
         { "value": "female", "label": "Female" },
         { "value": "male", "label": "Male" },
@@ -68,8 +62,8 @@
     {
       "key": "guardianNames",
       "kind": "text",
-      "title": "Parent or guardian names",
-      "titleOther": "Parent or guardian names for {name}",
+      "title": "Parent / guardian names",
+      "titleOther": "Parent / guardian names for {name}",
       "placeholder": "Names",
       "single": true,
       "showIf": {
@@ -92,8 +86,8 @@
     {
       "key": "allergies",
       "kind": "text",
-      "title": "Any allergies?",
-      "titleOther": "Any allergies for {name}?",
+      "title": "Allergies",
+      "titleOther": "Allergies for {name}",
       "placeholder": "Allergy",
       "none": "None",
       "showIf": {
@@ -102,28 +96,12 @@
       }
     },
     {
-      "key": "reproductiveTeen",
-      "kind": "choice",
-      "title": "Reproductive status",
-      "titleOther": "{name}’s reproductive status",
-      "showIf": {
-        "gender": { "in": ["female", "intersex", "non-binary", "transgender"] },
-        "age": { "min": 13, "max": 17 }
-      },
-      "choices": [
-        { "value": "periods-started", "label": "Periods have started" },
-        { "value": "periods-not-started", "label": "Periods not started yet" },
-        { "value": "irregular", "label": "Irregular periods" },
-        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
-      ]
-    },
-    {
       "key": "reproductive",
       "kind": "choice",
       "title": "Reproductive status",
       "titleOther": "{name}’s reproductive status",
       "showIf": {
-        "gender": { "in": ["female", "intersex", "non-binary", "transgender"] },
+        "gender": { "in": ["female", "non-binary", "intersex"] },
         "age": { "min": 18 }
       },
       "choices": [
@@ -135,6 +113,38 @@
       ]
     },
     {
+      "key": "reproductiveTeen",
+      "kind": "choice",
+      "title": "Reproductive status",
+      "titleOther": "{name}’s reproductive status",
+      "showIf": {
+        "gender": { "in": ["female", "non-binary", "intersex"] },
+        "age": { "min": 13, "max": 17 }
+      },
+      "choices": [
+        { "value": "pre-menopausal", "label": "Pre-menopausal" },
+        { "value": "peri-menopausal", "label": "Peri-menopausal" },
+        { "value": "post-menopausal", "label": "Post-menopausal (natural)" },
+        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
+        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+      ]
+    },
+    {
+      "key": "transPuberty",
+      "kind": "choice",
+      "title": "What, if any, puberty has your body gone through or is going through?",
+      "titleOther": "What, if any, puberty has {name}’s body gone through or is going through?",
+      "showIf": {
+        "gender": { "in": ["transgender"] },
+        "age": { "min": 13 }
+      },
+      "choices": [
+        { "value": "trans-woman", "label": "Trans-woman" },
+        { "value": "trans-man", "label": "Trans-man" },
+        { "value": "none-yet", "label": "None yet" }
+      ]
+    },
+    {
       "key": "pubertyStart",
       "kind": "text",
       "title": "When did you start puberty?",
@@ -142,42 +152,28 @@
       "placeholder": "Age or year",
       "single": true,
       "showIf": {
-        "gender": { "in": ["male", "non-binary", "transgender", "intersex", "prefer-not"] },
+        "gender": { "in": ["male", "non-binary", "intersex", "prefer-not"] },
         "age": { "min": 13, "max": 17 }
       }
     },
     {
       "key": "pubertyNotes",
       "kind": "text",
-      "title": "Anything else about development?",
-      "titleOther": "Anything else about {name}’s development?",
+      "title": "Additional information / concerns about development",
+      "titleOther": "Additional information / concerns about {name}’s development",
       "placeholder": "Optional",
       "single": true,
       "optional": true,
       "showIf": {
-        "gender": { "in": ["male", "non-binary", "transgender", "intersex", "prefer-not"] },
+        "gender": { "in": ["male", "non-binary", "intersex", "prefer-not"] },
         "age": { "min": 13, "max": 17 }
       }
     },
     {
-      "key": "transIdentity",
-      "kind": "choice",
-      "title": "Which best describes you?",
-      "titleOther": "Which best describes {name}?",
-      "showIf": {
-        "gender": { "in": ["transgender"] },
-        "age": { "min": 13, "max": 17 }
-      },
-      "choices": [
-        { "value": "trans-woman", "label": "Trans woman" },
-        { "value": "trans-man", "label": "Trans man" }
-      ]
-    },
-    {
       "key": "medications",
       "kind": "text",
-      "title": "Medications (Rx & OTC)",
-      "titleOther": "{name}’s medications (Rx & OTC)",
+      "title": "Medications Rx & OTC — name + reason, or None",
+      "titleOther": "{name}’s medications Rx & OTC — name + reason, or None",
       "placeholder": "Name — reason",
       "none": "None",
       "showIf": {
@@ -187,8 +183,8 @@
     {
       "key": "supplements",
       "kind": "text",
-      "title": "Supplements",
-      "titleOther": "{name}’s supplements",
+      "title": "Supplements — name + reason, or None",
+      "titleOther": "{name}’s supplements — name + reason, or None",
       "placeholder": "Name — reason",
       "none": "None",
       "showIf": {

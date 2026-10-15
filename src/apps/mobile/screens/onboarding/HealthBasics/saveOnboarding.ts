@@ -42,6 +42,8 @@ export function saveOnboarding(a: Answers): string {
   const sex = SEX_FROM_GENDER[a.gender ?? ''] ?? (a.sex as SexAtBirth | undefined);
   const birthYear = { value: year, source: 'manual' as const, updatedAt: at };
   const reproductive = a.reproductive ?? a.reproductiveTeen;
+  /** PDF transgender intake: single puberty question (Trans-woman / Trans-man / None yet). */
+  const transPuberty = a.transPuberty && a.transPuberty !== 'none-yet' ? a.transPuberty : undefined;
   const meds = a.medications !== undefined ? parseNamed(a.medications, 'None')
     : a.childMedications !== undefined ? parseNamed(a.childMedications, 'None') : undefined;
   const supplements = a.supplements !== undefined ? parseNamed(a.supplements, 'None') : undefined;
@@ -53,7 +55,8 @@ export function saveOnboarding(a: Answers): string {
   if (a.genesisGold) care.genesisGold = a.genesisGold;
   if (a.pubertyStart) care.pubertyStart = a.pubertyStart;
   if (a.pubertyNotes?.trim()) care.pubertyNotes = a.pubertyNotes.trim();
-  if (a.transIdentity) care.transIdentity = a.transIdentity;
+  if (transPuberty) care.transIdentity = transPuberty;
+  if (a.transPuberty === 'none-yet') care.transPuberty = 'none-yet';
   if (a.guardianNames?.trim()) care.guardianNames = a.guardianNames.trim();
 
   const healthPatch = {
@@ -72,7 +75,8 @@ export function saveOnboarding(a: Answers): string {
       reproductive,
       cycle: CYCLE_FROM_REPRODUCTIVE[reproductive] ?? ('unknown' as Cycle),
     }),
-    ...(a.transIdentity && { transIdentity: a.transIdentity }),
+    ...(transPuberty && { transIdentity: transPuberty }),
+    ...(a.transPuberty === 'none-yet' && { pubertyNotes: 'None yet' }),
     ...(a.pubertyStart && { pubertyStart: a.pubertyStart }),
     ...(a.pubertyNotes?.trim() && { pubertyNotes: a.pubertyNotes.trim() }),
     ...(a.genesisGold === 'yes' || a.genesisGold === 'no' ? { genesisGold: a.genesisGold as 'yes' | 'no' } : {}),

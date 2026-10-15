@@ -41,7 +41,7 @@ export function CodeStep({ email, onVerified, onChangeEmail }: { email: string; 
   useEffect(() => {
     if (!verifying) return;
     const fast = document.documentElement.dataset.yocFastSignup === '1';
-    const id = window.setTimeout(() => verified.current(), fast ? 40 : simMs(900));
+    const id = window.setTimeout(() => verified.current(), fast ? 700 : simMs(900));
     return () => window.clearTimeout(id);
   }, [verifying, verified]);
 

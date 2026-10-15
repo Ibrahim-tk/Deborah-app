@@ -17,11 +17,11 @@ import styles from './JourneyRunner.module.css';
 
 /** Time per action during Health Basics / chat (readable). */
 const STEP_MS = 1400;
-/** Sign-up path only: Splash → Welcome → M-1.4 form + OTP. */
-const SIGNUP_MS = 50;
+/** Sign-up path (Splash → Welcome → M-1.4 + OTP): half the normal step pace. */
+const SIGNUP_MS = Math.round(STEP_MS * 0.5);
 /** Ticks with nothing to do (and nothing changing on screen) before the run gives up. */
 const IDLE_LIMIT = 10;
-const IDLE_SIGNUP = 40;
+const IDLE_SIGNUP = 20;
 
 type BatchResult = { id: string; label: string; ok: boolean; at: string };
 

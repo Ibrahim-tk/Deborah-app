@@ -168,15 +168,19 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'male'}).includes('pubertyNotes'));
     assert.ok(!keys({profileFor:'self',birthYear:yearFor(15),gender:'male'}).includes('reproductive'));
     assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'female'}).includes('reproductiveTeen'));
-    assert.ok(keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('transIdentity'));
-    assert.ok(keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('pubertyStart'));
-    assert.ok(keys({profileFor:'self',birthYear:yearFor(40),gender:'transgender'}).includes('reproductive'));
+    // Transgender: single puberty question for all ages 13+ (no menopausal list, no start-age text).
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('transPuberty'));
+    assert.ok(!keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('pubertyStart'));
+    assert.ok(!keys({profileFor:'self',birthYear:yearFor(16),gender:'transgender'}).includes('reproductive'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(40),gender:'transgender'}).includes('transPuberty'));
+    assert.ok(!keys({profileFor:'self',birthYear:yearFor(40),gender:'transgender'}).includes('reproductive'));
     assert.ok(!keys({profileFor:'self',birthYear:yearFor(40),gender:'prefer-not'}).includes('reproductive'));
     assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthYear:yearFor(9),consent:'yes',gender:'male'}).includes('guardianNames'));
     assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthYear:yearFor(9),consent:'yes',gender:'male'}).includes('childMedications'));
     assert.ok(!keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthYear:yearFor(9),consent:'yes',gender:'male'}).includes('medications'));
     assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'prefer-not'}).includes('pubertyStart'));
     assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'intersex'}).includes('pubertyStart'));
+    assert.ok(keys({profileFor:'self',birthYear:yearFor(15),gender:'intersex'}).includes('reproductiveTeen'));
   });
 
   test('all 24 PDF personas match healthBasics visibleSteps', () => {

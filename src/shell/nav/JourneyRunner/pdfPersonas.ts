@@ -54,15 +54,11 @@ const BAND_LABEL: Record<PdfAgeBand, string> = {
 function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
   if (band === 'lt13') return [/^Myself$/];
   const out: RegExp[] = [/^Myself$/, PDF_GENDER_LABEL[gender]];
-  const reproAdult = /^Pre-menopausal$/;
-  const reproTeen = /^Periods have started$/;
-  if (band === 'teen') {
-    if (gender === 'female' || gender === 'intersex' || gender === 'non-binary' || gender === 'transgender') {
-      out.push(reproTeen);
-    }
-    if (gender === 'transgender') out.push(/^Trans woman$/);
-  } else if (gender === 'female' || gender === 'intersex' || gender === 'non-binary' || gender === 'transgender') {
-    out.push(reproAdult);
+  const repro = /^Pre-menopausal$/;
+  if (gender === 'transgender') {
+    out.push(/^Trans-woman$/);
+  } else if (gender === 'female' || gender === 'intersex' || gender === 'non-binary') {
+    out.push(repro);
   }
   out.push(/^No$/); // Genesis Gold
   return out;
@@ -74,16 +70,19 @@ export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] 
   const keys = ['profileFor', 'birthYear', 'gender'];
   const teen = band === 'teen';
   const adultish = band === 'adult' || band === 'senior';
-  if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary' || gender === 'transgender')) {
+  // PDF: Female / Non-binary / Intersex get reproductive status (teen + adult banks).
+  if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
     keys.push('reproductiveTeen');
   }
-  if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary' || gender === 'transgender')) {
+  if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
     keys.push('reproductive');
   }
-  if (teen && (gender === 'male' || gender === 'non-binary' || gender === 'transgender' || gender === 'intersex' || gender === 'prefer-not')) {
+  // PDF + Deborah: Transgender → one puberty question for all ages 13+.
+  if (gender === 'transgender') keys.push('transPuberty');
+  // PDF: Male / Non-binary / Intersex / Prefer-not teens get “When did you start puberty?” + optional notes.
+  if (teen && (gender === 'male' || gender === 'non-binary' || gender === 'intersex' || gender === 'prefer-not')) {
     keys.push('pubertyStart', 'pubertyNotes');
   }
-  if (teen && gender === 'transgender') keys.push('transIdentity');
   keys.push('medications', 'supplements', 'genesisGold');
   return keys;
 }
@@ -99,16 +98,16 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
   a.gender = gender;
   const teen = band === 'teen';
   const adultish = band === 'adult' || band === 'senior';
-  if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary' || gender === 'transgender')) {
-    a.reproductiveTeen = 'periods-started';
+  if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
+    a.reproductiveTeen = 'pre-menopausal';
   }
-  if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary' || gender === 'transgender')) {
+  if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
     a.reproductive = 'pre-menopausal';
   }
-  if (teen && (gender === 'male' || gender === 'non-binary' || gender === 'transgender' || gender === 'intersex' || gender === 'prefer-not')) {
+  if (gender === 'transgender') a.transPuberty = 'trans-woman';
+  if (teen && (gender === 'male' || gender === 'non-binary' || gender === 'intersex' || gender === 'prefer-not')) {
     a.pubertyStart = '14';
   }
-  if (teen && gender === 'transgender') a.transIdentity = 'trans-woman';
   a.medications = 'None';
   a.supplements = 'None';
   a.genesisGold = 'no';
