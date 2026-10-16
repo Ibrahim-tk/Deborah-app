@@ -11,6 +11,16 @@ import { ageFromAnswers, effectiveGender, forSomeoneElse, list, pronounsForSave,
 
 const CONSENT_PATH = { child: 'guardian-child', teen: 'guardian-teen', adult: 'adult-agreement' } as const;
 
+type ConsentPath = NonNullable<Profile['consent']>['path'];
+
+/** Map medical-advocate radio (or legacy `yes`) to the stored consent path. */
+function consentPathFor(option: string | undefined, group: keyof typeof CONSENT_PATH): ConsentPath {
+  if (option === 'guardian') return group === 'adult' ? 'adult-agreement' : CONSENT_PATH[group];
+  if (option === 'agreed' || option === 'proxy') return 'adult-agreement';
+  // Legacy single-checkbox attestation, or missing → age-group default.
+  return CONSENT_PATH[group];
+}
+
 const SEX_AT_BIRTH = new Set<SexAtBirth>(['female', 'male', 'intersex']);
 
 const CYCLE_FROM_REPRODUCTIVE: Record<string, Cycle> = {
@@ -158,9 +168,20 @@ export function saveOnboarding(a: Answers): string {
     ...(dob && { dob }),
     ...(sex && { sexAtBirth: sex }),
     health: healthPatch,
-    intake: { conditions: [], ...intakePatch, medications: intakePatch.medications ?? [] },
+    intake: {
+      conditions: [],
+      ...intakePatch,
+      medications: intakePatch.medications ?? [],
+      ...(a.relationship === 'other' && a.relationshipOther?.trim()
+        ? { relationshipOther: a.relationshipOther.trim() }
+        : {}),
+    },
     createdAt: at,
-    consent: { path: CONSENT_PATH[group], attestedAt: at, attestedBy: s.accountId ?? SELF_PROFILE_ID },
+    consent: {
+      path: consentPathFor(a.consent, group),
+      attestedAt: at,
+      attestedBy: s.accountId ?? SELF_PROFILE_ID,
+    },
     ...(minor && { guardianConsentAt: at }),
     intakeV2: { step: 'done', completedAt: at, closedAt: at },
   };

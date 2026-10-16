@@ -1,21 +1,31 @@
 /** Value pickers used in health basics: wheels and sliders. */
 import { useState } from 'react';
-import { DateWheel, KnobSlider, RulerSlider, YearWheel } from '@mobile/ui';
+import { DateWheel, KnobSlider, OptionWheel, RulerSlider, YearWheel } from '@mobile/ui';
 import { Section } from '../Section';
 import { Grid, Specimen } from '../Specimen';
 
 const inches = (v: number) => `${Math.floor(v / 12)}′ ${v % 12}″`;
+
+const DEMO_CODES = [
+  { value: '+1', label: '🇺🇸  +1', spoken: 'United States / Canada, +1' },
+  { value: '+44', label: '🇬🇧  +44', spoken: 'United Kingdom, +44' },
+  { value: '+61', label: '🇦🇺  +61', spoken: 'Australia, +61' },
+];
 
 export function Pickers() {
   const [year, setYear] = useState(1978);
   const [date, setDate] = useState('2026-09-28');
   const [height, setHeight] = useState(65);
   const [weight, setWeight] = useState(150);
+  const [code, setCode] = useState('+1');
   return (
     <Section id="pickers" title="Pickers" lede="iOS-style wheels and rulers for numbers people know roughly. Keyboard and screen-reader operable.">
       <Grid>
         <Specimen name="YearWheel" path="ui/YearWheel" note="Snap-scrolling year wheel; `cinematic` adds the 3D drum used in sign-up.">
           <YearWheel label="Year of birth" value={year} min={1930} max={2012} onChange={setYear} />
+        </Specimen>
+        <Specimen name="OptionWheel" path="ui/OptionWheel" note="DateWheel-style band for string options (clean lilac selection + soft fade).">
+          <OptionWheel label="Country code" options={DEMO_CODES} value={code} onChange={setCode} />
         </Specimen>
         <Specimen name="DateWheel" path="ui/DateWheel" note="Month · day · year wheels with a shared selection band.">
           <DateWheel label="First day of last period" value={date} minYear={2025} maxYear={2026} onChange={setDate} />

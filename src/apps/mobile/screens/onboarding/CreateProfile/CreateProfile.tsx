@@ -19,6 +19,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { consentDoc } from '@shared/data';
 import { loadScenario, useAppStore } from '@shared/store';
 import { Button, Icon, Input, Sheet } from '@mobile/ui';
+import { PhoneField, type PhoneValue } from '@mobile/patterns/widgets';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { CodeStep } from '@mobile/screens/plans/CreateAccount/parts/CodeStep';
 import { ForgotPassword } from './parts/ForgotPassword';
@@ -61,6 +62,7 @@ export default function CreateProfile() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string }>({});
 
   const submit = (e: FormEvent) => {
@@ -93,6 +95,7 @@ export default function CreateProfile() {
     if (signin) return signIn(email.trim());
     s.setName(first);
     s.createAccount(email.trim());
+    if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
     s.acceptConsent(consentDoc.version);
     s.acceptTerms();
     setStage('done');
@@ -123,6 +126,7 @@ export default function CreateProfile() {
             <Input label="Password" type="password" placeholder="Enter your password" value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
             {signin && <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>Forgot password?</button>}
             {!signin && <Input label="Confirm password" type="password" placeholder="Confirm your password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />}
+            {!signin && <PhoneField value={phone} onChange={setPhone} />}
             <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>{signin ? 'Sign in' : 'Create account'}</Button>
           </form>
         )}

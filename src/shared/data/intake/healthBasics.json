@@ -10,6 +10,7 @@
     {
       "key": "relationship",
       "kind": "choice",
+      "presentation": "rows",
       "title": "Who are they to you?",
       "showIf": {
         "profileFor": { "in": ["dependent"] }
@@ -20,7 +21,12 @@
         { "value": "partner", "label": "Partner" },
         { "value": "parent", "label": "Parent" },
         { "value": "other", "label": "Someone else" }
-      ]
+      ],
+      "describeValue": "other",
+      "describeKey": "relationshipOther",
+      "describeLabel": "Relationship",
+      "describePlaceholder": "e.g. aunt, friend, cousin",
+      "describeAlwaysSpan": true
     },
     {
       "key": "memberName",
@@ -64,8 +70,8 @@
       "key": "pronouns",
       "kind": "choice",
       "presentation": "rows",
-      "title": "What are your pronouns?",
-      "titleOther": "What are {name}’s pronouns?",
+      "title": "What are your preferred pronouns?",
+      "titleOther": "What are {name}’s preferred pronouns?",
       "choices": [
         { "value": "she-her", "label": "She/Her" },
         { "value": "he-him", "label": "He/Him" },
@@ -73,7 +79,7 @@
         { "value": "she-they", "label": "She/They" },
         { "value": "he-they", "label": "He/They" },
         { "value": "any", "label": "Any pronouns" },
-        { "value": "describe", "label": "I want to describe" }
+        { "value": "describe", "label": "Other" }
       ],
       "describeValue": "describe",
       "describeKey": "pronounsOther",
@@ -97,8 +103,8 @@
       "key": "childMedications",
       "kind": "text",
       "presentation": "namedReasons",
-      "title": "Medications & supplements",
-      "titleOther": "Medications & supplements for {name}",
+      "title": "Are you currently taking any medications or supplements?",
+      "titleOther": "Is {name} currently taking any medications or supplements?",
       "namePlaceholder": "e.g. Allergy medication",
       "reasonPlaceholder": "What is it for?",
       "none": "None",
@@ -212,6 +218,7 @@
       "placeholder": "Age",
       "single": true,
       "showIf": {
+        "sex": { "in": ["female"] },
         "reproductiveStage": { "in": ["post-menopausal"] },
         "age": { "max": 59 }
       }
@@ -223,6 +230,7 @@
       "title": "Have you had a hysterectomy?",
       "titleOther": "Has {name} had a hysterectomy?",
       "showIf": {
+        "sex": { "in": ["female"] },
         "reproductiveStage": { "in": ["surgically-menopausal"] },
         "age": { "max": 59 }
       },
@@ -238,6 +246,7 @@
       "title": "Have you had your ovaries removed?",
       "titleOther": "Has {name} had their ovaries removed?",
       "showIf": {
+        "sex": { "in": ["female"] },
         "reproductiveStage": { "in": ["surgically-menopausal"] },
         "age": { "max": 59 }
       },
@@ -254,6 +263,7 @@
       "title": "Are you currently on hormone therapy (HRT)?",
       "titleOther": "Is {name} currently on hormone therapy (HRT)?",
       "showIf": {
+        "sex": { "in": ["female"] },
         "reproductiveStage": { "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"] },
         "age": { "max": 59 }
       },
@@ -263,15 +273,16 @@
         { "value": "no", "label": "No" }
       ],
       "expandValues": ["yes", "yes-previously"],
-      "expandKey": "hrtType"
+      "expandKey": "hrtType",
+      "expandTitle": "Please specify"
     },
     {
       "key": "hrtType",
       "kind": "choice",
       "presentation": "pills",
       "inline": true,
-      "title": "What type of HRT?",
-      "titleOther": "What type of HRT for {name}?",
+      "title": "Please specify",
+      "titleOther": "Please specify",
       "showIf": {
         "hrtStatus": { "in": ["yes", "yes-previously"] }
       },
@@ -284,15 +295,145 @@
     },
     {
       "key": "otherPuberty",
-      "kind": "text",
-      "title": "Has your body gone through any puberty or is going through?",
-      "titleOther": "Has {name}’s body gone through any puberty or is going through?",
-      "placeholder": "Describe",
-      "single": true,
+      "kind": "choice",
+      "presentation": "rows",
+      "title": "How has your body gone through any puberty?",
+      "titleOther": "How has {name}’s body gone through any puberty?",
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" },
+        { "value": "currently", "label": "Currently going through" }
+      ],
       "showIf": {
         "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
         "age": { "min": 13, "max": 59 }
       }
+    },
+    {
+      "key": "reproductive",
+      "kind": "choice",
+      "presentation": "rows",
+      "title": "Where are you hormonally right now?",
+      "titleOther": "Where is {name} hormonally right now?",
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "age": { "min": 18, "max": 59 }
+      },
+      "choices": [
+        { "value": "menstruation", "label": "Menstruation" },
+        { "value": "pre-menopausal", "label": "Pre-menopausal" },
+        { "value": "peri-menopausal", "label": "Peri-menopausal" },
+        { "value": "post-menopausal", "label": "Post-menopausal" },
+        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
+        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+      ]
+    },
+    {
+      "key": "reproductiveTeen",
+      "kind": "choice",
+      "presentation": "rows",
+      "title": "Where are you hormonally right now?",
+      "titleOther": "Where is {name} hormonally right now?",
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "age": { "min": 13, "max": 17 }
+      },
+      "choices": [
+        { "value": "menstruation", "label": "Menstruation" },
+        { "value": "pre-menopausal", "label": "Pre-menopausal" },
+        { "value": "peri-menopausal", "label": "Peri-menopausal" },
+        { "value": "post-menopausal", "label": "Post-menopausal" },
+        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
+        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+      ]
+    },
+    {
+      "key": "periodsStarted",
+      "kind": "choice",
+      "presentation": "pills",
+      "title": "Have your periods started?",
+      "titleOther": "Have {name}’s periods started?",
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "reproductiveStage": { "in": ["menstruation"] },
+        "age": { "min": 13, "max": 59 }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" },
+        { "value": "describe", "label": "I’m not sure / I want to describe" }
+      ],
+      "describeValue": "describe",
+      "describeKey": "periodsNotes",
+      "describeLabel": "Describe",
+      "describePlaceholder": "describe your situation"
+    },
+    {
+      "key": "ageAtLastPeriod",
+      "kind": "text",
+      "presentation": "chips",
+      "title": "Age at last period?",
+      "titleOther": "Age at {name}’s last period?",
+      "placeholder": "Age",
+      "single": true,
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "reproductiveStage": { "in": ["post-menopausal"] },
+        "age": { "max": 59 }
+      }
+    },
+    {
+      "key": "hysterectomy",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Have you had a hysterectomy?",
+      "titleOther": "Has {name} had a hysterectomy?",
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "reproductiveStage": { "in": ["surgically-menopausal"] },
+        "age": { "max": 59 }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" }
+      ]
+    },
+    {
+      "key": "ovariesRemoved",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Have you had your ovaries removed?",
+      "titleOther": "Has {name} had their ovaries removed?",
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "reproductiveStage": { "in": ["surgically-menopausal"] },
+        "age": { "max": 59 }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" },
+        { "value": "partial", "label": "Partial" }
+      ]
+    },
+    {
+      "key": "hrtStatus",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Are you currently on hormone therapy (HRT)?",
+      "titleOther": "Is {name} currently on hormone therapy (HRT)?",
+      "showIf": {
+        "sex": { "in": ["trans-man", "trans-woman", "prefer-not", "intersex"] },
+        "reproductiveStage": { "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"] },
+        "age": { "max": 59 }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "yes-previously", "label": "Yes, Previously" },
+        { "value": "no", "label": "No" }
+      ],
+      "expandValues": ["yes", "yes-previously"],
+      "expandKey": "hrtType",
+      "expandTitle": "Please specify"
     },
     {
       "key": "pubertyStart",
@@ -354,8 +495,8 @@
       "key": "medications",
       "kind": "text",
       "presentation": "namedReasons",
-      "title": "Medications (Rx & OTC)",
-      "titleOther": "Medications (Rx & OTC) for {name}",
+      "title": "Are you currently taking any medications (Rx or OTC)?",
+      "titleOther": "Is {name} currently taking any medications (Rx or OTC)?",
       "namePlaceholder": "e.g. Metformin",
       "reasonPlaceholder": "What is it for?",
       "none": "None",
@@ -367,8 +508,8 @@
       "key": "supplements",
       "kind": "text",
       "presentation": "namedReasons",
-      "title": "Supplements",
-      "titleOther": "Supplements for {name}",
+      "title": "Are you currently taking any supplements?",
+      "titleOther": "Is {name} currently taking any supplements?",
       "namePlaceholder": "e.g. Magnesium",
       "reasonPlaceholder": "What is it for?",
       "none": "None",

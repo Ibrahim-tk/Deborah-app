@@ -5,7 +5,8 @@
  * profile completion, and recommendations only when personalised (each says why).
  */
 import { Button, Icon, type IconName } from '@mobile/ui';
-import { Bar, LinkCard, Recommendations, SectionLabel, TilePair, type Recommendation, type TileProps } from './HomeKit';
+import { HealingPlanCard, IntakeCompletionCard } from '@mobile/patterns/widgets';
+import { LinkCard, Recommendations, SectionLabel, TilePair, type Recommendation, type TileProps } from './HomeKit';
 import styles from './HomeStates.module.css';
 
 export interface NextStep {
@@ -25,7 +26,8 @@ export interface StateReturningProps {
   pendingQuestion?: string;
   onContinue: () => void;
   steps: NextStep[];
-  journey?: { day: number; today?: string; onPress: () => void };
+  journey?: { day: number; today?: string; focus?: string; onPress: () => void };
+  intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
   tiles: [TileProps, TileProps];
   recommendations: Recommendation[];
@@ -70,13 +72,15 @@ export function StateReturning(p: StateReturningProps) {
         </section>
       )}
 
+      {p.intakeCard && (
+        <IntakeCompletionCard progress={p.intakeCard.progress} complete={p.intakeCard.complete} onAction={p.intakeCard.onAction} />
+      )}
+
       {p.journey && (
-        <LinkCard
-          tone="linen"
-          title="90 Day Journey"
-          lead="calendar"
-          meta={`Day ${p.journey.day} of 90${p.journey.today ? ` · Today: ${p.journey.today}` : ''}`}
-          extra={<Bar value={p.journey.day / 90} />}
+        <HealingPlanCard
+          day={p.journey.day}
+          todayHabit={p.journey.today}
+          focus={p.journey.focus}
           onPress={p.journey.onPress}
         />
       )}

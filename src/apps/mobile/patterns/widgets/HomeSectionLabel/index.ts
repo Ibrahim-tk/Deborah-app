@@ -1,0 +1,1 @@
+export { HomeSectionLabel } from './HomeSectionLabel';

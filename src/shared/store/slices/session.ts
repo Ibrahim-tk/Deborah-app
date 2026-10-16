@@ -17,6 +17,7 @@ type Actions = Pick<
   | 'setLocked'
   | 'snoozeFollowUp'
   | 'createAccount'
+  | 'setContactPhone'
   | 'restoreAccount'
   | 'setReferralSource'
   | 'acceptTerms'
@@ -63,6 +64,11 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
   setLocked: (isLocked) => set({ isLocked }),
   snoozeFollowUp: (followUpSnoozeUntil) => set({ followUpSnoozeUntil }),
   createAccount: (email, lastName) => set({ accountId: uid('acct'), accountEmail: email, accountLastName: lastName }),
+  setContactPhone: (countryCode, number) =>
+    set({
+      accountPhoneCountry: countryCode || undefined,
+      accountPhoneNumber: number.trim() || undefined,
+    }),
   restoreAccount: (email) => {
     if (!get().userName) get().setName(nameFromEmail(email));
     set((s) => ({

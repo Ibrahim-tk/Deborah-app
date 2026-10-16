@@ -96,6 +96,8 @@ export interface Intake {
   hrtType?: string;
   /** Parent / guardian names collected on a child (under-13 dependent) profile. */
   guardianNames?: string;
+  /** Free-text when relationship is `other` (“Someone else” → describe). */
+  relationshipOther?: string;
   /** ISO 3166 region confirmed in chat; inferred from the device locale. */
   country?: string;
   /** Asked only when relevant to the topic (e.g. thyroid): free text with units. */
@@ -113,6 +115,15 @@ export interface Intake {
   otherIssues?: string;
   healthGoal?: string;
   newMeds?: string;
+  /** Complete Intake shell (M-2.14) — placeholder sections until Dropbox questionnaires arrive. */
+  familyHistory?: string;
+  lifestyleSleep?: string;
+  lifestyleStress?: string;
+  lifestyleActivity?: string;
+  lifestyleDiet?: string;
+  otherMedical?: string;
+  /** Resume key for Complete Intake sections. */
+  completeIntakeSection?: string;
 }
 
 export interface Profile {

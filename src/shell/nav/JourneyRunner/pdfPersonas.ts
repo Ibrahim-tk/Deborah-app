@@ -91,7 +91,7 @@ function pronounValueFor(gender: PdfGender): string {
   return 'they-them';
 }
 
-/** Free-text puberty bank, ages 13–59 (sex options only — no non-binary on sex). */
+/** Choice-pill puberty bank, ages 13–59 (sex options only — no non-binary on sex). */
 function usesOtherPuberty(sex: string): boolean {
   return ['trans-man', 'trans-woman', 'prefer-not', 'intersex'].includes(sex);
 }
@@ -111,6 +111,8 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
     if (band === 'adult') out.push(/^No$/); // fertility
     out.push(/^No$/); // Genesis Gold
   } else if (usesOtherPuberty(sex)) {
+    out.push(/^Yes$/); // otherPuberty
+    out.push(/^Pre-menopausal$/); // reproductive after puberty
     out.push(/^No$/); // Genesis Gold
   }
   out.push(PDF_GENDER_LABEL[gender]); // identity always last
@@ -136,6 +138,8 @@ export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] 
     else keys.push('pubertyAge', 'fertilityConcerns');
   } else if (usesOtherPuberty(sex)) {
     keys.push('otherPuberty');
+    if (teen) keys.push('reproductiveTeen');
+    else keys.push('reproductive');
   }
   keys.push('medications', 'supplements', 'genesisGold', 'gender');
   return keys;
@@ -169,7 +173,9 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
       a.fertilityConcerns = 'no';
     }
   } else if (usesOtherPuberty(sex)) {
-    a.otherPuberty = 'Some puberty changes noted';
+    a.otherPuberty = 'yes';
+    if (teen) a.reproductiveTeen = 'pre-menopausal';
+    else a.reproductive = 'pre-menopausal';
   }
   a.medications = 'None';
   a.supplements = 'None';
@@ -185,7 +191,6 @@ function buildProfile(gender: PdfGender, band: PdfAgeBand): ProfileAnswers {
     textDefaults: {
       pubertyStart: '14',
       pubertyAge: '14',
-      otherPuberty: 'Some puberty changes noted',
     },
   };
 }

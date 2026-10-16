@@ -8,7 +8,12 @@
   --gs-parchment: #f9f7f5;
   display: none;
   position: absolute;
-  inset: 0;
+  /* Honor --backdrop-drift so Home purple sits higher; preauth leaves drift at 0. */
+  top: var(--backdrop-drift, 0px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: calc(100% - var(--backdrop-drift, 0px));
   z-index: -1;
   overflow: hidden;
   background: var(--gs-parchment);
@@ -35,11 +40,18 @@
 @keyframes gs-c { 50% { transform: translate3d(-36%, -10%, 0) scale(1.2); } 100% { transform: translate3d(-12%, 16%, 0) scale(0.9); } }
 @keyframes gs-d { 50% { transform: translate3d(-26%, 20%, 0) rotate(14deg); } 100% { transform: translate3d(10%, 8%, 0) rotate(-8deg); } }
 
-/* Same 'fade to canvas' veil as the original, so lower content keeps its ≥ 7:1 ink contrast. */
+/* Same 'fade to canvas' veil as the original, so lower content keeps its ≥ 7:1 ink contrast.
+ * Home (--backdrop-blend: 1) starts the melt earlier so purple eases into cream. */
 .veil {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, transparent 30%, color-mix(in srgb, var(--gs-parchment) 45%, transparent) 58%, var(--gs-parchment) 78%);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent calc(30% - 14% * var(--backdrop-blend, 0)),
+    color-mix(in srgb, var(--gs-parchment) 45%, transparent) calc(58% - 16% * var(--backdrop-blend, 0)),
+    var(--gs-parchment) calc(78% - 12% * var(--backdrop-blend, 0))
+  );
 }
 
 /* Static film grain (inline SVG turbulence), matching the photo's texture. */

@@ -48,7 +48,7 @@ export default function AboutDeborah() {
           </section>
 
           <Button fullWidth leadingIcon="calendar" onClick={() => push('M-8.2')}>
-            Book a consultation with Deborah
+            Book a consult with Deborah
           </Button>
         </div>
       </div>

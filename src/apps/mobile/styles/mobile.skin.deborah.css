@@ -35,7 +35,7 @@
     radial-gradient(ellipse at 87% -10%, #e9dbee77, transparent 45%);
   --surface-canvas:
     var(--bg-mesh),
-    var(--backdrop-image) center var(--backdrop-lift) / 100% auto no-repeat,
+    var(--backdrop-image) center calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)) / 100% auto no-repeat,
     var(--color-canvas);
   --color-surface: #fbf8fa;                   /* sheet */
   --color-surface-tonal: #f0ebe6;             /* cream tonal (was peach) */

@@ -4,7 +4,17 @@
 .step { display: flex; flex-direction: column; gap: var(--space-5); animation: step-in 0.4s ease-out both; }
 @keyframes step-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .step { animation: none; } }
-.title { font: var(--weight-regular) calc(28px * var(--type-scale)) / calc(34px * var(--type-scale)) var(--font-artistic, var(--font-display)); letter-spacing: -0.01em; color: var(--color-ink); }
+.title {
+  font: var(--weight-regular) calc(28px * var(--type-scale)) / calc(34px * var(--type-scale)) var(--font-artistic, var(--font-display));
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  /* Soft canvas halo on the glyphs only — keeps the tree visible; no extra white block or heavier body veil. */
+  text-shadow:
+    0 0 0.5px rgb(249 247 245 / 0.9),
+    0 0 8px rgb(249 247 245 / 0.95),
+    0 0 18px rgb(249 247 245 / 0.85),
+    0 1px 2px rgb(249 247 245 / 0.7);
+}
 .footer { display: flex; align-items: flex-end; padding: 0 var(--margin-screen) calc(var(--safe-bottom) + var(--space-2)); }
 
 /* Header band: just the back button; progress is the growing plant below. */
@@ -73,14 +83,19 @@
   transition: background 360ms ease-out;
 }
 
-/* Consent step (someone else's profile): the age-group note, then the attestation checkbox. */
-.consent { display: grid; gap: var(--space-4); }
-.consentText { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
-
 /* Choice steps: shared QuestionChoices widget; describe opens an inline field under the pills. */
 .choiceWidget { display: grid; gap: var(--space-3); }
 /* Status pills + inline follow-up (e.g. HRT type under Yes / Yes Previously). */
 .choiceStack { display: grid; gap: var(--space-5); }
+.expandFollowUp { display: grid; gap: var(--space-3); }
+.expandPrompt {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-body);
+}
+/* InlineChoicePills root carries margin-top for chat; reset in this expand stack. */
+.expandFollowUp > div { margin-top: 0; }
 .describeField {
   display: flex;
   align-items: center;

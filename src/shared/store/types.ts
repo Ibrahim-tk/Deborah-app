@@ -27,6 +27,9 @@ export interface SessionSlice {
   accountEmail?: string;
   /** Optional at sign-up (F01 step 4). */
   accountLastName?: string;
+  /** Best contact phone — manual outreach only (no OTP/SMS). */
+  accountPhoneCountry?: string;
+  accountPhoneNumber?: string;
   consentAcceptedAt?: string;
   consentVersion?: string;
   /** Consent to process health data, asked in chat the first time it asks about health (F01). */
@@ -56,6 +59,8 @@ export interface SessionSlice {
   snoozeFollowUp: (untilAnswerCount: number) => void;
   /** M-4.3 create mode: the trial history simply stays with the new account. */
   createAccount: (email: string, lastName?: string) => void;
+  /** Optional best-contact phone (country code + national number). */
+  setContactPhone: (countryCode: string, number: string) => void;
   /**
    * M-4.3 sign-in mode from Welcome: restores an S11-like world (plan active, consent on file,
    * no history on this device) so Main is reachable (docs/ux/F01-onboarding.md › Sign in).

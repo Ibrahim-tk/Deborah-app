@@ -6,9 +6,9 @@
  * @spec    docs/ux/F01-onboarding.md#m-12--welcome
  * @xref    web: W-1.2 (apps/web/screens/onboarding/Welcome) — not built
  *
- * Version 2: Deborah's orb and note, first name, Get Started, then one small legal checkbox
- * (Terms & Disclaimer + Privacy Notice) under the button. Must be checked before Get Started
- * enables. Sign-up sheet (M-1.4) still follows. Version 1 keeps the single legal line instead.
+ * Version 2: Deborah's orb and note, then first-name field, legal checkbox (terms and services +
+ * Privacy Notice), Get Started, and Sign in. Must be checked before Get Started enables.
+ * Sign-up sheet (M-1.4) still follows. Version 1 keeps the single legal line instead.
  * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
  */
 import { useId, useState, type FormEvent, type MouseEvent } from 'react';
@@ -61,7 +61,7 @@ export default function Welcome() {
         </div>
         <div className={styles.bottom}>
           <Input
-            label="What should I call you?"
+            label="Your first name"
             placeholder="First name"
             value={name}
             autoComplete="given-name"
@@ -71,7 +71,6 @@ export default function Welcome() {
             error={error}
             onChange={(e) => { setName(e.target.value); setError(undefined); }}
           />
-          <Button type="submit" fullWidth disabled={!ready}>Get Started</Button>
           <div className={styles.legal}>
             <input
               id={legalId}
@@ -86,12 +85,13 @@ export default function Welcome() {
               </span>
               <span className={styles.legalText}>
                 I agree to the{' '}
-                <button type="button" className={styles.link} onClick={openLegal('terms')}>Terms &amp; Disclaimer</button>
+                <button type="button" className={styles.link} onClick={openLegal('terms')}>terms and services</button>
                 {' '}and{' '}
                 <button type="button" className={styles.link} onClick={openLegal('privacy')}>Privacy Notice</button>
               </span>
             </label>
           </div>
+          <Button type="submit" fullWidth disabled={!ready}>Get Started</Button>
           <p className={styles.signIn}>
             Already have an account?{' '}
             <button type="button" className={styles.signInLink} onClick={() => presentSheet('M-1.4', { mode: 'signin' })}>Sign in</button>

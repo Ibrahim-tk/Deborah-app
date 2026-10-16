@@ -14,19 +14,27 @@ import {
   BookDeborah,
   ChoicePills,
   FullChoicePills,
+  FullChoicePillsGrid,
+  HealingPlanCard,
+  HealingPlanSection,
   InlineChoicePills,
   InlineConsent,
+  IntakeCompletionCard,
+  IntakeSectionHeader,
   MoodScale,
   NamedReasonList,
+  PhoneField,
+  PolicyUpdateConsent,
   QuestionChoices,
   ScaleCheck,
   UploadCard,
   type NamedReason,
+  type PhoneValue,
 } from '@mobile/patterns/widgets';
 import { buildAnswer, visitPrepItems } from '@mobile/screens/consultation/FirstConsult/parts/buildAnswer';
 import { VisitPrepCard } from '@mobile/screens/consultation/FirstConsult/parts/VisitPrepCard';
 import { BriefDocument } from '@mobile/screens/records/VisitBrief/parts/BriefDocument';
-import { HRT_STATUS_OPTIONS, HRT_TYPE_OPTIONS, MULTI_OPTIONS, PERIODS_DESCRIBE_OPTIONS, PUBERTY_BLOCKERS_OPTIONS, REGULAR_PILL_LABELS, SEX_AT_BIRTH_OPTIONS, YES_NO_OPTIONS, type WidgetKind } from './scenarios';
+import { GENDER_IDENTITY_OPTIONS, HRT_STATUS_OPTIONS, HRT_TYPE_OPTIONS, MULTI_OPTIONS, PERIODS_DESCRIBE_OPTIONS, PRONOUN_OPTIONS, PUBERTY_BLOCKERS_OPTIONS, REGULAR_PILL_LABELS, SEX_AT_BIRTH_OPTIONS, STACKED_YES_NO_OPTIONS, YES_NO_OPTIONS, type WidgetKind } from './scenarios';
 import styles from './WidgetLab.module.css';
 
 const say = (s?: string) => personalise(firstConsultFlow, s, 'Maria');
@@ -51,9 +59,16 @@ export interface LabWidgetProps {
 const labelOf = (ids: string[], options: { id: string; label: string }[]) =>
   ids.map((id) => options.find((o) => o.id === id)?.label).filter(Boolean).join(', ');
 
+const noop = () => undefined;
+
 export function LabWidget({ kind, reply }: LabWidgetProps) {
   const [consent, setConsent] = useState<'agreed' | 'declined'>();
   const [sexAtBirth, setSexAtBirth] = useState<string>();
+  const [genderId, setGenderId] = useState<string>();
+  const [genderOther, setGenderOther] = useState('');
+  const [pronounId, setPronounId] = useState<string>();
+  const [pronounOther, setPronounOther] = useState('');
+  const [stackedPick, setStackedPick] = useState<string>();
   const [periodsPick, setPeriodsPick] = useState<string>();
   const [periodsNotes, setPeriodsNotes] = useState('');
   const [blockersPick, setBlockersPick] = useState<string>();
@@ -64,6 +79,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
   const [medsNone, setMedsNone] = useState(false);
   const [supps, setSupps] = useState<NamedReason[]>([]);
   const [suppsNone, setSuppsNone] = useState(false);
+  const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
   switch (kind) {
     case 'consent':
       return <InlineConsent answered={consent} onAgree={() => { setConsent('agreed'); reply(undefined, 'Thank you. Tell me what’s on your mind.'); }} onDecline={() => setConsent('declined')} />;
@@ -107,15 +123,74 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
           onPick={(o) => reply(o, 'Thank you — these are the regular intake pills.')}
         />
       );
-    case 'pillsFull':
+    case 'pillsFullGrid':
       return (
-        <FullChoicePills
+        <FullChoicePillsGrid
           label="Sex at birth"
           options={SEX_AT_BIRTH_OPTIONS}
           selected={sexAtBirth}
           onPick={(id) => {
             setSexAtBirth(id);
             const o = SEX_AT_BIRTH_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — 2-col grid; Prefer not to say stays in the grid.');
+          }}
+        />
+      );
+    case 'pillsFullGridOther':
+      return (
+        <FullChoicePillsGrid
+          label="How do you identify yourself?"
+          options={GENDER_IDENTITY_OPTIONS}
+          selected={genderId}
+          describeValue="other"
+          describeLabel="Other"
+          describePlaceholder="describe how you identify"
+          describeText={genderOther}
+          onDescribeChange={setGenderOther}
+          onDescribeConfirm={() => {
+            const note = genderOther.trim();
+            reply(note || 'Other', 'Got it — Other spanned full-width while describing; pick another option to collapse it back.');
+          }}
+          onPick={(id) => {
+            setGenderId(id);
+            if (id === 'other') return;
+            const o = GENDER_IDENTITY_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — Other sits in-grid until tapped; then spans both columns.');
+          }}
+        />
+      );
+    case 'pillsFullGridPronouns':
+      return (
+        <FullChoicePillsGrid
+          label="What are your preferred pronouns?"
+          options={PRONOUN_OPTIONS}
+          selected={pronounId}
+          describeValue="describe"
+          describeLabel="Pronouns"
+          describePlaceholder="e.g. xe/xem"
+          describeText={pronounOther}
+          onDescribeChange={setPronounOther}
+          onDescribeConfirm={() => {
+            const note = pronounOther.trim();
+            reply(note || 'Other', 'Got it — describe spanned full-width; pick another option to collapse it back.');
+          }}
+          onPick={(id) => {
+            setPronounId(id);
+            if (id === 'describe') return;
+            const o = PRONOUN_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — “Other” sits in-grid until tapped; then spans both columns.');
+          }}
+        />
+      );
+    case 'pillsFull':
+      return (
+        <FullChoicePills
+          label="Quick yes or no"
+          options={STACKED_YES_NO_OPTIONS}
+          selected={stackedPick}
+          onPick={(id) => {
+            setStackedPick(id);
+            const o = STACKED_YES_NO_OPTIONS.find((x) => x.id === id)?.label ?? id;
             reply(o, 'Got it — full-width stacked options for short lists.');
           }}
         />
@@ -167,6 +242,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       );
     case 'pillsFullExpand': {
       const expanding = hrtStatus === 'yes' || hrtStatus === 'yes-previously';
+      const typeLabel = HRT_TYPE_OPTIONS.find((x) => x.id === hrtType)?.label;
       return (
         <div className={styles.expandStack}>
           <FullChoicePills
@@ -180,17 +256,23 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
             }}
           />
           {expanding && (
-            <FullChoicePills
-              label="What type of HRT?"
-              options={HRT_TYPE_OPTIONS}
-              selected={hrtType}
-              onPick={(id) => {
-                setHrtType(id);
-                const status = HRT_STATUS_OPTIONS.find((x) => x.id === hrtStatus)?.label ?? hrtStatus;
-                const type = HRT_TYPE_OPTIONS.find((x) => x.id === id)?.label ?? id;
-                reply(`${status} · ${type}`, 'Got it — Yes / Yes Previously expand type pills in place.');
-              }}
-            />
+            <div className={styles.expandFollowUp}>
+              <p className={styles.expandPrompt}>Please specify</p>
+              <InlineChoicePills
+                label="Please specify"
+                options={HRT_TYPE_OPTIONS.map((x) => x.label)}
+                optionIds={HRT_TYPE_OPTIONS.map((x) => x.id)}
+                keepAnswer
+                selected={typeLabel ? [typeLabel] : undefined}
+                onPick={(_label, index) => {
+                  const opt = HRT_TYPE_OPTIONS[index];
+                  if (!opt) return;
+                  setHrtType(opt.id);
+                  const status = HRT_STATUS_OPTIONS.find((x) => x.id === hrtStatus)?.label ?? hrtStatus;
+                  reply(`${status} · ${opt.label}`, 'Got it — Yes / Yes Previously expand inline type pills.');
+                }}
+              />
+            </div>
           )}
         </div>
       );
@@ -198,7 +280,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
     case 'namedReasons':
       return (
         <NamedReasonList
-          label="Medications (Rx & OTC)"
+          label="Are you currently taking any medications (Rx or OTC)?"
           entries={meds}
           addLabel="Add medicine"
           noneSelected={medsNone}
@@ -227,7 +309,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
     case 'namedReasonsSupplements':
       return (
         <NamedReasonList
-          label="Supplements"
+          label="Are you currently taking any supplements?"
           entries={supps}
           addLabel="Add supplement"
           noneSelected={suppsNone}
@@ -275,5 +357,19 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return <BriefDocument brief={DEMO_BRIEF} />;
     case 'emergency':
       return <EmergencyInterrupt title="Please get help now" body="If this is happening now, call emergency services." onCall={() => reply(undefined, 'Calling 911 (simulated).')} onFindER={() => reply(undefined, 'Finding care near you (simulated).')} onSafe={() => reply('I’m safe', 'Thank you. Let’s keep talking.')} />;
+    case 'phone':
+      return <PhoneField value={phone} onChange={(v) => { setPhone(v); if (v.number.length > 6) reply(`${v.countryCode} ${v.number}`, 'Thanks — optional contact only.'); }} />;
+    case 'intakeCompletion':
+      return <IntakeCompletionCard progress={0.65} onAction={() => reply(undefined, 'Opening Complete Intake (M-2.14).')} />;
+    case 'healingPlanLocked':
+      return <HealingPlanCard locked />;
+    case 'healingPlan':
+      return <HealingPlanCard day={18} focus="Steady sleep and calmer evenings" todayHabit="Cool bedroom" onPress={() => reply(undefined, 'Opening My Healing Plan (M-7.3).')} />;
+    case 'intakeSection':
+      return <IntakeSectionHeader title="Family history" lede="Placeholder until Dropbox questionnaires arrive." />;
+    case 'healingSection':
+      return <HealingPlanSection title="Immediate priorities"><p>Wind down 30 minutes earlier tonight.</p></HealingPlanSection>;
+    case 'policyUpdate':
+      return <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={() => reply(undefined, 'Terms accepted.')} />;
   }
 }

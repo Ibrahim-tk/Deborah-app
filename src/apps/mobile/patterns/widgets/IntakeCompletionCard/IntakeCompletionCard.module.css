@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 12px);
+  padding: var(--space-4, 16px);
+  border-radius: var(--radius-lg, 16px);
+  background: var(--color-surface-linen, #f5f0e8);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-title-sm, 17px);
+  font-weight: 500;
+  color: var(--color-text, #1d1d1f);
+}
+
+.body {
+  margin: 0;
+  font-size: var(--type-body-sm, 14px);
+  line-height: 1.4;
+  color: var(--color-text-secondary, #6e6e73);
+}

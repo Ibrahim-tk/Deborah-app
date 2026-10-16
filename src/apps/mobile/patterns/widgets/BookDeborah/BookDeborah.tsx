@@ -4,6 +4,7 @@
  * @usedBy  widget lab (/wid)
  */
 import { useState } from 'react';
+import { BOOK_CONSULT_LABEL } from '@shared/copy/booking';
 import { Button, Icon, Overlay } from '@mobile/ui';
 import styles from './BookDeborah.module.css';
 
@@ -16,7 +17,7 @@ export interface BookDeborahProps {
 
 export function BookDeborah({
   onRequest,
-  title = 'Book with Deborah',
+  title = BOOK_CONSULT_LABEL,
   meta = 'We’ll reach out to schedule',
 }: BookDeborahProps) {
   const [open, setOpen] = useState(false);

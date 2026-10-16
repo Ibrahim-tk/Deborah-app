@@ -13,7 +13,7 @@ import styles from './ProfileSwitcherList.module.css';
 export type AddMemberState = 'available' | 'locked' | 'full';
 
 export interface ProfileSwitcherListProps {
-  profiles: Pick<Profile, 'id' | 'name' | 'relationship'>[];
+  profiles: Array<Pick<Profile, 'id' | 'name' | 'relationship'> & { intake?: Pick<Profile['intake'], 'relationshipOther'> }>;
   activeId: string;
   addState: AddMemberState;
   maxProfiles?: number;
@@ -33,7 +33,7 @@ export function ProfileSwitcherList({ profiles, activeId, addState, maxProfiles 
                 <Avatar initial={p.name} size={44} />
                 <span className={styles.text}>
                   <span className={styles.name}>{p.name}</span>
-                  <span className={styles.relation}>{relationshipLabel(p.relationship)}</span>
+                  <span className={styles.relation}>{relationshipLabel(p.relationship, p.intake?.relationshipOther)}</span>
                 </span>
                 {active && <Icon name="check" size={22} className={styles.check} />}
                 {active && <span className={styles.srOnly}>Active profile</span>}

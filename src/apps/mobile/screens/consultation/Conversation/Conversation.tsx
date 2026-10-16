@@ -187,7 +187,7 @@ export default function Conversation() {
       <Aura />
       <GradientShift />
       <ChatHeader
-        onBack={pop}
+        onBack={() => pop()}
         onNewChat={() => chat.startNew()}
         canStartNew={!isEmpty && !profiling}
         scrolled={underBar}

@@ -14,6 +14,6 @@ Start with [CLAUDE.md](CLAUDE.md) and [docs/README.md](docs/README.md). Visual a
 ## Surfaces and flow versions
 
 - **Client:** `/` — Version 2 phone with Home / Chat / Reset.
-- **Internal tools:** `/internal` — password-gated prototype chrome (OTP `001001`, re-locks on refresh). Version 1 / Version 2 switch, Profile / Web / Design system / Widget Library.
+- **Internal tools:** `/internal` — password-gated prototype chrome (password `1234`, re-locks on refresh). Version 1 / Version 2 switch, Profile / Web / Design system / Widget Library.
 
 See [VERSIONS.md](VERSIONS.md) for URLs, source boundaries and checks.

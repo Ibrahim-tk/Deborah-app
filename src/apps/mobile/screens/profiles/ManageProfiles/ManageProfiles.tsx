@@ -32,7 +32,7 @@ export default function ManageProfiles() {
             <li key={p.id}>
               <ListRow
                 title={p.name}
-                subtitle={relationshipLabel(p.relationship)}
+                subtitle={relationshipLabel(p.relationship, p.intake?.relationshipOther)}
                 leading={<Avatar initial={p.name} size={40} />}
                 onPress={() => push('M-6.5', { profileId: p.id })}
               />

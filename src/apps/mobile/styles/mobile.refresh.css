@@ -8,7 +8,7 @@
     radial-gradient(55% 45% at 100% 100%, rgb(123 92 255 / 0.08), transparent 70%);
   --surface-canvas:
     var(--bg-mesh),
-    var(--backdrop-image) center var(--backdrop-lift) / 100% auto no-repeat,
+    var(--backdrop-image) center calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)) / 100% auto no-repeat,
     var(--color-canvas);
 
   /* 2. Surfaces: translucent, near-invisible rim, diffuse lift. */

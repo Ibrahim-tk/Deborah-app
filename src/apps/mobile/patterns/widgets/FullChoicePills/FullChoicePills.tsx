@@ -1,6 +1,7 @@
 /**
  * @pattern FullChoicePills — full-width stacked frosted options for intake forms
- *          (sex at birth, gender, periods yes/no). One option per row.
+ *          (periods yes/no, HRT). One option per row.
+ *          Sex at birth / pronouns / gender identity use FullChoicePillsGrid (2-col).
  *          Optional `describeValue`: that option morphs in-place into PillDescribeField
  *          (text + ChipPicker-style circular check) — no step remount.
  * @usedBy  Health Basics (yesNo / rows / describe pills); WidgetLab — not for in-chat answers
@@ -35,6 +36,11 @@ export interface FullChoicePillsProps {
   onDescribeChange?: (text: string) => void;
   /** Circular check / Enter — confirm the describe answer and continue. */
   onDescribeConfirm?: () => void;
+  /**
+   * FullChoicePillsGrid only: describe option spans both columns before selection
+   * (relationship “Someone else”). Ignored by stacked FullChoicePills.
+   */
+  describeAlwaysSpan?: boolean;
 }
 
 export function FullChoicePills({

@@ -24,7 +24,8 @@ export function useMemberForm() {
   const today = toDateInput(now);
 
   const [values, setValues] = useState<MemberValues>({ name: '', dob: '' });
-  // Consent is tied to the wording it was given for: if the age flips minor/adult, it must be re-given.
+  // Medical-advocate radio; cleared if DOB flips minor/adult so wording is re-confirmed.
+  const [consentValue, setConsentValue] = useState<string | null>(null);
   const [consentFor, setConsentFor] = useState<'minor' | 'adult' | null>(null);
 
   const set = (patch: Partial<MemberValues>) => setValues((v) => ({ ...v, ...patch }));
@@ -36,11 +37,11 @@ export function useMemberForm() {
   const minor = age !== null ? age < 18 : values.relationship === 'daughter' || values.relationship === 'son';
   const underThirteen = age !== null && age < 13;
   const kind = minor ? 'minor' : 'adult';
-  const consented = consentFor === kind;
+  const consented = consentFor === kind && Boolean(consentValue);
 
   const dobError = future ? 'Date of birth can’t be in the future.' : undefined;
   const valid = values.name.trim().length > 0 && Boolean(values.relationship) && age !== null && !underThirteen && consented;
-  const dirty = Boolean(values.name.trim() || values.relationship || values.dob || values.sex || consentFor);
+  const dirty = Boolean(values.name.trim() || values.relationship || values.dob || values.sex || consentValue);
 
   return {
     values,
@@ -51,7 +52,16 @@ export function useMemberForm() {
     underThirteen,
     dobError,
     consented,
-    setConsent: (checked: boolean) => setConsentFor(checked ? kind : null),
+    consentValue,
+    setConsent: (value: string) => {
+      if (!value) {
+        setConsentValue(null);
+        setConsentFor(null);
+        return;
+      }
+      setConsentValue(value);
+      setConsentFor(kind);
+    },
     valid,
     dirty,
   };

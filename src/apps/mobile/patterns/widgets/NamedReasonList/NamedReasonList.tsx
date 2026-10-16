@@ -4,6 +4,8 @@
  *
  * Main surface shows committed tiles + an add pill. Name/reason draft lives only in the sheet.
  * Quiet "I don't take any" stays under the add control (Continue footer still owned by the screen).
+ * Tiles are owned locally so remove (X) is not undone by a stale parent render; remount via `key`
+ * when the step/answers source changes (Health Basics already keys by step.key).
  */
 import { useEffect, useState } from 'react';
 import {
@@ -21,7 +23,7 @@ import {
   useReducedMotionPref,
 } from '@mobile/ui';
 import { NameSuggest } from './NameSuggest';
-import type { NamedReason } from './namedReasons';
+import { type NamedReason } from './namedReasons';
 import styles from './NamedReasonList.module.css';
 
 export type { NamedReason } from './namedReasons';
@@ -42,6 +44,7 @@ export interface NamedReasonListProps {
 }
 
 const blank = (): NamedReason => ({ name: '', reason: '' });
+const cleaned = (list: NamedReason[]) => list.filter((e) => e.name.trim());
 
 export function NamedReasonList({
   label,
@@ -58,8 +61,17 @@ export function NamedReasonList({
   const reduced = useReducedMotionPref();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<NamedReason>(blank);
-  const tiles = entries.filter((e) => e.name.trim());
+  // Local tiles: X remove updates this immediately. Remount (key) reloads from `entries`.
+  const [tiles, setTiles] = useState<NamedReason[]>(() => cleaned(entries));
+  // Parent "none" wins for display without syncing via an effect (avoids cascading setState).
+  const shown = noneSelected ? [] : tiles;
   const canAdd = Boolean(draft.name.trim());
+
+  const publish = (next: NamedReason[]) => {
+    const kept = cleaned(next);
+    setTiles(kept);
+    onChange(kept);
+  };
 
   const close = () => {
     setOpen(false);
@@ -73,12 +85,12 @@ export function NamedReasonList({
 
   const commit = () => {
     if (!draft.name.trim()) return;
-    onChange([...tiles, { name: draft.name.trim(), reason: draft.reason.trim() }]);
+    publish([...tiles, { name: draft.name.trim(), reason: draft.reason.trim() }]);
     close();
   };
 
   const removeTile = (i: number) => {
-    onChange(tiles.filter((_, idx) => idx !== i));
+    publish(tiles.filter((_, idx) => idx !== i));
   };
 
   useEffect(() => {
@@ -94,15 +106,24 @@ export function NamedReasonList({
 
   return (
     <div className={styles.root} role="group" aria-label={label}>
-      {tiles.length > 0 && (
+      {shown.length > 0 && (
         <ul className={styles.tiles} aria-label="Added">
-          {tiles.map((item, i) => (
-            <li key={`${item.name}-${i}`} className={styles.tile}>
+          {shown.map((item, i) => (
+            <li key={`${item.name}-${item.reason}-${i}`} className={styles.tile}>
               <div className={styles.tileText}>
                 <span className={styles.tileName}>{item.name}</span>
                 {item.reason ? <span className={styles.tileReason}>{item.reason}</span> : null}
               </div>
-              <IconButton icon="close" size="sm" label={`Remove ${item.name}`} onClick={() => removeTile(i)} />
+              <IconButton
+                icon="close"
+                size="sm"
+                label={`Remove ${item.name}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  removeTile(i);
+                }}
+              />
             </li>
           ))}
         </ul>
@@ -113,9 +134,22 @@ export function NamedReasonList({
         {addLabel}
       </button>
 
-      <button type="button" className={styles.none} aria-pressed={Boolean(noneSelected)} onClick={onNone}>
-        {noneLabel}
-      </button>
+      {/* Escape only when the list is empty — once a tile exists, "none" contradicts it. */}
+      {shown.length === 0 && (
+        <button
+          type="button"
+          className={styles.none}
+          aria-pressed={Boolean(noneSelected)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            publish([]);
+            onNone();
+          }}
+        >
+          {noneLabel}
+        </button>
+      )}
 
       <Overlay>
         <AnimatePresence>

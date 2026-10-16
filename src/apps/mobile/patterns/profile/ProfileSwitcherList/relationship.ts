@@ -10,4 +10,6 @@ export const RELATIONSHIP_LABELS: Record<Relationship, string> = {
   other: 'Family member',
 };
 
-export const relationshipLabel = (r: Relationship) => RELATIONSHIP_LABELS[r];
+/** Display label; pass `other` free text from intake.relationshipOther when present. */
+export const relationshipLabel = (r: Relationship, other?: string) =>
+  r === 'other' && other?.trim() ? other.trim() : RELATIONSHIP_LABELS[r];

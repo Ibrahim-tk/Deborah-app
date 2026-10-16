@@ -187,16 +187,23 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     assert.ok(keys(base(15,'female')).includes('reproductiveTeen'));
     assert.ok(!keys(base(15,'female')).includes('periodsStarted'));
     assert.ok(keys(base(15,'female',{ reproductiveTeen: 'menstruation' })).includes('periodsStarted'));
-    // Prefer-not / intersex / trans use free-text puberty (non-binary is identity-only).
-    assert.ok(!keys(base(28,'intersex')).includes('reproductive'));
+    // Prefer-not / intersex / trans: puberty → reproductive → meds → identity (female/male locked elsewhere).
     for (const g of ['trans-man', 'trans-woman', 'prefer-not', 'intersex']) {
-      assert.ok(keys(base(16, g)).includes('otherPuberty'));
-      assert.ok(!keys(base(16, g)).includes('pubertyStart'));
-      assert.ok(!keys(base(16, g)).includes('reproductive'));
-      assert.ok(keys(base(40, g)).includes('otherPuberty'));
+      const adult = keys(base(40, g));
+      assert.ok(adult.includes('otherPuberty'));
+      assert.ok(adult.includes('reproductive'));
+      assert.ok(adult.indexOf('reproductive') > adult.indexOf('otherPuberty'));
+      assert.ok(adult.indexOf('medications') > adult.indexOf('reproductive'));
+      assert.ok(adult.indexOf('gender') > adult.indexOf('genesisGold'));
+      const teen = keys(base(16, g));
+      assert.ok(teen.includes('otherPuberty'));
+      assert.ok(teen.includes('reproductiveTeen'));
+      assert.ok(teen.indexOf('reproductiveTeen') > teen.indexOf('otherPuberty'));
+      assert.ok(!teen.includes('pubertyStart'));
     }
-    // Non-binary persona path: sex prefer-not → otherPuberty bank → identity non-binary.
+    // Non-binary persona: sex prefer-not → puberty → reproductive → meds → identity non-binary.
     assert.ok(keys(base(28, 'prefer-not', { gender: 'non-binary' })).includes('otherPuberty'));
+    assert.ok(keys(base(28, 'prefer-not', { gender: 'non-binary' })).includes('reproductive'));
     assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male',pronouns:'he-him',gender:'male'}).includes('guardianNames'));
     assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male',pronouns:'he-him',gender:'male'}).includes('childMedications'));
     assert.ok(!keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male',pronouns:'he-him',gender:'male'}).includes('medications'));
@@ -245,9 +252,9 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     assert.deepEqual(visibleStepKeys(myself(15, { reproductiveTeen: 'menstruation', periodsStarted: 'yes', pubertyBlockers: 'no' })), [
       'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductiveTeen', 'periodsStarted', 'pubertyBlockers', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    // Non-binary identity: sex Prefer not → otherPuberty bank → identity Non-binary last.
-    assert.deepEqual(visibleStepKeys(myself(28, { sex: 'prefer-not', pronouns: 'they-them', gender: 'non-binary', otherPuberty: 'notes' })), [
-      'profileFor', 'birthDate', 'sex', 'pronouns', 'otherPuberty', 'medications', 'supplements', 'genesisGold', 'gender',
+    // Non-binary identity: sex Prefer not → puberty → reproductive → meds → identity last.
+    assert.deepEqual(visibleStepKeys(myself(28, { sex: 'prefer-not', pronouns: 'they-them', gender: 'non-binary', otherPuberty: 'yes', reproductive: 'pre-menopausal' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'otherPuberty', 'reproductive', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
     // Under-13 Myself: demography stays in the map; M-1.10 sheet on DOB Continue.
     assert.deepEqual(visibleStepKeys({ profileFor: 'self', birthDate: `${y - 8}-06-15` }), [

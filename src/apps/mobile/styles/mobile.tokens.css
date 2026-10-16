@@ -11,8 +11,12 @@
   /* Shared screen backdrop (Wispr Flow): purple wash → cream. Lift keeps purple to ~top 20%. */
   --backdrop-image: url('/images/splash/wispr-flow.jpg');
   --backdrop-lift: -148px;
+  /* Extra upward nudge on Home + main-app screens only (StackView sets this; preauth stays 0). */
+  --backdrop-drift: 0px;
+  /* Soft cream melt over the purple wash (0 off / 1 on). Home stacks only — Splash & onboarding stay crisp. */
+  --backdrop-blend: 0;
   --surface-canvas:
-    var(--backdrop-image) center var(--backdrop-lift) / 100% auto no-repeat,
+    var(--backdrop-image) center calc(var(--backdrop-lift) + var(--backdrop-drift)) / 100% auto no-repeat,
     var(--color-canvas);
   --color-surface-tonal: color-mix(in srgb, var(--gold-100) 45%, var(--gold-50));   /* softened Linen */
   --color-surface-lilac: var(--purple-50);     /* user bubbles, secondary buttons, selected */
@@ -86,16 +90,30 @@
   --shadow-float-md: 0 8px 24px rgba(43, 16, 78, 0.10), 0 1px 3px rgba(43, 16, 78, 0.08);
   --shadow-float-lg: 0 -8px 32px rgba(43, 16, 78, 0.12);
 
-  /* Tonal cards: flat colour fields (no shadow, no rim), large radius, one dark round action. */
+  /* Tonal cards: flat colour fields (no shadow, no rim), large radius, one dark round action.
+     AI-native overhaul: Color-Field Depth — fill contrast instead of strokes (docs/ui-overhaul-plan.md). */
   --radius-card: 28px;
   /* Whisper tints: just enough colour to tell cards apart, never enough to compete with text. */
   --card-tone-lilac: color-mix(in srgb, var(--purple-50) 45%, var(--white));
   --card-tone-linen: color-mix(in srgb, var(--gold-100) 40%, var(--white));
   --card-tone-rose: color-mix(in srgb, var(--pink-50) 50%, var(--white));
   --card-tone-paper: var(--white);
+  --surface-field-lilac: var(--card-tone-lilac);
+  --surface-field-linen: var(--card-tone-linen);
+  --surface-field-rose: var(--card-tone-rose);
+  --surface-field-paper: var(--card-tone-paper);
+  --surface-field-lift: color-mix(in srgb, var(--white) 72%, var(--gold-50));
+  --surface-field-press: color-mix(in srgb, var(--purple-50) 35%, var(--white));
   /* Quiet action: white circle + accent arrow. Midnight stays reserved for the Ask Deborah hero. */
   --card-action-bg: var(--white);
   --card-action-ink: var(--purple-500);
+  /* IconWell — flat Hugeicon in a soft disc */
+  --icon-well-bg: rgb(255 255 255 / 0.9);
+  --icon-well-fg: var(--color-accent);
+  --icon-well-size: 40px;
+  /* Progressive blur privilege — floating chrome only (ScrollEdge, transparent headers) */
+  --blur-edge-strong: blur(12px) saturate(120%);
+  --blur-edge-soft: blur(4px);
 
   background: var(--surface-canvas);
   color: var(--color-ink);

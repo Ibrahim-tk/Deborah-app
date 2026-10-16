@@ -6,7 +6,7 @@
  * Prompt copy is placeholder until Deborah approves it.
  */
 import { Button, Icon, ProgressRing } from '@mobile/ui';
-import { LinkCard } from './HomeKit';
+import { HealingPlanCard, IntakeCompletionCard } from '@mobile/patterns/widgets';
 import styles from './HomeStates.module.css';
 
 const PROMPTS = [
@@ -19,10 +19,12 @@ export interface StateNewProps {
   onPrompt: (prefill: string) => void;
   /** Hero: absent once the profile basics are done. */
   profile?: { progress: number; onOpen: () => void };
+  /** Intake completion widget (Complete / Update Intake). */
+  intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   onAddFamily: () => void;
 }
 
-export function StateNew({ onPrompt, profile, onAddFamily }: StateNewProps) {
+export function StateNew({ onPrompt, profile, intakeCard, onAddFamily }: StateNewProps) {
   return (
     <>
       {profile && (
@@ -36,6 +38,9 @@ export function StateNew({ onPrompt, profile, onAddFamily }: StateNewProps) {
           </div>
           <Button fullWidth onClick={profile.onOpen}>Complete your health profile</Button>
         </section>
+      )}
+      {intakeCard && (
+        <IntakeCompletionCard progress={intakeCard.progress} complete={intakeCard.complete} onAction={intakeCard.onAction} />
       )}
 
       <section className={profile ? styles.secondary : styles.hero} aria-labelledby="start-deborah" data-placeholder>
@@ -55,7 +60,7 @@ export function StateNew({ onPrompt, profile, onAddFamily }: StateNewProps) {
         </ul>
       </section>
 
-      <LinkCard tone="rose" lead="calendar" title="90 Day Journey" meta="Your personalized plan unlocks after your first conversation." icon="lock" label="90 Day Journey, locked" />
+      <HealingPlanCard locked />
 
       <button type="button" className={styles.familyRow} onClick={onAddFamily}>
         <span className={styles.plus} aria-hidden>

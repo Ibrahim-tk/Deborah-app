@@ -13,7 +13,7 @@ export type GateReason = 'documents' | 'family' | 'journey' | 'reminders';
 export const GATE_COPY: Record<GateReason, string> = {
   documents: 'To keep your medical records secure, let’s save your account.',
   family: 'Family profiles hold other people’s health details, so let’s save your account first.',
-  journey: 'Your 90-day journey runs for months, so let’s save your account to keep it safe.',
+  journey: 'Your healing plan runs for months, so let’s save your account to keep it safe.',
   reminders: 'Reminders need an account to reach you, so let’s save yours first.',
 };
 

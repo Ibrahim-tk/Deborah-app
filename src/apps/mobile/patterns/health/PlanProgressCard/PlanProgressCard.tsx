@@ -5,6 +5,7 @@
  * @spec    docs/ux/F07-my-health-hub.md#m-72--my-health-hub (Layout 3, plan complete state)
  * @xref    web: apps/web/patterns/health/PlanProgressCard — not built
  */
+import { HEALING_PLAN_TITLE } from '@shared/copy/healingPlan';
 import { Card, Icon, ProgressBar } from '@mobile/ui';
 import styles from './PlanProgressCard.module.css';
 
@@ -22,14 +23,14 @@ export function PlanProgressCard({ day, length = 90, habitsDone, habitsTotal, on
   return (
     <Card onPress={onPress} className={styles.root}>
       <span className={styles.head}>
-        <span className={styles.title}>Your {length}-day plan</span>
+        <span className={styles.title}>{HEALING_PLAN_TITLE}</span>
         <Icon name="chevron" size={22} className={styles.chevron} />
       </span>
       {complete ? (
         <span className={styles.complete}>You finished your {length} days — tell Deborah how it went</span>
       ) : (
         <>
-          <ProgressBar value={day / length} label={`${length}-day plan progress`} valueText={`Day ${day} of ${length}`} />
+          <ProgressBar value={day / length} label={`${HEALING_PLAN_TITLE} progress`} valueText={`Day ${day} of ${length}`} />
           <span className={styles.meta}>
             {habitsTotal > 0 ? `${habitsDone} of ${habitsTotal} habits this week` : 'No habits on your plan yet'}
           </span>

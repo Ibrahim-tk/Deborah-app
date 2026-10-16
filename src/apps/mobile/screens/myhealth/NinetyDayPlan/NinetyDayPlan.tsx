@@ -8,12 +8,14 @@
  */
 // OPEN: "habit tracking/90-day plan is a design proposal, not in the brief — needs Deborah's approval."
 import { useState } from 'react';
+import { HEALING_PLAN_TITLE } from '@shared/copy/healingPlan';
 import { findProduct } from '@shared/data';
 import { selectPlan90, selectPlanDay, useAppStore } from '@shared/store';
 import type { Habit } from '@shared/types/domain';
 import { dayKey, nowFrom } from '@shared/utils';
 import { ActionSheet, Button, Header, ListRow, Panel } from '@mobile/ui';
 import { EmptyState, HabitRow } from '@mobile/patterns/health';
+import { HealingPlanSection } from '@mobile/patterns/widgets';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './NinetyDayPlan.module.css';
 
@@ -31,16 +33,18 @@ export default function NinetyDayPlan() {
   const [removing, setRemoving] = useState<Habit | null>(null);
   const product = findProduct(plan?.productId);
   const checkIn = () => openAsk({ mode: 'checkin' });
+  const immediate = plan?.habits.slice(0, 2) ?? [];
+  const longer = plan?.habits.slice(2) ?? [];
 
   return (
-    <div className={styles.root} data-xref="M-7.3 · Your 90-day plan">
-      <Header title="Your 90-day plan" onBack={pop} backLabel={previousTitle} />
+    <div className={styles.root} data-xref="M-7.3 · My Healing Plan">
+      <Header title={HEALING_PLAN_TITLE} onBack={pop} backLabel={previousTitle} />
       <div className={styles.scroll}>
         {!plan ? (
           <div className={styles.body}>
             <EmptyState
               icon="calendar"
-              text="Your plan appears after your first consultation with Deborah."
+              text="Your healing plan appears after your first consultation with Deborah."
               actionLabel="Ask Deborah"
               actionIcon="deborah"
               onAction={() => openAsk({ focus: true })}
@@ -53,6 +57,48 @@ export default function NinetyDayPlan() {
               <p className={styles.goalLabel}>Your goal, in Deborah’s words</p>
               <p className={styles.goal} data-placeholder={placeholder}>{plan.goal}</p>
             </Panel>
+
+            <HealingPlanSection title="Immediate priorities" empty="No immediate actions yet.">
+              {immediate.length > 0 && (
+                <div className={styles.group} data-placeholder={placeholder}>
+                  {immediate.map((h) => (
+                    <HabitRow
+                      key={h.id}
+                      text={h.text}
+                      done={h.doneDates.includes(today)}
+                      source="from section 6"
+                      onToggle={() => useAppStore.getState().toggleHabit(profileId, h.id, today)}
+                      onLongPress={() => setRemoving(h)}
+                    />
+                  ))}
+                </div>
+              )}
+            </HealingPlanSection>
+
+            <HealingPlanSection title="Longer-term goals" empty="Longer-term goals appear as your plan grows.">
+              {longer.length > 0 && (
+                <div className={styles.group} data-placeholder={placeholder}>
+                  {longer.map((h) => (
+                    <HabitRow
+                      key={h.id}
+                      text={h.text}
+                      done={h.doneDates.includes(today)}
+                      source="from section 6"
+                      onToggle={() => useAppStore.getState().toggleHabit(profileId, h.id, today)}
+                      onLongPress={() => setRemoving(h)}
+                    />
+                  ))}
+                </div>
+              )}
+            </HealingPlanSection>
+
+            <HealingPlanSection title="Lifestyle areas" empty="Diet, exercise, sleep, and stress guidance will show here.">
+              <p className={styles.hint} data-placeholder>Diet · Exercise · Sleep · Stress — personalized as consultations continue.</p>
+            </HealingPlanSection>
+
+            <HealingPlanSection title="Follow-ups" empty="No follow-ups scheduled.">
+              <p className={styles.hint}>Check in with Deborah when you’re ready — no daily tracker required.</p>
+            </HealingPlanSection>
 
             <section className={styles.section} aria-labelledby="plan-week">
               <h2 id="plan-week" className={styles.heading}>This week</h2>

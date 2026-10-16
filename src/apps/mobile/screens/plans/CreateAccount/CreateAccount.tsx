@@ -14,6 +14,7 @@
 import { useState } from 'react';
 import { useAppStore } from '@shared/store';
 import { Aura, Button, GradientShift, Header, IconButton, Input, Panel, Sheet, SocialButton } from '@mobile/ui';
+import { PhoneField, type PhoneValue } from '@mobile/patterns/widgets';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
 import { GATE_COPY, resumeGate, type GateReason } from '@mobile/hooks/useAccountGate';
@@ -49,6 +50,7 @@ export default function CreateAccount() {
   const [emailError, setEmailError] = useState<string>();
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string>();
+  const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
   const [whyOpen, setWhyOpen] = useState(false);
   const [mode, setMode] = useState(initialMode);
   const [switchedToCreate, setSwitchedToCreate] = useState(false);
@@ -74,11 +76,13 @@ export default function CreateAccount() {
     } else if (sheet) {
       // Guest save from Home (avatar, save card) or a hard gate: stay where she was.
       s.createAccount(address);
+      if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
       dismissSheet();
       toast('Your profile is saved');
       if (reason) resumeGate();
     } else if (returnTo === 'chat') {
       s.createAccount(address);
+      if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
       if (sheet) dismissSheet();
       else dismissModal();
       toast('Your profile is saved');
@@ -86,6 +90,7 @@ export default function CreateAccount() {
       if (s.notificationPermission === 'unknown') presentSheet('M-2.8');
     } else {
       s.createAccount(address);
+      if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
       presentSheet('M-4.4', { plan, billing, returnTo });
     }
   };
@@ -168,6 +173,7 @@ export default function CreateAccount() {
           succeed(email.trim());
         }} noValidate>
           <Input label="Set a password" type="password" autoComplete="new-password" hint="At least 8 characters" autoFocus value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} />
+          <PhoneField value={phone} onChange={setPhone} />
           <Button type="submit" fullWidth>Done</Button>
         </form>
       )}

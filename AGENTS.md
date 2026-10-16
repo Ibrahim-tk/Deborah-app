@@ -8,7 +8,7 @@ Unless the user explicitly says **production**, **client**, or **update the main
 - Prototype shell tooling (TopNav, journeys, scenarios, toggles)
 - Live Version 2 product code in `src/` while verifying on `/internal`
 
-The internal page is password-gated (prototype OTP `001001`, in-memory only — re-locks on every refresh). That gate is not real authentication.
+The internal page is password-gated (prototype password `1234`, in-memory only — re-locks on every refresh). That gate is not real authentication.
 
 ## Production / client — only on command
 

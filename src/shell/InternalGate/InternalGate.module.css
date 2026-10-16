@@ -30,13 +30,6 @@
   font-weight: 500;
 }
 
-.lede {
-  margin: 8px 0 0;
-  font-size: 13px;
-  line-height: 1.4;
-  color: var(--shell-muted);
-}
-
 .label {
   display: block;
   margin-top: 20px;

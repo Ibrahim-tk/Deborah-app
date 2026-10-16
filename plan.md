@@ -1,320 +1,480 @@
-# User Journey Audit and Testing Dashboard Plan
+# Oracle Clinician — Post-intake UI Overhaul Plan
 
-Date: 15 October 2026
+**Date:** 17 October 2026 · **Status:** proposal for review · **Implementation:** not started  
+**Primary surface:** Version 2 mobile prototype, reviewed at `/internal/mobile?flow=v2`  
+**Companion documents:** [program.md](program.md) · [research catalogue](docs/planning/ui-overhaul-references.md) · [previous plan, preserved verbatim](docs/planning/plan-before-ui-overhaul-2026-10-17.md)
 
-## Latest planning addition — Contextual widget reuse
+## Contents
 
-**Widget preference, not a requirement:** Prefer the existing `/wid` widgets wherever they naturally fit the question or action. Do not force their use, add steps to accommodate them, or change question meaning or flow just to include a widget. Keep the current control when it is the clearer or more appropriate interaction.
+1. [Intent and non-negotiables](#1-intent-and-non-negotiables)
+2. [Current app findings](#2-current-app-findings)
+3. [Research and experience direction](#3-research-and-experience-direction)
+4. [Information architecture](#4-information-architecture)
+5. [Home](#5-home)
+6. [Chat: locked baseline and optional presentation study](#6-chat-locked-baseline-and-optional-presentation-study)
+7. [My Health and Healing Plan](#7-my-health-and-healing-plan)
+8. [Family](#8-family)
+9. [Records and history](#9-records-and-history)
+10. [Visit Notes](#10-visit-notes)
+11. [Labs and supporting screens](#11-labs-and-supporting-screens)
+12. [Visual language and tokens](#12-visual-language-and-tokens)
+13. [Blur, motion and feedback](#13-blur-motion-and-feedback)
+14. [Reusable component architecture](#14-reusable-component-architecture)
+15. [Widget Library](#15-widget-library)
+16. [Behavior preservation](#16-behavior-preservation)
+17. [States and content ranges](#17-states-and-content-ranges)
+18. [Accessibility and responsiveness](#18-accessibility-and-responsiveness)
+19. [Performance and failure handling](#19-performance-and-failure-handling)
+20. [Phased build backlog](#20-phased-build-backlog)
+21. [Verification and acceptance](#21-verification-and-acceptance)
+22. [Risks and deferred decisions](#22-risks-and-deferred-decisions)
+23. [Review checklist](#23-review-checklist)
 
-See [CONTEXTUAL_WIDGET_PLAN.md](CONTEXTUAL_WIDGET_PLAN.md). Reuse the existing `/wid` components wherever their input/action semantics match the current context. Preserve question wording, conditions and journey transitions. Finish verification of the choice/consent integration, then connect eligible upload, reminder and booking actions. Coordinate the ending separately through ENDING_FLOW_PLAN.md. This addition is a plan, not authorization to change the remaining implementation in this turn.
+## 1. Intent and non-negotiables
 
-## Latest scoped request — Conversation endings only
+### 1.1 Desired outcome
 
-See [ENDING_FLOW_PLAN.md](ENDING_FLOW_PLAN.md) for the focused plan requested after the screenshot review. It addresses the existing Profile saved confirmation and missing seven-section answer in the provider-review red-flag ending. No UI changes, widget changes or earlier-flow changes are in scope for that request. The broader widget/dashboard sections below remain separate work.
+Make the post-intake experience feel as direct, readable and conversational as the leading AI apps, while remaining recognizably Oracle Clinician. Improve layout, organization, interaction affordances and component quality. Keep the existing care journey underneath the screen.
 
-## Immediate priority — Reuse /wid widgets in chat
+Modernity should come from a clear hierarchy, subtle tonal surfaces, excellent spacing, purposeful icons and a small amount of progressive blur where it has a spatial purpose. It should not depend on filling the screen with translucent panels or animated decoration.
 
-User clarification, 15 October 2026: **Keep the current question wording; change widgets only.** The existing question order, journey branches, navigation and overall consultation flow remain the behavioral contract. This is an interaction and presentation change, not a new intake flow.
+`PRODUCT.md` describes people often tired or anxious, roughly 40–65, reading in short sessions and sometimes with increased text size. That makes comfortable targets, good contrast and a low decision burden essential. Preserve Deborah’s voice, the educational purpose and the seven-section guidance framework.
 
-Complete this work before continuing the journey dashboard build. At this stage, plan the widget integration first; do not change the chat implementation until execution of this section is requested.
+### 1.2 Locked regions
 
-### Findings from the current implementation
+| Locked area | Exact meaning |
+|---|---|
+| Sign-in/sign-up | Same appearance, fields, validation, account actions, terms handling and destinations |
+| Intake | Same forms, question wording/order, controls, consent, branching, values and completion; includes Complete Intake and chat intake |
+| Chat experience | Preserve the approved chat in the base scope; §6 documents a separate optional presentation study |
+| Composer | No JSX/CSS/token, dimensions, placement, focus, keyboard, draft, send/stop, attachment or voice changes |
+| Home launcher | Treat `ChatLauncher` as part of the composer lock, despite being a different component |
+| Headers/navbar | Keep Home/chat/other screen headers, sidebar and navigation chrome and their current actions |
+| Greeting/time | Preserve date, time-of-day greeting, name, contextual line, styling and device-clock behavior |
+| Product logic | Keep clinical answers, gates, safety, profile ownership, counting, reminders, save/export and eligibility |
 
-- `/wid` is the existing widget reference page. Its reusable components live in `src/apps/mobile/patterns/widgets/`; the lab's example questions and canned responses are demonstration content, not replacement consultation logic.
-- The standard Conversation screen (`M-2.1`) uses a bottom `AnswerPanel` for active multiple-choice questions. `MessageList` suppresses the corresponding inline controls while that panel is active.
-- `IntakeQuestion`, `ComposerOptions` and `AnswerPanel` contain separate choice implementations. They do not consistently reuse the widget components shown on `/wid`.
-- The existing choice controls submit a single option immediately, even when question metadata supports multiple answers. The lab already demonstrates controlled multi-selection with `ChoicePills` and Continue.
-- The scripted first consultation (`M-2.12`) already uses several widgets through `FirstConsult/parts/FlowWidget.tsx`. Reuse that experience without creating a second competing implementation.
-- `ScaleCheck` currently assumes 0–10, and `MoodScale` has a fixed five-label vocabulary. They cannot safely replace arbitrary questions without matching the existing answer contract.
+The request both locks chat and asks for a plan covering chat. The conservative interpretation is to give chat detailed compatibility and future-design coverage without assuming permission to restyle it. Approving the base program does not silently unlock chat. A later explicit chat presentation phase still cannot touch the composer or clinical flow.
 
-### W-1 — Capture the behavior to preserve
+The preference for no strokes/shadows governs decorative card treatment. It does not remove keyboard focus, required control affordances, safety emphasis or anything inside a locked component.
 
-- [ ] Inventory current questions from `conversation/intake.json`, `conversation/chatIntake.json` and the scripted consultation flows.
-- [ ] For each question, record ID, exact prompt, option IDs/labels, single/multiple selection, accepted value shape, existing default, Other/skip behavior and next-step rule.
-- [ ] Record current user-bubble text, pending fact patch and confirmation behavior for representative answers.
-- [ ] Capture the current question sequence for adult self, teen dependent, child fallback and adult partner journeys.
-- [ ] Keep all question wording and clinical options unchanged. Do not copy the widget lab's sample questions or keyword router into the consultation engine.
+### 1.3 Current deliverable
 
-**Done when:** There is a question-to-widget mapping with an explicit list of behavior that must remain identical.
+Only Markdown planning files change. No application code, dependencies, token values, tests, clinical content, navigation, Version 1 files or client chrome change. Existing unrelated working-tree edits remain intact.
 
-### W-2 — Map each existing interaction to an existing widget
+The future build is internal-first under `AGENTS.md`. `/internal` and `/` currently share Version 2 product code: internal verification is not deployment isolation. See §16.6 before any merge or release.
 
-| Existing interaction | Reuse from /wid | Integration rule |
-| --- | --- | --- |
-| Yes/no or short single-choice answers | `ChoicePills` | Use the existing labels and return the original option ID; do not add Not sure unless the question already has it. |
-| Multiple-choice symptom or history selection | Controlled `ChoicePills` plus existing Continue button | Preserve `multi` semantics and existing exclusive None behavior. Submit the selected IDs together. |
-| Existing numeric 0–10 question | `ScaleCheck` | Use only when the current question already accepts that numeric range; preserve the existing default and stored value. |
-| Existing five-point mood question | `MoodScale` | Use only where labels and values match; otherwise minimally parameterize the widget or retain equivalent choices. Do not reinterpret a symptom question as mood. |
-| Health-data consent | `InlineConsent` | Preserve the actual consent wording, decline behavior, saved timestamp and downstream gate. Parameterize the widget if needed instead of copying lab handlers. |
-| Existing file attachment interaction | `UploadCard` | Bind to the existing file/confirmation path and account gate. The lab's simulated completion must not bypass report review. |
-| Existing appointment selection | `SlotPicker` | Reuse where a slot is already requested; preserve navigation, availability data and booking steps. |
-| Existing confirmation action | `ConfirmCard`, only where equivalent | Preserve each action's meaning and cancel behavior. Do not replace Review and Confirm's per-fact Edit/Save/Don't save with a generic booking confirmation. |
-| Existing reminder choice | `ReminderCard` | Wire into the current reminder actions and permission flow; do not add a new ask or change when it appears. |
-| Existing answer, product, safety and visit-prep content | Existing answer/product/safety/prep components shown on /wid | Reuse current production handlers; preserve safety precedence, product suppression and existing destinations. |
-| Birth year, date, measurements or free text | Existing dedicated field primitives | Keep the specialized field if /wid has no equivalent. Do not force unrelated widgets onto these inputs. |
+## 2. Current app findings
 
-The user's explicit choice of the `/wid` widgets governs this work, including `ChoicePills`; the older general design-system pill restriction must not cause those widgets to be replaced.
+### 2.1 Evidence reviewed
 
-**Done when:** Every current question has a compatible control, with explicit exceptions where the widget catalogue has no equivalent.
+This plan uses `PRODUCT.md`, `DESIGN.md`, `VERSIONS.md`, the current route registry, Home renderers/view models, My Health, Family profiles, Records, Visit Brief, shared widgets, loaded styles, icons, scroll-edge blur and package scripts. Returning Home R01 was inspected in the running internal preview. Other screen findings come from source inspection; this is not an exhaustive visual regression audit.
 
-### W-3 — Add a thin presentation adapter
+| Area | Existing implementation | Consequence |
+|---|---|---|
+| Home | `Home`, `StateNew`, `StateReturning`, `StateEstablished`, `HomeKit` | Recompose bodies; keep handlers and state classification |
+| Home classification | New with no history/active messages; established from plan day 14 when not mid-intake; otherwise returning | No new ranking or AI priority model |
+| Home data | Topic, summary, pending question, completion, reports, habits, recommendations | No invented daily health summary |
+| Chat | `Conversation`, `FirstConsult`, shared chat patterns and engine | Both consultation paths remain protected |
+| My Health | `MyHealthHub`, `HubEmpty`, `HubPopulated`, `useHubData` | Existing focus, plan, check-in, counts and content support better hierarchy |
+| Family | `ManageProfiles`, `ProfileDetails`, switcher, `useAddMember` | Preserve details versus switching and existing limits |
+| Records | `Records`, `RecordsList` | Keep Consultations / Visit Notes / Labs, profile and segment parameters |
+| Visit Notes | `VisitBrief`, `BriefDocument`, `AppointmentFollowUp` | Existing document/edit/save/PDF/follow-up logic is authoritative |
+| Widgets | `patterns/widgets`, `patterns/health`, `HomeKit` | Extend/reuse first; extract genuinely new cards |
+| Widget Library | `WidgetLab`, `LabWidget`, `scenarios.ts` | Extend the chat-oriented showcase to screen cards |
+| Icons | `ui/Icon/Icon.tsx`, free Hugeicons Stroke Rounded | Keep one adapter and family |
+| Blur | `ui/ScrollEdge` already has masked strong/soft blur and reduced transparency | Reuse the existing approach selectively |
 
-- [ ] Create a reusable question renderer in the mobile patterns layer that imports the actual widget components, not the WidgetLab screen or its sample data.
-- [ ] Pass question metadata and callbacks into the renderer; keep journey decisions in the existing engine.
-- [ ] Map widget selections back to stable option IDs rather than using labels as stored values.
-- [ ] Add presentation metadata only where needed to select a widget deterministically. Do not use text keyword heuristics.
-- [ ] Keep selection state local until the widget's intended submit interaction. Send exactly one existing answer event per completed answer.
-- [ ] Preserve Other/free-text and skip behavior for each question; do not introduce new options globally.
-- [ ] Preserve answered widgets as readable history, with only the current unanswered question interactive.
-- [ ] Support pending, submitting, answered, disabled and retry/reset states without double submission.
-- [ ] Add only minimal compatible props to existing widgets where necessary; keep `/wid` working with its current examples.
+### 2.2 Design findings
 
-**Done when:** The same question and answer payload reach the existing engine through the chosen widget.
+Returning Home currently stacks continuation, next steps, intake completion, plan, destinations and recommendations. Similar card structures compete for attention. The opportunity is to distinguish “continue,” “do something today,” and “find my information” through composition and scale.
 
-### W-4 — Integrate without changing the journey
+Home-specific helpers and inline markup are not yet a complete shared widget catalogue. Extract meaningful components, not just a universal rounded rectangle with many unrelated flags.
 
-- [ ] Replace the standard chat's duplicate option controls with the shared widget renderer.
-- [ ] Present the widget with its corresponding question in the conversation, following `/wid` as the interaction reference. Treat placement and composer visibility as presentation decisions; do not add screens, questions or journey steps.
-- [ ] Ensure `MessageList` and the bottom answer area cannot render two active controls for the same question.
-- [ ] Preserve typing, thinking, auto-scroll, emergency locking and the ability to answer Other in the existing text path.
-- [ ] Reuse the renderer in the scripted consultation where appropriate while retaining its existing node-to-node transitions.
-- [ ] Keep onboarding, navigation destinations, answer generation, consultation counting, minor rules, product gates and Review and Confirm timing unchanged.
-- [ ] Leave existing follow-up and booking screens in their current flow; do not move an entire workflow into the transcript merely because a lab widget exists.
-- [ ] Remove old choice implementations only after all consumers are checked.
+The R01 preview showed “Your Health Profile — 100% Complete” with “Complete Intake.” The source uses different predicates for basic completion and extended intake. The overhaul must not alter that calculation or misrepresent the percentage. Record a UI-copy clarification opportunity that distinguishes the two concepts, rather than quietly fixing product logic.
 
-**Done when:** The user follows the same journey and answers the same questions using the widgets they designed.
+The requested visual material already exists in part: cream/plum colors, tonal cards, generous corners, Hugeicons and progressive blur. The plan should improve the system’s application instead of replacing the brand.
 
-### W-5 — Verify interaction and behavior parity
+### 2.3 Resolve design authority without accidental redesign
 
-- [ ] Compare before/after question IDs, order, option IDs, next-step decisions and resulting fact patches on the same seeded scenarios.
-- [ ] Test one-tap choices, multiple selections, exclusive None, Other text, back/reopen, keyboard controls and double-tap prevention.
-- [ ] Check numeric and mood widgets only on compatible existing questions; mark incompatible cases rather than inventing new questions.
-- [ ] Verify only active controls accept input and older answers remain readable.
-- [ ] Confirm health facts stay pending until explicit Review and Confirm; test Save, Edit and Don't save.
-- [ ] Check child/teen product suppression, adult partner context, consent decline and emergency precedence.
-- [ ] Check the widget lab and both conversation implementations for regressions.
-- [ ] Run TypeScript, lint and build checks, plus focused answer-payload tests where necessary.
-- [ ] Inspect the phone layout, keyboard, scrolling and largest text size using representative real question labels.
+`DESIGN.md` describes Cormorant + SF Pro and an earlier parchment palette. `MobileApp.tsx` loads semantic tokens, refresh/base styles, DM Sans, and finally `mobile.skin.deborah.css`. The skin overrides fonts, colors, controls and radii, while its comment still describes an exploration.
 
-**Acceptance:** Existing wording and question sequence are unchanged; the same selections produce the same routing and profile changes; supported questions use the actual `/wid` widgets; no duplicate answer controls or new journey steps appear.
+Recommendation: preserve the effective current token skin for continuity and make its canonical status an explicit P0/P1 decision. Do not silently revert to SF Pro because an older document says so. Do not change token values simply to reconcile documentation. No `DESIGN.md` change is part of this planning task.
 
-### W-6 — Resume the journey testing plan
+## 3. Research and experience direction
 
-After widget parity is verified, continue the audit/dashboard phases below. Update manual test instructions and automatic playback to recognize the widget interactions rather than depending on the retired option-panel markup. Keep widget integration and dashboard work separate so each can be reviewed independently.
+### 3.1 What to borrow
 
-### Proposed code touchpoints
+| Reference | Documented pattern | Oracle adaptation |
+|---|---|---|
+| Grok | Direct conversation entry and follow-up | One clear Home continuation surface |
+| ChatGPT | Natural iteration and grouped chats/context | Recognizable continuity and organized records |
+| Perplexity | Visible sources, files and contextual follow-up | Honest metadata and clear existing next actions |
+| Claude | Reusable outputs separate from conversation | Document-like Visit Notes and retrievable health material |
 
-| Responsibility | Files or area |
-| --- | --- |
-| Canonical widget implementations | `src/apps/mobile/patterns/widgets/` |
-| Widget reference and regression check | `src/apps/mobile/screens/lab/WidgetLab/` |
-| Standard conversation integration | `src/apps/mobile/screens/consultation/Conversation/Conversation.tsx`, `parts/MessageList.tsx` |
-| Existing duplicate choice renderers | `src/apps/mobile/patterns/chat/IntakeQuestion/`, `ComposerOptions/` |
-| Scripted flow integration | `src/apps/mobile/screens/consultation/FirstConsult/parts/FlowWidget.tsx` and its choice renderer |
-| Presentation metadata, only if required | `src/shared/types/content.ts`, `src/shared/types/domain.ts`, existing question data |
-| Behavior checks | Existing question engine, fact confirmation and seeded journeys |
+Sources: [Grok overview](https://x.ai/grok), [Use ChatGPT](https://learn.chatgpt.com/docs/use-chatgpt), [Perplexity Pro Search](https://www.perplexity.ai/help-center/en/articles/10352903-what-is-pro-search), [Claude artifacts](https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them).
 
-### Execution checkpoint
+The [20-entry annotated catalogue](docs/planning/ui-overhaul-references.md) is part of the plan. It separates current documentation, historical examples, visual reference destinations and our proposed adaptations. Public docs were reviewed; no claim is made to have audited every signed-in native app version.
 
-The earlier journey-dashboard execution has been paused for this widget plan. Dedicated S20/S21 seeds, shared family-consent changes, consent metadata, runner reset cancellation and draft journey catalogue files were started before the pause. They are not a completed or verified dashboard. Preserve and review those working-tree changes when the dashboard work resumes.
+### 3.2 A distinct job for each surface
 
-## Objective
+- **Home:** reorient me and help me continue.
+- **Chat:** listen, clarify and provide the existing guidance.
+- **My Health:** organize what I am working on and have saved.
+- **Family:** make whose information I am managing unmistakable.
+- **Records:** retrieve a consultation, note or lab report.
+- **Visit Notes:** review and take existing information to my provider.
 
-Establish what the existing prototype supports, identify what remains, and build a development-only journey dashboard so each available user experience can be tested manually from beginning to end.
+This is AI-native through context and continuity. It does not require a model to rearrange the screen, write new summaries or invent next steps. Deterministic existing state is sufficient. Essential actions should stay predictable across visits.
 
-Reuse existing screens, navigation, scenario seeds and design-system components. Keep simulated behavior clearly identified. This plan does not authorize implementing every missing product feature.
+### 3.3 Recommended composition
 
-## Current baseline
+Use a continuation-first Home with three visual scales: one spacious primary module, compact supporting action rows, and a restrained destination group. Keep commerce lower in the hierarchy while preserving eligibility. Avoid turning every three-line item into a large poster.
 
-These findings come from code inspection; they are not a claim that every journey has passed browser testing.
+| Alternative considered | Benefit | Why it is not recommended as the lead |
+|---|---|---|
+| Everything as chat | Strong conversational identity | Weak record/family retrieval and conflicts with chat lock |
+| Equal dashboard tiles | Familiar navigation | Too many equal choices on a small phone |
+| Health timeline | Useful historical story | Requires new aggregation and careful cross-type semantics |
+| Daily AI briefing | Personalized entry | Requires new generation and ranking logic |
+| Continuation-first | Clear next task using current state | Sparse data needs deliberate handling; best fit for scope |
 
-| Area | Current evidence | Remaining work |
-| --- | --- | --- |
-| Onboarding | Welcome opens sign-up; self and dependent branches, birth year, sex, age gate and consent are present | Verify every branch in the browser |
-| Dependent onboarding | Profile creation and profile switch before chat are present | Verify third-person conversation, minor rules and profile isolation |
-| Health profile | Chat intake and Review and Confirm are present | Verify save, edit, discard, repeated questions and later updates |
-| Guest prompts | Removed from main chat and Home; retired card remains in the design system | Verify no prompts reappear in supported journeys |
-| Journey tooling | Automatic Journeys menu and scenario loader exist | Add guided manual testing, expected results and reliable reset |
-| Scenario catalogue | S01–S19 and R01 exist; dependent journey runs reuse S03 | Add dedicated teen and adult-partner seeds |
-| Family consent | Onboarding reads shared consent data | Add Family Member still uses hardcoded wording |
-| Consent record | Path and timestamp are stored | Resolve the planned attestedBy field |
-| Documentation | UX specs and screen cross-reference exist | Onboarding descriptions still contain the previous flow |
-| Labs | Lab screens and simulated upload exist; selected file contents are not read | Audit confirmation and downstream behavior; label simulation |
-| Invitations and permissions | Not established by the inspection so far | Audit before claiming support or creating role-switch demos |
+P1 should compare concrete layouts, not reopen the entire brand. The reference apps supply hierarchy/interaction lessons; Oracle supplies tokens, content, identity and behavior.
 
-TypeScript checks passed for the app and Vite configuration. Lint passed with zero errors and 12 warnings. Full browser regression testing remains outstanding.
+## 4. Information architecture
 
-There is no BUILD.md in the repository. Use docs/11-build-plan.md and the relevant docs/ux specifications as the available build references. If BUILD.md is later supplied, compare it separately and record discrepancies.
+### 4.1 Preserve existing destinations
 
-## Phase 1 — Audit implementation and establish status
+| Destination | Current route | Contract |
+|---|---|---|
+| Home | M-2.0 | Existing root/navigation |
+| Conversation / scripted consultation | M-2.1 / M-2.12 | Exact current entry/resume distinction |
+| Health profile / Complete Intake | M-2.10 / M-2.14 | Modal/form and intake behavior locked |
+| Family overview | M-6.6 | Existing push |
+| Profile details / switcher | M-6.5 / M-6.1 | Viewing details is distinct from switching |
+| My Health / Healing Plan | M-7.2 / M-7.3 | Preserve gates and root/pushed back behavior |
+| Content / library / about | M-7.4 / M-7.5 / M-7.6 | Existing content IDs and destinations |
+| Records | M-9.1 | Preserve segment and optional profileId |
+| Consultation detail | M-9.2 | Preserve conversationId and read/resume distinction |
+| Note editor / lab report | M-9.4 / M-9.5 | Preserve noteId/reportId and ownership |
+| PDF preview / Visit Notes | M-9.6 / M-9.7 | Preserve source IDs, modal, save/export semantics |
+| Lab upload / confirmation | M-5.3 / M-5.4 | Same upload/review/confirmation |
+| Booking | M-8.2 / M-8.3 / M-8.4 | Same sequence and data |
 
-- [ ] Read the build plan, architecture, navigation, state/scenario and relevant UX specifications.
-- [ ] Inventory registered screens, reachable routes, sheets, modals and interactions.
-- [ ] Trace navigation and state mutations for each journey.
-- [ ] Inspect scenario seeds, account simulation, profile ownership and engine decisions.
-- [ ] Manually follow reachable journeys in the browser.
-- [ ] Record entry requirements, actions, decision branches, success states, errors and exits.
-- [ ] Record evidence for missing or broken behavior without assuming a screen proves the whole flow works.
+No new bottom navigation, sidebar or top-level taxonomy. Existing body shortcuts can be clearer. A new visual shortcut is eligible only when it uses an already working destination, the same navigation API, parameters and permission gates. Otherwise defer it.
 
-Use separate classifications:
+### 4.2 Content movement ledger
 
-| Classification | Values |
-| --- | --- |
-| Implementation | IMPLEMENTED, PARTIALLY IMPLEMENTED, NOT IMPLEMENTED |
-| Verification | UNTESTED, PASSED, FAILED |
-| Behavior | Local prototype behavior, simulated processing, unavailable |
+Before implementation, record each existing element’s old/new location, visibility condition, callback and result. Every currently available action stays reachable. Combining repeated headings and changing wrappers is acceptable; dropping an action to shorten the screen is not.
 
-### Required journey inventory
+Do not make essential actions dependent on horizontal swiping, hover, long press or a new hidden disclosure. Safety content and required errors never go behind “more.” Existing gating remains, but no new gate is introduced to support the design.
 
-1. First-time onboarding, including all self/dependent age branches.
-2. Conversational health profile creation.
-3. Returning-user consultation and sign-in.
-4. Health profile updates through chat and Review and Confirm.
-5. Adding and switching family profiles.
-6. Teen invitation, consent and sharing, if supported or specified.
-7. Adult dependent invitation and consent, if supported or specified.
-8. Medical document/lab attachment paths.
-9. Document analysis, confirmation and profile updates, where supported.
-10. Doctor-visit notes and any actual recording functionality.
-11. Medication updates and any implemented conflict resolution.
-12. Conversation history and management.
-13. Account, subscription, notifications and privacy management.
+## 5. Home
 
-Extend the inventory to other implemented journeys, including follow-up, safety, trial limits and booking. Clearly distinguish a visit-note editor from audio recording, a dependent profile from a separate user account, and a file picker from document analysis.
+### 5.1 Fixed frame and reading order
 
-**Exit criterion:** Every requested journey has a documented status, evidence and a known supported endpoint.
+The region above and including the greeting remains unchanged. The launcher retains its current position and appearance. Design the scroll content between those boundaries.
 
-## Phase 2 — Write journey maps and test cases
+1. Existing header.
+2. Existing date, greeting and contextual line.
+3. Primary module for the existing Home state.
+4. Supporting actions using current eligibility.
+5. Existing health/family destinations in a coherent group.
+6. Plan, reports and recommendations where currently available.
+7. Scroll clearance for the final action above the fixed launcher.
 
-- [ ] Create JOURNEY_MAP.md with Mermaid flowcharts for supported and specified journeys.
-- [ ] Include entry points, actions, decisions, exits and relevant errors.
-- [ ] Label missing steps explicitly rather than drawing them as completed functionality.
-- [ ] Create JOURNEY_TEST_CASES.md with personas, seed IDs, inputs, actions, per-step expected results and final outcomes.
-- [ ] Create JOURNEY_GAPS.md with missing screens, incomplete interactions, broken connections and specification differences.
-- [ ] Link findings to source files and screen IDs.
+This is a hierarchy proposal, not a new state algorithm. The state-specific versions below retain the current data predicates and current action set.
 
-Use Sarah for first-time onboarding and chat, Emily for managing a teenage dependent, and Helen for adult-dependent invitation/access testing only if that capability is established. Otherwise, mark Helen's invitation journey unavailable and explain the missing pieces.
+### 5.2 New user after intake
 
-Prioritize onboarding and chat, returning users, family profiles, labs/records, then account/privacy. Cover safety branches alongside the journeys they affect.
+**User need:** “What can I do with Deborah now?”
 
-**Exit criterion:** A tester can follow each supported journey without reading source code or guessing inputs.
+Use an open start module with the current introduction and existing starter prompts. Prefer clear full-width action rows, with a familiar icon and trailing affordance, over multiple equally dominant buttons. Preserve prompt wording and prefill behavior. A tap must prepare the same conversation as today; it must not submit a different prompt automatically.
 
-## Phase 3 — Resolve confirmed gaps in existing flows
+If incomplete intake is still eligible, keep the completion action without introducing a compulsory checkpoint. The existing locked Healing Plan preview and Add Family path stay secondary. No fabricated health progress, fake diagnosis, sample report or “daily AI insight” fills empty space.
 
-- [ ] Share consent copy between onboarding and Add Family Member while preserving the documented difference in under-13 handling.
-- [ ] Resolve consent-record metadata, including attestedBy.
-- [ ] Add dedicated teen and adult-partner seeds, following the intended S20/S21 naming if available.
-- [ ] Update F01 onboarding, F06 family consent and screen cross-references to match the final implementation.
-- [ ] Verify the follow-up opt-in appears once after the answer/review sequence.
-- [ ] Check automatic journey completion signals and remove brittle assumptions where necessary.
-- [ ] Fix confirmed navigation, profile-isolation and reset defects.
+**Proposed components:** `StartConversationCard`, existing `IntakeCompletionCard`, existing locked `HealingPlanCard`, shared family entry row. These are future component names, not completed work.
 
-Keep larger missing product capabilities in JOURNEY_GAPS.md as separately scoped work. Do not create invitation, sharing, recording or conflict-resolution features merely to make a dashboard row appear complete.
+**Acceptance:** all existing prompts and actions remain; zero-history layout is useful; no new onboarding, no new modal and no launcher change.
 
-**Exit criterion:** Existing supported journeys have consistent starting data and no known blocking connection defects.
+### 5.3 Returning after a conversation
 
-## Phase 4 — Build the Journey Testing Dashboard
+**User need:** “Where did we leave off?”
 
-- [ ] Add /demo/journeys through the existing React router.
-- [ ] Enable it in development and optionally through an explicit hosted-demo build flag; exclude it from ordinary product access.
-- [ ] Build within the prototype shell using existing UI and design-system conventions.
-- [ ] Show journey name, persona, goal, step count, implementation status and verification status.
-- [ ] Provide Start, Resume, View Flowchart and Reset actions.
-- [ ] Show known gaps and simulated behavior before starting.
-- [ ] Open existing application screens instead of recreating them as mock screens.
-- [ ] Keep the automatic Journeys player as optional playback alongside manual testing.
+Lead with a `ContinueConversationCard`: existing topic, relative date, summary when present and one Continue action. Put metadata in quiet readable text, not colored badges. A subtle lilac surface establishes priority without a border or shadow. Keep the content short by using the existing summary, not by generating a new one or clipping important text.
 
-### Guided manual experience
+For mid-intake, show the existing pending question and retain the meaning of “Pick up your answers.” Do not invent a completion percentage. The current resume handler may unarchive and activate a conversation; the component receives that handler rather than reimplementing it.
 
-Display a testing panel beside the prototype with the current step, suggested input, expected result, available branches and progress. Let the tester interact with the application directly. Provide controls to mark a step passed, failed or blocked, with a short session note.
+Next steps form a compact group. Preserve the current supplied order and `steps.slice(0, 3)` limit. Keep existing medication, labs, deferred-profile and follow-up eligibility. No AI ranking, new recommendation engine or changed action parameters.
 
-Choose a lightweight flowchart rendering approach after checking existing dependencies. Avoid adding a dependency unless it materially improves the dashboard and cannot be handled adequately with existing tooling.
+Intake status, Healing Plan and reports remain reachable. Give My Health and Family a consistent title/metadata/action arrangement. A Visit Notes shortcut is a P1 option: if adopted, it opens the existing records notes segment with the correct context; it must not generate or save a note on tap.
 
-**Exit criterion:** A tester can choose a journey and follow the real prototype with visible guidance.
+**Acceptance:** Continue reaches the same conversation/question; absent summaries leave a smaller component; all supporting actions remain; count, ordering and gates stay unchanged.
 
-## Phase 5 — Make guidance, branching and reset reliable
+### 5.4 Established user
 
-### Shared journey definitions
+**User need:** “What am I already working on today?”
 
-Create a typed catalogue owned by the demo/shell layer. Each definition should include:
+Keep the existing habits-for-today lead. Use comfortable checkbox rows and the current done/total representation. No streak, wellness score, celebration or implied medical progress. Preserve exact habit text and IDs.
 
-- Stable journey ID, title, persona and goal.
-- Implementation status and behavior limitations.
-- Starting scenario and navigation entry point.
-- Ordered steps, inputs and expected results.
-- Branches, supported role changes and completion conditions.
-- Flowchart content and known gap references.
+Below it, present the existing Continue/check-in action, intake status, Healing Plan, reports, destinations and recommendations with the shared visual rhythm. The current due label and callback remain coupled. Zero habits must not display a fabricated achievement or positive health assessment.
 
-Reuse this catalogue across the dashboard, guidance panel and automatic playback where practical to prevent conflicting definitions.
+**Acceptance:** toggling uses the same profile, habit ID and simulated date; current progress math and day-14 threshold remain; check-in opens the same mode; no state mutation occurs merely on card mount.
 
-### Progress and reset
+### 5.5 Commerce and recommendations
 
-- [ ] Observe screen/navigation and application state to recognize objective step completion.
-- [ ] Use manual confirmation for subjective expectations or checks that cannot be reliably detected.
-- [ ] Avoid relying solely on visible copy or DOM selectors for progress.
-- [ ] Cancel pending playback and demo timers before resetting.
-- [ ] Restore the scenario's store, navigation, pending facts, sheets and demo progress.
-- [ ] Isolate persona state and verify conversations and health facts remain assigned to their profiles.
-- [ ] Treat switching family profiles and switching simulated accounts as distinct operations.
-- [ ] Stop at unsupported steps with an explanation of what is missing.
-- [ ] Keep demo controls and test-session state isolated from product behavior.
+Keep current product eligibility and reason strings; place recommendations after care continuity. Preserve product IDs and suppression rules. Do not add generic promotional material, rating stars, verification seals or new endorsements. If a reason is marked placeholder, keep that status visible in internal review.
 
-**Exit criterion:** Every supported journey can be restarted repeatedly with predictable state and no cross-persona leakage.
+A compact tonal row with current image, name and reason is sufficient. Do not restyle a shared chat `ProductCard` globally to achieve the Home treatment. Use an isolated presentation variant or an appropriate existing Home wrapper if implementation is approved.
 
-## Phase 6 — Verify and hand over
+### 5.6 Home edge cases
 
-- [ ] Run every supported journey manually from its dashboard entry point.
-- [ ] Test all five onboarding branches: adult self, under-18 self, child dependent, teen dependent and adult dependent.
-- [ ] Test review save, edit and discard, then verify resulting profile data.
-- [ ] Test returning sign-in, repeat consultation and conversation history.
-- [ ] Check product suppression and existing safety branches for relevant personas.
-- [ ] Verify attachment and analysis paths accurately describe simulation.
-- [ ] Test back, cancel, alternate branches, reset and repeated runs.
-- [ ] Verify intended account/privacy actions against local mock data.
-- [ ] Run TypeScript, lint and production build checks.
-- [ ] Verify the explicitly enabled hosted demo route and confirm ordinary builds do not expose it.
-- [ ] Update journey verification statuses and gap documentation with actual results.
+| Case | Required treatment |
+|---|---|
+| Long name / expanded greeting | New body must not assume a fixed intro height |
+| Long topic or prompt | Wrap; do not hide meaning in a two-line clamp |
+| No summary | Omit its slot, no invented prose |
+| Partial intake | Same resume/completion path, no restart |
+| Basics at 100%, extended intake incomplete | Preserve truthful values; review labels separately |
+| No reports | Current omission/action behavior, no fake report card |
+| Due check-in | Current state/action; no invented severity |
+| Other profile active | Existing profile-scoped selectors and callbacks |
+| Exhausted trial | Existing consultation gate remains |
+| Keyboard / small viewport | Last action stays reachable above unchanged input surface |
 
-Add focused automated checks for meaningful state isolation, reset and branch logic as needed. Do not add tests that merely repeat static journey definitions.
+References: [catalogue R01–R06, R09 and R14](docs/planning/ui-overhaul-references.md). The three-state model is Oracle’s existing behavior; the new hierarchy is our proposal.
 
-**Exit criterion:** Every available journey has a recorded result, unsupported sections are explicit, and the dashboard works in the intended testing environment.
+## 6. Chat: locked baseline and optional presentation study
 
-## Implementation starting points
+### 6.1 Base scope: preserve and verify
 
-| Responsibility | Existing location |
-| --- | --- |
-| Top-level route | src/App.tsx |
-| Prototype shell | src/shell/Shell/ |
-| Automatic journey catalogue and player | src/shell/nav/JourneyRunner/ |
-| Scenario catalogue and seeds | src/shared/scenarios/ |
-| Scenario state loading | src/shared/store/loadScenario.ts |
-| Mobile screen registry and navigation | src/apps/mobile/navigation/ |
-| Conversation engine | src/shared/engine/ |
-| Onboarding | src/apps/mobile/screens/onboarding/ |
-| Family profiles | src/apps/mobile/screens/profiles/ |
-| UX specifications | docs/ux/ |
+The existing chat is a protected destination, not a blank canvas. Home can make it easier to enter or resume, but the resulting chat must be the same. Protect both `Conversation` and `FirstConsult`, including their different entry paths, active question handling and completion behavior.
 
-## Working constraints
+The compatibility checklist covers:
 
-- Inspect before implementing; preserve unrelated working-tree changes.
-- Reuse existing screens and primitives; do not redesign the app.
-- Keep the project frontend-only with local mock data and no real service integrations.
-- Do not present simulated behavior as real authentication, AI analysis, invitation delivery or permission enforcement.
-- Do not silently expand scope to missing product features.
-- Make every supported demo resettable.
-- Document actual results, including failures and untested behavior.
+- Same user and assistant turn sequence, text, question labels and option IDs.
+- Same intake control behavior, multi/single selection, skip/Other handling, consent and fact confirmation.
+- Same early-guidance versus completed-guidance distinction and counting.
+- Same seven answer sections in their existing order, product placement and closing content.
+- Same safety precedence, interruption and escalation behavior.
+- Same draft retention, sending, stopping, retrying, attachment/voice and keyboard behavior.
+- Same scroll anchoring and scroll-to-latest control; new Home styles must not leak into chat.
+- Same Visit Notes, PDF, provider-question and next-step actions.
 
-## Final deliverables
+`AnswerSections` currently opens the first section by default, uses the active streaming section while streaming, and provides Expand all / Collapse all after streaming. Preserve these mechanics. Do not turn the answer into a carousel, reorder sections or collapse additional content simply because another app’s answer looks shorter.
 
-1. JOURNEY_MAP.md.
-2. JOURNEY_TEST_CASES.md.
-3. JOURNEY_GAPS.md.
-4. Development/explicit-demo dashboard at /demo/journeys.
-5. Shared journey definitions, isolated scenario starts and reset behavior.
-6. A verification record showing passed, failed, blocked and untested journeys.
+### 6.2 Optional future visual direction — requires separate inclusion
 
-The work is complete when the tester can select a persona and journey, see its flowchart, click through the existing prototype with clear expectations, explore supported branches, reset, and understand exactly where functionality is missing.
+If the user later wants chat presentation included, explore the following without touching the composer:
 
-## Scoped execution update — 15 October 2026
+1. **Reading rhythm:** clearer spacing between turns and within long answers, using existing type roles. Keep assistant prose readable on the canvas and the existing user bubble distinction.
+2. **Answer navigation:** make current section headings and expand affordances more legible; preserve the same defaults and expanded content. No new generated summary above the seven sections.
+3. **Action grouping:** organize existing answer utilities consistently. Keep tap targets and accessible names; do not add copy/share/export actions that are not already supported.
+4. **Embedded widgets:** align existing non-intake output cards with the approved tonal vocabulary through explicit variants. Intake widgets stay frozen even if they share primitives.
+5. **Provenance:** show only existing lab/source data. A visual source capsule must not suggest web retrieval or clinician verification that did not occur.
+6. **Status feedback:** preserve actual stream/error/completion flags. No invented “reviewing your hormones” stage, simulated confidence percentage or exposed chain-of-thought narrative.
 
-Contextual widget integration and the provider-review ending are implemented. See WIDGET_INTEGRATION_STATUS.md for exact scope and verification. Existing question data and preceding branches were preserved; controls are reused where compatible rather than forced. The separate journey dashboard and full manual regression matrix remain outstanding.
+This study should produce an annotated comparison before implementation. It is not necessary for the Home, My Health, Family or Notes redesign to proceed.
+
+### 6.3 Why these references fit
+
+[ChatGPT’s follow-up guidance](https://learn.chatgpt.com/docs/use-chatgpt) supports continuity, [Perplexity’s session description](https://www.perplexity.ai/help-center/en/articles/10354769-what-is-a-thread) supports coherent conversation context, and [Claude’s artifact model](https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them) supports keeping a reusable document distinct from its conversation. These are interaction lessons, not authorization to add those products’ capabilities.
+
+### 6.4 Explicitly excluded chat ideas
+
+No model selector, DeepSearch mode, regenerate-with-another-model control, branching conversations, new memory panel, live web sources, autonomous care task, new voice mode, automatic note generation, prompt marketplace or new composer accessory row. Each would require product logic or changes to locked controls.
+
+## 7. My Health and Healing Plan
+
+### 7.1 My Health’s purpose
+
+My Health should feel like the organized place for the person’s existing care material. It should complement Home: Home answers “what now?”, while My Health answers “where is my plan and information?” Keep the current header and navigation behavior.
+
+Proposed body sequence, using existing values:
+
+1. Existing focus/last consultation, if present.
+2. Current Healing Plan overview, if present.
+3. Current check-in/reminder state.
+4. Record destinations: History, Visit Notes and Labs with existing counts.
+5. Existing “For you from Deborah” items and the full library link.
+
+This retains the current `HubPopulated` content set. The change is visual grouping: current activity in the upper region, records as a consistent compact collection, educational content below. Avoid a large card around every section plus another card around every item.
+
+### 7.2 Focus and plan
+
+Reuse or extend `FocusCard` and `PlanProgressCard`. A focus card shows the existing topic, date and summary. Its action keeps the current unarchive/set-active/openAsk behavior. It is not a new medical assessment and should not be labeled “health insight.”
+
+Plan progress shows the current day and existing habit counts. The title should consistently use the app’s current “My Healing Plan” wording. The code’s 90-day model does not authorize a new completion calculation or a clinical improvement chart. When the plan’s existing day is beyond 90, preserve the current check-in action rather than opening a different screen for visual consistency.
+
+The `HealingPlanCard` used on Home and `PlanProgressCard` in My Health have different responsibilities today. Reuse their underlying visual roles if helpful, but do not merge their behavior just because both display a plan.
+
+### 7.3 Records collection
+
+Use existing `QuickLinks` semantics or a narrow presentational extension. The three destinations remain History, Visit Notes and Labs. Each can have a small icon, label and accurate count; color supports grouping but never substitutes for the label.
+
+A destination with zero records remains honest. Do not use “Ready” or “Updated” without supporting data. Counts must come from the current profile-scoped hook; no aggregate across all family members.
+
+### 7.4 Empty My Health
+
+Keep the current empty-state actions. Make the explanation short and the first action clear, using the existing approved text where possible. Do not show empty charts, multiple disabled tiles or a progress ring at a fabricated starting value. Layout should remain spacious without looking unfinished.
+
+A useful empty state explains what will appear after the existing activity. It does not force intake completion, a purchase or a new data upload unless the current behavior already requires that path.
+
+### 7.5 Healing Plan detail
+
+Preserve the current plan sections, habit checks, dates, day calculations and any existing gates. Use one strong section hierarchy, comfortable rows and restrained separators formed by spacing/tonal grouping. Progress graphics represent adherence or plan position only when that is the existing metric; never describe them as recovery, risk reduction or health improvement.
+
+Completion feedback should be immediate and quiet. Preserve reversibility if the current habit toggle supports it. Do not add confetti, streak pressure, new reminder scheduling, celebratory health claims or a new “finish day” transaction.
+
+### 7.6 Acceptance
+
+- Empty/populated/due/completed/other-profile states are covered.
+- Existing pull-to-refresh and loading behavior remains; no new wait is introduced for a visual reveal.
+- Focus and plan controls invoke identical actions.
+- Record counts and destinations match the current profile.
+- Library recommendations use the same items, reasons and eligibility.
+- Shared chat or intake patterns are unaffected.
+
+References: [ChatGPT Projects](https://learn.chatgpt.com/docs/projects), [Perplexity Projects](https://www.perplexity.ai/help-center/en/articles/10352961-what-are-projects), and [Claude’s historical project/artifact examples](https://www.anthropic.com/news/projects). The adaptation concerns organization, not new memory or collaboration.
+
+## 8. Family
+
+### 8.1 Family overview
+
+Make the person’s name and relationship the primary information. A `FamilyProfileCard` or reusable profile row should contain the existing avatar/initials, name, relationship and the existing open-details action. Prefer a vertical list to a horizontal avatar carousel, which hides members and becomes awkward with large text.
+
+Use a consistent neutral or lilac treatment rather than a new color for every person. Color must not imply medical risk, age category, permission level or “favorite” status. An active-profile marker is acceptable only where the current selector provides that fact and where its meaning is clear; it is not a reason to change row behavior.
+
+### 8.2 Preserve important distinctions
+
+`ManageProfiles` currently opens a profile’s details using `profileId`. A redesign must not make tapping that row silently switch the active profile. Switching belongs to the current switcher/handler, with its existing effects on conversations and navigation.
+
+Viewing another person’s information and acting on the active profile are different capabilities. Preserve the current hide/disable rules for Ask/Add Labs in other-profile records. A more attractive card must not accidentally make an unavailable action active.
+
+### 8.3 Add-member states
+
+Keep the count and `MAX_PROFILES` limit from the existing code. Preserve the current available, locked and full states, including the existing upgrade path and disabled behavior. Do not introduce invitations, new accounts, shared access, a separate teen login, a new consent screen or a new family plan purchase step.
+
+The Add Member form and dependent/adult intake are locked. Only the entry presentation and non-form profile overview can be included in the base overhaul. Any shared widget used by these forms must retain its default appearance.
+
+### 8.4 Profile details
+
+Organize existing information into clearly titled groups with readable values and current Edit actions. Missing values should retain their existing honest empty representation; never render missing medication data as “None” unless that is the stored meaning.
+
+No new health summary should be synthesized from the profile. Avoid turning identity details into a decorative dashboard. Keep fields, validation and saving behavior unchanged wherever an edit form is entered.
+
+### 8.5 States and acceptance
+
+Review self-only, multiple profiles, maximum profiles, locked add, long names, custom relationship labels, teen/dependent context and adult partner context. Tapping a profile opens the same destination with the same ID. Active-profile switching still uses the current path. No cross-profile record, habit, note or chat leakage is acceptable.
+
+Workspace organization in [ChatGPT](https://learn.chatgpt.com/docs/projects) and [Perplexity](https://www.perplexity.ai/help-center/en/articles/10352961-what-are-projects) is only a hierarchy reference. Neither is evidence for family consent or health-data permissions. Oracle’s existing rules remain authoritative.
+
+## 9. Records and history
+
+### 9.1 Preserve the current record model
+
+Keep Consultations, Visit Notes and Labs as the existing three segments. Retain initial `segment`, optional `profileId`, current sort order and selected state. Do not replace the segments with a mixed timeline or add global search, filters, favorites or pinning without separate scope.
+
+The redesign should make scanning easier through row alignment, title emphasis, useful metadata and consistent item spacing. Dense lists usually benefit from a single grouped surface with generous row rhythm, not a large rounded card around every row.
+
+### 9.2 Consultation row
+
+Reuse `ConsultationRow` and display current topic, date, answered/in-progress state and lab-informed flag. Keep status as readable words with an icon where useful. No new severity color or “verified” mark.
+
+The whole row can remain the existing activation target. Avoid a separate tiny arrow button inside a row that is already clickable. Preserve opening `M-9.2` with the conversation ID. Opening history must not implicitly resume or unarchive a conversation unless the existing handler already does so.
+
+### 9.3 Note row
+
+Reuse `NoteRow` with current title, kind, date and body preview. Distinguish provider briefs from other notes using their actual kind. Existing provider briefs open `M-9.7`; ordinary notes open `M-9.4`. Do not route everything through the prettier document screen.
+
+An absent title remains the current fallback. A preview may be visually shortened only if the full title and the accessible destination remain clear and the body is available on opening. Do not truncate clinical warnings that form the action’s meaning.
+
+### 9.4 Lab row
+
+Use existing name, collection date and value count. If a label is missing, retain the current fallback. A row should look like a report, not a health verdict. No new classification, comparison with previous values or automatic trend arrow.
+
+### 9.5 Empty and large collections
+
+Each segment keeps its existing empty-state action. Retain active-profile restrictions on asking and uploading. Use a short explanation, one appropriate existing action and a restrained icon.
+
+For many records, keep a single scroll container and stable row keys. Do not change sorting or pagination behavior under the guise of performance. Evaluate the current realistic dataset before adding virtualization; it is not a default dependency for this redesign.
+
+References: [Perplexity Sessions](https://www.perplexity.ai/help-center/en/articles/10354769-what-is-a-thread) for coherent history, [file identity](https://www.perplexity.ai/help-center/en/articles/10354807-file-uploads) for recognizable source material, and [ChatGPT organization](https://learn.chatgpt.com/docs/projects). Existing Oracle selectors determine actual content.
+
+## 10. Visit Notes
+
+### 10.1 Experience thesis
+
+Visit Notes should feel like a calm document the person can inspect and use. Keep the current modal/header and existing actions. The body should have a clear document title, patient context, ordered sections and quiet editable controls. Avoid stacking every paragraph into a separate colored card.
+
+The [Claude artifact reference](https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them) supports this distinction between conversation and reusable output. Oracle already has the document behavior; this plan improves its presentation.
+
+### 10.2 Preserve the seven document sections
+
+`BriefDocument` currently renders:
+
+1. Chief Complaint.
+2. Clinical Context — What Deborah AI Identified.
+3. Tests to Discuss.
+4. Questions for My Provider.
+5. Current Medications & Supplements.
+6. Red Flags — Screened by Deborah AI.
+7. Deborah AI’s Recommendation.
+
+Keep their content, order and existing editable/read-only distinction, followed by the current disclaimer. These document sections are separate from the seven-section conversational answer; do not assume the models are interchangeable.
+
+The existing patient name, optional date of birth, purpose and priority must remain legible. Urgent/provider-review information may not be reduced to an unlabelled colored dot or hidden in a collapsed panel. Do not imply a real clinician signed or verified an AI-generated brief.
+
+### 10.3 Reading and editing
+
+Use one comfortable document surface. Establish hierarchy with existing type roles, spacing, aligned labels and subtle group fills only where helpful. Keep editable areas visibly editable; removing every control boundary is not worth making a text field look like static prose.
+
+Preserve the current editable chief complaint, tests, questions and medications. Keep exact patch shapes and list semantics. Do not add AI rewrite buttons, version history, autosave, collaborative presence, rich-text formatting or new fields.
+
+### 10.4 Save, export and follow-up
+
+The current Visit Brief code has important side effects: save creates or updates a note, PDF persists a note before opening the existing preview, and both lead to appointment follow-up. Keep that sequence and the same IDs. Do not replace explicit saving with an automatic save on open or blur.
+
+Preserve appointment-date scheduling and the existing no-date seven-day path. Reformatting the follow-up panel must not change notification content, deliverAt calculation, profile deep link or dismissal behavior.
+
+`BriefDocument` is also used in PDF preview. Keep the print/export appearance stable by default. A screen-only visual improvement must not accidentally change printable content, page flow, backgrounds or edit controls. If the document stylesheet is shared, use an explicit screen context; do not assume a UI CSS change cannot affect exports.
+
+### 10.5 Insufficient information
+
+Retain the existing gate/empty state when full guidance is unavailable. The design may make the explanation easier to read but cannot enable PDF or create a brief from incomplete data. Do not present a fake document preview to fill the screen.
+
+### 10.6 Acceptance
+
+Test unsaved review, edited review, saved note reopened, PDF entry, existing urgent priority, no source answer, long lists and follow-up with/without a date. Save must update rather than duplicate where the current code does. The same sourceMessageId, conversationId, noteId and profileId relationships must survive.
+
+## 11. Labs and supporting screens
+
+### 11.1 Labs
+
+Improve report overview/rows and the reading hierarchy of lab details. Keep values, units, reference ranges, collection dates, confirmed state and existing flags exactly as supplied. Do not infer missing units, calculate trends, add normal/abnormal judgments or invent source confidence.
+
+Preserve upload, camera/file permission, extraction, confirmation and editing behavior. The current uploader and confirmation form are not replaced with an AI-app attachment model. A report-looking card must distinguish available metadata from a result’s interpretation.
+
+Use [Perplexity’s file context](https://www.perplexity.ai/help-center/en/articles/10354807-file-uploads) and [source transparency](https://www.perplexity.ai/help-center/en/articles/10352903-what-is-pro-search) as clarity references. Source metadata is evidence only when it actually exists in Oracle’s data.
+
+### 11.2 Library and content detail
+
+Use the existing content title, type, image and reason. Make the title the main entry, with one concise metadata line and current action. Keep `useForYou` selection and existing library filtering behavior. No infinite discovery feed, popularity score, new tags or invented reading-time estimate.
+
+Content detail should prioritize the actual reading/media experience. Avoid decorative cards around every paragraph. Preserve media controls, source attribution and current destinations. A content card reused in the hub and library must use the same component with a deliberate presentation variant if needed.
+
+### 11.3 Booking
+
+Align non-form body cards with the tonal system, preserving the current booking path and its simulated nature. Keep location/eligibility, available slots, booking confirmation and reminder behavior. No new urgency badge, fabricated remaining-slot count, payment path or promise of appointment availability.
+
+Any booking widget used inside locked chat must keep its current default appearance. Styling the booking screen is not permission to change `BookDeborah` everywhere.
+
+### 11.4 Settings and account bodies
+
+A later consistency pass may improve section spacing and grouped rows without changing the header, text-size settings, subscriptions, sign-out, privacy controls or data actions. Sign-in/sign-up forms, payment and legal/consent surfaces stay locked.
+
+Keep destructive actions visually distinct and their existing confirmations intact. Do not use the no-stroke preference to make destructive and ordinary actions indistinguishable.
+
+### 11.5 Notifications and About Deborah
+
+If included in P7, use current notification state, timestamps and deep links; no new filters or unread logic. About Deborah can adopt the approved body spacing while preserving biography, claims and assets. Neither screen is a prerequisite for reviewing the main Home slice.
+

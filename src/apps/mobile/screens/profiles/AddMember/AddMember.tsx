@@ -7,12 +7,12 @@
  * @xref    web: W-6.2 (apps/web/screens/profiles/AddMember) — not built
  *
  * OPEN: "teen privacy (can the teen have her own login?), adult consent model (husband), whether
- * male health is in scope." Prototype: no separate login; adults get a simple agreement checkbox;
+ * male health is in scope." Prototype: no separate login; medical-advocate radios for consent;
  * "Male" is offered as sex at birth but the engine has no male-specific content.
  */
 import { useState } from 'react';
 import { consentDoc } from '@shared/data';
-import { ageBandFor } from '@shared/engine';
+import { ageBandFor, ageGroupFor } from '@shared/engine';
 import { useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom, uid } from '@shared/utils';
@@ -43,10 +43,10 @@ export default function AddMember() {
   const alert = useAlert();
   const toast = useToast();
   const form = useMemberForm();
-  const { values, set, age, minor, dobError, underThirteen, valid, dirty, today } = form;
+  const { values, set, age, minor, dobError, underThirteen, valid, dirty, today, consentValue, setConsent } = form;
   const [creating, setCreating] = useState(false);
-  const consentCopy = consentDoc.profileConsent[minor ? 'teen' : 'adult'];
-  const consentName = values.name.trim() || 'this person';
+  const { body, options } = consentDoc.profileConsent;
+  const consentName = values.name.trim() || 'them';
 
   const close = async () => {
     if (!dirty) return dismissModal();
@@ -65,6 +65,15 @@ export default function AddMember() {
     const now = nowFrom(s).toISOString();
     const id = uid('p');
     const name = values.name.trim();
+    const group = ageGroupFor(age);
+    const path: NonNullable<Profile['consent']>['path'] =
+      consentValue === 'guardian'
+        ? group === 'adult'
+          ? 'adult-agreement'
+          : group === 'child'
+            ? 'guardian-child'
+            : 'guardian-teen'
+        : 'adult-agreement';
     s.addProfile({
       id,
       name,
@@ -75,7 +84,7 @@ export default function AddMember() {
       intake: { ageBand: ageBandFor(age), conditions: [], medications: [] },
       createdAt: now,
       guardianConsentAt: minor ? now : undefined,
-      consent: { path: minor ? 'guardian-teen' : 'adult-agreement', attestedAt: now, attestedBy: s.accountId ?? s.profiles.order[0] },
+      consent: { path, attestedAt: now, attestedBy: s.accountId ?? s.profiles.order[0] },
     });
     // switchProfile closes the modal and resets Ask + My Health; openAsk lands on a fresh
     // Conversation, which is empty for the new profile ("Let's talk about {name}." + teen suggestions).
@@ -116,13 +125,18 @@ export default function AddMember() {
           )}
           <Select label="Sex at birth" options={SEXES} value={values.sex} onChange={(sex) => set({ sex })} />
           {!underThirteen && (
-            <div data-placeholder>
-            <p className={styles.hint}>{consentCopy.body.replaceAll('{name}', consentName)}</p>
-            <Checkbox
-              checked={form.consented}
-              onChange={form.setConsent}
-              label={consentCopy.check.replaceAll('{name}', consentName)}
-            />
+            <div className={styles.consent} data-placeholder>
+              <p className={styles.consentBody}>{body.replaceAll('{name}', consentName)}</p>
+              <div className={styles.consentChecks} role="group" aria-label="Confirm your authority">
+                {options.map((o) => (
+                  <Checkbox
+                    key={o.value}
+                    checked={consentValue === o.value}
+                    onChange={(on) => (on ? setConsent(o.value) : setConsent(''))}
+                    label={o.label.replaceAll('{name}', consentName)}
+                  />
+                ))}
+              </div>
             </div>
           )}
           <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>

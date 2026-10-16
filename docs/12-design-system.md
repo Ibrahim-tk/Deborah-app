@@ -2,6 +2,8 @@
 
 The design system itself lives in **`/DESIGN.md`** (Impeccable / DESIGN.md format) with product context in **`/PRODUCT.md`**. This file explains how to wire it into the codebase. If anything in `docs/ux/*` conflicts with `DESIGN.md` on visual matters, **DESIGN.md wins**.
 
+**AI-native UI overhaul (2026):** color-field depth, progressive blur on floating chrome only, and the Home → hub → family → records visual program are documented in [`ui-overhaul-plan.md`](ui-overhaul-plan.md). That program amends Elevation & Cards in `DESIGN.md` — follow the amended rules for new Home/hub cards.
+
 ## 1. Files to copy into the project
 
 | From this bundle | To | Purpose |

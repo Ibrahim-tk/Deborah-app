@@ -6,16 +6,24 @@ import {
   ChoicePills,
   ConfirmCard,
   FullChoicePills,
+  FullChoicePillsGrid,
+  HealingPlanCard,
+  HealingPlanSection,
   InlineChoicePills,
   InlineConsent,
+  IntakeCompletionCard,
+  IntakeSectionHeader,
   MoodScale,
   NamedReasonList,
+  PhoneField,
   PillDescribeField,
+  PolicyUpdateConsent,
   QuestionChoices,
   ReminderCard,
   ScaleCheck,
   UploadCard,
   type NamedReason,
+  type PhoneValue,
 } from '@mobile/patterns/widgets';
 import { Section } from '../Section';
 import { Grid, Specimen, Variant } from '../Specimen';
@@ -23,12 +31,17 @@ import styles from './sections.module.css';
 
 const noop = () => {};
 
+function PhoneFieldDemo() {
+  const [value, setValue] = useState<PhoneValue>({ countryCode: '+1', number: '' });
+  return <PhoneField value={value} onChange={setValue} />;
+}
+
 function NamedReasonsDemo() {
   const [entries, setEntries] = useState<NamedReason[]>([]);
   const [none, setNone] = useState(false);
   return (
     <NamedReasonList
-      label="Medications (Rx & OTC)"
+      label="Are you currently taking any medications (Rx or OTC)?"
       entries={entries}
       addLabel="Add medicine"
       noneSelected={none}
@@ -61,7 +74,34 @@ const MULTI = [
 const SEX = [
   { id: 'female', label: 'Female' },
   { id: 'male', label: 'Male' },
+  { id: 'trans-man', label: 'Trans man' },
+  { id: 'trans-woman', label: 'Trans woman' },
   { id: 'intersex', label: 'Intersex' },
+  { id: 'prefer-not', label: 'Prefer not to say' },
+];
+const GENDER = [
+  { id: 'female', label: 'Female' },
+  { id: 'male', label: 'Male' },
+  { id: 'trans-man', label: 'Trans man' },
+  { id: 'trans-woman', label: 'Trans woman' },
+  { id: 'intersex', label: 'Intersex' },
+  { id: 'non-binary', label: 'Non-binary' },
+  { id: 'prefer-not', label: 'Prefer not to say' },
+  { id: 'other', label: 'Other' },
+];
+const PRONOUNS = [
+  { id: 'she-her', label: 'She/Her' },
+  { id: 'he-him', label: 'He/Him' },
+  { id: 'they-them', label: 'They/Them' },
+  { id: 'she-they', label: 'She/They' },
+  { id: 'he-they', label: 'He/They' },
+  { id: 'any', label: 'Any pronouns' },
+  { id: 'describe', label: 'Other' },
+];
+const STACKED = [
+  { id: 'yes', label: 'Yes' },
+  { id: 'no', label: 'No' },
+  { id: 'not-sure', label: 'Not sure' },
 ];
 const PERIODS = [
   { id: 'yes', label: 'Yes' },
@@ -83,6 +123,44 @@ const HRT_TYPE = [
   { id: 'progesterone-only', label: 'Progesterone only' },
   { id: 'other', label: 'Other / not sure' },
 ];
+
+function GridOtherMorphDemo() {
+  const [selected, setSelected] = useState<string>();
+  const [text, setText] = useState('');
+  return (
+    <FullChoicePillsGrid
+      label="How do you identify yourself?"
+      options={GENDER}
+      selected={selected}
+      describeValue="other"
+      describeLabel="Other"
+      describePlaceholder="describe how you identify"
+      describeText={text}
+      onDescribeChange={setText}
+      onDescribeConfirm={noop}
+      onPick={setSelected}
+    />
+  );
+}
+
+function GridPronounsMorphDemo() {
+  const [selected, setSelected] = useState<string>();
+  const [text, setText] = useState('');
+  return (
+    <FullChoicePillsGrid
+      label="What are your preferred pronouns?"
+      options={PRONOUNS}
+      selected={selected}
+      describeValue="describe"
+      describeLabel="Pronouns"
+      describePlaceholder="e.g. xe/xem"
+      describeText={text}
+      onDescribeChange={setText}
+      onDescribeConfirm={noop}
+      onPick={setSelected}
+    />
+  );
+}
 
 function DescribeMorphDemo() {
   const [selected, setSelected] = useState<string>();
@@ -125,6 +203,7 @@ function HrtExpandDemo() {
   const [status, setStatus] = useState<string>();
   const [type, setType] = useState<string>();
   const expanding = status === 'yes' || status === 'yes-previously';
+  const typeLabel = HRT_TYPE.find((x) => x.id === type)?.label;
   return (
     <div className={styles.expandStack}>
       <FullChoicePills
@@ -137,12 +216,20 @@ function HrtExpandDemo() {
         }}
       />
       {expanding && (
-        <FullChoicePills
-          label="What type of HRT?"
-          options={HRT_TYPE}
-          selected={type}
-          onPick={setType}
-        />
+        <div className={styles.expandFollowUp}>
+          <p className={styles.expandPrompt}>Please specify</p>
+          <InlineChoicePills
+            label="Please specify"
+            options={HRT_TYPE.map((x) => x.label)}
+            optionIds={HRT_TYPE.map((x) => x.id)}
+            keepAnswer
+            selected={typeLabel ? [typeLabel] : undefined}
+            onPick={(_label, index) => {
+              const opt = HRT_TYPE[index];
+              if (opt) setType(opt.id);
+            }}
+          />
+        </div>
       )}
     </div>
   );
@@ -162,8 +249,13 @@ export function WidgetPatterns() {
         <Specimen name="ChoicePills" path="patterns/widgets/ChoicePills" note="Regular 44px wrapping intake pills.">
           <ChoicePills label="Any of these?" options={['Hot flashes', 'Night sweats', 'Brain fog', 'None of these']} onPick={noop} keepAnswer />
         </Specimen>
-        <Specimen name="FullChoicePills" path="patterns/widgets/FullChoicePills" note="Full-width stacked intake pills. describeValue morphs that option into PillDescribeField (check inside). Field hidden until tapped. expandValues reveal a second FullChoicePills (HRT type).">
-          <Variant label="stacked"><FullChoicePills label="Sex at birth" options={SEX} onPick={noop} /></Variant>
+        <Specimen name="FullChoicePillsGrid" path="patterns/widgets/FullChoicePillsGrid" note="Two-column intake pills for sex at birth / pronouns / gender identity. Prefer not to say always in-grid. describeValue (Other / I want to describe) sits in its grid cell until selected, then that slot spans both columns and morphs into PillDescribeField.">
+          <Variant label="sex at birth"><FullChoicePillsGrid label="Sex at birth" options={SEX} onPick={noop} /></Variant>
+          <Variant label="pronouns + describe morph"><GridPronounsMorphDemo /></Variant>
+          <Variant label="gender + Other morph"><GridOtherMorphDemo /></Variant>
+        </Specimen>
+        <Specimen name="FullChoicePills" path="patterns/widgets/FullChoicePills" note="Full-width stacked intake pills. describeValue morphs that option into PillDescribeField (check inside). Field hidden until tapped. expandValues reveal “Please specify” + InlineChoicePills (HRT type).">
+          <Variant label="stacked"><FullChoicePills label="Quick yes or no" options={STACKED} onPick={noop} /></Variant>
           <Variant label="describe morph"><DescribeMorphDemo /></Variant>
           <Variant label="yes details morph"><YesDetailsMorphDemo /></Variant>
           <Variant label="HRT type expand"><HrtExpandDemo /></Variant>
@@ -193,6 +285,26 @@ export function WidgetPatterns() {
         </Specimen>
         <Specimen name="UploadCard" path="patterns/widgets/UploadCard" note="Dashed drop area with a simulated upload (no network).">
           <UploadCard onUploaded={noop} />
+        </Specimen>
+        <Specimen name="PhoneField" path="patterns/widgets/PhoneField" note="Label “Phone number (optional)”. Fixed +1; flag opens a searchable country-code bottom sheet. No OTP/SMS.">
+          <PhoneFieldDemo />
+        </Specimen>
+        <Specimen name="IntakeCompletionCard" path="patterns/widgets/IntakeCompletionCard" note="Home health-profile progress + Complete/Update Intake.">
+          <Variant label="incomplete"><IntakeCompletionCard progress={0.65} onAction={noop} /></Variant>
+          <Variant label="complete"><IntakeCompletionCard progress={1} complete onAction={noop} /></Variant>
+        </Specimen>
+        <Specimen name="HealingPlanCard" path="patterns/widgets/HealingPlanCard" note="My Healing Plan on Home (locked + unlocked).">
+          <Variant label="locked"><HealingPlanCard locked /></Variant>
+          <Variant label="unlocked"><HealingPlanCard day={18} focus="Steady sleep" onPress={noop} /></Variant>
+        </Specimen>
+        <Specimen name="IntakeSectionHeader" path="patterns/widgets/IntakeSectionHeader" note="Section chrome for Complete Intake (M-2.14).">
+          <IntakeSectionHeader title="Family history" lede="Placeholder until Dropbox questionnaires arrive." />
+        </Specimen>
+        <Specimen name="HealingPlanSection" path="patterns/widgets/HealingPlanSection" note="Detail blocks on My Healing Plan (M-7.3).">
+          <HealingPlanSection title="Immediate priorities"><p>Wind down 30 minutes earlier.</p></HealingPlanSection>
+        </Specimen>
+        <Specimen name="PolicyUpdateConsent" path="patterns/widgets/PolicyUpdateConsent" note="Returning-user re-consent when legal version bumps.">
+          <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={noop} />
         </Specimen>
       </Grid>
     </Section>

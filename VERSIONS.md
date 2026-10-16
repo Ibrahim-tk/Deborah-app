@@ -5,7 +5,7 @@
 | Surface | URL | What you get |
 | --- | --- | --- |
 | **Client (production demo)** | `/` | Version 2 phone only. Brand + Home / Chat / Reset. No version switch or design tools. |
-| **Internal tools** | `/internal/…` | Full prototype chrome. Password-gated (OTP `001001`, in-memory — re-locks every refresh). Not real auth. |
+| **Internal tools** | `/internal/…` | Full prototype chrome. Password-gated (`1234`, in-memory — re-locks every refresh). Not real auth. |
 
 Internal paths:
 

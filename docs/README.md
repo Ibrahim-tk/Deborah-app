@@ -17,6 +17,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | 10 | [10-conventions.md](10-conventions.md) | Naming, file templates, header blocks, checklists | Always |
 | 11 | [11-build-plan.md](11-build-plan.md) | Phased build order, definition of done, ready-made Claude Code prompts | Planning a session |
 | 12 | [12-design-system.md](12-design-system.md) | How DESIGN.md and the token files are wired in; quiz decisions | Styling, any visual work |
+| — | [ui-overhaul-plan.md](ui-overhaul-plan.md) | AI-native UI overhaul program (locked surfaces, phases, color-field depth) | Home / hub / family / records visual work |
 | — | [../DESIGN.md](../DESIGN.md) · [../PRODUCT.md](../PRODUCT.md) | **The design system** (Impeccable format) and product context | Every visual decision |
 | — | `../design-tokens/` | Ready-to-copy CSS: primitives, mobile semantic tokens + type scale, fonts | Phase 0 scaffold |
 | — | [xref.md](xref.md) | Registry linking screen IDs ↔ files ↔ Figma ↔ spec, mobile ↔ web | Adding/finding screens |

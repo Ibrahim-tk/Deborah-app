@@ -49,7 +49,7 @@ export function useHomeView() {
   const recommendations: Recommendation[] = [];
   if (d.product) recommendations.push({ product: d.product, reason: `Because you mentioned ${lowerFirst(topic)}` });
   const planProduct = productList.find((p) => p.id === plan?.productId && p.id !== d.product?.id);
-  if (planProduct) recommendations.push({ product: planProduct, reason: 'Part of your 90 Day Journey' });
+  if (planProduct) recommendations.push({ product: planProduct, reason: 'Part of your My Healing Plan' });
 
   return {
     ...d,

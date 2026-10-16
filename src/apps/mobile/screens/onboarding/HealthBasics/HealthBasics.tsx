@@ -3,7 +3,7 @@
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
  * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10 sheet]
- *          · [someone else: consent by age group] · sex → pronouns → age×sex banks → identity (always) → Deborah
+ *          · [someone else: medical-advocate consent sheet] · sex → pronouns → age×sex banks → identity (always) → Deborah
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
@@ -11,7 +11,7 @@
  * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex at birth (routes banks),
  * then age×sex intake; gender identity last when sex is not Male/Female. Steps/`showIf` in healthBasics.json.
  */
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
 import { Aura, Button, GlassButton, GradientShift } from '@mobile/ui';
@@ -19,6 +19,7 @@ import { useNav } from '@mobile/navigation';
 import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, type Answers } from './steps';
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
+import { ConsentSheet } from './parts/ConsentSheet';
 import { BloomReveal } from './parts/BloomReveal';
 import { namedReasonsComplete } from '@mobile/patterns/widgets';
 import styles from './HealthBasics.module.css';
@@ -33,12 +34,20 @@ const CONFIRM_MS = 280;
 export default function HealthBasics() {
   const { presentSheet, pop } = useNav();
   const [answers, setAnswers] = useState<Answers>({ birthDate: DEFAULT_DOB });
+  const answersRef = useRef(answers);
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
   const [i, setI] = useState(0);
   const steps = visibleSteps(answers);
   // Back/edit can shrink the visible tree (e.g. leave peri → drop HRT); clamp for render.
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];
+  const consentOpen = step.kind === 'consent';
+  // Under the consent sheet, keep showing the previous question (usually DOB).
+  const under = consentOpen && at > 0 ? steps[at - 1] : step;
   const value = answers[step.key] ?? '';
+  const underValue = answers[under.key] ?? '';
   const last = at === steps.length - 1;
 
   const finish = (final: Answers) => {
@@ -47,7 +56,13 @@ export default function HealthBasics() {
     presentSheet('M-1.9', { profileId });
   };
 
-  const set = (key: string, v: string) => setAnswers((a) => ({ ...a, [key]: v }));
+  const set = (key: string, v: string) => {
+    setAnswers((a) => {
+      const next = { ...a, [key]: v };
+      answersRef.current = next;
+      return next;
+    });
+  };
   const next = (final: Answers) => {
     // Under-13 Myself: bottom sheet — guardian must add them, or back to start.
     if (step.kind === 'date' && !forSomeoneElse(final)) {
@@ -57,33 +72,42 @@ export default function HealthBasics() {
     // Age wheel may show a default without writing until Continue.
     if (step.presentation === 'ageWheel' && !final[step.key]) {
       final = { ...final, [step.key]: '12' };
+      answersRef.current = final;
       setAnswers(final);
     }
     return last ? finish(final) : setI(at + 1);
   };
   const advance = (v: string, extra?: Answers) => {
-    const final = { ...answers, ...extra, [step.key]: v };
+    // Merge from the latest answers so a prior tile-remove is not overwritten.
+    const final = { ...answersRef.current, ...extra, [step.key]: v };
+    answersRef.current = final;
     setAnswers(final);
     window.setTimeout(() => next(final), step.kind === 'text' ? 0 : CONFIRM_MS);
   };
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    if (canContinue) next(answers);
+    if (consentOpen || !canContinue) return;
+    next(answersRef.current);
   };
 
   const textOk =
-    step.kind === 'text' &&
-    (step.presentation === 'ageWheel' ||
-      (step.presentation === 'namedReasons' && namedReasonsComplete(value, step.none)) ||
-      ((step.presentation === 'chips' || !step.presentation) && Boolean(value.trim())));
+    under.kind === 'text' &&
+    (under.presentation === 'ageWheel' ||
+      (under.presentation === 'namedReasons' && namedReasonsComplete(underValue, under.none)) ||
+      ((under.presentation === 'chips' || !under.presentation) && Boolean(underValue.trim())));
   const canContinue =
-    step.optional === true ||
-    step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
+    under.optional === true ||
+    under.kind === 'date' || under.kind === 'year' || under.kind === 'measure' ||
     textOk ||
-    (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||
-    (step.kind === 'consent' && value === 'yes');
+    (under.kind === 'name' && NAME_PATTERN.test(underValue.trim()));
   // Choice (incl. describe morph check / expand type pills): no footer Continue — in-field confirm or pill tap advances.
-  const tapToAnswer = step.kind === 'choice' || step.kind === 'profileFor';
+  const tapToAnswer = under.kind === 'choice' || under.kind === 'profileFor';
+
+  const goBack = () => {
+    if (consentOpen) return setI(at - 1);
+    if (at > 0) return setI(at - 1);
+    pop();
+  };
 
   return (
     <form className={styles.root} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
@@ -94,22 +118,37 @@ export default function HealthBasics() {
       <header className={styles.header}>
         <span className={styles.backSlot}>
           {/* On the first question, back leaves the form for the screen that opened it. */}
-          <GlassButton icon="back" aria-label={at > 0 ? 'Previous question' : 'Back'} onClick={() => (at > 0 ? setI(at - 1) : pop())} />
+          <GlassButton icon="back" aria-label={at > 0 || consentOpen ? 'Previous question' : 'Back'} onClick={goBack} />
         </span>
       </header>
       {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
       <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
         <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
       </div>
-      <div className={styles.body}>
-        <div key={step.key} className={styles.step}>
-          <h1 className={`${styles.title} ${styles.heading}`}>{titleFor(step, answers)}</h1>
-          <StepBody step={step} answers={answers} set={set} advance={advance} />
+      <div className={styles.body} aria-hidden={consentOpen || undefined}>
+        <div key={under.key} className={styles.step}>
+          <h1 className={`${styles.title} ${styles.heading}`}>{titleFor(under, answers)}</h1>
+          <StepBody
+            step={under}
+            answers={answers}
+            set={consentOpen ? () => undefined : set}
+            advance={consentOpen ? () => undefined : advance}
+          />
         </div>
       </div>
       <div className={styles.footer}>
-        {!tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>}
+        {!consentOpen && !tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>}
       </div>
+
+      {consentOpen && (
+        <ConsentSheet
+          name={answers.memberName ?? ''}
+          value={value}
+          onChange={(v) => set('consent', v)}
+          onBack={() => setI(at - 1)}
+          onContinue={() => next(answersRef.current)}
+        />
+      )}
     </form>
   );
 }

@@ -148,7 +148,7 @@ export const EASINGS: TokenDef[] = [
 
 export const ICONS: IconName[] = [
   'chat', 'health', 'account', 'mic', 'bell', 'settings', 'send', 'stop', 'back', 'close', 'info', 'check', 'chevron',
-  'chevronDown', 'plus', 'eye', 'eyeOff', 'lock', 'shop', 'calendar', 'upload', 'camera', 'file', 'phone', 'alert',
+  'chevronDown', 'plus', 'eye', 'eyeOff', 'lock', 'shop', 'calendar', 'upload', 'camera', 'file', 'flash', 'flashOff', 'image', 'phone', 'alert',
   'copy', 'listen', 'thumbsUp', 'thumbsDown', 'share', 'pdf', 'note', 'book', 'video', 'refresh', 'more', 'medicine',
   'location', 'external', 'apple', 'google', 'mail', 'delete', 'edit', 'labs', 'success', 'play', 'search', 'menu',
   'aiSearch', 'family', 'appleFilled', 'deborah',

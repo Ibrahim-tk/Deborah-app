@@ -223,14 +223,33 @@ function profileTick(p: ProfileAnswers, top: HTMLElement, st: PilotState): Pilot
     if (row) { row.click(); return { done: false, acted: true, step: `Birth year ${year}` }; }
   }
 
-  const box = top.querySelector<HTMLInputElement>('input[type=checkbox]');
-  if (box && !box.checked) { box.click(); return { done: false, acted: true, step: 'Gives consent' }; }
+  // Medical-advocate checkboxes (M-1.8 consent): guardian for minors, agreed for adults.
+  const consentBoxes = [...top.querySelectorAll<HTMLInputElement>('input[type=checkbox]')];
+  if (consentBoxes.length >= 2 && !consentBoxes.some((b) => b.checked)) {
+    const labels = consentBoxes.map((b) => {
+      const lab = b.id ? top.querySelector(`label[for="${CSS.escape(b.id)}"]`) : null;
+      return { box: b, text: (lab?.textContent ?? '').replace(/\s+/g, ' ').trim() };
+    });
+    const pick =
+      (p.age < 18
+        ? labels.find((l) => /parent or legal guardian/i.test(l.text))
+        : labels.find((l) => /knows I.m adding them/i.test(l.text))) ??
+      labels.find((l) => /authorised to act/i.test(l.text)) ??
+      labels[0];
+    pick?.box.click();
+    return { done: false, acted: true, step: 'Gives consent' };
+  }
+  const box = consentBoxes[0];
+  if (box && !box.checked && consentBoxes.length === 1) {
+    box.click();
+    return { done: false, acted: true, step: 'Gives consent' };
+  }
 
   // Meds / supplements: one-tap None.
   const none = find(top, /^None$/);
   if (none) { none.click(); return { done: false, acted: true, step: 'Answers “None”' }; }
 
-  // Required free-text (puberty start): open Other if needed, type default, Continue.
+  // Required free-text (puberty age wheel fallback / optional notes): open Other if needed, type default, Continue.
   const defaults = p.textDefaults ?? {};
   const other = find(top, /^Other$/);
   const draft = top.querySelector<HTMLInputElement>('input:not([type=checkbox]):not([type=radio])');
@@ -239,7 +258,7 @@ function profileTick(p: ProfileAnswers, top: HTMLElement, st: PilotState): Pilot
     return { done: false, acted: true, step: 'Opens Other' };
   }
   if (draft && visible(draft) && !draft.value && !draft.closest('[role="slider"]')) {
-    const fill = defaults.otherPuberty ?? defaults.pubertyStart ?? defaults.pubertyAge ?? defaults[draft.name] ?? '14';
+    const fill = defaults.pubertyStart ?? defaults.pubertyAge ?? defaults[draft.name] ?? '14';
     typeInput(draft, fill);
     return { done: false, acted: true, step: `Types “${fill}”` };
   }
@@ -322,7 +341,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
   if (!st.nextStepTapped) {
     const row =
       run.afterAnswer === 'whatsNext-book'
-        ? find(phone, /^Book a consultation$/)
+        ? find(phone, /^Book a consult with Deborah$/) || find(phone, /^Book a consultation$/)
         : run.afterAnswer === 'whatsNext-followUp'
           ? find(phone, /^Ask a follow-up$/)
           : find(phone, /^Upload labs or results$/);
@@ -334,7 +353,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
     }
     const label =
       run.afterAnswer === 'whatsNext-book'
-        ? /^Book a consultation$/
+        ? /^Book a consult with Deborah$|^Book a consultation$/
         : run.afterAnswer === 'whatsNext-followUp'
           ? /^Ask a follow-up$/
           : /^Upload labs or results$/;

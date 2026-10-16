@@ -26,7 +26,9 @@ export const registry: Record<string, ScreenMeta> = {
   'M-2.10': { title: 'Your health profile', component: lazy(() => import('@mobile/screens/consultation/HealthProfile')), presentation: 'modal', figma: '', spec: 'intake V2 brief §7 (OPEN: add to ux/F02)' },
   'M-2.11': { title: 'Profile question', component: lazy(() => import('@mobile/screens/consultation/ProfileQuestion')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: '', spec: 'intake V2 brief §4 (OPEN: add to ux/F02)' },
   'M-2.13': { title: 'What Deborah noted', component: lazy(() => import('@mobile/screens/consultation/ReviewFacts')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'docs/ux/F02b-profile-aware-chat-intake.md#review-and-confirm' },
+  'M-2.14': { title: 'Complete Intake', component: lazy(() => import('@mobile/screens/consultation/CompleteIntake')), presentation: 'push', figma: '', spec: 'Client discovery 2026-10-16 (placeholder sections)' },
   'M-2.12': { title: 'First consultation', component: lazy(() => import('@mobile/screens/consultation/FirstConsult')), presentation: 'push', figma: '', spec: 'data/conversation/flows/firstConsult.json (OPEN: add to ux/F02)' },
+  'M-2.15': { title: 'Terms updated', component: lazy(() => import('@mobile/screens/account/PolicyUpdate')), presentation: 'modal', dismissible: false, figma: '', spec: 'Client discovery 2026-10-16 re-consent' },
 
   // F04 Free limit, plans & account
   'M-4.1': { title: 'Free limit', component: lazy(() => import('@mobile/screens/plans/FreeLimit')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: `${FIGMA}49-353`, spec: 'docs/ux/F04-plans-account.md#m-41--free-limit-reached' },
@@ -49,7 +51,7 @@ export const registry: Record<string, ScreenMeta> = {
 
   // F07 My Health hub (M-7.1 is the hub's empty state)
   'M-7.2': { title: 'My Health', component: lazy(() => import('@mobile/screens/myhealth/MyHealthHub')), presentation: 'tabRoot', tab: 'health', stack: 'main', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-72--my-health-hub' },
-  'M-7.3': { title: 'Your 90-day plan', component: lazy(() => import('@mobile/screens/myhealth/NinetyDayPlan')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-73--your-90-day-plan' },
+  'M-7.3': { title: 'My Healing Plan', component: lazy(() => import('@mobile/screens/myhealth/NinetyDayPlan')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-73--your-90-day-plan' },
   'M-7.4': { title: 'For you', component: lazy(() => import('@mobile/screens/myhealth/ContentDetail')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-74--for-you-content-detail' },
   'M-7.5': { title: 'Deborah’s library', component: lazy(() => import('@mobile/screens/myhealth/Library')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-75--deborahs-library' },
   'M-7.6': { title: 'About Deborah', component: lazy(() => import('@mobile/screens/myhealth/AboutDeborah')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-76--about-deborah' },

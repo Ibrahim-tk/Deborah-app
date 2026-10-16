@@ -80,7 +80,7 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
   if (isMedsList) {
     return (
       <MedsNamedReasons
-        label={intake.questionId === 'session-meds' ? 'New medications' : 'Medications (Rx & OTC)'}
+        label={intake.questionId === 'session-meds' ? 'New medications' : 'Are you currently taking any medications (Rx or OTC)?'}
         addLabel="Add medicine"
         active={active}
         answered={intake.answered}

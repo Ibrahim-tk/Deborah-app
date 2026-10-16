@@ -414,7 +414,7 @@
       "bot": "Because the flutters are new, I'd really like to hear about them myself. Here are my next openings, if you'd like one.",
       "widget": {
         "type": "slot_picker",
-        "title": "Book with Deborah",
+        "title": "Book a consult with Deborah",
         "meta": "30 min · Video",
         "options": [
           {

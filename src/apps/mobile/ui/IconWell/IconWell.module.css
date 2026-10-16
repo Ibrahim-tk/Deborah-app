@@ -1,0 +1,20 @@
+.root {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--icon-well-size);
+  height: var(--icon-well-size);
+  border-radius: var(--radius-full);
+  background: var(--icon-well-bg);
+  color: var(--icon-well-fg);
+}
+
+.sm {
+  width: 36px;
+  height: 36px;
+}
+
+.tintLilac { background: var(--surface-field-lilac); }
+.tintLinen { background: var(--surface-field-linen); }
+.tintRose { background: var(--surface-field-rose); }
+.tintAccent { background: color-mix(in srgb, var(--color-accent) 12%, var(--white)); }

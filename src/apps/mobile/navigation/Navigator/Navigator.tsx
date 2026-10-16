@@ -3,7 +3,8 @@
  * modal layers in z-order, toasts and the overlay host. Applies scenario starts, guards
  * onboarding, and reports the top-most screen to the shell caption.
  */
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { consentDoc } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { useDevice } from '@shell/device';
 import { AnimatePresence, DURATION, EASE_IOS, MotionDiv, OVERLAY_HOST_ID, useReducedMotionPref } from '@mobile/ui';
@@ -24,7 +25,9 @@ export function Navigator() {
   const { setScreen } = useDevice();
   const scenario = useAppStore((s) => s.scenario);
   const consented = useAppStore((s) => Boolean(s.consentAcceptedAt));
+  const consentVersion = useAppStore((s) => s.consentVersion);
   const deepLink = useAppStore((s) => s.deepLink);
+  const reconsentShown = useRef(false);
 
   // A freshly loaded scenario resets the navigator to its start.
   useEffect(() => {
@@ -35,6 +38,15 @@ export function Navigator() {
   useEffect(() => {
     if (nav.root === 'main' && !consented) nav.resetTo('preauth', 'M-1.1');
   }, [nav, consented]);
+
+  // Returning users: soft re-consent when legal version bumps (additive; does not change signup).
+  useEffect(() => {
+    if (nav.root !== 'main' || !consented || reconsentShown.current) return;
+    if (consentVersion && consentVersion !== consentDoc.version) {
+      reconsentShown.current = true;
+      nav.presentModal('M-2.15');
+    }
+  }, [nav, consented, consentVersion]);
 
   // Deep links requested by the shell (lock screen card, notification banner).
   useEffect(() => {
@@ -85,6 +97,7 @@ export function Navigator() {
                   container="stack"
                   onBack={nav.pop}
                   active={tab === nav.activeTab}
+                  homeBackdrop
                 />
               ))
             )}

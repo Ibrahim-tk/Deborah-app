@@ -300,7 +300,9 @@ Floors: nothing below 13 px anywhere; no Cormorant below 26 px.
 
 ## Elevation & Depth
 
-Flat by default. Depth comes from tonal layering — Parchment canvas, Paper surfaces outlined with a Hairline, Linen panels — and shadows appear only on elements that float above the content: composer, floating tab bar, sheets, menus, toasts.
+Flat by default. Depth comes from **tonal color fields** — Parchment canvas with Linen / Lilac Mist / soft rose / soft lift fills — and shadows appear only on elements that float above the content: composer, floating tab bar, sheets, menus, toasts.
+
+Hairline borders are reserved for dense list dividers and for **control outlines** on editable inputs — not for separating content cards from the canvas.
 
 ### Shadow Vocabulary
 - **float-sm** (`box-shadow: 0 2px 8px rgba(43, 16, 78, 0.08)`): menus, toasts.
@@ -308,7 +310,15 @@ Flat by default. Depth comes from tonal layering — Parchment canvas, Paper sur
 - **float-lg** (`box-shadow: 0 -8px 32px rgba(43, 16, 78, 0.12)`): bottom sheets.
 - **Scrim** (`rgba(18, 7, 33, 0.40)`): behind sheets and modals.
 
+### Progressive blur (floating chrome only)
+
+`backdrop-filter` is allowed **only** on chrome that sits above scrolling content: scroll-edge fades under transparent headers, optional dock rims. Content cards in the scroll column stay **opaque tonal fills** so clinical text stays ≥ 7:1. Respect `prefers-reduced-transparency` (fall back to solid parchment).
+
 ### Named Rules
+**The Color-Field Depth Rule.** Content cards separate from parchment by fill contrast (Linen, Lilac Mist, soft rose, soft lift), not by hairline stroke and not by shadow.
+
+**The Progressive Blur Privilege.** Blur and translucency are for floating chrome only — never for decorative frosted content cards in the scroll column.
+
 **The Only-Floating-Things-Cast-Shadows Rule.** Cards, options and inputs never have shadows. If it scrolls with the content, it is flat.
 
 ## Shapes
@@ -349,11 +359,12 @@ Full-width, easy-to-hit choices for suggestions, intake answers, quick replies a
 - **Multi-select:** check icons on each row plus a "Done" primary button below.
 
 ### Cards / Containers
-- **Corner style:** `lg` (16).
-- **Background:** Paper on Parchment; Linen for quiet informational panels.
+- **Corner style:** `lg` (16) or `xl` (24) for primary intent cards on Home.
+- **Background:** Color fields — Linen / Lilac Mist / soft rose / soft lift on Parchment; Paper only when a solid white field is needed.
 - **Shadow strategy:** none (see Elevation).
-- **Border:** 1 px Hairline on Paper cards; none on Linen panels.
+- **Border:** none on content cards (Color-Field Depth). Hairlines only inside dense lists or on editable controls.
 - **Internal padding:** 20 pt; 12 pt between title and body.
+- **Leading mark:** flat Hugeicon in a soft tinted circular well (`IconWell`), not a stroked badge.
 
 ### Inputs / Fields
 - **Style:** Paper fill, 1 px Control Border, `lg` radius, 56 pt tall, `callout` text, label above in `subhead` Plum Secondary.
@@ -435,6 +446,7 @@ Calm iOS-standard motion with no bounce.
 - **Don't** use gold as text on light surfaces (except Gold Ink: ≥ 7:1 on canvas and Paper, large text only on Linen) or as a button on beige.
 - **Don't** use pink-500 for text; Deborah's Rose is for her signature only.
 - **Don't** put shadows on cards, options or inputs.
-- **Don't** use glass, blur or translucency for decoration; surfaces are solid.
+- **Don't** use glass, blur or translucency on scroll-content cards; progressive blur is for floating chrome only (see Elevation).
+- **Don't** outline content cards with hairlines to fake depth — use color fields instead.
 - **Don't** use a coloured side stripe (border-left) on cards, callouts or alerts.
 - **Don't** use gradient text, eyebrow labels above headings, or emoji as icons.

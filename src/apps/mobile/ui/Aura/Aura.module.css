@@ -13,8 +13,39 @@
   /* Extra tall so the lift never exposes a hard foot edge. */
   inset: 0 0 -100%;
   background: var(--backdrop-image) top center / 100% auto no-repeat;
-  transform: translate3d(0, var(--backdrop-lift), 0);
+  transform: translate3d(0, calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)), 0);
   will-change: transform;
+  /* Home: feather the photo foot so purple melts into cream instead of banding. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(28% + (1 - var(--backdrop-blend, 0)) * 72%),
+    rgb(0 0 0 / 0.55) calc(48% + (1 - var(--backdrop-blend, 0)) * 52%),
+    transparent calc(72% + (1 - var(--backdrop-blend, 0)) * 28%)
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(28% + (1 - var(--backdrop-blend, 0)) * 72%),
+    rgb(0 0 0 / 0.55) calc(48% + (1 - var(--backdrop-blend, 0)) * 52%),
+    transparent calc(72% + (1 - var(--backdrop-blend, 0)) * 28%)
+  );
+}
+/* Home cream melt — sits over the photo, under content; off when --backdrop-blend is 0. */
+.root::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 16%,
+    color-mix(in srgb, var(--color-canvas) 28%, transparent) 36%,
+    color-mix(in srgb, var(--color-canvas) 72%, transparent) 56%,
+    var(--color-canvas) 78%
+  );
+  opacity: var(--backdrop-blend, 0);
+  pointer-events: none;
 }
 
 /* Rise: start exactly where Splash left the photo, then drift up slowly and settle softly. */

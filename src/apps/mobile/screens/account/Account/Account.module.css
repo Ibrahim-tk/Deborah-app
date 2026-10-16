@@ -10,3 +10,17 @@
 .footer { display: grid; gap: var(--space-1); text-align: center; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .profile { display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); padding: 0 var(--space-2); border-radius: var(--radius-full); color: var(--color-ink-secondary); }
 .profile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.phoneLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.phoneScrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}

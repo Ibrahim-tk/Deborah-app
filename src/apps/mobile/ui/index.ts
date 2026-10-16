@@ -39,8 +39,12 @@ export * from './GradientShift';
 export * from './SocialButton';
 export * from './ChoiceGroup';
 export * from './YearWheel';
+export * from './OptionWheel';
 export * from './RulerSlider';
 export * from './KnobSlider';
 export * from './ProgressRing';
 export * from './DateWheel';
 export * from './EdgeLight';
+export * from './ColorField';
+export * from './IconWell';
+

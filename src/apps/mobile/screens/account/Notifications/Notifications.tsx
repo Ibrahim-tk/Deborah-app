@@ -6,6 +6,7 @@
  * @spec    docs/ux/F10-account-privacy.md#m-104--notifications-not-in-wireframes
  * @xref    web: W-10.4 (apps/web/screens/account/Notifications) — not built
  */
+import { useState } from 'react';
 import { FOLLOW_UP_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
 import { addDays, nowFrom, uid } from '@shared/utils';
 import { Button, Header, Panel, Segmented, Toggle, useAlert } from '@mobile/ui';
@@ -15,9 +16,10 @@ import styles from './Notifications.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
 const INTERVALS = [
-  { value: '7', label: '1 week' },
-  { value: '14', label: '2 weeks' },
-  { value: '30', label: '1 month' },
+  { value: '7', label: 'Weekly' },
+  { value: '14', label: 'Every 2 weeks' },
+  { value: '30', label: 'Monthly' },
+  { value: '0', label: 'Off' },
 ];
 // Same default as M-2.8 Follow-up opt-in.
 const DEFAULT_DAYS = 14;
@@ -79,7 +81,27 @@ export default function Notifications() {
     toast('Check-in reminders on');
   };
 
-  const changeInterval = (value: string) => reschedule(true, Number(value));
+  const changeInterval = (value: string) => {
+    const n = Number(value);
+    if (n === 0) return reschedule(false, days);
+    reschedule(true, n);
+  };
+
+  const [awayFollowUp, setAwayFollowUp] = useState(() => {
+    try {
+      return localStorage.getItem('oc.away-followup') === '1';
+    } catch {
+      return false;
+    }
+  });
+  const toggleAway = (on: boolean) => {
+    setAwayFollowUp(on);
+    try {
+      localStorage.setItem('oc.away-followup', on ? '1' : '0');
+    } catch {
+      /* session-only */
+    }
+  };
 
   const setBooking = async (on: boolean) => {
     if (on && !useAppStore.getState().accountId) return gate('reminders', () => void setBooking(true));
@@ -108,9 +130,14 @@ export default function Notifications() {
 
         <section className={styles.group} aria-label="Check-in reminders">
           <Toggle checked={checkIns} onChange={setCheckIns} label="Check-in reminders" description="Deborah asks how you’re doing." />
-          <fieldset className={styles.interval} disabled={!checkIns}>
-            <legend className={styles.legend}>How often{!checkIns && ' · turn on reminders to choose'}</legend>
-            <Segmented label="How often" options={INTERVALS} value={String(days)} onChange={changeInterval} />
+          <fieldset className={styles.interval} disabled={!checkIns && String(days) !== '0'}>
+            <legend className={styles.legend}>Preferred frequency</legend>
+            <Segmented
+              label="Preferred frequency"
+              options={INTERVALS}
+              value={checkIns ? String(days) : '0'}
+              onChange={changeInterval}
+            />
           </fieldset>
         </section>
 
@@ -120,6 +147,15 @@ export default function Notifications() {
             onChange={setBooking}
             label="Booking reminders"
             description="The day before a consultation with Deborah."
+          />
+        </section>
+
+        <section className={styles.group} aria-label="Inactivity follow-up">
+          <Toggle
+            checked={awayFollowUp && !denied}
+            onChange={toggleAway}
+            label="Follow-up when I’ve been away"
+            description="Design only for now — no automatic inactivity schedule yet."
           />
         </section>
 

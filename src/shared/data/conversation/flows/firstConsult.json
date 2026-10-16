@@ -452,7 +452,7 @@
         "type": "escalation",
         "options": [
           {
-            "label": "Book with Deborah",
+            "label": "Book a consult with Deborah",
             "next": "offer_booking"
           },
           {
@@ -512,7 +512,7 @@
       "bot": "Lovely. These are my next openings.",
       "widget": {
         "type": "slot_picker",
-        "title": "Book with Deborah",
+        "title": "Book a consult with Deborah",
         "meta": "30 min · Video",
         "options": [
           {

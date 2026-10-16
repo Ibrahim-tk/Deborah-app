@@ -1,8 +1,8 @@
-/** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / QuestionChoices / ChipPicker. */
-import { consentDoc, intakeSuggestionData, medicinesData } from '@shared/data';
-import { FullChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@mobile/patterns/widgets';
-import { Checkbox, DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
-import { list, STEPS, titleFor, visibleSuggestions, withDerived, type Answers, type Step } from '../steps';
+/** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / FullChoicePillsGrid / QuestionChoices / ChipPicker. */
+import { intakeSuggestionData, medicinesData } from '@shared/data';
+import { FullChoicePills, FullChoicePillsGrid, InlineChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@mobile/patterns/widgets';
+import { DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
+import { list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
@@ -38,18 +38,9 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
       return (
         <Input label="First name" placeholder={step.placeholder ?? 'First name'} value={value} autoComplete="off" autoCapitalize="words" maxLength={40} enterKeyHint="next" onChange={(e) => set(step.key, e.target.value)} />
       );
-    case 'consent': {
-      // Copy by age group (child · teen · adult) from legal/consent.json; placeholder until legal review.
-      const group = (withDerived(answers).ageGroup ?? 'adult') as 'child' | 'teen' | 'adult';
-      const copy = consentDoc.profileConsent[group];
-      const name = answers.memberName?.trim() || 'them';
-      return (
-        <div className={styles.consent} data-placeholder>
-          <p className={styles.consentText}>{copy.body.replaceAll('{name}', name)}</p>
-          <Checkbox checked={value === 'yes'} onChange={(on) => set(step.key, on ? 'yes' : '')} label={copy.check.replaceAll('{name}', name)} />
-        </div>
-      );
-    }
+    case 'consent':
+      // Rendered as ConsentSheet over HealthBasics — not inline in the step body.
+      return null;
     case 'measure':
       return (
         <>
@@ -68,11 +59,23 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
       const expandStep = expandKey ? STEPS.find((s) => s.key === expandKey) : undefined;
       const expandChoices = step.expandChoices ?? expandStep?.choices;
       const expanding = Boolean(expandValues?.includes(value) && expandKey && expandChoices?.length);
-      // Full-width options (sex/gender) + describe morph + expand follow-up (HRT type under status).
+      // Sex / pronouns / gender / relationship: 2-col grid
+      // (describe/Other/Someone else stays in-cell — or always spans — then morphs).
+      // Other rows (incl. otherPuberty): stacked FullChoicePills + describe morph + expand follow-up.
       if (step.presentation === 'yesNo' || step.presentation === 'rows' || describeValue || expandValues) {
+        const useGrid =
+          step.key === 'sex' ||
+          step.key === 'pronouns' ||
+          step.key === 'gender' ||
+          step.key === 'relationship';
+        const Pills = useGrid ? FullChoicePillsGrid : FullChoicePills;
+        const expandPrompt = step.expandTitle ?? (expandStep ? titleFor(expandStep, answers) : 'Please specify');
+        const expandOpts = expandChoices ?? [];
+        const expandSelectedId = expandKey ? answers[expandKey] : undefined;
+        const expandSelectedLabel = expandOpts.find((c) => c.value === expandSelectedId)?.label;
         return (
           <div className={styles.choiceStack}>
-            <FullChoicePills
+            <Pills
               label={step.title}
               options={options}
               selected={value || undefined}
@@ -80,6 +83,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
               describeLabel={step.describeLabel ?? 'Describe'}
               describePlaceholder={step.describePlaceholder ?? 'describe your situation'}
               describeText={describeKey ? (answers[describeKey] ?? '') : ''}
+              describeAlwaysSpan={step.describeAlwaysSpan}
               onDescribeChange={describeKey ? (text) => set(describeKey, text) : undefined}
               onDescribeConfirm={
                 describeValue
@@ -92,7 +96,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
                   set(step.key, describeValue);
                   return;
                 }
-                // Stay: reveal follow-up FullChoicePills (e.g. HRT type) under status.
+                // Stay: reveal follow-up inline type pills (e.g. HRT type under status).
                 if (expandValues?.includes(id)) {
                   set(step.key, id);
                   if (expandKey) set(expandKey, '');
@@ -104,12 +108,20 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
               }}
             />
             {expanding && (
-              <FullChoicePills
-                label={step.expandTitle ?? (expandStep ? titleFor(expandStep, answers) : 'Type')}
-                options={expandChoices!.map((c) => ({ id: c.value, label: c.label }))}
-                selected={answers[expandKey!] || undefined}
-                onPick={(typeId) => advance(value, { [expandKey!]: typeId })}
-              />
+              <div className={styles.expandFollowUp}>
+                <p className={styles.expandPrompt}>{expandPrompt}</p>
+                <InlineChoicePills
+                  label={expandPrompt}
+                  options={expandOpts.map((c) => c.label)}
+                  optionIds={expandOpts.map((c) => c.value)}
+                  keepAnswer
+                  selected={expandSelectedLabel ? [expandSelectedLabel] : undefined}
+                  onPick={(_label, index) => {
+                    const typeId = expandOpts[index]?.value;
+                    if (typeId) advance(value, { [expandKey!]: typeId });
+                  }}
+                />
+              </div>
             )}
           </div>
         );
@@ -142,7 +154,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
         return (
           <NamedReasonList
             key={step.key}
-            label={step.title}
+            label={titleFor(step, answers)}
             entries={decodeNamedReasons(value, step.none)}
             addLabel={addLabel}
             noneSelected={value === step.none}
@@ -164,9 +176,9 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
         const min = step.ageMin ?? 7;
         const max = step.ageMax ?? 18;
         const age = Math.min(max, Math.max(min, Number(value) || 12));
+        // Clean DateWheel-style band (lilac selection + soft fade) — not the cinematic 3D drum.
         return (
           <YearWheel
-            cinematic
             label={step.title}
             value={age}
             min={min}

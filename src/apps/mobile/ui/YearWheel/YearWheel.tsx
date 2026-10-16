@@ -1,8 +1,6 @@
 /**
- * @ui YearWheel — iOS-style scroll wheel for a birth year (snap scrolling). Keyboard and screen
- * readers use it as a slider: arrows step a year, Page keys step ten.
- * `cinematic`: a five-row 3D drum. Every year's tilt, scale, dim and blur follow the live scroll position,
- * and the centred year grows.
+ * @ui YearWheel — iOS-style scroll wheel for a birth year or age (snap scrolling).
+ * Default look matches DateWheel (lilac selection band + soft fade + center zoom). Pass `cinematic` for the 3D drum.
  */
 import { useCallback, useEffect, useRef, type CSSProperties } from 'react';
 import { cx } from '@shared/utils';
@@ -14,43 +12,44 @@ export interface YearWheelProps {
   max: number;
   onChange: (year: number) => void;
   label: string;
-  /** Opt-in 3D drum (sign-up health basics); the plain wheel stays the default. */
+  /** Opt-in 3D drum; plain/clean wheel (DateWheel style) is the default. */
   cinematic?: boolean;
   /** Spoken value for the slider (default: “Born in {value}”). Use for age wheels. */
   formatValue?: (value: number) => string;
 }
 
-const ITEM = 44;
+const ITEM_CLEAN = 40;
+const ITEM_CINEMA = 44;
 
 export function YearWheel({ value, min, max, onChange, label, cinematic, formatValue }: YearWheelProps) {
   const ref = useRef<HTMLDivElement>(null);
   const years = Array.from({ length: max - min + 1 }, (_, i) => max - i);
   const settle = useRef<number>();
   const frame = useRef<number>();
-  const rows = cinematic ? 5 : 3;
+  const item = cinematic ? ITEM_CINEMA : ITEM_CLEAN;
+  const rows = 5;
 
-  // Cinematic: write each year's distance from the centre (in rows) as CSS vars, once per frame.
+  // Paint --d / --ad from scroll for continuous center zoom (clean) and the cinematic drum.
   const paint = useCallback(() => {
     const el = ref.current;
-    if (!el || !cinematic) return;
+    if (!el) return;
     if (el.scrollLeft) el.scrollLeft = 0;
-    const pos = el.scrollTop / ITEM;
+    const pos = el.scrollTop / item;
     el.querySelectorAll<HTMLElement>('[data-i]').forEach((node) => {
       const d = Number(node.dataset.i) - pos;
       if (Math.abs(d) > 4) return;
       node.style.setProperty('--d', d.toFixed(3));
       node.style.setProperty('--ad', Math.min(Math.abs(d), 3).toFixed(3));
     });
-  }, [cinematic]);
+  }, [item]);
 
-  // Keep the scroll position on the value (initial render and keyboard steps).
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const top = (max - value) * ITEM;
+    const top = (max - value) * item;
     if (Math.abs(el.scrollTop - top) > 2) el.scrollTo({ top });
     paint();
-  }, [value, max, paint]);
+  }, [value, max, item, paint]);
   useEffect(() => () => cancelAnimationFrame(frame.current ?? 0), []);
 
   const onScroll = () => {
@@ -60,7 +59,7 @@ export function YearWheel({ value, min, max, onChange, label, cinematic, formatV
     settle.current = window.setTimeout(() => {
       const el = ref.current;
       if (!el) return;
-      const y = Math.min(max, Math.max(min, max - Math.round(el.scrollTop / ITEM)));
+      const y = Math.min(max, Math.max(min, max - Math.round(el.scrollTop / item)));
       if (y !== value) onChange(y);
     }, 90);
   };

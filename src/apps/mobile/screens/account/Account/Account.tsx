@@ -9,9 +9,10 @@
 import { Fragment, useState } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Card, Divider, Header, ListRow, useAlert } from '@mobile/ui';
+import { Button, Card, Divider, Header, ListRow, Overlay, Sheet, useAlert } from '@mobile/ui';
 import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
 import { TextSizeSheet, textSizeLabel } from '@mobile/patterns/settings';
+import { PhoneField, formatPhone, type PhoneValue } from '@mobile/patterns/widgets';
 import { useNav, useNavStore, useRoute } from '@mobile/navigation';
 import styles from './Account.module.css';
 
@@ -22,10 +23,17 @@ export default function Account() {
   const alert = useAlert();
   const name = useAppStore((s) => s.userName);
   const email = useAppStore((s) => s.accountEmail);
+  const phoneCountry = useAppStore((s) => s.accountPhoneCountry);
+  const phoneNumber = useAppStore((s) => s.accountPhoneNumber);
   const plan = useAppStore((s) => s.plan);
   const trial = plan === 'trial';
   const planName = findPlan(plan)?.name;
   const { collapsed, onScroll } = useCollapsingTitle();
+  const [phoneOpen, setPhoneOpen] = useState(false);
+  const [phoneDraft, setPhoneDraft] = useState<PhoneValue>({ countryCode: '+1', number: '' });
+  const phoneDisplay = formatPhone(
+    phoneNumber ? { countryCode: phoneCountry || '+1', number: phoneNumber } : undefined,
+  );
 
   const signOut = async () => {
     const choice = await alert({
@@ -43,8 +51,14 @@ export default function Account() {
   const textSize = useAppStore((s) => s.settings.textSize);
   const [textSizeOpen, setTextSizeOpen] = useState(false);
 
+  const openPhone = () => {
+    setPhoneDraft({ countryCode: phoneCountry || '+1', number: phoneNumber || '' });
+    setPhoneOpen(true);
+  };
+
   const groups: { title: string; subtitle?: string; value?: string; onPress: () => void }[][] = [
     [
+      { title: 'Best contact phone', subtitle: phoneDisplay ?? 'Add a number for Deborah’s team', value: phoneDisplay ? undefined : 'Optional', onPress: openPhone },
       { title: 'Subscription & billing', onPress: () => nav.push('M-10.3') },
       { title: 'Family profiles', onPress: () => nav.push('M-6.6') },
       { title: 'Notifications', onPress: () => nav.push('M-10.4') },
@@ -55,7 +69,7 @@ export default function Account() {
       { title: 'Privacy & data', onPress: () => nav.push('M-10.2') },
       { title: 'Terms & disclaimer', onPress: () => nav.open('M-10.5') },
     ],
-    [{ title: 'About Deborah', subtitle: 'Book a consultation', onPress: () => nav.push('M-7.6') }],
+    [{ title: 'About Deborah', subtitle: 'Book a consult with Deborah', onPress: () => nav.push('M-7.6') }],
   ];
 
   const { canGoBack, previousTitle } = useRoute();
@@ -104,6 +118,26 @@ export default function Account() {
         </footer>
       </div>
       <TextSizeSheet open={textSizeOpen} onClose={() => setTextSizeOpen(false)} />
+      <Overlay>
+        {phoneOpen && (
+          <div className={styles.phoneLayer}>
+            <button type="button" className={styles.phoneScrim} aria-label="Close" onClick={() => setPhoneOpen(false)} />
+            <Sheet title="Best contact phone">
+              <p className={styles.text}>For Deborah’s team only — no texts or verification codes.</p>
+              <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
+              <Button
+                fullWidth
+                onClick={() => {
+                  useAppStore.getState().setContactPhone(phoneDraft.countryCode, phoneDraft.number);
+                  setPhoneOpen(false);
+                }}
+              >
+                Save
+              </Button>
+            </Sheet>
+          </div>
+        )}
+      </Overlay>
     </div>
   );
 }

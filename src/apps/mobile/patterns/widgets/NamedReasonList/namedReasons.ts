@@ -3,10 +3,13 @@ export interface NamedReason {
   reason: string;
 }
 
-/** Serialize rows for answers store (drops blank names). */
+/** Serialize rows for answers store (drops blank names). Empty list → "[]" (not "") so clears stick. */
 export function encodeNamedReasons(entries: NamedReason[]): string {
-  const kept = entries.filter((e) => e.name.trim());
-  return kept.length ? JSON.stringify(kept.map((e) => ({ name: e.name.trim(), reason: e.reason.trim() }))) : '';
+  const kept = entries.filter((e) => e.name.trim()).map((e) => ({
+    name: e.name.trim(),
+    reason: e.reason.trim(),
+  }));
+  return JSON.stringify(kept);
 }
 
 /** Parse answers value; falls back to legacy comma names. */

@@ -1,0 +1,26 @@
+.root { display: flex; flex-direction: column; gap: 4px; margin: var(--space-4, 16px) 0 var(--space-2, 8px); }
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-title-sm, 17px);
+  font-weight: 500;
+}
+
+.done {
+  font-size: var(--type-caption, 12px);
+  color: var(--color-text-secondary, #6e6e73);
+}
+
+.lede {
+  margin: 0;
+  font-size: var(--type-body-sm, 14px);
+  line-height: 1.4;
+  color: var(--color-text-secondary, #6e6e73);
+}

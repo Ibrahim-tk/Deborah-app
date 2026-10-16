@@ -3,6 +3,7 @@
  * mark), then compact section cards with status, and personalised recommendations.
  */
 import { Icon } from '@mobile/ui';
+import { HealingPlanCard, IntakeCompletionCard } from '@mobile/patterns/widgets';
 import { Bar, LinkCard, Recommendations, TilePair, type Recommendation, type TileProps } from './HomeKit';
 import styles from './HomeStates.module.css';
 
@@ -19,6 +20,8 @@ export interface StateEstablishedProps {
   continueMeta?: string;
   onContinue: () => void;
   onJourney: () => void;
+  journeyFocus?: string;
+  intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
   tiles: [TileProps, TileProps];
   recommendations: Recommendation[];
@@ -58,7 +61,10 @@ export function StateEstablished(p: StateEstablishedProps) {
       </section>
 
       <LinkCard tone="linen" lead="chat" title="Continue with Deborah" meta={p.continueMeta ?? 'Pick up where you left off'} onPress={p.onContinue} />
-      <LinkCard tone="rose" lead="calendar" title="90 Day Journey" meta={`Day ${p.day} of 90 · On track`} onPress={p.onJourney} />
+      {p.intakeCard && (
+        <IntakeCompletionCard progress={p.intakeCard.progress} complete={p.intakeCard.complete} onAction={p.intakeCard.onAction} />
+      )}
+      <HealingPlanCard day={p.day} focus={p.journeyFocus} onPress={p.onJourney} />
       {p.reports && <LinkCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />}
       <TilePair tiles={p.tiles} compact />
       <Recommendations items={p.recommendations} onShop={p.onShop} />

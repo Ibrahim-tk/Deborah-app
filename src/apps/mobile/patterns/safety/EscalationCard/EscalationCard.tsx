@@ -58,7 +58,7 @@ export function EscalationCard({ body, reasons, details, dismissed, onBook, onDi
                 </div>
               )}
               <div className={styles.actions}>
-                <Button fullWidth leadingIcon="calendar" onClick={book}>Book a consultation with Deborah</Button>
+                <Button fullWidth leadingIcon="calendar" onClick={book}>Book a consult with Deborah</Button>
                 <Button variant="ghost" fullWidth className={styles.notNow} onClick={notNow}>Not now</Button>
               </div>
             </div>

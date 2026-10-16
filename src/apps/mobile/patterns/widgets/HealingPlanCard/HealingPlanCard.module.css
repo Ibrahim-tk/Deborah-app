@@ -1,0 +1,43 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3, 12px);
+  padding: var(--space-4, 16px);
+  border-radius: var(--radius-lg, 16px);
+  background: var(--color-surface-linen, #f5f0e8);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 8px);
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #1d1d1f);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--type-title-sm, 17px);
+  font-weight: 500;
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--type-body-sm, 14px);
+  color: var(--color-text-secondary, #6e6e73);
+}
+
+.focus {
+  margin: 0;
+  font-size: var(--type-body, 15px);
+  line-height: 1.4;
+  color: var(--color-text, #1d1d1f);
+}

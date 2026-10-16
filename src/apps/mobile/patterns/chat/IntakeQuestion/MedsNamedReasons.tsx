@@ -31,6 +31,7 @@ export function MedsNamedReasons({
   return (
     <div className={styles.root}>
       <NamedReasonList
+        key={answered?.join('|') ?? 'meds-open'}
         label={label}
         entries={tiles}
         addLabel={addLabel}
@@ -40,7 +41,10 @@ export function MedsNamedReasons({
           if (!locked) setEntries(next);
         }}
         onNone={() => {
-          if (!locked) onNone();
+          if (!locked) {
+            setEntries([]);
+            onNone();
+          }
         }}
       />
       {tiles.length > 0 && !locked && (

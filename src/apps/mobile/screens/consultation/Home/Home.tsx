@@ -84,8 +84,18 @@ export default function Home() {
   const pct = Math.round(d.completion * 100);
   const openProfile = () => presentModal('M-2.10');
   const journey = () => gate('journey', () => push('M-7.3'));
+  const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
   const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
+  const intakeExtended = Boolean(
+    profile?.intake.familyHistory || profile?.intake.lifestyleSleep || profile?.intake.otherMedical,
+  );
+  const intakeCard = {
+    progress: d.completion,
+    complete: d.intakeDone && intakeExtended,
+    onAction: () => (d.intakeDone ? completeIntake() : openAsk({ startIntake: true })),
+  };
+  const planFocus = useAppStore((s) => s.plan90[s.activeProfileId]?.goal);
   const tiles: [TileProps, TileProps] = [
     { tone: 'linen', lead: 'health', title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', progress: FLAGS.intakeV2 ? d.completion : undefined, onPress: go('M-7.2') },
     { tone: 'rose', lead: 'family', title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
@@ -123,6 +133,7 @@ export default function Home() {
           <StateNew
             onPrompt={(prefill) => { closeSheet(); openAsk({ prefill }); }}
             profile={!d.intakeDone ? { progress: d.completion, onOpen: () => { closeSheet(); openAsk({ startIntake: true }); } } : undefined}
+            intakeCard={d.intakeDone ? intakeCard : undefined}
             onAddFamily={() => addMember(false)}
           />
         )}
@@ -134,7 +145,8 @@ export default function Home() {
             pendingQuestion={d.pendingQuestion}
             onContinue={resume}
             steps={steps.slice(0, 3)}
-            journey={d.planDay ? { day: d.planDay, today: d.nextHabit, onPress: journey } : undefined}
+            intakeCard={intakeCard}
+            journey={d.planDay ? { day: d.planDay, today: d.nextHabit, focus: planFocus, onPress: journey } : undefined}
             reports={reports}
             tiles={tiles}
             recommendations={d.recommendations}
@@ -149,6 +161,8 @@ export default function Home() {
             continueMeta={d.checkInDue ? 'Your check-in is due' : d.when ? `Last chat ${d.when} · ${d.topic}` : undefined}
             onContinue={d.checkInDue ? () => openAsk({ mode: 'checkin' }) : resume}
             onJourney={journey}
+            journeyFocus={planFocus}
+            intakeCard={intakeCard}
             reports={reports}
             tiles={tiles}
             recommendations={d.recommendations}

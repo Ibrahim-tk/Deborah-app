@@ -1,4 +1,11 @@
 .root { height: 100%; }
 .body { display: grid; gap: var(--space-5); }
+.consent { display: grid; gap: var(--space-3); }
+.consentBody {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+}
+.consentChecks { display: grid; gap: var(--space-1); }
 .notice { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .hint { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

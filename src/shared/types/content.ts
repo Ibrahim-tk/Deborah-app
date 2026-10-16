@@ -43,12 +43,15 @@ export interface Consent {
   careLine: string;
   terms: LegalDoc;
   privacy: LegalDoc;
-  /** Consent for a profile set up for someone else, by age group (plan P-01). `{name}` is theirs. */
+  /** Consent for a profile set up for someone else (medical advocate). `{name}` is theirs. */
   profileConsent: {
     status: ContentStatus;
     open: string;
     title: string;
-  } & Record<'child' | 'teen' | 'adult', { body: string; check: string }>;
+    body: string;
+    /** Single-select radio options; one required. */
+    options: { value: string; label: string }[];
+  };
   status: ContentStatus;
 }
 
@@ -292,7 +295,7 @@ export interface HealthBasicsStep {
   titleOther?: string;
   /** Optional prompt under the title (e.g. guardian question under “About Your Child”). */
   prompt?: string;
-  /** Quiz control shape: yesNo/rows → FullChoicePills; pills → QuestionChoices; chips → ChipPicker; namedReasons → add pill → Sheet (name+reason) → tiles; ageWheel → YearWheel of ages. */
+  /** Quiz control shape: yesNo/rows → FullChoicePills (sex/pronouns/gender/otherPuberty/relationship → FullChoicePillsGrid); pills → QuestionChoices; chips → ChipPicker; namedReasons → add pill → Sheet (name+reason) → tiles; ageWheel → YearWheel of ages. */
   presentation?: HealthBasicsPresentation;
   /** ageWheel: inclusive min age (default 7). */
   ageMin?: number;
@@ -323,14 +326,19 @@ export interface HealthBasicsStep {
   /** Placeholder for the inline describe field. */
   describePlaceholder?: string;
   /**
-   * Choice steps: selecting any of these values stays on screen and reveals a second FullChoicePills
+   * FullChoicePillsGrid: the describe option spans both columns even before it is
+   * selected (e.g. relationship “Someone else” under a 2×2 of fixed roles).
+   */
+  describeAlwaysSpan?: boolean;
+  /**
+   * Choice steps: selecting any of these values stays on screen and reveals body prompt + InlineChoicePills
    * (choices from the step named by `expandKey`, or `expandChoices` inline). Used when more than one
-   * option needs a follow-up box (e.g. HRT Yes / Yes Previously → type).
+   * option needs a follow-up (e.g. HRT Yes / Yes Previously → type).
    */
   expandValues?: string[];
   /** Answer key (and usually the inline step key) for the follow-up choice. */
   expandKey?: string;
-  /** Title for the follow-up pills when not reading from another step. */
+  /** Visible body prompt above the follow-up inline pills (e.g. “Please specify”). */
   expandTitle?: string;
   /** Follow-up options when not reading from another step. */
   expandChoices?: { value: string; label: string }[];

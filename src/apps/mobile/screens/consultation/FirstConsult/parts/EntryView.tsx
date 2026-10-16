@@ -53,7 +53,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep }: 
           {/* After the framework (design direction 2026-10-14): the product, then Deborah herself, then her times. */}
           {product && answer.product && <div className={styles.after}><ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} /></div>}
           <p className={styles.afterLine}>If you’d like to go through this with me in person, I have time this week.</p>
-          <SlotPicker title="Book with Deborah" meta="30 min · Video or phone" days={FORTNIGHT} onPick={(day, time) => onAction(`book:${day}, ${time}`)} />
+          <SlotPicker title="Book a consult with Deborah" meta="30 min · Video or phone" days={FORTNIGHT} onPick={(day, time) => onAction(`book:${day}, ${time}`)} />
           {active && <SuggestedQuestions questions={replies.map((r) => say(r.label))} onSelect={(q) => onPick(node, replies.filter((r) => say(r.label) === q))} />}
         </div>
       </MessageBubble>
@@ -78,7 +78,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep }: 
   if (node.type === 'safety') {
     return (
       <MessageBubble role="deborah" text={entry.text} turnStart>
-        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Book with Deborah', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
+        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Book a consult with Deborah', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
       </MessageBubble>
     );
   }
@@ -93,7 +93,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep }: 
           sheet={false}
           body={entry.text}
           dismissed={!book || !active}
-          onBook={() => onPick(node, [book ?? { label: 'Book with Deborah', next: 'exit_booking' }])}
+          onBook={() => onPick(node, [book ?? { label: 'Book a consult with Deborah', next: 'exit_booking' }])}
           onDismiss={() => notNow && onPick(node, [notNow])}
         />
       </MessageBubble>

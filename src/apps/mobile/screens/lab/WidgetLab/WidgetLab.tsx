@@ -12,7 +12,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MessageBubble, ThinkingIndicator, Composer } from '@mobile/patterns/chat';
-import { Aura, DeborahBlob, GradientShift, OVERLAY_HOST_ID } from '@mobile/ui';
+import { DeborahBlob, OVERLAY_HOST_ID } from '@mobile/ui';
 import { LabWidget } from './LabWidget';
 import { SCENARIO, mid, routeQuestion, type LabMessage } from './scenarios';
 import styles from './WidgetLab.module.css';
@@ -53,9 +53,6 @@ export default function WidgetLab() {
 
   return (
     <div className={styles.root} data-xref="LAB · Widget lab">
-      {/* Same living backdrop as Conversation (Wispr Flow + soft pink foot). */}
-      <Aura />
-      <GradientShift />
       <header className={styles.header}>
         <DeborahBlob size={36} label="Deborah" />
         <div>
@@ -78,20 +75,20 @@ export default function WidgetLab() {
             ),
           )}
           {typing && <ThinkingIndicator label="Deborah is writing…" />}
+          <div className={styles.composer}>
+            <Composer
+              value={draft}
+              onChange={setDraft}
+              onSend={(text) => send(text ?? draft)}
+              onStop={() => {}}
+              onAttach={() => later({ id: mid(), role: 'deborah', text: 'Add it here:', widget: 'upload' })}
+              onFocusChange={() => {}}
+              generating={typing}
+              placeholder="Try “book a visit”, “my energy”, “labs”…"
+              voiceSample="Why do I keep waking up at 3am?"
+            />
+          </div>
         </div>
-      </div>
-      <div className={styles.bottom}>
-        <Composer
-          value={draft}
-          onChange={setDraft}
-          onSend={(text) => send(text ?? draft)}
-          onStop={() => {}}
-          onAttach={() => later({ id: mid(), role: 'deborah', text: 'Add it here:', widget: 'upload' })}
-          onFocusChange={() => {}}
-          generating={typing}
-          placeholder="Try “book a visit”, “my energy”, “labs”…"
-          voiceSample="Why do I keep waking up at 3am?"
-        />
       </div>
       {/* Host for bottom sheets (the escalation sheet), as the app's Navigator provides. */}
       <div id={OVERLAY_HOST_ID} className={styles.overlayHost} />

@@ -90,6 +90,11 @@ export default function AddLabs() {
       {camera && (
         <CameraView
           onCancel={() => setCamera(false)}
+          onLibrary={() => {
+            setCamera(false);
+            // Let the overlay dismiss, then open the system picker.
+            window.setTimeout(() => fileInput.current?.click(), 160);
+          }}
           onUse={() => {
             setCamera(false);
             start('photo', 'Photo of your lab report');

@@ -16,14 +16,14 @@
 
 /* Progressive blur only — soft masks so there is no hard seam through the glass controls. */
 .blurStrong {
-  -webkit-backdrop-filter: blur(12px) saturate(120%);
-  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: var(--blur-edge-strong);
+  backdrop-filter: var(--blur-edge-strong);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 25%, transparent 85%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 25%, transparent 85%);
 }
 .blurSoft {
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: var(--blur-edge-soft);
+  backdrop-filter: var(--blur-edge-soft);
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
 }
@@ -42,7 +42,7 @@
   position: absolute;
   inset: 0 0 -100%;
   background: var(--backdrop-image) top center / 100% auto no-repeat;
-  transform: translate3d(0, var(--backdrop-lift), 0);
+  transform: translate3d(0, calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)), 0);
 }
 
 @media (prefers-reduced-transparency: reduce) {
