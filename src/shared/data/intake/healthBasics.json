@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Version 2 onboarding (M-1.8) — Age + Sex at birth routes intake banks; gender identity is asked last only when sex is not Male/Female. Under-13 Myself → M-1.10 ask adult. Ages 13–17 / 18–59: sex banks (periods/blockers teen-only; reproductive + nests for F/NB/IS 18–59; etc.). Age 60+: skip deep questions → name+reason meds → name+reason supplements → Genesis Gold. Pregnant/Postpartum (under 60) also uses name+reason meds/supplements. Wording placeholder pending Deborah.",
+  "note": "Version 2 onboarding (M-1.8) — Age + Sex at birth routes intake banks; gender identity is asked last only when sex is not Male/Female. Under-13 Myself → M-1.10 ask adult. Ages 13+: one standard NamedReasonList for Medications and one for Supplements (all sexes/stages). Under-13 dependents use NamedReasonList for combined meds & supplements. Wording placeholder pending Deborah.",
   "steps": [
     {
       "key": "profileFor",
@@ -75,17 +75,12 @@
     {
       "key": "childMedications",
       "kind": "text",
-      "title": "Any medications or supplements right now?",
-      "titleOther": "Any medications or supplements for {name} right now?",
-      "placeholder": "Name — reason",
+      "presentation": "namedReasons",
+      "title": "Medications & supplements",
+      "titleOther": "Medications & supplements for {name}",
+      "namePlaceholder": "e.g. Allergy medication",
+      "reasonPlaceholder": "What is it for?",
       "none": "None",
-      "suggestions": [
-        { "label": "Allergy medication" },
-        { "label": "Asthma inhaler" },
-        { "label": "Antibiotics" },
-        { "label": "Vitamins" },
-        { "label": "ADHD medication" }
-      ],
       "showIf": {
         "profileFor": { "in": ["dependent"] },
         "age": { "max": 12 }
@@ -264,24 +259,6 @@
       ]
     },
     {
-      "key": "hrtTaken",
-      "kind": "choice",
-      "presentation": "pills",
-      "title": "How is it taken?",
-      "titleOther": "How is {name}’s HRT taken?",
-      "showIf": {
-        "hrtStatus": { "in": ["yes", "yes-previously"] },
-        "age": { "max": 59 }
-      },
-      "choices": [
-        { "value": "pill", "label": "Pill" },
-        { "value": "patch", "label": "Patch" },
-        { "value": "gel-cream", "label": "Gel or cream" },
-        { "value": "injection", "label": "Injection" },
-        { "value": "other", "label": "Other / not sure" }
-      ]
-    },
-    {
       "key": "transPuberty",
       "kind": "choice",
       "title": "What, if any, puberty has your body gone through or is going through?",
@@ -324,34 +301,6 @@
     {
       "key": "medications",
       "kind": "text",
-      "presentation": "chips",
-      "title": "Any current medications?",
-      "titleOther": "Any current medications for {name}?",
-      "placeholder": "e.g. Levothyroxine",
-      "none": "None",
-      "suggestions": [
-        { "label": "Levothyroxine" },
-        { "label": "Metformin" },
-        { "label": "Blood pressure medication" },
-        {
-          "label": "Birth control",
-          "showIf": { "sex": { "notIn": ["male"] } }
-        },
-        {
-          "label": "Testosterone",
-          "showIf": { "sex": { "in": ["male", "intersex", "trans-man", "trans-woman"] } }
-        },
-        { "label": "Antidepressant" },
-        { "label": "HRT / hormones" }
-      ],
-      "showIf": {
-        "age": { "min": 13, "max": 59 },
-        "reproductiveStage": { "notIn": ["pregnant-postpartum"] }
-      }
-    },
-    {
-      "key": "medications",
-      "kind": "text",
       "presentation": "namedReasons",
       "title": "Medications (Rx & OTC)",
       "titleOther": "Medications (Rx & OTC) for {name}",
@@ -359,49 +308,7 @@
       "reasonPlaceholder": "What is it for?",
       "none": "None",
       "showIf": {
-        "reproductiveStage": { "in": ["pregnant-postpartum"] },
-        "age": { "max": 59 }
-      }
-    },
-    {
-      "key": "medications",
-      "kind": "text",
-      "presentation": "namedReasons",
-      "title": "Medications (Rx & OTC)",
-      "titleOther": "Medications (Rx & OTC) for {name}",
-      "namePlaceholder": "e.g. Metformin",
-      "reasonPlaceholder": "What is it for?",
-      "none": "None",
-      "showIf": {
-        "age": { "min": 60 }
-      }
-    },
-    {
-      "key": "supplements",
-      "kind": "text",
-      "presentation": "chips",
-      "title": "Any supplements?",
-      "titleOther": "Any supplements for {name}?",
-      "placeholder": "e.g. Magnesium, Vitamin D",
-      "none": "None",
-      "suggestions": [
-        { "label": "Magnesium" },
-        { "label": "Vitamin D" },
-        { "label": "Omega-3" },
-        {
-          "label": "Iron",
-          "showIf": { "sex": { "notIn": ["male"] } }
-        },
-        {
-          "label": "Zinc",
-          "showIf": { "sex": { "in": ["male", "intersex", "trans-man", "trans-woman"] } }
-        },
-        { "label": "B12" },
-        { "label": "Probiotics" }
-      ],
-      "showIf": {
-        "age": { "min": 13, "max": 59 },
-        "reproductiveStage": { "notIn": ["pregnant-postpartum"] }
+        "age": { "min": 13 }
       }
     },
     {
@@ -414,21 +321,7 @@
       "reasonPlaceholder": "What is it for?",
       "none": "None",
       "showIf": {
-        "reproductiveStage": { "in": ["pregnant-postpartum"] },
-        "age": { "max": 59 }
-      }
-    },
-    {
-      "key": "supplements",
-      "kind": "text",
-      "presentation": "namedReasons",
-      "title": "Supplements",
-      "titleOther": "Supplements for {name}",
-      "namePlaceholder": "e.g. Magnesium",
-      "reasonPlaceholder": "What is it for?",
-      "none": "None",
-      "showIf": {
-        "age": { "min": 60 }
+        "age": { "min": 13 }
       }
     },
     {

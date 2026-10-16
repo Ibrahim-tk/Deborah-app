@@ -134,7 +134,11 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
     case 'text':
       if (step.presentation === 'namedReasons') {
         const addLabel =
-          step.key === 'medications' ? 'Add medicine' : step.key === 'supplements' ? 'Add supplement' : 'Add';
+          step.key === 'medications' || step.key === 'childMedications'
+            ? 'Add medicine'
+            : step.key === 'supplements'
+              ? 'Add supplement'
+              : 'Add';
         return (
           <NamedReasonList
             key={step.key}
@@ -145,7 +149,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
             namePlaceholder={step.namePlaceholder ?? 'Name'}
             reasonPlaceholder={step.reasonPlaceholder ?? 'Reason'}
             nameSuggestions={
-              step.key === 'medications'
+              step.key === 'medications' || step.key === 'childMedications'
                 ? medicinesData
                 : step.key === 'supplements'
                   ? intakeSuggestionData.supplements

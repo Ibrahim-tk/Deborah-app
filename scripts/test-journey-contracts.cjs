@@ -220,8 +220,8 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     assert.deepEqual(visibleStepKeys(myself(28, { periodsStarted: 'yes', reproductive: 'pre-menopausal' })), [
       'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'medications', 'supplements', 'genesisGold',
     ]);
-    assert.deepEqual(visibleStepKeys(myself(48, { periodsStarted: 'yes', reproductive: 'peri-menopausal', hrtStatus: 'yes', hrtType: 'combined', hrtTaken: 'patch' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hrtStatus', 'hrtTaken', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(48, { periodsStarted: 'yes', reproductive: 'peri-menopausal', hrtStatus: 'yes', hrtType: 'combined' })), [
+      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(48, { periodsStarted: 'yes', reproductive: 'peri-menopausal', hrtStatus: 'no' })), [
       'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
@@ -229,8 +229,8 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     assert.deepEqual(visibleStepKeys(myself(55, { periodsStarted: 'yes', reproductive: 'post-menopausal', ageAtLastPeriod: '52', hrtStatus: 'no' })), [
       'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'ageAtLastPeriod', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
-    assert.deepEqual(visibleStepKeys(myself(50, { periodsStarted: 'yes', reproductive: 'surgically-menopausal', hysterectomy: 'yes', ovariesRemoved: 'partial', hrtStatus: 'yes', hrtType: 'estrogen-only', hrtTaken: 'pill' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hysterectomy', 'ovariesRemoved', 'hrtStatus', 'hrtTaken', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(50, { periodsStarted: 'yes', reproductive: 'surgically-menopausal', hysterectomy: 'yes', ovariesRemoved: 'partial', hrtStatus: 'yes', hrtType: 'estrogen-only' })), [
+      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hysterectomy', 'ovariesRemoved', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
     // Pregnant/Postpartum: name+reason meds/supplements UI (same step keys).
     assert.deepEqual(visibleStepKeys(myself(28, { periodsStarted: 'yes', reproductive: 'pregnant-postpartum' })), [

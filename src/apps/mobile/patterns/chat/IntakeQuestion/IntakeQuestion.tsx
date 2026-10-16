@@ -7,7 +7,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { IntakeMeta } from '@shared/types/domain';
 import { InlineConsent, QuestionChoices } from '@mobile/patterns/widgets';
+import { encodeNamedReasons } from '@mobile/patterns/widgets';
 import { IntakeFields } from './IntakeFields';
+import { MedsNamedReasons } from './MedsNamedReasons';
 import styles from './IntakeQuestion.module.css';
 
 /** What should own the answer UI under the thread. */
@@ -37,13 +39,24 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
   const canExpand = Boolean(expandOptions?.length);
   const freeText = intake.input === 'text' || (intake.options.length === 0 && !intake.input);
 
+  const isMedsList = intake.questionId === 'medications' || intake.questionId === 'session-meds';
+
+  const finish = (ids: string[]) => {
+    if (locked || submitting.current) return;
+    submitting.current = true;
+    setSent(true);
+    // Keep `yes` — session-concern / session-complete confirm with id "yes".
+    // Drop `other` only: that path focuses the composer instead of submitting.
+    onAnswer(ids.filter((id) => id !== 'other'));
+  };
+
   useEffect(() => {
     if (!active || !onAnswerSurface) return;
     // Hide the bottom composer only on the expand multi-pill step. Hybrid gates
     // (e.g. "Yes, that's it" / "Something else…") keep the composer visible.
-    if (freeText || composerOther || !expanded) onAnswerSurface('composer');
-    else onAnswerSurface('choices');
-  }, [active, freeText, composerOther, expanded, onAnswerSurface]);
+    if (isMedsList || (expanded && !composerOther && !freeText)) onAnswerSurface('choices');
+    else onAnswerSurface('composer');
+  }, [active, freeText, composerOther, expanded, isMedsList, onAnswerSurface]);
 
   if (intake.skipped) return <p className={styles.step}>Skipped</p>;
   // F02d: free-text session questions use the composer only — no type-invite pills.
@@ -63,14 +76,27 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
     );
   }
 
-  const finish = (ids: string[]) => {
-    if (locked || submitting.current) return;
-    submitting.current = true;
-    setSent(true);
-    // Keep `yes` — session-concern / session-complete confirm with id "yes".
-    // Drop `other` only: that path focuses the composer instead of submitting.
-    onAnswer(ids.filter((id) => id !== 'other'));
-  };
+  // Same NamedReasonList as Health Basics (add pill → sheet → tiles) for meds questions.
+  if (isMedsList) {
+    return (
+      <MedsNamedReasons
+        label={intake.questionId === 'session-meds' ? 'New medications' : 'Medications (Rx & OTC)'}
+        addLabel="Add medicine"
+        active={active}
+        answered={intake.answered}
+        onNone={() => finish(['none'])}
+        onSubmit={(entries) => {
+          if (locked || submitting.current) return;
+          submitting.current = true;
+          setSent(true);
+          onAnswer(
+            entries.map((e) => e.name),
+            encodeNamedReasons(entries),
+          );
+        }}
+      />
+    );
+  }
 
   const focusComposer = () => {
     if (locked) return;
