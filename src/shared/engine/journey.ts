@@ -61,34 +61,21 @@ export function missingBasics(profile: Profile, now: Date): string[] {
 }
 
 /**
- * DN-10: up to `maxClarifiers` questions for this journey and symptom group, skipping anything the
- * profile already answers or this conversation already asked, then the red-flag screen (DN-11).
+ * Ask Dibora revamp: long journey × symptom checklists are replaced by session questions in
+ * planConsultation. `@clarify` now expands to the red-flag screen only (DN-11).
  * Returns null when the journey has no bank (teen, child): the script's own questions apply.
  */
-export function planClarifiers(profile: Profile, now: Date, group: SymptomGroupId | undefined, asked: string[]): string[] | null {
+export function planClarifiers(profile: Profile, now: Date, _group: SymptomGroupId | undefined, asked: string[]): string[] | null {
   const id = journeyFor(profile, now);
   const def = id && journeyDef(id);
   if (!def) return null;
-  const base = def.extends ? journeyDef(def.extends) : def;
-  const bank = base?.clarifiers ?? {};
-  const ids = (group && bank[group]) || bank.general || [];
-  const vars = journeyVars(profile, now);
-  const fits = (qid: string) => {
-    const q = chatQuestion(qid);
-    if (!q || asked.includes(qid) || !shows(q.showIf, vars)) return false;
-    if (!q.skipIfKnown || !q.profileField.startsWith('intake.')) return true;
-    const v = profile.intake[q.profileField.slice('intake.'.length) as keyof Profile['intake']];
-    return Array.isArray(v) ? v.length === 0 : !v;
-  };
-  // F02b 3e: ask the stage first, then re-plan on the journey it gives.
-  if (def.reroute && fits(ids[0])) return [ids[0], CLARIFY];
-  let picked = ids.filter(fits).slice(0, chatIntakeData.maxClarifiers);
-  // F02b 4d: an age extra replaces the lowest-priority clarifier.
-  if (def.extra && fits(def.extra)) picked = [...picked.slice(0, chatIntakeData.maxClarifiers - 1), def.extra];
   const sex = sexOf(profile);
   const flags = sex === 'intersex' ? 'red-flags-intersex' : def.redFlags;
-  return [...picked, ...(asked.includes(flags) ? [] : [flags])];
+  return asked.includes(flags) ? [] : [flags];
 }
+
+/** Session intake ids (Ask Dibora): concern → other → goal → meds → completeness gate. */
+export const SESSION_QUESTIONS = ['session-concern', 'session-other', 'session-goal', 'session-meds', 'session-complete'] as const;
 
 /** DN-12: journeys that never carry a product (pregnancy, breastfeeding, minors). */
 export function journeyAllowsProduct(id: JourneyId | null | undefined): boolean {

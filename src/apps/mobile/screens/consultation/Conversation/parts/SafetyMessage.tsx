@@ -1,4 +1,5 @@
 /** Renders F03 safety messages inside the Conversation (docs/ux/F03-safety.md). */
+import { useEffect, useRef } from 'react';
 import { guardrailsData as g, suggestionsData } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
@@ -16,10 +17,22 @@ export interface SafetyMessageProps {
   onFocusComposer: () => void;
 }
 
+function useTeamNotifyToast(message: Message, conversationId: string, active: boolean) {
+  const toast = useToast();
+  const seen = useRef(false);
+  useEffect(() => {
+    if (!active || seen.current || message.meta?.teamNotified) return;
+    seen.current = true;
+    useAppStore.getState().patchMessage(conversationId, message.id, { meta: { ...message.meta, teamNotified: true } });
+    toast('Care team prioritized and notified (demo)');
+  }, [active, conversationId, message.id, message.meta, toast]);
+}
+
 export function SafetyMessage({ message: m, conversationId, busy, chat, onFocusComposer }: SafetyMessageProps) {
   const alert = useAlert();
   const toast = useToast();
   const { open, push } = useNav();
+  useTeamNotifyToast(m, conversationId, (m.kind === 'emergency' && !m.meta?.acknowledged) || m.kind === 'crisis');
 
   const call = async (title: string, demo: string) => {
     const choice = await alert({ title, buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Call' }] });
@@ -45,6 +58,8 @@ export function SafetyMessage({ message: m, conversationId, busy, chat, onFocusC
           lifelineLabel={g.crisis.lifeline.label}
           moreSupport={g.crisis.moreSupport}
           onCall={() => call(`Call or text ${g.crisis.lifeline.tel}?`, `Connecting to ${g.crisis.lifeline.tel}… (demo)`)}
+          onCall911={() => call('Call 911?', 'Calling 911… (demo)')}
+          onText={() => call('Text HOME to 741741?', 'Opening Messages… (demo)')}
           onKeepTalking={onFocusComposer}
         />
       );

@@ -110,3 +110,24 @@ input.row::placeholder { color: var(--color-ink-placeholder); }
 
 
 .otherForm { display: grid; gap: var(--space-3); margin-top: var(--space-3); }
+.composerHint {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-align: center;
+}
+.otherPill {
+  justify-self: start;
+  min-height: 36px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-lilac);
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+}
+.otherPill:active { transform: scale(0.96); background: var(--color-accent-tint-pressed); }
+.otherPill:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.otherPill:disabled { opacity: 0.5; }

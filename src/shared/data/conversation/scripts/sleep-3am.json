@@ -6,7 +6,7 @@
   "voiceSample": "I wake up at three in the morning almost every night and my mind starts racing.",
   "openingMessage": "Why am I waking up at 3am every night?",
   "readyLine": "Thank you, {name}. That helps me understand your nights. Tap below when you'd like my thoughts.",
-  "suggestedQuestions": ["Is this related to stress?", "Does what I eat in the evening matter?"],
+  "suggestedQuestions": ["Why am I so exhausted all the time?", "Are my hormones out of balance?", "Does what I eat in the evening matter?"],
   "answer": {
     "sections": [
       { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, you're falling asleep but waking around 3am, and then your mind won't settle. Night after night, that wears you down." },

@@ -13,12 +13,21 @@ const card = (ctx: EngineContext, kind: Message['kind'], text: string, status = 
 /** Emergency appears before any other Deborah content and locks the composer until "I'm safe". */
 export function emergencySteps(ctx: EngineContext): Step[] {
   const conv = ctx.conversation;
+  const teamAlert = { level: 'emergency' as const, at: ctx.now };
   return [
     { type: 'thinking', on: false },
     card(ctx, 'emergency', g.emergency.body),
     {
       type: 'store',
-      action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'safety', statusBeforeSafety: conv.status === 'safety' ? conv.statusBeforeSafety : conv.status } },
+      action: {
+        type: 'setConversation',
+        conversationId: conv.id,
+        patch: {
+          status: 'safety',
+          statusBeforeSafety: conv.status === 'safety' ? conv.statusBeforeSafety : conv.status,
+          teamAlert,
+        },
+      },
     },
   ];
 }
@@ -33,11 +42,19 @@ export function acknowledgeEmergencySteps(ctx: EngineContext, messageId: string)
   ];
 }
 
-/** Crisis: calm card; the conversation continues, products are suppressed, next reply is gentle. */
+/** Crisis: calm card / sheet; the conversation continues, products are suppressed, next reply is gentle. */
 export function crisisSteps(ctx: EngineContext): Step[] {
+  const teamAlert = { level: 'crisis' as const, at: ctx.now };
   return [
     card(ctx, 'crisis', g.crisis.body),
-    { type: 'store', action: { type: 'setConversation', conversationId: ctx.conversation.id, patch: { noProduct: true, gentleNext: true } } },
+    {
+      type: 'store',
+      action: {
+        type: 'setConversation',
+        conversationId: ctx.conversation.id,
+        patch: { noProduct: true, gentleNext: true, teamAlert },
+      },
+    },
   ];
 }
 

@@ -69,3 +69,35 @@ export function mergeFacts(existing: PendingFact[] | undefined, incoming: Pendin
 }
 
 export const pendingFacts = (c: Pick<Conversation, 'facts'> | undefined) => (c?.facts ?? []).filter((f) => f.status === 'pending');
+
+/**
+ * Ask Dibora: when the user confirms they've sent everything, fold session answers, opening
+ * text, and symptoms into pending facts for Review and Confirm. Labs stay on the profile
+ * report and are read via engine context at answer time.
+ */
+export function mergeSessionKnowledge(conv: Conversation, profile: Profile): PendingFact[] {
+  const known = withFacts(profile, conv.facts);
+  const out: PendingFact[] = [];
+  const add = (key: string, value: string | undefined, patch: PendingFact['patch']) => {
+    if (!value?.trim() || value === 'None') return;
+    out.push({
+      id: uid('f'),
+      key,
+      label: label(key),
+      value: value.trim(),
+      patch,
+      source: 'answer',
+      status: 'pending',
+    });
+  };
+  add('mainConcern', known.intake.mainConcern ?? conv.openingText, {
+    intake: { mainConcern: known.intake.mainConcern ?? conv.openingText },
+  });
+  add('otherIssues', known.intake.otherIssues, { intake: { otherIssues: known.intake.otherIssues } });
+  add('healthGoal', known.intake.healthGoal, { intake: { healthGoal: known.intake.healthGoal } });
+  add('newMeds', known.intake.newMeds, { intake: { newMeds: known.intake.newMeds } });
+  if (known.intake.symptoms?.length) {
+    add('symptoms', known.intake.symptoms.join(', '), { intake: { symptoms: known.intake.symptoms } });
+  }
+  return mergeFacts(conv.facts, out);
+}

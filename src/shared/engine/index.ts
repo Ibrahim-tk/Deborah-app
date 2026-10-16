@@ -8,8 +8,8 @@ import type { Conversation } from '../types/domain';
 import type { EngineContext, EnginePlan, UserInput } from '../types/engine';
 import { uid } from '../utils/ids';
 import { asksForAnswer, detectScript, followUpReply, symptomGroupOf } from './classifier';
-import { factFromAnswer, factsFromMessage, mergeFacts, pendingFacts, withFacts } from './facts';
-import { CLARIFY, journeyFor } from './journey';
+import { factFromAnswer, factsFromMessage, mergeFacts, mergeSessionKnowledge, pendingFacts, withFacts } from './facts';
+import { CLARIFY, SESSION_QUESTIONS, journeyFor } from './journey';
 import { classify } from './guardrails';
 import {
   acknowledgeEmergencySteps,
@@ -68,7 +68,7 @@ function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
     case 'checkInReply':
       return checkInReplySteps(ctx, input.messageId, input.optionId);
     case 'shareLabs':
-      return shareLabsSteps(ctx, input.report);
+      return shareLabsSteps(ctx, input.report, input.direct);
     case 'finishReview':
       return ctx.conversation.providerReview?.state === 'waiting' && !pendingFacts(ctx.conversation).length
         ? answerSteps(ctx, ctx.conversation, ctx.profile) : [];
@@ -140,9 +140,26 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
   if (conv.status === 'intake') {
     // Free text answers the current question. Anything it names (a medicine, an allergy) is noted for
     // Review and Confirm (DN-13); the words themselves stay in the conversation only.
-    const current = (conv.intakePlan ?? []).find((id) => !(conv.intakeDone ?? []).includes(id));
     const inferred = inferFromMessage(ctx.profile, text, new Date(ctx.now));
     const facts = factsFromMessage(inferred);
+    // Completeness “I have more”: this turn is extra context; re-ask session-complete afterward.
+    if (conv.awaitingSessionMore) {
+      const next: Conversation = {
+        ...conv,
+        awaitingSessionMore: false,
+        facts: mergeFacts(conv.facts, facts),
+        openingText: conv.openingText || text.trim(),
+      };
+      const profile = withFacts(ctx.profile, facts);
+      return [
+        userBubble(ctx, text),
+        ...proposeSteps(conv.id, facts),
+        { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { awaitingSessionMore: false, facts: next.facts } } },
+        ...pause('Reading your answer'),
+        ...nextIntakeOrReady({ ...ctx, profile }, next, profile),
+      ];
+    }
+    const current = (conv.intakePlan ?? []).find((id) => !(conv.intakeDone ?? []).includes(id));
     const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), ...(current ? [current] : [])], facts: mergeFacts(conv.facts, facts) };
     const profile = withFacts(ctx.profile, facts);
     return [
@@ -165,8 +182,10 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
  */
 function startProfileSteps(ctx: EngineContext): EnginePlan {
   const conv = ctx.conversation;
-  // Profile only: the basics, never topic clarifiers or a red-flag screen (there's no topic yet).
-  const plan = planConsultation(ctx, [], false).filter((id) => id !== CLARIFY);
+  // Profile only: the basics, never session questions or a red-flag screen (there's no topic yet).
+  const plan = planConsultation(ctx, [], false).filter(
+    (id) => id !== CLARIFY && !(SESSION_QUESTIONS as readonly string[]).includes(id),
+  );
   const next: Conversation = { ...conv, status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [] };
   return [
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [], startedAt: ctx.now } } },
@@ -184,7 +203,8 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
   const script = scripts[scriptId] ?? scripts[FALLBACK_SCRIPT_ID];
   const prev = ctx.conversation;
   // The onboarding chat carries on into her first consultation (its messages stay).
-  const reuse = prev.messages.length === 0 || Boolean(prev.profileOnly);
+  // Lab attach on empty also reuses so the "Shared lab results" bubble stays in-thread.
+  const reuse = prev.messages.length === 0 || Boolean(prev.profileOnly) || prev.status === 'empty';
   const conv: Conversation = {
     id: reuse ? prev.id : uid('c'),
     profileId: ctx.profile.id,
@@ -199,10 +219,18 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
     intakePlan: planConsultation(ctx, script.intake, Boolean(script.answer.product)),
     intakeDone: [],
     facts,
+    openingText: text.trim(),
   };
   return [
     reuse
-      ? { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: prev.profileOnly ? { ...conv, messages: prev.messages, profileOnly: false } : conv } }
+      ? {
+          type: 'store',
+          action: {
+            type: 'setConversation',
+            conversationId: conv.id,
+            patch: { ...conv, messages: prev.messages, profileOnly: false },
+          },
+        }
       : { type: 'store', action: { type: 'startConversation', conversation: conv } },
     userBubble(ctx, text),
     ...pause('Reading your message'),
@@ -221,27 +249,94 @@ function handleIntakeAnswer(ctx: EngineContext, questionId: string, optionIds: s
   if (!q || optionIds.length === 0) return [];
   const qMsg = [...conv.messages].reverse().find((m) => m.intake?.questionId === questionId);
   const markAnswered: EnginePlan = qMsg ? [{ type: 'patch', messageId: qMsg.id, patch: { intake: { ...qMsg.intake!, answered: optionIds } } }] : [];
-  const bubble = userBubble(ctx, optionLabels(q, optionIds, otherText, qMsg?.intake?.options));
+
+  // Completeness gate: "I have more" invites the composer (max 2 loops), then re-asks.
+  if (questionId === 'session-complete') {
+    const bubble = userBubble(ctx, optionLabels(q, optionIds, otherText, qMsg?.intake?.options));
+    if (optionIds[0] === 'more') {
+      const count = (conv.sessionMoreCount ?? 0) + 1;
+      if (count <= 2) {
+        return [
+          ...markAnswered,
+          bubble,
+          {
+            type: 'store',
+            action: {
+              type: 'setConversation',
+              conversationId: conv.id,
+              patch: { sessionMoreCount: count, awaitingSessionMore: true },
+            },
+          },
+          ...pause('Reading your answer', 400, 700),
+          ...deborahText(ctx, 'Of course — add anything else in the box below, then I’ll check in again.'),
+        ];
+      }
+      // Cap reached: treat as complete.
+    }
+    const done = [...(conv.intakeDone ?? []), questionId];
+    const merged = mergeSessionKnowledge({ ...conv, intakeDone: done }, ctx.profile);
+    const next: Conversation = { ...conv, intakeDone: done, facts: merged, awaitingSessionMore: false };
+    return [
+      ...markAnswered,
+      bubble,
+      ...proposeSteps(conv.id, pendingFacts({ facts: merged })),
+      {
+        type: 'store',
+        action: {
+          type: 'setConversation',
+          conversationId: conv.id,
+          patch: { intakeDone: done, facts: merged, awaitingSessionMore: false },
+        },
+      },
+      ...pause('Reading your answer', 600, 1000),
+      ...nextIntakeOrReady(ctx, next, withFacts(ctx.profile, merged)),
+    ];
+  }
+
+  const resolvedOther =
+    questionId === 'session-concern' && optionIds[0] === 'yes'
+      ? otherText?.trim() || conv.openingText?.trim()
+      : otherText;
+  const bubbleLabel =
+    questionId === 'session-concern' && optionIds[0] === 'yes' && resolvedOther
+      ? resolvedOther
+      : optionLabels(q, optionIds, resolvedOther, qMsg?.intake?.options);
+  const bubble = userBubble(ctx, bubbleLabel);
 
   if (questionId === CONSENT_ID) return [...markAnswered, bubble, ...consentSteps(ctx, conv, optionIds[0] === 'agree')];
 
   const done = [...(conv.intakeDone ?? []), questionId];
   // DN-11: preserve urgent intervention; other concerns get an uncounted provider-review ending.
   if (q.redFlags && optionIds.some((id) => id !== 'none')) {
+    const label = optionLabels(q, optionIds, resolvedOther, qMsg?.intake?.options);
     return [
       ...markAnswered,
       bubble,
       { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: done, redFlag: true, noProduct: true } } },
       ...pause('Reading your answer', 600, 1000),
-      ...(classify(optionLabels(q, optionIds, otherText, qMsg?.intake?.options), ctx).replace === 'emergency'
+      ...(classify(label, ctx).replace === 'emergency'
         ? emergencySteps({ ...ctx, conversation: { ...conv, redFlag: true, noProduct: true } })
-        : redFlagSteps(ctx, { ...conv, intakeDone: done, redFlag: true, providerReview: { state: 'waiting', concerns: optionIds.filter((id) => id !== 'none').map((id) => id === 'other' ? otherText?.trim() || 'Other concern' : q.options.find((o) => o.id === id)?.label ?? id) } })),
+        : redFlagSteps(ctx, {
+            ...conv,
+            intakeDone: done,
+            redFlag: true,
+            providerReview: {
+              state: 'waiting',
+              concerns: optionIds
+                .filter((id) => id !== 'none')
+                .map((id) => (id === 'other' ? resolvedOther?.trim() || 'Other concern' : q.options.find((o) => o.id === id)?.label ?? id)),
+            },
+          })),
     ];
   }
 
   // DN-13: the answer is noted for Review and Confirm, and used right away in this conversation.
-  const patch = answerPatch(q, optionIds, otherText, new Date(ctx.now), ctx.profile);
-  const fact = factFromAnswer(q, patch, optionLabels(q, optionIds, otherText, qMsg?.intake?.options));
+  const patch = answerPatch(q, optionIds, resolvedOther, new Date(ctx.now), ctx.profile);
+  // Confirming the opener as main concern still stores the opening text.
+  if (questionId === 'session-concern' && optionIds[0] === 'yes' && resolvedOther) {
+    patch.intake = { ...patch.intake, mainConcern: resolvedOther };
+  }
+  const fact = factFromAnswer(q, patch, bubbleLabel);
   const facts = fact ? [fact] : [];
   const profile = withFacts(ctx.profile, facts);
   const next: Conversation = { ...conv, intakeDone: done, facts: mergeFacts(conv.facts, facts) };

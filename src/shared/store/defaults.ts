@@ -25,7 +25,7 @@ export function createDefaults(now: string = new Date().toISOString()): AppData 
     booking: { bookings: [] },
     settings: { theme: 'light', textSize: 1 },
     scenario: { id: 'S01', start: { kind: 'screen', root: 'preauth', stack: ['M-1.1'] }, loadNonce: 0 },
-    qa: { safetyBench: false },
+    qa: { safetyBench: false, teamAlerts: [] },
     dev: { speed: 'normal', failNext: false },
   };
 }

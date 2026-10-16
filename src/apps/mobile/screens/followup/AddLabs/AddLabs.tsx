@@ -5,6 +5,8 @@
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=49-547
  * @spec    docs/ux/F05-followup-labs.md#m-53--add-your-lab-results
  * @xref    web: W-5.3 (apps/web/screens/followup/AddLabs) — not built
+ *
+ * Prototype: camera or file upload only (image / PDF). No manual entry, no trust/padlock line.
  */
 import { useEffect, useRef, useState } from 'react';
 import { Icon, OptionList, OptionRow, ProgressBar, ProgressStatus, Sheet } from '@mobile/ui';
@@ -57,22 +59,13 @@ export default function AddLabs() {
         ) : (
           <div className={styles.body}>
             <OptionList label="How would you like to add them?">
-              <OptionRow leadingIcon="camera" chevron onSelect={() => setCamera(true)}>Take a photo of the report</OptionRow>
-              <OptionRow leadingIcon="pdf" chevron onSelect={() => fileInput.current?.click()}>Upload a PDF</OptionRow>
-              <OptionRow
-                leadingIcon="edit"
-                chevron
-                onSelect={() => {
-                  dismissSheet();
-                  presentModal('M-5.4', { source: 'manual' });
-                }}
-              >
-                Enter values manually
+              <OptionRow leadingIcon="camera" chevron onSelect={() => setCamera(true)}>
+                Take a photo
+              </OptionRow>
+              <OptionRow leadingIcon="upload" chevron onSelect={() => fileInput.current?.click()}>
+                Upload lab results
               </OptionRow>
             </OptionList>
-            <p className={styles.trust}>
-              <Icon name="lock" size={18} /> Your results are encrypted and only used for your consultations.
-            </p>
           </div>
         )}
       </Sheet>
@@ -81,7 +74,7 @@ export default function AddLabs() {
       <input
         ref={fileInput}
         type="file"
-        accept="application/pdf,image/*"
+        accept="image/*,application/pdf"
         className={styles.hiddenInput}
         onChange={(e) => {
           const file = e.target.files?.[0];

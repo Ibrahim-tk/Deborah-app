@@ -6,7 +6,7 @@
   "voiceSample": "I keep getting hot flashes at night and then I can't fall back asleep. During the day I feel foggy.",
   "openingMessage": "I've been having hot flashes at night and I'm exhausted all the time. My brain feels foggy.",
   "readyLine": "Thank you, {name}. I have a good picture now — tap below when you'd like to hear what I think, or ask me anything else first.",
-  "suggestedQuestions": ["Could this be perimenopause?", "Which labs should I ask for?"],
+  "suggestedQuestions": ["I can't sleep — what's going on?", "I'm gaining weight and nothing is working", "Which labs should I ask for?"],
   "answer": {
     "sections": [
       { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, you're waking up hot at night, struggling to get back to sleep, and carrying that tiredness and fog through your day. At {ageLabel}, that combination is something I hear about often — and it's real, not in your head." },

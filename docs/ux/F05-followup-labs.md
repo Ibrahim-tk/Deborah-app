@@ -7,8 +7,7 @@
 ```
 [shell] LockScreen + notification (M-5.1) ─tap─► unlock ─► deep link followup:<profile> ─► M-2.1 checkin
 M-2.1 checkin ─ Yes/Partly/Not yet ─► Deborah reply ─► labRequest "Upload my labs" ─► M-5.3 sheet
-M-5.3 ─ photo/PDF ─► "Reading your report…" ─► M-5.4 confirm ─► send ─► M-2.1 lab-informed answer (counts as consultation)
-            └ manual ─► M-5.4 (empty rows)
+M-5.3 ─ photo / upload (image or PDF) ─► "Reading your report…" ─► M-5.4 confirm ─► send ─► M-2.1 lab-informed answer (counts as consultation)
 ```
 
 ---
@@ -45,14 +44,13 @@ Check-in replies are not counted. The lab-informed answer **is** counted (paid u
 | Presentation | Sheet, medium |
 | Entry | `labRequest` button · M-9.1 Labs segment "+ Add" · hub quick link |
 
-**Layout:** title "Add your lab results" · **Take a photo of the report** · **Upload a PDF** · **Enter values manually** · trust line "Your results are encrypted and only used for your consultations."
+**Layout:** title "Add your lab results" · **Take a photo** · **Upload lab results** (image or PDF). No manual entry, no padlock/trust footer.
 
 **Behaviour**
 | Option | Prototype behaviour |
 |---|---|
 | Take a photo | Simulated camera view (full-screen modal: dark viewfinder, frame guide, shutter) → captured thumbnail → "Use photo" → processing |
-| Upload a PDF | Real `<input type="file" accept="application/pdf,image/*">` (file is **not** read; only the name is shown) → processing |
-| Manual | Push M-5.4 with empty rows |
+| Upload lab results | Real `<input type="file" accept="image/*,application/pdf">` (file is **not** read; only the name is shown) → processing |
 | Processing | Inline in sheet: progress + "Reading your report…" 1.5–2.5 s → M-5.4 with `sample-a` values |
 
 ---

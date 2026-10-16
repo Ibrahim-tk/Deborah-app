@@ -61,7 +61,7 @@ export default function LabReport() {
 
   const ask = () => {
     returnToConversation();
-    chat.shareLabs(report);
+    chat.shareLabs(report, { direct: true });
   };
 
   const meta = [

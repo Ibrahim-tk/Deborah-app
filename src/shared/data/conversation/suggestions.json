@@ -2,18 +2,33 @@
   "default": [
     {
       "id": "s1",
-      "text": "Why am I waking up at 3am every night?",
-      "scriptId": "sleep-3am"
+      "text": "Why am I so exhausted all the time?",
+      "scriptId": "thyroid-fatigue"
     },
     {
       "id": "s2",
-      "text": "Hot flashes and brain fog — are they connected?",
-      "scriptId": "hot-flashes-sleep"
+      "text": "I can't sleep — what's going on?",
+      "scriptId": "sleep-3am"
     },
     {
       "id": "s3",
-      "text": "Should I get my thyroid checked?",
-      "scriptId": "thyroid-fatigue"
+      "text": "Are my hormones out of balance?",
+      "scriptId": "hot-flashes-sleep"
+    },
+    {
+      "id": "s4",
+      "text": "Hot flashes, night sweats — is this menopause?",
+      "scriptId": "hot-flashes-sleep"
+    },
+    {
+      "id": "s5",
+      "text": "I'm gaining weight and nothing is working",
+      "scriptId": "generic"
+    },
+    {
+      "id": "s6",
+      "text": "My labs look normal but I feel terrible",
+      "scriptId": "lab-review"
     }
   ],
   "teen": [
@@ -33,5 +48,6 @@
       "scriptId": "teen-irregular-periods"
     }
   ],
-  "status": "placeholder"
+  "status": "placeholder",
+  "note": "Common concerns from Ask Deborah startup list. Icons stay as aiSearch (DESIGN.md bans emoji as icons)."
 }

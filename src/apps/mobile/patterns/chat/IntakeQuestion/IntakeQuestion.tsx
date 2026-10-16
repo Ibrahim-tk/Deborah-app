@@ -1,15 +1,17 @@
 /**
  * @pattern IntakeQuestion — /wid widgets bound to existing engine question IDs and answer events.
  * Only the current question accepts input. Question copy, ordering and profile writes stay in the engine.
- * Specialized year/date/measurement fields remain unchanged; no current intake question is a 0–10 or
- * five-face mood question, so ScaleCheck and MoodScale are not substituted for categorical answers.
+ * F02d: gate "Yes" expands to small pills (Other in the same row); confirm is a circular tick after the
+ * last pill. "Other…" focuses the bottom composer — no inline form. Composer stays hidden until Other.
  */
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { IntakeMeta } from '@shared/types/domain';
-import { Button, Input } from '@mobile/ui';
 import { InlineConsent, QuestionChoices } from '@mobile/patterns/widgets';
 import { IntakeFields } from './IntakeFields';
 import styles from './IntakeQuestion.module.css';
+
+/** What should own the answer UI under the thread. */
+export type IntakeAnswerSurface = 'choices' | 'composer';
 
 export interface IntakeQuestionProps {
   intake: IntakeMeta;
@@ -17,44 +19,126 @@ export interface IntakeQuestionProps {
   layout?: 'list' | 'grid2';
   active: boolean;
   onAnswer: (optionIds: string[], otherText?: string) => void;
+  /** Focus the bottom composer for "Other…" (no inline Other form). */
   onOther?: () => void;
+  /** Tell the screen when to show or hide the bottom composer. */
+  onAnswerSurface?: (surface: IntakeAnswerSurface) => void;
   onSkip?: () => void;
 }
 
-export function IntakeQuestion({ intake, prompt, active, onAnswer }: IntakeQuestionProps) {
-  const [otherOn, setOtherOn] = useState(false);
-  const [otherText, setOtherText] = useState('');
+export function IntakeQuestion({ intake, prompt, active, onAnswer, onOther, onAnswerSurface }: IntakeQuestionProps) {
+  const [expanded, setExpanded] = useState(false);
+  const [composerOther, setComposerOther] = useState(false);
   const [sent, setSent] = useState(false);
   const submitting = useRef(false);
-  const [otherIds, setOtherIds] = useState<string[]>([]);
   const locked = !active || sent;
+
+  const expandOptions = intake.expandOptions;
+  const canExpand = Boolean(expandOptions?.length);
+  const freeText = intake.input === 'text' || (intake.options.length === 0 && !intake.input);
+
+  useEffect(() => {
+    if (!active || !onAnswerSurface) return;
+    // Hide the bottom composer only on the expand multi-pill step. Hybrid gates
+    // (e.g. "Yes, that's it" / "Something else…") keep the composer visible.
+    if (freeText || composerOther || !expanded) onAnswerSurface('composer');
+    else onAnswerSurface('choices');
+  }, [active, freeText, composerOther, expanded, onAnswerSurface]);
+
   if (intake.skipped) return <p className={styles.step}>Skipped</p>;
-  if (intake.input) return active ? <IntakeFields input={intake.input} onAnswer={onAnswer} /> : null;
-  if (intake.questionId === 'health-consent') {
-    return <InlineConsent title={prompt} description={null} agreeLabel={intake.options.find((o) => o.id === 'agree')?.label} declineLabel={intake.options.find((o) => o.id === 'decline')?.label} disabled={!active} answered={intake.answered ? (intake.answered.includes('agree') ? 'agreed' : 'declined') : undefined} onAgree={() => onAnswer(['agree'])} onDecline={() => onAnswer(['decline'])} />;
+  // F02d: free-text session questions use the composer only — no type-invite pills.
+  if (freeText) return null;
+  if (intake.input && intake.input !== 'text') {
+    return active ? <IntakeFields input={intake.input} onAnswer={onAnswer} /> : null;
   }
-  // Preserve the standard chat's existing Other-text escape hatch. Question data is untouched.
-  const options = intake.options.some((o) => o.id === 'other') ? intake.options : [...intake.options, { id: 'other', label: 'Other…' }];
-  const submit = (ids: string[]) => {
-    if (locked) return;
-    if (ids.includes('other')) { setOtherIds(ids); setOtherOn(true); return; }
+  if (intake.questionId === 'health-consent') {
+    return (
+      <InlineConsent
+        title={prompt}
+        description={null}
+        agreeLabel={intake.options.find((o) => o.id === 'agree')?.label}
+        declineLabel={intake.options.find((o) => o.id === 'decline')?.label}
+        disabled={!active}
+        answered={intake.answered ? (intake.answered.includes('agree') ? 'agreed' : 'declined') : undefined}
+        onAgree={() => onAnswer(['agree'])}
+        onDecline={() => onAnswer(['decline'])}
+      />
+    );
+  }
+
+  const finish = (ids: string[]) => {
+    if (locked || submitting.current) return;
+    submitting.current = true;
     setSent(true);
-    onAnswer(ids);
+    onAnswer(ids.filter((id) => id !== 'other' && id !== 'yes'));
   };
+
+  const focusComposer = () => {
+    if (locked) return;
+    setComposerOther(true);
+    onOther?.();
+  };
+
+  /** Gate: None / Yes — Yes reveals issue or med pills. */
+  const onGate = (ids: string[]) => {
+    if (locked) return;
+    if (canExpand && ids.includes('yes')) {
+      setExpanded(true);
+      setComposerOther(false);
+      return;
+    }
+    if (ids.includes('other') && onOther) {
+      focusComposer();
+      return;
+    }
+    finish(ids);
+  };
+
+  if (expanded && expandOptions) {
+    return (
+      <div className={styles.root}>
+        <QuestionChoices
+          key="expand"
+          label="Select any that apply"
+          options={expandOptions}
+          multi
+          exclusive="none"
+          confirm="tick"
+          disabled={locked || composerOther}
+          answered={intake.answered}
+          onOther={focusComposer}
+          onSubmit={(ids) => finish(ids)}
+        />
+        {composerOther && active && !sent && (
+          <p className={styles.composerHint}>Type it in the box below, then send.</p>
+        )}
+      </div>
+    );
+  }
+
+  // Standard gate. Do not auto-append Other when expand flow owns that path.
+  const gateOptions = canExpand
+    ? intake.options
+    : intake.options.some((o) => o.id === 'other')
+      ? intake.options
+      : [...intake.options, { id: 'other', label: 'Other…' }];
+
   return (
     <div className={styles.root}>
-      <QuestionChoices key={otherOn ? 'other' : 'choices'} label="Answer options" options={options} multi={intake.multi} exclusive="none" disabled={locked || otherOn} initialSelected={otherIds} answered={intake.answered ?? (otherOn ? otherIds : undefined)} onSubmit={submit} />
-      {otherOn && active && <form className={styles.otherForm} onSubmit={(e) => {
-        e.preventDefault();
-        if (!otherText.trim() || submitting.current) return;
-        submitting.current = true;
-        setSent(true);
-        onAnswer(otherIds.length ? otherIds : ['other'], otherText.trim());
-      }}>
-        <Input label="Other answer" value={otherText} autoFocus placeholder="Type your answer…" onChange={(e) => setOtherText(e.target.value)} />
-        <Button type="submit" fullWidth disabled={!otherText.trim() || sent}>Send</Button>
-        <Button variant="ghost" disabled={sent} onClick={() => setOtherOn(false)}>Back to options</Button>
-      </form>}
+      <QuestionChoices
+        key="gate"
+        label="Answer options"
+        options={gateOptions}
+        multi={intake.multi}
+        exclusive="none"
+        disabled={locked || composerOther}
+        answered={intake.answered ?? (composerOther ? ['other'] : undefined)}
+        onSubmit={onGate}
+        onOther={onOther ? focusComposer : undefined}
+      />
+      {composerOther && active && !sent && (
+        <p className={styles.composerHint}>Type it in the box below, then send.</p>
+      )}
     </div>
   );
 }

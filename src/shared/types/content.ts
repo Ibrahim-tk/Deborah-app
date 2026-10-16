@@ -74,8 +74,11 @@ export interface IntakeQuestion {
   skipIfKnown: boolean;
   /** 2-column grid for short answers (DESIGN.md › Option rows). */
   layout?: 'list' | 'grid2';
-  /** Field-style answer (F01 health profile): a date, or height + weight. */
-  input?: 'date' | 'measure' | 'year' | 'height' | 'weight';
+  /**
+   * Field-style answer: date / year / height / weight wheels, or `text` = composer-only
+   * (F02d — no inline type-invite pills).
+   */
+  input?: 'date' | 'measure' | 'year' | 'height' | 'weight' | 'text';
   noSkip?: boolean;
   hideStep?: boolean;
   /**
@@ -83,6 +86,11 @@ export interface IntakeQuestion {
    * pills = yes/no and short single answers · quiz = numbered card for lists with "Other".
    */
   presentation?: 'pills' | 'quiz';
+  /**
+   * F02d: after tapping `yes` on the gate options, show these pills (multi) instead of an
+   * inline type form. Include `{ id: "other" }` to route typing to the bottom composer.
+   */
+  expandOptions?: Option[];
   /** Core experience bank: asked only when the profile matches. */
   showIf?: ShowIf;
   /** DN-11: the red-flag screen; any option except "none" stops the hormone-only answer. */

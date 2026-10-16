@@ -96,6 +96,11 @@ export interface Intake {
   boneScan?: string;
   testosteroneChecked?: string;
   psaCheck?: string;
+  /** Ask Dibora session answers (pending until Review and Confirm). */
+  mainConcern?: string;
+  otherIssues?: string;
+  healthGoal?: string;
+  newMeds?: string;
 }
 
 export interface Profile {
@@ -147,8 +152,8 @@ export interface IntakeMeta {
   of: number;
   answered?: string[];
   skipped?: boolean;
-  /** Field-style answer instead of option rows: a date, or height + weight. */
-  input?: 'date' | 'measure' | 'year' | 'height' | 'weight';
+  /** Field-style answer: wheels, or `text` = composer-only (F02d). */
+  input?: 'date' | 'measure' | 'year' | 'height' | 'weight' | 'text';
   /** Consent and confirmations can't be skipped and don't count as numbered steps. */
   noSkip?: boolean;
   hideStep?: boolean;
@@ -157,6 +162,8 @@ export interface IntakeMeta {
    * pills = yes/no and short single answers · quiz = numbered card for lists with "Other".
    */
   presentation?: 'pills' | 'quiz';
+  /** Shown after gate "Yes" (F02d expand → issue/med pills). */
+  expandOptions?: Option[];
 }
 
 export type SectionKey =
@@ -214,6 +221,8 @@ export interface MessageMeta {
   acknowledged?: boolean;
   /** Escalation card dismissed with "Not now". */
   dismissed?: boolean;
+  /** Demo toast already shown for care-team notify (emergency / crisis). */
+  teamNotified?: boolean;
   status?: ContentStatus;
 }
 
@@ -290,6 +299,14 @@ export interface Conversation {
   facts?: PendingFact[];
   /** M-2.8 is due but waits until the Review and Confirm card is resolved. */
   followUpAfterReview?: boolean;
+  /** First user turn / suggestion text — prefills session main-concern confirm. */
+  openingText?: string;
+  /** Times the user chose “I have more to add” on session-complete (capped at 2). */
+  sessionMoreCount?: number;
+  /** After “I have more to add”: next free-text is extra context, then re-ask completeness. */
+  awaitingSessionMore?: boolean;
+  /** Simulated care-team alert after emergency or crisis (prototype only). */
+  teamAlert?: { level: 'emergency' | 'crisis'; at: ISODate; phrase?: string };
 }
 
 export type CheckInStage = 'opening' | 'awaitingDetail' | 'labs' | 'done';

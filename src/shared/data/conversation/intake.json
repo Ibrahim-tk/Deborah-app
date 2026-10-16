@@ -337,6 +337,90 @@
       "profileField": "intake.weight",
       "skipIfKnown": true,
       "input": "weight"
+    },
+    {
+      "id": "session-concern",
+      "presentation": "pills",
+      "prompt": "Just to confirm — your main health concern today is: {concern}. Does that sound right?",
+      "options": [
+        { "id": "yes", "label": "Yes, that's it" },
+        { "id": "other", "label": "Something else…" }
+      ],
+      "multi": false,
+      "profileField": "intake.mainConcern",
+      "skipIfKnown": false,
+      "layout": "list"
+    },
+    {
+      "id": "session-other",
+      "presentation": "pills",
+      "prompt": "Are there any other health issues you'd like me to keep in mind?",
+      "options": [
+        { "id": "none", "label": "None" },
+        { "id": "yes", "label": "Yes" }
+      ],
+      "expandOptions": [
+        { "id": "hypothyroidism", "label": "Hypothyroidism" },
+        { "id": "high-blood-pressure", "label": "High blood pressure" },
+        { "id": "diabetes", "label": "Diabetes" },
+        { "id": "anxiety", "label": "Anxiety" },
+        { "id": "depression", "label": "Depression" },
+        { "id": "migraines", "label": "Migraines" },
+        { "id": "pcos", "label": "PCOS" },
+        { "id": "endometriosis", "label": "Endometriosis" },
+        { "id": "other", "label": "Other…" }
+      ],
+      "multi": false,
+      "profileField": "intake.otherIssues",
+      "skipIfKnown": false,
+      "layout": "list"
+    },
+    {
+      "id": "session-goal",
+      "presentation": "quiz",
+      "prompt": "What's one health goal for this year — and what's gotten in the way so far?",
+      "options": [],
+      "multi": false,
+      "profileField": "intake.healthGoal",
+      "skipIfKnown": false,
+      "input": "text"
+    },
+    {
+      "id": "session-meds",
+      "presentation": "pills",
+      "prompt": "Any new medications since your last visit?",
+      "options": [
+        { "id": "none", "label": "None" },
+        { "id": "yes", "label": "Yes" }
+      ],
+      "expandOptions": [
+        { "id": "levothyroxine", "label": "Levothyroxine" },
+        { "id": "metformin", "label": "Metformin" },
+        { "id": "lisinopril", "label": "Lisinopril" },
+        { "id": "sertraline", "label": "Sertraline" },
+        { "id": "estradiol", "label": "Estradiol" },
+        { "id": "progesterone", "label": "Progesterone" },
+        { "id": "other", "label": "Other…" }
+      ],
+      "multi": false,
+      "profileField": "intake.newMeds",
+      "skipIfKnown": false,
+      "layout": "list"
+    },
+    {
+      "id": "session-complete",
+      "presentation": "pills",
+      "prompt": "Have you sent everything you wanted me to see — symptoms, notes, and any labs?",
+      "options": [
+        { "id": "yes", "label": "Yes, that's everything" },
+        { "id": "more", "label": "I have more to add" }
+      ],
+      "multi": false,
+      "profileField": "session.complete",
+      "skipIfKnown": false,
+      "noSkip": true,
+      "hideStep": true,
+      "layout": "list"
     }
   ],
   "maxQuestions": 3,

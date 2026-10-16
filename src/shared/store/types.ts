@@ -204,7 +204,11 @@ export interface MetaSlice {
 
 /** QA aids a scenario can switch on (S13 Safety test bench). */
 export interface QaSlice {
-  qa: { safetyBench: boolean };
+  qa: {
+    safetyBench: boolean;
+    /** Simulated care-team notifications (emergency / crisis). Demo only. */
+    teamAlerts: { level: 'emergency' | 'crisis'; at: string; conversationId: string; phrase?: string }[];
+  };
 }
 
 /** Dev flags mirrored from the shell; never persisted. */

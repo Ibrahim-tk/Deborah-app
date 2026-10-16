@@ -6,7 +6,7 @@
   "voiceSample": "I'm tired all the time, I feel cold, and I wonder if it's my thyroid.",
   "openingMessage": "Should I get my thyroid checked? I'm tired all the time.",
   "readyLine": "Thank you, {name}. I have what I need. Tap below whenever you're ready for my thoughts.",
-  "suggestedQuestions": ["My TSH was normal — could it still be my thyroid?", "What else causes tiredness like this?"],
+  "suggestedQuestions": ["My labs look normal but I feel terrible", "I can't sleep — what's going on?", "What else causes tiredness like this?"],
   "answer": {
     "sections": [
       { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, you're running on empty most days, and you're wondering whether your thyroid could be behind it. That's a thoughtful question to ask." },

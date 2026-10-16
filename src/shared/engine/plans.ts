@@ -89,7 +89,19 @@ export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, pro
   // Consent and the country check aren't numbered steps.
   const numbered = plan.filter((id) => id !== CLARIFY && !question(id)?.hideStep);
   const step = numbered.filter((id) => done.includes(id)).length + 1;
-  const text = interpolate(q.prompt, { name: profile.name, country: countryName(ctx.region ?? 'US') });
+  const concern = conv.openingText?.trim();
+  const concernFreeText = q.id === 'session-concern' && !concern;
+  const prompt = concernFreeText
+    ? "What's your main health concern today? Type it in the box below."
+    : q.prompt;
+  const text = interpolate(prompt, {
+    name: profile.name,
+    country: countryName(ctx.region ?? 'US'),
+    concern: concern || 'what you shared',
+  });
+  // F02d: type-only prompts get empty options + input text (composer only, no pills).
+  const freeText = q.input === 'text' || concernFreeText;
+  const options = freeText ? [] : optionsFor(q, ctx);
   return [
     ...pre,
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake' } } },
@@ -97,14 +109,15 @@ export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, pro
       kind: 'intakeQuestion',
       intake: {
         questionId: q.id,
-        options: optionsFor(q, ctx),
+        options,
         multi: q.multi,
         step,
         of: numbered.length,
-        input: q.input,
+        input: freeText ? 'text' : q.input,
         noSkip: q.noSkip,
         hideStep: q.hideStep,
         presentation: q.presentation,
+        expandOptions: q.expandOptions,
       },
     }),
   ];
@@ -165,7 +178,9 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
   const steps: Step[] = [
     { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'generating', ...(provider && { providerReview: { ...providerState, state: 'generating' } }) } } },
     // A retry resumes the answer without repeating the lead line.
-    ...(opts.retry ? [] : deborahText(ctx, provider ? providerReviewCopy.lead : persona.voice.answerLead)),
+    ...(opts.retry
+      ? []
+      : deborahText(ctx, provider ? providerReviewCopy.lead : persona.voice.answerLead)),
     { type: 'thinking', on: true, label: reviewing },
     { type: 'delay', ms: between(600, 800) },
     { type: 'thinking', on: true, label: handbook },

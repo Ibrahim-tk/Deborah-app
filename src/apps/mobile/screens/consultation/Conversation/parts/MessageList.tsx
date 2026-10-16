@@ -39,12 +39,14 @@ export interface MessageListProps {
   onRestartPlan: () => void;
   onLongPress: (m: Message) => void;
   onFocusComposer: () => void;
+  /** F02d: hide/show bottom composer while intake owns choices vs typing. */
+  onIntakeAnswerSurface?: (surface: 'choices' | 'composer') => void;
   /** DN-13: Edit on the Review and Confirm card (M-2.13). */
   onEditFacts: () => void;
 }
 
 
-export function MessageList({ conversation, busy, chat, actions, onShop, onBook, onUploadLabs, onRestartPlan, onLongPress, onFocusComposer, onEditFacts }: MessageListProps) {
+export function MessageList({ conversation, busy, chat, actions, onShop, onBook, onUploadLabs, onRestartPlan, onLongPress, onFocusComposer, onIntakeAnswerSurface, onEditFacts }: MessageListProps) {
   const { messages, status } = conversation;
   const reports = useAppStore((s) => s.labs.reportsById);
   // DN-12: no products for anyone under 18, the shop tiles included.
@@ -174,6 +176,7 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
             onAnswer={(ids, other) => chat.answerIntake(intake.questionId, ids, other)}
             onSkip={() => chat.skip(intake.questionId)}
             onOther={onFocusComposer}
+            onAnswerSurface={onIntakeAnswerSurface}
           />
         )}
         {quick && quickActive && (

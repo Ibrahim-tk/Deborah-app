@@ -340,9 +340,8 @@ Photo view is simulated. PDF selection uses a real picker, but contents are neve
 flowchart TD
   N0["1. Open lab attachment · M-5.3"]
   N0 -.-> B0_0["Photo → simulated camera"]
-  N0 -.-> B0_1["PDF → local file picker; choose only synthetic data"]
-  N0 -.-> B0_2["Manual → empty values form"]
-  N1["2. Use sample photo · M-5.4"]
+  N0 -.-> B0_1["Upload → image or PDF picker; choose only synthetic data"]
+  N1["2. Confirm sample values · M-5.4"]
   N0 --> N1
   N2["3. Review results · M-2.1"]
   N1 --> N2
@@ -515,7 +514,7 @@ flowchart TD
 
 Maria · IMPLEMENTED · Start: S13
 
-Scripted guardrail matching; clinical copy is placeholder.
+Scripted guardrail matching; clinical copy is placeholder. Emergency and crisis simulate care-team prioritization/notify (demo toast + conversation.teamAlert). Crisis actions open a bottom sheet (911, 988, text line). Urgent non-emergency red flags advise care within 24 hours / first business day.
 
 ```mermaid
 flowchart TD

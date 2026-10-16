@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { suggestionsData } from '@shared/data';
-import { ageOf, isMinor, pendingFacts } from '@shared/engine';
+import { ageOf, greeting, isMinor, pendingFacts } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
@@ -34,7 +34,7 @@ const SHOW_TRIAL_COUNTER = false;
 
 export default function Conversation() {
   const chat = useConversation();
-  const { conversation, profile, freeLeft, busy } = chat;
+  const { conversation, profile, freeLeft, busy, history } = chat;
   const { open, push, pop, switchTab, presentSheet } = useNav();
   const gate = useAccountGate();
   const intake = useIntakeFlow();
@@ -47,6 +47,8 @@ export default function Conversation() {
   const [recording, setRecording] = useState(false);
   const [symptomsOpen, setSymptomsOpen] = useState(false);
   const [underBar, setUnderBar] = useState(false);
+  /** F02d: while expand/gate pills are active, hide the bottom composer until Other. */
+  const [intakeSurface, setIntakeSurface] = useState<'choices' | 'composer'>('composer');
   const safetyBench = useAppStore((s) => s.qa.safetyBench);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -72,11 +74,16 @@ export default function Conversation() {
   const profileOpening = Boolean(startIntake) && isEmpty;
   const profiling = (conversation?.status === 'intake' || (intakeMode && !aboutStep) || profileOpening) && !emergencyOpen;
   const quizMsg = [...messages].reverse().find((m) => m.kind === 'intakeQuestion');
+  // Wheel fields (year/height/weight) own the UI; `text` is composer-only (F02d) and still counts as quiz.
+  const fieldWheel = quizMsg?.intake?.input && quizMsg.intake.input !== 'text';
   const quiz =
-    conversation?.status === 'intake' && !busy && Boolean(quizMsg?.intake) && !quizMsg?.intake?.input &&
+    conversation?.status === 'intake' && !busy && Boolean(quizMsg?.intake) && !fieldWheel &&
     !quizMsg?.intake?.answered && !quizMsg?.intake?.skipped && !quizMsg?.meta?.streaming
       ? quizMsg?.intake
       : undefined;
+  const quizFreeText = Boolean(quiz && (quiz.input === 'text' || quiz.options.length === 0));
+  // Expand / gate choice questions own the UI — composer only after Other or for free-text.
+  const hideComposerForChoices = Boolean(quiz && !quizFreeText && intakeSurface === 'choices');
   const { ref: scrollRef, onScroll, showLatest, toBottom } = useAutoScroll(`${intake.progress.step}:${messages.length}:${last?.text?.length}:${JSON.stringify(last?.answer?.sections.map((s) => s.body.length + (s.bullets?.length ?? 0)))}:${conversation?.thinking}`);
 
   useEffect(() => () => setChromeHidden(false), [setChromeHidden]);
@@ -108,6 +115,11 @@ export default function Conversation() {
     if (focus || prefill) inputRef.current?.focus();
   }, [focus, prefill]);
 
+  // F02d: free-text session questions — put focus in the composer (no inline type pill).
+  useEffect(() => {
+    if (quizFreeText) inputRef.current?.focus();
+  }, [quizFreeText, quiz?.questionId]);
+
   const chatSend = chat.send;
   const consent = useHealthConsent();
   const askConsent = consent.ask;
@@ -123,14 +135,22 @@ export default function Conversation() {
       if (intakeMode && intake.progress.step === 'done') intake.close();
       setDraft('');
       toBottom();
-      if (quiz?.options.some((o) => o.id === 'other')) return void chat.answerIntake(quiz.questionId, ['other'], t);
+      // Free-text session Q, expand "Other…", or hybrid Other: composer answers the current question.
+      if (
+        quiz &&
+        (quizFreeText ||
+          Boolean(quiz.expandOptions?.length) ||
+          quiz.options.some((o) => o.id === 'other'))
+      ) {
+        return void chat.answerIntake(quiz.questionId, ['other'], t);
+      }
       // After sign-up's health basics: consent alert first, so Deborah can answer directly.
       await askConsent();
       // Gated by the free limit: the message stays in the composer (F04).
       const accepted = await chatSend(t, scriptId);
       if (!accepted) setDraft(t);
     },
-    [chatSend, toBottom, aboutStep, intakeMode, intake, quiz, chat, askConsent],
+    [chatSend, toBottom, aboutStep, intakeMode, intake, quiz, quizFreeText, chat, askConsent],
   );
 
   const { interceptFocus } = useReturnFlows({ startCheckIn: chat.startCheckIn, send, status: conversation?.status, busy, atBottom: !showLatest });
@@ -163,7 +183,13 @@ export default function Conversation() {
       {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
       <Aura />
       <GradientShift />
-      <ChatHeader onBack={pop} onNewChat={() => chat.startNew()} canStartNew={!isEmpty && !profiling} scrolled={underBar} />
+      <ChatHeader
+        onBack={pop}
+        onNewChat={() => chat.startNew()}
+        canStartNew={!isEmpty && !profiling}
+        scrolled={underBar}
+        profile={profile ? { name, onPress: openSwitcher } : undefined}
+      />
       {other && profile && (
         <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} child={(ageOf(profile, now) ?? 99) < 13} onSwitch={openSwitcher} />
       )}
@@ -180,7 +206,16 @@ export default function Conversation() {
           {intakeMode ? (
             <IntakeFlow flow={intake} onScan={(field) => presentSheet('M-2.9', { field })} onPick={(t) => send(t)} />
           ) : isEmpty ? (
-            !profileOpening && <Greeting />
+            !profileOpening && (() => {
+              const last = history[0];
+              const g = greeting(name || 'there', now, last?.topic ?? last?.summary, other);
+              return (
+                <Greeting
+                  welcomeBack={g.welcomeBack}
+                  onContinue={g.welcomeBack ? () => chat.continueLast() : undefined}
+                />
+              );
+            })()
           ) : (
             conversation && (
               <MessageList
@@ -197,6 +232,7 @@ export default function Conversation() {
                 })}
                 onLongPress={setPressed}
                 onFocusComposer={() => inputRef.current?.focus()}
+                onIntakeAnswerSurface={setIntakeSurface}
                 onEditFacts={() => presentSheet('M-2.13', { conversationId: conversation.id })}
               />
             )
@@ -207,9 +243,11 @@ export default function Conversation() {
 
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
-        {isEmpty && !intakeMode && !profileOpening && !recording && <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />}
+        {(isEmpty || conversation?.status === 'empty') && !intakeMode && !profileOpening && !recording && (
+          <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
+        )}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
-        {(!profiling || Boolean(quiz)) && <Composer
+        {(!profiling || Boolean(quiz)) && !hideComposerForChoices && <Composer
           value={draft}
           onChange={setDraft}
           onSend={(text) => send(text ?? draft)}
@@ -220,7 +258,25 @@ export default function Conversation() {
           generating={generating}
           lockedNote={emergencyOpen ? 'Please get help first.' : undefined}
           inputRef={inputRef}
-          placeholder={aboutStep ? ABOUT_PLACEHOLDER : quiz ? 'Or type something else…' : conversation?.status === 'intake' ? 'Or type your answer…' : 'Describe how you’re feeling…'}
+          placeholder={
+            aboutStep
+              ? ABOUT_PLACEHOLDER
+              : quizFreeText
+                ? quiz?.questionId === 'session-goal'
+                  ? 'Type your goal…'
+                  : quiz?.questionId === 'session-concern'
+                    ? 'Type your main concern…'
+                    : 'Type your answer…'
+                : quiz?.expandOptions?.length
+                  ? quiz.questionId === 'session-meds'
+                    ? 'Or type a medication…'
+                    : 'Or type another issue…'
+                : quiz
+                  ? 'Or type something else…'
+                  : conversation?.status === 'intake'
+                    ? 'Or type your answer…'
+                    : 'Ask me anything'
+          }
           onRecordingChange={setRecording}
           voiceSample={aboutStep ? ABOUT_VOICE_SAMPLE : chat.voiceSample}
           // Trial counter hidden for now (design direction 2026-10-08); the free-limit sheet still gates.

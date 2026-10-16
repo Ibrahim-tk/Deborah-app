@@ -7,7 +7,7 @@
   "voiceSample": "I have my lab results back and I'd like you to look at them.",
   "openingMessage": "I have my lab results back.",
   "readyLine": "Thank you, {name}. I have your results in front of me.",
-  "suggestedQuestions": ["What should I ask at my next appointment?", "When should I recheck my labs?"],
+  "suggestedQuestions": ["Why am I so exhausted all the time?", "Are my hormones out of balance?", "When should I recheck my labs?"],
   "answer": {
     "sections": [
       { "key": "hearing", "title": "What I'm Hearing", "body": "{name}, thank you for sharing your labs from {labDate}. I looked at all {labCount} values you confirmed, including {labHighlight}. Numbers only tell part of the story, so I'm reading them alongside what you've told me about how you feel." },

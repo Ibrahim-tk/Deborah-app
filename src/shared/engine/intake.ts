@@ -7,7 +7,7 @@ import { intakeData } from '../data';
 import type { IntakeQuestion } from '../types/content';
 import type { Intake, Option, Profile } from '../types/domain';
 import type { EngineContext } from '../types/engine';
-import { CLARIFY, chatQuestion, journeyAllowsProduct, journeyFor, missingBasics } from './journey';
+import { CLARIFY, SESSION_QUESTIONS, chatQuestion, journeyAllowsProduct, journeyFor, missingBasics } from './journey';
 import { ageBandFor, ageOn, isMinor } from './profile';
 
 export const CONSENT_ID = 'health-consent';
@@ -67,9 +67,8 @@ export function missingOnboarding(profile: Profile): string[] {
 /**
  * Full plan for a new consultation: consent first (only if any health question follows), then the
  * missing basics and safety gates, then the topic, then the country check.
- * Core experience (DN-09 · DN-10): adults get the journey's missing basics and a `@clarify` slot that
- * expands into the journey × symptom-group clarifiers once the questions before it are answered.
- * Teens and children keep the script's own questions (no bank yet, plan § Scope).
+ * Ask Dibora: adults get missing basics, session questions (concern / other / goal / meds /
+ * completeness), then `@clarify` → red-flag screen only. Teens and children keep script questions.
  */
 export function planConsultation(ctx: EngineContext, scriptIntake: string[], hasProduct: boolean): string[] {
   const now = new Date(ctx.now);
@@ -78,7 +77,11 @@ export function planConsultation(ctx: EngineContext, scriptIntake: string[], has
   // OPEN: "child and male-teen question banks" (plan § Scope) — documented default: a boy under 18 gets only
   // the neutral how-long / how-often questions, never the scripts' cycle questions.
   const minorBoy = isMinor(ctx.profile, now) && (ctx.profile.sexAtBirth ?? ctx.profile.health?.sexAtBirth?.value) === 'male';
-  let topic = usesBank ? [...missingBasics(ctx.profile, now), CLARIFY] : minorBoy ? ['how-long', 'how-often'] : planIntake(scriptIntake, ctx.profile);
+  let topic = usesBank
+    ? [...missingBasics(ctx.profile, now), ...SESSION_QUESTIONS, CLARIFY]
+    : minorBoy
+      ? ['how-long', 'how-often']
+      : planIntake(scriptIntake, ctx.profile);
   if (ctx.profileGates === false) return topic;
   // Basics first (date of birth, sex at birth), then the topic, then the product safety gates
   // (medications, allergies) so she's asked about her own concern before her medicine cabinet.
@@ -140,12 +143,23 @@ export function answerPatch(q: IntakeQuestion, optionIds: string[], otherText: s
   if (q.id === 'body') return { profile: {}, intake: { height: optionIds[0], weight: optionIds[1] } };
   if (q.id === COUNTRY_ID) return { profile: {}, intake: { country: optionIds[0] === 'other' ? otherText?.trim() || 'other' : optionIds[0] } };
   // Clarifier answers that only matter to this conversation never touch the profile.
-  if (q.profileField.startsWith('conversation.')) return { profile: {}, intake: {} };
+  if (q.profileField.startsWith('conversation.') || q.profileField.startsWith('session.')) return { profile: {}, intake: {} };
   const field = q.profileField.replace(/^intake\./, '');
   // Symptoms collect across questions and conversations; "None of these" adds nothing.
   if (field === 'symptoms') {
     const picked = optionIds.filter((id) => id !== 'none');
     return { profile: {}, intake: picked.length ? { symptoms: [...new Set([...(current?.intake.symptoms ?? []), ...picked])] } : {} };
+  }
+  // Session free-text / confirm / expanded pills: store the human label the user sees.
+  if (field === 'mainConcern' || field === 'otherIssues' || field === 'healthGoal' || field === 'newMeds') {
+    if (optionIds[0] === 'none') return { profile: {}, intake: { [field]: 'None' } as Partial<Intake> };
+    const text = otherText?.trim();
+    if (text) return { profile: {}, intake: { [field]: text } as Partial<Intake> };
+    const catalog = [...q.options, ...(q.expandOptions ?? [])];
+    const labels = optionIds
+      .filter((id) => id !== 'yes' && id !== 'other')
+      .map((id) => catalog.find((o) => o.id === id)?.label ?? id);
+    return { profile: {}, intake: labels.length ? ({ [field]: labels.join(', ') } as Partial<Intake>) : {} };
   }
   return { profile: {}, intake: { [field]: q.multi ? optionIds : optionIds[0] } as Partial<Intake> };
 }
@@ -155,9 +169,13 @@ export function optionLabels(q: IntakeQuestion, optionIds: string[], otherText?:
   if (q.input === 'measure') return optionIds.filter(Boolean).join(' · ');
   // Wheels and rulers pass the label in the user's units (e.g. "5 ft 6 in").
   if (q.input === 'year' || q.input === 'height' || q.input === 'weight') return otherText?.trim() || optionIds[0];
+  // Prefer expand pills + gate options when labeling session answers.
+  const catalog = options.length ? options : [...q.options, ...(q.expandOptions ?? [])];
+  const full = [...catalog, ...(q.expandOptions ?? []).filter((o) => !catalog.some((c) => c.id === o.id))];
   // The "other" option echoes what the user typed; the scripted reply stays the same.
   return optionIds
-    .map((id) => (id === 'other' && otherText?.trim() ? otherText.trim() : options.find((o) => o.id === id)?.label ?? id))
+    .filter((id) => id !== 'yes')
+    .map((id) => (id === 'other' && otherText?.trim() ? otherText.trim() : full.find((o) => o.id === id)?.label ?? id))
     .join(', ');
 }
 

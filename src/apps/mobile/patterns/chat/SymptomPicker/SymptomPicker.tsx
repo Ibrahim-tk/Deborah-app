@@ -1,7 +1,7 @@
 /**
  * @pattern SymptomPicker — bottom sheet from the composer's "Symptoms" button: a search field, common
- *          symptoms grouped by area as toggle pills (line check), and "Add '…'" for anything rare or
- *          unlisted. "Add to message" drops the picked symptoms into the draft, where she can still edit.
+ *          symptoms grouped by area as toggle pills (tint when selected, no checkmark), and "Add '…'" for
+ *          anything rare or unlisted. "Add to message" drops the picked symptoms into the draft.
  * @usedBy  M-2.1, M-2.12
  * @spec    design direction 2026-10-14 (OPEN: add to docs/ux/F02-consultation.md) · data/intake/symptoms.json
  * @xref    web: apps/web/patterns/chat/SymptomPicker — not built
@@ -84,7 +84,6 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
                     <div className={styles.pills}>
                       {g.items.map((s) => (
                         <button key={s} type="button" className={styles.pill} aria-pressed={picked.includes(s)} onClick={() => toggle(s)}>
-                          <span className={styles.tick} aria-hidden><Icon name="check" size={16} /></span>
                           {s}
                         </button>
                       ))}

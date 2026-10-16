@@ -42,8 +42,8 @@ export type UserInput =
   /** Home "Complete your profile": Deborah asks the onboarding questions straight away. */
   | { kind: 'startProfile' }
   | { kind: 'checkInReply'; messageId: string; optionId: string }
-  /** M-5.4 "Looks right — send to Deborah". */
-  | { kind: 'shareLabs'; report: LabReport };
+  /** M-5.4 "Looks right — send to Deborah". `direct` skips session-first (e.g. M-9.5). */
+  | { kind: 'shareLabs'; report: LabReport; direct?: boolean };
 
 /** Store mutations the bridge applies (kept serialisable). */
 export type StoreAction =

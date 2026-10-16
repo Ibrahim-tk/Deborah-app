@@ -82,8 +82,9 @@ export function useConversation() {
     /** Home "Complete your profile": the first onboarding question, no user message first. */
     startProfile: () => run({ kind: 'startProfile' }),
     checkInReply: (messageId: string, optionId: string) => run({ kind: 'checkInReply', messageId, optionId }),
-    /** M-5.4 "Looks right — send to Deborah": lab-informed answer (counted). */
-    shareLabs: (report: LabReport) => run({ kind: 'shareLabs', report }),
+    /** M-5.4 / M-9.5: share labs into chat. `direct` answers immediately (records Ask). */
+    shareLabs: (report: LabReport, opts?: { direct?: boolean }) =>
+      run({ kind: 'shareLabs', report, direct: opts?.direct }),
     startNew: () => profile && useAppStore.getState().archiveActive(profile.id),
     /** "Continue that conversation": bring the most recent answered conversation back. */
     continueLast: () => {

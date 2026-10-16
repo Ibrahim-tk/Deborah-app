@@ -13,3 +13,26 @@
 }
 .root > *, .right > * { pointer-events: auto; }
 .right { display: flex; align-items: center; gap: var(--space-2); }
+.avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.42), rgb(255 255 255 / 0.18) 55%, rgb(255 255 255 / 0.3));
+  box-shadow:
+    inset 1px 1px 0.5px -0.5px rgb(255 255 255 / 0.95),
+    inset -1px -1px 0.5px -0.5px rgb(255 255 255 / 0.6),
+    inset 0 0 10px rgb(255 255 255 / 0.25),
+    0 4px 14px rgb(18 7 33 / 0.08);
+  -webkit-backdrop-filter: blur(14px) saturate(130%) brightness(1.06);
+  backdrop-filter: blur(14px) saturate(130%) brightness(1.06);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms var(--ease-out);
+}
+.avatar:active { transform: scale(0.94); }
+.avatar:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.avatar .avatarGlass { background: transparent; color: var(--color-ink); }
+.avatar .avatarGlass > span { font: var(--weight-medium) 17px / 1 var(--font-body); letter-spacing: -0.01em; }
