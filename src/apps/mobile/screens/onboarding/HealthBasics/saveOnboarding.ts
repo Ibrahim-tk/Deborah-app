@@ -1,6 +1,6 @@
 /**
- * Saves the onboarding profile (plan P-04). Basics from the form — who it's for, date of birth, gender,
- * and age×gender intake answers — go straight onto the profile (decision D-4).
+ * Saves the onboarding profile (plan P-04). Basics from the form — who it's for, date of birth,
+ * sex at birth, gender identity, and age×gender intake answers — go straight onto the profile (D-4).
  */
 import { ageBandFor, ageGroupFor } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
@@ -11,11 +11,7 @@ import { ageFromAnswers, forSomeoneElse, list, type Answers } from './steps';
 
 const CONSENT_PATH = { child: 'guardian-child', teen: 'guardian-teen', adult: 'adult-agreement' } as const;
 
-const SEX_FROM_GENDER: Partial<Record<string, SexAtBirth>> = {
-  female: 'female',
-  male: 'male',
-  intersex: 'intersex',
-};
+const SEX_VALUES = new Set<SexAtBirth>(['female', 'male', 'intersex']);
 
 const CYCLE_FROM_REPRODUCTIVE: Record<string, Cycle> = {
   'pre-menopausal': 'regular',
@@ -40,7 +36,7 @@ export function saveOnboarding(a: Answers): string {
   const dob = a.birthDate;
   const year = dob ? Number(dob.slice(0, 4)) : NaN;
   const age = ageFromAnswers(a, now) ?? (Number.isFinite(year) ? now.getFullYear() - year : 0);
-  const sex = SEX_FROM_GENDER[a.gender ?? ''] ?? (a.sex as SexAtBirth | undefined);
+  const sex = SEX_VALUES.has(a.sex as SexAtBirth) ? (a.sex as SexAtBirth) : undefined;
   const birthYear = Number.isFinite(year) ? { value: year, source: 'manual' as const, updatedAt: at } : undefined;
   const reproductive = a.reproductive ?? a.reproductiveTeen;
   /** PDF transgender intake: single puberty question (Trans-woman / Trans-man / None yet). */
@@ -59,6 +55,18 @@ export function saveOnboarding(a: Answers): string {
   if (transPuberty) care.transIdentity = transPuberty;
   if (a.transPuberty === 'none-yet') care.transPuberty = 'none-yet';
   if (a.guardianNames?.trim()) care.guardianNames = a.guardianNames.trim();
+  if (a.periodsStarted) care.periodsStarted = a.periodsStarted;
+  if (a.periodsNotes?.trim()) care.periodsNotes = a.periodsNotes.trim();
+  // Yes → free-text details (or "Yes"); No / legacy None → "None".
+  if (a.pubertyBlockers === 'yes') care.pubertyBlockers = a.pubertyBlockersDetails?.trim() || 'Yes';
+  else if (a.pubertyBlockers === 'no' || a.pubertyBlockers === 'None') care.pubertyBlockers = 'None';
+  else if (a.pubertyBlockers?.trim()) care.pubertyBlockers = a.pubertyBlockers.trim();
+  if (a.ageAtLastPeriod?.trim()) care.ageAtLastPeriod = a.ageAtLastPeriod.trim();
+  if (a.hysterectomy) care.hysterectomy = a.hysterectomy;
+  if (a.ovariesRemoved) care.ovariesRemoved = a.ovariesRemoved;
+  if (a.hrtStatus) care.hrtStatus = a.hrtStatus;
+  if (a.hrtType) care.hrtType = a.hrtType;
+  if (a.hrtTaken) care.hrtTaken = a.hrtTaken;
 
   const healthPatch = {
     ...(birthYear && { birthYear }),
@@ -82,6 +90,21 @@ export function saveOnboarding(a: Answers): string {
     ...(a.pubertyNotes?.trim() && { pubertyNotes: a.pubertyNotes.trim() }),
     ...(a.genesisGold === 'yes' || a.genesisGold === 'no' ? { genesisGold: a.genesisGold as 'yes' | 'no' } : {}),
     ...(a.guardianNames?.trim() && { guardianNames: a.guardianNames.trim() }),
+    ...(a.periodsStarted && { periodsStarted: a.periodsStarted }),
+    ...(a.periodsNotes?.trim() && { periodsNotes: a.periodsNotes.trim() }),
+    ...(a.pubertyBlockers === 'yes'
+      ? { pubertyBlockers: a.pubertyBlockersDetails?.trim() || 'Yes' }
+      : a.pubertyBlockers === 'no' || a.pubertyBlockers === 'None'
+        ? { pubertyBlockers: 'None' }
+        : a.pubertyBlockers
+          ? { pubertyBlockers: a.pubertyBlockers }
+          : {}),
+    ...(a.ageAtLastPeriod?.trim() && { ageAtLastPeriod: a.ageAtLastPeriod.trim() }),
+    ...(a.hysterectomy && { hysterectomy: a.hysterectomy }),
+    ...(a.ovariesRemoved && { ovariesRemoved: a.ovariesRemoved }),
+    ...(a.hrtStatus && { hrtStatus: a.hrtStatus }),
+    ...(a.hrtType && { hrtType: a.hrtType }),
+    ...(a.hrtTaken && { hrtTaken: a.hrtTaken }),
     ...(meds && { medications: meds.length ? meds.map((m) => m.name) : ['none'] }),
     ...(allergies && { allergies: allergies.length ? allergies.map((x) => x.substance) : ['none'] }),
     ...(supplements && {

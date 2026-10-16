@@ -1,11 +1,11 @@
-/** The control for one onboarding step: who-for tiles, name, year wheel, consent, choice tiles (and older kinds still in the data model). */
+/** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / QuestionChoices / ChipPicker. */
 import { consentDoc } from '@shared/data';
+import { FullChoicePills, QuestionChoices } from '@mobile/patterns/widgets';
 import { Checkbox, DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
-import { list, visibleSuggestions, withDerived, type Answers, type Step } from '../steps';
+import { list, STEPS, titleFor, visibleSuggestions, withDerived, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
-import { ChoiceTiles } from './ChoiceTiles';
 
 const THIS_YEAR = new Date().getFullYear();
 // Same units as Deborah's in-chat rulers (patterns/chat IntakeFields): imperial in the US.
@@ -17,8 +17,8 @@ export interface StepBodyProps {
   step: Step;
   answers: Answers;
   set: (key: string, value: string) => void;
-  /** Answer and move on (choice rows, "None", profile tiles). */
-  advance: (value: string) => void;
+  /** Answer and move on (choice rows, "None", profile tiles). Extra merges other keys in the same tick (e.g. expand type). */
+  advance: (value: string, extra?: Answers) => void;
 }
 
 export function StepBody({ step, answers, set, advance }: StepBodyProps) {
@@ -59,8 +59,78 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
       );
     case 'profileFor':
       return <ProfileForStep value={value} onPick={advance} />;
-    case 'choice':
-      return <ChoiceTiles label={step.title} choices={step.choices!} value={value} onPick={advance} />;
+    case 'choice': {
+      const options = (step.choices ?? []).map((c) => ({ id: c.value, label: c.label }));
+      const describeValue = step.describeValue;
+      const describeKey = step.describeKey;
+      const expandValues = step.expandValues;
+      const expandKey = step.expandKey;
+      const expandStep = expandKey ? STEPS.find((s) => s.key === expandKey) : undefined;
+      const expandChoices = step.expandChoices ?? expandStep?.choices;
+      const expanding = Boolean(expandValues?.includes(value) && expandKey && expandChoices?.length);
+      // Full-width options (sex/gender) + describe morph + expand follow-up (HRT type under status).
+      if (step.presentation === 'yesNo' || step.presentation === 'rows' || describeValue || expandValues) {
+        return (
+          <div className={styles.choiceStack}>
+            <FullChoicePills
+              label={step.title}
+              options={options}
+              selected={value || undefined}
+              describeValue={describeValue}
+              describeLabel={step.describeLabel ?? 'Describe'}
+              describePlaceholder={step.describePlaceholder ?? 'describe your situation'}
+              describeText={describeKey ? (answers[describeKey] ?? '') : ''}
+              onDescribeChange={describeKey ? (text) => set(describeKey, text) : undefined}
+              onDescribeConfirm={
+                describeValue
+                  ? () => advance(describeValue)
+                  : undefined
+              }
+              onPick={(id) => {
+                // Stay: morph that row into PillDescribeField (no advance / remount).
+                if (describeValue && id === describeValue) {
+                  set(step.key, describeValue);
+                  return;
+                }
+                // Stay: reveal follow-up FullChoicePills (e.g. HRT type) under status.
+                if (expandValues?.includes(id)) {
+                  set(step.key, id);
+                  if (expandKey) set(expandKey, '');
+                  return;
+                }
+                if (describeKey) set(describeKey, '');
+                if (expandKey) set(expandKey, '');
+                advance(id);
+              }}
+            />
+            {expanding && (
+              <FullChoicePills
+                label={step.expandTitle ?? (expandStep ? titleFor(expandStep, answers) : 'Type')}
+                options={expandChoices!.map((c) => ({ id: c.value, label: c.label }))}
+                selected={answers[expandKey!] || undefined}
+                onPick={(typeId) => advance(value, { [expandKey!]: typeId })}
+              />
+            )}
+          </div>
+        );
+      }
+      // Wrapping regular ChoicePills via QuestionChoices; chat uses InlineChoicePills.
+      return (
+        <div className={styles.choiceWidget}>
+          <QuestionChoices
+            key={step.key}
+            label={step.title}
+            options={options}
+            pills="regular"
+            onSubmit={(ids) => {
+              const id = ids[0];
+              if (!id) return;
+              advance(id);
+            }}
+          />
+        </div>
+      );
+    }
     case 'text':
       return (
         <ChipPicker

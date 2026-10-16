@@ -10,11 +10,12 @@ import { Button, Panel } from '@mobile/ui';
 import { AnswerSections } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt } from '@mobile/patterns/safety';
-import { BookDeborah, InlineConsent, MoodScale, QuestionChoices, ScaleCheck, UploadCard } from '@mobile/patterns/widgets';
+import { BookDeborah, ChoicePills, FullChoicePills, InlineChoicePills, InlineConsent, MoodScale, QuestionChoices, ScaleCheck, UploadCard } from '@mobile/patterns/widgets';
 import { buildAnswer, visitPrepItems } from '@mobile/screens/consultation/FirstConsult/parts/buildAnswer';
 import { VisitPrepCard } from '@mobile/screens/consultation/FirstConsult/parts/VisitPrepCard';
 import { BriefDocument } from '@mobile/screens/records/VisitBrief/parts/BriefDocument';
-import { MULTI_OPTIONS, YES_NO_OPTIONS, type WidgetKind } from './scenarios';
+import { HRT_STATUS_OPTIONS, HRT_TYPE_OPTIONS, MULTI_OPTIONS, PERIODS_DESCRIBE_OPTIONS, PUBERTY_BLOCKERS_OPTIONS, REGULAR_PILL_LABELS, SEX_AT_BIRTH_OPTIONS, YES_NO_OPTIONS, type WidgetKind } from './scenarios';
+import styles from './WidgetLab.module.css';
 
 const say = (s?: string) => personalise(firstConsultFlow, s, 'Maria');
 const ANSWER = buildAnswer(firstConsultFlow.nodes.answer_1, say);
@@ -40,6 +41,13 @@ const labelOf = (ids: string[], options: { id: string; label: string }[]) =>
 
 export function LabWidget({ kind, reply }: LabWidgetProps) {
   const [consent, setConsent] = useState<'agreed' | 'declined'>();
+  const [sexAtBirth, setSexAtBirth] = useState<string>();
+  const [periodsPick, setPeriodsPick] = useState<string>();
+  const [periodsNotes, setPeriodsNotes] = useState('');
+  const [blockersPick, setBlockersPick] = useState<string>();
+  const [blockersDetails, setBlockersDetails] = useState('');
+  const [hrtStatus, setHrtStatus] = useState<string>();
+  const [hrtType, setHrtType] = useState<string>();
   switch (kind) {
     case 'consent':
       return <InlineConsent answered={consent} onAgree={() => { setConsent('agreed'); reply(undefined, 'Thank you. Tell me what’s on your mind.'); }} onDecline={() => setConsent('declined')} />;
@@ -61,10 +69,116 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
           options={MULTI_OPTIONS}
           multi
           exclusive="none"
-          confirm="bar"
+          confirm="tick"
           onSubmit={(ids) => reply(labelOf(ids, MULTI_OPTIONS), 'Thank you, that helps me see the pattern.')}
         />
       );
+    case 'pillsInline':
+      return (
+        <InlineChoicePills
+          label="Answer"
+          options={YES_NO_OPTIONS.map((o) => o.label)}
+          keepAnswer
+          onPick={(o) => reply(o, o === 'Yes' ? 'That points me towards your hormones and temperature control.' : 'Good to know, that rules a few things out.')}
+        />
+      );
+    case 'pillsRegular':
+      return (
+        <ChoicePills
+          label="Symptoms"
+          options={REGULAR_PILL_LABELS}
+          keepAnswer
+          onPick={(o) => reply(o, 'Thank you — these are the regular intake pills.')}
+        />
+      );
+    case 'pillsFull':
+      return (
+        <FullChoicePills
+          label="Sex at birth"
+          options={SEX_AT_BIRTH_OPTIONS}
+          selected={sexAtBirth}
+          onPick={(id) => {
+            setSexAtBirth(id);
+            const o = SEX_AT_BIRTH_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — full-width stacked options for short lists.');
+          }}
+        />
+      );
+    case 'pillsFullDescribe':
+      return (
+        <FullChoicePills
+          label="Have your periods started?"
+          options={PERIODS_DESCRIBE_OPTIONS}
+          selected={periodsPick}
+          describeValue="describe"
+          describeLabel="Describe"
+          describePlaceholder="describe your situation"
+          describeText={periodsNotes}
+          onDescribeChange={setPeriodsNotes}
+          onDescribeConfirm={() => {
+            const note = periodsNotes.trim();
+            reply(note || 'I’m not sure / I want to describe', 'Got it — describe morph with ChipPicker-style check.');
+          }}
+          onPick={(id) => {
+            setPeriodsPick(id);
+            if (id === 'describe') return;
+            const o = PERIODS_DESCRIBE_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — Yes/No advance; “I’m not sure” becomes a field with check.');
+          }}
+        />
+      );
+    case 'pillsFullYesDetails':
+      return (
+        <FullChoicePills
+          label="Using any puberty blockers?"
+          options={PUBERTY_BLOCKERS_OPTIONS}
+          selected={blockersPick}
+          describeValue="yes"
+          describeLabel="Details"
+          describePlaceholder="details of puberty blocker"
+          describeText={blockersDetails}
+          onDescribeChange={setBlockersDetails}
+          onDescribeConfirm={() => {
+            const note = blockersDetails.trim();
+            reply(note || 'Yes', 'Got it — Yes opens details + check; No advances.');
+          }}
+          onPick={(id) => {
+            setBlockersPick(id);
+            if (id === 'yes') return;
+            reply('No', 'Got it — No advances; Yes morphs into a details field.');
+          }}
+        />
+      );
+    case 'pillsFullExpand': {
+      const expanding = hrtStatus === 'yes' || hrtStatus === 'yes-previously';
+      return (
+        <div className={styles.expandStack}>
+          <FullChoicePills
+            label="Are you currently on hormone therapy (HRT)?"
+            options={HRT_STATUS_OPTIONS}
+            selected={hrtStatus}
+            onPick={(id) => {
+              setHrtStatus(id);
+              setHrtType(undefined);
+              if (id === 'no') reply('No', 'Got it — No skips HRT type and goes on to meds.');
+            }}
+          />
+          {expanding && (
+            <FullChoicePills
+              label="What type of HRT?"
+              options={HRT_TYPE_OPTIONS}
+              selected={hrtType}
+              onPick={(id) => {
+                setHrtType(id);
+                const status = HRT_STATUS_OPTIONS.find((x) => x.id === hrtStatus)?.label ?? hrtStatus;
+                const type = HRT_TYPE_OPTIONS.find((x) => x.id === id)?.label ?? id;
+                reply(`${status} · ${type}`, 'Got it — Yes / Yes Previously expand type pills in place.');
+              }}
+            />
+          )}
+        </div>
+      );
+    }
     case 'scale':
       return <ScaleCheck title="Energy today" low="Empty" high="Full" onDone={(v) => reply(`${v} of 10`, v < 5 ? 'Low energy and broken sleep often travel together.' : 'Glad your energy is holding up.')} />;
     case 'mood':

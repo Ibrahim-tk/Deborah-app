@@ -14,6 +14,8 @@ import styles from './ForgotPassword.module.css';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_LENGTH = 8;
 const SET_MS = 1600;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
+const SKIP_AUTH_VALIDATION = true;
 
 type Stage = 'email' | 'code' | 'password' | 'set';
 
@@ -34,12 +36,22 @@ export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPas
 
   const sendCode = (e: FormEvent) => {
     e.preventDefault();
+    if (SKIP_AUTH_VALIDATION) {
+      setErrors({});
+      setStage('code');
+      return;
+    }
     if (!EMAIL_PATTERN.test(email.trim())) return setErrors({ email: 'That email doesn’t look quite right.' });
     setStage('code');
   };
 
   const save = (e: FormEvent) => {
     e.preventDefault();
+    if (SKIP_AUTH_VALIDATION) {
+      setErrors({});
+      setStage('set');
+      return;
+    }
     const next = {
       password: password.length >= MIN_LENGTH ? undefined : `Use at least ${MIN_LENGTH} characters.`,
       confirm: password === confirm ? undefined : 'Those passwords don’t match.',
@@ -63,7 +75,7 @@ export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPas
           <p className={shared.sub}>Enter your email and I’ll send you a code.</p>
         </div>
         <Input label="Email" type="email" placeholder="Your email" value={email} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors({}); }} />
-        <Button type="submit" fullWidth disabled={!email}>Send code</Button>
+        <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email}>Send code</Button>
         <Button variant="link" className={styles.back} onClick={onCancel}>Back to sign in</Button>
       </form>
     );
@@ -85,7 +97,7 @@ export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPas
         </div>
         <Input label="New password" type="password" placeholder="Enter a new password" value={password} autoComplete="new-password" error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
         <Input label="Confirm new password" type="password" placeholder="Confirm your new password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />
-        <Button type="submit" fullWidth disabled={!password || !confirm}>Update password</Button>
+        <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !password || !confirm}>Update password</Button>
       </form>
     );
 

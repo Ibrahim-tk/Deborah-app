@@ -50,14 +50,30 @@ const BAND_LABEL: Record<PdfAgeBand, string> = {
   senior: '60+',
 };
 
-/** Preferred choice labels tapped in order after Myself (gender + branch answers). */
+/** Sex at birth label for a persona (identity may differ for non-binary / transgender / prefer-not). */
+function sexAtBirthFor(gender: PdfGender): 'female' | 'male' | 'intersex' {
+  if (gender === 'male') return 'male';
+  if (gender === 'intersex') return 'intersex';
+  return 'female';
+}
+
+const SEX_LABEL: Record<'female' | 'male' | 'intersex', RegExp> = {
+  female: /^Female$/,
+  male: /^Male$/,
+  intersex: /^Intersex$/,
+};
+
+/** Preferred choice labels tapped in order after Myself (sex → identity → branch answers). */
 function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
   if (band === 'lt13') return [/^Myself$/];
-  const out: RegExp[] = [/^Myself$/, PDF_GENDER_LABEL[gender]];
+  const sex = sexAtBirthFor(gender);
+  const out: RegExp[] = [/^Myself$/, SEX_LABEL[sex], PDF_GENDER_LABEL[gender]];
   const repro = /^Pre-menopausal$/;
   if (gender === 'transgender') {
     out.push(/^Trans-woman$/);
   } else if (gender === 'female' || gender === 'intersex' || gender === 'non-binary') {
+    out.push(/^Yes$/); // Have your periods started?
+    out.push(/^None$/); // Puberty blockers
     out.push(repro);
   }
   out.push(/^No$/); // Genesis Gold
@@ -67,15 +83,15 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
 /** Steps that should appear for this persona (mirrors healthBasics.json showIf). */
 export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] {
   if (band === 'lt13') return ['profileFor', 'birthDate'];
-  const keys = ['profileFor', 'birthDate', 'gender'];
+  const keys = ['profileFor', 'birthDate', 'sex', 'gender'];
   const teen = band === 'teen';
   const adultish = band === 'adult' || band === 'senior';
-  // PDF: Female / Non-binary / Intersex get reproductive status (teen + adult banks).
+  // Female / Non-binary / Intersex: periods → puberty blockers → reproductive (pre seed skips HRT nests).
   if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
-    keys.push('reproductiveTeen');
+    keys.push('periodsStarted', 'pubertyBlockers', 'reproductiveTeen');
   }
   if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
-    keys.push('reproductive');
+    keys.push('periodsStarted', 'pubertyBlockers', 'reproductive');
   }
   // PDF + Deborah: Transgender → one puberty question for all ages 13+.
   if (gender === 'transgender') keys.push('transPuberty');
@@ -96,13 +112,18 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
     birthDate: `${thisYear - age}-06-15`,
   };
   if (band === 'lt13') return a;
+  a.sex = sexAtBirthFor(gender);
   a.gender = gender;
   const teen = band === 'teen';
   const adultish = band === 'adult' || band === 'senior';
   if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
+    a.periodsStarted = 'yes';
+    a.pubertyBlockers = 'no';
     a.reproductiveTeen = 'pre-menopausal';
   }
   if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
+    a.periodsStarted = 'yes';
+    a.pubertyBlockers = 'no';
     a.reproductive = 'pre-menopausal';
   }
   if (gender === 'transgender') a.transPuberty = 'trans-woman';
@@ -133,8 +154,8 @@ function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
     ageBand: band,
     label: `${gender} · ${BAND_LABEL[band]}`,
     description: gate
-      ? 'Myself → birth year under 13 → Ask adult to add you as a family member (M-1.10).'
-      : `Myself → ${BAND_LABEL[band]} → ${gender} intake branches → Deborah welcome → Ask Deborah.`,
+      ? 'Myself → birth date under 13 → Ask adult to add you as a family member (M-1.10).'
+      : `Myself → ${BAND_LABEL[band]} → sex at birth → ${gender} identity → intake branches → Deborah welcome → Ask Deborah.`,
     scenario: 'S01',
     onboarding: true,
     profile: buildProfile(gender, band),

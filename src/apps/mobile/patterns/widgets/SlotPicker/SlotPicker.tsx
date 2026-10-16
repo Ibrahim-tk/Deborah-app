@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { Icon } from '@mobile/ui';
-import { ChoicePills } from '../ChoicePills';
+import { InlineChoicePills } from '../InlineChoicePills';
 import styles from './SlotPicker.module.css';
 
 export interface SlotPickerProps {
@@ -46,7 +46,7 @@ export function SlotPicker({ title, meta, days, onPick, dayStyle = 'slider' }: S
           );
         })}
       </div>
-      <ChoicePills key={day} label="Time" options={current?.times ?? []} onPick={(time) => { setPicked(time); onPick(current?.label ?? day, time); }} />
+      <InlineChoicePills key={day} label="Time" options={current?.times ?? []} onPick={(time) => { setPicked(time); onPick(current?.label ?? day, time); }} />
     </section>
   );
 }

@@ -19,15 +19,21 @@ export function ageFromAnswers(a: Answers, now = new Date()): number | undefined
   return ageOn(`${dob}T12:00:00`, now);
 }
 
-/** Answers plus what's derived from them (`age`, `ageGroup`). */
+/** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`). */
 export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
   const age = ageFromAnswers(a);
-  if (age === undefined) return a;
-  return { ...a, age, ageGroup: ageGroupFor(age) };
+  const reproductiveStage = a.reproductive ?? a.reproductiveTeen;
+  const derived: Record<string, ShowIfValue> = {
+    ...a,
+    ...(reproductiveStage && { reproductiveStage }),
+  };
+  if (age === undefined) return derived;
+  return { ...derived, age, ageGroup: ageGroupFor(age) };
 };
 
-/** Questions to ask, given the answers so far. */
-export const visibleSteps = (a: Answers) => STEPS.filter((s) => shows(s.showIf, withDerived(a)));
+/** Questions to ask, given the answers so far. Inline steps (e.g. hrtType) expand under another step. */
+export const visibleSteps = (a: Answers) =>
+  STEPS.filter((s) => !s.inline && shows(s.showIf, withDerived(a)));
 
 /** Step keys visible for a complete answer set (PDF matrix / contract tests). */
 export const visibleStepKeys = (a: Answers) => visibleSteps(a).map((s) => s.key);

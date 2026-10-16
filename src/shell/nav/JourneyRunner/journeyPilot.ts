@@ -176,19 +176,26 @@ function welcomeBurst(top: HTMLElement): PilotTick {
 /** One action on the onboarding profile (M-1.8): tiles, year, consent, gender branches, meds, Continue. */
 function profileTick(p: ProfileAnswers, top: HTMLElement, st: PilotState): PilotTick {
   const pickIndex = st.pickIndex ?? 0;
-  const options = buttons(top).filter((b) => b.getAttribute('role') === 'radio' && !b.closest('[role="slider"]'));
+  // ProfileFor / FullChoicePills use role=radio; QuestionChoices use ChoicePills (data-choice-id).
+  const options = buttons(top).filter(
+    (b) =>
+      !b.closest('[role="slider"]') &&
+      (b.getAttribute('role') === 'radio' || b.hasAttribute('data-choice-id')),
+  );
   if (options.length) {
     const remaining = p.picks.slice(pickIndex);
     const scripted = remaining.map((re) => options.find((o) => re.test(text(o)))).find(Boolean);
+    const isOn = (o: HTMLElement) =>
+      o.getAttribute('aria-checked') === 'true' || o.getAttribute('aria-pressed') === 'true';
     if (scripted) {
       const matchedAt = remaining.findIndex((re) => re.test(text(scripted)));
       st.pickIndex = pickIndex + matchedAt + 1;
-      if (scripted.getAttribute('aria-checked') !== 'true') {
+      if (!isOn(scripted)) {
         scripted.click();
         return { done: false, acted: true, step: `Picks “${text(scripted).split(/(?<=[a-z])(?=[A-Z])/)[0]}”` };
       }
       // Already selected — fall through to Continue.
-    } else if (!options.some((o) => o.getAttribute('aria-checked') === 'true')) {
+    } else if (!options.some(isOn)) {
       // Branch step with no scripted match yet — pick the first option once.
       options[0].click();
       return { done: false, acted: true, step: `Picks “${text(options[0]).split(/(?<=[a-z])(?=[A-Z])/)[0]}”` };
@@ -263,13 +270,21 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
   }
 
   // Add labs sheet: camera path (file picker is hard for the DOM pilot).
-  if (/^M-5\.3/.test(screen)) {
+  if (/^M-5\.3/.test(screen) || [...phone.querySelectorAll<HTMLElement>('[data-xref^="M-5.3 "]')].some(visible)) {
+    const sheetBody = phone.textContent ?? '';
+    if (/Reading your report/i.test(sheetBody)) {
+      return { done: false, acted: false, step: 'Waiting for lab report read' };
+    }
     const use = find(phone, /^Use photo$/);
     if (use) { use.click(); return { done: false, acted: true, step: 'Use photo' }; }
     const shutter = phone.querySelector<HTMLButtonElement>('button[aria-label="Take photo"]');
-    if (shutter && visible(shutter)) { shutter.click(); return { done: false, acted: true, step: 'Take photo' }; }
+    if (shutter && laidOut(shutter) && !shutter.disabled) {
+      shutter.click();
+      return { done: false, acted: true, step: 'Take photo' };
+    }
     const photo = find(phone, /^Take a photo$/);
     if (photo) { photo.click(); return { done: false, acted: true, step: 'Open camera' }; }
+    return { done: false, acted: false, step: 'Waiting on labs sheet' };
   }
 
   if (run.afterAnswer === 'whatsNext-labs' && LABS_REFRESH.test(phone.textContent ?? '')) {

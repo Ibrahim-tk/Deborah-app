@@ -1,11 +1,13 @@
 /**
- * Shared choice widget for V2 chat and /wid. Emits stable IDs, never display labels.
- * IntakeQuestion, FlowChoice, and WidgetLab all mount this — edit once for both surfaces.
+ * Shared choice widget for V2 chat, /wid, and Health Basics. Emits stable IDs, never display labels.
+ * `pills="inline"` (default) → compact InlineChoicePills for chat.
+ * `pills="regular"` → full-size ChoicePills for intake forms.
  */
 import { useRef, useState } from 'react';
 import type { Option } from '@shared/types/domain';
 import { Button, Icon, OptionList, OptionRow } from '@mobile/ui';
 import { ChoicePills } from '../ChoicePills';
+import { InlineChoicePills } from '../InlineChoicePills';
 import { toggleSelection } from './selection';
 import styles from './QuestionChoices.module.css';
 
@@ -19,12 +21,15 @@ export interface QuestionChoicesProps {
   initialSelected?: string[];
   onSubmit: (ids: string[]) => void;
   /**
-   * Multi confirm control: full-width Continue bar (default), or circular tick after the last pill.
-   * F02d expand lists use `tick`.
+   * Multi confirm control: circular tick after the last pill (default), or full-width Continue bar.
    */
   confirm?: 'bar' | 'tick';
   /** When the `other` option is tapped in multi mode, call this instead of toggling it on. */
   onOther?: () => void;
+  /**
+   * Pill size: `inline` (default) for chat /wid; `regular` for Health Basics intake forms.
+   */
+  pills?: 'inline' | 'regular';
 }
 
 export function QuestionChoices({
@@ -36,15 +41,17 @@ export function QuestionChoices({
   answered,
   initialSelected = [],
   onSubmit,
-  confirm = 'bar',
+  confirm = 'tick',
   onOther,
+  pills = 'inline',
 }: QuestionChoicesProps) {
   const [selected, setSelected] = useState<string[]>(initialSelected);
   const submitted = useRef(false);
   const [sent, setSent] = useState(false);
   const locked = disabled || sent || Boolean(answered);
   const values = answered ?? selected;
-  // Tick confirm always uses small pills (expand lists often have 9+ options — the old ≤8
+  const regular = pills === 'regular';
+  // Tick confirm always uses pills (expand lists often have 9+ options — the old ≤8
   // cutoff was flipping them to full-width rows).
   const compact =
     confirm === 'tick' || (options.length <= 12 && options.every((o) => o.label.length <= 56));
@@ -68,27 +75,36 @@ export function QuestionChoices({
   const tick = canConfirm && confirm === 'tick' && (
     <button
       type="button"
-      className={styles.tick}
+      className={regular ? styles.tickRegular : styles.tick}
       aria-label="Continue"
       onClick={() => submit(selected)}
     >
-      <Icon name="check" size={22} />
+      <Icon name="check" size={regular ? 22 : 18} />
     </button>
   );
 
+  const pillProps = {
+    label,
+    options: options.map((o) => o.label),
+    optionIds: options.map((o) => o.id),
+    selected: options.filter((o) => values.includes(o.id)).map((o) => o.label),
+    disabled: locked,
+    onPick: (_: string, i: number) => submit([options[i].id]),
+    onToggle: multi ? (_: string, i: number) => toggle(options[i].id) : undefined,
+    endSlot: tick,
+  };
+
   return (
-    <div className={styles.root} role="group" aria-label={label} data-question-choices data-multi={multi || undefined}>
+    <div
+      className={styles.root}
+      role="group"
+      aria-label={label}
+      data-question-choices
+      data-multi={multi || undefined}
+      data-pills={pills}
+    >
       {compact ? (
-        <ChoicePills
-          label={label}
-          options={options.map((o) => o.label)}
-          optionIds={options.map((o) => o.id)}
-          selected={options.filter((o) => values.includes(o.id)).map((o) => o.label)}
-          disabled={locked}
-          onPick={(_, i) => submit([options[i].id])}
-          onToggle={multi ? (_, i) => toggle(options[i].id) : undefined}
-          endSlot={tick}
-        />
+        regular ? <ChoicePills {...pillProps} /> : <InlineChoicePills {...pillProps} />
       ) : (
         <OptionList label={label} multi={multi}>
           {options.map((o) => (

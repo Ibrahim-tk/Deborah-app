@@ -3,13 +3,13 @@
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
  * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10]
- *          · [someone else: consent by age group] · gender · age×gender branches (reproductive / puberty / meds)
+ *          · [someone else: consent by age group] · sex at birth · gender identity · age×gender branches (periods / reproductive / peri HRT / puberty / meds)
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * Version 2 onboarding profile: who Deborah will talk to, full date of birth, gender, then conditional
- * health-intake steps from the age × gender PDF. Steps and `showIf` branches live in data/intake/healthBasics.json.
+ * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex at birth, gender identity,
+ * then conditional health-intake steps from the age × gender PDF. Steps and `showIf` live in healthBasics.json.
  */
 import { useState, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';
@@ -34,9 +34,11 @@ export default function HealthBasics() {
   const [answers, setAnswers] = useState<Answers>({ birthDate: DEFAULT_DOB });
   const [i, setI] = useState(0);
   const steps = visibleSteps(answers);
-  const step = steps[Math.min(i, steps.length - 1)];
+  // Back/edit can shrink the visible tree (e.g. leave peri → drop HRT); clamp for render.
+  const at = Math.min(i, Math.max(0, steps.length - 1));
+  const step = steps[at];
   const value = answers[step.key] ?? '';
-  const last = i === steps.length - 1;
+  const last = at === steps.length - 1;
 
   const finish = (final: Answers) => {
     const profileId = saveOnboarding(final);
@@ -51,10 +53,10 @@ export default function HealthBasics() {
       const age = ageFromAnswers(final, nowFrom(useAppStore.getState()));
       if (age !== undefined && age < 13) return replace('M-1.10');
     }
-    return last ? finish(final) : setI(i + 1);
+    return last ? finish(final) : setI(at + 1);
   };
-  const advance = (v: string) => {
-    const final = { ...answers, [step.key]: v };
+  const advance = (v: string, extra?: Answers) => {
+    const final = { ...answers, ...extra, [step.key]: v };
     setAnswers(final);
     window.setTimeout(() => next(final), step.kind === 'text' ? 0 : CONFIRM_MS);
   };
@@ -69,6 +71,7 @@ export default function HealthBasics() {
     (step.kind === 'text' && Boolean(value.trim())) ||
     (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||
     (step.kind === 'consent' && value === 'yes');
+  // Choice (incl. describe morph check / expand type pills): no footer Continue — in-field confirm or pill tap advances.
   const tapToAnswer = step.kind === 'choice' || step.kind === 'profileFor';
 
   return (
@@ -80,12 +83,12 @@ export default function HealthBasics() {
       <header className={styles.header}>
         <span className={styles.backSlot}>
           {/* On the first question, back leaves the form for the screen that opened it. */}
-          <GlassButton icon="back" aria-label={i > 0 ? 'Previous question' : 'Back'} onClick={() => (i > 0 ? setI(i - 1) : pop())} />
+          <GlassButton icon="back" aria-label={at > 0 ? 'Previous question' : 'Back'} onClick={() => (at > 0 ? setI(at - 1) : pop())} />
         </span>
       </header>
       {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
-      <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={i + 1} aria-valuetext={`Question ${i + 1} of ${steps.length}`}>
-        <BloomReveal className={styles.bloom} progress={bloomProgress(i, steps.length)} />
+      <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
+        <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
       </div>
       <div className={styles.body}>
         <div key={step.key} className={styles.step}>

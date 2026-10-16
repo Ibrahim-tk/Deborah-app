@@ -282,12 +282,16 @@ export interface BookingInfo {
  */
 export type ShowIf = Record<string, { in?: string[]; notIn?: string[]; has?: string[]; lacks?: string[]; min?: number; max?: number; unknown?: boolean }>;
 export type HealthBasicsKind = 'date' | 'year' | 'measure' | 'choice' | 'text' | 'profileFor' | 'name' | 'consent';
+/** How the step control is rendered; omitted steps fall back from `kind`. */
+export type HealthBasicsPresentation = 'pills' | 'rows' | 'yesNo' | 'chips';
 export interface HealthBasicsStep {
   key: string;
   kind: HealthBasicsKind;
   title: string;
   /** Title when the profile is for someone else; `{name}` is their first name. */
   titleOther?: string;
+  /** Quiz control shape: yesNo/rows → FullChoicePills; pills → QuestionChoices (wrapping); chips → ChipPicker. */
+  presentation?: HealthBasicsPresentation;
   choices?: { value: string; label: string }[];
   placeholder?: string;
   /** Text steps: the one-tap empty answer. */
@@ -297,6 +301,34 @@ export interface HealthBasicsStep {
   /** Text steps: one answer only — a tap (or Other) replaces the current pick. */
   single?: boolean;
   optional?: boolean;
+  /**
+   * Choice steps: selecting this value keeps the screen open and shows an inline describe field
+   * (stored under `describeKey`) instead of advancing immediately.
+   */
+  describeValue?: string;
+  /** Answer key for the optional free text when `describeValue` is selected. */
+  describeKey?: string;
+  /** Accessible label for the inline describe field. */
+  describeLabel?: string;
+  /** Placeholder for the inline describe field. */
+  describePlaceholder?: string;
+  /**
+   * Choice steps: selecting any of these values stays on screen and reveals a second FullChoicePills
+   * (choices from the step named by `expandKey`, or `expandChoices` inline). Used when more than one
+   * option needs a follow-up box (e.g. HRT Yes / Yes Previously → type).
+   */
+  expandValues?: string[];
+  /** Answer key (and usually the inline step key) for the follow-up choice. */
+  expandKey?: string;
+  /** Title for the follow-up pills when not reading from another step. */
+  expandTitle?: string;
+  /** Follow-up options when not reading from another step. */
+  expandChoices?: { value: string; label: string }[];
+  /**
+   * When true, this step is never shown as its own screen — its choices are revealed inline under
+   * another step via `expandKey` (e.g. hrtType under hrtStatus).
+   */
+  inline?: boolean;
   /** Hidden unless every listed answer matches. */
   showIf?: ShowIf;
 }

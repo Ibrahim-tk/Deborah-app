@@ -9,10 +9,10 @@
 .tile:active { transform: scale(0.99); }
 .tile:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .tile[data-on] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
-/* Big icon on a soft square; selected = filled glyph on the accent. */
+/* Big icon on a soft circle; selected = filled glyph on the accent. */
 .badge {
   --icon-cut: var(--color-surface-lilac);
-  flex: none; display: grid; place-items: center; width: 60px; height: 60px; border-radius: var(--radius-md);
+  flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-full);
   background: var(--color-surface-lilac); color: var(--color-accent);
   transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
 }

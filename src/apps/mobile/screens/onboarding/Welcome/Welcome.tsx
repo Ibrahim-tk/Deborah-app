@@ -1,36 +1,51 @@
 /**
  * @screen  M-1.2 · Welcome
  * @flow    F01 First launch & onboarding
- * @states  default · name entered
+ * @states  default · name entered · legal unchecked · ready
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184
  * @spec    docs/ux/F01-onboarding.md#m-12--welcome
  * @xref    web: W-1.2 (apps/web/screens/onboarding/Welcome) — not built
  *
- * Onboarding plan P-05 (design direction 2026-10-15): Deborah's orb and note, then "What should I call you?"
- * (first name) and Get Started, which opens the sign-up sheet (M-1.4: email + password, code, "you're in"),
- * then the onboarding profile (M-1.8). M-1.4 accepts the Terms and Privacy and creates the account on verify.
- * "Sign in" opens the same sheet in sign-in mode (email + password, code, Home).
+ * Version 2: Deborah's orb and note, first name, Get Started, then one small legal checkbox
+ * (Terms & Disclaimer + Privacy Notice) under the button. Must be checked before Get Started
+ * enables. Sign-up sheet (M-1.4) still follows. Version 1 keeps the single legal line instead.
  * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
  */
-import { useState, type FormEvent } from 'react';
+import { useId, useState, type FormEvent, type MouseEvent } from 'react';
 import { persona } from '@shared/data';
-import { Aura, Button, DeborahBlob, GradientShift, Input, TextReveal } from '@mobile/ui';
+import { Aura, Button, DeborahBlob, GradientShift, Icon, Input, TextReveal } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
 import styles from './Welcome.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
+const SKIP_AUTH_VALIDATION = true;
 
 export default function Welcome() {
   const { presentSheet, presentModal } = useNav();
+  const legalId = useId();
   const [name, setName] = useState('');
   const [error, setError] = useState<string>();
+  const [agreed, setAgreed] = useState(false);
 
   const start = (e: FormEvent) => {
     e.preventDefault();
     const first = name.trim();
-    if (!first) return;
+    if (SKIP_AUTH_VALIDATION) {
+      setError(undefined);
+      presentSheet('M-1.4', { first: first || 'Tester' });
+      return;
+    }
+    if (!first || !agreed) return;
     if (!NAME_PATTERN.test(first)) return setError('Letters only, please.');
     presentSheet('M-1.4', { first });
+  };
+
+  const ready = SKIP_AUTH_VALIDATION || Boolean(name.trim() && agreed);
+  const openLegal = (section: 'terms' | 'privacy') => (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    presentModal('M-10.5', { section });
   };
 
   return (
@@ -56,12 +71,27 @@ export default function Welcome() {
             error={error}
             onChange={(e) => { setName(e.target.value); setError(undefined); }}
           />
-          <Button type="submit" fullWidth disabled={!name.trim()}>Get Started</Button>
-          <p className={styles.legal}>
-            By continuing you agree to our{' '}
-            <button type="button" className={styles.link} onClick={() => presentModal('M-10.5', { section: 'terms' })}>Terms</button> and{' '}
-            <button type="button" className={styles.link} onClick={() => presentModal('M-10.5', { section: 'privacy' })}>Privacy</button>.
-          </p>
+          <Button type="submit" fullWidth disabled={!ready}>Get Started</Button>
+          <div className={styles.legal}>
+            <input
+              id={legalId}
+              type="checkbox"
+              className={styles.legalInput}
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+            />
+            <label htmlFor={legalId} className={styles.legalRow}>
+              <span className={styles.legalBox} data-checked={agreed || undefined} aria-hidden="true">
+                {agreed && <Icon name="check" size={12} strokeWidth={2.5} />}
+              </span>
+              <span className={styles.legalText}>
+                I agree to the{' '}
+                <button type="button" className={styles.link} onClick={openLegal('terms')}>Terms &amp; Disclaimer</button>
+                {' '}and{' '}
+                <button type="button" className={styles.link} onClick={openLegal('privacy')}>Privacy Notice</button>
+              </span>
+            </label>
+          </div>
           <p className={styles.signIn}>
             Already have an account?{' '}
             <button type="button" className={styles.signInLink} onClick={() => presentSheet('M-1.4', { mode: 'signin' })}>Sign in</button>

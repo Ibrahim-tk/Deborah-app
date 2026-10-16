@@ -1,1 +1,46 @@
 .root { display: grid; gap: var(--space-3); min-width: 0; }
+
+/* Full-width continue — slightly taller for expand lists that still use the bar. */
+.continueBar { min-height: 56px; }
+
+/* Circular CTA tick — inline (chat) size. */
+.tick {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  align-self: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 3px 10px rgb(18 7 33 / 0.14);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms var(--ease-out), opacity var(--dur-base) var(--ease-out);
+}
+.tick:active { transform: scale(0.94); }
+.tick:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.tick:disabled { opacity: 0.45; cursor: default; }
+
+/* Tick matched to regular intake ChoicePills (44px). */
+.tickRegular {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  align-self: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 4px 14px rgb(18 7 33 / 0.16);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms var(--ease-out), opacity var(--dur-base) var(--ease-out);
+}
+.tickRegular:active { transform: scale(0.94); }
+.tickRegular:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.tickRegular:disabled { opacity: 0.45; cursor: default; }

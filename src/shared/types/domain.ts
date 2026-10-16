@@ -82,6 +82,14 @@ export interface Intake {
   pubertyStart?: string;
   /** Genesis Gold product question from the meds block. */
   genesisGold?: 'yes' | 'no';
+  /** Female hormonal nest: Have your periods started? (yes | no | describe). */
+  periodsStarted?: string;
+  /** Optional free text when periodsStarted is describe. */
+  periodsNotes?: string;
+  /** Peri-menopausal nest: Currently on HRT? (yes | yes-previously | no). */
+  hrtStatus?: string;
+  /** HRT type when on or previously on HRT (placeholder labels). */
+  hrtType?: string;
   /** Parent / guardian names collected on a child (under-13 dependent) profile. */
   guardianNames?: string;
   /** ISO 3166 region confirmed in chat; inferred from the device locale. */

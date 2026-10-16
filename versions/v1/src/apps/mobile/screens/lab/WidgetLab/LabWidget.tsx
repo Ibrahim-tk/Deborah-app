@@ -6,10 +6,26 @@ import { Button, Panel } from '@flow-v1/apps/mobile/ui';
 import { AnswerSections } from '@flow-v1/apps/mobile/patterns/chat';
 import { ProductCard } from '@flow-v1/apps/mobile/patterns/commerce';
 import { EmergencyInterrupt } from '@flow-v1/apps/mobile/patterns/safety';
-import { BookDeborah, ChoicePills, InlineConsent, MoodScale, ScaleCheck, UploadCard } from '@flow-v1/apps/mobile/patterns/widgets';
+import {
+  BookDeborah,
+  ChoicePills,
+  FullChoicePills,
+  InlineChoicePills,
+  InlineConsent,
+  MoodScale,
+  ScaleCheck,
+  UploadCard,
+} from '@flow-v1/apps/mobile/patterns/widgets';
 import { buildAnswer, visitPrepItems } from '@flow-v1/apps/mobile/screens/consultation/FirstConsult/parts/buildAnswer';
 import { VisitPrepCard } from '@flow-v1/apps/mobile/screens/consultation/FirstConsult/parts/VisitPrepCard';
-import { MULTI_OPTIONS, type WidgetKind } from './scenarios';
+import {
+  MULTI_OPTIONS,
+  PERIODS_DESCRIBE_OPTIONS,
+  PUBERTY_BLOCKERS_OPTIONS,
+  REGULAR_PILL_LABELS,
+  SEX_AT_BIRTH_OPTIONS,
+  type WidgetKind,
+} from './scenarios';
 import styles from './WidgetLab.module.css';
 
 const say = (s?: string) => personalise(firstConsultFlow, s, 'Maria');
@@ -36,6 +52,11 @@ function Multi({ reply }: Pick<LabWidgetProps, 'reply'>) {
 
 export function LabWidget({ kind, reply }: LabWidgetProps) {
   const [consent, setConsent] = useState<'agreed' | 'declined'>();
+  const [sexAtBirth, setSexAtBirth] = useState<string>();
+  const [periodsPick, setPeriodsPick] = useState<string>();
+  const [periodsNotes, setPeriodsNotes] = useState('');
+  const [blockersPick, setBlockersPick] = useState<string>();
+  const [blockersDetails, setBlockersDetails] = useState('');
   switch (kind) {
     case 'consent':
       return <InlineConsent answered={consent} onAgree={() => { setConsent('agreed'); reply(undefined, 'Thank you. Tell me what’s on your mind.'); }} onDecline={() => setConsent('declined')} />;
@@ -43,6 +64,82 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return <ChoicePills label="Answer" options={['Yes', 'No', 'Not sure']} keepAnswer onPick={(o) => reply(o, o === 'Yes' ? 'That points me towards your hormones and temperature control.' : 'Good to know, that rules a few things out.')} />;
     case 'multi':
       return <Multi reply={reply} />;
+    case 'pillsInline':
+      return (
+        <InlineChoicePills
+          label="Answer"
+          options={['Yes', 'No', 'Not sure']}
+          keepAnswer
+          onPick={(o) => reply(o, o === 'Yes' ? 'That points me towards your hormones and temperature control.' : 'Good to know, that rules a few things out.')}
+        />
+      );
+    case 'pillsRegular':
+      return (
+        <ChoicePills
+          label="Symptoms"
+          options={REGULAR_PILL_LABELS}
+          keepAnswer
+          onPick={(o) => reply(o, 'Thank you — these are the regular intake pills.')}
+        />
+      );
+    case 'pillsFull':
+      return (
+        <FullChoicePills
+          label="Sex at birth"
+          options={SEX_AT_BIRTH_OPTIONS}
+          selected={sexAtBirth}
+          onPick={(id) => {
+            setSexAtBirth(id);
+            const o = SEX_AT_BIRTH_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — full-width stacked options for short lists.');
+          }}
+        />
+      );
+    case 'pillsFullDescribe':
+      return (
+        <FullChoicePills
+          label="Have your periods started?"
+          options={PERIODS_DESCRIBE_OPTIONS}
+          selected={periodsPick}
+          describeValue="describe"
+          describeLabel="Describe"
+          describePlaceholder="describe your situation"
+          describeText={periodsNotes}
+          onDescribeChange={setPeriodsNotes}
+          onDescribeConfirm={() => {
+            const note = periodsNotes.trim();
+            reply(note || 'I’m not sure / I want to describe', 'Got it — describe morph with ChipPicker-style check.');
+          }}
+          onPick={(id) => {
+            setPeriodsPick(id);
+            if (id === 'describe') return;
+            const o = PERIODS_DESCRIBE_OPTIONS.find((x) => x.id === id)?.label ?? id;
+            reply(o, 'Got it — Yes/No advance; “I’m not sure” becomes a field with check.');
+          }}
+        />
+      );
+    case 'pillsFullYesDetails':
+      return (
+        <FullChoicePills
+          label="Using any puberty blockers?"
+          options={PUBERTY_BLOCKERS_OPTIONS}
+          selected={blockersPick}
+          describeValue="yes"
+          describeLabel="Details"
+          describePlaceholder="details of puberty blocker"
+          describeText={blockersDetails}
+          onDescribeChange={setBlockersDetails}
+          onDescribeConfirm={() => {
+            const note = blockersDetails.trim();
+            reply(note || 'Yes', 'Got it — Yes opens details + check; No advances.');
+          }}
+          onPick={(id) => {
+            setBlockersPick(id);
+            if (id === 'yes') return;
+            reply('No', 'Got it — No advances; Yes morphs into a details field.');
+          }}
+        />
+      );
     case 'scale':
       return <ScaleCheck title="Energy today" low="Empty" high="Full" onDone={(v) => reply(`${v} of 10`, v < 5 ? 'Low energy and broken sleep often travel together.' : 'Glad your energy is holding up.')} />;
     case 'mood':

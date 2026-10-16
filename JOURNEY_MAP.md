@@ -17,7 +17,7 @@ Birth years below are based on 2026. Use only synthetic data.
 | Journey | Persona | Start | Status |
 | --- | --- | --- | --- |
 | [First-time onboarding](#onboarding) | Sarah | [S01](http://127.0.0.1:5173/mobile?scenario=S01) | IMPLEMENTED |
-| [Self under 18 — age gate](#self-age-gate) | Sarah | [S03](http://127.0.0.1:5173/mobile?scenario=S03) | IMPLEMENTED |
+| [Self under 13 — age gate](#self-age-gate) | Sarah | [S03](http://127.0.0.1:5173/mobile?scenario=S03) | IMPLEMENTED |
 | [Teen dependent onboarding](#teen-onboarding) | Emily | [S20](http://127.0.0.1:5173/mobile?scenario=S20) | IMPLEMENTED |
 | [Child dependent onboarding](#child-onboarding) | Emily | [S20](http://127.0.0.1:5173/mobile?scenario=S20) | IMPLEMENTED |
 | [Adult partner onboarding](#adult-onboarding) | Helen | [S21](http://127.0.0.1:5173/mobile?scenario=S21) | IMPLEMENTED |
@@ -66,7 +66,7 @@ flowchart TD
   N1 -.-> B1_1["Sign in → returning-user path"]
   N2["3. Choose profile basics · M-1.9"]
   N1 --> N2
-  N2 -.-> B2_0["Self under 18 → Ask a parent"]
+  N2 -.-> B2_0["Self under 13 → Ask a parent"]
   N2 -.-> B2_1["Family member → relationship, name, consent"]
   N3["4. Start chatting · M-2.1"]
   N2 --> N3
@@ -82,16 +82,16 @@ flowchart TD
 
 <a id="self-age-gate"></a>
 
-## Self under 18 — age gate
+## Self under 13 — age gate
 
 Sarah · IMPLEMENTED · Start: S03
 
-Local age gate; year-of-birth approximation.
+Local age gate; full date of birth (PDF under-13).
 
 ```mermaid
 flowchart TD
   N0["1. Choose Myself · M-1.8"]
-  N1["2. Under-18 birth year · M-1.10"]
+  N1["2. Under-13 birth date · M-1.10"]
   N0 --> N1
 ```
 

@@ -1,33 +1,29 @@
 /**
- * EXPLORATION (2026-10-13): single choice as quiz-style pills, label left-aligned.
- * The picked pill tints with an accent rim before the screen moves on.
+ * @deprecated Use FullChoicePills from `@mobile/patterns/widgets` — same full-width stacked look.
+ * Kept as a thin adapter so older Health Basics imports keep working.
  */
-import type { CSSProperties } from 'react';
-import styles from './ChoiceTiles.module.css';
+import { FullChoicePills } from '@mobile/patterns/widgets';
 
 export interface ChoiceTilesProps {
   label: string;
   choices: { value: string; label: string }[];
   value: string;
   onPick: (value: string) => void;
+  /** Ignored — describe flows belong on QuestionChoices / StepBody. */
+  describeValue?: string;
+  describeLabel?: string;
+  describePlaceholder?: string;
+  describeText?: string;
+  onDescribeChange?: (text: string) => void;
 }
 
 export function ChoiceTiles({ label, choices, value, onPick }: ChoiceTilesProps) {
   return (
-    <div className={styles.root} data-dense={choices.length > 4 || undefined} role="radiogroup" aria-label={label}>
-      {choices.map((c, i) => (
-        <button
-          key={c.value}
-          type="button"
-          role="radio"
-          aria-checked={value === c.value}
-          className={styles.option}
-          style={{ '--i': i } as CSSProperties}
-          onClick={() => onPick(c.value)}
-        >
-          <span className={styles.label}>{c.label}</span>
-        </button>
-      ))}
-    </div>
+    <FullChoicePills
+      label={label}
+      options={choices.map((c) => ({ id: c.value, label: c.label }))}
+      selected={value || undefined}
+      onPick={onPick}
+    />
   );
 }

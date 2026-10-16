@@ -25,6 +25,8 @@ import styles from './CreateAccount.module.css';
 type Step = 'choose' | 'email' | 'code' | 'password' | 'merge';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
+const SKIP_AUTH_VALIDATION = true;
 
 export default function CreateAccount() {
   const { mode: initialMode = 'create', plan, billing, returnTo, sheet, provider: startWith, reason } = useScreenParams<{
@@ -89,6 +91,11 @@ export default function CreateAccount() {
   };
 
   const submitEmail = () => {
+    if (SKIP_AUTH_VALIDATION) {
+      setEmailError(undefined);
+      setStep('code');
+      return;
+    }
     if (!EMAIL.test(email.trim())) return setEmailError('Enter an email address like maria@example.com.');
     setEmailError(undefined);
     setStep('code');
@@ -156,7 +163,7 @@ export default function CreateAccount() {
       {step === 'password' && (
         <form className={styles.group} onSubmit={(e) => {
           e.preventDefault();
-          if (password.length < 8) return setPasswordError('Use at least 8 characters.');
+          if (!SKIP_AUTH_VALIDATION && password.length < 8) return setPasswordError('Use at least 8 characters.');
           setPasswordError(undefined);
           succeed(email.trim());
         }} noValidate>

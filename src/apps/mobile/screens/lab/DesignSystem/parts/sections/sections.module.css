@@ -3,6 +3,7 @@
 .monoMuted { font: 12px / 18px ui-monospace, 'SF Mono', Menlo, monospace; color: var(--color-ink-secondary); overflow-wrap: anywhere; }
 .swatchUse { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .stack { display: grid; gap: var(--space-2); }
+.expandStack { display: grid; gap: var(--space-5); }
 .relative { position: relative; height: 72px; }
 /* Zero-height anchor at the box's bottom: ScrollToLatest floats 12 pt above its parent's top edge. */
 .anchor { position: absolute; right: 0; bottom: 0; left: 0; height: 0; }

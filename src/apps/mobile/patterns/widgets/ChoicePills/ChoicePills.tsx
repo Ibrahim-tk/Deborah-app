@@ -1,10 +1,8 @@
 /**
- * @pattern ChoicePills — short answers (yes / no, a few words) as small frosted pills that answer on tap,
- *          the same pill as the onboarding health questions. Once picked, the choice stays highlighted
- *          (tint + border only — no checkmark).
- *          Multi mode (`selected` + `onToggle`): pills toggle on and off, a compact multi-select.
- *          Optional `endSlot` sits after the last pill (e.g. circular confirm tick).
- * @usedBy  QuestionChoices (IntakeQuestion, FlowChoice, /wid lab) — do not fork a second pill UI
+ * @pattern ChoicePills — regular-sized frosted pills for intake / onboarding forms (Health Basics).
+ *          Multi mode + optional `endSlot` (circular confirm tick) after the last pill.
+ *          For in-chat answers use InlineChoicePills instead.
+ * @usedBy  QuestionChoices with pills="regular" (Health Basics) — not for chat thread widgets
  * OPEN: DESIGN.md bans pills; used here by design direction 2026-10-14.
  */
 import { useState, type CSSProperties, type ReactNode } from 'react';
@@ -14,14 +12,14 @@ export interface ChoicePillsProps {
   label: string;
   options: string[];
   onPick: (option: string, index: number) => void;
-  /** Keep the answered state visible in the thread instead of the parent removing the pills. */
+  /** Keep the answered state visible instead of the parent removing the pills. */
   keepAnswer?: boolean;
   /** Multi-select: controlled selection; tapping toggles instead of answering. */
   selected?: string[];
   onToggle?: (option: string, index: number) => void;
   disabled?: boolean;
   optionIds?: string[];
-  /** Rendered after the last pill in the same wrapping row (F02d circular tick). */
+  /** Rendered after the last pill in the same wrapping row (circular confirm tick). */
   endSlot?: ReactNode;
 }
 

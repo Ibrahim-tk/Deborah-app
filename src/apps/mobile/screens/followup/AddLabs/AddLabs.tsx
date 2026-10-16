@@ -25,20 +25,24 @@ export default function AddLabs() {
   const [progress, setProgress] = useState(0);
 
   // Simulated extraction: 1.5–2.5 s, then the confirm screen with the sample-a values.
+  // Only depend on `processing` — nav helpers from useNav() are new refs each render and would
+  // clear the timer before M-5.4 opens (labs journey idle on “Reading your report…”).
   useEffect(() => {
     if (!processing) return;
     const total = simBetween(1500, 2500);
     const started = Date.now();
+    const { source, fileName } = processing;
     const tick = window.setInterval(() => setProgress(Math.min(1, (Date.now() - started) / Math.max(total, 1))), 80);
     const done = window.setTimeout(() => {
       dismissSheet();
-      presentModal('M-5.4', { source: processing.source, fileName: processing.fileName });
+      presentModal('M-5.4', { source, fileName });
     }, total);
     return () => {
       window.clearInterval(tick);
       window.clearTimeout(done);
     };
-  }, [processing, dismissSheet, presentModal]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot per processing payload
+  }, [processing]);
 
   const start = (source: Source, fileName: string) => {
     setProgress(0);

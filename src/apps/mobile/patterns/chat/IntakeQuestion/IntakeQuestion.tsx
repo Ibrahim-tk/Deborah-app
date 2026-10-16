@@ -26,7 +26,7 @@ export interface IntakeQuestionProps {
   onSkip?: () => void;
 }
 
-export function IntakeQuestion({ intake, prompt, active, onAnswer, onOther, onAnswerSurface }: IntakeQuestionProps) {
+export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurface }: IntakeQuestionProps) {
   const [expanded, setExpanded] = useState(false);
   const [composerOther, setComposerOther] = useState(false);
   const [sent, setSent] = useState(false);
@@ -51,13 +51,10 @@ export function IntakeQuestion({ intake, prompt, active, onAnswer, onOther, onAn
   if (intake.input && intake.input !== 'text') {
     return active ? <IntakeFields input={intake.input} onAnswer={onAnswer} /> : null;
   }
+  // Canonical InlineConsent card (title + Privacy/Terms body + Not now / Agree) — same as /wid and first-chat ask.
   if (intake.questionId === 'health-consent') {
     return (
       <InlineConsent
-        title={prompt}
-        description={null}
-        agreeLabel={intake.options.find((o) => o.id === 'agree')?.label}
-        declineLabel={intake.options.find((o) => o.id === 'decline')?.label}
         disabled={!active}
         answered={intake.answered ? (intake.answered.includes('agree') ? 'agreed' : 'declined') : undefined}
         onAgree={() => onAnswer(['agree'])}

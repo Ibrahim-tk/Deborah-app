@@ -131,8 +131,8 @@ exists before the chat, so there is no save-your-profile card or guest sign-up s
 
 Two profiles, built at different times:
 - **Onboarding profile** (M-1.8, before the chat): who it's for, relationship and first name for someone else,
-  birth year, consent for someone else, sex at birth. Saved straight to the profile; these are basics the person
-  typed into a form, not health facts (decision D-4).
+  date of birth, consent for someone else, sex at birth, gender identity, then age×gender intake branches from the
+  PDF. Saved straight to the profile (decision D-4).
 - **Health profile** (in the chat): stage, medications, allergies, conditions, symptoms. Asked only when needed,
   saved only through Review and Confirm (F02b).
 
@@ -142,23 +142,22 @@ Full screen, one step at a time, the tree grows as you go (`data/intake/healthBa
 
 | Branch | Steps | Then |
 |---|---|---|
-| Myself, 18+ | Who is this for → birth year → sex at birth | M-1.9 "Start chatting" → chat as you |
-| Myself, under 18 | Who is this for → birth year | **M-1.10** Ask a parent (OPEN O-2) |
-| Someone else, 18+ | Who → relationship → first name → their birth year → "They know I'm adding them and agree" → sex at birth | M-1.9 "Start talking about {name}" → switch profile → chat about them |
-| Someone else, 13–17 | … → teen privacy note + guardian consent → sex at birth | same; teen script, no product |
-| Someone else, under 13 | … → guardian attestation → sex at birth | same; minor rules, no product |
+| Myself, 13+ | Who → date of birth → sex at birth → gender identity → age×gender bank (e.g. Female: periods, reproductive, peri HRT, meds, supplements, Genesis Gold) | M-1.9 "Start chatting" → chat as you |
+| Myself, under 13 | Who → date of birth | **M-1.10** Ask a parent (PDF age gate) |
+| Someone else, 18+ | Who → relationship → first name → DOB → consent → sex at birth → gender identity → adult bank | M-1.9 "Start talking about {name}" → switch profile → chat about them |
+| Someone else, 13–17 | … → teen consent → sex → identity → teen bank | same; teen script, no product |
+| Someone else, under 13 | … → guardian attestation → sex → identity → child basics | same; minor rules, no product |
 
-- Birth year wheel (D-1) and sex at birth only (D-2); identity can be asked later in chat if wording needs it.
+- Full date of birth (D-1); **sex at birth** then **gender identity** are both mandatory (D-2).
 - Consent copy by age group lives in `legal/consent.json › profileConsent` (placeholder pending legal review).
 - Someone else is allowed on any plan as the first person added (D-3); M-6.1 still asks to upgrade for more.
-- Boys under 18 get only neutral how-long / how-often questions (no cycle questions). OPEN: child and male-teen banks.
+- Boys under 18 get only neutral how-long / how-often questions in chat (no cycle questions). OPEN: child and male-teen banks.
 
 ## M-1.10 · Ask a parent
 
-Root screen in the pre-auth stack, replacing M-1.8 when **your own** birth year is under 18. Deborah's orb, "Let's bring in a parent", a short line that a
-parent or guardian sets things up for anyone under 18, and **Back to the start** (→ M-1.2).
-OPEN (O-2): "Can someone under 18 sign up for themselves?" Documented default: no, until the family consent work
-(meeting · D) settles self sign-up for teens. A parent can already add a teen or child as "someone I care for". Copy is placeholder pending legal review.
+Root screen in the pre-auth stack, replacing M-1.8 when **your own** date of birth is under 13. Deborah's orb, "Let's bring in a parent", a short line that a
+parent or guardian sets things up for anyone under 13, and **Back to the start** (→ M-1.2).
+OPEN (O-2): "Can someone under 13 sign up for themselves?" Documented default: no (PDF). A parent can already add a teen or child as "someone I care for". Copy is placeholder pending legal review.
 
 ## M-2.1 · First-chat disclaimer
 

@@ -55,7 +55,10 @@ export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', t
         {description ?? <>Only to tailor my guidance. You accept our {link('privacy')} and {link('terms')}.</>}
       </p>}
       {answered ? (
-        <p className={styles.done}><Icon name="check" size={16} /> {answered === 'agreed' ? 'You agreed. Thank you.' : 'Not now. Your answers stay on this phone.'}</p>
+        <p className={styles.done}>
+          <span>{answered === 'agreed' ? 'You agreed. Thank you.' : 'Not now. Your answers stay on this phone.'}</span>
+          <Icon name="check" size={16} aria-hidden />
+        </p>
       ) : (
         <div className={styles.actions}>
           {variant === 'strip' ? (

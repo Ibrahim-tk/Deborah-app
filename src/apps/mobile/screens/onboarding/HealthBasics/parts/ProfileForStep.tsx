@@ -25,7 +25,7 @@ export function ProfileForStep({ value, onPick }: ProfileForStepProps) {
         const on = value === v;
         return (
           <button key={v} type="button" role="radio" aria-checked={on} className={styles.tile} data-on={on || undefined} onClick={() => onPick(v)}>
-            <span className={styles.badge}><Glyph filled={on} size={34} /></span>
+            <span className={styles.badge}><Glyph filled={on} size={28} /></span>
             <span className={styles.text}>
               <span className={styles.tileTitle}>{title}</span>
               <span className={styles.tileSub}>{sub}</span>

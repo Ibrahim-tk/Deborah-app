@@ -1,9 +1,8 @@
 /**
- * EXPLORATION (2026-10-13): single choice as quiz-style pills, label left-aligned.
- * The picked pill tints with an accent rim before the screen moves on.
+ * @deprecated Use FullChoicePills from `@flow-v1/apps/mobile/patterns/widgets`.
+ * Thin adapter so older Health Basics imports keep working.
  */
-import type { CSSProperties } from 'react';
-import styles from './ChoiceTiles.module.css';
+import { FullChoicePills } from '@flow-v1/apps/mobile/patterns/widgets';
 
 export interface ChoiceTilesProps {
   label: string;
@@ -14,20 +13,11 @@ export interface ChoiceTilesProps {
 
 export function ChoiceTiles({ label, choices, value, onPick }: ChoiceTilesProps) {
   return (
-    <div className={styles.root} data-dense={choices.length > 4 || undefined} role="radiogroup" aria-label={label}>
-      {choices.map((c, i) => (
-        <button
-          key={c.value}
-          type="button"
-          role="radio"
-          aria-checked={value === c.value}
-          className={styles.option}
-          style={{ '--i': i } as CSSProperties}
-          onClick={() => onPick(c.value)}
-        >
-          <span className={styles.label}>{c.label}</span>
-        </button>
-      ))}
-    </div>
+    <FullChoicePills
+      label={label}
+      options={choices.map((c) => ({ id: c.value, label: c.label }))}
+      selected={value || undefined}
+      onPick={onPick}
+    />
   );
 }

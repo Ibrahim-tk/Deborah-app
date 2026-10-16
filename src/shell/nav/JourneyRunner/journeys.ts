@@ -81,9 +81,9 @@ export const JOURNEYS: JourneyRun[] = [
   {
     id: 'for-teen',
     label: 'For my daughter, 15 · periods',
-    description: 'Signed up. Someone I care for → Daughter, Maya → 15 → teen consent → Female. Chat about Maya: third person, teen questions, no product.',
+    description: 'Signed up. Someone I care for → Daughter, Maya → 15 → teen consent → sex Female → identity Female. Chat about Maya: third person, teen questions, no product.',
     scenario: 'S20',
-    profile: { picks: [/^Family member/, /^Daughter$/, /^Female$/], name: 'Maya', age: 15 },
+    profile: { picks: [/^Family member/, /^Daughter$/, /^Female$/, /^Female$/, /^Yes$/, /^None$/, /^Pre-menopausal$/, /^No$/], name: 'Maya', age: 15 },
     message: 'Her periods have been really irregular',
     answers: [/^1–2 years$/, /^Irregular$/, ...NONE],
     review: 'save',
@@ -91,9 +91,9 @@ export const JOURNEYS: JourneyRun[] = [
   {
     id: 'for-child',
     label: 'For my son, 9 · sleep',
-    description: 'Someone I care for → Son, Leo → 9 → guardian consent → Male. Minor rules: no product.',
+    description: 'Someone I care for → Son, Leo → 9 → guardian consent → sex Male → identity Male. Minor rules: no product.',
     scenario: 'S03',
-    profile: { picks: [/^Family member/, /^Son$/, /^Male$/], name: 'Leo', age: 9 },
+    profile: { picks: [/^Family member/, /^Son$/, /^Male$/, /^Male$/], name: 'Leo', age: 9 },
     message: 'He has trouble falling asleep',
     answers: [...NONE],
     review: 'save',
@@ -101,9 +101,9 @@ export const JOURNEYS: JourneyRun[] = [
   {
     id: 'for-partner',
     label: 'For my partner, 52 · energy',
-    description: 'Someone I care for → Partner, James → 52 → they agree → Male. Male 40–54 questions in third person.',
+    description: 'Someone I care for → Partner, James → 52 → they agree → sex Male → identity Male. Male 40–54 questions in third person.',
     scenario: 'S21',
-    profile: { picks: [/^Family member/, /^Partner$/, /^Male$/], name: 'James', age: 52 },
+    profile: { picks: [/^Family member/, /^Partner$/, /^Male$/, /^Male$/, /^No$/], name: 'James', age: 52 },
     message: 'He has no energy by the afternoon',
     answers: [/^Tired by mid-afternoon$/, /^No$/, /^7–8$/, /^Months$/, /^Never$/, ...NONE],
     review: 'save',
@@ -184,8 +184,8 @@ export const GUIDANCE_JOURNEYS: JourneyRun[] = [
       'Full E2E: Welcome → sign-up → Myself profile → Ask Deborah → intake → 7 sections → Review Save → What’s next → Book a consultation.',
     scenario: 'S01',
     onboarding: true,
-    // Burst sign-up + explicit Health Basics (Myself / female / age) so onboarding does not idle.
-    profile: { picks: [/^Myself/, /^Female$/], age: 28 },
+    // Burst sign-up + explicit Health Basics (Myself / sex Female / identity Female / age) so onboarding does not idle.
+    profile: { picks: [/^Myself/, /^Female$/, /^Female$/, /^Yes$/, /^None$/, /^Pre-menopausal$/, /^No$/], age: 28 },
     message: 'I’ve been having headaches lately',
     answers: HEADACHE_ANSWERS,
     textAnswers: { goal: 'Sleep through the night without waking at 3am' },

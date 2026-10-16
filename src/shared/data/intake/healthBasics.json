@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Version 2 onboarding (M-1.8) — exact branches from Genesis Health (2).pdf Health Intake Logic wrt Age & Gender. Mandatory: Age (full date of birth: day, month, year) + Gender. All questions mandatory except free text after puberty. Transgender: one puberty question (Trans-woman / Trans-man). Wording is placeholder pending Deborah.",
+  "note": "Version 2 onboarding (M-1.8) — exact branches from Genesis Health (2).pdf Health Intake Logic wrt Age & Gender. Mandatory: Age (full date of birth: day, month, year) + Sex at birth + Gender identity. Female/non-binary/intersex 13+: periodsStarted → pubertyBlockers → reproductive banks. Peri/post/surgical open hrtStatus (Yes / Yes Previously expand inline hrtType pills; No skips type/taken) → hrtTaken. Post asks ageAtLastPeriod; surgical asks hysterectomy + ovariesRemoved. Pre goes straight to meds. Transgender: one puberty question (Trans-woman / Trans-man). Wording is placeholder pending Deborah.",
   "steps": [
     {
       "key": "profileFor",
@@ -46,8 +46,21 @@
       }
     },
     {
+      "key": "sex",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "What was your sex at birth?",
+      "titleOther": "What was {name}’s sex at birth?",
+      "choices": [
+        { "value": "female", "label": "Female" },
+        { "value": "male", "label": "Male" },
+        { "value": "intersex", "label": "Intersex" }
+      ]
+    },
+    {
       "key": "gender",
       "kind": "choice",
+      "presentation": "rows",
       "title": "How do you identify yourself?",
       "titleOther": "How does {name} identify?",
       "choices": [
@@ -109,8 +122,48 @@
       }
     },
     {
+      "key": "periodsStarted",
+      "kind": "choice",
+      "presentation": "pills",
+      "title": "Have your periods started?",
+      "titleOther": "Have {name}’s periods started?",
+      "showIf": {
+        "gender": { "in": ["female", "non-binary", "intersex"] },
+        "age": { "min": 13 }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" },
+        { "value": "describe", "label": "I’m not sure / I want to describe" }
+      ],
+      "describeValue": "describe",
+      "describeKey": "periodsNotes",
+      "describeLabel": "Describe",
+      "describePlaceholder": "describe your situation"
+    },
+    {
+      "key": "pubertyBlockers",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Using any puberty blockers?",
+      "titleOther": "Using any puberty blockers for {name}?",
+      "showIf": {
+        "gender": { "in": ["female", "non-binary", "intersex"] },
+        "age": { "min": 13 }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" }
+      ],
+      "describeValue": "yes",
+      "describeKey": "pubertyBlockersDetails",
+      "describeLabel": "Details",
+      "describePlaceholder": "details of puberty blocker"
+    },
+    {
       "key": "reproductive",
       "kind": "choice",
+      "presentation": "rows",
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
@@ -128,6 +181,7 @@
     {
       "key": "reproductiveTeen",
       "kind": "choice",
+      "presentation": "rows",
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
@@ -140,6 +194,98 @@
         { "value": "post-menopausal", "label": "Post-menopausal (natural)" },
         { "value": "surgically-menopausal", "label": "Surgically menopausal" },
         { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+      ]
+    },
+    {
+      "key": "ageAtLastPeriod",
+      "kind": "text",
+      "presentation": "chips",
+      "title": "Age at last period?",
+      "titleOther": "Age at {name}’s last period?",
+      "placeholder": "Age",
+      "single": true,
+      "showIf": {
+        "reproductiveStage": { "in": ["post-menopausal"] }
+      }
+    },
+    {
+      "key": "hysterectomy",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Have you had a hysterectomy?",
+      "titleOther": "Has {name} had a hysterectomy?",
+      "showIf": {
+        "reproductiveStage": { "in": ["surgically-menopausal"] }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" }
+      ]
+    },
+    {
+      "key": "ovariesRemoved",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Have you had your ovaries removed?",
+      "titleOther": "Has {name} had their ovaries removed?",
+      "showIf": {
+        "reproductiveStage": { "in": ["surgically-menopausal"] }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "no", "label": "No" },
+        { "value": "partial", "label": "Partial" }
+      ]
+    },
+    {
+      "key": "hrtStatus",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "title": "Are you currently on hormone therapy (HRT)?",
+      "titleOther": "Is {name} currently on hormone therapy (HRT)?",
+      "showIf": {
+        "reproductiveStage": { "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"] }
+      },
+      "choices": [
+        { "value": "yes", "label": "Yes" },
+        { "value": "yes-previously", "label": "Yes, Previously" },
+        { "value": "no", "label": "No" }
+      ],
+      "expandValues": ["yes", "yes-previously"],
+      "expandKey": "hrtType"
+    },
+    {
+      "key": "hrtType",
+      "kind": "choice",
+      "presentation": "pills",
+      "inline": true,
+      "title": "What type of HRT?",
+      "titleOther": "What type of HRT for {name}?",
+      "showIf": {
+        "hrtStatus": { "in": ["yes", "yes-previously"] }
+      },
+      "choices": [
+        { "value": "estrogen-only", "label": "Estrogen only" },
+        { "value": "combined", "label": "Combined" },
+        { "value": "progesterone-only", "label": "Progesterone only" },
+        { "value": "other", "label": "Other / not sure" }
+      ]
+    },
+    {
+      "key": "hrtTaken",
+      "kind": "choice",
+      "presentation": "pills",
+      "title": "How is it taken?",
+      "titleOther": "How is {name}’s HRT taken?",
+      "showIf": {
+        "hrtStatus": { "in": ["yes", "yes-previously"] }
+      },
+      "choices": [
+        { "value": "pill", "label": "Pill" },
+        { "value": "patch", "label": "Patch" },
+        { "value": "gel-cream", "label": "Gel or cream" },
+        { "value": "injection", "label": "Injection" },
+        { "value": "other", "label": "Other / not sure" }
       ]
     },
     {
@@ -185,6 +331,7 @@
     {
       "key": "medications",
       "kind": "text",
+      "presentation": "chips",
       "title": "Any current medications?",
       "titleOther": "Any current medications for {name}?",
       "placeholder": "e.g. Levothyroxine",
@@ -211,6 +358,7 @@
     {
       "key": "supplements",
       "kind": "text",
+      "presentation": "chips",
       "title": "Any supplements?",
       "titleOther": "Any supplements for {name}?",
       "placeholder": "e.g. Magnesium, Vitamin D",
@@ -237,6 +385,7 @@
     {
       "key": "genesisGold",
       "kind": "choice",
+      "presentation": "yesNo",
       "title": "Are you taking Genesis Gold?",
       "titleOther": "Is {name} taking Genesis Gold?",
       "showIf": {

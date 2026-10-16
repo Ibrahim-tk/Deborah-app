@@ -76,3 +76,30 @@
 /* Consent step (someone else's profile): the age-group note, then the attestation checkbox. */
 .consent { display: grid; gap: var(--space-4); }
 .consentText { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
+
+/* Choice steps: shared QuestionChoices widget; describe opens an inline field under the pills. */
+.choiceWidget { display: grid; gap: var(--space-3); }
+/* Status pills + inline follow-up (e.g. HRT type under Yes / Yes Previously). */
+.choiceStack { display: grid; gap: var(--space-5); }
+.describeField {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  background: var(--selected-tint);
+  box-shadow: inset 0 0 0 1.5px var(--color-border-selected);
+}
+.describeInput {
+  width: 100%;
+  min-height: 56px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  outline: none;
+}
+.describeInput::placeholder { color: var(--color-ink-placeholder); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

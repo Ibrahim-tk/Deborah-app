@@ -27,6 +27,8 @@ import styles from './CreateProfile.module.css';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_LENGTH = 8;
 const DONE_MS = 1600;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
+const SKIP_AUTH_VALIDATION = true;
 
 type Stage = 'form' | 'code' | 'forgot' | 'done';
 
@@ -61,6 +63,11 @@ export default function CreateProfile() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
+    if (SKIP_AUTH_VALIDATION) {
+      setErrors({});
+      setStage('code');
+      return;
+    }
     const next = {
       email: EMAIL_PATTERN.test(email.trim()) ? undefined : 'That email doesn’t look quite right.',
       password: signin || password.length >= MIN_LENGTH ? undefined : `Use at least ${MIN_LENGTH} characters.`,
@@ -114,7 +121,7 @@ export default function CreateProfile() {
             <Input label="Password" type="password" placeholder="Enter your password" value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
             {signin && <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>Forgot password?</button>}
             {!signin && <Input label="Confirm password" type="password" placeholder="Confirm your password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />}
-            <Button type="submit" fullWidth disabled={!email || !password || (!signin && !confirm)}>{signin ? 'Sign in' : 'Create account'}</Button>
+            <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>{signin ? 'Sign in' : 'Create account'}</Button>
           </form>
         )}
         {stage === 'code' && (

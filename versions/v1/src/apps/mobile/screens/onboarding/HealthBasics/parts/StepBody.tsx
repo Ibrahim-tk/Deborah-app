@@ -1,11 +1,11 @@
-/** The control for one onboarding step: who-for tiles, name, year wheel, consent, choice tiles (and older kinds still in the data model). */
+/** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / ChipPicker. */
 import { consentDoc } from '@flow-v1/shared/data';
+import { FullChoicePills } from '@flow-v1/apps/mobile/patterns/widgets';
 import { Checkbox, DateWheel, Input, RulerSlider, YearWheel } from '@flow-v1/apps/mobile/ui';
 import { list, visibleSuggestions, withDerived, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
-import { ChoiceTiles } from './ChoiceTiles';
 
 const THIS_YEAR = new Date().getFullYear();
 // Same units as Deborah's in-chat rulers (patterns/chat IntakeFields): imperial in the US.
@@ -60,7 +60,14 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
     case 'profileFor':
       return <ProfileForStep value={value} onPick={advance} />;
     case 'choice':
-      return <ChoiceTiles label={step.title} choices={step.choices!} value={value} onPick={advance} />;
+      return (
+        <FullChoicePills
+          label={step.title}
+          options={(step.choices ?? []).map((c) => ({ id: c.value, label: c.label }))}
+          selected={value || undefined}
+          onPick={advance}
+        />
+      );
     case 'text':
       return (
         <ChipPicker

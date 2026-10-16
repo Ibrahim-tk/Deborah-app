@@ -15,26 +15,26 @@ Updated 15 October 2026. Each case starts UNTESTED. Test the actual UI manually;
 | --- | --- | --- | --- |
 | 1. Welcome | Wait for Splash, enter Sarah and choose Get Started. | The sign-up sheet opens; it does not skip to the questions. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Create demo account | Enter sarah@example.com, demo-password-1 in both password fields, then Create account. Enter 444444. | You’re in appears, followed by Onboarding profile. | ☐ Pass ☐ Fail ☐ Blocked |
-| 3. Choose profile basics | Choose Myself. Set birth year to 1998 and Continue. Choose Female. | Only basics are collected before chat; no health-history questionnaire. | ☐ Pass ☐ Fail ☐ Blocked |
+| 3. Choose profile basics | Choose Myself. Set DOB to 1998 (adult). Continue. Sex at birth Female → identify Female → answer periods / hormonal stage / meds / supplements / Genesis Gold. | Sex and identity are both asked; Female adult bank runs before Deborah. | ☐ Pass ☐ Fail ☐ Blocked |
 | 4. Start chatting | Choose Start chatting. | Conversation opens with Sarah as the active profile. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Ask Deborah | Send “I’ve been having headaches lately”. Agree to health-data processing if asked. Answer each relevant question; use None where appropriate. | Questions reflect the selected profile. Facts remain pending until confirmation. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Review and Confirm | When the answer finishes, inspect what Deborah noted. Choose Save to my profile. | The facts become confirmed. No guest sign-up card appears. A first-answer reminder offer may follow. | ☐ Pass ☐ Fail ☐ Blocked |
 
-Alternate checks: Invalid email or mismatched passwords → inline error; Sign in → returning-user path; Self under 18 → Ask a parent; Family member → relationship, name, consent; Safety concern → safety response; Missing basic → question before answer; Edit → M-2.13 → Use this → Save; Don’t save → discard pending facts.
+Alternate checks: Invalid email or mismatched passwords → inline error; Sign in → returning-user path; Self under 13 → Ask a parent; Family member → relationship, name, consent; Safety concern → safety response; Missing basic → question before answer; Edit → M-2.13 → Use this → Save; Don’t save → discard pending facts.
 
-## Self under 18 — age gate
+## Self under 13 — age gate
 
 - Persona: Sarah
-- Goal: Verify a 16-year-old cannot start their own consultation.
+- Goal: Verify someone under 13 cannot start their own consultation.
 - Starting point: [S03](http://127.0.0.1:5173/mobile?scenario=S03)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
-- Simulation: Local age gate; year-of-birth approximation.
+- Simulation: Local age gate; full date of birth.
 
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
-| 1. Choose Myself | Choose Myself. | Birth-year wheel appears. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Under-18 birth year | Set birth year to 2010 and Continue. | Ask a parent replaces onboarding. No chat or self age/sex basics are saved. | ☐ Pass ☐ Fail ☐ Blocked |
+| 1. Choose Myself | Choose Myself. | Date of birth wheel appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Under-13 birth date | Set DOB to an age under 13 and Continue. | Ask a parent replaces onboarding. No chat or self sex/identity basics are saved. | ☐ Pass ☐ Fail ☐ Blocked |
 
 ## Teen dependent onboarding
 
@@ -50,7 +50,7 @@ Alternate checks: Invalid email or mismatched passwords → inline error; Sign i
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Relationship and name | Choose Daughter, enter Maya, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 2011. Continue, read and check the agreement, then Continue. | Age-appropriate guardian-teen consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
-| 4. Sex at birth | Choose Female. | Start talking about Maya appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 4. Sex and identity | Sex at birth Female → identify Female → answer teen Female intake (periods, stage, meds, supplements, Genesis Gold). | Start talking about Maya appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about Maya; send “Her periods have been really irregular”. | Profile banner identifies Maya; questions use third person. No product recommendation is permitted. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Finish and inspect | Answer the questions, request the answer if prompted, and review any noted facts. | Only the dependent’s profile is updated on confirmation; the account holder remains name-only. | ☐ Pass ☐ Fail ☐ Blocked |
 
@@ -70,7 +70,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Relationship and name | Choose Son, enter Leo, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 2017. Continue, read and check the agreement, then Continue. | Age-appropriate guardian-child consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
-| 4. Sex at birth | Choose Male. | Start talking about Leo appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 4. Sex and identity | Sex at birth Male → identify Male → child basics (guardians, meds, allergies). | Start talking about Leo appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about Leo; send “He has trouble falling asleep”. | Profile banner identifies Leo; questions use third person. No product recommendation is permitted. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Finish and inspect | Answer the questions, request the answer if prompted, and review any noted facts. | Only the dependent’s profile is updated on confirmation; the account holder remains name-only. | ☐ Pass ☐ Fail ☐ Blocked |
 
@@ -90,7 +90,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Relationship and name | Choose Partner, enter James, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 1974. Continue, read and check the agreement, then Continue. | Age-appropriate adult-agreement consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
-| 4. Sex at birth | Choose Male. | Start talking about James appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 4. Sex and identity | Sex at birth Male → identify Male → adult meds / supplements / Genesis Gold. | Start talking about James appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about James; send “He has no energy by the afternoon”. | Profile banner identifies James; questions use third person. Male 40–54 journey applies. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Finish and inspect | Answer the questions, request the answer if prompted, and review any noted facts. | Only the dependent’s profile is updated on confirmation; the account holder remains name-only. | ☐ Pass ☐ Fail ☐ Blocked |
 
@@ -490,12 +490,12 @@ Alternate checks: Not now → close gate.
 - Auto: **▶ Journeys → Guidance · early first look** (S23).
 - Manual starting point: [S23](http://127.0.0.1:5173/mobile?scenario=S23)
 - Implementation: IMPLEMENTED
-- Verification: UNTESTED
+- Verification: VERIFIED 16 Oct 2026 — auto `guidance-early`: mid-intake ASK → early first look copy → finish intake → 7 sections → Review Save → Journey finished.
 
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
-| 1. Request early | Auto types Tell me what you think mid-intake (or tap/type manually). | Deborah lists what’s still missing; free count unchanged. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Finish and ask again | Answer remaining questions, then request guidance. | Seven sections stream; consultation counts once; journey finished. | ☐ Pass ☐ Fail ☐ Blocked |
+| 1. Request early | Auto types Tell me what you think mid-intake (or tap/type manually). | Deborah lists what’s still missing; free count unchanged. | ☑ Pass ☐ Fail ☐ Blocked |
+| 2. Finish and ask again | Answer remaining questions, then request guidance. | Seven sections stream; consultation counts once; journey finished. | ☑ Pass ☐ Fail ☐ Blocked |
 
 ## Guidance — out of coverage
 
@@ -504,12 +504,12 @@ Alternate checks: Not now → close gate.
 - Auto: **▶ Journeys → Guidance · out of coverage** (S05 + cataract phrase).
 - Manual starting point: [S13](http://127.0.0.1:5173/mobile?scenario=S13) Safety bench → Uncovered, or S05.
 - Implementation: IMPLEMENTED
-- Verification: UNTESTED
+- Verification: VERIFIED 16 Oct 2026 — auto `guidance-uncovered`: cataract phrase → intake → outside-coverage body → Journey finished (uncounted).
 
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
-| 1. Send uncovered phrase | Auto sends cataract recovery phrase (or Safety bench → Uncovered). | New consult starts. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Request guidance | Finish intake if needed; Tell me what you think. | Outside-coverage copy; team toast; Book available; free count unchanged; journey finished. | ☐ Pass ☐ Fail ☐ Blocked |
+| 1. Send uncovered phrase | Auto sends cataract recovery phrase (or Safety bench → Uncovered). | New consult starts. | ☑ Pass ☐ Fail ☐ Blocked |
+| 2. Request guidance | Finish intake if needed; Tell me what you think. | Outside-coverage copy; team toast; Book available; free count unchanged; journey finished. | ☑ Pass ☐ Fail ☐ Blocked |
 
 ## Guidance — lab summary refresh
 
@@ -518,11 +518,11 @@ Alternate checks: Not now → close gate.
 - Auto: **▶ Journeys → Guidance · lab summary refresh** (S04).
 - Manual starting point: [S04](http://127.0.0.1:5173/mobile?scenario=S04)
 - Implementation: IMPLEMENTED
-- Verification: UNTESTED
+- Verification: VERIFIED 16 Oct 2026 — auto `guidance-labs`: What’s next → camera → send → “I’ve updated this with your labs” → Journey finished.
 
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
-| 1. Upload labs | Auto: What’s next → Upload labs → Take a photo → Use photo → Looks right — send to Deborah. | Updated seven-section answer (“I’ve updated this with your labs”); free count unchanged; journey finished. | ☐ Pass ☐ Fail ☐ Blocked |
+| 1. Upload labs | Auto: What’s next → Upload labs → Take a photo → Use photo → Looks right — send to Deborah. | Updated seven-section answer (“I’ve updated this with your labs”); free count unchanged; journey finished. | ☑ Pass ☐ Fail ☐ Blocked |
 
 
 ## Provider-review ending — S22
