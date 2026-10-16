@@ -4,13 +4,25 @@
  * `reply` lets the widget answer as the user and get Deborah's follow-up.
  */
 import { useState } from 'react';
-import { findProduct, firstConsultFlow } from '@shared/data';
+import { findProduct, firstConsultFlow, intakeSuggestionData, medicinesData } from '@shared/data';
 import { briefFromAnswer, personalise } from '@shared/engine';
 import { Button, Panel } from '@mobile/ui';
 import { AnswerSections } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt } from '@mobile/patterns/safety';
-import { BookDeborah, ChoicePills, FullChoicePills, InlineChoicePills, InlineConsent, MoodScale, QuestionChoices, ScaleCheck, UploadCard } from '@mobile/patterns/widgets';
+import {
+  BookDeborah,
+  ChoicePills,
+  FullChoicePills,
+  InlineChoicePills,
+  InlineConsent,
+  MoodScale,
+  NamedReasonList,
+  QuestionChoices,
+  ScaleCheck,
+  UploadCard,
+  type NamedReason,
+} from '@mobile/patterns/widgets';
 import { buildAnswer, visitPrepItems } from '@mobile/screens/consultation/FirstConsult/parts/buildAnswer';
 import { VisitPrepCard } from '@mobile/screens/consultation/FirstConsult/parts/VisitPrepCard';
 import { BriefDocument } from '@mobile/screens/records/VisitBrief/parts/BriefDocument';
@@ -48,6 +60,10 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
   const [blockersDetails, setBlockersDetails] = useState('');
   const [hrtStatus, setHrtStatus] = useState<string>();
   const [hrtType, setHrtType] = useState<string>();
+  const [meds, setMeds] = useState<NamedReason[]>([]);
+  const [medsNone, setMedsNone] = useState(false);
+  const [supps, setSupps] = useState<NamedReason[]>([]);
+  const [suppsNone, setSuppsNone] = useState(false);
   switch (kind) {
     case 'consent':
       return <InlineConsent answered={consent} onAgree={() => { setConsent('agreed'); reply(undefined, 'Thank you. Tell me what’s on your mind.'); }} onDecline={() => setConsent('declined')} />;
@@ -179,6 +195,64 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
         </div>
       );
     }
+    case 'namedReasons':
+      return (
+        <NamedReasonList
+          label="Medications (Rx & OTC)"
+          entries={meds}
+          addLabel="Add medicine"
+          noneSelected={medsNone}
+          namePlaceholder="e.g. Metformin"
+          reasonPlaceholder="What is it for?"
+          nameSuggestions={medicinesData}
+          onChange={(entries) => {
+            const added = entries.length > meds.length;
+            setMeds(entries);
+            setMedsNone(false);
+            if (added) {
+              const last = entries[entries.length - 1];
+              reply(
+                last ? (last.reason ? `${last.name} (${last.reason})` : last.name) : 'Added',
+                'Got it — add pill opens a sheet; tiles land on the main surface.',
+              );
+            }
+          }}
+          onNone={() => {
+            setMeds([]);
+            setMedsNone(true);
+            reply("I don't take any", 'Okay — quiet escape still advances without a sheet.');
+          }}
+        />
+      );
+    case 'namedReasonsSupplements':
+      return (
+        <NamedReasonList
+          label="Supplements"
+          entries={supps}
+          addLabel="Add supplement"
+          noneSelected={suppsNone}
+          namePlaceholder="e.g. Magnesium"
+          reasonPlaceholder="What is it for?"
+          nameSuggestions={intakeSuggestionData.supplements}
+          onChange={(entries) => {
+            const added = entries.length > supps.length;
+            setSupps(entries);
+            setSuppsNone(false);
+            if (added) {
+              const last = entries[entries.length - 1];
+              reply(
+                last ? (last.reason ? `${last.name} (${last.reason})` : last.name) : 'Added',
+                'Same NamedReasonList widget — supplements use Add supplement.',
+              );
+            }
+          }}
+          onNone={() => {
+            setSupps([]);
+            setSuppsNone(true);
+            reply("I don't take any", 'Okay — no supplements noted.');
+          }}
+        />
+      );
     case 'scale':
       return <ScaleCheck title="Energy today" low="Empty" high="Full" onDone={(v) => reply(`${v} of 10`, v < 5 ? 'Low energy and broken sleep often travel together.' : 'Glad your energy is holding up.')} />;
     case 'mood':

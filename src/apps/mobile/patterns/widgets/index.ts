@@ -4,6 +4,7 @@ export * from './ChoicePills';
 export * from './InlineChoicePills';
 export * from './FullChoicePills';
 export * from './PillDescribeField';
+export * from './NamedReasonList';
 export * from './ConfirmCard';
 export * from './BookDeborah';
 export * from './SlotPicker';

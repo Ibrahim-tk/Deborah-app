@@ -15,7 +15,7 @@ Updated 15 October 2026. Each case starts UNTESTED. Test the actual UI manually;
 | --- | --- | --- | --- |
 | 1. Welcome | Wait for Splash, enter Sarah and choose Get Started. | The sign-up sheet opens; it does not skip to the questions. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Create demo account | Enter sarah@example.com, demo-password-1 in both password fields, then Create account. Enter 444444. | You’re in appears, followed by Onboarding profile. | ☐ Pass ☐ Fail ☐ Blocked |
-| 3. Choose profile basics | Choose Myself. Set DOB to 1998 (adult). Continue. Sex at birth Female → identify Female → answer periods / hormonal stage / meds / supplements / Genesis Gold. | Sex and identity are both asked; Female adult bank runs before Deborah. | ☐ Pass ☐ Fail ☐ Blocked |
+| 3. Choose profile basics | Choose Myself. Set DOB to 1998 (adult). Continue. Sex at birth Female → periods / hormonal stage / meds / supplements / Genesis Gold (no identity question for Male/Female). | Female sex skips identity; Female adult bank runs, then Ask Deborah. | ☐ Pass ☐ Fail ☐ Blocked |
 | 4. Start chatting | Choose Start chatting. | Conversation opens with Sarah as the active profile. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Ask Deborah | Send “I’ve been having headaches lately”. Agree to health-data processing if asked. Answer each relevant question; use None where appropriate. | Questions reflect the selected profile. Facts remain pending until confirmation. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Review and Confirm | When the answer finishes, inspect what Deborah noted. Choose Save to my profile. | The facts become confirmed. No guest sign-up card appears. A first-answer reminder offer may follow. | ☐ Pass ☐ Fail ☐ Blocked |
@@ -50,7 +50,7 @@ Alternate checks: Invalid email or mismatched passwords → inline error; Sign i
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Relationship and name | Choose Daughter, enter Maya, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 2011. Continue, read and check the agreement, then Continue. | Age-appropriate guardian-teen consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
-| 4. Sex and identity | Sex at birth Female → identify Female → answer teen Female intake (periods, stage, meds, supplements, Genesis Gold). | Start talking about Maya appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 4. Sex at birth | Sex at birth Female (identity skipped) → answer teen Female intake (periods, stage, meds, supplements, Genesis Gold). | Start talking about Maya appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about Maya; send “Her periods have been really irregular”. | Profile banner identifies Maya; questions use third person. No product recommendation is permitted. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Finish and inspect | Answer the questions, request the answer if prompted, and review any noted facts. | Only the dependent’s profile is updated on confirmation; the account holder remains name-only. | ☐ Pass ☐ Fail ☐ Blocked |
 
@@ -70,7 +70,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Relationship and name | Choose Son, enter Leo, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 2017. Continue, read and check the agreement, then Continue. | Age-appropriate guardian-child consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
-| 4. Sex and identity | Sex at birth Male → identify Male → child basics (guardians, meds, allergies). | Start talking about Leo appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 4. Sex at birth | Sex at birth Male (identity skipped) → child basics (guardians, meds, allergies). | Start talking about Leo appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about Leo; send “He has trouble falling asleep”. | Profile banner identifies Leo; questions use third person. No product recommendation is permitted. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Finish and inspect | Answer the questions, request the answer if prompted, and review any noted facts. | Only the dependent’s profile is updated on confirmation; the account holder remains name-only. | ☐ Pass ☐ Fail ☐ Blocked |
 
@@ -90,7 +90,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Relationship and name | Choose Partner, enter James, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 1974. Continue, read and check the agreement, then Continue. | Age-appropriate adult-agreement consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
-| 4. Sex and identity | Sex at birth Male → identify Male → adult meds / supplements / Genesis Gold. | Start talking about James appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 4. Sex at birth | Sex at birth Male (identity skipped) → adult meds / supplements / Genesis Gold. | Start talking about James appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about James; send “He has no energy by the afternoon”. | Profile banner identifies James; questions use third person. Male 40–54 journey applies. | ☐ Pass ☐ Fail ☐ Blocked |
 | 6. Finish and inspect | Answer the questions, request the answer if prompted, and review any noted facts. | Only the dependent’s profile is updated on confirmation; the account holder remains name-only. | ☐ Pass ☐ Fail ☐ Blocked |
 

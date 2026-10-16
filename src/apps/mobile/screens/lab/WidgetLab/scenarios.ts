@@ -6,6 +6,7 @@
 export type WidgetKind =
   | 'consent' | 'yesno' | 'multi'
   | 'pillsInline' | 'pillsRegular' | 'pillsFull' | 'pillsFullDescribe' | 'pillsFullYesDetails' | 'pillsFullExpand'
+  | 'namedReasons' | 'namedReasonsSupplements'
   | 'scale' | 'mood' | 'answer' | 'product' | 'slots'
   | 'upload' | 'tip' | 'prep' | 'brief' | 'emergency';
 
@@ -34,6 +35,8 @@ export const SCENARIO: LabMessage[] = [
   d('Have your periods started? Tap “I’m not sure” to type, then the check.', 'pillsFullDescribe', 'FullChoicePills · describe morph'),
   d('Using any puberty blockers? Yes opens a details field with check; No advances.', 'pillsFullYesDetails', 'FullChoicePills · yes details morph'),
   d('On HRT? Yes / Yes Previously opens type pills below; No advances.', 'pillsFullExpand', 'FullChoicePills · HRT type expand'),
+  d('Any medications right now? Tap Add medicine for name + reason.', 'namedReasons', 'NamedReasonList · meds sheet'),
+  d('Supplements use the same sheet flow.', 'namedReasonsSupplements', 'NamedReasonList · supplements sheet'),
   d('How is your energy during the day, from 0 to 10?', 'scale', 'Scale (knob slider)'),
   d('And overall, how are you feeling this week?', 'mood', 'Mood check-in'),
   d('Thank you. Here is how I’d think about it.', 'answer', '7-section answer (signature card + Visit notes)'),
@@ -59,7 +62,9 @@ const ROUTES: { test: RegExp; widget: WidgetKind; text: string }[] = [
   { test: /regular pill|intake pill|wrapping/i, widget: 'pillsRegular', text: 'Which of these fit?' },
   { test: /inline pill|chat pill|compact pill/i, widget: 'pillsInline', text: 'Quick yes or no:' },
   { test: /symptom|which|also|other/i, widget: 'multi', text: 'Which of these are you noticing?' },
-  { test: /supplement|vitamin|magnesium|product|shop/i, widget: 'product', text: 'This is one many women ask about.' },
+  { test: /add medicine|medication|named.?reason|rx|otc/i, widget: 'namedReasons', text: 'Any medications right now?' },
+  { test: /add supplement|supplement list/i, widget: 'namedReasonsSupplements', text: 'Any supplements?' },
+  { test: /vitamin|magnesium|product|shop/i, widget: 'product', text: 'This is one many women ask about.' },
   { test: /question|doctor|prepare|notes|brief|provider/i, widget: 'brief', text: 'Here’s a structured note for your provider.' },
   { test: /why|what|explain|sleep|hot flash|sweat|period|hormone|thyroid/i, widget: 'answer', text: 'Here’s how I’d think about it.' },
   { test: /tip|try|tonight|help/i, widget: 'tip', text: 'Something small you can try:' },

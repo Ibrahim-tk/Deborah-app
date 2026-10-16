@@ -3,13 +3,13 @@
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
  * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10]
- *          · [someone else: consent by age group] · sex at birth · gender identity · age×gender branches (periods / reproductive / peri HRT / puberty / meds)
+ *          · [someone else: consent by age group] · sex at birth · age×sex branches · [identity if not M/F, last before Deborah]
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex at birth, gender identity,
- * then conditional health-intake steps from the age × gender PDF. Steps and `showIf` live in healthBasics.json.
+ * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex at birth (routes banks),
+ * then age×sex intake; gender identity last when sex is not Male/Female. Steps/`showIf` in healthBasics.json.
  */
 import { useState, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';
@@ -20,6 +20,7 @@ import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, 
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
 import { BloomReveal } from './parts/BloomReveal';
+import { namedReasonsComplete } from '@mobile/patterns/widgets';
 import styles from './HealthBasics.module.css';
 
 const THIS_YEAR = new Date().getFullYear();
@@ -68,7 +69,8 @@ export default function HealthBasics() {
   const canContinue =
     step.optional === true ||
     step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
-    (step.kind === 'text' && Boolean(value.trim())) ||
+    (step.kind === 'text' && step.presentation === 'namedReasons' && namedReasonsComplete(value, step.none)) ||
+    (step.kind === 'text' && step.presentation !== 'namedReasons' && Boolean(value.trim())) ||
     (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||
     (step.kind === 'consent' && value === 'yes');
   // Choice (incl. describe morph check / expand type pills): no footer Continue — in-field confirm or pill tap advances.

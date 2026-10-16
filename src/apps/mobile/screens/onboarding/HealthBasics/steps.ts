@@ -1,6 +1,6 @@
 /**
  * The onboarding profile steps come from data/intake/healthBasics.json, in order. Each step can carry a
- * `showIf` rule (e.g. gender × age branches); edit the JSON, not code.
+ * `showIf` rule (e.g. sex-at-birth × age branches); edit the JSON, not code.
  * `age` (number) and `ageGroup` are derived from the date of birth so rules can branch.
  */
 import { healthBasicsData } from '@shared/data';
@@ -19,7 +19,14 @@ export function ageFromAnswers(a: Answers, now = new Date()): number | undefined
   return ageOn(`${dob}T12:00:00`, now);
 }
 
-/** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`). */
+/** Identity for save: Male/Female sex skip the late identity question; otherwise use that answer. */
+export function effectiveGender(a: Answers): string | undefined {
+  if (a.sex === 'male' || a.sex === 'female') return a.sex;
+  return a.gender;
+}
+
+/** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`).
+ * Intake `showIf` routes on sex at birth (identity is asked last and does not change the path). */
 export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
   const age = ageFromAnswers(a);
   const reproductiveStage = a.reproductive ?? a.reproductiveTeen;
@@ -48,7 +55,8 @@ export function titleFor(s: Step, a: Answers): string {
   return t.replaceAll('{name}', name);
 }
 /** Suggestions to offer on a text step, given the answers so far. */
-export const visibleSuggestions = (s: Step, a: Answers) => (s.suggestions ?? []).filter((x) => shows(x.showIf, a)).map((x) => x.label);
+export const visibleSuggestions = (s: Step, a: Answers) =>
+  (s.suggestions ?? []).filter((x) => shows(x.showIf, withDerived(a))).map((x) => x.label);
 
 /** Splits a typed list ("a, b") into names; the "None" answers are stored as an empty list. */
 export function list(value: string | undefined, none?: string): string[] {

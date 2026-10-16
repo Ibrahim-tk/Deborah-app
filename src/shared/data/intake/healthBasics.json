@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Version 2 onboarding (M-1.8) — exact branches from Genesis Health (2).pdf Health Intake Logic wrt Age & Gender. Mandatory: Age (full date of birth: day, month, year) + Sex at birth + Gender identity. Female/non-binary/intersex 13+: periodsStarted → pubertyBlockers → reproductive banks. Peri/post/surgical open hrtStatus (Yes / Yes Previously expand inline hrtType pills; No skips type/taken) → hrtTaken. Post asks ageAtLastPeriod; surgical asks hysterectomy + ovariesRemoved. Pre goes straight to meds. Transgender: one puberty question (Trans-woman / Trans-man). Wording is placeholder pending Deborah.",
+  "note": "Version 2 onboarding (M-1.8) — Age + Sex at birth routes intake banks; gender identity is asked last only when sex is not Male/Female. Under-13 Myself → M-1.10 ask adult. Ages 13–17 / 18–59: sex banks (periods/blockers teen-only; reproductive + nests for F/NB/IS 18–59; etc.). Age 60+: skip deep questions → name+reason meds → name+reason supplements → Genesis Gold. Pregnant/Postpartum (under 60) also uses name+reason meds/supplements. Wording placeholder pending Deborah.",
   "steps": [
     {
       "key": "profileFor",
@@ -48,28 +48,16 @@
     {
       "key": "sex",
       "kind": "choice",
-      "presentation": "yesNo",
+      "presentation": "rows",
       "title": "What was your sex at birth?",
       "titleOther": "What was {name}’s sex at birth?",
       "choices": [
         { "value": "female", "label": "Female" },
         { "value": "male", "label": "Male" },
-        { "value": "intersex", "label": "Intersex" }
-      ]
-    },
-    {
-      "key": "gender",
-      "kind": "choice",
-      "presentation": "rows",
-      "title": "How do you identify yourself?",
-      "titleOther": "How does {name} identify?",
-      "choices": [
-        { "value": "female", "label": "Female" },
-        { "value": "male", "label": "Male" },
         { "value": "non-binary", "label": "Non-binary" },
-        { "value": "transgender", "label": "Transgender" },
-        { "value": "intersex", "label": "Intersex" },
-        { "value": "prefer-not", "label": "Prefer not to say" }
+        { "value": "trans-man", "label": "Trans man" },
+        { "value": "trans-woman", "label": "Trans woman" },
+        { "value": "intersex", "label": "Intersex" }
       ]
     },
     {
@@ -128,8 +116,8 @@
       "title": "Have your periods started?",
       "titleOther": "Have {name}’s periods started?",
       "showIf": {
-        "gender": { "in": ["female", "non-binary", "intersex"] },
-        "age": { "min": 13 }
+        "sex": { "in": ["female", "non-binary", "intersex"] },
+        "age": { "min": 13, "max": 59 }
       },
       "choices": [
         { "value": "yes", "label": "Yes" },
@@ -148,8 +136,8 @@
       "title": "Using any puberty blockers?",
       "titleOther": "Using any puberty blockers for {name}?",
       "showIf": {
-        "gender": { "in": ["female", "non-binary", "intersex"] },
-        "age": { "min": 13 }
+        "sex": { "in": ["female", "non-binary", "intersex"] },
+        "age": { "min": 13, "max": 17 }
       },
       "choices": [
         { "value": "yes", "label": "Yes" },
@@ -167,13 +155,13 @@
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
-        "gender": { "in": ["female", "non-binary", "intersex"] },
-        "age": { "min": 18 }
+        "sex": { "in": ["female", "non-binary", "intersex"] },
+        "age": { "min": 18, "max": 59 }
       },
       "choices": [
         { "value": "pre-menopausal", "label": "Pre-menopausal" },
         { "value": "peri-menopausal", "label": "Peri-menopausal" },
-        { "value": "post-menopausal", "label": "Post-menopausal (natural)" },
+        { "value": "post-menopausal", "label": "Post-menopausal" },
         { "value": "surgically-menopausal", "label": "Surgically menopausal" },
         { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
       ]
@@ -185,13 +173,13 @@
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
-        "gender": { "in": ["female", "non-binary", "intersex"] },
+        "sex": { "in": ["female", "non-binary", "intersex"] },
         "age": { "min": 13, "max": 17 }
       },
       "choices": [
         { "value": "pre-menopausal", "label": "Pre-menopausal" },
         { "value": "peri-menopausal", "label": "Peri-menopausal" },
-        { "value": "post-menopausal", "label": "Post-menopausal (natural)" },
+        { "value": "post-menopausal", "label": "Post-menopausal" },
         { "value": "surgically-menopausal", "label": "Surgically menopausal" },
         { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
       ]
@@ -205,7 +193,8 @@
       "placeholder": "Age",
       "single": true,
       "showIf": {
-        "reproductiveStage": { "in": ["post-menopausal"] }
+        "reproductiveStage": { "in": ["post-menopausal"] },
+        "age": { "max": 59 }
       }
     },
     {
@@ -215,7 +204,8 @@
       "title": "Have you had a hysterectomy?",
       "titleOther": "Has {name} had a hysterectomy?",
       "showIf": {
-        "reproductiveStage": { "in": ["surgically-menopausal"] }
+        "reproductiveStage": { "in": ["surgically-menopausal"] },
+        "age": { "max": 59 }
       },
       "choices": [
         { "value": "yes", "label": "Yes" },
@@ -229,7 +219,8 @@
       "title": "Have you had your ovaries removed?",
       "titleOther": "Has {name} had their ovaries removed?",
       "showIf": {
-        "reproductiveStage": { "in": ["surgically-menopausal"] }
+        "reproductiveStage": { "in": ["surgically-menopausal"] },
+        "age": { "max": 59 }
       },
       "choices": [
         { "value": "yes", "label": "Yes" },
@@ -244,7 +235,8 @@
       "title": "Are you currently on hormone therapy (HRT)?",
       "titleOther": "Is {name} currently on hormone therapy (HRT)?",
       "showIf": {
-        "reproductiveStage": { "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"] }
+        "reproductiveStage": { "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"] },
+        "age": { "max": 59 }
       },
       "choices": [
         { "value": "yes", "label": "Yes" },
@@ -278,7 +270,8 @@
       "title": "How is it taken?",
       "titleOther": "How is {name}’s HRT taken?",
       "showIf": {
-        "hrtStatus": { "in": ["yes", "yes-previously"] }
+        "hrtStatus": { "in": ["yes", "yes-previously"] },
+        "age": { "max": 59 }
       },
       "choices": [
         { "value": "pill", "label": "Pill" },
@@ -294,8 +287,8 @@
       "title": "What, if any, puberty has your body gone through or is going through?",
       "titleOther": "What, if any, puberty has {name}’s body gone through or is going through?",
       "showIf": {
-        "gender": { "in": ["transgender"] },
-        "age": { "min": 13 }
+        "sex": { "in": ["trans-man", "trans-woman"] },
+        "age": { "min": 13, "max": 59 }
       },
       "choices": [
         { "value": "trans-woman", "label": "Trans-woman" },
@@ -311,7 +304,7 @@
       "placeholder": "Age or year",
       "single": true,
       "showIf": {
-        "gender": { "in": ["male", "non-binary", "intersex", "prefer-not"] },
+        "sex": { "in": ["male", "non-binary", "intersex"] },
         "age": { "min": 13, "max": 17 }
       }
     },
@@ -324,7 +317,7 @@
       "single": true,
       "optional": true,
       "showIf": {
-        "gender": { "in": ["male", "non-binary", "intersex", "prefer-not"] },
+        "sex": { "in": ["male", "non-binary", "intersex"] },
         "age": { "min": 13, "max": 17 }
       }
     },
@@ -342,17 +335,45 @@
         { "label": "Blood pressure medication" },
         {
           "label": "Birth control",
-          "showIf": { "gender": { "notIn": ["male"] } }
+          "showIf": { "sex": { "notIn": ["male"] } }
         },
         {
           "label": "Testosterone",
-          "showIf": { "gender": { "in": ["male", "intersex", "transgender"] } }
+          "showIf": { "sex": { "in": ["male", "intersex", "trans-man", "trans-woman"] } }
         },
         { "label": "Antidepressant" },
         { "label": "HRT / hormones" }
       ],
       "showIf": {
-        "age": { "min": 13 }
+        "age": { "min": 13, "max": 59 },
+        "reproductiveStage": { "notIn": ["pregnant-postpartum"] }
+      }
+    },
+    {
+      "key": "medications",
+      "kind": "text",
+      "presentation": "namedReasons",
+      "title": "Medications (Rx & OTC)",
+      "titleOther": "Medications (Rx & OTC) for {name}",
+      "namePlaceholder": "e.g. Metformin",
+      "reasonPlaceholder": "What is it for?",
+      "none": "None",
+      "showIf": {
+        "reproductiveStage": { "in": ["pregnant-postpartum"] },
+        "age": { "max": 59 }
+      }
+    },
+    {
+      "key": "medications",
+      "kind": "text",
+      "presentation": "namedReasons",
+      "title": "Medications (Rx & OTC)",
+      "titleOther": "Medications (Rx & OTC) for {name}",
+      "namePlaceholder": "e.g. Metformin",
+      "reasonPlaceholder": "What is it for?",
+      "none": "None",
+      "showIf": {
+        "age": { "min": 60 }
       }
     },
     {
@@ -369,17 +390,45 @@
         { "label": "Omega-3" },
         {
           "label": "Iron",
-          "showIf": { "gender": { "notIn": ["male"] } }
+          "showIf": { "sex": { "notIn": ["male"] } }
         },
         {
           "label": "Zinc",
-          "showIf": { "gender": { "in": ["male", "intersex", "transgender"] } }
+          "showIf": { "sex": { "in": ["male", "intersex", "trans-man", "trans-woman"] } }
         },
         { "label": "B12" },
         { "label": "Probiotics" }
       ],
       "showIf": {
-        "age": { "min": 13 }
+        "age": { "min": 13, "max": 59 },
+        "reproductiveStage": { "notIn": ["pregnant-postpartum"] }
+      }
+    },
+    {
+      "key": "supplements",
+      "kind": "text",
+      "presentation": "namedReasons",
+      "title": "Supplements",
+      "titleOther": "Supplements for {name}",
+      "namePlaceholder": "e.g. Magnesium",
+      "reasonPlaceholder": "What is it for?",
+      "none": "None",
+      "showIf": {
+        "reproductiveStage": { "in": ["pregnant-postpartum"] },
+        "age": { "max": 59 }
+      }
+    },
+    {
+      "key": "supplements",
+      "kind": "text",
+      "presentation": "namedReasons",
+      "title": "Supplements",
+      "titleOther": "Supplements for {name}",
+      "namePlaceholder": "e.g. Magnesium",
+      "reasonPlaceholder": "What is it for?",
+      "none": "None",
+      "showIf": {
+        "age": { "min": 60 }
       }
     },
     {
@@ -394,6 +443,25 @@
       "choices": [
         { "value": "yes", "label": "Yes" },
         { "value": "no", "label": "No" }
+      ]
+    },
+    {
+      "key": "gender",
+      "kind": "choice",
+      "presentation": "rows",
+      "title": "How do you identify yourself?",
+      "titleOther": "How does {name} identify?",
+      "showIf": {
+        "sex": { "notIn": ["female", "male"], "unknown": false }
+      },
+      "choices": [
+        { "value": "female", "label": "Female" },
+        { "value": "male", "label": "Male" },
+        { "value": "non-binary", "label": "Non-binary" },
+        { "value": "trans-man", "label": "Trans man" },
+        { "value": "trans-woman", "label": "Trans woman" },
+        { "value": "intersex", "label": "Intersex" },
+        { "value": "prefer-not", "label": "Prefer not to say" }
       ]
     }
   ]

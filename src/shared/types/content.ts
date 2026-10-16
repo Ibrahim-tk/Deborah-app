@@ -283,15 +283,19 @@ export interface BookingInfo {
 export type ShowIf = Record<string, { in?: string[]; notIn?: string[]; has?: string[]; lacks?: string[]; min?: number; max?: number; unknown?: boolean }>;
 export type HealthBasicsKind = 'date' | 'year' | 'measure' | 'choice' | 'text' | 'profileFor' | 'name' | 'consent';
 /** How the step control is rendered; omitted steps fall back from `kind`. */
-export type HealthBasicsPresentation = 'pills' | 'rows' | 'yesNo' | 'chips';
+export type HealthBasicsPresentation = 'pills' | 'rows' | 'yesNo' | 'chips' | 'namedReasons';
 export interface HealthBasicsStep {
   key: string;
   kind: HealthBasicsKind;
   title: string;
   /** Title when the profile is for someone else; `{name}` is their first name. */
   titleOther?: string;
-  /** Quiz control shape: yesNo/rows → FullChoicePills; pills → QuestionChoices (wrapping); chips → ChipPicker. */
+  /** Quiz control shape: yesNo/rows → FullChoicePills; pills → QuestionChoices; chips → ChipPicker; namedReasons → add pill → Sheet (name+reason) → tiles. */
   presentation?: HealthBasicsPresentation;
+  /** namedReasons: placeholder for the name field. */
+  namePlaceholder?: string;
+  /** namedReasons: placeholder for the reason field. */
+  reasonPlaceholder?: string;
   choices?: { value: string; label: string }[];
   placeholder?: string;
   /** Text steps: the one-tap empty answer. */

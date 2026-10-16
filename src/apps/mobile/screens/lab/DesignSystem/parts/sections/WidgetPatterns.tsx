@@ -1,11 +1,51 @@
 /** On-the-fly chat widgets (also staged in context at /wid). Same patterns as V2 Conversation. */
 import { useState } from 'react';
-import { BookDeborah, ChoicePills, ConfirmCard, FullChoicePills, InlineChoicePills, InlineConsent, MoodScale, PillDescribeField, QuestionChoices, ReminderCard, ScaleCheck, UploadCard } from '@mobile/patterns/widgets';
+import { medicinesData } from '@shared/data';
+import {
+  BookDeborah,
+  ChoicePills,
+  ConfirmCard,
+  FullChoicePills,
+  InlineChoicePills,
+  InlineConsent,
+  MoodScale,
+  NamedReasonList,
+  PillDescribeField,
+  QuestionChoices,
+  ReminderCard,
+  ScaleCheck,
+  UploadCard,
+  type NamedReason,
+} from '@mobile/patterns/widgets';
 import { Section } from '../Section';
 import { Grid, Specimen, Variant } from '../Specimen';
 import styles from './sections.module.css';
 
 const noop = () => {};
+
+function NamedReasonsDemo() {
+  const [entries, setEntries] = useState<NamedReason[]>([]);
+  const [none, setNone] = useState(false);
+  return (
+    <NamedReasonList
+      label="Medications (Rx & OTC)"
+      entries={entries}
+      addLabel="Add medicine"
+      noneSelected={none}
+      namePlaceholder="e.g. Metformin"
+      reasonPlaceholder="What is it for?"
+      nameSuggestions={medicinesData}
+      onChange={(next) => {
+        setEntries(next);
+        setNone(false);
+      }}
+      onNone={() => {
+        setEntries([]);
+        setNone(true);
+      }}
+    />
+  );
+}
 
 const YES_NO = [
   { id: 'yes', label: 'Yes' },
@@ -130,6 +170,9 @@ export function WidgetPatterns() {
         </Specimen>
         <Specimen name="PillDescribeField" path="patterns/widgets/PillDescribeField" note="Reusable pill text field + circular check (ChipPicker “Add your own” look).">
           <PillDescribeField label="Describe" placeholder="describe your situation" value="" onChange={noop} onConfirm={noop} autoFocus={false} />
+        </Specimen>
+        <Specimen name="NamedReasonList" path="patterns/widgets/NamedReasonList" note="Meds / supplements: add pill → Sheet (Name + Reason + Add) → tiles on the main surface. NameSuggest uses medicines.json. Also staged at /wid.">
+          <NamedReasonsDemo />
         </Specimen>
         <Specimen name="QuestionChoices" path="patterns/widgets/QuestionChoices" note="pills=inline (chat) vs regular (wrapping intake). Multi uses circular tick after the last pill.">
           <Variant label="inline"><QuestionChoices label="Still having periods?" options={YES_NO} onSubmit={noop} /></Variant>

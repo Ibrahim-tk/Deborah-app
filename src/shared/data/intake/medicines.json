@@ -1,0 +1,18 @@
+{
+  "status": "placeholder",
+  "note": "Prototype seed list for Medications (Rx & OTC) Name autocomplete. Not a formulary.",
+  "medicines": [
+    "Metformin",
+    "Metoprolol",
+    "Montelukast",
+    "Methotrexate",
+    "Meloxicam",
+    "Mirtazapine",
+    "Levothyroxine",
+    "Lisinopril",
+    "Sertraline",
+    "Atorvastatin",
+    "Omeprazole",
+    "Escitalopram"
+  ]
+}

@@ -9,9 +9,10 @@ Canonical ages (birth year = current year − age): under 13 → 8 · 13–17 �
 ## Mandatory fields (PDF)
 
 1. **Age** (year of birth)
-2. **Gender** — Female · Male · Non-binary · Transgender · Intersex · Prefer not to say
+2. **Sex at birth** (prototype) — Female · Male · Non-binary · Trans man · Trans woman · Intersex — **routes the intake banks**
+3. **How do you identify?** — asked **last** (after meds / supplements / Genesis Gold), only when sex is not Male/Female. Options include Prefer not to say. Does not change routing.
 
-There is no separate “Sex at birth” question in the PDF.
+PDF matrix paths map to sex at birth; Prefer not to say personas use Non-binary sex, then identity Prefer not to say at the end.
 
 ## Branch questions (as in the PDF)
 
@@ -24,11 +25,11 @@ There is no separate “Sex at birth” question in the PDF.
 | Male | 18+, 60+ | Meds block |
 | Non-binary / Intersex | 13–17 | Reproductive status → puberty start + optional notes → Meds block |
 | Non-binary / Intersex | 18+, 60+ | Reproductive status → Meds block |
-| **Transgender** | **13+ (all)** | **One question:** “What, if any, puberty has your body gone through or is going through?” → **Trans-woman** · **Trans-man** · **None yet** → then Meds block |
+| **Trans man / Trans woman** | **13+ (all)** | **One question:** “What, if any, puberty has your body gone through or is going through?” → **Trans-woman** · **Trans-man** · **None yet** → then Meds block |
 | Prefer not to say | 13–17 | Puberty start + optional notes → Meds block |
 | Prefer not to say | 18+, 60+ | Meds block |
 
-**Reproductive status options (PDF):** Pre-menopausal · Peri-menopausal · Post-menopausal (natural) · Surgically menopausal · Pregnant / Postpartum
+**Reproductive status options (PDF):** Pre-menopausal · Peri-menopausal · Post-menopausal · Surgically menopausal · Pregnant / Postpartum
 
 **Meds block (PDF):** Medications Rx & OTC — name + reason, or None · Supplements — name + reason, or None · Taking Genesis Gold?
 

@@ -1,17 +1,17 @@
 /**
  * Saves the onboarding profile (plan P-04). Basics from the form — who it's for, date of birth,
- * sex at birth, gender identity, and age×gender intake answers — go straight onto the profile (D-4).
+ * sex at birth, gender identity, and age×sex intake answers — go straight onto the profile (D-4).
  */
 import { ageBandFor, ageGroupFor } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Cycle, Profile } from '@shared/types/domain';
 import type { SexAtBirth } from '@shared/types/health';
 import { nowFrom, uid } from '@shared/utils';
-import { ageFromAnswers, forSomeoneElse, list, type Answers } from './steps';
+import { ageFromAnswers, effectiveGender, forSomeoneElse, list, type Answers } from './steps';
 
 const CONSENT_PATH = { child: 'guardian-child', teen: 'guardian-teen', adult: 'adult-agreement' } as const;
 
-const SEX_VALUES = new Set<SexAtBirth>(['female', 'male', 'intersex']);
+const SEX_AT_BIRTH = new Set<SexAtBirth>(['female', 'male', 'intersex']);
 
 const CYCLE_FROM_REPRODUCTIVE: Record<string, Cycle> = {
   'pre-menopausal': 'regular',
@@ -25,6 +25,20 @@ const CYCLE_FROM_REPRODUCTIVE: Record<string, Cycle> = {
 };
 
 function parseNamed(value: string | undefined, none?: string): { name: string }[] {
+  if (!value || value === none) return [];
+  // Pregnant/Postpartum name+reason rows are stored as JSON.
+  try {
+    const parsed = JSON.parse(value) as { name?: string; reason?: string }[];
+    if (Array.isArray(parsed)) {
+      return parsed
+        .filter((x) => x?.name?.trim())
+        .map((x) => ({
+          name: x.reason?.trim() ? `${x.name!.trim()} — ${x.reason.trim()}` : x.name!.trim(),
+        }));
+    }
+  } catch {
+    /* comma list */
+  }
   return list(value, none).map((name) => ({ name }));
 }
 
@@ -36,10 +50,12 @@ export function saveOnboarding(a: Answers): string {
   const dob = a.birthDate;
   const year = dob ? Number(dob.slice(0, 4)) : NaN;
   const age = ageFromAnswers(a, now) ?? (Number.isFinite(year) ? now.getFullYear() - year : 0);
-  const sex = SEX_VALUES.has(a.sex as SexAtBirth) ? (a.sex as SexAtBirth) : undefined;
+  // Clinical sex at birth is only M/F/I; other first-step picks are identity (with optional follow-up).
+  const sex = SEX_AT_BIRTH.has(a.sex as SexAtBirth) ? (a.sex as SexAtBirth) : undefined;
+  const gender = effectiveGender(a);
   const birthYear = Number.isFinite(year) ? { value: year, source: 'manual' as const, updatedAt: at } : undefined;
   const reproductive = a.reproductive ?? a.reproductiveTeen;
-  /** PDF transgender intake: single puberty question (Trans-woman / Trans-man / None yet). */
+  /** Trans man / Trans woman intake: single puberty question (Trans-woman / Trans-man / None yet). */
   const transPuberty = a.transPuberty && a.transPuberty !== 'none-yet' ? a.transPuberty : undefined;
   const meds = a.medications !== undefined ? parseNamed(a.medications, 'None')
     : a.childMedications !== undefined ? parseNamed(a.childMedications, 'None') : undefined;
@@ -68,10 +84,12 @@ export function saveOnboarding(a: Answers): string {
   if (a.hrtType) care.hrtType = a.hrtType;
   if (a.hrtTaken) care.hrtTaken = a.hrtTaken;
 
+  if (a.sex) care.sexSelection = a.sex;
+
   const healthPatch = {
     ...(birthYear && { birthYear }),
     ...(sex && { sexAtBirth: { value: sex, source: 'manual' as const, updatedAt: at } }),
-    ...(a.gender && { genderIdentity: { value: a.gender, source: 'manual' as const, updatedAt: at } }),
+    ...(gender && { genderIdentity: { value: gender, source: 'manual' as const, updatedAt: at } }),
     ...(meds && { medications: { value: meds, source: 'manual' as const, updatedAt: at } }),
     ...(allergies && { allergies: { value: allergies, source: 'manual' as const, updatedAt: at } }),
     ...(Object.keys(care).length && { careContext: { value: care, source: 'manual' as const, updatedAt: at } }),
@@ -79,7 +97,7 @@ export function saveOnboarding(a: Answers): string {
 
   const intakePatch = {
     ageBand: ageBandFor(age),
-    ...(a.gender && { genderIdentity: a.gender }),
+    ...(gender && { genderIdentity: gender }),
     ...(reproductive && {
       reproductive,
       cycle: CYCLE_FROM_REPRODUCTIVE[reproductive] ?? ('unknown' as Cycle),

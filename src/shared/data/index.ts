@@ -38,6 +38,7 @@ import labSamples from './labs/sample-reports.json';
 import labMarkers from './labs/markers.json';
 import healthKit from './intake/healthkit.json';
 import intakeSuggestions from './intake/suggestions.json';
+import medicines from './intake/medicines.json';
 import scanSamples from './intake/scans.json';
 import healthBasics from './intake/healthBasics.json';
 import symptoms from './intake/symptoms.json';
@@ -88,6 +89,8 @@ export function findLibraryItem(id: string | undefined): LibraryItem | undefined
 /** Intake V2 mock sources (simulated Apple Health read, search suggestions, camera OCR samples). */
 export const healthKitMock = healthKit;
 export const intakeSuggestionData = intakeSuggestions as Record<'medications' | 'supplements' | 'allergies' | 'conditions', string[]> & { status: string };
+/** Prototype medicine names for Health Basics namedReasons Name autocomplete. */
+export const medicinesData = (medicines as { medicines: string[] }).medicines;
 export type ScanSample = { id: string; label: string; field: 'medications' | 'allergies' | 'conditions'; ocr: string };
 export const scanSampleData = scanSamples.samples as ScanSample[];
 export const healthBasicsData = healthBasics as HealthBasicsData;

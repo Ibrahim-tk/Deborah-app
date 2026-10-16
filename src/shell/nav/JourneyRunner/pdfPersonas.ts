@@ -10,7 +10,8 @@ export type PdfGender =
   | 'female'
   | 'male'
   | 'non-binary'
-  | 'transgender'
+  | 'trans-man'
+  | 'trans-woman'
   | 'intersex'
   | 'prefer-not';
 
@@ -26,7 +27,8 @@ export const PDF_GENDER_LABEL: Record<PdfGender, RegExp> = {
   female: /^Female$/,
   male: /^Male$/,
   'non-binary': /^Non-binary$/,
-  transgender: /^Transgender$/,
+  'trans-man': /^Trans man$/,
+  'trans-woman': /^Trans woman$/,
   intersex: /^Intersex$/,
   'prefer-not': /^Prefer not to say$/,
 };
@@ -40,7 +42,15 @@ export interface PdfPersonaRun extends JourneyRun {
   expectedSteps: string[];
 }
 
-const GENDERS: PdfGender[] = ['female', 'male', 'non-binary', 'transgender', 'intersex', 'prefer-not'];
+const GENDERS: PdfGender[] = [
+  'female',
+  'male',
+  'non-binary',
+  'trans-man',
+  'trans-woman',
+  'intersex',
+  'prefer-not',
+];
 const BANDS: PdfAgeBand[] = ['lt13', 'teen', 'adult', 'senior'];
 
 const BAND_LABEL: Record<PdfAgeBand, string> = {
@@ -50,56 +60,81 @@ const BAND_LABEL: Record<PdfAgeBand, string> = {
   senior: '60+',
 };
 
-/** Sex at birth label for a persona (identity may differ for non-binary / transgender / prefer-not). */
-function sexAtBirthFor(gender: PdfGender): 'female' | 'male' | 'intersex' {
-  if (gender === 'male') return 'male';
-  if (gender === 'intersex') return 'intersex';
-  return 'female';
+function isTransGender(gender: PdfGender): boolean {
+  return gender === 'trans-man' || gender === 'trans-woman';
 }
 
-const SEX_LABEL: Record<'female' | 'male' | 'intersex', RegExp> = {
+/** First-step sex pick: male/female skip identity; others open “How do you identify?”. */
+function sexPickFor(gender: PdfGender): string {
+  if (gender === 'prefer-not') return 'non-binary';
+  return gender;
+}
+
+function needsIdentityFollowUp(gender: PdfGender): boolean {
+  return gender !== 'male' && gender !== 'female';
+}
+
+const SEX_STEP_LABEL: Record<string, RegExp> = {
   female: /^Female$/,
   male: /^Male$/,
+  'non-binary': /^Non-binary$/,
+  'trans-man': /^Trans man$/,
+  'trans-woman': /^Trans woman$/,
   intersex: /^Intersex$/,
 };
 
-/** Preferred choice labels tapped in order after Myself (sex → identity → branch answers). */
+/** Route key for banks = sex at birth (prefer-not personas use Non-binary sex, then identity last). */
+function routeSex(gender: PdfGender): string {
+  return sexPickFor(gender);
+}
+
+/** Preferred choice labels tapped in order after Myself (sex → banks → optional identity last). */
 function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
   if (band === 'lt13') return [/^Myself$/];
-  const sex = sexAtBirthFor(gender);
-  const out: RegExp[] = [/^Myself$/, SEX_LABEL[sex], PDF_GENDER_LABEL[gender]];
+  const sex = routeSex(gender);
+  const out: RegExp[] = [/^Myself$/, SEX_STEP_LABEL[sex] ?? /^Female$/];
   const repro = /^Pre-menopausal$/;
-  if (gender === 'transgender') {
-    out.push(/^Trans-woman$/);
-  } else if (gender === 'female' || gender === 'intersex' || gender === 'non-binary') {
-    out.push(/^Yes$/); // Have your periods started?
-    out.push(/^None$/); // Puberty blockers
+  // 60+: skip deep banks — only meds / supplements / Genesis Gold after demography.
+  if (band === 'senior') {
+    out.push(/^No$/);
+  } else if (isTransGender(gender)) {
+    out.push(gender === 'trans-man' ? /^Trans-man$/ : /^Trans-woman$/);
+    out.push(/^No$/); // Genesis Gold
+  } else if (sex === 'female' || sex === 'intersex' || sex === 'non-binary') {
+    out.push(/^Yes$/);
+    if (band === 'teen') out.push(/^No$/);
     out.push(repro);
+    out.push(/^No$/); // Genesis Gold
+  } else {
+    out.push(/^No$/); // Genesis Gold (e.g. male)
   }
-  out.push(/^No$/); // Genesis Gold
+  if (needsIdentityFollowUp(gender)) out.push(PDF_GENDER_LABEL[gender]);
   return out;
 }
 
 /** Steps that should appear for this persona (mirrors healthBasics.json showIf). */
 export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] {
   if (band === 'lt13') return ['profileFor', 'birthDate'];
-  const keys = ['profileFor', 'birthDate', 'sex', 'gender'];
+  const sex = routeSex(gender);
+  const keys = ['profileFor', 'birthDate', 'sex'];
   const teen = band === 'teen';
-  const adultish = band === 'adult' || band === 'senior';
-  // Female / Non-binary / Intersex: periods → puberty blockers → reproductive (pre seed skips HRT nests).
-  if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
+  if (band === 'senior') {
+    keys.push('medications', 'supplements', 'genesisGold');
+    if (needsIdentityFollowUp(gender)) keys.push('gender');
+    return keys;
+  }
+  if (teen && (sex === 'female' || sex === 'intersex' || sex === 'non-binary')) {
     keys.push('periodsStarted', 'pubertyBlockers', 'reproductiveTeen');
   }
-  if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
-    keys.push('periodsStarted', 'pubertyBlockers', 'reproductive');
+  if (band === 'adult' && (sex === 'female' || sex === 'intersex' || sex === 'non-binary')) {
+    keys.push('periodsStarted', 'reproductive');
   }
-  // PDF + Deborah: Transgender → one puberty question for all ages 13+.
-  if (gender === 'transgender') keys.push('transPuberty');
-  // PDF: Male / Non-binary / Intersex / Prefer-not teens get “When did you start puberty?” + optional notes.
-  if (teen && (gender === 'male' || gender === 'non-binary' || gender === 'intersex' || gender === 'prefer-not')) {
+  if (isTransGender(gender)) keys.push('transPuberty');
+  if (teen && (sex === 'male' || sex === 'non-binary' || sex === 'intersex')) {
     keys.push('pubertyStart', 'pubertyNotes');
   }
   keys.push('medications', 'supplements', 'genesisGold');
+  if (needsIdentityFollowUp(gender)) keys.push('gender');
   return keys;
 }
 
@@ -108,31 +143,30 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
   const age = PDF_AGES[band];
   const a: Record<string, string> = {
     profileFor: 'self',
-    // Mid-year DOB so age bands stay stable across the calendar year.
     birthDate: `${thisYear - age}-06-15`,
   };
   if (band === 'lt13') return a;
-  a.sex = sexAtBirthFor(gender);
-  a.gender = gender;
+  const sex = sexPickFor(gender);
+  a.sex = sex;
   const teen = band === 'teen';
-  const adultish = band === 'adult' || band === 'senior';
-  if (teen && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
+  if (band === 'senior') {
+    // No deep banks.
+  } else if (teen && (sex === 'female' || sex === 'intersex' || sex === 'non-binary')) {
     a.periodsStarted = 'yes';
     a.pubertyBlockers = 'no';
     a.reproductiveTeen = 'pre-menopausal';
-  }
-  if (adultish && (gender === 'female' || gender === 'intersex' || gender === 'non-binary')) {
+  } else if (band === 'adult' && (sex === 'female' || sex === 'intersex' || sex === 'non-binary')) {
     a.periodsStarted = 'yes';
-    a.pubertyBlockers = 'no';
     a.reproductive = 'pre-menopausal';
   }
-  if (gender === 'transgender') a.transPuberty = 'trans-woman';
-  if (teen && (gender === 'male' || gender === 'non-binary' || gender === 'intersex' || gender === 'prefer-not')) {
+  if (band !== 'senior' && isTransGender(gender)) a.transPuberty = gender;
+  if (teen && (sex === 'male' || sex === 'non-binary' || sex === 'intersex')) {
     a.pubertyStart = '14';
   }
   a.medications = 'None';
   a.supplements = 'None';
   a.genesisGold = 'no';
+  if (needsIdentityFollowUp(gender)) a.gender = gender;
   return a;
 }
 
@@ -140,7 +174,6 @@ function buildProfile(gender: PdfGender, band: PdfAgeBand): ProfileAnswers {
   return {
     picks: picksFor(gender, band),
     age: PDF_AGES[band],
-    /** Fill required puberty free-text when that step appears. */
     textDefaults: { pubertyStart: '14' },
   };
 }
@@ -155,7 +188,7 @@ function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
     label: `${gender} · ${BAND_LABEL[band]}`,
     description: gate
       ? 'Myself → birth date under 13 → Ask adult to add you as a family member (M-1.10).'
-      : `Myself → ${BAND_LABEL[band]} → sex at birth → ${gender} identity → intake branches → Deborah welcome → Ask Deborah.`,
+      : `Myself → ${BAND_LABEL[band]} → sex → intake${needsIdentityFollowUp(gender) ? ' → identity' : ''} → Deborah → Ask Deborah.`,
     scenario: 'S01',
     onboarding: true,
     profile: buildProfile(gender, band),
@@ -167,5 +200,5 @@ function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
   };
 }
 
-/** All 24 PDF personas (6 genders × 4 age bands), in a stable menu / Run-all order. */
+/** All PDF personas (7 genders × 4 age bands), in a stable menu / Run-all order. */
 export const PDF_PERSONA_RUNS: PdfPersonaRun[] = GENDERS.flatMap((g) => BANDS.map((b) => buildRun(g, b)));

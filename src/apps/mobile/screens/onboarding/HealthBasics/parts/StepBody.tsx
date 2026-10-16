@@ -1,6 +1,6 @@
 /** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / QuestionChoices / ChipPicker. */
-import { consentDoc } from '@shared/data';
-import { FullChoicePills, QuestionChoices } from '@mobile/patterns/widgets';
+import { consentDoc, intakeSuggestionData, medicinesData } from '@shared/data';
+import { FullChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@mobile/patterns/widgets';
 import { Checkbox, DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
 import { list, STEPS, titleFor, visibleSuggestions, withDerived, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
@@ -132,6 +132,30 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
       );
     }
     case 'text':
+      if (step.presentation === 'namedReasons') {
+        const addLabel =
+          step.key === 'medications' ? 'Add medicine' : step.key === 'supplements' ? 'Add supplement' : 'Add';
+        return (
+          <NamedReasonList
+            key={step.key}
+            label={step.title}
+            entries={decodeNamedReasons(value, step.none)}
+            addLabel={addLabel}
+            noneSelected={value === step.none}
+            namePlaceholder={step.namePlaceholder ?? 'Name'}
+            reasonPlaceholder={step.reasonPlaceholder ?? 'Reason'}
+            nameSuggestions={
+              step.key === 'medications'
+                ? medicinesData
+                : step.key === 'supplements'
+                  ? intakeSuggestionData.supplements
+                  : undefined
+            }
+            onChange={(entries) => set(step.key, encodeNamedReasons(entries))}
+            onNone={() => advance(step.none ?? 'None')}
+          />
+        );
+      }
       return (
         <ChipPicker
           key={step.key}
