@@ -19,9 +19,9 @@ export function ageFromAnswers(a: Answers, now = new Date()): number | undefined
   return ageOn(`${dob}T12:00:00`, now);
 }
 
-/** Identity for save: Male/Female sex skip the late identity question; otherwise use that answer. */
+/** Identity for save: Male/Female/Prefer-not sex skip the late identity question; otherwise use that answer. */
 export function effectiveGender(a: Answers): string | undefined {
-  if (a.sex === 'male' || a.sex === 'female') return a.sex;
+  if (a.sex === 'male' || a.sex === 'female' || a.sex === 'prefer-not') return a.sex;
   return a.gender;
 }
 

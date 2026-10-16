@@ -2,8 +2,8 @@
  * @screen  M-1.8 · Onboarding profile
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
- * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10]
- *          · [someone else: consent by age group] · sex at birth · age×sex branches · [identity if not M/F, last before Deborah]
+ * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10 sheet]
+ *          · [someone else: consent by age group] · sex at birth · age×sex banks · [identity last if NB/trans/intersex]
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
@@ -31,7 +31,7 @@ const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 const CONFIRM_MS = 280;
 
 export default function HealthBasics() {
-  const { presentSheet, pop, replace } = useNav();
+  const { presentSheet, pop } = useNav();
   const [answers, setAnswers] = useState<Answers>({ birthDate: DEFAULT_DOB });
   const [i, setI] = useState(0);
   const steps = visibleSteps(answers);
@@ -49,10 +49,15 @@ export default function HealthBasics() {
 
   const set = (key: string, v: string) => setAnswers((a) => ({ ...a, [key]: v }));
   const next = (final: Answers) => {
-    // PDF age gate: only under-13 selves need a parent; teens continue the form.
+    // Under-13 Myself: bottom sheet — guardian must add them, or back to start.
     if (step.kind === 'date' && !forSomeoneElse(final)) {
       const age = ageFromAnswers(final, nowFrom(useAppStore.getState()));
-      if (age !== undefined && age < 13) return replace('M-1.10');
+      if (age !== undefined && age < 13) return presentSheet('M-1.10');
+    }
+    // Age wheel may show a default without writing until Continue.
+    if (step.presentation === 'ageWheel' && !final[step.key]) {
+      final = { ...final, [step.key]: '12' };
+      setAnswers(final);
     }
     return last ? finish(final) : setI(at + 1);
   };
@@ -66,11 +71,15 @@ export default function HealthBasics() {
     if (canContinue) next(answers);
   };
 
+  const textOk =
+    step.kind === 'text' &&
+    (step.presentation === 'ageWheel' ||
+      (step.presentation === 'namedReasons' && namedReasonsComplete(value, step.none)) ||
+      ((step.presentation === 'chips' || !step.presentation) && Boolean(value.trim())));
   const canContinue =
     step.optional === true ||
     step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
-    (step.kind === 'text' && step.presentation === 'namedReasons' && namedReasonsComplete(value, step.none)) ||
-    (step.kind === 'text' && step.presentation !== 'namedReasons' && Boolean(value.trim())) ||
+    textOk ||
     (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||
     (step.kind === 'consent' && value === 'yes');
   // Choice (incl. describe morph check / expand type pills): no footer Continue — in-field confirm or pill tap advances.

@@ -80,6 +80,8 @@ export interface Intake {
   pubertyNotes?: string;
   /** When puberty started (free text: age or year). */
   pubertyStart?: string;
+  /** Male adult bank: fertility or reproductive concerns (yes | no). */
+  fertilityConcerns?: string;
   /** Genesis Gold product question from the meds block. */
   genesisGold?: 'yes' | 'no';
   /** Female hormonal nest: Have your periods started? (yes | no | describe). */

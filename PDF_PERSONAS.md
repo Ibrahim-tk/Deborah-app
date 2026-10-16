@@ -9,10 +9,10 @@ Canonical ages (birth year = current year − age): under 13 → 8 · 13–17 �
 ## Mandatory fields (PDF)
 
 1. **Age** (year of birth)
-2. **Sex at birth** (prototype) — Female · Male · Non-binary · Trans man · Trans woman · Intersex — **routes the intake banks**
-3. **How do you identify?** — asked **last** (after meds / supplements / Genesis Gold), only when sex is not Male/Female. Options include Prefer not to say. Does not change routing.
+2. **Sex at birth** — Female · Male · Non-binary · Trans man · Trans woman · Intersex · Prefer not to say — **routes the intake banks** (Female bank is female-only)
+3. **How do you identify?** — asked **last**, only for Non-binary · Trans man · Trans woman · Intersex. Skipped for Male / Female / Prefer not to say. Does not change routing.
 
-PDF matrix paths map to sex at birth; Prefer not to say personas use Non-binary sex, then identity Prefer not to say at the end.
+Under-13 Myself opens the M-1.10 guardian sheet (Back to the start).
 
 ## Branch questions (as in the PDF)
 

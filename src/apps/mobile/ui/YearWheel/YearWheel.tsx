@@ -16,11 +16,13 @@ export interface YearWheelProps {
   label: string;
   /** Opt-in 3D drum (sign-up health basics); the plain wheel stays the default. */
   cinematic?: boolean;
+  /** Spoken value for the slider (default: “Born in {value}”). Use for age wheels. */
+  formatValue?: (value: number) => string;
 }
 
 const ITEM = 44;
 
-export function YearWheel({ value, min, max, onChange, label, cinematic }: YearWheelProps) {
+export function YearWheel({ value, min, max, onChange, label, cinematic, formatValue }: YearWheelProps) {
   const ref = useRef<HTMLDivElement>(null);
   const years = Array.from({ length: max - min + 1 }, (_, i) => max - i);
   const settle = useRef<number>();
@@ -77,7 +79,7 @@ export function YearWheel({ value, min, max, onChange, label, cinematic }: YearW
         aria-valuemin={min}
         aria-valuemax={max}
         aria-valuenow={value}
-        aria-valuetext={`Born in ${value}`}
+        aria-valuetext={formatValue ? formatValue(value) : `Born in ${value}`}
         onScroll={onScroll}
         onKeyDown={(e) => {
           const d = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1, PageUp: 10, PageDown: -10 }[e.key];

@@ -34,7 +34,7 @@ Alternate checks: Invalid email or mismatched passwords → inline error; Sign i
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
 | 1. Choose Myself | Choose Myself. | Date of birth wheel appears. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Under-13 birth date | Set DOB to an age under 13 and Continue. | Ask a parent replaces onboarding. No chat or self sex/identity basics are saved. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Under-13 birth date | Set DOB to an age under 13 and Continue. | Guardian sheet (M-1.10) opens: profile needs a guardian; Back to the start returns to Welcome. No chat or self sex/identity basics are saved. | ☐ Pass ☐ Fail ☐ Blocked |
 
 ## Teen dependent onboarding
 

@@ -239,7 +239,7 @@ function profileTick(p: ProfileAnswers, top: HTMLElement, st: PilotState): Pilot
     return { done: false, acted: true, step: 'Opens Other' };
   }
   if (draft && visible(draft) && !draft.value && !draft.closest('[role="slider"]')) {
-    const fill = defaults.pubertyStart ?? defaults[draft.name] ?? '14';
+    const fill = defaults.otherPuberty ?? defaults.pubertyStart ?? defaults.pubertyAge ?? defaults[draft.name] ?? '14';
     typeInput(draft, fill);
     return { done: false, acted: true, step: `Types “${fill}”` };
   }

@@ -160,6 +160,50 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
           />
         );
       }
+      if (step.presentation === 'ageWheel') {
+        const min = step.ageMin ?? 7;
+        const max = step.ageMax ?? 18;
+        const age = Math.min(max, Math.max(min, Number(value) || 12));
+        return (
+          <YearWheel
+            cinematic
+            label={step.title}
+            value={age}
+            min={min}
+            max={max}
+            formatValue={(n) => `Age ${n}`}
+            onChange={(n) => set(step.key, String(n))}
+          />
+        );
+      }
+      if (step.key === 'guardianNames' || step.prompt) {
+        return (
+          <Input
+            label={step.prompt ?? step.title}
+            placeholder={step.placeholder ?? 'enter name'}
+            value={value}
+            autoComplete="off"
+            autoCapitalize="words"
+            maxLength={80}
+            enterKeyHint="next"
+            onChange={(e) => set(step.key, e.target.value)}
+          />
+        );
+      }
+      if (step.single && !step.none && !step.suggestions?.length) {
+        return (
+          <Input
+            label={step.title}
+            placeholder={step.placeholder ?? ''}
+            value={value}
+            autoComplete="off"
+            autoCapitalize="sentences"
+            maxLength={280}
+            enterKeyHint="next"
+            onChange={(e) => set(step.key, e.target.value)}
+          />
+        );
+      }
       return (
         <ChipPicker
           key={step.key}

@@ -283,15 +283,21 @@ export interface BookingInfo {
 export type ShowIf = Record<string, { in?: string[]; notIn?: string[]; has?: string[]; lacks?: string[]; min?: number; max?: number; unknown?: boolean }>;
 export type HealthBasicsKind = 'date' | 'year' | 'measure' | 'choice' | 'text' | 'profileFor' | 'name' | 'consent';
 /** How the step control is rendered; omitted steps fall back from `kind`. */
-export type HealthBasicsPresentation = 'pills' | 'rows' | 'yesNo' | 'chips' | 'namedReasons';
+export type HealthBasicsPresentation = 'pills' | 'rows' | 'yesNo' | 'chips' | 'namedReasons' | 'ageWheel';
 export interface HealthBasicsStep {
   key: string;
   kind: HealthBasicsKind;
   title: string;
   /** Title when the profile is for someone else; `{name}` is their first name. */
   titleOther?: string;
-  /** Quiz control shape: yesNo/rows → FullChoicePills; pills → QuestionChoices; chips → ChipPicker; namedReasons → add pill → Sheet (name+reason) → tiles. */
+  /** Optional prompt under the title (e.g. guardian question under “About Your Child”). */
+  prompt?: string;
+  /** Quiz control shape: yesNo/rows → FullChoicePills; pills → QuestionChoices; chips → ChipPicker; namedReasons → add pill → Sheet (name+reason) → tiles; ageWheel → YearWheel of ages. */
   presentation?: HealthBasicsPresentation;
+  /** ageWheel: inclusive min age (default 7). */
+  ageMin?: number;
+  /** ageWheel: inclusive max age (default 18). */
+  ageMax?: number;
   /** namedReasons: placeholder for the name field. */
   namePlaceholder?: string;
   /** namedReasons: placeholder for the reason field. */

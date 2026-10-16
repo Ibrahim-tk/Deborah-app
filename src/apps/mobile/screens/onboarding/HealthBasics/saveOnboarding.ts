@@ -55,8 +55,7 @@ export function saveOnboarding(a: Answers): string {
   const gender = effectiveGender(a);
   const birthYear = Number.isFinite(year) ? { value: year, source: 'manual' as const, updatedAt: at } : undefined;
   const reproductive = a.reproductive ?? a.reproductiveTeen;
-  /** Trans man / Trans woman intake: single puberty question (Trans-woman / Trans-man / None yet). */
-  const transPuberty = a.transPuberty && a.transPuberty !== 'none-yet' ? a.transPuberty : undefined;
+  const pubertyStart = a.pubertyStart || a.pubertyAge;
   const meds = a.medications !== undefined ? parseNamed(a.medications, 'None')
     : a.childMedications !== undefined ? parseNamed(a.childMedications, 'None') : undefined;
   const supplements = a.supplements !== undefined ? parseNamed(a.supplements, 'None') : undefined;
@@ -66,10 +65,10 @@ export function saveOnboarding(a: Answers): string {
   const care: Record<string, string> = {};
   if (supplements?.length) care.supplements = supplements.map((x) => x.name).join(', ');
   if (a.genesisGold) care.genesisGold = a.genesisGold;
-  if (a.pubertyStart) care.pubertyStart = a.pubertyStart;
+  if (pubertyStart) care.pubertyStart = pubertyStart;
   if (a.pubertyNotes?.trim()) care.pubertyNotes = a.pubertyNotes.trim();
-  if (transPuberty) care.transIdentity = transPuberty;
-  if (a.transPuberty === 'none-yet') care.transPuberty = 'none-yet';
+  if (a.otherPuberty?.trim()) care.otherPuberty = a.otherPuberty.trim();
+  if (a.fertilityConcerns) care.fertilityConcerns = a.fertilityConcerns;
   if (a.guardianNames?.trim()) care.guardianNames = a.guardianNames.trim();
   if (a.periodsStarted) care.periodsStarted = a.periodsStarted;
   if (a.periodsNotes?.trim()) care.periodsNotes = a.periodsNotes.trim();
@@ -102,10 +101,10 @@ export function saveOnboarding(a: Answers): string {
       reproductive,
       cycle: CYCLE_FROM_REPRODUCTIVE[reproductive] ?? ('unknown' as Cycle),
     }),
-    ...(transPuberty && { transIdentity: transPuberty }),
-    ...(a.transPuberty === 'none-yet' && { pubertyNotes: 'None yet' }),
-    ...(a.pubertyStart && { pubertyStart: a.pubertyStart }),
+    ...(a.otherPuberty?.trim() && { pubertyNotes: a.otherPuberty.trim() }),
+    ...(pubertyStart && { pubertyStart }),
     ...(a.pubertyNotes?.trim() && { pubertyNotes: a.pubertyNotes.trim() }),
+    ...(a.fertilityConcerns && { fertilityConcerns: a.fertilityConcerns }),
     ...(a.genesisGold === 'yes' || a.genesisGold === 'no' ? { genesisGold: a.genesisGold as 'yes' | 'no' } : {}),
     ...(a.guardianNames?.trim() && { guardianNames: a.guardianNames.trim() }),
     ...(a.periodsStarted && { periodsStarted: a.periodsStarted }),
