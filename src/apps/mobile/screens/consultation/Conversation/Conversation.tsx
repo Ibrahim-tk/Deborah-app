@@ -9,14 +9,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { suggestionsData } from '@shared/data';
-import { ageOf, asksForAnswer, greeting, isMinor, pendingFacts } from '@shared/engine';
+import { asksForAnswer, greeting, isMinor, pendingFacts } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
 import { ActionSheet } from '@mobile/ui';
 import { Aura, GradientShift } from '@mobile/ui';
 import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
-import { ProfileBanner, relationshipLabel } from '@mobile/patterns/profile';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -194,9 +193,6 @@ export default function Conversation() {
         scrolled={underBar}
         profile={profile ? { name, onPress: openSwitcher } : undefined}
       />
-      {other && profile && (
-        <ProfileBanner who={profile.relationship === 'other' ? name : relationshipLabel(profile.relationship)} minor={minor} child={(ageOf(profile, now) ?? 99) < 13} onSwitch={openSwitcher} />
-      )}
 
       <div
         ref={scrollRef}

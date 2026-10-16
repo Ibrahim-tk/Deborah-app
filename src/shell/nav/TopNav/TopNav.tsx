@@ -15,7 +15,7 @@ export function TopNav() {
   return (
     <header className={styles.root}>
       <span className={styles.brand}>
-        <span aria-hidden="true">◆</span> Oracle Clinician · prototype v{VERSION}
+        <span aria-hidden="true">◆</span> Oracle Clinician · internal v{VERSION}
       </span>
       <nav className={styles.center} aria-label="Prototype">
         <FlowVersionSwitch />

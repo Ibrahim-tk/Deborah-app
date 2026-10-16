@@ -1,6 +1,6 @@
 /**
  * @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: BrowserFrame or full-bleed.
- * Widgets: the widget lab (/wid) in the IPhoneFrame. Design system: the living component library (/design-system), full-bleed.
+ * Widgets: the widget lab (/internal/wid) in the IPhoneFrame. Design system: (/internal/design-system), full-bleed.
  */
 import MobileApp from '@mobile/MobileApp';
 import WidgetLabApp from '@mobile/WidgetLabApp';

@@ -19,14 +19,35 @@ export function ageFromAnswers(a: Answers, now = new Date()): number | undefined
   return ageOn(`${dob}T12:00:00`, now);
 }
 
-/** Identity for save: Male/Female/Prefer-not sex skip the late identity question; otherwise use that answer. */
+/**
+ * Identity for save — banks still route on sex only.
+ * Prefer the always-asked identity answer; fall back to sex if somehow missing.
+ * Pronouns never override this.
+ */
 export function effectiveGender(a: Answers): string | undefined {
-  if (a.sex === 'male' || a.sex === 'female' || a.sex === 'prefer-not') return a.sex;
-  return a.gender;
+  return a.gender || a.sex;
+}
+
+/** Canonical pronoun string for profile save (US forms; describe → free text). */
+export function pronounsForSave(a: Answers): string | undefined {
+  if (!a.pronouns) return undefined;
+  if (a.pronouns === 'describe') {
+    const custom = a.pronounsOther?.trim();
+    return custom || 'describe';
+  }
+  const map: Record<string, string> = {
+    'she-her': 'she/her',
+    'he-him': 'he/him',
+    'they-them': 'they/them',
+    'she-they': 'she/they',
+    'he-they': 'he/they',
+    any: 'any',
+  };
+  return map[a.pronouns] ?? a.pronouns;
 }
 
 /** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`).
- * Intake `showIf` routes on sex at birth (identity is asked last and does not change the path). */
+ * Intake `showIf` routes on sex at birth (pronouns / identity do not change the path). */
 export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
   const age = ageFromAnswers(a);
   const reproductiveStage = a.reproductive ?? a.reproductiveTeen;

@@ -3,7 +3,7 @@
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
  * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10 sheet]
- *          · [someone else: consent by age group] · sex at birth · age×sex banks · [identity last if NB/trans/intersex]
+ *          · [someone else: consent by age group] · sex → pronouns → age×sex banks → identity (always) → Deborah
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built

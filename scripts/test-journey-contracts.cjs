@@ -167,85 +167,91 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     const {visibleSteps}=source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
     const keys=(a)=>visibleSteps(a).map((s)=>s.key);
     const dobFor=(age)=>`${new Date().getFullYear()-age}-06-15`;
-    // Sex routes banks; identity last for NB/trans/intersex only (not M/F/prefer-not).
+    // Sex routes banks; pronouns always; identity always last (after banks).
     const base=(age,sex,extra={})=>{
-      const a = { profileFor: 'self', birthDate: dobFor(age), sex, ...extra };
-      if (sex !== 'male' && sex !== 'female' && sex !== 'prefer-not') a.gender = sex;
+      const a = { profileFor: 'self', birthDate: dobFor(age), sex, pronouns: 'they-them', gender: sex, ...extra };
       return a;
     };
-    assert.ok(!keys(base(35,'female')).includes('gender'));
-    assert.ok(!keys(base(35,'male')).includes('gender'));
-    assert.ok(!keys(base(35,'prefer-not')).includes('gender'));
-    assert.ok(keys(base(35,'non-binary')).includes('gender'));
-    assert.deepEqual(keys(base(35,'female')).filter((k)=>!['profileFor','birthDate','sex','gender'].includes(k)),
-      ['periodsStarted','reproductive','medications','supplements','genesisGold']);
-    assert.deepEqual(keys(base(35,'male')).filter((k)=>!['profileFor','birthDate','sex','gender'].includes(k)),
+    assert.ok(keys(base(35,'female')).includes('pronouns'));
+    assert.ok(keys(base(35,'female')).includes('gender'));
+    assert.ok(keys(base(35,'female')).indexOf('gender') > keys(base(35,'female')).indexOf('genesisGold'));
+    assert.deepEqual(keys(base(35,'female')).filter((k)=>!['profileFor','birthDate','sex','pronouns','gender'].includes(k)),
+      ['reproductive','medications','supplements','genesisGold']);
+    assert.ok(!keys(base(35,'female')).includes('periodsStarted'));
+    assert.ok(keys(base(35,'female',{ reproductive: 'menstruation' })).includes('periodsStarted'));
+    assert.deepEqual(keys(base(35,'male')).filter((k)=>!['profileFor','birthDate','sex','pronouns','gender'].includes(k)),
       ['pubertyAge','fertilityConcerns','medications','supplements','genesisGold']);
     assert.ok(keys(base(15,'male')).includes('pubertyStart'));
     assert.ok(keys(base(15,'male')).includes('pubertyNotes'));
     assert.ok(!keys(base(15,'male')).includes('reproductive'));
     assert.ok(keys(base(15,'female')).includes('reproductiveTeen'));
-    // Female banks are female-only (non-binary / intersex use free-text puberty).
-    assert.ok(!keys(base(28,'non-binary')).includes('periodsStarted'));
+    assert.ok(!keys(base(15,'female')).includes('periodsStarted'));
+    assert.ok(keys(base(15,'female',{ reproductiveTeen: 'menstruation' })).includes('periodsStarted'));
+    // Prefer-not / intersex / trans use free-text puberty (non-binary is identity-only).
     assert.ok(!keys(base(28,'intersex')).includes('reproductive'));
-    for (const g of ['trans-man', 'trans-woman', 'prefer-not', 'non-binary', 'intersex']) {
+    for (const g of ['trans-man', 'trans-woman', 'prefer-not', 'intersex']) {
       assert.ok(keys(base(16, g)).includes('otherPuberty'));
       assert.ok(!keys(base(16, g)).includes('pubertyStart'));
       assert.ok(!keys(base(16, g)).includes('reproductive'));
       assert.ok(keys(base(40, g)).includes('otherPuberty'));
     }
-    assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male'}).includes('guardianNames'));
-    assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male'}).includes('childMedications'));
-    assert.ok(!keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male'}).includes('medications'));
-    const nbKeys = keys(base(35, 'non-binary'));
-    assert.ok(nbKeys.indexOf('gender') > nbKeys.indexOf('genesisGold'));
+    // Non-binary persona path: sex prefer-not → otherPuberty bank → identity non-binary.
+    assert.ok(keys(base(28, 'prefer-not', { gender: 'non-binary' })).includes('otherPuberty'));
+    assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male',pronouns:'he-him',gender:'male'}).includes('guardianNames'));
+    assert.ok(keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male',pronouns:'he-him',gender:'male'}).includes('childMedications'));
+    assert.ok(!keys({profileFor:'dependent',relationship:'son',memberName:'Sam',birthDate:dobFor(9),consent:'yes',sex:'male',pronouns:'he-him',gender:'male'}).includes('medications'));
   });
 
-  test('Myself Female trees include sex and reproductive nests (identity skipped for Female sex)', () => {
+  test('Myself Female trees include sex, pronouns, reproductive nests, identity last', () => {
     const { visibleStepKeys } = source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
     const y = new Date().getFullYear();
     const myself = (age, extra = {}) => ({
       profileFor: 'self',
       birthDate: `${y - age}-06-15`,
       sex: 'female',
+      pronouns: 'she-her',
+      gender: 'female',
       ...extra,
     });
-    // Adults 18–59: periods (3 options) before reproductive banks. Puberty blockers stay teen-only.
-    assert.deepEqual(visibleStepKeys(myself(28, { periodsStarted: 'yes', reproductive: 'pre-menopausal' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'medications', 'supplements', 'genesisGold',
+    // Adults 18–59: reproductive first; periods only after Menstruation; identity always last.
+    assert.deepEqual(visibleStepKeys(myself(28, { reproductive: 'pre-menopausal' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    assert.deepEqual(visibleStepKeys(myself(48, { periodsStarted: 'yes', reproductive: 'peri-menopausal', hrtStatus: 'yes', hrtType: 'combined' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(28, { reproductive: 'menstruation', periodsStarted: 'yes' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'periodsStarted', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    assert.deepEqual(visibleStepKeys(myself(48, { periodsStarted: 'yes', reproductive: 'peri-menopausal', hrtStatus: 'no' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(48, { reproductive: 'peri-menopausal', hrtStatus: 'yes', hrtType: 'combined' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    assert.deepEqual(visibleStepKeys(myself(55, { periodsStarted: 'yes', reproductive: 'post-menopausal', ageAtLastPeriod: '52', hrtStatus: 'no' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'ageAtLastPeriod', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(48, { reproductive: 'peri-menopausal', hrtStatus: 'no' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    assert.deepEqual(visibleStepKeys(myself(50, { periodsStarted: 'yes', reproductive: 'surgically-menopausal', hysterectomy: 'yes', ovariesRemoved: 'partial', hrtStatus: 'yes', hrtType: 'estrogen-only' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'hysterectomy', 'ovariesRemoved', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(55, { reproductive: 'post-menopausal', ageAtLastPeriod: '52', hrtStatus: 'no' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'ageAtLastPeriod', 'hrtStatus', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    // Pregnant/Postpartum: name+reason meds/supplements UI (same step keys).
-    assert.deepEqual(visibleStepKeys(myself(28, { periodsStarted: 'yes', reproductive: 'pregnant-postpartum' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'reproductive', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(50, { reproductive: 'surgically-menopausal', hysterectomy: 'yes', ovariesRemoved: 'partial', hrtStatus: 'yes', hrtType: 'estrogen-only' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'hysterectomy', 'ovariesRemoved', 'hrtStatus', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    // 60+: skip periods / reproductive / deep nests — meds + supplements + Genesis Gold only.
+    assert.deepEqual(visibleStepKeys(myself(28, { reproductive: 'pregnant-postpartum' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductive', 'medications', 'supplements', 'genesisGold', 'gender',
+    ]);
     assert.deepEqual(visibleStepKeys(myself(66)), [
-      'profileFor', 'birthDate', 'sex', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
     assert.ok(!visibleStepKeys(myself(66, { reproductive: 'peri-menopausal' })).includes('hrtStatus'));
-    // Teens 13–17: periods + puberty blockers before reproductiveTeen.
-    assert.deepEqual(visibleStepKeys(myself(15, { periodsStarted: 'yes', pubertyBlockers: 'no', reproductiveTeen: 'pre-menopausal' })), [
-      'profileFor', 'birthDate', 'sex', 'periodsStarted', 'pubertyBlockers', 'reproductiveTeen', 'medications', 'supplements', 'genesisGold',
+    assert.deepEqual(visibleStepKeys(myself(15, { reproductiveTeen: 'pre-menopausal', pubertyBlockers: 'no' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductiveTeen', 'pubertyBlockers', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    // Non-binary is not on the female bank — free-text puberty + identity last.
-    assert.deepEqual(visibleStepKeys(myself(28, { sex: 'non-binary', gender: 'female', otherPuberty: 'notes' })), [
-      'profileFor', 'birthDate', 'sex', 'otherPuberty', 'medications', 'supplements', 'genesisGold', 'gender',
+    assert.deepEqual(visibleStepKeys(myself(15, { reproductiveTeen: 'menstruation', periodsStarted: 'yes', pubertyBlockers: 'no' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'reproductiveTeen', 'periodsStarted', 'pubertyBlockers', 'medications', 'supplements', 'genesisGold', 'gender',
     ]);
-    // Under-13 Myself: sex stays in the map; HealthBasics presents M-1.10 sheet on DOB Continue.
+    // Non-binary identity: sex Prefer not → otherPuberty bank → identity Non-binary last.
+    assert.deepEqual(visibleStepKeys(myself(28, { sex: 'prefer-not', pronouns: 'they-them', gender: 'non-binary', otherPuberty: 'notes' })), [
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'otherPuberty', 'medications', 'supplements', 'genesisGold', 'gender',
+    ]);
+    // Under-13 Myself: demography stays in the map; M-1.10 sheet on DOB Continue.
     assert.deepEqual(visibleStepKeys({ profileFor: 'self', birthDate: `${y - 8}-06-15` }), [
-      'profileFor', 'birthDate', 'sex',
+      'profileFor', 'birthDate', 'sex', 'pronouns', 'gender',
     ]);
   });
 
@@ -263,13 +269,11 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
       assert.deepEqual(visibleStepKeys(seeded), run.expectedSteps, run.id);
       assert.equal(run.stopAt, 'deborah', run.id);
       assert.ok(seeded.sex, run.id);
-      if (run.gender === 'male' || run.gender === 'female' || run.gender === 'prefer-not') {
-        assert.equal(seeded.gender, undefined, run.id);
-        assert.ok(!run.expectedSteps.includes('gender'), run.id);
-      } else {
-        assert.equal(seeded.gender, run.gender, run.id);
-        assert.ok(run.expectedSteps.includes('gender'), run.id);
-      }
+      assert.ok(seeded.pronouns, run.id);
+      assert.equal(seeded.gender, run.gender, run.id);
+      assert.ok(run.expectedSteps.includes('gender'), run.id);
+      assert.ok(run.expectedSteps.indexOf('gender') > run.expectedSteps.indexOf('genesisGold'), run.id);
+      if (run.gender === 'non-binary') assert.equal(seeded.sex, 'prefer-not', run.id);
     }
   });
 }

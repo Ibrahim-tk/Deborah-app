@@ -6,7 +6,7 @@ Updated 15 October 2026. Each case starts UNTESTED. Test the actual UI manually;
 
 - Persona: Sarah
 - Goal: Create a local demo account and reach a first conversation as an adult.
-- Starting point: [S01](http://127.0.0.1:5173/mobile?scenario=S01)
+- Starting point: [S01](http://127.0.0.1:5173/internal/mobile?scenario=S01)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Account creation and email verification are simulated; any six digits work.
@@ -26,7 +26,7 @@ Alternate checks: Invalid email or mismatched passwords → inline error; Sign i
 
 - Persona: Sarah
 - Goal: Verify someone under 13 cannot start their own consultation.
-- Starting point: [S03](http://127.0.0.1:5173/mobile?scenario=S03)
+- Starting point: [S03](http://127.0.0.1:5173/internal/mobile?scenario=S03)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Local age gate; full date of birth.
@@ -40,7 +40,7 @@ Alternate checks: Invalid email or mismatched passwords → inline error; Sign i
 
 - Persona: Emily
 - Goal: Create Maya’s profile and open a conversation about them.
-- Starting point: [S20](http://127.0.0.1:5173/mobile?scenario=S20)
+- Starting point: [S20](http://127.0.0.1:5173/internal/mobile?scenario=S20)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: One account holder manages the dependent. No invitation, separate login or sharing permissions.
@@ -60,7 +60,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 
 - Persona: Emily
 - Goal: Create Leo’s profile and open a conversation about them.
-- Starting point: [S20](http://127.0.0.1:5173/mobile?scenario=S20)
+- Starting point: [S20](http://127.0.0.1:5173/internal/mobile?scenario=S20)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: One account holder manages the dependent. No invitation, separate login or sharing permissions.
@@ -80,7 +80,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 
 - Persona: Helen
 - Goal: Create James’s profile and open a conversation about them.
-- Starting point: [S21](http://127.0.0.1:5173/mobile?scenario=S21)
+- Starting point: [S21](http://127.0.0.1:5173/internal/mobile?scenario=S21)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: One account holder manages the dependent. No invitation, separate login or sharing permissions.
@@ -100,7 +100,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 
 - Persona: Sarah
 - Goal: Build a health profile gradually without silent saving.
-- Starting point: [S14](http://127.0.0.1:5173/mobile?scenario=S14)
+- Starting point: [S14](http://127.0.0.1:5173/internal/mobile?scenario=S14)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Scripted questions and answers; local pending/confirmed facts.
@@ -118,7 +118,7 @@ Alternate checks: Safety concern → safety response; Missing basic → question
 
 - Persona: Maria
 - Goal: Return to Home with history and start or continue a conversation.
-- Starting point: [R01](http://127.0.0.1:5173/mobile?scenario=R01)
+- Starting point: [R01](http://127.0.0.1:5173/internal/mobile?scenario=R01)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Seeded account and history; responses are scripted.
@@ -135,7 +135,7 @@ Alternate checks: Continue → previous conversation; Ask → new/scripted consu
 
 - Persona: Maria
 - Goal: Reach returning Home through the sign-in entry.
-- Starting point: [S01](http://127.0.0.1:5173/mobile?scenario=S01)
+- Starting point: [S01](http://127.0.0.1:5173/internal/mobile?scenario=S01)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Any demo credentials and six digits restore R01; no real authentication.
@@ -149,7 +149,7 @@ Alternate checks: Continue → previous conversation; Ask → new/scripted consu
 
 - Persona: Elena
 - Goal: Verify save behavior for pending health facts.
-- Starting point: [S19](http://127.0.0.1:5173/mobile?scenario=S19)
+- Starting point: [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Seeded answer with three pending facts; writes remain local.
@@ -164,7 +164,7 @@ Alternate checks: Continue → previous conversation; Ask → new/scripted consu
 
 - Persona: Elena
 - Goal: Verify edit behavior for pending health facts.
-- Starting point: [S19](http://127.0.0.1:5173/mobile?scenario=S19)
+- Starting point: [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Seeded answer with three pending facts; writes remain local.
@@ -180,7 +180,7 @@ Alternate checks: Continue → previous conversation; Ask → new/scripted consu
 
 - Persona: Elena
 - Goal: Verify discard behavior for pending health facts.
-- Starting point: [S19](http://127.0.0.1:5173/mobile?scenario=S19)
+- Starting point: [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Seeded answer with three pending facts; writes remain local.
@@ -195,7 +195,7 @@ Alternate checks: Continue → previous conversation; Ask → new/scripted consu
 
 - Persona: Emily
 - Goal: Add a teen through Family profiles and check isolated history.
-- Starting point: [S09](http://127.0.0.1:5173/mobile?scenario=S09)
+- Starting point: [S09](http://127.0.0.1:5173/internal/mobile?scenario=S09)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Managed profiles in one local account, not separate users.
@@ -245,7 +245,7 @@ Alternate checks: Missing → receive and accept; Missing → configure or revok
 
 - Persona: Maria
 - Goal: Experience the lab attachment interface and confirm sample results.
-- Starting point: [S08](http://127.0.0.1:5173/mobile?scenario=S08)
+- Starting point: [S08](http://127.0.0.1:5173/internal/mobile?scenario=S08)
 - Implementation: PARTIALLY IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Photo view is simulated. PDF selection uses a real picker, but contents are never read or uploaded; all files map to the same sample.
@@ -262,7 +262,7 @@ Alternate checks: Photo → simulated camera; PDF → local file picker; choose 
 
 - Persona: Maria
 - Goal: Inspect a confirmed report and its lab-informed answer.
-- Starting point: [S08](http://127.0.0.1:5173/mobile?scenario=S08)
+- Starting point: [S08](http://127.0.0.1:5173/internal/mobile?scenario=S08)
 - Implementation: PARTIALLY IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Seeded lab values and scripted analysis; not AI document understanding.
@@ -277,7 +277,7 @@ Alternate checks: Photo → simulated camera; PDF → local file picker; choose 
 
 - Persona: Maria
 - Goal: Write and retrieve a note from a provider visit.
-- Starting point: [S08](http://127.0.0.1:5173/mobile?scenario=S08)
+- Starting point: [S08](http://127.0.0.1:5173/internal/mobile?scenario=S08)
 - Implementation: PARTIALLY IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Text editor and local autosave. No visit audio recording or transcription.
@@ -294,7 +294,7 @@ Alternate checks: More options → Delete → confirmation; Reset journey → no
 
 - Persona: Maria
 - Goal: Review a structured provider note, save/print it, and schedule the right follow-up.
-- Starting point: [S24](http://127.0.0.1:5173/mobile?scenario=S24)
+- Starting point: [S24](http://127.0.0.1:5173/internal/mobile?scenario=S24)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Assembled from the conversation answer + profile. HTML print preview (no real PDF file). Notifications are local timers.
@@ -311,7 +311,7 @@ Alternate checks: Download PDF → print preview of the same brief; S23 → Disc
 
 - Persona: Elena
 - Goal: Review and correct a proposed medication update.
-- Starting point: [S19](http://127.0.0.1:5173/mobile?scenario=S19)
+- Starting point: [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19)
 - Implementation: PARTIALLY IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Structured review/edit/confirm exists. General medication reconciliation and conflict resolution are not implemented.
@@ -326,7 +326,7 @@ Alternate checks: Download PDF → print preview of the same brief; S23 → Disc
 
 - Persona: Maria
 - Goal: Read past conversations and continue the selected one.
-- Starting point: [R01](http://127.0.0.1:5173/mobile?scenario=R01)
+- Starting point: [R01](http://127.0.0.1:5173/internal/mobile?scenario=R01)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Local seeded transcript; PDF is an HTML preview and Share copies text.
@@ -342,7 +342,7 @@ Alternate checks: Download PDF → print preview of the same brief; S23 → Disc
 
 - Persona: Maria
 - Goal: Inspect settings, request a demo export and test local deletion.
-- Starting point: [R01](http://127.0.0.1:5173/mobile?scenario=R01)
+- Starting point: [R01](http://127.0.0.1:5173/internal/mobile?scenario=R01)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Export request, notifications and account deletion affect mock state only; no email or remote deletion occurs.
@@ -360,7 +360,7 @@ Alternate checks: Cancel → preserve state; Confirm → local reset.
 
 - Persona: Maria
 - Goal: Open a generic reminder and reply to the check-in.
-- Starting point: [S07](http://127.0.0.1:5173/mobile?scenario=S07)
+- Starting point: [S07](http://127.0.0.1:5173/internal/mobile?scenario=S07)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Simulated lock screen and notification delivery, not OS push.
@@ -376,7 +376,7 @@ Alternate checks: Better → progress response; Same/worse → follow-up questio
 
 - Persona: Maria
 - Goal: Reach the trial gate and experience a simulated upgrade.
-- Starting point: [S06](http://127.0.0.1:5173/mobile?scenario=S06)
+- Starting point: [S06](http://127.0.0.1:5173/internal/mobile?scenario=S06)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Prices and payment are mock UI; no purchase or card transaction occurs.
@@ -393,7 +393,7 @@ Alternate checks: Maybe later → return to app.
 
 - Persona: Maria
 - Goal: Check adding another person requires a Family plan.
-- Starting point: [S10](http://127.0.0.1:5173/mobile?scenario=S10)
+- Starting point: [S10](http://127.0.0.1:5173/internal/mobile?scenario=S10)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Simulated subscription gate.
@@ -409,7 +409,7 @@ Alternate checks: Not now → close gate.
 
 - Persona: Maria
 - Goal: Follow the human consultation path.
-- Starting point: [S12](http://127.0.0.1:5173/mobile?scenario=S12)
+- Starting point: [S12](http://127.0.0.1:5173/internal/mobile?scenario=S12)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Local availability, sharing checkbox and payment simulation; no real appointment.
@@ -424,7 +424,7 @@ Alternate checks: Not now → close gate.
 
 - Persona: Maria
 - Goal: Check the existing safety boundary.
-- Starting point: [S13](http://127.0.0.1:5173/mobile?scenario=S13)
+- Starting point: [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Scripted guardrail matching; clinical copy is placeholder.
@@ -439,7 +439,7 @@ Alternate checks: Not now → close gate.
 
 - Persona: Maria
 - Goal: Check the existing safety boundary.
-- Starting point: [S13](http://127.0.0.1:5173/mobile?scenario=S13)
+- Starting point: [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Scripted guardrail matching; clinical copy is placeholder.
@@ -454,7 +454,7 @@ Alternate checks: Not now → close gate.
 
 - Persona: Maria
 - Goal: Check the existing safety boundary.
-- Starting point: [S13](http://127.0.0.1:5173/mobile?scenario=S13)
+- Starting point: [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13)
 - Implementation: IMPLEMENTED
 - Verification: UNTESTED
 - Simulation: Scripted guardrail matching; clinical copy is placeholder.
@@ -470,7 +470,7 @@ Alternate checks: Not now → close gate.
 - Persona: Alex (demo onboarding) / Maria for manual S04
 - Goal: End-to-end Miro Step 4 happy path through Book.
 - Auto: **▶ Journeys → Ask Deborah guidance → Guidance · happy path + Book** (S01 onboarding E2E).
-- Manual starting point: [S04](http://127.0.0.1:5173/mobile?scenario=S04)
+- Manual starting point: [S04](http://127.0.0.1:5173/internal/mobile?scenario=S04)
 - Implementation: IMPLEMENTED
 - Verification: VERIFIED 16 Oct 2026 — auto `guidance-happy` finished at M-8.2; manual S04 → Book → M-8.2.
 - Simulation: Live onboarding + scripted answer; OptionRows only.
@@ -488,7 +488,7 @@ Alternate checks: Not now → close gate.
 - Persona: Maria
 - Goal: Requesting an answer mid-intake yields an early first look, not a counted consultation.
 - Auto: **▶ Journeys → Guidance · early first look** (S23).
-- Manual starting point: [S23](http://127.0.0.1:5173/mobile?scenario=S23)
+- Manual starting point: [S23](http://127.0.0.1:5173/internal/mobile?scenario=S23)
 - Implementation: IMPLEMENTED
 - Verification: VERIFIED 16 Oct 2026 — auto `guidance-early`: mid-intake ASK → early first look copy → finish intake → 7 sections → Review Save → Journey finished.
 
@@ -502,7 +502,7 @@ Alternate checks: Not now → close gate.
 - Persona: Maria
 - Goal: Uncovered concern routes to team handoff without counting.
 - Auto: **▶ Journeys → Guidance · out of coverage** (S05 + cataract phrase).
-- Manual starting point: [S13](http://127.0.0.1:5173/mobile?scenario=S13) Safety bench → Uncovered, or S05.
+- Manual starting point: [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13) Safety bench → Uncovered, or S05.
 - Implementation: IMPLEMENTED
 - Verification: VERIFIED 16 Oct 2026 — auto `guidance-uncovered`: cataract phrase → intake → outside-coverage body → Journey finished (uncounted).
 
@@ -516,7 +516,7 @@ Alternate checks: Not now → close gate.
 - Persona: Maria
 - Goal: Upload labs from What’s next refreshes the same-topic summary without an extra free charge.
 - Auto: **▶ Journeys → Guidance · lab summary refresh** (S04).
-- Manual starting point: [S04](http://127.0.0.1:5173/mobile?scenario=S04)
+- Manual starting point: [S04](http://127.0.0.1:5173/internal/mobile?scenario=S04)
 - Implementation: IMPLEMENTED
 - Verification: VERIFIED 16 Oct 2026 — auto `guidance-labs`: What’s next → camera → send → “I’ve updated this with your labs” → Journey finished.
 
@@ -527,7 +527,7 @@ Alternate checks: Not now → close gate.
 
 ## Provider-review ending — S22
 
-Code and browser verified on 15 October 2026. Start at `/mobile?scenario=S22`.
+Code and browser verified on 15 October 2026. Start at `/internal/mobile?scenario=S22`.
 
 | Action | Expected |
 | --- | --- |

@@ -16,38 +16,38 @@ Birth years below are based on 2026. Use only synthetic data.
 
 | Journey | Persona | Start | Status |
 | --- | --- | --- | --- |
-| [First-time onboarding](#onboarding) | Sarah | [S01](http://127.0.0.1:5173/mobile?scenario=S01) | IMPLEMENTED |
-| [Self under 13 — age gate](#self-age-gate) | Sarah | [S03](http://127.0.0.1:5173/mobile?scenario=S03) | IMPLEMENTED |
-| [Teen dependent onboarding](#teen-onboarding) | Emily | [S20](http://127.0.0.1:5173/mobile?scenario=S20) | IMPLEMENTED |
-| [Child dependent onboarding](#child-onboarding) | Emily | [S20](http://127.0.0.1:5173/mobile?scenario=S20) | IMPLEMENTED |
-| [Adult partner onboarding](#adult-onboarding) | Helen | [S21](http://127.0.0.1:5173/mobile?scenario=S21) | IMPLEMENTED |
-| [Health profile through conversation](#chat-profile) | Sarah | [S14](http://127.0.0.1:5173/mobile?scenario=S14) | IMPLEMENTED |
-| [Returning user consultation](#returning) | Maria | [R01](http://127.0.0.1:5173/mobile?scenario=R01) | IMPLEMENTED |
-| [Sign in and restore history](#signin) | Maria | [S01](http://127.0.0.1:5173/mobile?scenario=S01) | IMPLEMENTED |
-| [Review facts — save](#review-save) | Elena | [S19](http://127.0.0.1:5173/mobile?scenario=S19) | IMPLEMENTED |
-| [Review facts — edit](#review-edit) | Elena | [S19](http://127.0.0.1:5173/mobile?scenario=S19) | IMPLEMENTED |
-| [Review facts — discard](#review-discard) | Elena | [S19](http://127.0.0.1:5173/mobile?scenario=S19) | IMPLEMENTED |
-| [Add and switch family profiles](#family-add) | Emily | [S09](http://127.0.0.1:5173/mobile?scenario=S09) | IMPLEMENTED |
+| [First-time onboarding](#onboarding) | Sarah | [S01](http://127.0.0.1:5173/internal/mobile?scenario=S01) | IMPLEMENTED |
+| [Self under 13 — age gate](#self-age-gate) | Sarah | [S03](http://127.0.0.1:5173/internal/mobile?scenario=S03) | IMPLEMENTED |
+| [Teen dependent onboarding](#teen-onboarding) | Emily | [S20](http://127.0.0.1:5173/internal/mobile?scenario=S20) | IMPLEMENTED |
+| [Child dependent onboarding](#child-onboarding) | Emily | [S20](http://127.0.0.1:5173/internal/mobile?scenario=S20) | IMPLEMENTED |
+| [Adult partner onboarding](#adult-onboarding) | Helen | [S21](http://127.0.0.1:5173/internal/mobile?scenario=S21) | IMPLEMENTED |
+| [Health profile through conversation](#chat-profile) | Sarah | [S14](http://127.0.0.1:5173/internal/mobile?scenario=S14) | IMPLEMENTED |
+| [Returning user consultation](#returning) | Maria | [R01](http://127.0.0.1:5173/internal/mobile?scenario=R01) | IMPLEMENTED |
+| [Sign in and restore history](#signin) | Maria | [S01](http://127.0.0.1:5173/internal/mobile?scenario=S01) | IMPLEMENTED |
+| [Review facts — save](#review-save) | Elena | [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19) | IMPLEMENTED |
+| [Review facts — edit](#review-edit) | Elena | [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19) | IMPLEMENTED |
+| [Review facts — discard](#review-discard) | Elena | [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19) | IMPLEMENTED |
+| [Add and switch family profiles](#family-add) | Emily | [S09](http://127.0.0.1:5173/internal/mobile?scenario=S09) | IMPLEMENTED |
 | [Teen invitation and sharing](#teen-invitation) | Emily | Unavailable | NOT IMPLEMENTED |
 | [Adult invitation and access permissions](#adult-invitation) | Helen | Unavailable | NOT IMPLEMENTED |
-| [Lab attachment and confirmation](#labs-upload) | Maria | [S08](http://127.0.0.1:5173/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
-| [Lab-informed answer and records](#labs-analysis) | Maria | [S08](http://127.0.0.1:5173/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
-| [Doctor visit notes](#visit-notes) | Maria | [S08](http://127.0.0.1:5173/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
-| [My Visit Notes — provider brief](#provider-brief) | Maria | [S24](http://127.0.0.1:5173/mobile?scenario=S24) | IMPLEMENTED |
-| [Medication update and conflict limits](#medication-update) | Elena | [S19](http://127.0.0.1:5173/mobile?scenario=S19) | PARTIALLY IMPLEMENTED |
-| [Conversation history and continuation](#history) | Maria | [R01](http://127.0.0.1:5173/mobile?scenario=R01) | IMPLEMENTED |
-| [Account and privacy controls](#account-privacy) | Maria | [R01](http://127.0.0.1:5173/mobile?scenario=R01) | IMPLEMENTED |
-| [Follow-up reminder and check-in](#followup) | Maria | [S07](http://127.0.0.1:5173/mobile?scenario=S07) | IMPLEMENTED |
-| [Trial limit and plan selection](#upgrade) | Maria | [S06](http://127.0.0.1:5173/mobile?scenario=S06) | IMPLEMENTED |
-| [Family plan gate](#family-upgrade) | Maria | [S10](http://127.0.0.1:5173/mobile?scenario=S10) | IMPLEMENTED |
-| [Escalation and booking](#booking) | Maria | [S12](http://127.0.0.1:5173/mobile?scenario=S12) | IMPLEMENTED |
-| [Emergency safety](#emergency) | Maria | [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
-| [Medication safety](#medication-safety) | Maria | [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
-| [Out-of-scope question](#out-of-scope) | Maria | [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
-| [Guidance — happy path + What’s next](#guidance-happy) | Alex / Maria | ▶ Journeys → Guidance · happy path + Book (S01) · or [S04](http://127.0.0.1:5173/mobile?scenario=S04) | IMPLEMENTED · VERIFIED 16 Oct 2026 |
-| [Guidance — early first look](#guidance-early) | Maria | ▶ Journeys → Guidance · early first look · or [S23](http://127.0.0.1:5173/mobile?scenario=S23) | IMPLEMENTED |
-| [Guidance — out of coverage](#guidance-uncovered) | Maria | ▶ Journeys → Guidance · out of coverage · or [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
-| [Guidance — lab summary refresh](#guidance-labs) | Maria | ▶ Journeys → Guidance · lab summary refresh · or [S04](http://127.0.0.1:5173/mobile?scenario=S04) | IMPLEMENTED |
+| [Lab attachment and confirmation](#labs-upload) | Maria | [S08](http://127.0.0.1:5173/internal/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
+| [Lab-informed answer and records](#labs-analysis) | Maria | [S08](http://127.0.0.1:5173/internal/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
+| [Doctor visit notes](#visit-notes) | Maria | [S08](http://127.0.0.1:5173/internal/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
+| [My Visit Notes — provider brief](#provider-brief) | Maria | [S24](http://127.0.0.1:5173/internal/mobile?scenario=S24) | IMPLEMENTED |
+| [Medication update and conflict limits](#medication-update) | Elena | [S19](http://127.0.0.1:5173/internal/mobile?scenario=S19) | PARTIALLY IMPLEMENTED |
+| [Conversation history and continuation](#history) | Maria | [R01](http://127.0.0.1:5173/internal/mobile?scenario=R01) | IMPLEMENTED |
+| [Account and privacy controls](#account-privacy) | Maria | [R01](http://127.0.0.1:5173/internal/mobile?scenario=R01) | IMPLEMENTED |
+| [Follow-up reminder and check-in](#followup) | Maria | [S07](http://127.0.0.1:5173/internal/mobile?scenario=S07) | IMPLEMENTED |
+| [Trial limit and plan selection](#upgrade) | Maria | [S06](http://127.0.0.1:5173/internal/mobile?scenario=S06) | IMPLEMENTED |
+| [Family plan gate](#family-upgrade) | Maria | [S10](http://127.0.0.1:5173/internal/mobile?scenario=S10) | IMPLEMENTED |
+| [Escalation and booking](#booking) | Maria | [S12](http://127.0.0.1:5173/internal/mobile?scenario=S12) | IMPLEMENTED |
+| [Emergency safety](#emergency) | Maria | [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13) | IMPLEMENTED |
+| [Medication safety](#medication-safety) | Maria | [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13) | IMPLEMENTED |
+| [Out-of-scope question](#out-of-scope) | Maria | [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13) | IMPLEMENTED |
+| [Guidance — happy path + What’s next](#guidance-happy) | Alex / Maria | ▶ Journeys → Guidance · happy path + Book (S01) · or [S04](http://127.0.0.1:5173/internal/mobile?scenario=S04) | IMPLEMENTED · VERIFIED 16 Oct 2026 |
+| [Guidance — early first look](#guidance-early) | Maria | ▶ Journeys → Guidance · early first look · or [S23](http://127.0.0.1:5173/internal/mobile?scenario=S23) | IMPLEMENTED |
+| [Guidance — out of coverage](#guidance-uncovered) | Maria | ▶ Journeys → Guidance · out of coverage · or [S13](http://127.0.0.1:5173/internal/mobile?scenario=S13) | IMPLEMENTED |
+| [Guidance — lab summary refresh](#guidance-labs) | Maria | ▶ Journeys → Guidance · lab summary refresh · or [S04](http://127.0.0.1:5173/internal/mobile?scenario=S04) | IMPLEMENTED |
 
 <a id="onboarding"></a>
 
@@ -586,7 +586,7 @@ flowchart TD
 
 ## Guidance — happy path + What’s next
 
-Alex / Maria · IMPLEMENTED · VERIFIED 16 Oct 2026 · Auto: ▶ Journeys → Guidance · happy path + Book (S01 E2E) · Manual shortcut: [S04](http://127.0.0.1:5173/mobile?scenario=S04) · Spec: [F02e](docs/ux/F02e-guidance.md)
+Alex / Maria · IMPLEMENTED · VERIFIED 16 Oct 2026 · Auto: ▶ Journeys → Guidance · happy path + Book (S01 E2E) · Manual shortcut: [S04](http://127.0.0.1:5173/internal/mobile?scenario=S04) · Spec: [F02e](docs/ux/F02e-guidance.md)
 
 Chevron (auto): Welcome → sign-up → Myself profile → Start chatting → headaches intake → 7 sections → Review Save → What’s next → **Book a consultation** → M-8.2 → Journey finished. Manual S04 skips to answered chat + What’s next. Spine stops at Book (not Discuss with provider / M-9.7).
 

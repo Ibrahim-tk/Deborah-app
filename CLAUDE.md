@@ -4,6 +4,8 @@ You are building a **browser-based, high-fidelity, frontend-only prototype** of 
 
 Read `docs/README.md` first. It indexes every spec. Never guess behaviour that a spec defines.
 
+**Surfaces:** `/` is the client demo; `/internal` is password-gated prototype tooling. Default all edits to **internal** unless the user explicitly asks for production/client. See `AGENTS.md` and `VERSIONS.md`.
+
 **Visual design:** `DESIGN.md` (tokens + rules) and `PRODUCT.md` (product context) at the root are the authority for every visual decision. If a UX spec conflicts with DESIGN.md on visuals, DESIGN.md wins. If the Impeccable skill is installed (`npx skills add pbakaus/impeccable`), it reads both files automatically.
 
 ## Non-negotiables

@@ -76,7 +76,7 @@ export const useShellStore = create<ShellState>()((set) => ({
   theme: 'light',
   variant: 1,
   webFullBleed: false,
-  lastWebPath: '/web',
+  lastWebPath: '/internal/web',
   toggles: {
     highlightPlaceholders: false,
     network: 'normal',

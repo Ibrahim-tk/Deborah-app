@@ -1,18 +1,26 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { InternalGate } from '@shell/InternalGate';
 import { flowVersionFrom, flowVersionHref } from '@shared/utils/flowVersion';
+import { legacyRedirectTarget } from '@shared/utils/internalPaths';
+import ClientApp from './ClientApp';
 
-const Version1 = lazy(() => import('../versions/v1/src/App'));
-const Version2 = lazy(() => import('./FlowV2App'));
+const InternalApp = lazy(() => import('./InternalApp'));
+const InternalV1App = lazy(() => import('./InternalV1App'));
 
-/** Load only one complete source tree per document, including its styles and stores. */
-export default function App() {
+function LegacyRedirect() {
+  const { pathname, search, hash } = useLocation();
+  return <Navigate to={legacyRedirectTarget(pathname, search, hash)} replace />;
+}
+
+/** Preserve `flow` + scenario on internal routes only. Client `/` never mounts Version 1. */
+function InternalVersionLoader() {
   const location = useLocation();
   const navigate = useNavigate();
   const [version] = useState(() => flowVersionFrom(location.search));
   const scenario = useRef(new URLSearchParams(location.search).get('scenario'));
+
   useEffect(() => {
-    // Existing platform links omit query parameters; retain the chosen flow and latest scenario.
     const params = new URLSearchParams(location.search);
     if (params.get('scenario')) scenario.current = params.get('scenario');
     else if (scenario.current) params.set('scenario', scenario.current);
@@ -21,7 +29,35 @@ export default function App() {
       navigate(target, { replace: true });
     }
   }, [location.pathname, location.search, location.hash, navigate, version]);
-  return <Suspense fallback={<p role="status">Loading Version {version === 'v1' ? '1' : '2'}…</p>}>
-    {version === 'v1' ? <Version1 /> : <Version2 />}
-  </Suspense>;
+
+  return (
+    <Suspense fallback={<p role="status">Loading Version {version === 'v1' ? '1' : '2'}…</p>}>
+      {version === 'v1' ? <InternalV1App /> : <InternalApp />}
+    </Suspense>
+  );
+}
+
+function InternalSurface({ children }: { children: ReactNode }) {
+  return <InternalGate>{children}</InternalGate>;
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<ClientApp />} />
+      <Route
+        path="/internal/*"
+        element={
+          <InternalSurface>
+            <InternalVersionLoader />
+          </InternalSurface>
+        }
+      />
+      <Route path="/mobile" element={<LegacyRedirect />} />
+      <Route path="/web/*" element={<LegacyRedirect />} />
+      <Route path="/wid" element={<LegacyRedirect />} />
+      <Route path="/design-system" element={<LegacyRedirect />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }

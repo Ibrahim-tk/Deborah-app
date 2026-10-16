@@ -40,6 +40,6 @@ export function useShellEffects() {
   }, [params, scenarioId, select]);
 
   useEffect(() => {
-    if (pathname.startsWith('/web')) setLastWebPath(pathname);
+    if (pathname.startsWith('/internal/web')) setLastWebPath(pathname);
   }, [pathname, setLastWebPath]);
 }

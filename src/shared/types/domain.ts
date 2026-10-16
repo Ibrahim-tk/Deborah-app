@@ -74,6 +74,8 @@ export interface Intake {
   reproductive?: string;
   /** Onboarding form (M-1.8 V2): gender identity when distinct from sex at birth. */
   genderIdentity?: string;
+  /** Onboarding form: preferred pronouns (e.g. she/her, he/him, they/them, or custom). */
+  pronouns?: string;
   /** Trans teen branch: trans-woman | trans-man. */
   transIdentity?: string;
   /** Optional puberty notes from the teen development free-text step. */

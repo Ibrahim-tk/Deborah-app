@@ -7,13 +7,14 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Cycle, Profile } from '@shared/types/domain';
 import type { SexAtBirth } from '@shared/types/health';
 import { nowFrom, uid } from '@shared/utils';
-import { ageFromAnswers, effectiveGender, forSomeoneElse, list, type Answers } from './steps';
+import { ageFromAnswers, effectiveGender, forSomeoneElse, list, pronounsForSave, type Answers } from './steps';
 
 const CONSENT_PATH = { child: 'guardian-child', teen: 'guardian-teen', adult: 'adult-agreement' } as const;
 
 const SEX_AT_BIRTH = new Set<SexAtBirth>(['female', 'male', 'intersex']);
 
 const CYCLE_FROM_REPRODUCTIVE: Record<string, Cycle> = {
+  menstruation: 'regular',
   'pre-menopausal': 'regular',
   'periods-started': 'regular',
   'peri-menopausal': 'irregular',
@@ -53,6 +54,7 @@ export function saveOnboarding(a: Answers): string {
   // Clinical sex at birth is only M/F/I; other first-step picks are identity (with optional follow-up).
   const sex = SEX_AT_BIRTH.has(a.sex as SexAtBirth) ? (a.sex as SexAtBirth) : undefined;
   const gender = effectiveGender(a);
+  const pronouns = pronounsForSave(a);
   const birthYear = Number.isFinite(year) ? { value: year, source: 'manual' as const, updatedAt: at } : undefined;
   const reproductive = a.reproductive ?? a.reproductiveTeen;
   const pubertyStart = a.pubertyStart || a.pubertyAge;
@@ -84,6 +86,7 @@ export function saveOnboarding(a: Answers): string {
   if (a.hrtTaken) care.hrtTaken = a.hrtTaken;
 
   if (a.sex) care.sexSelection = a.sex;
+  if (pronouns) care.pronouns = pronouns;
 
   const healthPatch = {
     ...(birthYear && { birthYear }),
@@ -97,6 +100,7 @@ export function saveOnboarding(a: Answers): string {
   const intakePatch = {
     ageBand: ageBandFor(age),
     ...(gender && { genderIdentity: gender }),
+    ...(pronouns && { pronouns }),
     ...(reproductive && {
       reproductive,
       cycle: CYCLE_FROM_REPRODUCTIVE[reproductive] ?? ('unknown' as Cycle),
