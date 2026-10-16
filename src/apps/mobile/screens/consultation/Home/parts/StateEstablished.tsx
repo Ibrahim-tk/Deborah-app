@@ -1,17 +1,20 @@
 /**
- * Home · State 3 — a few weeks in (Figma 172:145). A "today" card leads (the day's habits, tap to
- * mark), then compact section cards with status, and personalised recommendations.
+ * Home · State 3 — a few weeks in (Figma 172:145).
+ * AI-native overhaul: TodayHabitsCard + shared destination widgets.
  */
-import { Icon } from '@mobile/ui';
-import { HealingPlanCard, IntakeCompletionCard } from '@mobile/patterns/widgets';
-import { Bar, LinkCard, Recommendations, TilePair, type Recommendation, type TileProps } from './HomeKit';
-import styles from './HomeStates.module.css';
+import {
+  DestinationTilePair,
+  HealingPlanCard,
+  IntakeCompletionCard,
+  LinkStatusCard,
+  RecommendationCard,
+  TodayHabitsCard,
+  type DestinationTileProps,
+  type Recommendation,
+  type TodayHabit,
+} from '@mobile/patterns/widgets';
 
-export interface TodayHabit {
-  id: string;
-  text: string;
-  done: boolean;
-}
+export type { TodayHabit };
 
 export interface StateEstablishedProps {
   day: number;
@@ -23,51 +26,32 @@ export interface StateEstablishedProps {
   journeyFocus?: string;
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
-  tiles: [TileProps, TileProps];
+  tiles: [DestinationTileProps, DestinationTileProps];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
 }
 
 export function StateEstablished(p: StateEstablishedProps) {
-  const done = p.habits.filter((h) => h.done).length;
   return (
     <>
-      <section className={styles.hero} aria-labelledby="today-habits" data-placeholder>
-        <div className={styles.heroText}>
-          <p className={styles.kicker}>
-            <Icon name="calendar" size={16} />
-            Today · Day {p.day} of 90
-          </p>
-          <h2 id="today-habits" className={styles.heroTitle}>Your habits for today</h2>
-        </div>
-        {p.habits.length > 0 && (
-          <ul className={styles.habits}>
-            {p.habits.map((h) => (
-              <li key={h.id}>
-                <button type="button" className={styles.habit} role="checkbox" aria-checked={h.done} onClick={() => p.onToggle(h.id)}>
-                  <span className={styles.mark} data-on={h.done || undefined} aria-hidden>
-                    {h.done && <Icon name="check" size={14} />}
-                  </span>
-                  <span>{h.text}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-        <div className={styles.todayFoot}>
-          <Bar value={p.habits.length ? done / p.habits.length : 0} className={styles.todayBar} />
-          <span className={styles.stepSub}>{done} of {p.habits.length} done</span>
-        </div>
-      </section>
+      <TodayHabitsCard day={p.day} habits={p.habits} onToggle={p.onToggle} />
 
-      <LinkCard tone="linen" lead="chat" title="Continue with Deborah" meta={p.continueMeta ?? 'Pick up where you left off'} onPress={p.onContinue} />
+      <LinkStatusCard
+        tone="linen"
+        lead="chat"
+        title="Continue with Deborah"
+        meta={p.continueMeta ?? 'Pick up where you left off'}
+        onPress={p.onContinue}
+      />
       {p.intakeCard && (
         <IntakeCompletionCard progress={p.intakeCard.progress} complete={p.intakeCard.complete} onAction={p.intakeCard.onAction} />
       )}
       <HealingPlanCard day={p.day} focus={p.journeyFocus} onPress={p.onJourney} />
-      {p.reports && <LinkCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />}
-      <TilePair tiles={p.tiles} compact />
-      <Recommendations items={p.recommendations} onShop={p.onShop} />
+      {p.reports && (
+        <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />
+      )}
+      <DestinationTilePair tiles={p.tiles} compact />
+      <RecommendationCard items={p.recommendations} onShop={p.onShop} />
     </>
   );
 }

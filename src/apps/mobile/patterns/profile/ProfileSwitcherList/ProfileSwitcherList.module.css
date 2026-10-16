@@ -15,9 +15,9 @@
   transition: background-color var(--dur-quick) var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
-.row { background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-control); }
-.row[data-active='true'] { background: var(--color-surface-lilac); box-shadow: inset 0 0 0 2px var(--color-border-selected); }
-.row:active, .add:active:not(:disabled) { background: var(--color-accent-tint); }
+.row { background: var(--surface-field-lift); border: 0; box-shadow: none; }
+.row[data-active='true'] { background: var(--surface-field-lilac); box-shadow: none; }
+.row:active, .add:active:not(:disabled) { background: var(--surface-field-press); }
 .row:focus-visible, .add:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 
 .text { flex: 1; min-width: 0; display: grid; gap: 2px; }
@@ -25,10 +25,10 @@
 .relation { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 .check { flex: none; color: var(--color-accent); }
 
-/* Dashed outline marks "a slot you can fill" (F06 M-6.1); no badge for the plan lock. */
-.add { border: 1px dashed var(--color-border-control); background: transparent; }
+/* Soft rose field marks "a slot you can fill" (F06 M-6.1); no badge for the plan lock. */
+.add { border: 0; background: var(--surface-field-rose); border-radius: var(--radius-xl); }
 .add:disabled { cursor: default; color: var(--color-ink-secondary); }
-.addIcon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-full); background: var(--color-surface-tonal); }
+.addIcon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-full); background: var(--icon-well-bg); color: var(--icon-well-fg); }
 .addLabel { flex: 1; min-width: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
 .lock {
   flex: none;

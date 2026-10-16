@@ -1,22 +1,23 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3, 12px);
-  padding: var(--space-4, 16px);
-  border-radius: var(--radius-lg, 16px);
-  background: var(--color-surface-linen, #f5f0e8);
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-linen);
+  color: var(--color-ink);
 }
 
 .title {
   margin: 0;
-  font-size: var(--type-title-sm, 17px);
-  font-weight: 500;
-  color: var(--color-text, #1d1d1f);
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
 }
 
 .body {
   margin: 0;
-  font-size: var(--type-body-sm, 14px);
-  line-height: 1.4;
-  color: var(--color-text-secondary, #6e6e73);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
 }

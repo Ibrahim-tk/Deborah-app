@@ -18,7 +18,7 @@ import { GreetingSheet } from './parts/GreetingSheet';
 import { StateNew } from './parts/StateNew';
 import { StateReturning, type NextStep } from './parts/StateReturning';
 import { StateEstablished } from './parts/StateEstablished';
-import type { TileProps } from './parts/HomeKit';
+import type { DestinationTileProps as TileProps } from '@mobile/patterns/widgets';
 import { useHomeView } from './parts/useHomeView';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import { useAddMember } from '@mobile/screens/profiles/useAddMember';

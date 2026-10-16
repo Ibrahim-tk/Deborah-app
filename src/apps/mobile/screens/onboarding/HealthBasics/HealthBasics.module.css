@@ -1,6 +1,7 @@
 /* Column layout: the question takes the height it needs; the bloom fills (and shrinks to) what is left. */
 .root { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
-.root > :not(span) { position: relative; } /* everything but the Aura / GradientShift backdrop spans */
+/* Stack content above Aura/GradientShift <span>s. Overlays (consent sheet) keep their own absolute positioning. */
+.root > :not(span):not([data-overlay]) { position: relative; }
 .step { display: flex; flex-direction: column; gap: var(--space-5); animation: step-in 0.4s ease-out both; }
 @keyframes step-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .step { animation: none; } }

@@ -1,35 +1,34 @@
 /**
- * Home · State 2 — returning after a chat (Figma 171:145). Home reflects the conversation:
- * Continue with Deborah (resumes at an unanswered question), next steps that fill the profile
- * over time, the 90 Day Journey once unlocked, Reports only once one exists, My Health with
- * profile completion, and recommendations only when personalised (each says why).
+ * Home · State 2 — returning after a chat (Figma 171:145).
+ * AI-native overhaul: PrimaryIntentCard + NextIntentList; callbacks unchanged.
  */
-import { Button, Icon, type IconName } from '@mobile/ui';
-import { HealingPlanCard, IntakeCompletionCard } from '@mobile/patterns/widgets';
-import { LinkCard, Recommendations, SectionLabel, TilePair, type Recommendation, type TileProps } from './HomeKit';
-import styles from './HomeStates.module.css';
+import { Button } from '@mobile/ui';
+import {
+  DestinationTilePair,
+  HealingPlanCard,
+  IntakeCompletionCard,
+  LinkStatusCard,
+  NextIntentList,
+  type NextIntent,
+  PrimaryIntentCard,
+  RecommendationCard,
+  type Recommendation,
+  type DestinationTileProps,
+} from '@mobile/patterns/widgets';
 
-export interface NextStep {
-  key: string;
-  title: string;
-  sub: string;
-  icon: IconName;
-  onPress: () => void;
-}
+export type NextStep = NextIntent;
 
 export interface StateReturningProps {
-  /** "yesterday", "3 days ago"… */
   when?: string;
   topic: string;
   summary?: string;
-  /** The intake question left unanswered, if the chat stopped partway. */
   pendingQuestion?: string;
   onContinue: () => void;
   steps: NextStep[];
   journey?: { day: number; today?: string; focus?: string; onPress: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
-  tiles: [TileProps, TileProps];
+  tiles: [DestinationTileProps, DestinationTileProps];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
 }
@@ -37,40 +36,18 @@ export interface StateReturningProps {
 export function StateReturning(p: StateReturningProps) {
   return (
     <>
-      <section className={styles.hero} aria-labelledby="continue-deborah">
-        <div className={styles.heroText}>
-          <p className={styles.kicker}>
-            <Icon name="chat" size={16} />
-            Continue with Deborah{p.when ? ` · ${p.when}` : ''}
-          </p>
-          <h2 id="continue-deborah" className={styles.heroTitle}>{p.topic}</h2>
-          {p.summary && <p className={styles.heroBody}>{p.summary}</p>}
-        </div>
-        {p.pendingQuestion && <p className={styles.pending}>Next: “{p.pendingQuestion}”</p>}
+      <PrimaryIntentCard
+        titleId="continue-deborah"
+        title={p.topic}
+        body={p.summary}
+        kicker={`Continue with Deborah${p.when ? ` · ${p.when}` : ''}`}
+        kickerIcon="chat"
+        pending={p.pendingQuestion}
+      >
         <Button fullWidth onClick={p.onContinue}>Continue</Button>
-      </section>
+      </PrimaryIntentCard>
 
-      {p.steps.length > 0 && (
-        <section className={styles.section} aria-labelledby="next-steps">
-          <SectionLabel><span id="next-steps">Next steps</span></SectionLabel>
-          <ul className={styles.list}>
-            {p.steps.map((s) => (
-              <li key={s.key}>
-                <button type="button" className={styles.step} onClick={s.onPress}>
-                  <span className={styles.stepIcon} aria-hidden>
-                    <Icon name={s.icon} size={20} />
-                  </span>
-                  <span className={styles.stepText}>
-                    <span className={styles.stepTitle}>{s.title}</span>
-                    <span className={styles.stepSub}>{s.sub}</span>
-                  </span>
-                  <Icon name="chevron" size={18} />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <NextIntentList items={p.steps} />
 
       {p.intakeCard && (
         <IntakeCompletionCard progress={p.intakeCard.progress} complete={p.intakeCard.complete} onAction={p.intakeCard.onAction} />
@@ -85,11 +62,13 @@ export function StateReturning(p: StateReturningProps) {
         />
       )}
 
-      {p.reports && <LinkCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />}
+      {p.reports && (
+        <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />
+      )}
 
-      <TilePair tiles={p.tiles} />
+      <DestinationTilePair tiles={p.tiles} />
 
-      <Recommendations items={p.recommendations} onShop={p.onShop} />
+      <RecommendationCard items={p.recommendations} onShop={p.onShop} />
     </>
   );
 }

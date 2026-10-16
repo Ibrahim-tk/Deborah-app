@@ -15,8 +15,18 @@
   flex-direction: column;
   width: min(84%, 320px);
   padding-top: var(--safe-top);
-  background: var(--color-canvas);
+  background: color-mix(in srgb, var(--color-canvas) 92%, var(--white));
+  -webkit-backdrop-filter: var(--blur-edge-strong);
+  backdrop-filter: var(--blur-edge-strong);
   box-shadow: var(--shadow-float-md);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .panel {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--color-canvas);
+  }
 }
 
 .top {
@@ -47,9 +57,9 @@
   min-height: var(--tap-min);
   margin-bottom: var(--space-3);
   padding: 0 var(--space-3);
-  border: 1px solid var(--color-border-hairline);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lilac);
   color: var(--color-ink);
   font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-ui);
 }
@@ -71,7 +81,7 @@
 }
 .row:active,
 .chat:active { background: var(--color-accent-tint); }
-.row[aria-current='page'] { background: var(--color-surface-lilac); }
+.row[aria-current='page'] { background: var(--surface-field-lilac); }
 .row:focus-visible,
 .chat:focus-visible,
 .newChat:focus-visible,
@@ -121,4 +131,4 @@
 .productCta { display: inline-flex; align-items: center; gap: var(--space-1); margin-top: var(--space-3); font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
 
 /* Settings pinned under the scroll, above the home indicator. */
-.bottom { flex: none; padding: var(--space-2) var(--space-3) calc(var(--safe-bottom) + var(--space-2)); border-top: 1px solid var(--color-border-hairline); }
+.bottom { flex: none; padding: var(--space-2) var(--space-3) calc(var(--safe-bottom) + var(--space-2)); border-top: 0; background: var(--surface-field-lift); }

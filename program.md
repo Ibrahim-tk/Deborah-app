@@ -1,8 +1,10 @@
 # Oracle Clinician — UI Overhaul Program
 
-**Prepared:** 17 October 2026 · **Status:** proposed, for review · **Implementation:** not started
+**Prepared:** 17 October 2026 · **Status:** proposed, for review · **Implementation in this chat:** none
 
 This program defines a presentation overhaul of the post-intake mobile experience. It is a plan for making the existing product easier to understand, navigate, and return to. It does not authorize code changes, new clinical behavior, or a release.
+
+**Concurrent workspace work:** source changes were detected during drafting, including new Home widget components. The plan records an inspected baseline and a final freshness note. Reconcile the current tree in P0 and reuse compatible components already added elsewhere; do not repeat implementation or treat this proposal as approval of concurrent code changes.
 
 Read [plan.md](plan.md) for the detailed screen and component specifications. Read [the reference catalogue](docs/planning/ui-overhaul-references.md) for the research and the exact patterns to study. The earlier root plan is preserved verbatim in [the planning archive](docs/planning/plan-before-ui-overhaul-2026-10-17.md); its relative links were preserved as historical text and should be resolved from the repository root.
 

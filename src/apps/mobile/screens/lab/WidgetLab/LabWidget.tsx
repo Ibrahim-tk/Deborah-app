@@ -13,6 +13,7 @@ import { EmergencyInterrupt } from '@mobile/patterns/safety';
 import {
   BookDeborah,
   ChoicePills,
+  DestinationTilePair,
   FullChoicePills,
   FullChoicePillsGrid,
   HealingPlanCard,
@@ -21,12 +22,18 @@ import {
   InlineConsent,
   IntakeCompletionCard,
   IntakeSectionHeader,
+  LinkStatusCard,
   MoodScale,
   NamedReasonList,
+  NextIntentList,
   PhoneField,
   PolicyUpdateConsent,
+  PrimaryIntentCard,
+  PromptStarterList,
   QuestionChoices,
+  RecommendationCard,
   ScaleCheck,
+  TodayHabitsCard,
   UploadCard,
   type NamedReason,
   type PhoneValue,
@@ -371,5 +378,62 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return <HealingPlanSection title="Immediate priorities"><p>Wind down 30 minutes earlier tonight.</p></HealingPlanSection>;
     case 'policyUpdate':
       return <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={() => reply(undefined, 'Terms accepted.')} />;
+    case 'primaryIntent':
+      return (
+        <PrimaryIntentCard titleId="lab-intent" title="Sleep and night waking" body="Last chat · 3 days ago" kicker="Continue with Deborah" kickerIcon="chat">
+          <Button fullWidth onClick={() => reply(undefined, 'Opening chat…')}>Continue</Button>
+        </PrimaryIntentCard>
+      );
+    case 'promptStarters':
+      return (
+        <PromptStarterList
+          items={[
+            { label: 'I’ve been feeling tired', prefill: 'I’ve been feeling tired.' },
+            { label: 'Help me with sleep', prefill: 'Help me with sleep.' },
+            { label: 'Review my supplements', prefill: 'Review my supplements.' },
+          ]}
+          onPrompt={(t) => reply(t, 'Let’s talk about that.')}
+        />
+      );
+    case 'nextIntents':
+      return (
+        <NextIntentList
+          items={[
+            { key: 'checkin', icon: 'bell', title: 'Check in with Deborah', sub: 'Tell her how things are going', onPress: () => reply(undefined, 'Opening check-in…') },
+            { key: 'labs', icon: 'upload', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => reply(undefined, 'Opening labs…') },
+          ]}
+        />
+      );
+    case 'todayHabits':
+      return (
+        <TodayHabitsCard
+          day={18}
+          habits={[
+            { id: 'h1', text: 'Cool bedroom tonight', done: true },
+            { id: 'h2', text: 'Magnesium with dinner', done: false },
+          ]}
+          onToggle={() => reply(undefined, 'Habit toggled (lab).')}
+        />
+      );
+    case 'linkStatus':
+      return <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta="2 lab reports" onPress={() => reply(undefined, 'Opening Records…')} />;
+    case 'destinationTiles':
+      return (
+        <DestinationTilePair
+          tiles={[
+            { tone: 'linen', lead: 'health', title: 'My Health', meta: 'Profile 80%', progress: 0.8, onPress: () => reply(undefined, 'My Health') },
+            { tone: 'rose', lead: 'family', title: 'Family', meta: '2 profiles', onPress: () => reply(undefined, 'Family') },
+          ]}
+        />
+      );
+    case 'recommendation': {
+      const product = findProduct('genesis-gold');
+      return product ? (
+        <RecommendationCard
+          items={[{ product, reason: 'Fits your sleep focus' }]}
+          onShop={(id) => reply(undefined, `Shop ${id}`)}
+        />
+      ) : null;
+    }
   }
 }

@@ -1,3 +1,5 @@
+/* Full-screen overlay — must stay position:absolute (HealthBasics excludes [data-overlay]
+   from the rule that forces children to position:relative). */
 .root {
   position: absolute;
   inset: 0;
@@ -25,8 +27,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* Tall enough for title + body + three long checkboxes + Continue; scrolls if needed. */
-  max-height: calc(100% - var(--safe-top) - 12px);
+  /* Medium detent: hug content; leave more of Health Basics visible above. */
+  max-height: calc(100% - var(--safe-top) - 120px);
   overflow: hidden;
   padding: var(--space-2) var(--margin-screen) 0;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
@@ -41,21 +43,20 @@
   flex: none;
   width: 40px;
   height: 5px;
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2);
   border-radius: var(--radius-full);
   background: var(--purple-100);
 }
 
-/* flex-basis auto — not flex:1/0% — so the sheet grows with content instead of collapsing. */
 .content {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   display: grid;
   align-content: start;
-  gap: var(--space-4);
+  gap: var(--space-3);
   padding-bottom: var(--space-3);
 }
 
@@ -69,10 +70,15 @@
 
 .body {
   margin: 0;
-  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
   letter-spacing: -0.015em;
-  color: var(--color-ink);
+  color: var(--color-ink-body);
   text-wrap: pretty;
+}
+
+/* Medium weight only — DESIGN.md ceiling is 500 (override <strong> UA bold). */
+.name {
+  font-weight: var(--weight-medium);
 }
 
 .checks {
@@ -82,8 +88,9 @@
 
 .footer {
   flex: none;
-  padding: var(--space-4) 0 calc(var(--safe-bottom) + var(--space-4));
+  padding: var(--space-2) 0 calc(var(--safe-bottom) + var(--space-3));
   background: var(--color-surface);
+  box-shadow: 0 -8px 16px var(--color-surface);
 }
 
 @keyframes fade { from { opacity: 0; } }

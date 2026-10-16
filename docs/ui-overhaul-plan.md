@@ -50,13 +50,13 @@ Freeze sign-in, intake, and the chat experience (including Composer). Revamp the
 
 | Phase | Deliverable | Status |
 |-------|-------------|--------|
-| 0 | This doc + DESIGN.md amend + docs index links | in progress |
-| 1 | Tokens + ColorField/IconWell + extract HomeKit + WidgetLab | pending |
-| 2 | Home body visual revamp | pending |
-| 3 | My Health + 90-day plan | pending |
-| 4 | Family profiles | pending |
-| 5 | Records + Visit Notes | pending |
-| 6 | Sidebar + orphan hygiene + xref | pending |
+| 0 | This doc + DESIGN.md amend + docs index links | done |
+| 1 | Tokens + ColorField/IconWell + extract HomeKit + WidgetLab | done |
+| 2 | Home body visual revamp | done |
+| 3 | My Health + 90-day plan | done |
+| 4 | Family profiles | done |
+| 5 | Records + Visit Notes | done |
+| 6 | Sidebar + orphan hygiene + xref | done |
 
 ## Non-blocking gate
 

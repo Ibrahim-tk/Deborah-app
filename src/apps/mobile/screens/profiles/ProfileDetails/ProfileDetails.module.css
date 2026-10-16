@@ -13,10 +13,10 @@
 .section { display: grid; gap: var(--space-3); }
 .heading { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
 
-/* Read rows sit on a Paper card; ListRow brings its own screen-margin padding, so pull it in. */
-.rows { display: grid; border-radius: var(--radius-lg); background: var(--color-surface); overflow: hidden; }
+/* Read rows on a color field; ListRow brings its own screen-margin padding, so pull it in. */
+.rows { display: grid; border-radius: var(--radius-xl); background: var(--surface-field-lift); overflow: hidden; }
 .rows.rows > * { padding-inline: var(--space-4); }
-.rows > * + * { border-top: 1px solid var(--color-border-hairline); }
+.rows > * + * { border-top: 0; box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent); }
 
 .fields { display: grid; gap: var(--space-5); }
 .group { display: grid; gap: var(--space-2); }

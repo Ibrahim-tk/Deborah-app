@@ -125,20 +125,20 @@ export default function HealthBasics() {
       <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
         <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
       </div>
-      <div className={styles.body} aria-hidden={consentOpen || undefined}>
-        <div key={under.key} className={styles.step}>
-          <h1 className={`${styles.title} ${styles.heading}`}>{titleFor(under, answers)}</h1>
-          <StepBody
-            step={under}
-            answers={answers}
-            set={consentOpen ? () => undefined : set}
-            advance={consentOpen ? () => undefined : advance}
-          />
-        </div>
-      </div>
-      <div className={styles.footer}>
-        {!consentOpen && !tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>}
-      </div>
+      {/* While the consent sheet is open, hide the DOB step so it doesn’t sit half-visible under a seam. */}
+      {!consentOpen && (
+        <>
+          <div className={styles.body}>
+            <div key={under.key} className={styles.step}>
+              <h1 className={`${styles.title} ${styles.heading}`}>{titleFor(under, answers)}</h1>
+              <StepBody step={under} answers={answers} set={set} advance={advance} />
+            </div>
+          </div>
+          <div className={styles.footer}>
+            {!tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>}
+          </div>
+        </>
+      )}
 
       {consentOpen && (
         <ConsentSheet

@@ -1,7 +1,7 @@
 /**
  * @screen  M-5.4 · Check your results
  * @flow    F05 Follow-up & return with labs
- * @states  detected (sample-a values) · manual (empty, add form open) · editing a row · adding a value · nothing to send
+ * @states  detected (sample-a values) · manual (empty) · editing a row · nothing to send
  *          · edit mode (from M-9.5: prefilled from the stored report, "Save changes", no chat send)
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=49-547
  * @spec    docs/ux/F05-followup-labs.md#m-54--check-your-results
@@ -17,7 +17,6 @@ import { LabValueRow } from '@mobile/patterns/health';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
-import { AddValueForm } from './parts/AddValueForm';
 import styles from './ConfirmLabs.module.css';
 
 type Source = LabReport['source'];
@@ -54,7 +53,6 @@ export default function ConfirmLabs() {
   const [date, setDate] = useState(draft.date);
   const [values, setValues] = useState<LabValue[]>(draft.values);
   const [editing, setEditing] = useState<string | null>(null);
-  const [adding, setAdding] = useState(source === 'manual' && !stored);
   const [error, setError] = useState<string | null>(null);
 
   const patch = (id: string, p: { value?: string; unit?: string }) =>
@@ -62,7 +60,7 @@ export default function ConfirmLabs() {
 
   const send = () => {
     const complete = values.filter((v) => v.value.trim());
-    if (complete.length === 0) return setError('Add at least one value from your report first.');
+    if (complete.length === 0) return setError('Nothing to send — this report has no values.');
     const s = useAppStore.getState();
     const collectedAt = new Date(`${date}T12:00:00`).toISOString();
     if (stored) {
@@ -104,7 +102,7 @@ export default function ConfirmLabs() {
           </div>
 
           <div className={styles.values}>
-            {values.length === 0 && !adding && <p className={styles.empty}>No values yet. Add the ones on your report.</p>}
+            {values.length === 0 && <p className={styles.empty}>No values on this report.</p>}
             {values.map((v) => (
               <LabValueRow
                 key={v.id}
@@ -120,19 +118,6 @@ export default function ConfirmLabs() {
               />
             ))}
           </div>
-
-          {adding ? (
-            <AddValueForm
-              existing={values.map((v) => v.marker)}
-              onAdd={(v) => {
-                setValues((vs) => [...vs, { id: uid('lv'), ...v }]);
-                setError(null);
-              }}
-              onClose={() => setAdding(false)}
-            />
-          ) : (
-            <Button variant="secondary" leadingIcon="plus" onClick={() => setAdding(true)}>Add a value</Button>
-          )}
 
           <p className={styles.disclaimer}>Please make sure these match your report.</p>
         </div>

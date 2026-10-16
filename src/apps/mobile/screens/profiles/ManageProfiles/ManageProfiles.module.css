@@ -12,11 +12,22 @@
 
 .count, .note { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 
-.rows { display: grid; border-radius: var(--radius-lg); background: var(--color-surface); overflow: hidden; }
-.rows > li + li { border-top: 1px solid var(--color-border-hairline); }
+.rows {
+  display: grid;
+  gap: var(--space-2);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  overflow: visible;
+}
+.rows > li {
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift);
+  overflow: hidden;
+}
+.rows > li + li { border-top: 0; }
 .rows.rows button { padding-inline: var(--space-4); }
 
-/* Same dashed "slot" row as the switcher (M-6.1); the plan lock is plain text, never a badge. */
+/* Same slot row as the switcher (M-6.1); the plan lock is plain text, never a badge. */
 .add {
   display: flex;
   align-items: center;
@@ -24,13 +35,14 @@
   width: 100%;
   min-height: var(--row-min);
   padding: var(--space-3) var(--space-4);
-  border: 1px dashed var(--color-border-control);
-  border-radius: var(--radius-lg);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-rose);
   color: var(--color-ink);
   text-align: left;
   -webkit-tap-highlight-color: transparent;
 }
-.add:active:not(:disabled) { background: var(--color-accent-tint); }
+.add:active:not(:disabled) { background: var(--surface-field-press); }
 .add:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 .add:disabled { cursor: default; color: var(--color-ink-secondary); }
 .addLabel { flex: 1; min-width: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }

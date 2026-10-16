@@ -1,8 +1,10 @@
 # Oracle Clinician — Post-intake UI Overhaul Plan
 
-**Date:** 17 October 2026 · **Status:** proposal for review · **Implementation:** not started  
+**Date:** 17 October 2026 · **Status:** proposal for review · **Implementation in this chat:** none  
 **Primary surface:** Version 2 mobile prototype, reviewed at `/internal/mobile?flow=v2`  
 **Companion documents:** [program.md](program.md) · [research catalogue](docs/planning/ui-overhaul-references.md) · [previous plan, preserved verbatim](docs/planning/plan-before-ui-overhaul-2026-10-17.md)
+
+**Workspace freshness note:** Source files changed concurrently while this document was being written. The source audit below describes the inspected baseline, not a guarantee of the final working tree. This chat changed planning documents only. Before implementation, refresh the component/action inventory against the current tree and reconcile any overlapping work; do not re-create components already added elsewhere. See §2.4.
 
 ## Contents
 
@@ -99,6 +101,14 @@ The requested visual material already exists in part: cream/plum colors, tonal c
 `DESIGN.md` describes Cormorant + SF Pro and an earlier parchment palette. `MobileApp.tsx` loads semantic tokens, refresh/base styles, DM Sans, and finally `mobile.skin.deborah.css`. The skin overrides fonts, colors, controls and radii, while its comment still describes an exploration.
 
 Recommendation: preserve the effective current token skin for continuity and make its canonical status an explicit P0/P1 decision. Do not silently revert to SF Pro because an older document says so. Do not change token values simply to reconcile documentation. No `DESIGN.md` change is part of this planning task.
+
+### 2.4 Concurrent changes detected at final review
+
+A hash comparison detected external changes to Home renderers/styles, shared tokens, several health/profile/record styles, ScrollEdge, DESIGN.md and widget catalogue files during drafting. No attempt was made to revert or validate that implementation. A concurrent `docs/ui-overhaul-plan.md` was also present at final review; this document does not claim to supersede or approve its implementation scope.
+
+The current tree had begun introducing `PrimaryIntentCard`, `PromptStarterList`, `NextIntentList` (under `NextIntentRow`), `TodayHabitsCard`, `DestinationTilePair`, `LinkStatusCard`, `RecommendationCard` and `HomeSectionLabel`. P0 must evaluate these first. Proposed names such as `ContinueConversationCard`, `StartConversationCard` and `HealthDestinationCard` describe required responsibilities, not a requirement to build duplicates. Map them onto those existing components where contracts match.
+
+Reconfirm the design-document mismatch, token values, consumer list and source locations before coding. The lock boundaries and behavior-preservation requirements remain the review criteria even if another implementation is already underway. The archived earlier plan preserves the bytes present when this planning task prepared the replacement; comparison with a later Git HEAD is not a valid archive-integrity check if concurrent work commits files.
 
 ## 3. Research and experience direction
 
@@ -477,4 +487,541 @@ Keep destructive actions visually distinct and their existing confirmations inta
 ### 11.5 Notifications and About Deborah
 
 If included in P7, use current notification state, timestamps and deep links; no new filters or unread logic. About Deborah can adopt the approved body spacing while preserving biography, claims and assets. Neither screen is a prerequisite for reviewing the main Home slice.
+
+## 12. Visual language and tokens
+
+### 12.1 Tonal hierarchy
+
+The design should use a small set of existing tonal roles consistently. Color is a tool for grouping, not a different theme for every card. Reserve the strongest accent for the clearest action. Make titles readable through ink, scale and placement rather than heavy weight or outlines.
+
+| Role | Existing token candidates | Proposed usage |
+|---|---|---|
+| Main canvas | `--color-canvas`, `--surface-canvas` | Keep effective background; do not modify locked upper region |
+| Quiet reading surface | `--color-surface`, `--card-tone-paper` | Notes, grouped records, secondary material after compositing checks |
+| Continuation emphasis | `--card-tone-lilac`, `--color-accent-tint` | Primary contextual care module |
+| Plan/warm grouping | `--card-tone-linen`, `--color-surface-tonal` | Existing plan or related grouping |
+| Occasional soft accent | `--card-tone-rose` | Existing suitable secondary roles; not a new health status |
+| Action | `--color-accent`, `--color-accent-pressed` | Existing primary action vocabulary |
+| Text | `--color-ink`, `--color-ink-body`, `--color-ink-secondary` | Title, prose and metadata with verified contrast |
+| Focus | `--color-focus` | Visible keyboard focus remains mandatory |
+| Safety/status | Existing danger/success/warning tokens | Only where current state gives those meanings |
+
+Use semantic token names, not new hex values in individual cards. If a genuinely missing role emerges, propose a semantic alias to existing tokens with a clear use case. No new palette, font family or parallel design system is needed. Do not copy ChatGPT black/white, Claude orange/beige, Perplexity teal or Grok branding.
+
+The currently loaded paper token may be translucent. It is not automatically safe on every background. Measure the final composite; prefer an existing opaque semantic surface where blur/backdrop would undermine reading. A named token is not proof of accessibility.
+
+### 12.2 Borderless cards without weak affordances
+
+Use flat filled surfaces, spacing between groups and consistent alignment. Avoid decorative card strokes, inset highlights, hover shadows, floating card shadows and nested glass rims. Keep a clear heading and recognizable action so a tonal tile does not resemble an inert illustration.
+
+Static information does not need an arrow. Navigating rows do. Checkable habits need a checkbox state. A button inside a card needs a clear label. Do not place a button inside an already interactive button-shaped card. If a module has several actions, its outer container is non-interactive and each control has its own hit target.
+
+Preserve necessary control boundaries, selection indicators, focus outlines and safety distinctions. If an accessible field requires a stroke, that is a functional boundary, not decorative card chrome. Locked controls keep their current treatment.
+
+### 12.3 Type and spacing
+
+Use current semantic text roles and `--type-scale`, not fixed arbitrary sizes. Preserve the 400/500 weight vocabulary. Display typography belongs at genuine display moments; use body/headline roles for most row titles and card controls. The locked Home greeting retains its current type treatment.
+
+Use existing spacing primitives and screen margin. Establish one consistent rhythm: tight metadata groups, comfortable item spacing, larger section gaps. Give a heading more space above than below. Avoid equal large padding on every module, which makes a phone feel like a long stack of posters.
+
+Do not shrink text to fit a two-column layout. Destination pairs can become a single column at narrow widths or large text. Card height follows content. Preserve the intent of the project’s 13px caption floor; P0 should measure actual small text-size settings because multiplying a 13px token by 0.9 may fall below that floor. Do not globally change locked text to resolve it within this overhaul.
+
+### 12.4 Geometry
+
+Reuse effective `--radius-card` and smaller radius roles deliberately. One major card radius, one compact row/control radius and the existing round button/avatar vocabulary are enough. Avoid introducing a unique corner shape for each card.
+
+The effective skin currently sets a larger card radius than old DESIGN.md. Retain that as the initial visual baseline; do not turn every list row into a 30px pill. Existing pill-based intake widgets remain locked and are not removed because an older design document bans pills.
+
+### 12.5 Iconography
+
+Keep the `Icon` adapter and the installed free Hugeicons family. Use existing names such as `chat`, `health`, `family`, `note`, `labs`, `calendar`, `upload`, `bell`, `check`, `chevron` and `lock` where supported by the adapter. Verify names before implementation; do not invent a package export or add direct library imports in screens.
+
+Prefer consistent icon size, optical alignment and stroke weight. Flat UI can use stroke icons; it does not require a paid solid/duotone set. Small tonal icon backgrounds can distinguish actions, but avoid colored icon boxes on every single text row. Never use an unlabeled sparkle to mean both AI guidance, recommendations and status.
+
+Icon-only controls retain accessible names and comfortable hit areas. Decorative icons are hidden from assistive technology. Status always includes words. The [Hugeicons reference](https://hugeicons.com/docs/faqs/license-questions) confirms the free Stroke Rounded package is separately MIT licensed; retain its notices and avoid paid families.
+
+## 13. Blur, motion and feedback
+
+### 13.1 Progressive blur: narrow purpose
+
+Progressive blur should indicate a scroll boundary or an existing overlay relationship. It is not a material applied to every card. `ScrollEdge` already contains layered masked blur; keep the locked header’s current behavior in the base phase. Do not retune that shared primitive globally.
+
+For a future in-scope scroll boundary, use a bounded decorative layer outside text/control content. It must not intercept pointer events, obscure the last line, or create a new scroll container. Keep essential text on stable readable surfaces. Avoid blurring medical content directly.
+
+An implementation proposal may reuse the existing strong/soft structure with tokenized effect roles. Exact blur radii and fade depth are a P1/P2 visual decision, not values copied from a competitor. Avoid full-height backdrop filters, many overlapping layers and scroll-driven JavaScript that updates styles every frame.
+
+### 13.2 Fallbacks
+
+Provide an opaque or quietly fading token-based edge when backdrop-filter is unavailable or reduced transparency is requested. Do not assume every target browser exposes the preference. The default layout must remain usable without blur.
+
+See [MDN backdrop-filter](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter) and [reduced transparency](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-transparency). They explain browser behavior, not a guarantee about any specific target device’s performance.
+
+### 13.3 Motion vocabulary
+
+Use the existing duration/easing tokens and Motion adapter. Apply feedback to the changed element: a pressed fill, a check state, an existing modal transition. Do not cascade a long entrance animation through Home each visit.
+
+No new shimmer, bounce, parallax, orbiting AI symbols, looping glow, confetti or animated health gauge. Avoid movement that makes the user wait to tap or read. For reduced motion, feedback should remain understandable through instant state and color/text changes.
+
+Existing navigation transitions and loading timing remain unchanged. A visual improvement cannot add a new delay to mask an expensive component. Avoid remounting components for a pleasant animation when that would reset focus, selection or local edits.
+
+### 13.4 Interaction feedback contract
+
+| Interaction | Proposed feedback | Preserve |
+|---|---|---|
+| Tap a destination | Existing pressed/transition response | Same route and parameters |
+| Toggle a habit | Existing checked state, quiet fill | Same ID/date mutation and reversibility |
+| Save a note | Existing toast and follow-up panel | Same persistence timing |
+| Choose record segment | Clear selected state | Same segment model and list contents |
+| Disabled/gated action | Existing reason/state visible | Same eligibility and upgrade/gate path |
+| Loading | Existing static skeleton/spinner | Same source of truth and timing |
+| Error/retry | Readable current message and action | Same retry behavior; never hide the failure |
+
+## 14. Reusable component architecture
+
+### 14.1 Layer responsibilities
+
+**Primitives (`ui/`):** generic typography, buttons, icons, avatar, layout and accessible controls. Do not add health logic here. Do not globally restyle a primitive when locked consumers use it.
+
+**Patterns (`patterns/health`, `patterns/profile`, `patterns/widgets`, appropriate domain folders):** reusable meaningful card/row compositions. Prefer existing modules; extract Home-specific patterns only when needed. A component’s home follows its domain, not the fact it has rounded corners.
+
+**Screens:** own route context, current selectors, orchestration and handlers. They pass explicit data and callbacks into patterns. Existing hooks keep deriving eligibility/state.
+
+**Widget Library:** imports those same modules and provides explicit fixtures. Its local demonstration state must not mutate real consultation data or replace production handlers.
+
+No generic schema-driven dashboard, new component framework, state management library or UI dependency is required. Do not add a universal `Card` with dozens of boolean props to conceal unrelated domain semantics.
+
+### 14.2 Component inventory
+
+“Extend” means a narrowly scoped approved variant; existing locked consumers keep their current default. “New/extract” means proposed work, not code already created.
+
+| Pattern | Strategy | Production use | Required library variants |
+|---|---|---|---|
+| `StartConversationCard` | Extract current Home intro/prompt composition | New Home | 1/3 prompts, long prompt, completion context |
+| `ContinueConversationCard` | Extract current returning hero; evaluate shared layout with FocusCard | Returning Home | Summary/no summary, pending question, long topic |
+| `NextStepsList` and `NextStepRow` | Extract current Home action list | Returning Home | 0/1/3 items, long labels, existing disabled state if supported |
+| `TodayHabitsCard` | Extract `StateEstablished` habit composition | Established Home | 0/1/many habits, some/all complete |
+| `IntakeCompletionCard` | Reuse; avoid changing intake UI | Home | Existing complete/incomplete states, truthful mixed completion example |
+| `HealingPlanCard` | Reuse or explicit body-only variant | Home | Locked, day 1, active, long focus |
+| `HealthDestinationCard` | Extract/extend HomeKit tile composition | Home | My Health/Family, count/no metadata, narrow layout |
+| `ReportSummaryCard` | Extract Home reports link if distinct enough | Home | Available metadata, missing name/date, long name |
+| Recommendation item/group | Reuse `HomeKit`/commerce pattern where safe | Home | 0/1/multiple existing eligible products, long reason |
+| `FocusCard` | Reuse/extend | My Health | With/without summary, placeholder flag |
+| `PlanProgressCard` | Reuse/extend | My Health | Active, complete, zero habits |
+| `CheckInCard` | Reuse/extend | My Health | Every actual state from current props |
+| `QuickLinks` | Reuse/extend | My Health records collection | Zero/large counts, large text |
+| `FamilyProfileCard` or profile row | Extract meaningful overview composition | Family | Self/dependent/partner/custom relationship/long name |
+| Add-family entry | Extract or reuse current action composition | Family/Home where semantics match | Available/locked/full |
+| `ProfileBanner` / `ProfileSwitcherList` | Preserve by default; demonstrate context | Existing profile surfaces | Self/other/active; no changed switching |
+| `ConsultationRow` | Reuse/extend | Records | Answered/in-progress, lab-informed, long title |
+| `NoteRow` | Reuse/extend | Records | Provider brief/ordinary note/untitled/long preview |
+| `LabReportRow` | Extract current ListRow composition if reused | Records | Missing metadata, many values, long name |
+| `BriefDocument` | Reuse with screen-safe presentation | Visit Notes | Editable/read-only, sparse/long/urgent; print remains protected |
+| Document section/layout primitive | Extract only if useful in BriefDocument | Visit Notes | Heading/body/list, editable field, missing section data |
+| `AppointmentFollowUp` | Keep logic, scoped presentation only | Visit Notes | With/without date, current actions |
+| `ContentCard` | Reuse/extend | Hub/library | Content types, reason/no reason, long title |
+| `EmptyState` | Reuse with approved presentation | Health/records/notes | Each real empty reason/action, no invented capability |
+| Scroll boundary treatment | Reuse concept; scoped variant only if needed | New in-scope bodies | Active/inactive/reduced transparency/unsupported fallback |
+
+Do not build every proposed abstraction automatically. First compare current props and usage. If `FocusCard` already expresses the required behavior, extend it narrowly instead of creating a second equivalent card. Conversely, a visual resemblance alone is not enough to combine components with different actions.
+
+### 14.3 Pattern contract
+
+Each reusable card/row has:
+
+- A typed data contract using current values, IDs and enums.
+- Explicit event callbacks; no label-to-action keyword routing.
+- A meaningful accessible name and heading relationship.
+- Documented empty/optional slots, minimum/long content and disabled semantics.
+- Clear controlled versus local presentation state.
+- Stable identity so rerenders do not reset fields, selection or focus.
+- A CSS Module using semantic tokens and locally scoped selectors.
+- A barrel export where consistent with the current folder conventions.
+- A Widget Library entry importing the production component.
+
+Keep pure formatting local where appropriate, but do not derive new clinical priority or completion. No card should call the store on mount to create notes, mark reports read, advance intake or schedule a reminder.
+
+### 14.4 Shared-consumer protection
+
+Before editing a reused pattern, list every consumer. If chat, intake, headers or onboarding use it, keep the default unchanged and prefer a deliberate context variant for the approved body. Do not spread an “overhaul” CSS selector across `.phone-root` or override every `button`/`section` globally.
+
+If isolation would require invasive branching, leave that shared pattern as-is for this phase. An imperfectly matched existing control is safer than breaking a locked journey. Record the mismatch for later review rather than hiding a broad change inside a component refactor.
+
+## 15. Widget Library
+
+### 15.1 Required role
+
+The existing library at `/internal/wid?flow=v2` remains the place to inspect shared components. Every new card must appear there using the actual production module. A screenshot or a separately styled sample is not sufficient.
+
+Preserve the current chat showcase and its composer. Add a non-product catalogue area or section for Home/health/profile/record/document patterns, while keeping the existing global toolbar/header unchanged. Catalogue controls may live inside the library body. They must not become product navigation or require a new route.
+
+### 15.2 Entry anatomy
+
+Each entry should show a plain component name, a one-sentence purpose, the screen(s) using it, representative fixtures and the same action states seen in the product. Include its source path and token roles in internal documentation, not in patient-facing UI.
+
+For interactive specimens, callbacks update local fixture state or report the intended action/parameters in the internal sample. Never import the WidgetLab keyword router into product code, and never trigger real booking, saving, shopping, subscription or notification behavior from a casual specimen click.
+
+### 15.3 Coverage dimensions
+
+For each new card, cover default, sparse content, long content, narrow width, largest text, keyboard focus and applicable pressed/selected/disabled/loading/error states. Do not invent unsupported states simply to fill a catalogue matrix: a static note preview does not need a loading spinner if it never loads independently.
+
+Preserve mock/placeholder labeling. A lab fixture is not real medical information and must not be silently promoted into a production recommendation. Keep scenario examples deterministic and profile-specific.
+
+### 15.4 Completion rule
+
+A new card is incomplete until its shared implementation, product use, Widget Library specimens, state notes and action contract all exist. Screens must import it rather than carrying a subtly different local copy. Review library and screen together; the library proves component coverage, while the screen proves composition.
+
+The Design System route should document primitive/token roles when new roles are adopted. It need not duplicate every full widget. Widget Library owns contextual examples; Design System owns reusable rules and foundational controls.
+
+## 16. Behavior preservation
+
+### 16.1 What UI-only means here
+
+A change is eligible when it changes presentation, composition or a local disclosure of already available nonessential information without changing what the action means. Moving a current card, extracting markup, aligning metadata or adding an accessible label to an in-scope new control can fit. Changing a question, gate, route parameter, persistence operation, priority algorithm or required action sequence does not.
+
+Local presentation state is not automatically harmless. A new accordion can hide an essential action; a new tab can reset a form; a remount can clear a draft. Keep the base design simple enough that these risks are unnecessary.
+
+### 16.2 Protected implementation areas
+
+| Area | Default rule |
+|---|---|
+| `src/shared/engine/` | No changes |
+| `src/shared/store/`, selectors and slices | No behavior or schema changes |
+| Clinical/intake/consent data and shared copy | No wording, sequencing or eligibility changes |
+| `navigation/registry.ts`, nav store, transitions | Preserve route IDs, stacks, params and transitions |
+| `useHomeData`, `useHomeView`, `useHubData`, account/add-member gates | Preserve derivation and handlers |
+| Onboarding, Complete Intake, chat, Composer and ChatLauncher | Locked visual/behavior boundary |
+| `mobile.tokens.css`, skin, shared primitives | No global changes as a shortcut; explicit scope review first |
+| Client app/shell/top-nav | Excluded |
+| `versions/v1/`, manifest and saved contracts | Excluded |
+
+Some presentational extraction may occur in a screen file that also contains handlers. Review the diff at statement level: JSX composition can change while the handler bodies, conditions and effects remain identical. If a desired visual arrangement needs a behavior change, move that item into deferred scope.
+
+### 16.3 Action-equivalence ledger
+
+| Existing action | Required parity evidence |
+|---|---|
+| Home launcher | R01 still uses its returning scripted path; other scenarios keep current active/openAsk behavior |
+| Continue mid-intake | Same conversation, current question, answer mode and draft |
+| Continue existing conversation | Same selected target, unarchive/set-active effects and openAsk call |
+| Starter prompt | Same prefill string and entry behavior; no automatic new submission |
+| Complete Intake | Same intakeDone-dependent destination/action |
+| My Health/Family tile | Same route and back-stack behavior |
+| Healing Plan | Same `journey` gate and current destination |
+| Check-in | Same `mode: 'checkin'`, current profile and eligibility |
+| Toggle habit | Same habitId/profileId/date and toggled value |
+| Add family | Same `add(false)` behavior, full/locked handling and limit |
+| Open family details | Same `profileId`; no implicit profile switch |
+| Open record | Same record-specific ID and editor/detail destination |
+| Add labs | Same active-profile eligibility and `documents` gate where currently applied |
+| Save Visit Notes | Same create/update decision and note fields |
+| Download PDF | Same persist-before-preview operation and briefNoteId |
+| Schedule follow-up | Same date calculation, notification copy/deep link and dismissal |
+| Product action | Same eligible productId and existing destination |
+
+Record the baseline once using representative seeded data. New handlers should normally be passed through, not reconstructed inside the new card. Comparing appearance alone does not prove behavior parity.
+
+### 16.4 Preserve data meaning
+
+Do not conflate absent medication information with an explicit “none,” unconfirmed labs with reviewed labs, early guidance with completed guidance, a saved note with a draft, or profile basics with extended intake completion. Visual state labels should reflect the existing fields exactly.
+
+No new data model, migration, API request, AI provider, storage key or cross-profile aggregation. The prototype remains a frontend with scripted/mock AI behavior. The interface must not imply newly available intelligence.
+
+### 16.5 Non-blocking implementation
+
+Build one vertical slice at a time. Components can be reviewed with local fixtures before their screens are changed. Existing screens keep working while a slice is under review. Do not turn the overhaul into a prerequisite for fixing unrelated bugs or continuing existing product work.
+
+If provenance fields are missing, omit the optional provenance enhancement. If a new icon is unavailable, use a suitable existing icon. If blur is slow, ship the fallback. If a shared pattern cannot safely be restyled, preserve it. None of these should stall Home composition or force new infrastructure.
+
+Keep PRs/commits scoped to one phase or coherent slice. Revert the specific presentation patch if needed; do not reset unrelated user work or revert the whole repository. No data migration should be required for rollback.
+
+### 16.6 Shared `/` and `/internal` surface
+
+`VERSIONS.md` explicitly states that Version 2 `src` is shared with the client demo. Default proposal: build on an isolated branch and review locally at `/internal`. Do not merge/deploy while the design is under review. This permits progress without claiming runtime isolation that does not exist.
+
+If a deployed internal-only preview is later required, agree on a scoped presentation isolation approach before shipping it. Do not add a global flag or freeze `versions/client` as a side effect; the frozen client snapshot is separately requested work. Continue to leave `ClientApp`, `ClientShell` and `ClientTopNav` untouched.
+
+## 17. States and content ranges
+
+### 17.1 Coverage matrix
+
+| Surface | Required states |
+|---|---|
+| Home | New, returning, established, mid-intake, no summary, due check-in, zero reports, recommendations absent/present |
+| My Health | Loading, empty, populated, refresh, plan complete, other profile |
+| Healing Plan | Locked/currently gated entry, active, no habits, some/all complete, beyond day 90 |
+| Family | Self only, multiple members, add available, add locked, full capacity, custom relationship |
+| Records | Each segment loading/empty/populated, active/other profile, long collection |
+| Visit Notes | No full guidance, unsaved, edited, saved/reopened, urgent priority, PDF, date/no-date follow-up |
+| Labs | No report, partial metadata, unconfirmed/confirmed as currently represented, long values, existing errors |
+| Library | Existing content types, no eligible recommendations, missing optional metadata, long title |
+| Locked surfaces | Sign-in, intake variants, chat start/stream/stop/error/safety/end, composer keyboard/focus |
+
+### 17.2 Useful existing scenario seeds
+
+Use the current `src/shared/scenarios` data and visible scenario picker, not invented replacements. Reconfirm seed contents at P0 because the working tree is evolving.
+
+| Seed | Main purpose |
+|---|---|
+| S01 | New-user/sign-in boundary regression |
+| S02 | Signed-up/onboarding boundary; do not assume it is already post-intake |
+| S03 | Basic-details/intake-related entry; verify actual seed and visible route before use |
+| R01 | Returning Home, continuation and special launcher path |
+| S04 | First completed answer and downstream actions |
+| S05 / S06 | Last free/exhausted trial gates |
+| S07 / S08 | Follow-up due / labs reviewed with established plan |
+| S09 / S10 | Family context / individual-plan family gate |
+| S11 | Empty My Health |
+| S12 / S13 | Escalation and safety compatibility |
+| S14–S18 | Representative age/stage/pregnancy/male journey compatibility |
+| S19 / S22 | Fact confirmation and provider-review ending |
+| S20 / S21 | Dependent and adult-partner intake compatibility |
+| S23 | Early guidance versus completed guidance |
+| S24 / S24b | Visit Notes full-guidance and insufficient-detail cases |
+
+A seed name is not proof that every state is exercised. Add only necessary UI fixtures for missing presentation ranges; do not rewrite the clinical seed to make a prettier screenshot.
+
+### 17.3 Content stress ranges
+
+Use one-word and long names, two-to-four-line topics, long relationship labels, missing summaries, long prompts, zero/one/three next steps, zero/five family profiles according to the actual limit, zero/many records, multi-line medications with doses, and long provider-question lists. Include labels at approximately twice their English length for expansion checks without adding localization infrastructure.
+
+Test default and all supported in-app text sizes, narrow phone width, existing 393×852 frame, wider phone and short keyboard-reduced height. Do not fit long content by reducing font size, hiding an action or assuming a fixed card height.
+
+## 18. Accessibility and responsiveness
+
+### 18.1 Readability and interaction
+
+Use WCAG 2.2 AA as the minimum and retain the project’s 7:1 target for readable text and 48px comfortable hit targets. Those stronger project targets are not a claim that AA universally requires those exact numbers. Measure actual effective colors after skin overrides, alpha compositing and background effects.
+
+Provide text alongside semantic color and use clear names for icon controls. Keep headings in logical order. Use lists for collections, buttons for actions and appropriate links for navigation according to existing conventions. Card boundaries can be subtle while the action itself remains recognizable.
+
+Source: [WCAG 2.2](https://www.w3.org/TR/WCAG22/). Existing accessibility shortcomings on locked surfaces should be recorded separately instead of silently broadening this UI task.
+
+### 18.2 Focus and keyboard
+
+The new body must work with keyboard navigation in the browser prototype. Keep a visible focus outline, logical order and no nested interactive elements. A large clickable card must not trap focus or activate when its internal checkbox is used.
+
+Focused content must remain visible above the fixed launcher/composer and below any header. Use correct scroll clearance in the body without changing those locked elements. Retain current modal focus management and return focus to the invoking control. See [W3C Focus Not Obscured](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum).
+
+### 18.3 Text scaling and layout
+
+At large text, rows grow, destination pairs stack and metadata wraps. Avoid fixed heights except where the existing control contract requires them, and never clip action labels. Screens with long documents use a readable single column; no phone-sized split view.
+
+Respect the phone frame and safe-area behavior already present. Responsive changes apply to the prototype’s in-scope body, not a new desktop product. The web app under `src/apps/web` remains separate scope.
+
+### 18.4 Motion/transparency preferences
+
+Every optional effect has an immediate/opaque fallback. Reduced motion must not remove status feedback. Reduced transparency must not expose text to a busy background. Where a preference is unsupported, the default design still meets readability and interaction requirements.
+
+## 19. Performance and failure handling
+
+### 19.1 Performance approach
+
+Record a baseline on the same browser/device and representative scenarios before changing the UI. Compare Home scroll, record scroll, opening a note and typing in the locked composer. The goal is no material regression; absolute performance budgets should be set from this baseline rather than fabricated in a planning document.
+
+Avoid per-card backdrop filters, full-screen animated gradients, large new imagery, repeated measured layout in scroll handlers and new dependencies. Keep icon imports behind the current adapter. Stable component keys and lightweight presentational props matter more here than premature memoization.
+
+If scroll or input degrades, remove the optional effect first. The app must remain usable and visually coherent without blur. Do not compensate with longer loading animations or a delay before showing the screen.
+
+### 19.2 Loading and failures
+
+Use existing loading/error flags and the same retry actions. Static skeletons match the eventual geometry where already used. Do not invent network states in a purely local card or show an animated “AI working” indicator merely during navigation.
+
+Preserve current validation and error text. A new card should not swallow an exception, disable an action permanently or hide a failed upload behind a completed-looking surface. When optional data is absent, omit that slot; when an actual action fails, show the current failure state.
+
+### 19.3 Graceful partial delivery
+
+Home can ship to internal review while supporting screens remain visually unchanged. The common components must tolerate that mixed period without changing global styles. A missing optional polish item does not justify blocking an otherwise complete and behaviorally correct slice.
+
+## 20. Phased build backlog
+
+The companion [program.md](program.md) contains the overall estimate and review gates. The tasks below are future build instructions, not work performed in this planning turn.
+
+### P0 — Baseline and boundaries · 1–2 focused days
+
+**Inputs:** approved plan, current working tree, existing scenarios.
+
+- Capture locked sign-in, intake, headers/greeting, chat/composer and shared consumer regions in representative states.
+- Record effective token values and load order; settle current skin as baseline without an incidental palette migration.
+- Inventory every action and visibility predicate for the first Home slice.
+- Record current checks and distinguish pre-existing failures.
+- Map component consumers and identify shared print/chat/intake risks.
+- Choose local/branch review and document the shared client-surface implication.
+
+**Exit:** boundary manifest, action ledger, scenario list and baseline evidence. No new behavior. Avoid turning a broad audit into a prerequisite for all design work; investigate only material risks to the requested scope.
+
+### P1 — Composition and visual agreement · 2–3 focused days
+
+- Prepare new/returning/established Home compositions using actual scenario content.
+- Place unchanged header, greeting and launcher in every composition.
+- Compare continuation, supporting actions and destinations at real phone size.
+- Demonstrate one card, one list row, one document section and one family row using current tokens.
+- Include narrow/large-text layouts and opaque/reduced-motion variants.
+- Assemble a small dated reference board from the catalogue, with a specific lesson for each capture.
+- Resolve optional Home Visit Notes shortcut and any nonclinical label clarification.
+
+**Exit:** one selected composition and a component/state list. Do not polish every secondary screen before the Home hierarchy is agreed.
+
+### P2 — Shared patterns and catalogue · 2–3 focused days
+
+- Reuse compatible patterns; extract Home-specific cards with typed props and callbacks.
+- Keep locked shared defaults unchanged; add scoped presentation variants only where justified.
+- Create Widget Library specimens for every new card and each material state.
+- Use existing spacing/type/color/icon roles and document any proposed alias.
+- Check keyboard semantics, target size, long content and largest text on specimens.
+
+**Exit:** reusable modules and their real library examples. No production screen should contain an unregistered new card after this phase’s integration work.
+
+### P3 — Home vertical slice · 2–3 focused days
+
+- Replace state body composition only; preserve Home hooks/effects/handlers, greeting and launcher.
+- Integrate all three state layouts, retaining current conditions and available actions.
+- Verify mid-intake resume, R01 launcher branch, check-in, habits, family, reports and product paths.
+- Inspect first viewport and bottom reachability at default/largest text and keyboard height.
+- Compare locked regions before/after and check shared chat/intake consumers.
+
+**Exit:** concrete Home review with screenshots and action-equivalence evidence. If a composition needs changed logic, revise the composition or defer that part.
+
+### P4 — My Health and Healing Plan · 2–3 focused days
+
+- Apply the current-work/records/educational-content hierarchy.
+- Reuse Focus, PlanProgress, CheckIn and QuickLinks patterns with scoped styles.
+- Preserve empty/loading/refresh/completed behavior and plan-day actions.
+- Verify record counts and IDs for self and another active profile.
+- Add any new variants to the library in the same slice.
+
+**Exit:** empty/populated/due/completed hub and plan states with current behavior intact.
+
+### P5 — Family and profile context · 1–2 focused days
+
+- Introduce the shared profile overview row/card with readable identity and relationship.
+- Preserve details navigation versus switching.
+- Retain add-member available/locked/full behavior and current capacity.
+- Limit profile details changes to approved non-form presentation.
+- Check dependent, partner, custom relationship and long-name fixtures.
+
+**Exit:** improved overview with no changed forms, consent, membership, active profile or record access.
+
+### P6 — Records, Visit Notes and lab presentation · 2–4 focused days
+
+- Harmonize consultation/note/report rows without changing segments, selectors or sorting.
+- Present Visit Notes as one document, keeping section order and edit semantics.
+- Preserve source IDs, save/update/PDF/follow-up sequencing.
+- Scope screen styles to avoid accidental print/PDF changes.
+- Verify full/insufficient guidance, saved/reopened notes, urgent priority and long documents.
+- Improve report reading surfaces without new lab interpretation or upload behavior.
+
+**Exit:** retrievable records and usable notes with correct persistence/export behavior. If shared PDF styling cannot be isolated, retain the existing document styling and ship the safe surrounding improvements.
+
+### P7 — Supporting body consistency · 1–2 focused days
+
+- Apply approved spacing and card vocabulary to library/content, booking information and selected settings bodies.
+- Preserve existing forms, gates, payments, legal copy and notification logic.
+- Keep shared chat widget defaults unchanged.
+- Update catalogue coverage for any newly extracted card.
+
+**Exit:** consistent supporting surfaces without expanding product scope. Unrelated feature work remains deferred.
+
+### P8 — Integration and acceptance · 2–3 focused days
+
+- Review the full approved surface set and locked boundaries in one batched pass.
+- Check large text, keyboard, reduced motion/transparency, long content and cross-profile cases.
+- Run required build/lint/type/journey/version checks, compare against baseline.
+- Measure representative scroll/input behavior and remove effects that regress it.
+- Fix material issues in one batch, then confirm the fixes in a bounded second pass.
+- Record library completeness, known limitations, diff scope and per-phase rollback.
+
+**Exit:** reviewable internal result. Acceptance is not automatic permission to deploy to `/`.
+
+### PX — Optional chat presentation · 2–4 additional focused days
+
+Only after explicit inclusion of chat presentation. Start with §6’s comparison, enumerate exact components to change, preserve all intake/composer/header defaults, and verify every affected answer/stream/safety state. Keep this a separate slice so declining it does not block the rest of the overhaul.
+
+**Base estimate:** 15–25 focused working days, excluding review wait and unrelated defects. Home becomes reviewable at P3. PX is additional. Re-estimate after P0 using the actual shared-style and baseline-test findings.
+
+## 21. Verification and acceptance
+
+### 21.1 Existing checks
+
+During implementation, run the repository’s existing commands appropriate to the slice, followed by the complete set before final acceptance:
+
+- `npm run typecheck`
+- `npm run lint`
+- `npm run test:journeys`
+- `npm run test:versions`
+- `npm run build`
+
+These are planned verification steps, not tests claimed to have run during this documentation-only task. Existing journey/version checks cover important behavior but do not prove UI affordance quality or every handler binding. Pair them with the action ledger and visible scenario inspection.
+
+Add focused behavioral checks only if extraction creates a material untested risk, such as wrong record ID or save action. Do not create tests that merely assert a class name, mirror JSX or freeze every spacing choice.
+
+### 21.2 Concrete acceptance criteria
+
+| Criterion | Evidence |
+|---|---|
+| Locked surfaces unchanged | Matched-state before/after captures and affected-consumer review |
+| No changed domain logic | Diff shows no engine/store/data/schema/gate changes; handler ledger matches |
+| Correct continuation | Same conversation/question before and after for R01 and mid-intake |
+| Clear Home priority | Reviewers can identify the primary existing task without explanation |
+| Existing actions retained | Content movement ledger accounts for every action |
+| Profile correctness | Self/dependent/partner action traces keep correct IDs and data |
+| Correct notes behavior | Create/update/reopen/PDF/follow-up results match baseline |
+| Component reuse | New card modules are imported by screens and library, with no duplicate specimen markup |
+| Tone and hierarchy | New decorative cards use token-based flat fills with no ornamental border/shadow |
+| Accessible interactions | Keyboard, focus visibility, labels, targets, contrast and text scaling checked |
+| Graceful effects | Reduced-motion/transparency and unsupported-blur variants remain usable |
+| No performance regression | Same-device comparisons of representative scroll/input paths |
+| Release scope understood | Explicit acknowledgement that shared V2 affects client after merge/deploy |
+
+### 21.3 Suggested usability review
+
+Use a small task-based review with representative users or stakeholders; it is a design check, not a claim of statistical validation. Ask them to continue a conversation, find a saved note, find a lab report, identify the active person and locate the Healing Plan.
+
+Watch where they hesitate, select the wrong item or misunderstand status. Compare with the baseline, rather than declaring an unmeasured percentage improvement. A tentative target is that the main Home task is understood within a few seconds and existing destinations require no extra steps. Do not add analytics or collect health data merely to evaluate the redesign; moderated observation is enough for this phase.
+
+## 22. Risks and deferred decisions
+
+| Risk/decision | Recommended treatment | What can proceed meanwhile |
+|---|---|---|
+| Chat wording ambiguity | Keep locked; PX separate | All approved surrounding screens |
+| Design document versus effective skin | Confirm effective skin baseline; document separately | Source mapping and compositions using current tokens |
+| Shared client surface | Local branch/internal review, no automatic deploy | Full local design/build |
+| Shared styles leak into intake/composer | Explicit variants, consumer map, no global overrides | Isolated patterns |
+| 100% basics versus incomplete extended intake | Preserve predicates; review truthful labels separately | Card layout and existing action |
+| Missing source metadata | Omit unsupported provenance UI | Records/notes presentation |
+| Shared BriefDocument print styling | Screen scope or retain existing document styling | Record rows and modal body organization |
+| Dense phone layout | Vertical hierarchy, natural height, large-text stacking | Core components |
+| Expensive blur | Opaque fallback; remove optional effect | Entire functional layout |
+| Existing working-tree changes | Establish baseline and avoid broad resets | Planning and narrowly scoped future slices |
+| Prior widget/ending plans | Keep historical plans separate; do not execute them through this revamp | UI-only scope |
+
+### 22.1 Optional ideas explicitly outside the base plan
+
+Daily AI briefings, generated next-best actions, symptom trend graphs, risk scoring, new citation infrastructure, new search/filter/pinning, cross-device sync, family invitations, new reminder automation, collaborative notes, autonomous care tasks and clinical-content revision are separate product work. They may be valuable later, but none is required to achieve this UI uplift.
+
+### 22.2 Small review decisions
+
+The plan can be reviewed now without answering a questionnaire. The choices that matter before implementation are:
+
+1. Accept or adjust the continuation-first Home hierarchy.
+2. Confirm the current effective design skin as the visual baseline.
+3. Keep chat locked as proposed, or explicitly include a later PX presentation study.
+4. Decide whether a Home Visit Notes shortcut is useful, provided it preserves the existing records path.
+5. Confirm the initial screen breadth: P0–P6 first, with P7 as the supporting consistency pass.
+
+None of these authorizes code changes in the present planning task. They are review points for the next implementation request.
+
+## 23. Review checklist
+
+- [ ] Sign-in, intake, headers, greeting/date/time, chat and composer boundaries match the request.
+- [ ] Home’s three existing states each have a useful and recognizable next action.
+- [ ] All existing paths stay available without new mandatory steps or waiting.
+- [ ] My Health feels organized, Family makes person context clear, and Visit Notes read like documents.
+- [ ] The reference adaptations are specific and use Oracle’s design system rather than competitor branding.
+- [ ] New cards are components and appear as the same implementation in the Widget Library.
+- [ ] Flat tonal color and subtle effects preserve readability and interaction clarity.
+- [ ] No new AI behavior, clinical logic, data schema or permissions are hidden in the UI work.
+- [ ] Each phase has a reviewable output, parity evidence and a safe rollback.
+- [ ] Client/shared-source implications are understood before any later release.
+
+The proposed first build milestone is a complete, reviewable Home slice with its reusable components and library examples. The rest of the program extends that accepted language to existing health, family and record surfaces while preserving the product’s behavior.
 

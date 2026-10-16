@@ -1,0 +1,26 @@
+.root { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+
+.prompt {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 12px 12px 12px var(--space-4);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface-field-paper);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+
+.prompt:active { background: var(--surface-field-press); }
+.prompt:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.onLift .prompt { background: color-mix(in srgb, var(--surface-field-lilac) 60%, var(--white)); }
+.onLift .prompt:active { background: var(--surface-field-lilac); }

@@ -1,6 +1,6 @@
 .root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; container-type: size; }
 
-.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent); display: grid; align-content: start; gap: var(--space-5); padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--space-6) + 56px); }
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent); display: grid; align-content: start; gap: var(--space-6); padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--space-6) + 56px); }
 /* Bottom padding clears the 48 px bottom fade, so the last card can scroll fully into view. */
 
 /* Heading sits a little below the lifted backdrop; cards follow, the composer is docked below. */

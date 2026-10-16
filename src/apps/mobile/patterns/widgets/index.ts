@@ -20,3 +20,13 @@ export * from './HealingPlanCard';
 export * from './IntakeSectionHeader';
 export * from './PolicyUpdateConsent';
 export * from './HealingPlanSection';
+export * from './ProgressHairline';
+export * from './HomeSectionLabel';
+export * from './LinkStatusCard';
+export * from './DestinationTilePair';
+export * from './RecommendationCard';
+export * from './PrimaryIntentCard';
+export * from './PromptStarterList';
+export * from './NextIntentRow';
+export * from './TodayHabitsCard';
+

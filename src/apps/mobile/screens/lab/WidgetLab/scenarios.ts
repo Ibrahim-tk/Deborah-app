@@ -9,7 +9,8 @@ export type WidgetKind =
   | 'namedReasons' | 'namedReasonsSupplements'
   | 'scale' | 'mood' | 'answer' | 'product' | 'slots'
   | 'upload' | 'tip' | 'prep' | 'brief' | 'emergency'
-  | 'phone' | 'intakeCompletion' | 'healingPlan' | 'healingPlanLocked' | 'intakeSection' | 'policyUpdate' | 'healingSection';
+  | 'phone' | 'intakeCompletion' | 'healingPlan' | 'healingPlanLocked' | 'intakeSection' | 'policyUpdate' | 'healingSection'
+  | 'primaryIntent' | 'promptStarters' | 'nextIntents' | 'todayHabits' | 'linkStatus' | 'destinationTiles' | 'recommendation';
 
 export interface LabMessage {
   id: string;
@@ -57,6 +58,13 @@ export const SCENARIO: LabMessage[] = [
   d('Complete Intake uses section headers like this.', 'intakeSection', 'IntakeSectionHeader'),
   d('Plan detail sections:', 'healingSection', 'HealingPlanSection'),
   d('When terms update, returning users see this.', 'policyUpdate', 'PolicyUpdateConsent'),
+  d('Home primary intent (continue / start).', 'primaryIntent', 'PrimaryIntentCard'),
+  d('Starter prompts on Home.', 'promptStarters', 'PromptStarterList'),
+  d('Returning next steps.', 'nextIntents', 'NextIntentList'),
+  d('Established habits for today.', 'todayHabits', 'TodayHabitsCard'),
+  d('Status link card (Reports / Continue).', 'linkStatus', 'LinkStatusCard'),
+  d('My Health · Family destinations.', 'destinationTiles', 'DestinationTilePair'),
+  d('Personalised recommendations.', 'recommendation', 'RecommendationCard'),
 ];
 
 /** Typed message → the widget Deborah answers with (keyword match; the fallback asks a yes/no). */

@@ -1,10 +1,11 @@
 /** On-the-fly chat widgets (also staged in context at /wid). Same patterns as V2 Conversation. */
 import { useState } from 'react';
-import { medicinesData } from '@shared/data';
+import { findProduct, medicinesData } from '@shared/data';
 import {
   BookDeborah,
   ChoicePills,
   ConfirmCard,
+  DestinationTilePair,
   FullChoicePills,
   FullChoicePillsGrid,
   HealingPlanCard,
@@ -13,18 +14,25 @@ import {
   InlineConsent,
   IntakeCompletionCard,
   IntakeSectionHeader,
+  LinkStatusCard,
   MoodScale,
   NamedReasonList,
+  NextIntentList,
   PhoneField,
   PillDescribeField,
   PolicyUpdateConsent,
+  PrimaryIntentCard,
+  PromptStarterList,
   QuestionChoices,
+  RecommendationCard,
   ReminderCard,
   ScaleCheck,
+  TodayHabitsCard,
   UploadCard,
   type NamedReason,
   type PhoneValue,
 } from '@mobile/patterns/widgets';
+import { Button } from '@mobile/ui';
 import { Section } from '../Section';
 import { Grid, Specimen, Variant } from '../Specimen';
 import styles from './sections.module.css';
@@ -305,6 +313,31 @@ export function WidgetPatterns() {
         </Specimen>
         <Specimen name="PolicyUpdateConsent" path="patterns/widgets/PolicyUpdateConsent" note="Returning-user re-consent when legal version bumps.">
           <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={noop} />
+        </Specimen>
+        <Specimen name="PrimaryIntentCard" path="patterns/widgets/PrimaryIntentCard" note="Home hero — continue / start / complete profile.">
+          <PrimaryIntentCard titleId="ds-intent" title="Sleep and night waking" body="Ready to pick up where you left off." kicker="Continue with Deborah" kickerIcon="chat">
+            <Button fullWidth onClick={noop}>Continue</Button>
+          </PrimaryIntentCard>
+        </Specimen>
+        <Specimen name="PromptStarterList" path="patterns/widgets/PromptStarterList" note="Full-width starter rows (not chips).">
+          <PromptStarterList items={[{ label: 'I’ve been feeling tired', prefill: 'x' }, { label: 'Help me with sleep', prefill: 'y' }]} onPrompt={noop} />
+        </Specimen>
+        <Specimen name="NextIntentList" path="patterns/widgets/NextIntentRow" note="Returning-user next steps.">
+          <NextIntentList items={[{ key: 'a', icon: 'bell', title: 'Check in with Deborah', sub: 'How things are going', onPress: noop }]} />
+        </Specimen>
+        <Specimen name="TodayHabitsCard" path="patterns/widgets/TodayHabitsCard" note="Established Home — today’s habits.">
+          <TodayHabitsCard day={18} habits={[{ id: '1', text: 'Cool bedroom', done: true }, { id: '2', text: 'Magnesium', done: false }]} onToggle={noop} />
+        </Specimen>
+        <Specimen name="LinkStatusCard" path="patterns/widgets/LinkStatusCard" note="Tonal link/status row (Reports, Continue).">
+          <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta="2 lab reports" onPress={noop} />
+        </Specimen>
+        <Specimen name="DestinationTilePair" path="patterns/widgets/DestinationTilePair" note="My Health · Family destinations.">
+          <DestinationTilePair tiles={[{ tone: 'linen', lead: 'health', title: 'My Health', meta: 'Profile 80%', progress: 0.8, onPress: noop }, { tone: 'rose', lead: 'family', title: 'Family', meta: '2 profiles', onPress: noop }]} />
+        </Specimen>
+        <Specimen name="RecommendationCard" path="patterns/widgets/RecommendationCard" note="Personalised product rail on Home.">
+          {findProduct('genesis-gold') && (
+            <RecommendationCard items={[{ product: findProduct('genesis-gold')!, reason: 'Fits your sleep focus' }]} onShop={noop} />
+          )}
         </Specimen>
       </Grid>
     </Section>

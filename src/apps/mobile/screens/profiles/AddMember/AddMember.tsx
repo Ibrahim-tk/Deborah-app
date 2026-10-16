@@ -10,7 +10,7 @@
  * male health is in scope." Prototype: no separate login; medical-advocate radios for consent;
  * "Male" is offered as sex at birth but the engine has no male-specific content.
  */
-import { useState } from 'react';
+import { Fragment, useState, type ReactNode } from 'react';
 import { consentDoc } from '@shared/data';
 import { ageBandFor, ageGroupFor } from '@shared/engine';
 import { useAppStore } from '@shared/store';
@@ -21,6 +21,18 @@ import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
 import { useMemberForm } from './useMemberForm';
 import styles from './AddMember.module.css';
+
+/** Split `{name}` placeholders and wrap the person name at medium weight (≤500). */
+function withName(template: string, who: string): ReactNode {
+  const parts = template.split('{name}');
+  if (parts.length === 1) return template;
+  return parts.map((part, i) => (
+    <Fragment key={i}>
+      {i > 0 && <strong className={styles.name}>{who}</strong>}
+      {part}
+    </Fragment>
+  ));
+}
 
 type Relation = Exclude<Profile['relationship'], 'self'>;
 type Sex = NonNullable<Profile['sexAtBirth']>;
@@ -126,14 +138,14 @@ export default function AddMember() {
           <Select label="Sex at birth" options={SEXES} value={values.sex} onChange={(sex) => set({ sex })} />
           {!underThirteen && (
             <div className={styles.consent} data-placeholder>
-              <p className={styles.consentBody}>{body.replaceAll('{name}', consentName)}</p>
+              <p className={styles.consentBody}>{withName(body, consentName)}</p>
               <div className={styles.consentChecks} role="group" aria-label="Confirm your authority">
                 {options.map((o) => (
                   <Checkbox
                     key={o.value}
                     checked={consentValue === o.value}
                     onChange={(on) => (on ? setConsent(o.value) : setConsent(''))}
-                    label={o.label.replaceAll('{name}', consentName)}
+                    label={withName(o.label, consentName)}
                   />
                 ))}
               </div>
