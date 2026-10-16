@@ -1,10 +1,10 @@
 /**
  * The onboarding profile steps come from data/intake/healthBasics.json, in order. Each step can carry a
  * `showIf` rule (e.g. gender × age branches); edit the JSON, not code.
- * `age` (number) and `ageGroup` are derived from the birth year so rules can branch.
+ * `age` (number) and `ageGroup` are derived from the date of birth so rules can branch.
  */
 import { healthBasicsData } from '@shared/data';
-import { ageGroupFor, shows, type ShowIfValue } from '@shared/engine';
+import { ageGroupFor, ageOn, shows, type ShowIfValue } from '@shared/engine';
 import type { HealthBasicsStep } from '@shared/types/content';
 
 export type Step = HealthBasicsStep;
@@ -12,12 +12,17 @@ export type Answers = Partial<Record<string, string>>;
 
 export const STEPS: Step[] = healthBasicsData.steps;
 
-const THIS_YEAR = new Date().getFullYear();
+/** Whole years from an ISO date of birth (yyyy-mm-dd). */
+export function ageFromAnswers(a: Answers, now = new Date()): number | undefined {
+  const dob = a.birthDate;
+  if (!dob || !/^\d{4}-\d{2}-\d{2}$/.test(dob)) return undefined;
+  return ageOn(`${dob}T12:00:00`, now);
+}
 
 /** Answers plus what's derived from them (`age`, `ageGroup`). */
 export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
-  if (!a.birthYear) return a;
-  const age = THIS_YEAR - Number(a.birthYear);
+  const age = ageFromAnswers(a);
+  if (age === undefined) return a;
   return { ...a, age, ageGroup: ageGroupFor(age) };
 };
 
@@ -30,7 +35,7 @@ export const visibleStepKeys = (a: Answers) => visibleSteps(a).map((s) => s.key)
 /** True when the profile being set up is for someone else. */
 export const forSomeoneElse = (a: Answers) => a.profileFor === 'dependent';
 
-/** Step title in the right voice ("What year were you born?" or "What year was Emma born?"). */
+/** Step title in the right voice ("When were you born?" or "When was Emma born?"). */
 export function titleFor(s: Step, a: Answers): string {
   const name = a.memberName?.trim() || 'them';
   const t = forSomeoneElse(a) && s.titleOther ? s.titleOther : s.title;

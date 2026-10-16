@@ -32,6 +32,20 @@
 .label { font-size: 13px; }
 .description { font-size: 12px; line-height: 1.35; color: var(--shell-muted); }
 
+/* One-line journey rows: label only, ellipsis if the name is long. */
+.item[data-oneline] {
+  flex-direction: row;
+  align-items: center;
+  padding-block: 7px;
+}
+.item[data-oneline] .label {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .check {
   display: flex;
   align-items: center;

@@ -1,11 +1,11 @@
-/* Palette from the brand swatch: orchid #804A8A, aubergine #3A0353, honey #F8D299, apricot #F59E51. */
+/* Palette: orchid / aubergine over cream (Wispr Flow). Warm fields are dusty rose, not yellow. */
 .root {
   --gs-violet: #804a8a;
   --gs-lilac: #a66bb3;
-  --gs-gold: #f8d299;
-  --gs-apricot: #f59e51;
+  --gs-cream: #e8e0da;
+  --gs-rose: #d4b8c4;
   --gs-plum: #3a0353;
-  --gs-parchment: #fbf6ec;
+  --gs-parchment: #f9f7f5;
   display: none;
   position: absolute;
   inset: 0;
@@ -27,7 +27,7 @@
 }
 .violet { top: -22%; left: -30%; background: radial-gradient(closest-side, var(--gs-violet), transparent); --gs-anim: gs-a 9s; }
 .lilac  { top: -6%;  left: -10%; background: radial-gradient(closest-side, var(--gs-lilac), transparent); --gs-anim: gs-b 11s; }
-.gold   { top: 8%; left: 30%;  background: radial-gradient(closest-side, var(--gs-apricot), color-mix(in srgb, var(--gs-gold) 70%, transparent) 55%, transparent);  --gs-anim: gs-c 13s; }
+.gold   { top: 8%; left: 30%;  background: radial-gradient(closest-side, var(--gs-rose), color-mix(in srgb, var(--gs-cream) 70%, transparent) 55%, transparent);  --gs-anim: gs-c 13s; }
 .plum   { top: -46%; left: 40%;  background: radial-gradient(closest-side, var(--gs-plum), transparent); --gs-anim: gs-d 10s; }
 
 @keyframes gs-a { 50% { transform: translate3d(28%, 14%, 0) scale(1.15); } 100% { transform: translate3d(8%, 26%, 0) scale(0.95); } }

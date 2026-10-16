@@ -3,7 +3,7 @@ import type { StateCreator } from 'zustand';
 import { uid } from '../../utils/ids';
 import { addDays, nowFrom } from '../../utils/dates';
 import { createDefaults } from '../defaults';
-import { BOOKING_REMINDER_BODY, FOLLOW_UP_TITLE } from './notifications';
+import { BOOKING_DAY_AFTER_BODY, BOOKING_REMINDER_BODY, FOLLOW_UP_TITLE } from './notifications';
 import type { AppState, BookingSlice, LabsSlice, NotesSlice, Plan90Slice, SettingsSlice } from '../types';
 
 type Actions = Pick<LabsSlice, 'addReport' | 'updateValue' | 'confirmReport' | 'replaceReport' | 'deleteReport'> &
@@ -108,9 +108,20 @@ export const contentActions: StateCreator<AppState, [], [], Actions> = (set, get
         delivered: false,
         read: false,
       };
+      // Miro Step 4: day-after appointment check-in (same followup deep link as guidance).
+      const dayAfter = {
+        id: uid('n'),
+        title: FOLLOW_UP_TITLE,
+        body: BOOKING_DAY_AFTER_BODY,
+        deepLink: `followup:${b.profileId}`,
+        deliverAt: addDays(b.slot, 1),
+        delivered: false,
+        read: false,
+      };
+      const extra = s.notifications.bookingReminders ? [reminder, dayAfter] : [dayAfter];
       return {
         booking: { bookings: [...s.booking.bookings, b] },
-        notifications: s.notifications.bookingReminders ? { ...s.notifications, queue: [...s.notifications.queue, reminder] } : s.notifications,
+        notifications: { ...s.notifications, queue: [...s.notifications.queue, ...extra] },
       };
     }),
   cancelBooking: (id) =>

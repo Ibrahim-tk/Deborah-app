@@ -23,6 +23,7 @@ const KIND: Record<NoteKind, { icon: IconName; label: string }> = {
   'saved-answer': { icon: 'chat', label: 'Saved answer' },
   'after-visit': { icon: 'calendar', label: 'After my visit' },
   free: { icon: 'edit', label: 'Note' },
+  'provider-brief': { icon: 'pdf', label: 'For my provider' },
 };
 
 export function NoteRow({ title, kind, updated, body, onPress }: NoteRowProps) {

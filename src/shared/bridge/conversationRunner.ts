@@ -59,6 +59,9 @@ function applyAction(action: StoreAction, cid: string): string {
     case 'createPlanFromAnswer':
       s.createPlanFromAnswer(action.profileId, action.goal, action.habits, action.productId, action.status);
       break;
+    case 'scheduleGuidanceFollowUp':
+      s.scheduleGuidanceFollowUp(action.profileId, action.days);
+      break;
     case 'updateProfile':
       s.updateProfile(action.profileId, action.patch);
       break;

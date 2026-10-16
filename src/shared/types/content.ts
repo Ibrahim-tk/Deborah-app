@@ -199,9 +199,11 @@ export interface GuardrailsData {
   };
   medication: { patterns: string[]; body: string; interactionLink: { label: string; url: string }; status: ContentStatus };
   outOfScope: { patterns: string[]; body: string; status: ContentStatus };
+  /** Miro Step 4: enough context but concern not in Deborah’s approved knowledge — team handoff (uncounted). */
+  uncovered: { patterns: string[]; body: string; status: ContentStatus };
   escalation: { triggers: { unresolvedConsultations: number; phrases: string[] }; body: string; status: ContentStatus };
   /** Canonical phrases inserted by the S13 safety test bench. */
-  testPhrases: Record<'emergency' | 'medication' | 'crisis' | 'outOfScope' | 'escalation', string>;
+  testPhrases: Record<'emergency' | 'medication' | 'crisis' | 'outOfScope' | 'escalation' | 'uncovered', string>;
 }
 
 /** F05 check-in conversation copy (conversation/checkin.json). */

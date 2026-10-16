@@ -1,5 +1,5 @@
 /**
- * Saves the onboarding profile (plan P-04). Basics from the form — who it's for, birth year, gender,
+ * Saves the onboarding profile (plan P-04). Basics from the form — who it's for, date of birth, gender,
  * and age×gender intake answers — go straight onto the profile (decision D-4).
  */
 import { ageBandFor, ageGroupFor } from '@shared/engine';
@@ -7,7 +7,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Cycle, Profile } from '@shared/types/domain';
 import type { SexAtBirth } from '@shared/types/health';
 import { nowFrom, uid } from '@shared/utils';
-import { forSomeoneElse, list, type Answers } from './steps';
+import { ageFromAnswers, forSomeoneElse, list, type Answers } from './steps';
 
 const CONSENT_PATH = { child: 'guardian-child', teen: 'guardian-teen', adult: 'adult-agreement' } as const;
 
@@ -37,10 +37,11 @@ export function saveOnboarding(a: Answers): string {
   const s = useAppStore.getState();
   const now = nowFrom(s);
   const at = now.toISOString();
-  const year = Number(a.birthYear);
-  const age = now.getFullYear() - year;
+  const dob = a.birthDate;
+  const year = dob ? Number(dob.slice(0, 4)) : NaN;
+  const age = ageFromAnswers(a, now) ?? (Number.isFinite(year) ? now.getFullYear() - year : 0);
   const sex = SEX_FROM_GENDER[a.gender ?? ''] ?? (a.sex as SexAtBirth | undefined);
-  const birthYear = { value: year, source: 'manual' as const, updatedAt: at };
+  const birthYear = Number.isFinite(year) ? { value: year, source: 'manual' as const, updatedAt: at } : undefined;
   const reproductive = a.reproductive ?? a.reproductiveTeen;
   /** PDF transgender intake: single puberty question (Trans-woman / Trans-man / None yet). */
   const transPuberty = a.transPuberty && a.transPuberty !== 'none-yet' ? a.transPuberty : undefined;
@@ -60,7 +61,7 @@ export function saveOnboarding(a: Answers): string {
   if (a.guardianNames?.trim()) care.guardianNames = a.guardianNames.trim();
 
   const healthPatch = {
-    birthYear,
+    ...(birthYear && { birthYear }),
     ...(sex && { sexAtBirth: { value: sex, source: 'manual' as const, updatedAt: at } }),
     ...(a.gender && { genderIdentity: { value: a.gender, source: 'manual' as const, updatedAt: at } }),
     ...(meds && { medications: { value: meds, source: 'manual' as const, updatedAt: at } }),
@@ -94,6 +95,7 @@ export function saveOnboarding(a: Answers): string {
   if (!forSomeoneElse(a)) {
     const self = s.profiles.byId[SELF_PROFILE_ID];
     s.updateProfile(SELF_PROFILE_ID, {
+      ...(dob && { dob }),
       ...(sex && { sexAtBirth: sex }),
       health: { ...self?.health, ...healthPatch },
     });
@@ -109,6 +111,7 @@ export function saveOnboarding(a: Answers): string {
     id: uid('p'),
     name: a.memberName?.trim() || 'Them',
     relationship: (a.relationship ?? 'other') as Profile['relationship'],
+    ...(dob && { dob }),
     ...(sex && { sexAtBirth: sex }),
     health: healthPatch,
     intake: { conditions: [], ...intakePatch, medications: intakePatch.medications ?? [] },

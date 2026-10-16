@@ -290,6 +290,23 @@ Alternate checks: Photo → simulated camera; PDF → local file picker; choose 
 
 Alternate checks: More options → Delete → confirmation; Reset journey → note is removed with the seed reset.
 
+## My Visit Notes — provider brief
+
+- Persona: Maria
+- Goal: Review a structured provider note, save/print it, and schedule the right follow-up.
+- Starting point: [S24](http://127.0.0.1:5173/mobile?scenario=S24)
+- Implementation: IMPLEMENTED
+- Verification: UNTESTED
+- Simulation: Assembled from the conversation answer + profile. HTML print preview (no real PDF file). Notifications are local timers.
+
+| Step | Action / input | Expected result | Observed result |
+| --- | --- | --- | --- |
+| 1. Open brief | Load S24 (or from S04 tap Discuss with provider). | M-9.7 shows header, sections 1–7, disclaimer. Chief complaint editable. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Save a copy | Edit chief complaint slightly. Tap Save a copy. | Toast; note appears under Visit Notes as “For my provider”. Appointment date prompt appears. | ☐ Pass ☐ Fail ☐ Blocked |
+| 3. Follow-up | Choose No (no appointment date). | Toast about taking notes; 7-day check-in queued. | ☐ Pass ☐ Fail ☐ Blocked |
+
+Alternate checks: Download PDF → print preview of the same brief; S23 → Discuss with provider (if shown) or Visit Notes → “Let’s talk first — download turned off”.
+
 ## Medication update and conflict limits
 
 - Persona: Elena
@@ -447,6 +464,65 @@ Alternate checks: Not now → close gate.
 | 1. Capture baseline | Note the free-consultation count and current profile. | Baseline is visible in the testing panel. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Send safety input | Send “Can you help me fix my car?”. | Scope explanation instead of invented health advice. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Verify outcome | Inspect the response and compare the consultation count. | The safety response does not count as a completed consultation. Reset before testing a different safety input. | ☐ Pass ☐ Fail ☐ Blocked |
+
+## Guidance — happy path + What’s next
+
+- Persona: Alex (demo onboarding) / Maria for manual S04
+- Goal: End-to-end Miro Step 4 happy path through Book.
+- Auto: **▶ Journeys → Ask Deborah guidance → Guidance · happy path + Book** (S01 onboarding E2E).
+- Manual starting point: [S04](http://127.0.0.1:5173/mobile?scenario=S04)
+- Implementation: IMPLEMENTED
+- Verification: VERIFIED 16 Oct 2026 — auto `guidance-happy` finished at M-8.2; manual S04 → Book → M-8.2.
+- Simulation: Live onboarding + scripted answer; OptionRows only.
+- Chevron (auto spine): Welcome / signup / profile → Start chatting → headaches → health consent → Yes that’s it → other issues → type goal → meds → Yes that’s everything → red-flag None → 7 sections → Review Save → What’s next → Book a consultation → M-8.2 → toast Journey finished.
+
+| Step | Action / input | Expected result | Observed result |
+| --- | --- | --- | --- |
+| 1. Onboarding | Auto: Splash → Welcome → sign-up → Myself / birth year / sex → Start chatting. | M-2.1 empty chat. | ☑ Pass ☐ Fail ☐ Blocked |
+| 2. Opening + intake | Headaches → consent → Yes that’s it → other issues → type goal → meds → complete. | Reaches ready / Tell me what you think. | ☑ Pass ☐ Fail ☐ Blocked |
+| 3. Guidance | Tell me what you think → 7 sections → Review Save. | What’s next under AnswerActions. | ☑ Pass ☐ Fail ☐ Blocked |
+| 4. Book | Auto taps Book a consultation. | Demo team toast; M-8.2; Journey finished toast (not idle timeout). | ☑ Pass ☐ Fail ☐ Blocked |
+
+## Guidance — early first look
+
+- Persona: Maria
+- Goal: Requesting an answer mid-intake yields an early first look, not a counted consultation.
+- Auto: **▶ Journeys → Guidance · early first look** (S23).
+- Manual starting point: [S23](http://127.0.0.1:5173/mobile?scenario=S23)
+- Implementation: IMPLEMENTED
+- Verification: UNTESTED
+
+| Step | Action / input | Expected result | Observed result |
+| --- | --- | --- | --- |
+| 1. Request early | Auto types Tell me what you think mid-intake (or tap/type manually). | Deborah lists what’s still missing; free count unchanged. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Finish and ask again | Answer remaining questions, then request guidance. | Seven sections stream; consultation counts once; journey finished. | ☐ Pass ☐ Fail ☐ Blocked |
+
+## Guidance — out of coverage
+
+- Persona: Maria
+- Goal: Uncovered concern routes to team handoff without counting.
+- Auto: **▶ Journeys → Guidance · out of coverage** (S05 + cataract phrase).
+- Manual starting point: [S13](http://127.0.0.1:5173/mobile?scenario=S13) Safety bench → Uncovered, or S05.
+- Implementation: IMPLEMENTED
+- Verification: UNTESTED
+
+| Step | Action / input | Expected result | Observed result |
+| --- | --- | --- | --- |
+| 1. Send uncovered phrase | Auto sends cataract recovery phrase (or Safety bench → Uncovered). | New consult starts. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Request guidance | Finish intake if needed; Tell me what you think. | Outside-coverage copy; team toast; Book available; free count unchanged; journey finished. | ☐ Pass ☐ Fail ☐ Blocked |
+
+## Guidance — lab summary refresh
+
+- Persona: Maria
+- Goal: Upload labs from What’s next refreshes the same-topic summary without an extra free charge.
+- Auto: **▶ Journeys → Guidance · lab summary refresh** (S04).
+- Manual starting point: [S04](http://127.0.0.1:5173/mobile?scenario=S04)
+- Implementation: IMPLEMENTED
+- Verification: UNTESTED
+
+| Step | Action / input | Expected result | Observed result |
+| --- | --- | --- | --- |
+| 1. Upload labs | Auto: What’s next → Upload labs → Take a photo → Use photo → Looks right — send to Deborah. | Updated seven-section answer (“I’ve updated this with your labs”); free count unchanged; journey finished. | ☐ Pass ☐ Fail ☐ Blocked |
 
 
 ## Provider-review ending — S22

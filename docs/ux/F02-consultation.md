@@ -2,14 +2,15 @@
 
 **Goal:** Maria describes how she feels; Deborah listens, asks a few light questions, and — when Maria asks — answers in her 7-section framework. One completed answer = one consultation.
 **Figma:** https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=48-361
-**Engine:** `docs/07-ai-simulation.md` · **Scenarios:** S02, S03, S04, S05, S13
+**Engine:** `docs/07-ai-simulation.md` · **Scenarios:** S02, S03, S04, S05, S13, S23  
+**Guidance (Miro Step 4):** [F02e-guidance.md](F02e-guidance.md) — early first look, coverage gate, What’s next, 14-day + day-after follow-ups.
 
 ```
 M-2.1 empty ─tap composer─► focused (3 suggestions) ─send/suggestion─► intake Q1 ─► Q2 ─► Q3 ─► ready
-   ─"Tell me what you think"─► generating ─► answered (7 sections) ─► [first time] M-2.8 opt-in sheet
+   ─"Tell me what you think"─► (enough details? else early first look) ─► generating ─► answered (7 sections) ─► What’s next · [first time] M-2.8 or auto 14d follow-up
 answered ─ Shop ─► M-2.7 · Save PDF ─► M-9.6 · Visit Notes ─► M-9.4 · follow-up question ─► short reply
 answered ─ new topic ─► (trial left? new consultation : M-4.1 Free limit)
-Any Deborah turn may be replaced/augmented by F03 safety states.
+Any Deborah turn may be replaced/augmented by F03 safety states · uncovered concerns → team handoff (uncounted).
 ```
 
 ---

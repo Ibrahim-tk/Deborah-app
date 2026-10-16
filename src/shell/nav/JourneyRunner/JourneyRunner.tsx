@@ -10,7 +10,7 @@ import { useScenario } from '../../useScenario';
 import { useShellStore } from '../../shell.store';
 import { Popover } from '../Popover';
 import { MenuItem, MenuSection } from '../MenuParts';
-import { JOURNEYS, type JourneyRun } from './journeys';
+import { GUIDANCE_JOURNEYS, JOURNEYS, type JourneyRun } from './journeys';
 import { journeyTick, type PilotState } from './journeyPilot';
 import { PDF_PERSONA_RUNS, type PdfPersonaRun } from './pdfPersonas';
 import styles from './JourneyRunner.module.css';
@@ -22,6 +22,11 @@ const SIGNUP_MS = Math.round(STEP_MS * 0.5);
 /** Ticks with nothing to do (and nothing changing on screen) before the run gives up. */
 const IDLE_LIMIT = 10;
 const IDLE_SIGNUP = 20;
+/** Guidance runs stream 7 sections / labs processing — allow more idle ticks. */
+const IDLE_GUIDANCE = 48;
+
+const isGuidanceRun = (j: JourneyRun) =>
+  Boolean(j.earlyAnswer || (j.afterAnswer && j.afterAnswer !== 'none') || /cataract/i.test(j.message));
 
 type BatchResult = { id: string; label: string; ok: boolean; at: string };
 
@@ -68,10 +73,11 @@ export function JourneyRunner() {
       const t = journeyTick(run, state.current);
       if (t.step) setStep(t.step);
       const now = document.querySelector('.phone-root')?.textContent ?? '';
+      // Reset idle on action or DOM text change (streaming). Do not treat “Waiting…” as eternal — that hung runs.
       idle = t.acted || now !== lastText ? 0 : idle + 1;
       lastText = now;
       const signingUp = usesFastSignup(run) && onSignupScreen();
-      const idleCap = signingUp ? IDLE_SIGNUP : IDLE_LIMIT;
+      const idleCap = signingUp ? IDLE_SIGNUP : isGuidanceRun(run) ? IDLE_GUIDANCE : IDLE_LIMIT;
 
       if (!(t.done || idle >= idleCap)) {
         schedule(signingUp ? SIGNUP_MS : STEP_MS);
@@ -148,19 +154,25 @@ export function JourneyRunner() {
     <Popover trigger={<><span aria-hidden="true">▶</span> Journeys <span aria-hidden="true">▾</span></>} width="lg">
       {(close) => (
         <>
+          <MenuSection title="Ask Deborah guidance (Miro Step 4)">
+            {GUIDANCE_JOURNEYS.map((j) => (
+              <MenuItem key={j.id} oneLine label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
+            ))}
+          </MenuSection>
           <MenuSection title="PDF personas (age × gender)">
             <MenuItem
+              oneLine
               label="Run all PDF personas"
               description={`Play all ${PDF_PERSONA_RUNS.length} gender × age paths one by one; sign-up + OTP is burst-filled.`}
               onSelect={() => { close(); startAllPdf(); }}
             />
             {PDF_PERSONA_RUNS.map((j) => (
-              <MenuItem key={j.id} label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
+              <MenuItem key={j.id} oneLine label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
             ))}
           </MenuSection>
           <MenuSection title="Play a journey by itself">
             {JOURNEYS.map((j) => (
-              <MenuItem key={j.id} label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
+              <MenuItem key={j.id} oneLine label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
             ))}
           </MenuSection>
         </>

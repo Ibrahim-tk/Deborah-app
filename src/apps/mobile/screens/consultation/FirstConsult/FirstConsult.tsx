@@ -16,6 +16,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { firstConsultFlow, returningConsultFlow } from '@shared/data';
+import { briefFromAnswer, visitBriefPreview } from '@shared/engine';
 import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
@@ -77,18 +78,46 @@ export default function FirstConsult() {
     asked.current = true;
     player.respond(entryId, node, picked);
   };
+  const saveProviderBrief = (): string | undefined => {
+    const s = useAppStore.getState();
+    const profile = selectActiveProfile(s);
+    if (!profile) {
+      toast('No active profile');
+      return undefined;
+    }
+    const answer = buildAnswer(flow.nodes.answer_1, say);
+    const brief = briefFromAnswer(profile, answer, 'First consultation');
+    const id = uid('n');
+    s.addNote({
+      id,
+      profileId: profile.id,
+      kind: 'provider-brief',
+      title: 'For my provider',
+      body: visitBriefPreview(brief),
+      brief,
+      updatedAt: nowFrom(s).toISOString(),
+    });
+    return id;
+  };
+
   const action = (value: string) => {
     if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with Deborah`); return push('M-8.2'); }
-    if (value === 'visit_notes') {
-      // §7's "Save to Visit notes": the answer goes into Visit Notes, as from the chat's answer actions.
-      const answer = buildAnswer(flow.nodes.answer_1, say);
-      const body = answer.sections.map((x) => [x.title, x.body, ...(x.bullets ?? [])].filter(Boolean).join('\n')).join('\n\n');
-      const s = useAppStore.getState();
-      s.addNote({ id: uid('n'), profileId: s.activeProfileId, kind: 'saved-answer', title: 'First consultation with Deborah', body, updatedAt: nowFrom(s).toISOString() });
-      return toast('Saved to Visit Notes');
+    // Miro Step 5: Visit prep / §7 save land on the structured provider brief (M-9.7).
+    if (value === 'visit_notes' || value === 'save') {
+      const id = saveProviderBrief();
+      if (id) {
+        open('M-9.7', { noteId: id });
+        toast('Saved to My Visit Notes');
+      }
+      return;
     }
     if (value === 'exit_product') return open('M-2.7', { productId: 'genesis-gold' });
-    toast(value === 'call' ? 'Calling 911 (simulated)' : value === 'find_care' ? 'Finding care near you (simulated)' : value === 'pdf' ? 'PDF ready to share' : 'Saved to My Health');
+    if (value === 'pdf') {
+      const id = saveProviderBrief();
+      if (id) open('M-9.6', { briefNoteId: id });
+      return;
+    }
+    toast(value === 'call' ? 'Calling 911 (simulated)' : value === 'find_care' ? 'Finding care near you (simulated)' : 'Saved to My Health');
   };
   // Typing instead of tapping leaves the script for free chat, carrying what she typed.
   const typeInstead = (text: string) => {

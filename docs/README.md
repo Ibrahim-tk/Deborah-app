@@ -30,6 +30,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | [ux/F02-consultation.md](ux/F02-consultation.md) | Core consultation (the Conversation screen and all its states) |
 | [ux/F02b-profile-aware-chat-intake.md](ux/F02b-profile-aware-chat-intake.md) | Profile-aware chat intake: female & male question journeys (THEORY, draft) |
 | [ux/F02d-session-intake-answer-modes.md](ux/F02d-session-intake-answer-modes.md) | Session intake: choice vs free-text vs hybrid (composer vs pills) |
+| [ux/F02e-guidance.md](ux/F02e-guidance.md) | Miro Step 4: early first look, coverage gate, What’s next, follow-ups |
 | [ux/F03-safety.md](ux/F03-safety.md) | Safety & guardrails |
 | [ux/F04-plans-account.md](ux/F04-plans-account.md) | Free limit, plans, account creation, payment |
 | [ux/F05-followup-labs.md](ux/F05-followup-labs.md) | Follow-up notification, check-in, lab upload |
@@ -37,6 +38,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | [ux/F07-my-health-hub.md](ux/F07-my-health-hub.md) | My Health hub, 90-day plan, content, library, About Deborah |
 | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | Human escalation and booking |
 | [ux/F09-records.md](ux/F09-records.md) | History, consultation detail, Visit Notes, labs |
+| [ux/F09b-visit-brief.md](ux/F09b-visit-brief.md) | Miro Step 5: My Visit Notes / For My Provider brief |
 | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | Account, settings, privacy & data |
 | [web/README.md](web/README.md) | Web app — reserved, not specified yet |
 

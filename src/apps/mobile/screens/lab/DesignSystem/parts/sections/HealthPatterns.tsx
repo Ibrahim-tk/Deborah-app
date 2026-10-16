@@ -40,6 +40,7 @@ export function HealthPatterns() {
             <ConsultationRow topic="Sleep and night waking" date="12 Sep" status="answered" withLabs onPress={noop} />
             <ConsultationRow topic="Afternoon energy" date="3 Oct" status="in-progress" onPress={noop} />
             <NoteRow title="Questions for my visit" kind="questions" updated="5 Oct" body="Ask about timing of evening routine." onPress={noop} />
+            <NoteRow title="For my provider" kind="provider-brief" updated="16 Oct" body="Night sweats and waking hot for about 8–12 months." onPress={noop} />
             <LabValueRow value={lab} editing={editing} onEdit={() => setEditing(true)} onDone={() => setEditing(false)} onDelete={noop}
               onChange={(p) => setLab((l) => ({ ...l, ...p, edited: true }))} />
           </div>

@@ -6,7 +6,7 @@
   overflow: visible;
   pointer-events: none;
 }
-/* Behind the card's fill, so only light thrown outward shows. */
-.bloom { z-index: -1; }
+/* Behind the card's fill — only outward light shows; host may clip the top. */
+.bloom { z-index: 0; }
 
-/* Motion runs through the Web Animations API (see EdgeLight.tsx) so all segments share one clock. */
+/* Motion runs through the Web Animations API (see EdgeLight.tsx): uneven pace + breathing length. */

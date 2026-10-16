@@ -4,8 +4,8 @@
  * OPEN: all Deborah-voice copy here is placeholder until Deborah approves it.
  */
 export type WidgetKind =
-  | 'consent' | 'yesno' | 'multi' | 'scale' | 'mood' | 'answer' | 'product' | 'slots' | 'confirm'
-  | 'reminder' | 'upload' | 'tip' | 'prep' | 'escalation' | 'emergency';
+  | 'consent' | 'yesno' | 'multi' | 'scale' | 'mood' | 'answer' | 'product' | 'slots'
+  | 'upload' | 'tip' | 'prep' | 'emergency';
 
 export interface LabMessage {
   id: string;
@@ -30,22 +30,17 @@ export const SCENARIO: LabMessage[] = [
   d('And overall, how are you feeling this week?', 'mood', 'Mood check-in'),
   d('Thank you. Here is how I’d think about it.', 'answer', '7-section answer (signature card + Visit notes)'),
   d('Many women in your situation ask about this one. Talk to your clinician first.', 'product', 'Product card'),
-  d('Would you like to bring this to Deborah herself? Here are her next openings.', 'slots', 'Slot picker (two-week slider)'),
-  d('Please confirm before I book it.', 'confirm', 'Confirm card'),
-  d('Shall I check in with you about your sleep in a week?', 'reminder', 'Reminder'),
+  d('Would you like to bring this to Deborah herself?', 'slots', 'Book with Deborah'),
   d('If you have recent labs, add them and I’ll read them alongside your answers.', 'upload', 'Upload'),
   d('One small thing to try tonight:', 'tip', 'Inline tip'),
   d('I put your questions for your next appointment together.', 'prep', 'Visit prep card'),
-  d('One more thing, Maria.', 'escalation', 'Safety escalation'),
 ];
 
 /** Typed message → the widget Deborah answers with (keyword match; the fallback asks a yes/no). */
 const ROUTES: { test: RegExp; widget: WidgetKind; text: string }[] = [
   { test: /chest pain|can.?t breathe|faint|bleeding heavily|suicid|emergency/i, widget: 'emergency', text: 'This could be serious.' },
-  { test: /book|appointment|see deborah|visit|consult/i, widget: 'slots', text: 'Let’s find a time with Deborah.' },
-  { test: /pay|buy|order|subscribe|confirm/i, widget: 'confirm', text: 'Here’s what that looks like. Please confirm.' },
+  { test: /book|appointment|see deborah|visit|consult/i, widget: 'slots', text: 'I can ask the team to reach out and set up a time with Deborah.' },
   { test: /lab|blood|test result|pdf|report/i, widget: 'upload', text: 'Add your report and I’ll read it with you.' },
-  { test: /remind|reminder|check in|later/i, widget: 'reminder', text: 'I can nudge you.' },
   { test: /mood|feel|sad|anxious|stress/i, widget: 'mood', text: 'Let’s start with how you’re feeling right now.' },
   { test: /energy|tired|fatigue|pain|scale|how much/i, widget: 'scale', text: 'On a scale from 0 to 10, how strong is it today?' },
   { test: /symptom|which|also|other/i, widget: 'multi', text: 'Which of these are you noticing?' },
@@ -61,12 +56,3 @@ export function routeQuestion(text: string): LabMessage {
 }
 
 export const MULTI_OPTIONS = ['Night sweats', 'Racing thoughts', 'Needing the bathroom', 'A dry mouth', 'None of these'];
-
-/** Two weeks for the slider variation; weekends and full days have no openings (dimmed). */
-const WEEKDAYS = ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed'];
-const SLOTS = [['9:30 am', '1:00 pm', '3:00 pm'], ['10:00 am', '2:30 pm'], [], [], ['8:30 am', '11:00 am', '4:00 pm'], ['9:00 am'], []];
-export const SLOT_FORTNIGHT = Array.from({ length: 14 }, (_, i) => ({
-  value: `d${i}`,
-  label: `${WEEKDAYS[i % 7]} ${16 + i}`,
-  times: SLOTS[i % 7],
-}));

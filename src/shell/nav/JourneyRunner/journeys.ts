@@ -6,6 +6,9 @@
  */
 export type ReviewAction = 'save' | 'edit' | 'discard';
 
+/** After Guidance given: keep playing Whats next (default `none` = stop at answer like today). */
+export type AfterAnswer = 'none' | 'whatsNext-book' | 'whatsNext-followUp' | 'whatsNext-labs';
+
 /** Onboarding profile answers for a run that starts at M-1.8 (S03) or continues after sign-up on S01. */
 export interface ProfileAnswers {
   /** Tile, relationship, gender and branch options to tap, matched in order. */
@@ -34,9 +37,35 @@ export interface JourneyRun {
   /** Preferred answers, matched against option labels in order. */
   answers: RegExp[];
   review: ReviewAction;
+  /**
+   * Free-text session answers keyed by role (e.g. `goal` for session-goal).
+   * Used when the composer placeholder asks for typed input mid-intake.
+   */
+  textAnswers?: { goal?: string; answer?: string };
+  /**
+   * Miro Step 4: type “Tell me what you think” while intake choices are still on screen
+   * (AnswerCTA only appears at ready). Then finish intake and request full guidance.
+   */
+  earlyAnswer?: boolean;
+  /** Miro Step 4: continue past the answer into Whats next (default stop at answer). */
+  afterAnswer?: AfterAnswer;
 }
 
 const NONE = [/^None$/, /^None of these$/];
+/** Session confirm + completeness gates (F02d) — must match before falling back to first option. */
+const SESSION_YES = [/^Yes, that'?s it$/, /^Yes, that'?s everything$/];
+/** Prefer None on Yes/None gates so expand lists are skipped; plain Yes last. */
+const SESSION_GATES = [...SESSION_YES, ...NONE, /^Yes$/];
+const HEADACHE_ANSWERS = [
+  ...SESSION_GATES,
+  /^Regular cycles$/,
+  /^Headaches$/,
+  /^A few times a week$/,
+  /^The week before my period$/,
+];
+
+/** Guardrails uncovered test phrase (docs/ux/F02e-guidance.md). */
+export const UNCOVERED_PHRASE = 'I need advice about my cataract surgery recovery.';
 
 export const JOURNEYS: JourneyRun[] = [
   {
@@ -46,7 +75,7 @@ export const JOURNEYS: JourneyRun[] = [
     scenario: 'S01',
     onboarding: true,
     message: 'I’ve been having headaches lately',
-    answers: [/^Regular cycles$/, /^Headaches$/, /^A few times a week$/, /^The week before my period$/, ...NONE],
+    answers: HEADACHE_ANSWERS,
     review: 'save',
   },
   {
@@ -96,7 +125,7 @@ export const JOURNEYS: JourneyRun[] = [
     description: 'Cycling × skin, hair and body. Stage asked first, medications gate, red flags clear → answer → Save.',
     scenario: 'S14',
     message: 'I’ve been having headaches lately',
-    answers: [/^Regular cycles$/, /^Headaches$/, /^A few times a week$/, /^The week before my period$/, ...NONE],
+    answers: HEADACHE_ANSWERS,
     review: 'save',
   },
   {
@@ -105,7 +134,7 @@ export const JOURNEYS: JourneyRun[] = [
     description: 'Peri × sleep clarifiers, then medications and allergies before the product → Edit, then Save.',
     scenario: 'S15',
     message: 'I can’t sleep through the night, I keep waking at 3am',
-    answers: [/^Closer together$/, /^Night sweats$/, /^1–6 months$/, ...NONE],
+    answers: [...SESSION_GATES, /^Closer together$/, /^Night sweats$/, /^1–6 months$/],
     review: 'edit',
   },
   {
@@ -114,7 +143,7 @@ export const JOURNEYS: JourneyRun[] = [
     description: 'Shared pregnancy questions, no medication gate, no product card.',
     scenario: 'S16',
     message: 'I feel exhausted all the time',
-    answers: [/^Pregnant$/, /^Not yet$/, ...NONE],
+    answers: [...SESSION_GATES, /^Pregnant$/, /^Not yet$/],
     review: 'save',
   },
   {
@@ -123,7 +152,7 @@ export const JOURNEYS: JourneyRun[] = [
     description: 'Last-period question re-routes to perimenopause, the stage is noted for Review and Confirm.',
     scenario: 'S17',
     message: 'Hot flashes are driving me crazy',
-    answers: [/^1–12 months ago$/, /^Closer together$/, /^Hot flashes$/, /^A few weeks$/, ...NONE],
+    answers: [...SESSION_GATES, /^1–12 months ago$/, /^Closer together$/, /^Hot flashes$/, /^A few weeks$/],
     review: 'save',
   },
   {
@@ -132,7 +161,7 @@ export const JOURNEYS: JourneyRun[] = [
     description: 'Male questions with the 40–54 extra and male red flags.',
     scenario: 'S18',
     message: 'I have no energy by the afternoon',
-    answers: [/^Tired by mid-afternoon$/, /^No$/, /^7–8$/, /^Months$/, /^Never$/, ...NONE],
+    answers: [...SESSION_GATES, /^Tired by mid-afternoon$/, /^No$/, /^7–8$/, /^Months$/, /^Never$/],
     review: 'save',
   },
   {
@@ -141,7 +170,55 @@ export const JOURNEYS: JourneyRun[] = [
     description: 'A red flag on the safety screen: provider-directed framework after review; no product or trial charge → Don’t save.',
     scenario: 'S15',
     message: 'I wake up drenched in night sweats',
-    answers: [/^Weight loss I can’t explain$/, /^Closer together$/, /^Night sweats$/, /^1–6 months$/, /^None$/],
+    answers: [...SESSION_GATES, /^Weight loss I can’t explain$/, /^Closer together$/, /^Night sweats$/, /^1–6 months$/],
     review: 'discard',
+  },
+];
+
+/** Miro Step 4 Ask Deborah guidance — separate Journeys menu section. */
+export const GUIDANCE_JOURNEYS: JourneyRun[] = [
+  {
+    id: 'guidance-happy',
+    label: 'Guidance · happy path + Book',
+    description:
+      'Full E2E: Welcome → sign-up → Myself profile → Ask Deborah → intake → 7 sections → Review Save → What’s next → Book a consultation.',
+    scenario: 'S01',
+    onboarding: true,
+    // Burst sign-up + explicit Health Basics (Myself / female / age) so onboarding does not idle.
+    profile: { picks: [/^Myself/, /^Female$/], age: 28 },
+    message: 'I’ve been having headaches lately',
+    answers: HEADACHE_ANSWERS,
+    textAnswers: { goal: 'Sleep through the night without waking at 3am' },
+    review: 'save',
+    afterAnswer: 'whatsNext-book',
+  },
+  {
+    id: 'guidance-early',
+    label: 'Guidance · early first look',
+    description: 'S23 mid-intake. Types Tell me what you think early, sees what’s missing, finishes questions, then full guidance.',
+    scenario: 'S23',
+    message: '',
+    answers: [...SESSION_GATES, /^Closer together$/, /^Night sweats$/, /^Hot flashes$/, /^1–6 months$/, /^A few weeks$/],
+    review: 'save',
+    earlyAnswer: true,
+  },
+  {
+    id: 'guidance-uncovered',
+    label: 'Guidance · out of coverage',
+    description: 'S05 empty chat. Cataract phrase → intake → Tell me what you think → team handoff (uncounted).',
+    scenario: 'S05',
+    message: UNCOVERED_PHRASE,
+    answers: [...SESSION_GATES],
+    review: 'save',
+  },
+  {
+    id: 'guidance-labs',
+    label: 'Guidance · lab summary refresh',
+    description: 'S04 answered chat. What’s next → Upload labs → Take a photo → send to Deborah → updated summary.',
+    scenario: 'S04',
+    message: '',
+    answers: [],
+    review: 'save',
+    afterAnswer: 'whatsNext-labs',
   },
 ];

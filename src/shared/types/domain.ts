@@ -305,8 +305,12 @@ export interface Conversation {
   sessionMoreCount?: number;
   /** After “I have more to add”: next free-text is extra context, then re-ask completeness. */
   awaitingSessionMore?: boolean;
-  /** Simulated care-team alert after emergency or crisis (prototype only). */
-  teamAlert?: { level: 'emergency' | 'crisis'; at: ISODate; phrase?: string };
+  /** Simulated care-team alert after emergency, crisis, or out-of-coverage guidance (prototype only). */
+  teamAlert?: { level: 'emergency' | 'crisis' | 'uncovered'; at: ISODate; phrase?: string };
+  /** Miro Step 4: ISO time when a full 7-section guidance finished (not early first look / uncovered). */
+  guidanceGivenAt?: ISODate;
+  /** Same-topic lab reassess: next answer replaces guidance without counting another free consult. */
+  labRefresh?: boolean;
 }
 
 export type CheckInStage = 'opening' | 'awaitingDetail' | 'labs' | 'done';
@@ -346,7 +350,47 @@ export interface Plan90 {
   productStartDate?: ISODate;
 }
 
-export type NoteKind = 'questions' | 'saved-answer' | 'after-visit' | 'free';
+export type NoteKind = 'questions' | 'saved-answer' | 'after-visit' | 'free' | 'provider-brief';
+
+/** Structured “My Visit Notes / For My Provider” payload (Miro Step 5 · M-9.7). */
+export interface VisitBriefLab {
+  name: string;
+  tier: 'primary' | 'also';
+  reason: string;
+}
+
+export interface VisitBriefQuestion {
+  text: string;
+  why: string;
+}
+
+export interface VisitBriefMed {
+  name: string;
+  dose?: string;
+  current?: boolean;
+  /** Extra line when the client takes Genesis Gold. */
+  genesisGoldNote?: string;
+}
+
+export interface VisitBriefContent {
+  header: {
+    name: string;
+    dob?: string;
+    priority?: boolean;
+    whatThisIs: string;
+  };
+  /** Scheduling metadata only — not printed on the brief (Miro: appointment date “will not be there”). */
+  appointmentDate?: ISODate;
+  chiefComplaint: string;
+  clinicalContext: string;
+  labs: VisitBriefLab[];
+  questions: VisitBriefQuestion[];
+  medications: VisitBriefMed[];
+  redFlagsSummary: string;
+  recommendation: string;
+  disclaimer: string[];
+  status: ContentStatus;
+}
 
 export interface Note {
   id: ID;
@@ -356,6 +400,9 @@ export interface Note {
   body: string;
   updatedAt: ISODate;
   sourceMessageId?: ID;
+  conversationId?: ID;
+  /** Set when kind === 'provider-brief'. */
+  brief?: VisitBriefContent;
 }
 
 export interface Booking {

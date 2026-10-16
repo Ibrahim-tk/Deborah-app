@@ -4,7 +4,7 @@
  */
 import { FALLBACK_SCRIPT_ID, scripts, TEEN_SCRIPT_ID } from '../data';
 import { isMinor } from './profile';
-import type { Conversation } from '../types/domain';
+import type { Conversation, PendingFact } from '../types/domain';
 import type { EngineContext, EnginePlan, UserInput } from '../types/engine';
 import { uid } from '../utils/ids';
 import { asksForAnswer, detectScript, followUpReply, symptomGroupOf } from './classifier';
@@ -26,7 +26,8 @@ import { shareLabsSteps } from './labs';
 import { answerPatch, CONSENT_ID, optionLabels, planConsultation, question } from './intake';
 import { inferFromMessage } from './extract';
 import { ANSWER_REQUEST_LABEL, answerSteps, deborahText, nextIntakeOrReady, pause, redFlagSteps, scriptOf, userBubble } from './plans';
-import type { PendingFact } from '../types/domain';
+import { beginGuidance } from './guidance';
+import { matchesUncovered } from './guidanceGates';
 export { CONSENT_ID } from './intake';
 
 export { ANSWER_REQUEST_LABEL } from './plans';
@@ -43,6 +44,18 @@ export { extractionPatch, extractProfile, handOffSuggestions, healthKitPatch, pr
 export { chunkText, CPS } from './streamer';
 export { FREE_LIMIT, isGated } from './counting';
 export { replayScript, streamInto } from './replay';
+export { beginGuidance, needsMoreDetails, isUncoveredConcern } from './guidance';
+export { matchesUncovered } from './guidanceGates';
+export { asksForAnswer } from './classifier';
+export {
+  assembleVisitBrief,
+  briefFromAnswer,
+  hasEnoughDetailForVisitBrief,
+  latestCompletedAnswer,
+  visitBriefPreview,
+  VISIT_BRIEF_DISCLAIMER,
+  VISIT_BRIEF_WHAT_THIS_IS,
+} from './visitBrief';
 
 export function createConversationEngine() {
   return { handleUserInput };
@@ -75,7 +88,7 @@ function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
     case 'requestAnswer':
       return [
         ...(input.retry ? [] : [userBubble(ctx, ANSWER_REQUEST_LABEL)]),
-        ...answerSteps(ctx, ctx.conversation, ctx.profile, { retry: input.retry }),
+        ...beginGuidance(ctx, ctx.conversation, ctx.profile, { retry: input.retry }),
       ];
   }
 }
@@ -120,16 +133,18 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
   const minorGirl = isMinor(ctx.profile, new Date(ctx.now)) && (ctx.profile.sexAtBirth ?? ctx.profile.health?.sexAtBirth?.value) !== 'male';
   const detected = minorGirl ? TEEN_SCRIPT_ID : (suggestionScript ?? detectScript(text));
 
-  // Asking "what do you think" during intake/ready jumps to the answer.
+  // Asking "what do you think" during intake/ready jumps to guidance (early look / coverage / answer).
   if ((conv.status === 'intake' || conv.status === 'ready' || conv.status === 'error') && asksForAnswer(text)) {
-    return [userBubble(ctx, text), ...answerSteps(ctx, conv, ctx.profile)];
+    return [userBubble(ctx, text), ...beginGuidance(ctx, conv, ctx.profile)];
   }
 
   const startsNew =
     conv.status === 'empty' ||
     conv.messages.length === 0 ||
     // A check-in behaves like an answered consultation: a new topic starts a new one.
-    ((conv.status === 'answered' || conv.status === 'checkin') && detected !== null && detected !== conv.scriptId);
+    ((conv.status === 'answered' || conv.status === 'checkin') && detected !== null && detected !== conv.scriptId) ||
+    // Miro Step 4: uncovered concern from an answered chat still opens a new (uncounted) path.
+    ((conv.status === 'answered' || conv.status === 'checkin') && matchesUncovered(text));
 
   if (startsNew) {
     // Safety guardrails (phase 4) run before this gate and are never gated.

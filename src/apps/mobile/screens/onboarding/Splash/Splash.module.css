@@ -28,8 +28,7 @@
   text-align: center;
 }
 
-/* Photo backdrop exported from Figma (161:386 · image 85, texture effect baked in), already
-   cropped to the 390×844 frame; the Figma bottom hue is multiplied onto the very bottom edge. */
+/* Wispr Flow backdrop — same image as Aura / chat; unshifted on Splash. */
 .backdrop {
   position: absolute;
   inset: 0;
@@ -37,18 +36,6 @@
   overflow: hidden;
   pointer-events: none;
   background:
-    url('/images/splash/splash-bg.png') top center / cover no-repeat,
+    var(--backdrop-image) top center / cover no-repeat,
     var(--color-canvas);
-}
-/* Lilac foot, pushed 25% of its height past the bottom edge; multiply drops its white. */
-.backdrop::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  aspect-ratio: 780 / 636;
-  background: url('/images/splash/bottom-hue.png') center / 100% 100% no-repeat;
-  mix-blend-mode: multiply;
-  transform: translateY(25%);
 }

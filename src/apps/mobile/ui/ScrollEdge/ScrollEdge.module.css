@@ -5,36 +5,48 @@
   right: 0;
   left: 0;
   z-index: 4;
-  height: calc(var(--safe-top) + var(--header-h) + 28px);
+  height: calc(var(--safe-top) + var(--header-h) + 40px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 240ms var(--ease-out);
+  overflow: hidden;
+  transition: opacity 280ms var(--ease-out);
 }
 .root[data-active] { opacity: 1; }
 .root > span { position: absolute; inset: 0; }
 
-/* Progressive blur: a strong layer masked to the top, a softer one reaching further down. */
+/* Progressive blur only — soft masks so there is no hard seam through the glass controls. */
 .blurStrong {
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 75%);
-  mask-image: linear-gradient(to bottom, #000 40%, transparent 75%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 25%, transparent 85%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 25%, transparent 85%);
 }
 .blurSoft {
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
 }
-/* Instead of a parchment tint, repaint the screen's own sky (same image and lift as Aura) over
-   the scrolled content, so the bar stays as vivid as at rest and content dissolves beneath it. */
+
+/*
+ * Same sky paint as Aura (top + lift), so the edge never fights the screen backdrop.
+ * Soft feather only — no hard cutoff through the nav buttons.
+ */
 .fade {
-  background: url('/images/splash/splash-bg.png') center var(--backdrop-lift) / 100% auto no-repeat;
-  -webkit-mask-image: linear-gradient(to bottom, #000 45%, rgb(0 0 0 / 0.6) 75%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 45%, rgb(0 0 0 / 0.6) 75%, transparent 100%);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 20%, rgb(0 0 0 / 0.55) 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 20%, rgb(0 0 0 / 0.55) 55%, transparent 100%);
+}
+.fade::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -100%;
+  background: var(--backdrop-image) top center / 100% auto no-repeat;
+  transform: translate3d(0, var(--backdrop-lift), 0);
 }
 
 @media (prefers-reduced-transparency: reduce) {
   .blurStrong, .blurSoft { -webkit-backdrop-filter: none; backdrop-filter: none; }
-  .fade { background: linear-gradient(to bottom, var(--color-canvas) 65%, transparent); }
+  .fade::before { content: none; }
+  .fade { background: linear-gradient(to bottom, var(--color-canvas) 40%, transparent); }
 }

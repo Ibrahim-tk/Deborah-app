@@ -21,6 +21,7 @@ export const DEFAULT_TITLE: Record<NoteKind, string> = {
   'after-visit': 'After my visit',
   'saved-answer': 'Saved from Deborah',
   free: 'Note',
+  'provider-brief': 'For my provider',
 };
 
 export function useNoteAutosave(draft: NoteDraft, profileId: string, initialId?: string) {

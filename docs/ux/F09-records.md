@@ -39,5 +39,9 @@ Read mode of the M-5.4 layout: metadata + values; overflow menu: Edit (→ M-5.4
 
 ## M-9.6 · PDF preview (NOT IN WIREFRAMES)
 
-**Presentation:** modal. A white A4-proportioned page preview rendered in HTML: app logo, profile name, date, "Questions for your provider", "Tests worth discussing", summary of sections, closing line, disclaimer footer. Actions: **Share** (toast) · **Print** (`window.print()` of the preview only — optional) · Done.
+**Presentation:** modal. When the conversation has enough detail for Miro Step 5 (or `briefNoteId` is passed), prints the structured **My Visit Notes** brief (same layout as M-9.7). Otherwise a shorter A4 page: logo, profile name, date, "Questions for your provider", "Tests worth discussing", summary of sections, closing line, disclaimer footer. Actions: **Share** (toast) · **Print** (`window.print()` of the preview only — optional) · Done.
 **Open:** Premium gating for PDF (brief lists it under Premium) — prototype allows for all and shows "Premium" as plain footnote text.
+
+## M-9.7 · My Visit Notes (Miro Step 5)
+
+See **[F09b-visit-brief.md](F09b-visit-brief.md)**. Structured provider brief: header (name, DOB, priority, what-this-is) · chief complaint (editable) · clinical context · tests · questions · meds · red flags & recommendation · disclaimer. Save to Visit Notes (`provider-brief`) · Download PDF → M-9.6 · then appointment-date follow-up.

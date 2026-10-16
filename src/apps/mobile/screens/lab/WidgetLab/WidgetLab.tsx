@@ -6,11 +6,13 @@
  * @xref    web: — not built
  *
  * A single chat view that shows every on-the-fly widget in a believable scenario, so they can be styled
- * side by side. Type anything: a keyword router (no AI, no network) picks the widget Deborah answers with.
+ * side by side. Widgets come from `@mobile/patterns/widgets` — the same modules V2 Conversation uses —
+ * so a visual change here is a change in chat (and the reverse). Type anything: a keyword router
+ * (no AI, no network) picks the widget Deborah answers with.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MessageBubble, ThinkingIndicator, Composer } from '@mobile/patterns/chat';
-import { DeborahBlob, OVERLAY_HOST_ID } from '@mobile/ui';
+import { Aura, DeborahBlob, GradientShift, OVERLAY_HOST_ID } from '@mobile/ui';
 import { LabWidget } from './LabWidget';
 import { SCENARIO, mid, routeQuestion, type LabMessage } from './scenarios';
 import styles from './WidgetLab.module.css';
@@ -51,6 +53,9 @@ export default function WidgetLab() {
 
   return (
     <div className={styles.root} data-xref="LAB · Widget lab">
+      {/* Same living backdrop as Conversation (Wispr Flow + soft pink foot). */}
+      <Aura />
+      <GradientShift />
       <header className={styles.header}>
         <DeborahBlob size={36} label="Deborah" />
         <div>

@@ -14,6 +14,8 @@ import {
   CareDisclaimer,
   ClosingLine,
   ErrorBubble,
+  GuidanceNextSteps,
+  type GuidanceNextId,
   IntakeQuestion,
   MessageBubble,
   QuickReplies,
@@ -37,6 +39,9 @@ export interface MessageListProps {
   onBook: () => void;
   onUploadLabs: () => void;
   onRestartPlan: () => void;
+  onVisitNotes: () => void;
+  onOpenPlan: () => void;
+  onTeamBook: () => void;
   onLongPress: (m: Message) => void;
   onFocusComposer: () => void;
   /** F02d: hide/show bottom composer while intake owns choices vs typing. */
@@ -46,9 +51,26 @@ export interface MessageListProps {
 }
 
 
-export function MessageList({ conversation, busy, chat, actions, onShop, onBook, onUploadLabs, onRestartPlan, onLongPress, onFocusComposer, onIntakeAnswerSurface, onEditFacts }: MessageListProps) {
+export function MessageList({
+  conversation,
+  busy,
+  chat,
+  actions,
+  onShop,
+  onBook,
+  onUploadLabs,
+  onRestartPlan,
+  onVisitNotes,
+  onOpenPlan,
+  onTeamBook,
+  onLongPress,
+  onFocusComposer,
+  onIntakeAnswerSurface,
+  onEditFacts,
+}: MessageListProps) {
   const { messages, status } = conversation;
   const reports = useAppStore((s) => s.labs.reportsById);
+  const hasPlan = useAppStore((s) => Boolean(s.plan90[conversation.profileId]));
   // DN-12: no products for anyone under 18, the shop tiles included.
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
 
@@ -114,6 +136,18 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
       const done = !m.meta?.streaming && !m.meta?.stopped;
       const product = findProduct(m.answer.product?.productId);
       const lab = m.answer.labsReferenced?.map((id) => reports[id]).find(Boolean);
+      const latestAnswer = [...messages].reverse().find((x) => x.kind === 'answer' && !x.meta?.streaming);
+      const showNext = Boolean(done && conversation.guidanceGivenAt && latestAnswer?.id === m.id && status === 'answered' && !conversation.redFlag);
+      const onNext = (id: GuidanceNextId) => {
+        if (id === 'followUp') onFocusComposer();
+        else if (id === 'provider' || id === 'save') {
+          // Miro Step 5: open structured brief (or “Let’s talk first” gate) — not empty M-9.4.
+          actions.saveAnswer(m, conversation.topic ?? 'your question');
+        } else if (id === 'book') onTeamBook();
+        else if (id === 'labs') onUploadLabs();
+        else if (id === 'product' && product) onShop(product.id);
+        else if (id === 'plan') onOpenPlan();
+      };
       return (
         <MessageBubble key={m.id} role="deborah" turnStart={turnStart}>
           <AnswerSections
@@ -132,7 +166,7 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
               <ClosingLine text={m.answer.closingLine} />
               <AnswerActions
                 onSavePdf={() => actions.savePdf(m)}
-                onVisitNotes={() => actions.saveAnswer(m, conversation.topic ?? 'your question')}
+                onVisitNotes={onVisitNotes}
                 onShare={() => m.answer && actions.shareAnswer(m.answer)}
                 onCopy={() => m.answer && actions.shareAnswer(m.answer)}
                 onListen={actions.listen}
@@ -144,6 +178,14 @@ export function MessageList({ conversation, busy, chat, actions, onShop, onBook,
                 title="Deborah’s formulations"
                 onShop={onShop}
               />}
+              {showNext && (
+                <GuidanceNextSteps
+                  disabled={busy}
+                  showProduct={Boolean(product && !minor && !conversation.noProduct)}
+                  showPlan={hasPlan}
+                  onSelect={onNext}
+                />
+              )}
             </>
           )}
           {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}

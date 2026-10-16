@@ -167,6 +167,8 @@ export interface NotificationsSlice {
     bookingReminders: boolean;
   };
   scheduleNotification: (n: AppNotification) => void;
+  /** After guidance when permission already granted — default ~14 days (Miro Step 4). */
+  scheduleGuidanceFollowUp: (profileId: ID, days: number) => void;
   /** State menu › Deliver follow-up notification: generic text, active profile, delivered now. */
   deliverFollowUpNow: () => void;
   deliverDue: () => void;

@@ -55,6 +55,14 @@ export function tick(): Tick {
     return { done: false, screen, acted: true };
   }
 
+  // 1b. V1 Welcome: Terms / Privacy checkboxes before Get Started enables.
+  const unchecked = [...top.querySelectorAll<HTMLInputElement>('input[type=checkbox]')]
+    .find((box) => visible(box) && !box.disabled && !box.checked);
+  if (unchecked) {
+    unchecked.click();
+    return { done: false, screen, acted: true };
+  }
+
   // 2. Tap the forward action.
   const buttons = [...top.querySelectorAll<HTMLButtonElement>('button')].filter((b) => visible(b) && !b.disabled && !NEVER.test(label(b)));
   for (const re of FORWARD) {

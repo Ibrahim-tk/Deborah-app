@@ -10,10 +10,13 @@
 .search:focus-within { box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
 .input { flex: 1; min-width: 0; border: 0; background: transparent; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); caret-color: var(--color-accent); outline: none; }
 .input::placeholder { color: var(--color-ink-placeholder); }
-.list { flex: 1; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--space-5) var(--space-4); }
+.list { flex: 1; overflow-y: auto; display: grid; align-content: start; gap: 0; padding: var(--space-2) var(--space-5) var(--space-4); }
 .addOwn { display: flex; align-items: center; gap: var(--space-2); min-height: var(--row-min); padding: 0 var(--space-4); border-radius: var(--radius-md); background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); text-align: left; }
-.group { display: grid; gap: var(--space-3); }
-.groupTitle { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-tertiary); }
+.group { display: grid; gap: var(--space-3); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-border-hairline); }
+.group:first-child { padding-top: var(--space-2); }
+.group:last-child { border-bottom: 0; padding-bottom: var(--space-2); }
+/* Quieter than pills so the section label sits in the background of the hierarchy. */
+.groupTitle { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-placeholder); }
 .pills { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); }
 /* Compact chips — shorter than the 44px ChoicePills so more of the list fits. */
 .pill { display: inline-flex; align-items: center; min-height: 28px; max-width: 100%; padding: 2px var(--space-3); border-radius: var(--radius-pill); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--surface-border); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink); text-align: left; transition: background var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }

@@ -1,11 +1,19 @@
 import type { StateCreator } from 'zustand';
-import { nowFrom } from '../../utils/dates';
+import { addDays, nowFrom } from '../../utils/dates';
 import { uid } from '../../utils/ids';
 import type { AppState, DevSlice, NotificationsSlice } from '../types';
 
 type Actions = Pick<
   NotificationsSlice,
-  'scheduleNotification' | 'deliverFollowUpNow' | 'deliverDue' | 'markRead' | 'setFollowUp' | 'setBookingReminders' | 'deliverBookingReminderNow' | 'cancelNotifications'
+  | 'scheduleNotification'
+  | 'scheduleGuidanceFollowUp'
+  | 'deliverFollowUpNow'
+  | 'deliverDue'
+  | 'markRead'
+  | 'setFollowUp'
+  | 'setBookingReminders'
+  | 'deliverBookingReminderNow'
+  | 'cancelNotifications'
 > &
   Pick<DevSlice, 'setDev'>;
 
@@ -13,9 +21,33 @@ type Actions = Pick<
 export const FOLLOW_UP_TITLE = 'Your Oracle Clinician';
 export const FOLLOW_UP_BODY = 'Deborah: How are you feeling this week?';
 export const BOOKING_REMINDER_BODY = 'Reminder: you have a consultation with Deborah tomorrow.';
+export const BOOKING_DAY_AFTER_BODY = 'Deborah: How did your appointment go?';
+/** Miro Step 5: no appointment date — follow up after 7 days regardless. */
+export const VISIT_NOTES_TAKE_BODY = 'Deborah: Take your visit notes to the appointment — how did it go?';
 
 export const notificationsActions: StateCreator<AppState, [], [], Actions> = (set, get) => ({
   scheduleNotification: (n) => set((s) => ({ notifications: { ...s.notifications, queue: [...s.notifications.queue, n] } })),
+  scheduleGuidanceFollowUp: (profileId, days) =>
+    set((s) => {
+      const deepLink = `followup:${profileId}`;
+      const queue = s.notifications.queue.filter((n) => n.delivered || n.deepLink !== deepLink);
+      const n = {
+        id: uid('n'),
+        title: FOLLOW_UP_TITLE,
+        body: FOLLOW_UP_BODY,
+        deepLink,
+        deliverAt: addDays(nowFrom(s).toISOString(), days),
+        delivered: false,
+        read: false,
+      };
+      return {
+        notifications: {
+          ...s.notifications,
+          followUp: { ...s.notifications.followUp, [profileId]: { enabled: true, intervalDays: days } },
+          queue: [...queue, n],
+        },
+      };
+    }),
   deliverFollowUpNow: () =>
     set((s) => {
       const n = {

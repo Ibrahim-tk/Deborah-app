@@ -26,4 +26,9 @@ export type { AppState, AppData } from './types';
 export { SELF_PROFILE_ID, createDefaults } from './defaults';
 export * from './selectors';
 export { loadScenario } from './loadScenario';
-export { FOLLOW_UP_BODY, FOLLOW_UP_TITLE } from './slices/notifications';
+export {
+  BOOKING_DAY_AFTER_BODY,
+  FOLLOW_UP_BODY,
+  FOLLOW_UP_TITLE,
+  VISIT_NOTES_TAKE_BODY,
+} from './slices/notifications';

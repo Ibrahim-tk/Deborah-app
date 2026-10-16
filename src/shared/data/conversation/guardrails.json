@@ -73,6 +73,18 @@
     "body": "That's outside what I can help with — I focus on hormonal and whole-body health from my clinical work. Your provider is the right person for this.",
     "status": "placeholder"
   },
+  "uncovered": {
+    "patterns": [
+      "cataract",
+      "broken ankle",
+      "dental implant",
+      "root canal",
+      "orthopedic surgery",
+      "chemotherapy protocol"
+    ],
+    "body": "This sits outside what Deborah’s approved educational materials cover. I can send a short summary to Deborah’s team so they can follow up (usually within one business day), or you can book time with her.",
+    "status": "placeholder"
+  },
   "escalation": {
     "triggers": {
       "unresolvedConsultations": 3,
@@ -90,6 +102,7 @@
     "medication": "Should I stop taking my levothyroxine?",
     "crisis": "Some days I don't see the point anymore.",
     "outOfScope": "Can you look at my MRI results?",
-    "escalation": "I've tried everything and nothing is working."
+    "escalation": "I've tried everything and nothing is working.",
+    "uncovered": "I need advice about my cataract surgery recovery."
   }
 }

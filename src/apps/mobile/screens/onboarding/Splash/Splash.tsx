@@ -53,10 +53,9 @@ export default function Splash() {
 
   return (
     <div className={styles.root} data-xref="M-1.1 · Splash">
-      {/* Figma 161:386: grainy violet/gold photo backdrop, melted into parchment. */}
+      {/* Wispr Flow: grainy violet → cream (same backdrop as Aura / chat). */}
       <span className={styles.backdrop} aria-hidden />
-      <GradientShift />
-      {/* Tree of life and positions are taken 1:1 from Figma 161:386 (390×844 frame). */}
+      <GradientShift />      {/* Tree of life and positions are taken 1:1 from Figma 161:386 (390×844 frame). */}
       <div className={styles.tree}>
         <GrowReveal src="/images/splash/tree-of-life.svg" width={141} height={141} delay={100} duration={2000} />
       </div>

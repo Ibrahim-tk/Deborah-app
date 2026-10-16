@@ -9,10 +9,24 @@ import providerReviewCopy from '../data/conversation/provider-review.json';
 import { buildAnswer, buildProviderReview, emptyAnswer } from './answer';
 import { shouldOfferFollowUp } from './counting';
 import { pendingFacts } from './facts';
-import { countryName, missingGates, optionsFor, planIntake, question, recommendsProduct, stillOpen } from './intake';
+import { countryName, missingGates, optionsFor, planIntake, question, recommendsProduct } from './intake';
+import { guardrailsData as g } from '../data';
 import { CLARIFY, journeyAllowsProduct, journeyFor, planClarifiers } from './journey';
+import { isUncoveredConcern } from './guidanceGates';
 import { isMinor } from './profile';
 import { between, CPS } from './streamer';
+
+/** Inline uncovered handoff (avoid plans ↔ safety circular import). */
+function uncoveredGuidanceSteps(ctx: EngineContext, conv: Conversation): Step[] {
+  const teamAlert = { level: 'uncovered' as const, at: ctx.now, phrase: conv.openingText ?? conv.topic };
+  return [
+    ...deborahText(ctx, g.uncovered.body, { kind: 'outOfScope' }),
+    {
+      type: 'store',
+      action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'answered', teamAlert } },
+    },
+  ];
+}
 
 export const ANSWER_REQUEST_LABEL = 'Tell me what you think';
 
@@ -76,15 +90,27 @@ export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, pro
     pre.push(...expanded.steps);
   }
   const done = conv.intakeDone ?? [];
-  const plan = stillOpen(conv.intakePlan ?? [], done, profile);
-  const nextId = plan.find((id) => !done.includes(id));
+  // Prefer this conversation's unanswered plan slots (F02e early look / seeded mid-intake).
+  // stillOpen(profile) would skip quizzes already on screen when the profile seed already has the field.
+  const plan = conv.intakePlan ?? [];
+  const nextId = plan.find((id) => !done.includes(id) && id !== CLARIFY);
   const q = nextId ? question(nextId) : undefined;
-  // Nothing to ask (the profile already covers it, e.g. sign-up's health basics): answer straight away
-  // instead of pausing on "Tap below when you'd like my thoughts". Profile-only chats still wait for a topic.
-  if (!q && !done.length && !conv.profileOnly && conv.scriptId) return [...pre, ...answerSteps(ctx, conv, profile)];
-  // DN-11 → DN-12: the red-flag screen is the last question; once it is clear, Deborah answers.
-  if (!q && done.some((id) => question(id)?.redFlags) && !conv.profileOnly) return [...pre, ...answerSteps(ctx, conv, profile)];
-  if (!q) return [...pre, ...readySteps(ctx, conv, profile)];
+  // Nothing to ask (the profile already covers it, e.g. sign-up's health basics): guidance straight away.
+  // Profile-only chats still wait for a topic. Uncovered concerns go to team handoff (Miro Step 4).
+  if (!q && !done.length && !conv.profileOnly && conv.scriptId) {
+    return [...pre, ...(isUncoveredConcern(conv) ? uncoveredGuidanceSteps(ctx, conv) : answerSteps(ctx, conv, profile))];
+  }
+  // DN-11 → DN-12: the red-flag screen is the last question; once it is clear, hand off or answer.
+  if (!q && done.some((id) => question(id)?.redFlags) && !conv.profileOnly) {
+    return [
+      ...pre,
+      ...(isUncoveredConcern(conv) ? uncoveredGuidanceSteps(ctx, conv) : answerSteps(ctx, conv, profile)),
+    ];
+  }
+  if (!q) {
+    if (!conv.profileOnly && isUncoveredConcern(conv)) return [...pre, ...uncoveredGuidanceSteps(ctx, conv)];
+    return [...pre, ...readySteps(ctx, conv, profile)];
+  }
 
   // Consent and the country check aren't numbered steps.
   const numbered = plan.filter((id) => id !== CLARIFY && !question(id)?.hideStep);
@@ -167,20 +193,33 @@ export function readySteps(ctx: EngineContext, conv: Conversation, profile: Prof
 }
 
 /** Answer phase: lead line → thinking → 7 sections streamed → count, summary, plan, prompts. */
-export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Profile, opts: { retry?: boolean; labs?: LabReport } = {}): Step[] {
+export function answerSteps(
+  ctx: EngineContext,
+  conv: Conversation,
+  profile: Profile,
+  opts: { retry?: boolean; labs?: LabReport; /** Same-topic lab reassess — uncounted guidance refresh. */ refresh?: boolean } = {},
+): Step[] {
   // Every answer entry point shares the same safety and review policy.
   if (conv.status === 'safety' || conv.gentleNext) return [];
   const provider = conv.redFlag === true;
   if (provider && (pendingFacts(conv).length || conv.providerReview?.state === 'done')) return [];
+  const refresh = Boolean(opts.refresh || conv.labRefresh);
   const providerState = conv.providerReview ?? { state: 'waiting' as const, concerns: [] };
   const script = scriptOf(conv);
   const [reviewing, handbook, writing] = persona.voice.reviewing;
   const steps: Step[] = [
-    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'generating', ...(provider && { providerReview: { ...providerState, state: 'generating' } }) } } },
+    {
+      type: 'store',
+      action: {
+        type: 'setConversation',
+        conversationId: conv.id,
+        patch: { status: 'generating', labRefresh: undefined, ...(provider && { providerReview: { ...providerState, state: 'generating' } }) },
+      },
+    },
     // A retry resumes the answer without repeating the lead line.
     ...(opts.retry
       ? []
-      : deborahText(ctx, provider ? providerReviewCopy.lead : persona.voice.answerLead)),
+      : deborahText(ctx, provider ? providerReviewCopy.lead : refresh ? 'I’ve updated this with your labs.' : persona.voice.answerLead)),
     { type: 'thinking', on: true, label: reviewing },
     { type: 'delay', ms: between(600, 800) },
     { type: 'thinking', on: true, label: handbook },
@@ -229,29 +268,54 @@ export function answerSteps(ctx: EngineContext, conv: Conversation, profile: Pro
     return steps;
   }
 
-  const answeredAfter = ctx.answeredCount + 1;
+  const guidanceAt = ctx.now;
+  const answeredAfter = ctx.answeredCount + (refresh ? 0 : 1);
   steps.push(
-    { type: 'patch', messageId: m.id, patch: { suggestions: script.suggestedQuestions, meta: { streaming: false, activeSection: undefined, counted: true } } },
-    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'answered' } } },
-    { type: 'store', action: { type: 'completeConsultation', conversationId: conv.id } },
-    { type: 'store', action: { type: 'setSummary', conversationId: conv.id, summary: script.answer.summary, topic: script.topic } },
+    {
+      type: 'patch',
+      messageId: m.id,
+      patch: {
+        suggestions: script.suggestedQuestions,
+        meta: { streaming: false, activeSection: undefined, counted: !refresh },
+      },
+    },
     {
       type: 'store',
       action: {
-        type: 'createPlanFromAnswer',
-        profileId: profile.id,
-        goal: interpolate(script.answer.goal, { name: profile.name }),
-        habits: script.answer.habitsForPlan.map((h) => interpolate(h, { name: profile.name })),
-        productId: answer.product?.productId,
-        status: script.status,
+        type: 'setConversation',
+        conversationId: conv.id,
+        patch: { status: 'answered', guidanceGivenAt: guidanceAt },
       },
     },
   );
+  if (!refresh) {
+    steps.push(
+      { type: 'store', action: { type: 'completeConsultation', conversationId: conv.id } },
+      { type: 'store', action: { type: 'setSummary', conversationId: conv.id, summary: script.answer.summary, topic: script.topic } },
+      {
+        type: 'store',
+        action: {
+          type: 'createPlanFromAnswer',
+          profileId: profile.id,
+          goal: interpolate(script.answer.goal, { name: profile.name }),
+          habits: script.answer.habitsForPlan.map((h) => interpolate(h, { name: profile.name })),
+          productId: answer.product?.productId,
+          status: script.status,
+        },
+      },
+    );
+  } else {
+    steps.push({
+      type: 'store',
+      action: { type: 'setSummary', conversationId: conv.id, summary: script.answer.summary, topic: script.topic },
+    });
+  }
   // DN-13: anything noted in this conversation waits for Confirm before it reaches the profile.
   steps.push(...reviewFactsSteps(ctx, conv));
-  // The account already exists (sign-up before onboarding, plan P-10): no save-your-profile card.
-  if (shouldOfferFollowUp(ctx, answeredAfter)) {
-    // The follow-up opt-in (M-2.8) never covers the Review and Confirm card: it waits until that's resolved.
+  // Miro: ~14 days after guidance when permission already granted; else M-2.8 on first answer.
+  if (!refresh && ctx.notificationPermission === 'granted') {
+    steps.push({ type: 'store', action: { type: 'scheduleGuidanceFollowUp', profileId: profile.id, days: 14 } });
+  } else if (!refresh && shouldOfferFollowUp(ctx, answeredAfter)) {
     if (pendingFacts(conv).length) steps.push({ type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { followUpAfterReview: true } } });
     else steps.push({ type: 'delay', ms: 1500 }, { type: 'prompt', prompt: 'followUpOptIn' });
   }

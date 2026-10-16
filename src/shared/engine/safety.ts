@@ -80,6 +80,23 @@ export function outOfScopeSteps(ctx: EngineContext): Step[] {
   return [...deborahText(ctx, g.outOfScope.body, { kind: 'outOfScope' })];
 }
 
+/** Miro Step 4: enough context but outside approved knowledge — team handoff. Uncounted. */
+export function uncoveredSteps(ctx: EngineContext): Step[] {
+  const conv = ctx.conversation;
+  const teamAlert = { level: 'uncovered' as const, at: ctx.now, phrase: conv.openingText ?? conv.topic };
+  return [
+    ...deborahText(ctx, g.uncovered.body, { kind: 'outOfScope' }),
+    {
+      type: 'store',
+      action: {
+        type: 'setConversation',
+        conversationId: conv.id,
+        patch: { status: 'answered', teamAlert },
+      },
+    },
+  ];
+}
+
 export function escalationSteps(ctx: EngineContext): Step[] {
   return [{ type: 'delay', ms: 400 }, card(ctx, 'escalation', g.escalation.body)];
 }

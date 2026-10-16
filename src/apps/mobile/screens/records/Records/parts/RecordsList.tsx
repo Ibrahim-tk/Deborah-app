@@ -87,7 +87,11 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
                 kind={n.kind}
                 updated={formatShortDate(n.updatedAt)}
                 body={n.body}
-                onPress={() => open('M-9.4', { noteId: n.id })}
+                onPress={() =>
+                  n.kind === 'provider-brief'
+                    ? open('M-9.7', { noteId: n.id })
+                    : open('M-9.4', { noteId: n.id })
+                }
               />
               <Divider />
             </li>

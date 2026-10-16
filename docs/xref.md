@@ -47,6 +47,7 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-9.4 | Note editor | F09 | `records/NoteEditor` | W-9.4 — not built | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |
 | M-9.5 | Lab report | F09 | `records/LabReport` | W-9.5 — not built | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |
 | M-9.6 | PDF preview | F09 | `records/PdfPreview` | W-9.6 — not built | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |
+| M-9.7 | My Visit Notes | F09b | `records/VisitBrief` | W-9.7 — not built | — | [ux/F09b-visit-brief.md](ux/F09b-visit-brief.md) | built (Miro Step 5) |
 | M-10.1 | Account | F10 | `account/Account` | W-10.1 — not built | [F10](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-695) | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | built (phase 6) |
 | M-10.2 | Privacy & data | F10 | `account/PrivacyData` | W-10.2 — not built | [F10](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-695) | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | built (phase 6) |
 | M-10.3 | Subscription | F10 | `account/Subscription` | W-10.3 — not built | [F10](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-695) | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | built (phase 6) |
@@ -68,5 +69,5 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | ProfileSwitcherList / ProfileBanner | `patterns/profile/*` | not built | ux/F06-family-profiles.md |
 | FocusCard / PlanProgressCard / CheckInCard / QuickLinks / ContentCard / HabitRow | `patterns/health/*` | not built | ux/F07-my-health-hub.md |
 | ConsultationRow / NoteRow / EmptyState | `patterns/health/*` | not built | ux/F09-records.md |
-| InlineConsent / ChoicePills / ConfirmCard / SlotPicker / MoodScale / ScaleCheck / ReminderCard / UploadCard | `patterns/widgets/*` | not built | Widget lab `/wid` (`screens/lab/WidgetLab`, design tool, 2026-10-14) |
+| InlineConsent / QuestionChoices / ChoicePills / BookDeborah / ConfirmCard / SlotPicker / MoodScale / ScaleCheck / ReminderCard / UploadCard | `patterns/widgets/*` | not built | Widget lab `/wid` + V2 Conversation / IntakeQuestion / FlowChoice (one source; edit widget → reflects in chat) |
 | Design system (every token, ui primitive and pattern, rendered live) | `screens/lab/DesignSystem` | not built | Route `/design-system` (design tool, 2026-10-15); sources DESIGN.md · deborah-design-system.md |

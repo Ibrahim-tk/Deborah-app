@@ -1,0 +1,19 @@
+.panel {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border-hairline);
+  background: var(--color-surface);
+}
+
+.q {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  text-align: center;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}

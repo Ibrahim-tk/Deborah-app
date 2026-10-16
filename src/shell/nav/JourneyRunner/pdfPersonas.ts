@@ -36,7 +36,7 @@ export interface PdfPersonaRun extends JourneyRun {
   ageBand: PdfAgeBand;
   /** Where a successful auto-run should land. */
   stopAt: 'gate' | 'deborah';
-  /** Expected Health Basics step keys after a full answer set (lt13 self: only through birthYear). */
+  /** Expected Health Basics step keys after a full answer set (lt13 self: only through birthDate). */
   expectedSteps: string[];
 }
 
@@ -66,8 +66,8 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
 
 /** Steps that should appear for this persona (mirrors healthBasics.json showIf). */
 export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] {
-  if (band === 'lt13') return ['profileFor', 'birthYear'];
-  const keys = ['profileFor', 'birthYear', 'gender'];
+  if (band === 'lt13') return ['profileFor', 'birthDate'];
+  const keys = ['profileFor', 'birthDate', 'gender'];
   const teen = band === 'teen';
   const adultish = band === 'adult' || band === 'senior';
   // PDF: Female / Non-binary / Intersex get reproductive status (teen + adult banks).
@@ -92,7 +92,8 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
   const age = PDF_AGES[band];
   const a: Record<string, string> = {
     profileFor: 'self',
-    birthYear: String(thisYear - age),
+    // Mid-year DOB so age bands stay stable across the calendar year.
+    birthDate: `${thisYear - age}-06-15`,
   };
   if (band === 'lt13') return a;
   a.gender = gender;

@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Version 2 onboarding (M-1.8) — exact branches from Genesis Health (2).pdf Health Intake Logic wrt Age & Gender. Mandatory: Age (birth year) + Gender. All questions mandatory except free text after puberty. Transgender: one puberty question (Trans-woman / Trans-man). Wording is placeholder pending Deborah.",
+  "note": "Version 2 onboarding (M-1.8) — exact branches from Genesis Health (2).pdf Health Intake Logic wrt Age & Gender. Mandatory: Age (full date of birth: day, month, year) + Gender. All questions mandatory except free text after puberty. Transgender: one puberty question (Trans-woman / Trans-man). Wording is placeholder pending Deborah.",
   "steps": [
     {
       "key": "profileFor",
@@ -32,10 +32,10 @@
       }
     },
     {
-      "key": "birthYear",
-      "kind": "year",
-      "title": "Age",
-      "titleOther": "{name}’s age (year of birth)"
+      "key": "birthDate",
+      "kind": "date",
+      "title": "When were you born?",
+      "titleOther": "When was {name} born?"
     },
     {
       "key": "consent",
@@ -48,8 +48,8 @@
     {
       "key": "gender",
       "kind": "choice",
-      "title": "Gender",
-      "titleOther": "{name}’s gender",
+      "title": "How do you identify yourself?",
+      "titleOther": "How does {name} identify?",
       "choices": [
         { "value": "female", "label": "Female" },
         { "value": "male", "label": "Male" },
@@ -62,8 +62,8 @@
     {
       "key": "guardianNames",
       "kind": "text",
-      "title": "Parent / guardian names",
-      "titleOther": "Parent / guardian names for {name}",
+      "title": "Who are the parent or guardian names?",
+      "titleOther": "Who are the parent or guardian names for {name}?",
       "placeholder": "Names",
       "single": true,
       "showIf": {
@@ -74,10 +74,17 @@
     {
       "key": "childMedications",
       "kind": "text",
-      "title": "Medications & allergies",
-      "titleOther": "{name}’s medications (Rx, OTC, herbs, supplements)",
+      "title": "Any medications or supplements right now?",
+      "titleOther": "Any medications or supplements for {name} right now?",
       "placeholder": "Name — reason",
       "none": "None",
+      "suggestions": [
+        { "label": "Allergy medication" },
+        { "label": "Asthma inhaler" },
+        { "label": "Antibiotics" },
+        { "label": "Vitamins" },
+        { "label": "ADHD medication" }
+      ],
       "showIf": {
         "profileFor": { "in": ["dependent"] },
         "age": { "max": 12 }
@@ -86,10 +93,16 @@
     {
       "key": "allergies",
       "kind": "text",
-      "title": "Allergies",
-      "titleOther": "Allergies for {name}",
-      "placeholder": "Allergy",
+      "title": "Any medication allergies?",
+      "titleOther": "Any medication allergies for {name}?",
+      "placeholder": "e.g. Penicillin",
       "none": "None",
+      "suggestions": [
+        { "label": "Penicillin" },
+        { "label": "Sulfa drugs" },
+        { "label": "Aspirin" },
+        { "label": "NSAIDs" }
+      ],
       "showIf": {
         "profileFor": { "in": ["dependent"] },
         "age": { "max": 12 }
@@ -98,8 +111,8 @@
     {
       "key": "reproductive",
       "kind": "choice",
-      "title": "Reproductive status",
-      "titleOther": "{name}’s reproductive status",
+      "title": "Where are you hormonally right now?",
+      "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
         "gender": { "in": ["female", "non-binary", "intersex"] },
         "age": { "min": 18 }
@@ -115,8 +128,8 @@
     {
       "key": "reproductiveTeen",
       "kind": "choice",
-      "title": "Reproductive status",
-      "titleOther": "{name}’s reproductive status",
+      "title": "Where are you hormonally right now?",
+      "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
         "gender": { "in": ["female", "non-binary", "intersex"] },
         "age": { "min": 13, "max": 17 }
@@ -172,10 +185,25 @@
     {
       "key": "medications",
       "kind": "text",
-      "title": "Medications Rx & OTC — name + reason, or None",
-      "titleOther": "{name}’s medications Rx & OTC — name + reason, or None",
-      "placeholder": "Name — reason",
+      "title": "Any current medications?",
+      "titleOther": "Any current medications for {name}?",
+      "placeholder": "e.g. Levothyroxine",
       "none": "None",
+      "suggestions": [
+        { "label": "Levothyroxine" },
+        { "label": "Metformin" },
+        { "label": "Blood pressure medication" },
+        {
+          "label": "Birth control",
+          "showIf": { "gender": { "notIn": ["male"] } }
+        },
+        {
+          "label": "Testosterone",
+          "showIf": { "gender": { "in": ["male", "intersex", "transgender"] } }
+        },
+        { "label": "Antidepressant" },
+        { "label": "HRT / hormones" }
+      ],
       "showIf": {
         "age": { "min": 13 }
       }
@@ -183,10 +211,25 @@
     {
       "key": "supplements",
       "kind": "text",
-      "title": "Supplements — name + reason, or None",
-      "titleOther": "{name}’s supplements — name + reason, or None",
-      "placeholder": "Name — reason",
+      "title": "Any supplements?",
+      "titleOther": "Any supplements for {name}?",
+      "placeholder": "e.g. Magnesium, Vitamin D",
       "none": "None",
+      "suggestions": [
+        { "label": "Magnesium" },
+        { "label": "Vitamin D" },
+        { "label": "Omega-3" },
+        {
+          "label": "Iron",
+          "showIf": { "gender": { "notIn": ["male"] } }
+        },
+        {
+          "label": "Zinc",
+          "showIf": { "gender": { "in": ["male", "intersex", "transgender"] } }
+        },
+        { "label": "B12" },
+        { "label": "Probiotics" }
+      ],
       "showIf": {
         "age": { "min": 13 }
       }
@@ -194,7 +237,7 @@
     {
       "key": "genesisGold",
       "kind": "choice",
-      "title": "Taking Genesis Gold?",
+      "title": "Are you taking Genesis Gold?",
       "titleOther": "Is {name} taking Genesis Gold?",
       "showIf": {
         "age": { "min": 13 }

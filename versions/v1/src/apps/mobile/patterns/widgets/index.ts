@@ -2,6 +2,7 @@
 export * from './InlineConsent';
 export * from './ChoicePills';
 export * from './ConfirmCard';
+export * from './BookDeborah';
 export * from './SlotPicker';
 export * from './MoodScale';
 export * from './ScaleCheck';

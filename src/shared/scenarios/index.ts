@@ -27,9 +27,12 @@ import r01 from './R01-returning-signin.json';
 import s20 from './S20-teen-onboarding.json';
 import s21 from './S21-partner-onboarding.json';
 import s22 from './S22-provider-review.json';
+import s23 from './S23-guidance-early.json';
+import s24 from './S24-visit-brief.json';
+import s24b from './S24b-visit-brief-gate.json';
 
 export const SEEDS: Record<string, ScenarioSeed> = Object.fromEntries(
-  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
+  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
 );
 
 export const SCENARIO_GROUPS: ScenarioGroup[] = [
@@ -51,7 +54,10 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S01', label: 'New user — first launch', group: 'Onboarding', description: 'Someone opening the app for the very first time: Welcome, sign-up sheet, onboarding profile, Deborah’s welcome, first conversation.', startsAt: 'M-1.1 Splash', phase: 2 },
   { id: 'S03', label: 'Signed up — onboarding profile', group: 'Onboarding', description: 'Account created. The onboarding profile is open: who it’s for (Myself, or someone you care for → relationship, name, consent by age), birth year, sex at birth.', startsAt: 'M-1.8 Onboarding profile', phase: 2 },
   { id: 'S02', label: 'Basic details done — Deborah’s welcome', group: 'Onboarding', description: 'Profile already says perimenopausal. Home with Deborah’s welcome sheet; Start chatting opens the first conversation.', startsAt: 'M-2.0 + M-1.9 sheet', phase: 2 },
-  { id: 'S04', label: 'First answer delivered', group: 'Trial', description: 'Health profile on file; one counted consultation with a full seven-section answer. Follow-up not set.', startsAt: 'M-2.1 (answered)', phase: 3 },
+  { id: 'S04', label: 'First answer delivered', group: 'Trial', description: 'Health profile on file; one counted consultation with a full seven-section answer and What’s next rows. Follow-up not set.', startsAt: 'M-2.1 (answered)', phase: 3 },
+  { id: 'S23', label: 'Guidance — early first look', group: 'QA', description: 'Mid-intake on hot flashes. Tap Tell me what you think for an early first look (uncounted), then finish questions for full guidance.', startsAt: 'M-2.1 (intake)', phase: 7 },
+  { id: 'S24', label: 'My Visit Notes — provider brief', group: 'QA', description: 'Full guidance on file. Opens My Visit Notes (M-9.7): review chief complaint, save a copy, download PDF, then appointment follow-up.', startsAt: 'M-9.7 My Visit Notes', phase: 7 },
+  { id: 'S24b', label: 'My Visit Notes — not enough detail', group: 'QA', description: 'Mid-intake (no full guidance). Visit Notes / Save PDF shows “Let’s talk first — download turned off”.', startsAt: 'M-2.1 (intake)', phase: 7 },
   { id: 'S05', label: 'Last free consultation', group: 'Trial', description: 'Two of three free consultations used.', startsAt: 'M-2.1 (empty), 1 left', phase: 3 },
   { id: 'S06', label: 'Trial exhausted', group: 'Conversion', description: 'All three free consultations used. The free-limit sheet shows; any new question is held until a plan is chosen.', startsAt: 'M-2.1 + M-4.1 sheet', phase: 5 },
   { id: 'R01', label: 'Returning — signed in', group: 'Return', description: 'Signed back in: health profile on file, a consultation from 3 days ago. Home shows Continue; Ask Deborah plays the 2am heart-flutter demo.', startsAt: 'M-2.0 Home', phase: 2 },
@@ -67,7 +73,7 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S17', label: 'Stage not sure', group: 'Journeys', description: 'Rosa, 45, said “not sure”. Ask about hot flashes: last-period question, the stage is noted, then the matching journey’s questions.', startsAt: 'M-2.1 (empty)', phase: 7 },
   { id: 'S18', label: 'Male, 52', group: 'Journeys', description: 'James, no medicines. Ask about energy or sleep: male questions plus the 40–54 extra, male red flags. OPEN: male journey scope.', startsAt: 'M-2.1 (empty)', phase: 7 },
   { id: 'S19', label: 'Facts to confirm', group: 'Journeys', description: 'An answered conversation with three facts waiting: Save, Edit (M-2.13) or Don’t save. Nothing is on the profile until you confirm.', startsAt: 'M-2.1 (answered)', phase: 7 },
-  { id: 'S13', label: 'Safety test bench', group: 'QA', description: 'Trial 1/3 with quick inserts for emergency, medication, crisis and out-of-scope phrases.', startsAt: 'M-2.1', phase: 4 },
+  { id: 'S13', label: 'Safety test bench', group: 'QA', description: 'Trial 1/3 with quick inserts for emergency, medication, crisis, out-of-scope and uncovered (cataract) phrases.', startsAt: 'M-2.1', phase: 4 },
 ];
 
 export const DEFAULT_SCENARIO_ID = 'S01';

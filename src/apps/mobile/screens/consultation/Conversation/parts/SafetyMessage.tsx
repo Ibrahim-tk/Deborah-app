@@ -17,22 +17,29 @@ export interface SafetyMessageProps {
   onFocusComposer: () => void;
 }
 
-function useTeamNotifyToast(message: Message, conversationId: string, active: boolean) {
+function useTeamNotifyToast(message: Message, conversationId: string, active: boolean, copy?: string) {
   const toast = useToast();
   const seen = useRef(false);
   useEffect(() => {
     if (!active || seen.current || message.meta?.teamNotified) return;
     seen.current = true;
     useAppStore.getState().patchMessage(conversationId, message.id, { meta: { ...message.meta, teamNotified: true } });
-    toast('Care team prioritized and notified (demo)');
-  }, [active, conversationId, message.id, message.meta, toast]);
+    toast(copy ?? 'Care team prioritized and notified (demo)');
+  }, [active, conversationId, copy, message.id, message.meta, toast]);
 }
 
 export function SafetyMessage({ message: m, conversationId, busy, chat, onFocusComposer }: SafetyMessageProps) {
   const alert = useAlert();
   const toast = useToast();
   const { open, push } = useNav();
-  useTeamNotifyToast(m, conversationId, (m.kind === 'emergency' && !m.meta?.acknowledged) || m.kind === 'crisis');
+  const teamAlert = useAppStore((s) => s.conversations.byId[conversationId]?.teamAlert);
+  const uncovered = m.kind === 'outOfScope' && teamAlert?.level === 'uncovered';
+  useTeamNotifyToast(
+    m,
+    conversationId,
+    (m.kind === 'emergency' && !m.meta?.acknowledged) || m.kind === 'crisis' || uncovered,
+    uncovered ? 'Summary sent to Deborah’s team (demo)' : undefined,
+  );
 
   const call = async (title: string, demo: string) => {
     const choice = await alert({ title, buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Call' }] });

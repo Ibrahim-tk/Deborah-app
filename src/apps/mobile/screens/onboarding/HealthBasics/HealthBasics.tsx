@@ -2,35 +2,36 @@
  * @screen  M-1.8 · Onboarding profile
  * @flow    F01 onboarding (plan P-02 to P-04): Splash → Welcome → sign-up (M-1.4) → this → Deborah (M-1.9) → chat
  * @presentation full screen, right after the sign-up sheet's "You're in"
- * @states  who is this for · [someone else: relationship · first name] · birth year · [self under 13 → M-1.10]
+ * @states  who is this for · [someone else: relationship · first name] · date of birth · [self under 13 → M-1.10]
  *          · [someone else: consent by age group] · gender · age×gender branches (reproductive / puberty / meds)
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * Version 2 onboarding profile: who Deborah will talk to, age, gender, then conditional health-intake
- * steps from the age × gender PDF. Steps and `showIf` branches live in data/intake/healthBasics.json.
+ * Version 2 onboarding profile: who Deborah will talk to, full date of birth, gender, then conditional
+ * health-intake steps from the age × gender PDF. Steps and `showIf` branches live in data/intake/healthBasics.json.
  */
 import { useState, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
 import { Aura, Button, GlassButton, GradientShift } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
-import { bloomProgress, forSomeoneElse, titleFor, visibleSteps, type Answers } from './steps';
+import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, type Answers } from './steps';
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
 import { BloomReveal } from './parts/BloomReveal';
 import styles from './HealthBasics.module.css';
 
 const THIS_YEAR = new Date().getFullYear();
-const DEFAULT_YEAR = String(THIS_YEAR - 35);
+/** Mid-year default so the date wheel opens on a plausible adult DOB. */
+const DEFAULT_DOB = `${THIS_YEAR - 35}-06-15`;
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 // Long enough to see a tapped tile or row confirm before the next question.
 const CONFIRM_MS = 280;
 
 export default function HealthBasics() {
   const { presentSheet, pop, replace } = useNav();
-  const [answers, setAnswers] = useState<Answers>({ birthYear: DEFAULT_YEAR });
+  const [answers, setAnswers] = useState<Answers>({ birthDate: DEFAULT_DOB });
   const [i, setI] = useState(0);
   const steps = visibleSteps(answers);
   const step = steps[Math.min(i, steps.length - 1)];
@@ -46,9 +47,9 @@ export default function HealthBasics() {
   const set = (key: string, v: string) => setAnswers((a) => ({ ...a, [key]: v }));
   const next = (final: Answers) => {
     // PDF age gate: only under-13 selves need a parent; teens continue the form.
-    if (step.kind === 'year' && !forSomeoneElse(final)) {
-      const age = nowFrom(useAppStore.getState()).getFullYear() - Number(final.birthYear);
-      if (age < 13) return replace('M-1.10');
+    if (step.kind === 'date' && !forSomeoneElse(final)) {
+      const age = ageFromAnswers(final, nowFrom(useAppStore.getState()));
+      if (age !== undefined && age < 13) return replace('M-1.10');
     }
     return last ? finish(final) : setI(i + 1);
   };

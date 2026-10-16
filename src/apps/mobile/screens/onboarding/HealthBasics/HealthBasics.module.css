@@ -69,7 +69,7 @@
   margin-top: calc(var(--space-12, 48px) * -1);
   padding-top: calc(var(--space-12, 48px) + var(--space-2));
   background:
-    linear-gradient(to bottom, rgb(253 250 246 / 0) 0%, rgb(253 250 246 / 0.72) 22%, rgb(253 250 246 / 0.86) 55%, rgb(253 250 246 / 0.6) 100%);
+    linear-gradient(to bottom, rgb(249 247 245 / 0) 0%, rgb(249 247 245 / 0.72) 22%, rgb(249 247 245 / 0.86) 55%, rgb(249 247 245 / 0.6) 100%);
   transition: background 360ms ease-out;
 }
 

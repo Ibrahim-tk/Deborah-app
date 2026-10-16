@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { suggestionsData } from '@shared/data';
-import { ageOf, greeting, isMinor, pendingFacts } from '@shared/engine';
+import { ageOf, asksForAnswer, greeting, isMinor, pendingFacts } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
@@ -29,6 +29,7 @@ import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
 import styles from './Conversation.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
+import { useToast } from '@mobile/hooks/toast.store';
 
 const SHOW_TRIAL_COUNTER = false;
 
@@ -37,6 +38,7 @@ export default function Conversation() {
   const { conversation, profile, freeLeft, busy, history } = chat;
   const { open, push, pop, switchTab, presentSheet } = useNav();
   const gate = useAccountGate();
+  const toast = useToast();
   const intake = useIntakeFlow();
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
   // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
@@ -136,8 +138,10 @@ export default function Conversation() {
       setDraft('');
       toBottom();
       // Free-text session Q, expand "Other…", or hybrid Other: composer answers the current question.
+      // Exception (F02e): “Tell me what you think” must request guidance (early look / answer), not fill Other.
       if (
         quiz &&
+        !asksForAnswer(t) &&
         (quizFreeText ||
           Boolean(quiz.expandOptions?.length) ||
           quiz.options.some((o) => o.id === 'other'))
@@ -199,7 +203,9 @@ export default function Conversation() {
         className={styles.scroll}
         onScroll={(e) => {
           onScroll();
-          setUnderBar(e.currentTarget.scrollTop > 4);
+          // Hysteresis so the edge effect doesn’t flicker the purple wash on/off near the top.
+          const y = e.currentTarget.scrollTop;
+          setUnderBar((on) => (on ? y > 2 : y > 12));
         }}
       >
         <div className={styles.column} data-empty={isEmpty || undefined}>
@@ -230,6 +236,19 @@ export default function Conversation() {
                   switchTab('health');
                   push('M-7.3');
                 })}
+                onVisitNotes={() => {
+                  const msg = [...(conversation?.messages ?? [])].reverse().find((m) => m.kind === 'answer' && m.answer);
+                  if (msg) actions.saveAnswer(msg, conversation?.topic ?? 'your question');
+                  else open('M-9.4');
+                }}
+                onOpenPlan={() => {
+                  switchTab('health');
+                  push('M-7.3');
+                }}
+                onTeamBook={() => {
+                  toast('Summary sent to Deborah’s team (demo)');
+                  push('M-8.2');
+                }}
                 onLongPress={setPressed}
                 onFocusComposer={() => inputRef.current?.focus()}
                 onIntakeAnswerSurface={setIntakeSurface}

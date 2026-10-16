@@ -70,7 +70,9 @@ export function IntakeQuestion({ intake, prompt, active, onAnswer, onOther, onAn
     if (locked || submitting.current) return;
     submitting.current = true;
     setSent(true);
-    onAnswer(ids.filter((id) => id !== 'other' && id !== 'yes'));
+    // Keep `yes` — session-concern / session-complete confirm with id "yes".
+    // Drop `other` only: that path focuses the composer instead of submitting.
+    onAnswer(ids.filter((id) => id !== 'other'));
   };
 
   const focusComposer = () => {

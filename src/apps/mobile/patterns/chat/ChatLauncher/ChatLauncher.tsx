@@ -17,21 +17,23 @@ export interface ChatLauncherProps {
 
 export function ChatLauncher({ placeholder = 'Describe how you’re feeling…', glow, onOpen }: ChatLauncherProps) {
   return (
-    <button type="button" className={glow ? `${styles.root} ${styles.glow}` : styles.root} onClick={onOpen} aria-label="Message Deborah">
-      {/* Hero use: a small violet light travels around the edge. */}
-      {glow && <EdgeLight />}
-      <span className={styles.placeholder}>{placeholder}</span>
-      <span className={styles.tools} aria-hidden>
-        <span className={styles.tool}>
-          <Icon name="plus" size={20} />
+    <div className={styles.wrap}>
+      {/* Glow behind the white launcher — not on the rim. */}
+      {glow && <EdgeLight className={styles.edgeLight} />}
+      <button type="button" className={glow ? `${styles.root} ${styles.glow}` : styles.root} onClick={onOpen} aria-label="Message Deborah">
+        <span className={styles.placeholder}>{placeholder}</span>
+        <span className={styles.tools} aria-hidden>
+          <span className={styles.tool}>
+            <Icon name="plus" size={20} />
+          </span>
+          <span className={styles.tool}>
+            <Icon name="mic" size={20} />
+          </span>
+          <span className={`${styles.tool} ${styles.send}`}>
+            <Icon name="send" size={18} />
+          </span>
         </span>
-        <span className={styles.tool}>
-          <Icon name="mic" size={20} />
-        </span>
-        <span className={`${styles.tool} ${styles.send}`}>
-          <Icon name="send" size={18} />
-        </span>
-      </span>
-    </button>
+      </button>
+    </div>
   );
 }

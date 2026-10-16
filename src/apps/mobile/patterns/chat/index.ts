@@ -22,3 +22,4 @@ export * from './ComposerOptions';
 export * from './SymptomPicker';
 export * from './SaveProfileCard';
 export * from './ReviewFactsCard';
+export * from './GuidanceNextSteps';

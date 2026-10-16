@@ -1,4 +1,7 @@
-/** Shared /wid choice widget adapter. Emits stable IDs, never display labels. */
+/**
+ * Shared choice widget for V2 chat and /wid. Emits stable IDs, never display labels.
+ * IntakeQuestion, FlowChoice, and WidgetLab all mount this — edit once for both surfaces.
+ */
 import { useRef, useState } from 'react';
 import type { Option } from '@shared/types/domain';
 import { Button, Icon, OptionList, OptionRow } from '@mobile/ui';

@@ -50,6 +50,10 @@ function expandConversations(seed: ScenarioSeed, data: AppData): AppData['conver
     const labs = Object.values(data.labs.reportsById).find((r) => r.profileId === cs.profileId && r.confirmed);
     let conv = replayScript(scriptId, checkpoint as 'intake-1' | 'ready' | 'answered', { conversationId: id, profile, now: seed.now, labs });
     if (cs.daysAgo) conv = backdate(conv, seed.now, cs.daysAgo);
+    // Miro Step 4: answered seeds show What’s next when guidance was given.
+    if (checkpoint === 'answered' && !conv.guidanceGivenAt) {
+      conv = { ...conv, guidanceGivenAt: conv.countedAt ?? seed.now };
+    }
     byId[id] = { ...conv, archived: !cs.active };
     if (cs.active) activeByProfile[cs.profileId] = id;
   }

@@ -5,11 +5,11 @@ import { personalise } from '@flow-v1/shared/engine';
 import { Button, Panel } from '@flow-v1/apps/mobile/ui';
 import { AnswerSections } from '@flow-v1/apps/mobile/patterns/chat';
 import { ProductCard } from '@flow-v1/apps/mobile/patterns/commerce';
-import { EmergencyInterrupt, EscalationCard } from '@flow-v1/apps/mobile/patterns/safety';
-import { ChoicePills, ConfirmCard, InlineConsent, MoodScale, ReminderCard, ScaleCheck, SlotPicker, UploadCard } from '@flow-v1/apps/mobile/patterns/widgets';
+import { EmergencyInterrupt } from '@flow-v1/apps/mobile/patterns/safety';
+import { BookDeborah, ChoicePills, InlineConsent, MoodScale, ScaleCheck, UploadCard } from '@flow-v1/apps/mobile/patterns/widgets';
 import { buildAnswer, visitPrepItems } from '@flow-v1/apps/mobile/screens/consultation/FirstConsult/parts/buildAnswer';
 import { VisitPrepCard } from '@flow-v1/apps/mobile/screens/consultation/FirstConsult/parts/VisitPrepCard';
-import { MULTI_OPTIONS, SLOT_FORTNIGHT, type WidgetKind } from './scenarios';
+import { MULTI_OPTIONS, type WidgetKind } from './scenarios';
 import styles from './WidgetLab.module.css';
 
 const say = (s?: string) => personalise(firstConsultFlow, s, 'Maria');
@@ -54,19 +54,13 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return product && ANSWER.product ? <ProductCard product={product} productRef={ANSWER.product} onShop={() => reply(undefined, 'Opening the shop (simulated).')} /> : null;
     }
     case 'slots':
-      return <SlotPicker title="Book with Deborah" meta="30 min · Video" days={SLOT_FORTNIGHT} onPick={(day, time) => reply(`${day}, ${time}`, 'Lovely. One step left: confirm it below.')} />;
-    case 'confirm':
-      return <ConfirmCard eyebrow="Confirm booking" icon="calendar" title="Deborah · 30 min" value="$150" detail="Thu 16 · 3:00 pm · Video" detailValue="Card ending 4242" confirmedText="Booked. You’ll get a reminder." onConfirm={() => reply(undefined, 'You’re booked. I’ll send your notes to Deborah ahead of time.')} />;
-    case 'reminder':
-      return <ReminderCard what="Sleep check-in" when="Next Thursday, 8:00 pm" onChange={(on) => on && reply(undefined, 'Done. I’ll check in next Thursday.')} />;
+      return <BookDeborah onRequest={() => reply(undefined, 'I’ve let the team know. They’ll be in touch soon to set up a time.')} />;
     case 'upload':
       return <UploadCard onUploaded={(f) => reply(`Uploaded ${f}`, 'Got it. I’ll read your thyroid markers alongside your sleep.')} />;
     case 'tip':
       return <Panel tone="lilac" icon="check">Keep the bedroom cool, around 18 °C, and have a glass of water by the bed.</Panel>;
     case 'prep':
       return <VisitPrepCard title="For my next appointment" questions={PREP.questions} tests={PREP.tests} onShare={() => reply(undefined, 'PDF ready to share (simulated).')} onSave={() => reply(undefined, 'Saved to your Visit notes.')} />;
-    case 'escalation':
-      return <EscalationCard body="It sounds like your situation deserves a personal look. I’d like you to talk with me directly." reasons={['Broken sleep for months', 'Night sweats most nights', 'A thyroid medicine to review']} details={['30 min', 'Video or phone', 'Next opening Thu 16', 'Your notes go ahead']} onBook={() => reply('Book with Deborah', 'Let’s find a time.')} onDismiss={() => reply('I understand', 'Thank you. I’m here when you want to talk more.')} />;
     case 'emergency':
       return <EmergencyInterrupt title="Please get help now" body="If this is happening now, call emergency services." onCall={() => reply(undefined, 'Calling 911 (simulated).')} onFindER={() => reply(undefined, 'Finding care near you (simulated).')} onSafe={() => reply('I’m safe', 'Thank you. Let’s keep talking.')} />;
   }

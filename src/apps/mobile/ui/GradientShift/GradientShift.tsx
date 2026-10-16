@@ -1,6 +1,6 @@
 /**
- * @ui GradientShift — variation 2 backdrop: a slow-drifting violet / lilac / gold sky that melts
- * into parchment. Renders nothing visible unless <html data-variant="2"> (set by the shell).
+ * @ui GradientShift — variation 2 backdrop: a slow-drifting violet / lilac / cream sky that melts
+ * into Wispr Flow cream. Renders nothing visible unless <html data-variant="2"> (set by the shell).
  *
  * Performance: each colour field is its own layer that only animates `transform`, so the
  * compositor moves pre-rasterised gradients with no layout or repaint per frame. No `filter: blur`

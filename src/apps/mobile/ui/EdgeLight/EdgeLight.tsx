@@ -1,9 +1,8 @@
 /**
- * @ui EdgeLight — a soft violet glow that travels around a rounded card's edge at an even speed
- *     (a blurred dash moving along the outline, so it never crawls on long edges the way a
- *     rotating conic gradient does). Nothing is drawn on the card edge itself.
- *     Place inside a `position: relative` card that is not its own stacking context: the glow
- *     sits behind the card's fill. Still under reduced motion.
+ * @ui EdgeLight — a soft violet glow that drifts behind a rounded card (never on the rim).
+ *     Length and pace vary so the motion feels organic rather than metronomic.
+ *     Place as a sibling behind the card fill (or inside a host that is not stacking-context
+ *     locked over the bloom). Still under reduced motion.
  *     OPEN: DESIGN.md bans shimmer animations; kept on the designer's request (2026-10-12).
  */
 import { useEffect, useId, useRef, type CSSProperties } from 'react';
@@ -13,41 +12,75 @@ import styles from './EdgeLight.module.css';
 export interface EdgeLightProps {
   /** Corner radius of the card, px. */
   radius?: number;
-  /** Seconds per lap. */
+  /** Base seconds per lap (actual pace drifts around this). */
   duration?: number;
   className?: string;
 }
 
-/**
- * Only the soft outer glow travels (design direction 2026-10-12: no line on the card edge).
- * Glow segments are centred on the moving point, shortest on top, so it is brightest in the middle.
- */
 const VIOLET = '#8b5cf6';
-const BLOOM = [0.14, 0.09, 0.05].map((len) => ({ len, color: VIOLET, opacity: 0.35, width: 8 }));
-/** Two glows on opposite sides of the card (half a lap apart), travelling the same way. */
-const PHASES = [0, 0.5];
+/** Soft bloom layers — lengths breathe in the animation. */
+const LAYERS = [
+  { baseLen: 0.16, color: VIOLET, opacity: 0.32, width: 9 },
+  { baseLen: 0.1, color: VIOLET, opacity: 0.22, width: 7 },
+  { baseLen: 0.06, color: VIOLET, opacity: 0.14, width: 5 },
+];
+/** Uneven phases so the two glows never sit opposite like clock hands. */
+const PHASES = [0.04, 0.41];
 
-export function EdgeLight({ radius = 24, duration = 14, className }: EdgeLightProps) {
+export function EdgeLight({ radius = 24, duration = 16, className }: EdgeLightProps) {
   const id = useId().replace(/:/g, '');
   const root = useRef<SVGSVGElement>(null);
 
-  // Every segment is phase-locked to the page clock (startTime 0), not to when it mounted, so a
-  // re-render or hot reload can never leave the tail, tip and bloom out of step; every EdgeLight
-  // on screen moves together too.
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('reduced-motion');
-    const host = root.current?.parentElement;
+    const reduced =
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('reduced-motion');
+    const host = root.current;
     if (reduced || !host) return;
-    const anims = [...host.querySelectorAll<SVGRectElement>(`rect[data-edge="${id}"]`)].map((r) => {
-      const start = Number(r.dataset.len) / 2 - Number(r.dataset.phase);
-      const a = r.animate([{ strokeDashoffset: start }, { strokeDashoffset: start - 1 }], { duration: duration * 1000, iterations: Infinity, easing: 'linear' });
-      a.startTime = 0;
-      return a;
+
+    const anims: Animation[] = [];
+    host.querySelectorAll<SVGRectElement>(`rect[data-edge="${id}"]`).forEach((r, i) => {
+      const phase = Number(r.dataset.phase);
+      const baseLen = Number(r.dataset.len);
+      // Each layer/phase drifts at its own pace and breathes in length.
+      const lapMs = duration * 1000 * (0.72 + ((i * 0.17) % 0.55));
+      const start = baseLen / 2 - phase;
+      const travel = r.animate(
+        [
+          { strokeDashoffset: start, offset: 0 },
+          { strokeDashoffset: start - 0.22, offset: 0.28, easing: 'ease-in-out' },
+          { strokeDashoffset: start - 0.48, offset: 0.52, easing: 'ease-out' },
+          { strokeDashoffset: start - 0.7, offset: 0.74, easing: 'ease-in' },
+          { strokeDashoffset: start - 1, offset: 1 },
+        ],
+        { duration: lapMs, iterations: Infinity },
+      );
+      // Stagger clocks so they never lock into a shared beat.
+      travel.currentTime = (i * lapMs * 0.31) % lapMs;
+
+      const breathe = r.animate(
+        [
+          { strokeDasharray: `${baseLen * 0.7} ${1 - baseLen * 0.7}` },
+          { strokeDasharray: `${baseLen * 1.35} ${1 - baseLen * 1.35}` },
+          { strokeDasharray: `${baseLen * 0.85} ${1 - baseLen * 0.85}` },
+          { strokeDasharray: `${baseLen * 1.15} ${1 - baseLen * 1.15}` },
+          { strokeDasharray: `${baseLen * 0.7} ${1 - baseLen * 0.7}` },
+        ],
+        {
+          duration: lapMs * (1.4 + (i % 3) * 0.35),
+          iterations: Infinity,
+          easing: 'ease-in-out',
+          direction: i % 2 === 0 ? 'normal' : 'reverse',
+        },
+      );
+      breathe.currentTime = (i * 900) % (lapMs * 1.4);
+      anims.push(travel, breathe);
     });
+
     return () => anims.forEach((a) => a.cancel());
   }, [id, duration]);
 
-  const seg = (phase: number) => (s: (typeof BLOOM)[number], i: number) => (
+  const seg = (phase: number) => (s: (typeof LAYERS)[number], i: number) => (
     <rect
       key={`${phase}-${i}`}
       x="0"
@@ -62,22 +95,20 @@ export function EdgeLight({ radius = 24, duration = 14, className }: EdgeLightPr
       strokeOpacity={s.opacity}
       strokeWidth={s.width}
       data-edge={id}
-      data-len={s.len}
+      data-len={s.baseLen}
       data-phase={phase}
-      // Every segment is centred on the same moving point, so together they read as one soft light.
-      style={{ strokeDasharray: `${s.len} ${1 - s.len}`, strokeDashoffset: s.len / 2 - phase } as CSSProperties}
+      style={{ strokeDasharray: `${s.baseLen} ${1 - s.baseLen}`, strokeDashoffset: s.baseLen / 2 - phase } as CSSProperties}
     />
   );
+
   return (
-    <>
-      <svg ref={root} className={cx(styles.layer, styles.bloom, className)} aria-hidden="true">
-        <defs>
-          <filter id={`b${id}`} x="-10%" y="-30%" width="120%" height="160%">
-            <feGaussianBlur stdDeviation="6" />
-          </filter>
-        </defs>
-        <g filter={`url(#b${id})`}>{PHASES.map((p) => BLOOM.map(seg(p)))}</g>
-      </svg>
-    </>
+    <svg ref={root} className={cx(styles.layer, styles.bloom, className)} aria-hidden="true">
+      <defs>
+        <filter id={`b${id}`} x="-20%" y="-40%" width="140%" height="180%">
+          <feGaussianBlur stdDeviation="7" />
+        </filter>
+      </defs>
+      <g filter={`url(#b${id})`}>{PHASES.map((p) => LAYERS.map(seg(p)))}</g>
+    </svg>
   );
 }

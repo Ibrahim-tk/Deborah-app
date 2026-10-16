@@ -22,7 +22,7 @@
   "M-2.1": {
     "title": "Conversation",
     "flow": "F02 Core consultation",
-    "note": "This is the heart of the product. Maria describes how she feels and Deborah asks up to three light intake questions. When Maria asks, Deborah answers in her 7-section framework. It should feel like a consultation, not a chatbot. The same screen also holds the safety, check-in, family-profile and escalation states."
+    "note": "This is the heart of the product. Maria describes how she feels and Deborah asks up to three light intake questions. When Maria asks, Deborah answers in her 7-section framework. It should feel like a consultation, not a chatbot. The same screen also holds the safety, check-in, family-profile and escalation states. Miro Step 4 (docs/ux/F02e-guidance.md): Ask Deborah / Tell me what you think > enough details? yes > covers concern? yes > stream 7 sections > product if allowed > disclaimer / closing > Guidance given > ~14-day follow-up > What’s next OptionRows. Not enough details > early first look > finish questions > ask again. Out of coverage > team handoff toast + Book (uncounted). What’s next: Ask a follow-up > Discuss with provider > Save summary > Book > Upload labs > Buy product > View 90-day plan."
   },
   "M-2.7": {
     "title": "Shop (in-app browser)",
@@ -167,7 +167,12 @@
   "M-9.6": {
     "title": "PDF preview",
     "flow": "F09 My Health records",
-    "note": "This is a printable one-page summary of an answer: questions for her provider, tests worth discussing and the disclaimer. It turns the conversation into something Maria can hand to her clinician. She can share or print it. Premium gating is still open; the prototype allows it for everyone."
+    "note": "Printable summary for a clinician. When the conversation has enough detail (Miro Step 5), this shows the full My Visit Notes brief; otherwise a shorter questions-and-tests page. Share and Print are simulated. Premium gating is still open; the prototype allows it for everyone."
+  },
+  "M-9.7": {
+    "title": "My Visit Notes",
+    "flow": "F09b Visit brief (Miro Step 5)",
+    "note": "A structured note for Maria’s provider: chief complaint she can edit, clinical context, tests, questions, meds, red flags and disclaimer. She can save a copy to Visit Notes or download a PDF, then set a day-after or 7-day check-in depending on whether she has an appointment date."
   },
   "M-10.1": {
     "title": "Account",

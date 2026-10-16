@@ -55,7 +55,11 @@ export function shareLabsSteps(ctx: EngineContext, report: LabReport, direct?: b
         ? [{ type: 'patch' as const, messageId: request.id, patch: { quickReplies: { ...request.quickReplies, answered: 'upload' } } }]
         : []),
       bubble,
-      ...answerSteps(ctx, conv, ctx.profile, { labs: report }),
+      // Same-topic lab share after an answer: uncounted guidance refresh (Miro update summary).
+      ...answerSteps(ctx, { ...conv, labRefresh: prev.status === 'answered' }, ctx.profile, {
+        labs: report,
+        refresh: prev.status === 'answered',
+      }),
     ];
   }
 

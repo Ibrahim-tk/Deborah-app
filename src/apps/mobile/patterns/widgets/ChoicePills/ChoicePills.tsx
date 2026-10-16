@@ -4,7 +4,7 @@
  *          (tint + border only — no checkmark).
  *          Multi mode (`selected` + `onToggle`): pills toggle on and off, a compact multi-select.
  *          Optional `endSlot` sits after the last pill (e.g. circular confirm tick).
- * @usedBy  M-2.12 (FlowChoice yes/no), widget lab (/wid), IntakeQuestion expand
+ * @usedBy  QuestionChoices (IntakeQuestion, FlowChoice, /wid lab) — do not fork a second pill UI
  * OPEN: DESIGN.md bans pills; used here by design direction 2026-10-14.
  */
 import { useState, type CSSProperties, type ReactNode } from 'react';

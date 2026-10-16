@@ -10,6 +10,7 @@ const LABELS = {
   crisis: 'Crisis',
   outOfScope: 'Out of scope',
   escalation: 'Escalation',
+  uncovered: 'Uncovered',
 } as const;
 
 export function SafetyBench({ onInsert }: { onInsert: (phrase: string) => void }) {

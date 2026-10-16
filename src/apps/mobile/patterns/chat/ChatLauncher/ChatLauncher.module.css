@@ -1,5 +1,32 @@
+/* Same warm aura as Composer — behind every chat entry field. */
+.wrap {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+}
+.wrap::before {
+  content: '';
+  position: absolute;
+  left: 42%;
+  right: -28%;
+  top: -20%;
+  bottom: -70%;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 75% at 78% 78%,
+    rgb(255 214 168 / 0.35) 0%,
+    rgb(245 190 140 / 0.18) 40%,
+    transparent 72%
+  );
+}
+
+.edgeLight { z-index: 0; }
+
 /* Mirrors the Composer's glass card so the hand-off into chat feels continuous. */
 .root {
+  position: relative;
+  z-index: 1;
   display: grid;
   gap: var(--space-2);
   width: 100%;
@@ -22,10 +49,8 @@
 .tool { display: grid; place-items: center; width: var(--tap-min); height: var(--tap-min); }
 .send { margin-left: auto; color: var(--color-accent); }
 
-/* Hero (Home): solid field, no rim, soft lift; EdgeLight draws the travelling light and its bloom.
-   Not a stacking context (no z-index), so the bloom can sit behind the fill. */
+/* Hero (Home): solid white field; EdgeLight is a sibling behind it. */
 .glow {
-  position: relative;
   border: 1px solid transparent;
   background: var(--color-surface);
   box-shadow: 0 8px 24px rgb(97 57 119 / 0.1), 0 1px 3px rgb(97 57 119 / 0.06);

@@ -2,14 +2,13 @@
  * Deliberately outside DESIGN.md (pills, soft shadows, low-opacity glows). To discard: delete this
  * file, its import in MobileApp.tsx, and revert Button/Card/Input/OptionRow module CSS. */
 .phone-root {
-  /* 1. Background: static mesh glow over the existing parchment + splash photo. */
+  /* 1. Background: soft mesh over Wispr Flow (cream, not yellow). */
   --bg-mesh:
-    radial-gradient(60% 45% at 0% 0%, rgb(205 73 127 / 0.14), transparent 70%),
-    radial-gradient(55% 45% at 100% 100%, rgb(123 92 255 / 0.10), transparent 70%),
-    radial-gradient(40% 25% at 50% 18%, rgb(230 199 118 / 0.10), transparent 70%);
+    radial-gradient(60% 45% at 0% 0%, rgb(205 73 127 / 0.10), transparent 70%),
+    radial-gradient(55% 45% at 100% 100%, rgb(123 92 255 / 0.08), transparent 70%);
   --surface-canvas:
     var(--bg-mesh),
-    url('/images/splash/splash-bg.png') center var(--backdrop-lift) / 100% auto no-repeat,
+    var(--backdrop-image) center var(--backdrop-lift) / 100% auto no-repeat,
     var(--color-canvas);
 
   /* 2. Surfaces: translucent, near-invisible rim, diffuse lift. */

@@ -29,14 +29,16 @@
      Deborah's own words. Components opt in with var(--font-artistic, var(--font-display)). */
   --font-artistic: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
-  /* Surfaces: Ask Deborah canvas recipe (§4) instead of the splash photo. */
-  --color-canvas: #f7f4f1;
+  /* Surfaces: cream canvas + Wispr Flow photo (same as chat / /wid). Soft lilac mesh only. */
+  --color-canvas: #f9f7f5;
   --bg-mesh:
-    radial-gradient(ellipse at 87% -10%, #e9dbee77, transparent 45%),
-    radial-gradient(ellipse at 8% 100%, #ffdda344, transparent 45%);
-  --surface-canvas: var(--bg-mesh), var(--color-canvas);
+    radial-gradient(ellipse at 87% -10%, #e9dbee77, transparent 45%);
+  --surface-canvas:
+    var(--bg-mesh),
+    var(--backdrop-image) center var(--backdrop-lift) / 100% auto no-repeat,
+    var(--color-canvas);
   --color-surface: #fbf8fa;                   /* sheet */
-  --color-surface-tonal: #f6e5ce;             /* peach tile */
+  --color-surface-tonal: #f0ebe6;             /* cream tonal (was peach) */
   --color-surface-lilac: #eadeef;             /* user bubble */
   --color-surface-signature: #2e193c;         /* quiet-moment card */
   --color-scrim: #321e4044;
@@ -85,7 +87,7 @@
   --radius-card: 30px;
   --radius-card-sm: 19px;
   --card-tone-lilac: #eae3ef;
-  --card-tone-linen: #f6e5ce;
+  --card-tone-linen: #f0ebe6;
   --card-tone-rose: #f4e3e6;
   --card-tone-paper: #ffffffb8;
   --card-action-bg: #ffffff99;

@@ -166,9 +166,9 @@ export function Composer({
           if (e.target !== area.current) e.preventDefault();
         }}
       >
+        {/* Glow behind the white card only — not drawn on the composer rim. */}
+        {!options && <EdgeLight className={styles.edgeLight} />}
         <div className={styles.root}>
-          {/* The travelling light is decoration for an idle bar: off while answering options. */}
-          {!options && <EdgeLight />}
           {banner && <div className={styles.banner}>{banner}</div>}
           {options}
           <div className={styles.field}>

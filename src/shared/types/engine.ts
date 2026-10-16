@@ -58,7 +58,9 @@ export type StoreAction =
   /** DN-13: facts noted in a conversation, waiting for Review and Confirm. Never written to the profile here. */
   | { type: 'proposeFacts'; conversationId: ID; facts: PendingFact[] }
   /** Archive the current conversation and continue the plan in this new one. */
-  | { type: 'startConversation'; conversation: Conversation };
+  | { type: 'startConversation'; conversation: Conversation }
+  /** Auto-queue a guidance check-in (Miro ~14 days) when notifications are already allowed. */
+  | { type: 'scheduleGuidanceFollowUp'; profileId: ID; days: number };
 
 export type StreamField = 'text' | `section:${SectionKey}` | `bullet:${SectionKey}:${number}`;
 

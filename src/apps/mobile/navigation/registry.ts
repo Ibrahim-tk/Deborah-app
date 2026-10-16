@@ -65,6 +65,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.4': { title: 'Note', component: lazy(() => import('@mobile/screens/records/NoteEditor')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-94--note-editor-not-in-wireframes' },
   'M-9.5': { title: 'Lab report', component: lazy(() => import('@mobile/screens/records/LabReport')), presentation: 'push', figma: '', spec: 'docs/ux/F09-records.md#m-95--lab-report-not-in-wireframes' },
   'M-9.6': { title: 'PDF preview', component: lazy(() => import('@mobile/screens/records/PdfPreview')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes' },
+  'M-9.7': { title: 'My Visit Notes', component: lazy(() => import('@mobile/screens/records/VisitBrief')), presentation: 'modal', figma: '', spec: 'docs/ux/F09b-visit-brief.md' },
 
   // F10 Account, privacy & data
   'M-10.1': { title: 'Settings', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },

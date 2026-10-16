@@ -1,6 +1,6 @@
 # Manual User Journey Charts
 
-Updated 15 October 2026. These charts describe inspected local prototype behavior. IMPLEMENTED means present in code; it does not mean every browser test has passed. Authentication, AI responses, payment, booking, notification delivery and document analysis are simulated.
+Updated 16 October 2026. These charts describe inspected local prototype behavior. IMPLEMENTED means present in code; it does not mean every browser test has passed. Authentication, AI responses, payment, booking, notification delivery and document analysis are simulated.
 
 ## How to test
 
@@ -33,6 +33,7 @@ Birth years below are based on 2026. Use only synthetic data.
 | [Lab attachment and confirmation](#labs-upload) | Maria | [S08](http://127.0.0.1:5173/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
 | [Lab-informed answer and records](#labs-analysis) | Maria | [S08](http://127.0.0.1:5173/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
 | [Doctor visit notes](#visit-notes) | Maria | [S08](http://127.0.0.1:5173/mobile?scenario=S08) | PARTIALLY IMPLEMENTED |
+| [My Visit Notes — provider brief](#provider-brief) | Maria | [S24](http://127.0.0.1:5173/mobile?scenario=S24) | IMPLEMENTED |
 | [Medication update and conflict limits](#medication-update) | Elena | [S19](http://127.0.0.1:5173/mobile?scenario=S19) | PARTIALLY IMPLEMENTED |
 | [Conversation history and continuation](#history) | Maria | [R01](http://127.0.0.1:5173/mobile?scenario=R01) | IMPLEMENTED |
 | [Account and privacy controls](#account-privacy) | Maria | [R01](http://127.0.0.1:5173/mobile?scenario=R01) | IMPLEMENTED |
@@ -43,6 +44,10 @@ Birth years below are based on 2026. Use only synthetic data.
 | [Emergency safety](#emergency) | Maria | [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
 | [Medication safety](#medication-safety) | Maria | [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
 | [Out-of-scope question](#out-of-scope) | Maria | [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
+| [Guidance — happy path + What’s next](#guidance-happy) | Alex / Maria | ▶ Journeys → Guidance · happy path + Book (S01) · or [S04](http://127.0.0.1:5173/mobile?scenario=S04) | IMPLEMENTED · VERIFIED 16 Oct 2026 |
+| [Guidance — early first look](#guidance-early) | Maria | ▶ Journeys → Guidance · early first look · or [S23](http://127.0.0.1:5173/mobile?scenario=S23) | IMPLEMENTED |
+| [Guidance — out of coverage](#guidance-uncovered) | Maria | ▶ Journeys → Guidance · out of coverage · or [S13](http://127.0.0.1:5173/mobile?scenario=S13) | IMPLEMENTED |
+| [Guidance — lab summary refresh](#guidance-labs) | Maria | ▶ Journeys → Guidance · lab summary refresh · or [S04](http://127.0.0.1:5173/mobile?scenario=S04) | IMPLEMENTED |
 
 <a id="onboarding"></a>
 
@@ -383,6 +388,24 @@ flowchart TD
   N2 -.-> B2_1["Reset journey → note is removed with the seed reset"]
 ```
 
+<a id="provider-brief"></a>
+
+## My Visit Notes — provider brief
+
+Maria · IMPLEMENTED · Start: S24 (or S04 → Discuss with provider)
+
+Miro Step 5: structured brief for the clinician. Enough detail = full 7-section guidance. Save / PDF, then appointment-date follow-up.
+
+```mermaid
+flowchart TD
+  N0["1. Open My Visit Notes · M-9.7"]
+  N1["2. Edit chief complaint · Save or Download PDF"]
+  N0 --> N1
+  N2["3. Appointment date? · day-after or 7-day check-in"]
+  N1 --> N2
+  N2 -.-> B2_0["S23 early first look → Let's talk first toast"]
+```
+
 <a id="medication-update"></a>
 
 ## Medication update and conflict limits
@@ -556,5 +579,73 @@ flowchart TD
   N1["2. Send safety input · M-2.1"]
   N0 --> N1
   N2["3. Verify outcome"]
+  N1 --> N2
+```
+
+<a id="guidance-happy"></a>
+
+## Guidance — happy path + What’s next
+
+Alex / Maria · IMPLEMENTED · VERIFIED 16 Oct 2026 · Auto: ▶ Journeys → Guidance · happy path + Book (S01 E2E) · Manual shortcut: [S04](http://127.0.0.1:5173/mobile?scenario=S04) · Spec: [F02e](docs/ux/F02e-guidance.md)
+
+Chevron (auto): Welcome → sign-up → Myself profile → Start chatting → headaches intake → 7 sections → Review Save → What’s next → **Book a consultation** → M-8.2 → Journey finished. Manual S04 skips to answered chat + What’s next. Spine stops at Book (not Discuss with provider / M-9.7).
+
+```mermaid
+flowchart TD
+  N0["1. S01 onboarding · or open S04"]
+  N1["2. Guidance + What’s next · M-2.1"]
+  N0 --> N1
+  N2["3. Book a consultation → M-8.2"]
+  N1 --> N2
+```
+
+<a id="guidance-early"></a>
+
+## Guidance — early first look
+
+Maria · IMPLEMENTED · Start: S23 · Spec: [F02e](docs/ux/F02e-guidance.md)
+
+Chevron: Ask for guidance > enough details? no > early first look (what’s still missing) > answer remaining questions > ask for guidance again > 7 sections.
+
+```mermaid
+flowchart TD
+  N0["1. Open mid-intake · S23"]
+  N1["2. Tell me what you think · M-2.1"]
+  N0 --> N1
+  N2["3. Finish intake · ask again"]
+  N1 --> N2
+```
+
+<a id="guidance-uncovered"></a>
+
+## Guidance — out of coverage
+
+Maria · IMPLEMENTED · Start: S13 · Spec: [F02e](docs/ux/F02e-guidance.md)
+
+Chevron: Safety bench Uncovered > send > finish intake if needed > Tell me what you think > team handoff toast + Book (uncounted). Phrase: cataract surgery recovery.
+
+```mermaid
+flowchart TD
+  N0["1. Insert Uncovered · S13"]
+  N1["2. Send and request guidance · M-2.1"]
+  N0 --> N1
+  N2["3. Confirm toast + Book · M-8.2"]
+  N1 --> N2
+```
+
+<a id="guidance-labs"></a>
+
+## Guidance — lab summary refresh
+
+Maria · IMPLEMENTED · Start: S04 · Spec: [F02e](docs/ux/F02e-guidance.md)
+
+Chevron: What’s next > Upload labs > M-5.3 > confirm > updated 7-section summary in same chat (same-topic refresh uncounted).
+
+```mermaid
+flowchart TD
+  N0["1. What’s next · Upload labs · S04"]
+  N1["2. Add and confirm labs · M-5.3"]
+  N0 --> N1
+  N2["3. Updated summary · M-2.1"]
   N1 --> N2
 ```

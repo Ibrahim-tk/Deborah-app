@@ -14,22 +14,27 @@ export function MenuSection({ title, children }: { title: string; children: Reac
 export interface MenuItemProps {
   label: string;
   description?: string;
+  /** Label only, one line (ellipsis). Description stays as the hover `title`. */
+  oneLine?: boolean;
   active?: boolean;
   disabled?: boolean;
   onSelect?: () => void;
 }
 
-export function MenuItem({ label, description, active, disabled, onSelect }: MenuItemProps) {
+export function MenuItem({ label, description, oneLine, active, disabled, onSelect }: MenuItemProps) {
+  const compact = oneLine || !description;
   return (
     <button
       type="button"
       className={styles.item}
       data-active={active || undefined}
+      data-oneline={compact || undefined}
       disabled={disabled}
+      title={description}
       onClick={onSelect}
     >
       <span className={styles.label}>{label}</span>
-      {description && <span className={styles.description}>{description}</span>}
+      {!compact && description && <span className={styles.description}>{description}</span>}
     </button>
   );
 }

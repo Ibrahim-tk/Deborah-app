@@ -32,6 +32,18 @@ export const EXTENDED_JOURNEYS: ManualJourney[] = [
     steps: [s('Open Visit Notes', 'From My Health open records → Visit Notes → New note.', 'Note editor opens.', 'M-9.4'), s('Write a note', 'Title: October follow-up. Choose After my visit. Enter “Discuss sleep diary at next appointment.”', 'Text is editable and locally autosaved.'), s('Close and reopen', 'Close, find the note in Visit Notes, then reopen it.', 'Title, type and text remain on the active profile.', 'M-9.4', ['More options → Delete → confirmation', 'Reset journey → note is removed with the seed reset'])],
   },
   {
+    id: 'provider-brief', name: 'My Visit Notes — provider brief', persona: 'Maria', scenario: 'S24', status: 'IMPLEMENTED',
+    goal: 'Review a structured provider note, save or print it, and schedule the right follow-up.',
+    behavior: 'Assembled from the conversation answer and profile. HTML print preview; local follow-up notifications.',
+    evidence: ['src/apps/mobile/screens/records/VisitBrief/', 'src/shared/engine/visitBrief.ts', 'docs/ux/F09b-visit-brief.md'],
+    gaps: ['No real PDF file or email of the brief.'],
+    steps: [
+      s('Open brief', 'Load S24 (or from S04 tap Discuss with provider).', 'M-9.7 shows header, sections 1–7, disclaimer. Chief complaint editable.', 'M-9.7'),
+      s('Save a copy', 'Edit chief complaint slightly. Tap Save a copy.', 'Toast; note under Visit Notes as For my provider. Appointment date prompt appears.'),
+      s('Follow-up', 'Choose No (no appointment date).', 'Toast about taking notes; 7-day check-in queued.', undefined, ['Yes → day-after check-in', 'S23 → Let’s talk first toast']),
+    ],
+  },
+  {
     id: 'medication-update', name: 'Medication update and conflict limits', persona: 'Elena', scenario: 'S19', status: 'PARTIALLY IMPLEMENTED',
     goal: 'Review and correct a proposed medication update.', behavior: 'Structured review/edit/confirm exists. General medication reconciliation and conflict resolution are not implemented.', evidence: ['src/apps/mobile/screens/consultation/ReviewFacts/', 'src/shared/store/slices/conversations.ts'], gaps: ['No dedicated conflict detection, competing-source comparison or conflict-resolution workflow. Free-text extraction is limited.'],
     steps: [s('Inspect medicines', 'In Review and Confirm inspect the medication fact. Choose Edit and open Medications.', 'You can change the pending medication value before saving.', 'M-2.13'), s('Correct and confirm', 'Select the appropriate option or edit the text where offered. Choose Use this, then Save to my profile.', 'Only the confirmed value reaches the profile.'), s('Check source', 'Open Your health profile and inspect medications and confirmation source.', 'The corrected value is present; there is no separate conflict-comparison screen.', 'M-2.10')],
