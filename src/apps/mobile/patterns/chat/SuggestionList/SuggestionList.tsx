@@ -12,12 +12,18 @@ import styles from './SuggestionList.module.css';
 export interface SuggestionListProps {
   suggestions: Suggestion[];
   onSelect: (s: Suggestion) => void;
+  /** One-line chips for Home — tighter than composer starter cards. */
+  compact?: boolean;
 }
 
-export function SuggestionList({ suggestions, onSelect }: SuggestionListProps) {
+export function SuggestionList({ suggestions, onSelect, compact }: SuggestionListProps) {
   return (
     // mousedown is swallowed so tapping a row doesn't blur the composer first.
-    <div className={styles.root} onMouseDown={(e) => e.preventDefault()} data-placeholder>
+    <div
+      className={[styles.root, compact ? styles.compact : ''].filter(Boolean).join(' ')}
+      onMouseDown={(e) => e.preventDefault()}
+      data-placeholder
+    >
       <ul className={styles.list} aria-label="Suggested questions">
         {suggestions.map((s) => (
           <li key={s.id}>

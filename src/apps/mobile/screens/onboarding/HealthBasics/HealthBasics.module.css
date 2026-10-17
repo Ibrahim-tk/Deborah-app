@@ -1,7 +1,13 @@
 /* Column layout: the question takes the height it needs; the bloom fills (and shrinks to) what is left. */
 .root { position: relative; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
-/* Stack content above Aura/GradientShift <span>s. Overlays (consent sheet) keep their own absolute positioning. */
-.root > :not(span):not([data-overlay]) { position: relative; }
+/*
+ * Stack content above Aura/GradientShift <span>s.
+ * Exclude overlays (consent sheet keeps position:absolute) and the art spacer
+ * (tree must anchor to .root — not this flex band — or it translates up/down as
+ * question height changes). :not([data-overlay]) alone out-specs `.root > .art`
+ * { position: static }, which is what broke the locked fixed-tree layout.
+ */
+.root > :not(span):not([data-overlay]):not(.art) { position: relative; }
 .step { display: flex; flex-direction: column; gap: var(--space-5); animation: step-in 0.4s ease-out both; }
 @keyframes step-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .step { animation: none; } }
@@ -23,7 +29,8 @@
 .backSlot { flex: none; width: 44px; height: 44px; }
 /* Bloom band: an empty spacer that keeps the question at the bottom; the tree itself is a backdrop layer. */
 .art { flex: 1 1 0; min-height: 96px; }
-.root > .art { position: static; } /* so the tree positions against the whole screen, not this band */
+/* Explicit static — tree's absolute bloom uses .root as containing block across every step. */
+.root > .art { position: static; }
 /* The tree: canopy fills the width (bleeding off the right, where the photo is cut), trunk base landing among the answer rows
    (~74% down), and its lower part fading into the backdrop so the answers stay clean.
    Sized by height (66% of the screen, so the canopy top is never cut) and capped at 112% width, so short phones shrink it instead of cutting it. */

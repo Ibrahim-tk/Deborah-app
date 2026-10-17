@@ -8,8 +8,10 @@ import {
   DestinationTilePair,
   FullChoicePills,
   FullChoicePillsGrid,
+  GlassCareStrip,
   HealingPlanCard,
   HealingPlanSection,
+  HomeMediaHero,
   InlineChoicePills,
   InlineConsent,
   IntakeCompletionCard,
@@ -19,6 +21,7 @@ import {
   NamedReasonList,
   NextIntentList,
   PhoneField,
+  PhotoDestinationPair,
   PillDescribeField,
   PolicyUpdateConsent,
   PrimaryIntentCard,
@@ -27,6 +30,7 @@ import {
   RecommendationCard,
   ReminderCard,
   ScaleCheck,
+  SuggestionCarousel,
   TodayHabitsCard,
   UploadCard,
   type NamedReason,
@@ -297,7 +301,7 @@ export function WidgetPatterns() {
         <Specimen name="PhoneField" path="patterns/widgets/PhoneField" note="Label “Phone number (optional)”. Fixed +1; flag opens a searchable country-code bottom sheet. No OTP/SMS.">
           <PhoneFieldDemo />
         </Specimen>
-        <Specimen name="IntakeCompletionCard" path="patterns/widgets/IntakeCompletionCard" note="Home health-profile progress + Complete/Update Intake.">
+        <Specimen name="IntakeCompletionCard" path="patterns/widgets/IntakeCompletionCard" note="Home intake CTA — icon, copy, progress ring.">
           <Variant label="incomplete"><IntakeCompletionCard progress={0.65} onAction={noop} /></Variant>
           <Variant label="complete"><IntakeCompletionCard progress={1} complete onAction={noop} /></Variant>
         </Specimen>
@@ -338,6 +342,18 @@ export function WidgetPatterns() {
           {findProduct('genesis-gold') && (
             <RecommendationCard items={[{ product: findProduct('genesis-gold')!, reason: 'Fits your sleep focus' }]} onShop={noop} />
           )}
+        </Specimen>
+        <Specimen name="HomeMediaHero" path="patterns/widgets/HomeMediaHero" note="Compact continue hero — mauve gradient + violet bloom.">
+          <HomeMediaHero titleId="ds-media" title="Ongoing tiredness and a question about thyroid function" when="4 days ago" tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={noop} />
+        </Specimen>
+        <Specimen name="SuggestionCarousel" path="patterns/widgets/SuggestionCarousel" note="Next-step cards — icon · title · arrow · floral PNG.">
+          <SuggestionCarousel items={[{ key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: noop }, { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps Deborah tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: noop }]} />
+        </Specimen>
+        <Specimen name="PhotoDestinationPair" path="patterns/widgets/PhotoDestinationPair" note="My Health · Family — art + circular chevron/plus.">
+          <PhotoDestinationPair tiles={[{ title: 'My Health', meta: 'Profile 80%', tone: 'mint', artifact: 'dest-health-art', action: 'chevron', onPress: noop }, { title: 'Family', meta: '2 profiles', tone: 'rose', artifact: 'dest-family-art', action: 'plus', onPress: noop }]} />
+        </Specimen>
+        <Specimen name="GlassCareStrip" path="patterns/widgets/GlassCareStrip" note="Quiet care shortcuts.">
+          <GlassCareStrip items={[{ key: 'a', label: 'Complete intake', meta: '65%', onPress: noop }, { key: 'b', label: 'Healing plan', meta: 'Day 18', onPress: noop }]} />
         </Specimen>
       </Grid>
     </Section>

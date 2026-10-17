@@ -344,6 +344,17 @@ export interface LabValue {
   value: string;
   unit: string;
   edited?: boolean;
+  /** Prototype display-only status (plain text — not a clinical engine). */
+  statusLabel?: string;
+  /** Visual tone for status / highlighted value. */
+  statusTone?: 'normal' | 'excellent' | 'attention';
+}
+
+export interface LabReportInsight {
+  headline: string;
+  body: string;
+  /** Clinical copy gate — always placeholder unless Deborah-approved. */
+  status: 'placeholder' | 'approved';
 }
 
 export interface LabReport {
@@ -351,9 +362,12 @@ export interface LabReport {
   profileId: ID;
   source: 'photo' | 'pdf' | 'manual';
   labName?: string;
+  /** Optional panel title for M-9.5 (e.g. Immunity and Inflammation). */
+  panelTitle?: string;
   collectedAt?: ISODate;
   values: LabValue[];
   confirmed: boolean;
+  insight?: LabReportInsight;
 }
 
 export interface Habit {

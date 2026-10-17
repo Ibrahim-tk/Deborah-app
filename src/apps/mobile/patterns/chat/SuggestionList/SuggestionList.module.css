@@ -40,5 +40,16 @@
 .row:active { transform: scale(0.98); background: var(--purple-50); }
 .row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
+/* Home one-liners: hug a single line while keeping a 44pt tap target. */
+.compact .row {
+  min-height: 44px;
+  align-items: center;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+}
+.compact .text {
+  white-space: nowrap;
+}
+
 .text { min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink-body); }
 .icon { flex: none; display: grid; place-items: center; height: var(--lh-subhead); color: var(--color-accent); }

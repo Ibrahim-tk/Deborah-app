@@ -115,6 +115,28 @@
   --blur-edge-strong: blur(12px) saturate(120%);
   --blur-edge-soft: blur(4px);
 
+  /* Home artifact card tones — solid pastel fields (flower-card language) */
+  --home-tone-mint: color-mix(in srgb, var(--green-tint) 70%, #c8e6d4);
+  /* Periwinkle labs card (reference) */
+  --home-tone-sky: #e4e8fb;
+  --home-tone-sky-icon: #9aa8e8;
+  /* Peach / pink habits card (reference) */
+  --home-tone-rose: #fde8e6;
+  --home-tone-rose-icon: #e8a0a8;
+  --home-tone-lilac: color-mix(in srgb, var(--purple-100) 55%, #d4c4e4);
+  --home-tone-linen: color-mix(in srgb, var(--gold-100) 55%, var(--white));
+  --home-tone-gold: color-mix(in srgb, var(--amber-tint) 60%, var(--gold-100));
+  /* Main continue / CD card — soft mauve gradient (Half Marathon ref) */
+  --home-tone-hero: linear-gradient(165deg, #ebe4f7 0%, #ddd2f0 38%, #d0c2e8 68%, #c4b3e0 100%);
+  --home-artifact-ink: color-mix(in srgb, var(--purple-900) 28%, transparent);
+  --home-artifact-ink-on-hero: color-mix(in srgb, var(--gold-50) 35%, transparent);
+  --home-radius: 32px;
+  /* Colored glyph wells — round discs (shared by Next steps / intake / plan). */
+  --home-tone-icon-radius: var(--radius-full);
+  /* Soft frosted chevron — translucent + blur, not Apple glass. */
+  --home-chevron-bg: color-mix(in srgb, var(--white) 48%, transparent);
+  --home-chevron-blur: blur(10px);
+
   background: var(--surface-canvas);
   color: var(--color-ink);
   font-family: var(--font-body);

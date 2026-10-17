@@ -1,0 +1,1 @@
+export { PurpleDockBloom } from './PurpleDockBloom';

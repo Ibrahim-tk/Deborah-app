@@ -1,5 +1,7 @@
 /** Health patterns (docs/08-component-system.md §3). F07 hub + F09 records. */
 export * from './LabValueRow';
+export * from './LabInsightCard';
+export * from './LabMetricCard';
 export * from './EmptyState';
 // F07 — My Health hub
 export * from './FocusCard';

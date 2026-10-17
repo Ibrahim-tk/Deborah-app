@@ -29,4 +29,11 @@ export * from './PrimaryIntentCard';
 export * from './PromptStarterList';
 export * from './NextIntentRow';
 export * from './TodayHabitsCard';
+export * from './HomeMediaHero';
+export * from './SuggestionCarousel';
+export * from './PhotoDestinationPair';
+export * from './GlassCareStrip';
+export * from './homeArtifacts';
+
+
 

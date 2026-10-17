@@ -20,7 +20,6 @@ export function HealingPlanCard({
   locked = false,
   day = 0,
   totalDays = 90,
-  focus,
   todayHabit,
   onPress,
 }: HealingPlanCardProps) {
@@ -55,7 +54,6 @@ export function HealingPlanCard({
         Day {day} of {totalDays}
         {todayHabit ? ` · Today: ${todayHabit}` : ''}
       </p>
-      {focus && <p className={styles.focus}>{focus}</p>}
       <ProgressBar value={progress} label={`Day ${day} of ${totalDays}`} />
       {onPress && (
         <Button fullWidth variant="secondary" onClick={onPress}>

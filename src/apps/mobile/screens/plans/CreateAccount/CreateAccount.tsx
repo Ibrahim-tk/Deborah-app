@@ -26,8 +26,8 @@ import styles from './CreateAccount.module.css';
 type Step = 'choose' | 'email' | 'code' | 'password' | 'merge';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
-const SKIP_AUTH_VALIDATION = true;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
+const SKIP_AUTH_VALIDATION = false;
 
 export default function CreateAccount() {
   const { mode: initialMode = 'create', plan, billing, returnTo, sheet, provider: startWith, reason } = useScreenParams<{

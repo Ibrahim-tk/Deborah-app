@@ -41,7 +41,8 @@ const appPolicies = APPS.flatMap((app) => {
   const own = (...layers) => layers.map((l) => `${app}-${l}`);
   return [
     allow(`${app}-entry`, 'shared', 'styles', ...own('entry', 'styles', 'nav', 'hooks')),
-    allow(`${app}-nav`, 'shared', 'styles', ...own('nav', 'screens', 'ui', 'hooks')),
+    // Nav may pull patterns for chrome that embeds product widgets (e.g. Sidebar shop card).
+    allow(`${app}-nav`, 'shared', 'styles', ...own('nav', 'screens', 'patterns', 'ui', 'hooks')),
     allow(`${app}-screens`, 'shared', 'styles', ...own('screens', 'patterns', 'ui', 'hooks', 'nav')),
     allow(`${app}-patterns`, 'shared', 'styles', ...own('patterns', 'ui')),
     allow(`${app}-ui`, 'shared', 'styles', ...own('ui')),

@@ -1,4 +1,16 @@
-/* Home state leftovers — family row only (heroes live in PrimaryIntentCard / TodayHabitsCard). */
+/* Home state leftovers — family row + compact suggestion section label. */
+
+.suggestSection {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.suggestLabel {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
 
 .familyRow {
   display: flex;

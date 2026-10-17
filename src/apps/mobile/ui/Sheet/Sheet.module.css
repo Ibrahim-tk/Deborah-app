@@ -19,6 +19,19 @@
   background: var(--purple-100);
 }
 
-.title { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; margin-bottom: var(--space-3); }
+.header {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+.title {
+  margin: 0;
+  min-width: 0;
+  font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display);
+  letter-spacing: -0.005em;
+}
 .content { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .footer { flex: none; display: grid; gap: var(--space-2); padding-top: var(--space-5); }

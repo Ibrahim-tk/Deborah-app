@@ -1,2 +1,6 @@
 .root { height: 1px; margin: 0; border: 0; background: var(--color-border-hairline); }
-.root[data-inset='true'] { margin-left: var(--margin-screen); }
+/* Inset both ends so hairlines don’t flush to the card edge (iOS grouped-list). */
+.root[data-inset='true'] {
+  margin-left: var(--margin-screen);
+  margin-right: var(--margin-screen);
+}

@@ -5,12 +5,21 @@
  * last pill. "Other…" focuses the bottom composer — no inline form. Composer stays hidden until Other.
  */
 import { useEffect, useRef, useState } from 'react';
+import { FLAGS } from '@shared/flags';
 import type { IntakeMeta } from '@shared/types/domain';
 import { InlineConsent, QuestionChoices } from '@mobile/patterns/widgets';
 import { encodeNamedReasons } from '@mobile/patterns/widgets';
 import { IntakeFields } from './IntakeFields';
 import { MedsNamedReasons } from './MedsNamedReasons';
 import styles from './IntakeQuestion.module.css';
+
+/** Prototype: auto-agree health-consent without rendering InlineConsent. */
+function SkipHealthConsent({ active, answered, onAnswer }: { active: boolean; answered?: string[]; onAnswer: (ids: string[]) => void }) {
+  useEffect(() => {
+    if (active && !answered) onAnswer(['agree']);
+  }, [active, answered, onAnswer]);
+  return null;
+}
 
 /** What should own the answer UI under the thread. */
 export type IntakeAnswerSurface = 'choices' | 'composer';
@@ -66,6 +75,9 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
   }
   // Canonical InlineConsent card (title + Privacy/Terms body + Not now / Agree) — same as /wid and first-chat ask.
   if (intake.questionId === 'health-consent') {
+    if (FLAGS.skipHealthConsent) {
+      return <SkipHealthConsent active={active} answered={intake.answered} onAnswer={onAnswer} />;
+    }
     return (
       <InlineConsent
         disabled={!active}

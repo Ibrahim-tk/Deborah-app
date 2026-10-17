@@ -7,10 +7,11 @@
  * @xref    web: not built
  * @status  placeholder
  */
-import { useMemo, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { Button, Header, Input, TextArea } from '@mobile/ui';
-import { FullChoicePills, IntakeSectionHeader } from '@mobile/patterns/widgets';
+import { Aura, Button, Divider, Header, Input, ListRow, TextArea } from '@mobile/ui';
+import { ChoicePills, FullChoicePills, IntakeSectionHeader } from '@mobile/patterns/widgets';
+import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './CompleteIntake.module.css';
 
@@ -23,6 +24,8 @@ const SECTIONS: { id: SectionId; title: string; lede: string }[] = [
   { id: 'other', title: 'Other medical', lede: 'Anything else Deborah should know.' },
 ];
 
+const SECTION_TITLES = SECTIONS.map((s) => s.title);
+
 const SLEEP = [
   { id: 'great', label: 'Sleeping well' },
   { id: 'fair', label: 'Hit or miss' },
@@ -32,6 +35,7 @@ const SLEEP = [
 export default function CompleteIntake() {
   const { pop } = useNav();
   const { previousTitle } = useRoute();
+  const { collapsed, onScroll } = useCollapsingTitle();
   const profile = useAppStore(selectActiveProfile);
   const intake = profile?.intake;
   const [section, setSection] = useState<SectionId>(
@@ -47,13 +51,13 @@ export default function CompleteIntake() {
   const idx = SECTIONS.findIndex((s) => s.id === section);
   const current = SECTIONS[idx] ?? SECTIONS[0];
 
-  const basicsSummary = useMemo(() => {
+  const basicsRows = useMemo(() => {
     if (!profile) return [];
-    const rows: string[] = [];
-    if (profile.intake.pronouns) rows.push(`Pronouns: ${profile.intake.pronouns}`);
-    if (profile.sexAtBirth) rows.push(`Sex at birth: ${profile.sexAtBirth}`);
-    if (profile.dob) rows.push(`Birth date on file`);
-    if (profile.health?.medications?.value) rows.push('Medications on file');
+    const rows: { label: string; value: string }[] = [];
+    if (profile.intake.pronouns) rows.push({ label: 'Pronouns', value: profile.intake.pronouns });
+    if (profile.sexAtBirth) rows.push({ label: 'Sex at birth', value: profile.sexAtBirth });
+    if (profile.dob) rows.push({ label: 'Birth date', value: 'On file' });
+    if (profile.health?.medications?.value) rows.push({ label: 'Medications', value: 'On file' });
     return rows;
   }, [profile]);
 
@@ -79,51 +83,72 @@ export default function CompleteIntake() {
     else pop();
   };
 
+  const pickSection = (title: string) => {
+    const next = SECTIONS.find((s) => s.title === title);
+    if (!next || next.id === section) return;
+    saveSection(next.id);
+    setSection(next.id);
+  };
+
   return (
     <div className={styles.root} data-xref="M-2.14 · Complete Intake" data-placeholder>
-      <Header title="Complete Intake" onBack={pop} backLabel={previousTitle} />
-      <div className={styles.body}>
+      <Aura />
+      <Header
+        title="Complete Intake"
+        large
+        collapsed={collapsed}
+        onBack={pop}
+        backLabel={previousTitle}
+      />
+      <div className={styles.body} onScroll={onScroll}>
         <p className={styles.banner}>
           You can finish later — progress is saved. We’ll invite an annual review of your health profile.
         </p>
-        <nav className={styles.tabs} aria-label="Intake sections">
-          {SECTIONS.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              className={styles.tab}
-              aria-current={s.id === section || undefined}
-              onClick={() => {
-                saveSection(s.id);
-                setSection(s.id);
-              }}
-            >
-              {s.title}
-            </button>
-          ))}
-        </nav>
+
+        <div className={styles.pills}>
+          <ChoicePills
+            label="Intake sections"
+            options={SECTION_TITLES}
+            selected={[current.title]}
+            onPick={pickSection}
+            onToggle={pickSection}
+          />
+        </div>
 
         <IntakeSectionHeader title={current.title} lede={current.lede} />
 
         {section === 'basics' && (
-          <ul className={styles.list}>
-            {basicsSummary.length === 0 ? (
-              <li className={styles.muted}>No basics saved yet — finish short onboarding or your health profile card.</li>
-            ) : (
-              basicsSummary.map((line) => (
-                <li key={line}>{line}</li>
-              ))
-            )}
-          </ul>
+          basicsRows.length === 0 ? (
+            <div className={styles.panel}>
+              <p className={styles.empty}>
+                No basics saved yet — finish short onboarding or your health profile card.
+              </p>
+            </div>
+          ) : (
+            <div className={styles.rows}>
+              {basicsRows.map((row, i) => (
+                <Fragment key={row.label}>
+                  {i > 0 && <Divider />}
+                  <ListRow title={row.label} value={row.value} trailing={null} />
+                </Fragment>
+              ))}
+            </div>
+          )
         )}
 
         {section === 'family' && (
-          <TextArea
-            label="Family history"
-            placeholder="e.g. mother — thyroid; father — heart disease"
-            value={family}
-            onChange={(e) => setFamily(e.target.value)}
-          />
+          <div className={styles.field}>
+            <p className={styles.fieldLabel}>Family history</p>
+            <TextArea
+              className={styles.textField}
+              label="Family history"
+              placeholder="e.g. mother — thyroid; father — heart disease"
+              value={family}
+              onChange={(e) => setFamily(e.target.value)}
+              minRows={3}
+              maxRows={8}
+            />
+          </div>
         )}
 
         {section === 'lifestyle' && (
@@ -136,12 +161,18 @@ export default function CompleteIntake() {
         )}
 
         {section === 'other' && (
-          <TextArea
-            label="Other medical notes"
-            placeholder="Surgeries, specialists, anything else"
-            value={other}
-            onChange={(e) => setOther(e.target.value)}
-          />
+          <div className={styles.field}>
+            <p className={styles.fieldLabel}>Other medical notes</p>
+            <TextArea
+              className={styles.textField}
+              label="Other medical notes"
+              placeholder="Surgeries, specialists, anything else"
+              value={other}
+              onChange={(e) => setOther(e.target.value)}
+              minRows={3}
+              maxRows={8}
+            />
+          </div>
         )}
 
         <div className={styles.actions}>

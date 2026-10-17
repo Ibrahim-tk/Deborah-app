@@ -1,10 +1,14 @@
-/* Tonal note card (same family as Home + answer sections): flat colour, no shadow, generous air. */
+/* Horizontal tonal card: copy + affordance left, rounded cover right. No shadow.
+   Card height is driven by a fixed square cover so list items stay equal height
+   regardless of thumbnail intrinsic aspect ratio. */
 .root {
   display: grid;
-  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1.15fr) minmax(112px, 0.85fr);
+  align-items: stretch;
+  gap: var(--space-3);
   width: 100%;
-  padding: var(--space-5) var(--space-4) var(--space-4) var(--space-5);
-  border-radius: var(--radius-card);
+  padding: var(--space-3);
+  border-radius: 28px;
   color: var(--color-ink);
   text-align: left;
   -webkit-tap-highlight-color: transparent;
@@ -13,24 +17,110 @@
 .root:active { transform: scale(0.98); }
 .root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { .root:active { transform: none; } }
+
 .lilac { background: var(--card-tone-lilac); }
 .linen { background: var(--card-tone-linen); }
 .rose { background: var(--card-tone-rose); }
 
-.head {
+.copy {
   display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-right: var(--space-1);
-  padding-bottom: var(--space-3);
-  border-bottom: 0;
-  opacity: 0.92;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-2) var(--space-1) var(--space-1) var(--space-2);
+}
+
+.kind {
   font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
 }
-.text { display: grid; gap: var(--space-2); padding-right: var(--space-1); }
-.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; text-wrap: balance; }
-.reason { font: italic var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
-.foot { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
-.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-.go { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: var(--radius-full); background: var(--card-action-bg); color: var(--card-action-ink); }
+
+.title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--color-ink);
+}
+
+.reason {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font: italic var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+}
+
+.go {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  border-radius: var(--radius-full);
+  background: var(--home-chevron-bg);
+  color: var(--color-ink);
+  -webkit-backdrop-filter: var(--home-chevron-blur);
+  backdrop-filter: var(--home-chevron-blur);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--white) 55%, transparent);
+}
+
+.go[data-action='play'] {
+  background: color-mix(in srgb, var(--purple-500) 72%, var(--purple-100));
+  color: var(--white);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 22px;
+  isolation: isolate;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.duration {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  max-width: calc(100% - 20px);
+  font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--white);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .go {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--white) 88%, transparent);
+  }
+  .go[data-action='play'] {
+    background: color-mix(in srgb, var(--purple-500) 72%, var(--purple-100));
+  }
+}

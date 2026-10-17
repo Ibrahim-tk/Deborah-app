@@ -1,16 +1,16 @@
 /**
- * @pattern IntakeCompletionCard — Home health-profile progress + Complete/Update Intake CTA.
+ * @pattern IntakeCompletionCard — Home entry to finish / update intake.
  * @usedBy  M-2.0 Home · Widget lab · Design system
  * @status  placeholder
  */
-import { Button, ProgressBar } from '@mobile/ui';
+import { Icon, ProgressRing } from '@mobile/ui';
 import styles from './IntakeCompletionCard.module.css';
 
 export interface IntakeCompletionCardProps {
   /** 0–1 completion fraction. */
   progress: number;
   onAction: () => void;
-  /** When true, CTA reads Update Intake. */
+  /** When true, copy invites an update rather than a first finish. */
   complete?: boolean;
   title?: string;
   body?: string;
@@ -21,20 +21,39 @@ export function IntakeCompletionCard({
   onAction,
   complete = false,
   title,
-  body = 'Complete your health information to receive more personalized guidance.',
+  body,
 }: IntakeCompletionCardProps) {
   const pct = Math.round(Math.min(1, Math.max(0, progress)) * 100);
-  const heading = title ?? `Your Health Profile — ${pct}% Complete`;
+  const heading = title ?? (complete ? 'Update your intake' : 'Complete your intake');
+  const copy =
+    body
+    ?? (complete
+      ? 'Your profile is saved. Refresh it anytime as things change.'
+      : 'A few quiet details so Deborah can tailor her guidance to you.');
+
   return (
-    <section className={styles.root} aria-labelledby="intake-completion-title" data-placeholder>
-      <h2 id="intake-completion-title" className={styles.title}>
-        {heading}
-      </h2>
-      <ProgressBar value={progress} label={`${pct}% of health profile complete`} />
-      <p className={styles.body}>{body}</p>
-      <Button fullWidth onClick={onAction}>
-        {complete ? 'Update Intake' : 'Complete Intake'}
-      </Button>
-    </section>
+    <button
+      type="button"
+      className={styles.root}
+      onClick={onAction}
+      aria-labelledby="intake-completion-title"
+      data-placeholder
+    >
+      <span className={styles.mark} aria-hidden>
+        <Icon name="note" size={20} />
+      </span>
+      <span className={styles.copy}>
+        <span id="intake-completion-title" className={styles.title}>
+          {heading}
+        </span>
+        <span className={styles.body}>{copy}</span>
+      </span>
+      <ProgressRing
+        value={progress}
+        size={56}
+        label={`${pct}% of health profile complete`}
+        className={styles.ring}
+      />
+    </button>
   );
 }

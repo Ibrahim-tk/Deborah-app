@@ -10,7 +10,8 @@
 import { useState } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
-import { Button, ChoiceGroup, Input, Sheet } from '@mobile/ui';
+import { Button, Input, Sheet } from '@mobile/ui';
+import { ChoicePills } from '@mobile/patterns/widgets';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { DEFERRED, type DeferredTopic } from './questions';
@@ -45,21 +46,34 @@ export default function ProfileQuestion() {
     else save(next);
   };
 
+  const skip = () => (i + 1 < def.questions.length ? setI(i + 1) : save(answers));
+  const multi = def.questions.length > 1;
+
   return (
     <div data-xref="M-2.11 · Profile question">
-      <Sheet title={def.title}>
+      <Sheet
+        className={styles.sheet}
+        title={def.title}
+        titleEnd={multi ? <p className={styles.step}>{i + 1} of {def.questions.length}</p> : undefined}
+        footer={
+          topic === 'fullDob' ? (
+            <Button fullWidth disabled={!dob} onClick={() => save({})}>Save</Button>
+          ) : (
+            <div className={styles.skip}>
+              <Button variant="link" onClick={skip}>Skip</Button>
+            </div>
+          )
+        }
+      >
         <div className={styles.body}>
           {topic === 'fullDob' ? (
-            <>
-              <Input label="Date of birth" type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
-              <Button fullWidth disabled={!dob} onClick={() => save({})}>Save</Button>
-            </>
+            <Input label="Date of birth" type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
           ) : (
             <>
-              {def.questions.length > 1 && <p className={styles.step}>{i + 1} of {def.questions.length}</p>}
               <p className={styles.prompt}>{q.prompt}</p>
-              <ChoiceGroup label={q.prompt} choices={q.choices.map((c) => ({ value: c, label: c }))} onChange={pick} />
-              <Button variant="link" onClick={() => (i + 1 < def.questions.length ? setI(i + 1) : save(answers))}>Skip</Button>
+              <div className={styles.pills}>
+                <ChoicePills label={q.prompt} options={q.choices} onPick={pick} />
+              </div>
             </>
           )}
         </div>

@@ -1,0 +1,54 @@
+/* Insight summary card — parchment tokens, large radius (ref layout). */
+.root {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-radius: 28px;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+}
+
+.headline {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.body {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.body[data-expanded] {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-self: start;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-tonal);
+  color: var(--color-ink);
+  font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.more:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.up {
+  transform: rotate(180deg);
+}

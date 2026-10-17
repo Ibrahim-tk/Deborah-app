@@ -13,7 +13,7 @@ import { findProduct } from '@shared/data';
 import { selectPlan90, selectPlanDay, useAppStore } from '@shared/store';
 import type { Habit } from '@shared/types/domain';
 import { dayKey, nowFrom } from '@shared/utils';
-import { ActionSheet, Button, Header, ListRow, Panel } from '@mobile/ui';
+import { ActionSheet, Button, Header, Icon, ListRow, ProgressBar } from '@mobile/ui';
 import { EmptyState, HabitRow } from '@mobile/patterns/health';
 import { HealingPlanSection } from '@mobile/patterns/widgets';
 import { useNav, useRoute } from '@mobile/navigation';
@@ -35,6 +35,8 @@ export default function NinetyDayPlan() {
   const checkIn = () => openAsk({ mode: 'checkin' });
   const immediate = plan?.habits.slice(0, 2) ?? [];
   const longer = plan?.habits.slice(2) ?? [];
+  const progress = Math.min(1, Math.max(0, day / PLAN_DAYS));
+  const dayLabel = day > PLAN_DAYS ? `You finished your ${PLAN_DAYS} days` : `Day ${day} of ${PLAN_DAYS}`;
 
   return (
     <div className={styles.root} data-xref="M-7.3 · My Healing Plan">
@@ -52,11 +54,29 @@ export default function NinetyDayPlan() {
           </div>
         ) : (
           <div className={styles.body}>
-            <p className={styles.day}>{day > PLAN_DAYS ? `You finished your ${PLAN_DAYS} days` : `Day ${day} of ${PLAN_DAYS}`}</p>
-            <Panel tone="linen" goldRule>
-              <p className={styles.goalLabel}>Your goal, in Deborah’s words</p>
-              <p className={styles.goal} data-placeholder={placeholder}>{plan.goal}</p>
-            </Panel>
+            <section className={styles.hero} aria-label={dayLabel}>
+              <span className={styles.heroMark} aria-hidden>
+                <Icon name="calendar" size={18} />
+              </span>
+              <div className={styles.heroCopy}>
+                <p className={styles.day}>{dayLabel}</p>
+                {day <= PLAN_DAYS && (
+                  <ProgressBar value={progress} label={dayLabel} />
+                )}
+              </div>
+            </section>
+
+            <section className={styles.goalCard} aria-labelledby="plan-goal">
+              <span className={styles.goalMark} aria-hidden>
+                <Icon name="note" size={18} />
+              </span>
+              <div className={styles.goalCopy}>
+                <p className={styles.goalLabel}>Your goal, in Deborah’s words</p>
+                <p id="plan-goal" className={styles.goal} data-placeholder={placeholder}>
+                  {plan.goal}
+                </p>
+              </div>
+            </section>
 
             <HealingPlanSection title="Immediate priorities" empty="No immediate actions yet.">
               {immediate.length > 0 && (
@@ -92,20 +112,27 @@ export default function NinetyDayPlan() {
               )}
             </HealingPlanSection>
 
-            <HealingPlanSection title="Lifestyle areas" empty="Diet, exercise, sleep, and stress guidance will show here.">
-              <p className={styles.hint} data-placeholder>Diet · Exercise · Sleep · Stress — personalized as consultations continue.</p>
-            </HealingPlanSection>
+            <section className={styles.infoCard}>
+              <div className={styles.infoBlock}>
+                <h2 className={styles.infoTitle}>Lifestyle areas</h2>
+                <p className={styles.infoBody} data-placeholder>
+                  Diet · Exercise · Sleep · Stress — personalized as consultations continue.
+                </p>
+              </div>
+              <div className={styles.infoBlock}>
+                <h2 className={styles.infoTitle}>Follow-ups</h2>
+                <p className={styles.infoBody}>
+                  Check in with Deborah when you’re ready — no daily tracker required.
+                </p>
+              </div>
+            </section>
 
-            <HealingPlanSection title="Follow-ups" empty="No follow-ups scheduled.">
-              <p className={styles.hint}>Check in with Deborah when you’re ready — no daily tracker required.</p>
-            </HealingPlanSection>
-
-            <section className={styles.section} aria-labelledby="plan-week">
-              <h2 id="plan-week" className={styles.heading}>This week</h2>
+            <section className={styles.week} aria-labelledby="plan-week">
+              <h2 id="plan-week" className={styles.weekTitle}>This week</h2>
               {plan.habits.length === 0 ? (
                 <p className={styles.empty}>No habits on your plan right now. Deborah can suggest new ones at your next check-in.</p>
               ) : (
-                <div className={styles.group} data-placeholder={placeholder}>
+                <div className={styles.weekGroup} data-placeholder={placeholder}>
                   {plan.habits.map((h) => (
                     <HabitRow
                       key={h.id}
@@ -122,7 +149,7 @@ export default function NinetyDayPlan() {
             </section>
 
             {product && (
-              <div className={styles.group} data-placeholder={product.status === 'placeholder' || undefined}>
+              <div className={styles.product} data-placeholder={product.status === 'placeholder' || undefined}>
                 <ListRow
                   leading={<img src={product.image} alt="" className={styles.productImage} />}
                   title={product.name}

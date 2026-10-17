@@ -18,8 +18,8 @@ import { useNav } from '@mobile/navigation';
 import styles from './Welcome.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
-/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
-const SKIP_AUTH_VALIDATION = true;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
+const SKIP_AUTH_VALIDATION = false;
 
 export default function Welcome() {
   const { presentSheet, presentModal } = useNav();

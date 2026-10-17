@@ -6,10 +6,10 @@
  * @spec    docs/ux/F10-account-privacy.md#m-101--account
  * @xref    web: W-10.1 (apps/web/screens/account/Account) — not built
  */
-import { Fragment, useState } from 'react';
+import { Fragment, useState, type ReactNode } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Button, Card, Divider, Header, ListRow, Overlay, Sheet, useAlert } from '@mobile/ui';
+import { Button, Divider, Header, Icon, ListRow, Overlay, Sheet, useAlert, type IconName } from '@mobile/ui';
 import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
 import { TextSizeSheet, textSizeLabel } from '@mobile/patterns/settings';
 import { PhoneField, formatPhone, type PhoneValue } from '@mobile/patterns/widgets';
@@ -17,6 +17,23 @@ import { useNav, useNavStore, useRoute } from '@mobile/navigation';
 import styles from './Account.module.css';
 
 const VERSION = '0.1';
+
+interface SettingsRow {
+  title: string;
+  subtitle?: string;
+  value?: string;
+  icon?: IconName;
+  onPress: () => void;
+}
+
+/** Leading mark: icon only, secondary ink — no colored disc. */
+function leadIcon(icon: IconName): ReactNode {
+  return (
+    <span className={styles.lead} aria-hidden>
+      <Icon name={icon} size={20} />
+    </span>
+  );
+}
 
 export default function Account() {
   const nav = useNav();
@@ -56,24 +73,44 @@ export default function Account() {
     setPhoneOpen(true);
   };
 
-  const groups: { title: string; subtitle?: string; value?: string; onPress: () => void }[][] = [
+  const groups: SettingsRow[][] = [
+    // Ends on Family so no hairline under that row.
     [
-      { title: 'Best contact phone', subtitle: phoneDisplay ?? 'Add a number for Deborah’s team', value: phoneDisplay ? undefined : 'Optional', onPress: openPhone },
-      { title: 'Subscription & billing', onPress: () => nav.push('M-10.3') },
-      { title: 'Family profiles', onPress: () => nav.push('M-6.6') },
-      { title: 'Notifications', onPress: () => nav.push('M-10.4') },
+      { title: 'Subscription & billing', icon: 'shop', onPress: () => nav.push('M-10.3') },
+      { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
+    ],
+    [
+      { title: 'Notifications', icon: 'bell', onPress: () => nav.push('M-10.4') },
       // DESIGN.md › Text size control: Account › Text size.
-      { title: 'Text size', value: textSizeLabel(textSize), onPress: () => setTextSizeOpen(true) },
+      {
+        title: 'Text size',
+        value: textSizeLabel(textSize),
+        icon: 'note',
+        onPress: () => setTextSizeOpen(true),
+      },
+      { title: 'Terms & disclaimer', icon: 'file', onPress: () => nav.open('M-10.5') },
     ],
+    // Contact · privacy · About — text rows only, no leading icons.
     [
+      {
+        title: 'Contact info',
+        subtitle: phoneDisplay ?? 'Add a number',
+        value: phoneDisplay ? undefined : 'Optional',
+        onPress: openPhone,
+      },
       { title: 'Privacy & data', onPress: () => nav.push('M-10.2') },
-      { title: 'Terms & disclaimer', onPress: () => nav.open('M-10.5') },
+      {
+        title: 'About Deborah',
+        subtitle: 'Book a consult with Deborah',
+        onPress: () => nav.push('M-7.6'),
+      },
     ],
-    [{ title: 'About Deborah', subtitle: 'Book a consult with Deborah', onPress: () => nav.push('M-7.6') }],
   ];
 
   const { canGoBack, previousTitle } = useRoute();
   const goHome = useNavStore((s) => s.goHome);
+  const initial = (name || 'Y').trim().charAt(0).toUpperCase() || 'Y';
+
   return (
     <div className={styles.root} data-xref="M-10.1 · Account">
       <Header
@@ -85,31 +122,48 @@ export default function Account() {
       />
       <div className={styles.body} onScroll={onScroll}>
         {trial && (
-          <Card tone="emphasis" onPress={() => nav.open('M-4.2')}>
-            <h2 className={styles.cardTitle}>Choose a plan</h2>
-            <p className={styles.text}>Unlimited consultations, for you or your family.</p>
-          </Card>
+          <button type="button" className={styles.plan} onClick={() => nav.open('M-4.2')}>
+            <span className={styles.planMark} aria-hidden>
+              <Icon name="shop" size={18} />
+            </span>
+            <span className={styles.planCopy}>
+              <h2 className={styles.planTitle}>Choose a plan</h2>
+              <p className={styles.planBody}>Unlimited consultations, for you or your family.</p>
+            </span>
+            <span className={styles.planChevron} aria-hidden>
+              <Icon name="chevron" size={18} />
+            </span>
+          </button>
         )}
 
-        <Card>
-          <p className={styles.name}>{name || 'You'}</p>
-          <p className={styles.meta}>{email ?? 'No account yet — trial'}</p>
-          {!trial && planName && <p className={styles.meta}>{planName} plan</p>}
-        </Card>
+        <div className={styles.profile}>
+          <span className={styles.avatar} aria-hidden>{initial}</span>
+          <div className={styles.profileCopy}>
+            <p className={styles.name}>{name || 'You'}</p>
+            <p className={styles.meta}>{email ?? 'No account yet — trial'}</p>
+            {!trial && planName && <p className={styles.meta}>{planName} plan</p>}
+          </div>
+        </div>
 
         {groups.map((g, i) => (
           <div key={i} className={styles.group}>
             {g.map((r, j) => (
               <Fragment key={r.title}>
                 {j > 0 && <Divider />}
-                <ListRow title={r.title} subtitle={r.subtitle} value={r.value} onPress={r.onPress} />
+                <ListRow
+                  title={r.title}
+                  subtitle={r.subtitle}
+                  value={r.value}
+                  leading={r.icon ? leadIcon(r.icon) : undefined}
+                  onPress={r.onPress}
+                />
               </Fragment>
             ))}
           </div>
         ))}
 
         <div className={styles.group}>
-          <ListRow title="Sign out" trailing={null} onPress={signOut} />
+          <ListRow title="Sign out" trailing={null} destructive onPress={signOut} />
         </div>
 
         <footer className={styles.footer}>
@@ -122,7 +176,7 @@ export default function Account() {
         {phoneOpen && (
           <div className={styles.phoneLayer}>
             <button type="button" className={styles.phoneScrim} aria-label="Close" onClick={() => setPhoneOpen(false)} />
-            <Sheet title="Best contact phone">
+            <Sheet title="Contact info">
               <p className={styles.text}>For Deborah’s team only — no texts or verification codes.</p>
               <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
               <Button

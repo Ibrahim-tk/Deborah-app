@@ -10,7 +10,8 @@
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
 import { useAppStore } from '@shared/store';
-import { Aura, GradientShift, ScrollEdge } from '@mobile/ui';
+import { Aura, GradientShift, PurpleDockBloom, ScrollEdge } from '@mobile/ui';
+
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
 import { useNav, useNavStore } from '@mobile/navigation';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
@@ -18,8 +19,8 @@ import { GreetingSheet } from './parts/GreetingSheet';
 import { StateNew } from './parts/StateNew';
 import { StateReturning, type NextStep } from './parts/StateReturning';
 import { StateEstablished } from './parts/StateEstablished';
-import type { DestinationTileProps as TileProps } from '@mobile/patterns/widgets';
 import { useHomeView } from './parts/useHomeView';
+
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import { useAddMember } from '@mobile/screens/profiles/useAddMember';
 import styles from './Home.module.css';
@@ -55,8 +56,6 @@ export default function Home() {
   const hour = new Date().getHours();
   const part = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
   const heading = `Good ${part}${name ? `, ${name}` : ''}.`;
-  const subline = d.state === 'returning' ? `Ready to pick up on ${d.topic.charAt(0).toLowerCase()}${d.topic.slice(1)}?` : undefined;
-
 
   const closeSheet = () => {
     if (profile) greeted.add(profile.id);
@@ -96,16 +95,17 @@ export default function Home() {
     onAction: () => (d.intakeDone ? completeIntake() : openAsk({ startIntake: true })),
   };
   const planFocus = useAppStore((s) => s.plan90[s.activeProfileId]?.goal);
-  const tiles: [TileProps, TileProps] = [
-    { tone: 'linen', lead: 'health', title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', progress: FLAGS.intakeV2 ? d.completion : undefined, onPress: go('M-7.2') },
-    { tone: 'rose', lead: 'family', title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
+  const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
+    { title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', onPress: go('M-7.2') },
+    { title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
   ];
+
 
   // Next steps fill the profile over time, one tap each (State 2).
   const steps: NextStep[] = [];
   if (d.checkInDue) steps.push({ key: 'checkin', icon: 'bell', title: 'Check in with Deborah', sub: 'Tell her how things are going', onPress: () => openAsk({ mode: 'checkin' }) });
   if (FLAGS.intakeV2 && !d.profile?.health?.medications) steps.push({ key: 'meds', icon: 'medicine', title: 'Add your current medications', sub: 'So Deborah can check interactions', onPress: openProfile });
-  if (d.reports.length === 0) steps.push({ key: 'labs', icon: 'upload', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => open('M-5.3') });
+  if (d.reports.length === 0) steps.push({ key: 'labs', icon: 'file', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => open('M-5.3') });
   if (FLAGS.intakeV2 && d.intakeDone) {
     for (const x of d.deferred) steps.push({ key: x.key, icon: 'note', title: `Add ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, sub: 'Helps Deborah tailor her guidance', onPress: () => presentSheet('M-2.11', { topic: x.key }) });
   }
@@ -125,16 +125,17 @@ export default function Home() {
         <div className={styles.intro}>
           <p className={styles.date}>{today}</p>
           <h1 className={styles.hello}>{heading}</h1>
-          {subline && <p className={styles.subline}>{subline}</p>}
         </div>
 
 
         {d.state === 'new' && (
           <StateNew
             onPrompt={(prefill) => { closeSheet(); openAsk({ prefill }); }}
+            onStart={() => { closeSheet(); openAsk({ focus: true }); }}
             profile={!d.intakeDone ? { progress: d.completion, onOpen: () => { closeSheet(); openAsk({ startIntake: true }); } } : undefined}
             intakeCard={d.intakeDone ? intakeCard : undefined}
             onAddFamily={() => addMember(false)}
+            destinations={destinations}
           />
         )}
         {d.state === 'returning' && (
@@ -148,7 +149,7 @@ export default function Home() {
             intakeCard={intakeCard}
             journey={d.planDay ? { day: d.planDay, today: d.nextHabit, focus: planFocus, onPress: journey } : undefined}
             reports={reports}
-            tiles={tiles}
+            destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
           />
@@ -164,13 +165,14 @@ export default function Home() {
             journeyFocus={planFocus}
             intakeCard={intakeCard}
             reports={reports}
-            tiles={tiles}
+            destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
           />
         )}
       </div>
 
+      <PurpleDockBloom />
       <div className={styles.dock}>
         <ChatLauncher glow placeholder="Ask Deborah how you’re feeling…" onOpen={chat} />
       </div>

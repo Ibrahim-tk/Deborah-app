@@ -254,7 +254,7 @@ Alternate checks: Missing → receive and accept; Missing → configure or revok
 | --- | --- | --- | --- |
 | 1. Open lab attachment | From My Health open records → Labs → Add. | Add your lab results opens. | ☐ Pass ☐ Fail ☐ Blocked |
 | 2. Use sample photo | Choose Take a photo of the report, capture and use the simulated photo. | A processing state leads to sample results, regardless of an actual document. | ☐ Pass ☐ Fail ☐ Blocked |
-| 3. Review results | Edit a sample value. Check the lab and collection date, then Looks right — send to Deborah. | The confirmed report belongs to the active profile; conversation opens. | ☐ Pass ☐ Fail ☐ Blocked |
+| 3. Review results | Edit a sample value. Check the lab and collection date, then Add Report. | The confirmed report belongs to the active profile; conversation opens. | ☐ Pass ☐ Fail ☐ Blocked |
 
 Alternate checks: Photo → simulated camera; PDF → local file picker; choose only synthetic data; Manual → empty values form.
 
@@ -522,7 +522,7 @@ Alternate checks: Not now → close gate.
 
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
-| 1. Upload labs | Auto: What’s next → Upload labs → Take a photo → Use photo → Looks right — send to Deborah. | Updated seven-section answer (“I’ve updated this with your labs”); free count unchanged; journey finished. | ☑ Pass ☐ Fail ☐ Blocked |
+| 1. Upload labs | Auto: What’s next → Upload labs → Take a photo → Use photo → Add Report. | Updated seven-section answer (“I’ve updated this with your labs”); free count unchanged; journey finished. | ☑ Pass ☐ Fail ☐ Blocked |
 
 
 ## Provider-review ending — S22

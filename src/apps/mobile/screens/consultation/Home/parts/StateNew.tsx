@@ -1,56 +1,126 @@
 /**
- * Home · State 1 — new user who skipped the chat (Figma 170:145).
- * AI-native overhaul: PrimaryIntentCard + PromptStarterList; logic unchanged.
+ * Home · State 1 — new user. Artifact hero + compact composer-style suggestions.
  */
-import { Button, Icon, IconWell, ProgressRing } from '@mobile/ui';
+import { Icon, IconWell } from '@mobile/ui';
+import { SuggestionList } from '@mobile/patterns/chat';
 import {
-  HealingPlanCard,
+  GlassCareStrip,
+  HomeMediaHero,
   IntakeCompletionCard,
-  PrimaryIntentCard,
-  PromptStarterList,
+  PhotoDestinationPair,
 } from '@mobile/patterns/widgets';
+import type { Suggestion } from '@shared/types/content';
 import styles from './HomeStates.module.css';
 
 const PROMPTS = [
-  { label: 'I’ve been feeling tired', prefill: 'I’ve been feeling tired all the time.' },
-  { label: 'Help me with sleep', prefill: 'Can you help me with my sleep?' },
-  { label: 'Review my supplements', prefill: 'Can you review the supplements I take?' },
+  {
+    key: 'tired',
+    label: 'I’ve been feeling tired',
+    prefill: 'I’ve been feeling tired all the time.',
+  },
+  {
+    key: 'sleep',
+    label: 'Help me with sleep',
+    prefill: 'Can you help me with my sleep?',
+  },
+  {
+    key: 'supplements',
+    label: 'Review my supplements',
+    prefill: 'Can you review the supplements I take?',
+  },
 ];
+
+const SUGGESTIONS: Suggestion[] = PROMPTS.map((p) => ({
+  id: p.key,
+  text: p.label,
+  scriptId: '',
+}));
 
 export interface StateNewProps {
   onPrompt: (prefill: string) => void;
+  /** Opens chat with Deborah (hero frosted chevron). */
+  onStart: () => void;
   profile?: { progress: number; onOpen: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   onAddFamily: () => void;
+  destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
 }
 
-export function StateNew({ onPrompt, profile, intakeCard, onAddFamily }: StateNewProps) {
+export function StateNew({ onPrompt, onStart, profile, intakeCard, onAddFamily, destinations }: StateNewProps) {
+  const care: { key: string; label: string; meta?: string; onPress: () => void }[] = [];
+  if (profile) {
+    care.push({
+      key: 'profile',
+      label: 'Health profile',
+      meta: `${Math.round(profile.progress * 100)}%`,
+      onPress: profile.onOpen,
+    });
+  }
+
+  const selectSuggestion = (s: Suggestion) => {
+    const match = PROMPTS.find((p) => p.key === s.id);
+    onPrompt(match?.prefill ?? s.text);
+  };
+
   return (
     <>
-      {profile && (
-        <PrimaryIntentCard
+      {profile ? (
+        <HomeMediaHero
           titleId="complete-profile"
           title="Complete your health profile"
-          body="A few quick questions so Deborah’s guidance fits you. About 2 minutes."
-          leading={<ProgressRing value={profile.progress} size={52} label="Health profile complete" />}
-        >
-          <Button fullWidth onClick={profile.onOpen}>Complete your health profile</Button>
-        </PrimaryIntentCard>
+          meta="A few quick questions so Deborah’s guidance fits you. About 2 minutes."
+          tone="rose"
+          artifact="botanical"
+          ctaLabel="Complete your health profile"
+          onCta={profile.onOpen}
+        />
+      ) : (
+        <HomeMediaHero
+          titleId="start-deborah"
+          title="Start with Deborah"
+          meta="Tell her what’s going on. She’ll ask a few questions, then share what she thinks."
+          tone="hero"
+          artifact="violet-bloom"
+          ctaLabel="Start with Deborah"
+          onCta={onStart}
+        />
       )}
+
+      <section className={styles.suggestSection} aria-label={profile ? 'Or ask about' : 'Start with'}>
+        <h2 className={styles.suggestLabel}>{profile ? 'Or ask about' : 'Start with'}</h2>
+        <SuggestionList suggestions={SUGGESTIONS} onSelect={selectSuggestion} compact />
+      </section>
+
+      <GlassCareStrip items={care} />
+
       {intakeCard && (
-        <IntakeCompletionCard progress={intakeCard.progress} complete={intakeCard.complete} onAction={intakeCard.onAction} />
+        <IntakeCompletionCard
+          progress={intakeCard.progress}
+          complete={intakeCard.complete}
+          onAction={intakeCard.onAction}
+        />
       )}
 
-      <PrimaryIntentCard
-        tone={profile ? 'lift' : 'lilac'}
-        titleId="start-deborah"
-        title="Start with Deborah"
-        body="Tell her what’s going on. She’ll ask a few questions, then share what she thinks."
-      >
-        <PromptStarterList items={PROMPTS} onPrompt={onPrompt} variant={profile ? 'onLift' : 'paper'} />
-      </PrimaryIntentCard>
-
-      <HealingPlanCard locked />
+      <PhotoDestinationPair
+        tiles={[
+          {
+            title: destinations[0].title,
+            meta: destinations[0].meta,
+            tone: 'mint',
+            artifact: 'dest-health-art',
+            action: 'chevron',
+            onPress: destinations[0].onPress,
+          },
+          {
+            title: destinations[1].title,
+            meta: destinations[1].meta,
+            tone: 'rose',
+            artifact: 'dest-family-art',
+            action: 'plus',
+            onPress: destinations[1].onPress,
+          },
+        ]}
+      />
 
       <button type="button" className={styles.familyRow} onClick={onAddFamily}>
         <IconWell icon="plus" well="sm" tint="rose" />

@@ -1,19 +1,17 @@
 /**
- * Home · State 2 — returning after a chat (Figma 171:145).
- * AI-native overhaul: PrimaryIntentCard + NextIntentList; callbacks unchanged.
+ * Home · State 2 — returning. Artifact continue hero + intent-matched next steps.
  */
-import { Button } from '@mobile/ui';
 import {
-  DestinationTilePair,
+  GlassCareStrip,
   HealingPlanCard,
+  HomeMediaHero,
   IntakeCompletionCard,
-  LinkStatusCard,
-  NextIntentList,
-  type NextIntent,
-  PrimaryIntentCard,
+  PhotoDestinationPair,
   RecommendationCard,
+  SuggestionCarousel,
+  artifactForIntent,
+  type NextIntent,
   type Recommendation,
-  type DestinationTileProps,
 } from '@mobile/patterns/widgets';
 
 export type NextStep = NextIntent;
@@ -28,45 +26,92 @@ export interface StateReturningProps {
   journey?: { day: number; today?: string; focus?: string; onPress: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
-  tiles: [DestinationTileProps, DestinationTileProps];
+  destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
 }
 
 export function StateReturning(p: StateReturningProps) {
+  const care: { key: string; label: string; meta?: string; onPress: () => void }[] = [];
+  if (p.reports) {
+    care.push({
+      key: 'reports',
+      label: 'Reports',
+      meta: p.reports.meta,
+      onPress: p.reports.onPress,
+    });
+  }
+
+  const heroTitle =
+    p.summary?.replace(/^[·\s]+/, '').trim()
+    || `Ongoing ${p.topic.replace(/^Your /i, '').toLowerCase()} and questions about your health`;
+
   return (
     <>
-      <PrimaryIntentCard
+      <HomeMediaHero
         titleId="continue-deborah"
-        title={p.topic}
-        body={p.summary}
-        kicker={`Continue with Deborah${p.when ? ` · ${p.when}` : ''}`}
-        kickerIcon="chat"
-        pending={p.pendingQuestion}
-      >
-        <Button fullWidth onClick={p.onContinue}>Continue</Button>
-      </PrimaryIntentCard>
+        title={heroTitle}
+        when={p.when}
+        tone="hero"
+        artifact="violet-bloom"
+        ctaLabel="Continue"
+        onCta={p.onContinue}
+      />
 
-      <NextIntentList items={p.steps} />
+      <SuggestionCarousel
+        label="Next steps"
+        items={p.steps.map((s) => {
+          const art = artifactForIntent(s.key, s.title);
+          return {
+            key: s.key,
+            title: s.title,
+            sub: s.sub,
+            tone: art.tone,
+            artifact: art.artifact,
+            icon: s.icon,
+            onPress: s.onPress,
+          };
+        })}
+      />
 
-      {p.intakeCard && (
-        <IntakeCompletionCard progress={p.intakeCard.progress} complete={p.intakeCard.complete} onAction={p.intakeCard.onAction} />
+      <GlassCareStrip items={care} />
+
+      {p.intakeCard && !p.intakeCard.complete && (
+        <IntakeCompletionCard
+          progress={p.intakeCard.progress}
+          onAction={p.intakeCard.onAction}
+        />
       )}
 
       {p.journey && (
         <HealingPlanCard
           day={p.journey.day}
-          todayHabit={p.journey.today}
           focus={p.journey.focus}
+          todayHabit={p.journey.today}
           onPress={p.journey.onPress}
         />
       )}
 
-      {p.reports && (
-        <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />
-      )}
-
-      <DestinationTilePair tiles={p.tiles} />
+      <PhotoDestinationPair
+        tiles={[
+          {
+            title: p.destinations[0].title,
+            meta: p.destinations[0].meta,
+            tone: 'mint',
+            artifact: 'dest-health-art',
+            action: 'chevron',
+            onPress: p.destinations[0].onPress,
+          },
+          {
+            title: p.destinations[1].title,
+            meta: p.destinations[1].meta,
+            tone: 'rose',
+            artifact: 'dest-family-art',
+            action: 'plus',
+            onPress: p.destinations[1].onPress,
+          },
+        ]}
+      />
 
       <RecommendationCard items={p.recommendations} onShop={p.onShop} />
     </>

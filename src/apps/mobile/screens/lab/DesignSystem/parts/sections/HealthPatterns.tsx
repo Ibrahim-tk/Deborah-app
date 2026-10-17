@@ -1,7 +1,8 @@
 /** My Health patterns: plan, focus, check-ins, habits, records rows, library cards, empty states. */
 import { useState } from 'react';
 import {
-  CheckInCard, ConsultationRow, ContentCard, EmptyState, FocusCard, HabitRow, LabValueRow, NoteRow, PlanProgressCard, QuickLinks,
+  CheckInCard, ConsultationRow, ContentCard, EmptyState, FocusCard, HabitRow,
+  LabInsightCard, LabMetricCard, LabValueRow, NoteRow, PlanProgressCard, QuickLinks,
 } from '@mobile/patterns/health';
 import { libraryItems, labSampleReports } from '@shared/data';
 import type { LabValue } from '@shared/types/domain';
@@ -45,11 +46,20 @@ export function HealthPatterns() {
               onChange={(p) => setLab((l) => ({ ...l, ...p, edited: true }))} />
           </div>
         </Specimen>
-        <Specimen name="ContentCard" path="patterns/health/ContentCard" note="Library item as a tonal note card.">
+        <Specimen name="ContentCard" path="patterns/health/ContentCard" note="Horizontal tonal card: body title left, rounded cover right.">
           {libraryItems.slice(0, 2).map((item) => <div key={item.id} data-placeholder><ContentCard item={item} reason="Because you asked about sleep" onPress={noop} /></div>)}
         </Specimen>
         <Specimen name="EmptyState" path="patterns/health/EmptyState" note="title-2 invitation, one line of callout, one primary button.">
           <EmptyState icon="note" title="No notes yet" text="Save an answer or jot down questions for your visit." actionLabel="Ask Deborah" actionIcon="chat" onAction={noop} />
+        </Specimen>
+        <Specimen name="LabInsightCard · LabMetricCard" path="patterns/health/LabInsightCard" note="M-9.5 lab results grammar — parchment tokens, plain-text status (no pills).">
+          <LabInsightCard
+            headline="Paula, your tests show that your immune system is functioning very well!"
+            body="Blood tests, such as leukocytes (defense cells) and other components, are within expected values for this panel. This is educational context only — not a diagnosis."
+          />
+          <LabMetricCard value={{ id: 'n1', marker: 'Neutrophils', value: '4487.0', unit: 'µL', statusLabel: 'Normal', statusTone: 'normal' }} onPress={noop} />
+          <LabMetricCard value={{ id: 'a1', marker: 'AST', value: '38.0', unit: 'U/L', statusLabel: 'Excellent', statusTone: 'excellent' }} onPress={noop} />
+          <LabMetricCard value={{ id: 'v1', marker: 'VDRL', value: 'Non-Reactive', unit: '', statusTone: 'excellent' }} onPress={noop} />
         </Specimen>
       </Grid>
     </Section>

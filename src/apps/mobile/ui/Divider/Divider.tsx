@@ -1,4 +1,4 @@
-/** @ui Divider — 1 px hairline; inset 20 pt by default (list separators). */
+/** @ui Divider — 1 px hairline; inset ~20 pt on both ends by default (list separators). */
 import styles from './Divider.module.css';
 
 export function Divider({ inset = true }: { inset?: boolean }) {

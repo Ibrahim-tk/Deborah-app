@@ -64,8 +64,7 @@ Check-in replies are not counted. The lab-informed answer **is** counted (paid u
 **Layout**
 1. Detected metadata row: lab name · collection date (editable date picker).
 2. **LabValueRow** list: marker · value · unit · edit icon. Edited rows show "edited". Existing values can be edited or deleted; new values are not added here.
-3. Disclaimer: "Please make sure these match your report."
-4. Primary **Looks right — send to Deborah**.
+3. Primary **Add Report**.
 
 **Interactions:** tap row → inline edit (numeric keypad); swipe-left row → delete; send → `labs.confirmReport` → dismiss modal → Conversation: user system-message "Shared lab results ({n} values)" → generating → **lab-informed answer** (script `lab-review` / `withLabs` variant; "Based on your labs from {date}" tag) → §6 includes "Your next 90 days" habits; actions add **Book Deborah**.
 

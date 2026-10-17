@@ -14,8 +14,8 @@ import styles from './ForgotPassword.module.css';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_LENGTH = 8;
 const SET_MS = 1600;
-/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
-const SKIP_AUTH_VALIDATION = true;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
+const SKIP_AUTH_VALIDATION = false;
 
 type Stage = 'email' | 'code' | 'password' | 'set';
 

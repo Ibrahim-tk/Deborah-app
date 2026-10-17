@@ -1,11 +1,20 @@
 {
   "sample-a": {
     "labName": "Sample Lab",
+    "panelTitle": "Immunity and Inflammation",
     "collectedDaysAgo": 3,
+    "insight": {
+      "headline": "{name}, your tests show that your immune system is functioning very well!",
+      "body": "Blood tests, such as leukocytes (defense cells) and other components, are within expected values for this panel. This is educational context only — not a diagnosis.",
+      "status": "placeholder"
+    },
     "values": [
-      { "marker": "TSH", "value": "3.8", "unit": "mIU/L" },
-      { "marker": "Free T3", "value": "2.4", "unit": "pg/mL" },
-      { "marker": "Estradiol", "value": "45", "unit": "pg/mL" }
+      { "marker": "Neutrophils", "value": "4487.0", "unit": "µL", "statusLabel": "Normal", "statusTone": "normal" },
+      { "marker": "AST", "value": "38.0", "unit": "U/L", "statusLabel": "Excellent", "statusTone": "excellent" },
+      { "marker": "VDRL", "value": "Non-Reactive", "unit": "", "statusTone": "excellent" },
+      { "marker": "TSH", "value": "3.8", "unit": "mIU/L", "statusLabel": "Normal", "statusTone": "normal" },
+      { "marker": "Free T3", "value": "2.4", "unit": "pg/mL", "statusLabel": "Normal", "statusTone": "normal" },
+      { "marker": "Estradiol", "value": "45", "unit": "pg/mL", "statusLabel": "Normal", "statusTone": "normal" }
     ]
   }
 }

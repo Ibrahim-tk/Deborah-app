@@ -1,15 +1,173 @@
-.root { display: flex; flex-direction: column; height: 100%; background: transparent; }
-.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6)); }
-.cardTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
-.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
-.name { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
-.meta { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); overflow-wrap: anywhere; }
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: transparent;
+}
 
-/* Grouped settings sections: Linen (DESIGN.md › Neutral). */
-.group { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface-tonal); }
-.footer { display: grid; gap: var(--space-1); text-align: center; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-.profile { display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); padding: 0 var(--space-2); border-radius: var(--radius-full); color: var(--color-ink-secondary); }
-.profile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  /* Same as Home: overflow:hidden groups collapse without max-content rows. */
+  grid-auto-rows: max-content;
+  gap: var(--space-5);
+  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+}
+
+/* Plan CTA — lilac wash, sans title, circular accent mark + frosted chevron. */
+.plan {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: min-content;
+  padding: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--purple-50) 70%, var(--white)) 0%,
+    color-mix(in srgb, var(--purple-100) 45%, var(--gold-50)) 100%
+  );
+  color: var(--color-ink);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+}
+
+.plan:active { transform: scale(0.99); }
+.plan:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.planMark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--home-tone-icon-radius, var(--radius-full));
+  background: color-mix(in srgb, var(--purple-500) 55%, var(--purple-100));
+  color: var(--white);
+}
+
+.planCopy {
+  display: grid;
+  flex: 1;
+  gap: 4px;
+  min-width: 0;
+}
+
+.planTitle {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.planBody {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+}
+
+.planChevron {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--home-chevron-bg);
+  color: var(--purple-700);
+  -webkit-backdrop-filter: var(--home-chevron-blur);
+  backdrop-filter: var(--home-chevron-blur);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--white) 55%, transparent);
+}
+
+/* Profile summary — sans mark (no serif inside cards). */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: min-content;
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift);
+}
+
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-lilac);
+  color: var(--color-ink);
+  font: var(--weight-medium) var(--fs-title-3) / 1 var(--font-body);
+  letter-spacing: -0.02em;
+}
+
+.profileCopy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.meta {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* Grouped rows — soft lift field, not flat linen stacks. */
+.group {
+  min-height: min-content;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift);
+}
+
+.group > button {
+  padding-inline: var(--space-4);
+}
+
+/* Settings leading marks — icon only, muted secondary ink (no disc). */
+.lead {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--color-ink-secondary);
+}
+
+.text {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.footer {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  text-align: center;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
 
 .phoneLayer {
   position: fixed;
@@ -19,8 +177,21 @@
   flex-direction: column;
   justify-content: flex-end;
 }
+
 .phoneScrim {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plan:active { transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .planChevron {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--white) 88%, transparent);
+  }
 }

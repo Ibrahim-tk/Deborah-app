@@ -1,13 +1,12 @@
 /**
- * @pattern ContentCard — Deborah library item as a tonal note card: type + time header over a hairline,
- *          serif title, date + dark round action, and an
- *          optional reason line in plain text ("Because you asked about sleep"; never a chip)
+ * @pattern ContentCard — library item as a horizontal tonal card: body-font title + frosted
+ *          affordance on the left, large rounded cover on the right with duration overlay.
+ *          Optional reason line in plain text ("Because you asked about sleep"; never a chip).
  * @usedBy  M-7.1, M-7.2, M-7.5
  * @spec    docs/ux/F07-my-health-hub.md#m-72--my-health-hub (Layout 6), #m-75--deborahs-library
  * @xref    web: apps/web/patterns/health/ContentCard — not built
  */
 import type { LibraryItem } from '@shared/types/content';
-import { formatShortDate } from '@shared/utils';
 import { Icon, type IconName } from '@mobile/ui';
 import styles from './ContentCard.module.css';
 
@@ -18,31 +17,54 @@ export interface ContentCardProps {
 }
 
 /** Tone follows the content type, so a list reads as a calm rhythm, not a wall of white boxes. */
-const CONTENT_TYPE: Record<LibraryItem['type'], { icon: IconName; label: string; unit: string; tone: string }> = {
-  video: { icon: 'video', label: 'Video', unit: 'min', tone: 'rose' },
-  article: { icon: 'file', label: 'Article', unit: 'min read', tone: 'linen' },
-  lesson: { icon: 'book', label: 'Lesson', unit: 'min', tone: 'lilac' },
+const CONTENT_TYPE: Record<LibraryItem['type'], { label: string; tone: string; action: IconName }> = {
+  video: { label: 'Video', tone: 'rose', action: 'play' },
+  article: { label: 'Article', tone: 'linen', action: 'chevron' },
+  lesson: { label: 'Lesson', tone: 'lilac', action: 'chevron' },
 };
+
+/** Soft atmosphere art when a library item has no thumbnail yet. */
+const TOPIC_FALLBACK: Record<string, string> = {
+  sleep: '/images/home/suggest-sleep.jpg',
+  labs: '/images/home/dest-health.jpg',
+  thyroid: '/images/home/hero-continue.jpg',
+  'hot-flashes': '/images/home/suggest-tired.jpg',
+  foundations: '/images/home/hero-habits.jpg',
+  teen: '/images/home/dest-family.jpg',
+  stress: '/images/home/suggest-supplements.jpg',
+  fatigue: '/images/home/suggest-tired.jpg',
+  cycles: '/images/home/hero-new.jpg',
+};
+
+function coverFor(item: LibraryItem): string {
+  if (item.thumbnail) return item.thumbnail;
+  for (const topic of item.topics) {
+    const hit = TOPIC_FALLBACK[topic];
+    if (hit) return hit;
+  }
+  return '/images/home/hero-new.jpg';
+}
 
 export function ContentCard({ item, reason, onPress }: ContentCardProps) {
   const type = CONTENT_TYPE[item.type];
+  const cover = coverFor(item);
+  const durationLabel = item.type === 'article' ? `${item.durationMin} min read` : `${item.durationMin} min`;
+
   return (
     <button type="button" className={`${styles.root} ${styles[type.tone]}`} onClick={onPress}>
-      <span className={styles.head}>
-        <Icon name={type.icon} size={20} />
-        <span>
-          {type.label} · {item.durationMin} {type.unit}
+      <span className={styles.copy}>
+        <span className={styles.kind}>{type.label}</span>
+        <span className={styles.title} data-placeholder={item.status === 'placeholder' || undefined}>
+          {item.title}
         </span>
-      </span>
-      <span className={styles.text} data-placeholder={item.status === 'placeholder' || undefined}>
-        <span className={styles.title}>{item.title}</span>
         {reason && <span className={styles.reason}>{reason}</span>}
-      </span>
-      <span className={styles.foot}>
-        <span className={styles.meta}>{formatShortDate(item.publishedAt)}</span>
-        <span className={styles.go} aria-hidden>
-          <Icon name="chevron" size={18} />
+        <span className={styles.go} data-action={type.action} aria-hidden>
+          <Icon name={type.action} size={type.action === 'play' ? 16 : 18} />
         </span>
+      </span>
+      <span className={styles.media}>
+        <img className={styles.cover} src={cover} alt="" decoding="async" />
+        <span className={styles.duration}>{durationLabel}</span>
       </span>
     </button>
   );

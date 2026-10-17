@@ -281,7 +281,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
 
   // Labs confirm modal.
   if (/^M-5\.4/.test(screen)) {
-    const send = find(phone, /^Looks right — send to Deborah$/) ?? find(phone, /^Save changes$/);
+    const send = find(phone, /^Add Report$/) ?? find(phone, /^Save changes$/);
     if (send) {
       send.click();
       return { done: false, acted: true, step: 'Send labs to Deborah' };

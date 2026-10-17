@@ -1,0 +1,11 @@
+---
+description: Default edits to internal; client/production only on explicit command
+alwaysApply: true
+---
+
+# Client vs internal surfaces
+
+- **Default = internal** (`/internal`, shell tooling, Widget Library, Design System, live `src/` verified on internal).
+- Touch **production/client** (`/`, `src/ClientApp.tsx`, `src/shell/ClientShell/`, `src/shell/nav/ClientTopNav/`) only when the user explicitly says production, client, or update the main page.
+- Do not edit `versions/v1/` unless the user asks for a Version 1 fix.
+- Internal password gate (`1234`) is prototype-only and must stay in-memory (re-lock on refresh).

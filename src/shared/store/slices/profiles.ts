@@ -1,4 +1,5 @@
 import type { StateCreator } from 'zustand';
+import { FLAGS } from '../../flags';
 import { SELF_PROFILE_ID } from '../defaults';
 import type { AppState, ProfilesSlice } from '../types';
 
@@ -31,8 +32,8 @@ export const profilesActions: StateCreator<AppState, [], [], Actions> = (set) =>
   setHealth: (id, patch) =>
     set((s) => {
       const p = s.profiles.byId[id];
-      // Health data is stored only after explicit consent to process it.
-      if (!p || !s.healthConsentAt) return {};
+      // Health data is stored only after explicit consent (or the prototype skip flag).
+      if (!p || !(FLAGS.skipHealthConsent || s.healthConsentAt)) return {};
       const health = { ...p.health, ...patch };
       const m = mirror(health, nowFrom(s));
       const next = { ...p, ...m.profile, health, intake: { ...p.intake, ...m.intake } };

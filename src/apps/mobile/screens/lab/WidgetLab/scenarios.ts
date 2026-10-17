@@ -10,7 +10,9 @@ export type WidgetKind =
   | 'scale' | 'mood' | 'answer' | 'product' | 'slots'
   | 'upload' | 'tip' | 'prep' | 'brief' | 'emergency'
   | 'phone' | 'intakeCompletion' | 'healingPlan' | 'healingPlanLocked' | 'intakeSection' | 'policyUpdate' | 'healingSection'
-  | 'primaryIntent' | 'promptStarters' | 'nextIntents' | 'todayHabits' | 'linkStatus' | 'destinationTiles' | 'recommendation';
+  | 'primaryIntent' | 'promptStarters' | 'nextIntents' | 'todayHabits' | 'linkStatus' | 'destinationTiles' | 'recommendation'
+  | 'mediaHero' | 'suggestCarousel' | 'photoDestinations' | 'glassCare'
+  | 'labInsight' | 'labMetric';
 
 export interface LabMessage {
   id: string;
@@ -65,6 +67,12 @@ export const SCENARIO: LabMessage[] = [
   d('Status link card (Reports / Continue).', 'linkStatus', 'LinkStatusCard'),
   d('My Health · Family destinations.', 'destinationTiles', 'DestinationTilePair'),
   d('Personalised recommendations.', 'recommendation', 'RecommendationCard'),
+  d('Home artifact hero.', 'mediaHero', 'HomeMediaHero'),
+  d('Intent-matched suggestion carousel.', 'suggestCarousel', 'SuggestionCarousel'),
+  d('Artifact destinations.', 'photoDestinations', 'PhotoDestinationPair'),
+  d('Glass care strip.', 'glassCare', 'GlassCareStrip'),
+  d('Lab report insight summary.', 'labInsight', 'LabInsightCard'),
+  d('Lab metric cards (plain-text status).', 'labMetric', 'LabMetricCard'),
 ];
 
 /** Typed message → the widget Deborah answers with (keyword match; the fallback asks a yes/no). */

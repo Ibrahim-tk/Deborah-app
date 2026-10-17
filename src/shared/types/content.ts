@@ -235,9 +235,22 @@ export interface PlanOption {
 /** labs/sample-reports.json: what the simulated extractor returns. */
 export interface LabSample {
   labName: string;
+  /** Optional panel title for M-9.5 header. */
+  panelTitle?: string;
   /** Days before "now" the sample was collected. */
   collectedDaysAgo: number;
-  values: { marker: string; value: string; unit: string }[];
+  insight?: {
+    headline: string;
+    body: string;
+    status: 'placeholder' | 'approved';
+  };
+  values: {
+    marker: string;
+    value: string;
+    unit: string;
+    statusLabel?: string;
+    statusTone?: 'normal' | 'excellent' | 'attention';
+  }[];
 }
 
 export interface LabMarker {
@@ -256,6 +269,8 @@ export interface LibraryItem {
   topics: string[];
   durationMin: number;
   publishedAt: string;
+  /** Cover art for hub / library cards (docs/06-data-model.md). */
+  thumbnail?: string;
   /** Teen-appropriate content shown for minor profiles. */
   audience?: 'adult' | 'teen' | 'all';
   relatedProductId?: string;

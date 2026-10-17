@@ -1,0 +1,148 @@
+/* Next-step artifact cards — reference: flat pastel + full-color floral PNG. */
+.section { display: grid; gap: var(--space-3); }
+
+.label {
+  margin: 0;
+  padding-inline: 0;
+  font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink);
+}
+
+.rail {
+  display: flex;
+  gap: var(--space-3);
+  margin: 0 calc(var(--margin-screen) * -1);
+  padding: 4px var(--margin-screen) 8px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--margin-screen);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.rail::-webkit-scrollbar { display: none; }
+
+.item {
+  flex: none;
+  width: min(196px, 52vw);
+  scroll-snap-align: center;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-content: start;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 228px;
+  padding: var(--space-4);
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+
+.card[data-tone='mint'] { background: var(--home-tone-mint); }
+.card[data-tone='sky'] {
+  background: linear-gradient(165deg, #eef1fc 0%, var(--home-tone-sky) 55%, #d8def8 100%);
+}
+.card[data-tone='rose'] {
+  background: linear-gradient(165deg, #fff0ee 0%, var(--home-tone-rose) 50%, #f9d4d0 100%);
+}
+.card[data-tone='lilac'] {
+  background: linear-gradient(165deg, #f4f0fa 0%, #ebe4f6 45%, #e0d6f0 100%);
+}
+.card[data-tone='linen'] { background: var(--home-tone-linen); }
+.card[data-tone='gold'] { background: var(--home-tone-rose); }
+.card[data-tone='hero'] { background: var(--home-tone-lilac); }
+
+.card:active { transform: scale(0.98); }
+.card:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.artifact {
+  position: absolute;
+  right: -1%;
+  bottom: -28%;
+  width: 105%;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+  object-fit: contain;
+  object-position: bottom right;
+  opacity: 0.3;
+  transform: scale(0.6);
+  transform-origin: 100% 100%;
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--home-tone-icon-radius, var(--radius-full));
+  color: var(--white);
+  background: var(--home-tone-sky-icon);
+}
+
+.card[data-tone='rose'] .icon,
+.card[data-tone='gold'] .icon { background: var(--home-tone-rose-icon); }
+.card[data-tone='mint'] .icon { background: color-mix(in srgb, var(--green-ink) 45%, var(--green-tint)); }
+.card[data-tone='lilac'] .icon,
+.card[data-tone='hero'] .icon { background: color-mix(in srgb, var(--purple-500) 55%, var(--purple-100)); }
+.card[data-tone='linen'] .icon { background: color-mix(in srgb, var(--gold-900) 35%, var(--gold-100)); }
+
+.copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  max-width: 16ch;
+  padding-bottom: var(--space-2);
+}
+
+.title {
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  color: var(--color-ink);
+}
+
+.sub {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+}
+
+.arrow {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  border-radius: var(--radius-full);
+  background: var(--home-chevron-bg);
+  color: var(--color-ink);
+  -webkit-backdrop-filter: var(--home-chevron-blur);
+  backdrop-filter: var(--home-chevron-blur);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--white) 55%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:active { transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .arrow {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--white) 88%, transparent);
+  }
+}

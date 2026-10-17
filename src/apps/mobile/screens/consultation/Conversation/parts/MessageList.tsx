@@ -1,6 +1,7 @@
 /** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
 import { consentDoc, findProduct, productList } from '@shared/data';
 import { ANSWER_REQUEST_LABEL, isMinor } from '@shared/engine';
+import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
 import { formatShortDate } from '@shared/utils';
@@ -199,6 +200,21 @@ export function MessageList({
     const quickActive = Boolean(quick) && isLatestDeborah && !busy && !m.meta?.streaming && !quick?.answered;
     const intakeActive =
       Boolean(intake) && i === lastIntakeIndex && status === 'intake' && !busy && !m.meta?.streaming && !intake?.answered && !intake?.skipped;
+    // Prototype: skip health-consent card — still mount IntakeQuestion so it can auto-agree.
+    if (FLAGS.skipHealthConsent && intake?.questionId === 'health-consent' && !m.meta?.streaming) {
+      return (
+        <IntakeQuestion
+          key={m.id}
+          intake={intake}
+          prompt={m.text}
+          active={intakeActive}
+          onAnswer={(ids, other) => chat.answerIntake(intake.questionId, ids, other)}
+          onSkip={() => chat.skip(intake.questionId)}
+          onOther={onFocusComposer}
+          onAnswerSurface={onIntakeAnswerSurface}
+        />
+      );
+    }
     return (
       <MessageBubble
         key={m.id}

@@ -3,6 +3,7 @@
  * and the store snapshot the pure engine needs. Shared by the mobile and web conversation hooks.
  */
 import { createConversationEngine } from '../engine';
+import { FLAGS } from '../flags';
 import {
   selectActiveConversation,
   selectActiveProfile,
@@ -46,7 +47,8 @@ export function contextFor(s: AppState, conversation: Conversation): EngineConte
     lastTopic: selectLastTopic(s, profile.id),
     labs: selectLatestLabs(s, profile.id),
     profileGates: true,
-    healthConsent: Boolean(s.healthConsentAt),
+    // Prototype: skipHealthConsent treats consent as already granted so intake never plans it.
+    healthConsent: FLAGS.skipHealthConsent || Boolean(s.healthConsentAt),
     region: localeRegion(),
     hasAccount: Boolean(s.accountId),
   };

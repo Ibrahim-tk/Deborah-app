@@ -108,26 +108,61 @@
           "profileId": "p-self",
           "source": "photo",
           "labName": "Sample Lab",
+          "panelTitle": "Immunity and Inflammation",
           "collectedAt": "2026-10-20T12:00:00-07:00",
           "confirmed": true,
+          "insight": {
+            "headline": "{name}, your tests show that your immune system is functioning very well!",
+            "body": "Blood tests, such as leukocytes (defense cells) and other components, are within expected values for this panel. This is educational context only — not a diagnosis.",
+            "status": "placeholder"
+          },
           "values": [
             {
               "id": "lv-1",
-              "marker": "TSH",
-              "value": "3.8",
-              "unit": "mIU/L"
+              "marker": "Neutrophils",
+              "value": "4487.0",
+              "unit": "µL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
             },
             {
               "id": "lv-2",
-              "marker": "Free T3",
-              "value": "2.4",
-              "unit": "pg/mL"
+              "marker": "AST",
+              "value": "38.0",
+              "unit": "U/L",
+              "statusLabel": "Excellent",
+              "statusTone": "excellent"
             },
             {
               "id": "lv-3",
+              "marker": "VDRL",
+              "value": "Non-Reactive",
+              "unit": "",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lv-4",
+              "marker": "TSH",
+              "value": "3.8",
+              "unit": "mIU/L",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lv-5",
+              "marker": "Free T3",
+              "value": "2.4",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lv-6",
               "marker": "Estradiol",
               "value": "45",
-              "unit": "pg/mL"
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
             }
           ]
         }

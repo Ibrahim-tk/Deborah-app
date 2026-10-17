@@ -28,8 +28,8 @@ import styles from './CreateProfile.module.css';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_LENGTH = 8;
 const DONE_MS = 1600;
-/** TEMP: skip signup/signin field checks for manual journey testing. Set `false` to restore. */
-const SKIP_AUTH_VALIDATION = true;
+/** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
+const SKIP_AUTH_VALIDATION = false;
 /** PDF persona auto-run: shorter “You’re in” hold (still readable at ~0.5× normal step pace). */
 const fastDoneMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 700 : DONE_MS);
 

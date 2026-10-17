@@ -45,11 +45,15 @@ export function useHomeView() {
   const latestLabel = latest ? latest.labName ?? (latest.collectedAt ? `Labs from ${formatShortDate(latest.collectedAt)}` : 'Lab report') : '';
   const reportsMeta = n === 0 ? undefined : d.reportsNew ? `New · ${latestLabel}` : `${n} report${n === 1 ? '' : 's'} · Latest: ${latestLabel}`;
 
-  // Personalised only, each with a reason. OPEN: reason copy is placeholder.
+  // Prefer product from last answer / plan; fall back to Genesis Gold so Home always shows the shop widget.
   const recommendations: Recommendation[] = [];
   if (d.product) recommendations.push({ product: d.product, reason: `Because you mentioned ${lowerFirst(topic)}` });
   const planProduct = productList.find((p) => p.id === plan?.productId && p.id !== d.product?.id);
   if (planProduct) recommendations.push({ product: planProduct, reason: 'Part of your My Healing Plan' });
+  if (recommendations.length === 0 && state !== 'new') {
+    const gold = productList.find((p) => p.id === 'genesis-gold');
+    if (gold) recommendations.push({ product: gold, reason: `Fits your focus on ${lowerFirst(topic)}` });
+  }
 
   return {
     ...d,

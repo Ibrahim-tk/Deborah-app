@@ -1,13 +1,14 @@
 /**
  * @nav Sidebar — left drawer that replaces the tab bar (design direction 2026-10-08). Opened from
- * the menu button on every tab root. Holds the profile, new chat, Home, plans/settings, recent
- * chats, the old (i) items and a Genesis Gold feature card. Main destinations live on Home (M-2.0). Text size
- * stays on Account (nav may not import patterns).
+ * the menu button on every tab root. Holds the profile, new chat, recent chats, the chat ProductCard
+ * (Genesis Gold) pinned above Settings, and Settings at the bottom. Main destinations live on Home (M-2.0).
+ * Text size stays on Account.
  * OPEN: not in the F02/F07/F10 specs or Figma yet — specs still describe a bottom tab bar.
  */
 import { useShallow } from 'zustand/react/shallow';
 import { findProduct } from '@shared/data';
 import { selectHistory, useAppStore } from '@shared/store';
+import { ProductCard } from '@mobile/patterns/commerce';
 import { AnimatePresence, Avatar, DURATION, EASE_IOS, Icon, MotionDiv, type IconName } from '@mobile/ui';
 import { useNavStore } from '../nav.store';
 import type { TabId } from '../types';
@@ -53,17 +54,9 @@ export function Sidebar() {
     nav.openAsk();
   };
 
-  // Drawer = conversations first: New conversation, Home, then chat history. Everything else
-  // (plans, notifications, privacy, About Deborah, disclaimer) lives in Settings (M-10.1), pinned at the bottom.
-  const home: Item = {
-    label: 'Home',
-    icon: 'deborah',
-    onSelect: () => {
-      goTab('ask');
-      nav.popToRoot();
-    },
-    current: nav.activeTab === 'ask',
-  };
+  // Drawer = conversations first: New conversation, then chat history. Shop ProductCard + Settings
+  // sit in the pinned footer. Everything else (plans, notifications, privacy, About Deborah,
+  // disclaimer) lives in Settings (M-10.1).
   const settings: Item = {
     label: 'Settings',
     icon: 'settings',
@@ -127,8 +120,6 @@ export function Sidebar() {
                   New conversation
                 </button>
 
-                <ul className={styles.list}>{row(home)}</ul>
-
                 <h2 className={styles.heading}>Recent conversations</h2>
                 {history.length === 0 ? (
                   <p className={styles.empty}>Your conversations with Deborah will appear here.</p>
@@ -143,26 +134,24 @@ export function Sidebar() {
                     ))}
                   </ul>
                 )}
-
-
-                {gold && (
-                  <button
-                    type="button"
-                    className={styles.product}
-                    onClick={run(() => nav.presentModal('M-2.7', { productId: gold.id }))}
-                    data-placeholder={gold.status === 'placeholder' || undefined}
-                  >
-                    <img src={gold.image} alt="" className={styles.productImage} />
-                    <span className={styles.productName}>{gold.name}</span>
-                    <span className={styles.productTagline}>{gold.tagline}</span>
-                    <span className={styles.productCta}>
-                      Shop Genesis Gold <Icon name="external" size={16} />
-                    </span>
-                  </button>
-                )}
               </div>
 
-              <ul className={`${styles.list} ${styles.bottom}`}>{row(settings)}{guest && row(signIn)}</ul>
+              <div className={styles.bottom}>
+                {gold && (
+                  <div className={styles.shop}>
+                    <ProductCard
+                      product={gold}
+                      productRef={{
+                        productId: gold.id,
+                        why: gold.tagline,
+                        frame90: '',
+                      }}
+                      onShop={run(() => nav.presentModal('M-2.7', { productId: gold.id }))}
+                    />
+                  </div>
+                )}
+                <ul className={styles.list}>{row(settings)}{guest && row(signIn)}</ul>
+              </div>
             </MotionDiv>
           </>
         )}

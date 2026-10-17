@@ -15,14 +15,18 @@ import { useNav, useRoute } from '@mobile/navigation';
 import styles from './Notifications.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
+/** F10: 1 week · 2 weeks · 1 month — Off is the check-in toggle, not a segment. */
 const INTERVALS = [
   { value: '7', label: 'Weekly' },
   { value: '14', label: 'Every 2 weeks' },
   { value: '30', label: 'Monthly' },
-  { value: '0', label: 'Off' },
 ];
 // Same default as M-2.8 Follow-up opt-in.
 const DEFAULT_DAYS = 14;
+
+function resolveInterval(days: number): number {
+  return INTERVALS.some((o) => Number(o.value) === days) ? days : DEFAULT_DAYS;
+}
 
 export default function Notifications() {
   const { pop } = useNav();
@@ -35,7 +39,7 @@ export default function Notifications() {
   const bookingReminders = useAppStore((s) => s.notifications.bookingReminders);
   const denied = permission === 'denied';
   const checkIns = Boolean(followUp?.enabled) && !denied;
-  const days = followUp?.intervalDays ?? DEFAULT_DAYS;
+  const days = resolveInterval(followUp?.intervalDays ?? DEFAULT_DAYS);
 
   /** Turning anything on asks the system first when permission is still 'unknown' (as in M-2.8). */
   const ensurePermission = async () => {
@@ -82,9 +86,7 @@ export default function Notifications() {
   };
 
   const changeInterval = (value: string) => {
-    const n = Number(value);
-    if (n === 0) return reschedule(false, days);
-    reschedule(true, n);
+    reschedule(true, Number(value));
   };
 
   const [awayFollowUp, setAwayFollowUp] = useState(() => {
@@ -130,15 +132,17 @@ export default function Notifications() {
 
         <section className={styles.group} aria-label="Check-in reminders">
           <Toggle checked={checkIns} onChange={setCheckIns} label="Check-in reminders" description="Deborah asks how you’re doing." />
-          <fieldset className={styles.interval} disabled={!checkIns && String(days) !== '0'}>
-            <legend className={styles.legend}>Preferred frequency</legend>
-            <Segmented
-              label="Preferred frequency"
-              options={INTERVALS}
-              value={checkIns ? String(days) : '0'}
-              onChange={changeInterval}
-            />
-          </fieldset>
+          {checkIns && (
+            <fieldset className={styles.interval}>
+              <legend className={styles.legend}>Preferred frequency</legend>
+              <Segmented
+                label="Preferred frequency"
+                options={INTERVALS}
+                value={String(days)}
+                onChange={changeInterval}
+              />
+            </fieldset>
+          )}
         </section>
 
         <section className={styles.group} aria-label="Booking reminders">
@@ -158,8 +162,6 @@ export default function Notifications() {
             description="Design only for now — no automatic inactivity schedule yet."
           />
         </section>
-
-        <p className={styles.note}>Notifications never show health details on your lock screen.</p>
       </div>
     </div>
   );

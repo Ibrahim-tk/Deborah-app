@@ -12,7 +12,7 @@ import { labSampleReports } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { LabReport, LabValue } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Input, Modal } from '@mobile/ui';
+import { Button, Card, Input, Modal } from '@mobile/ui';
 import { LabValueRow } from '@mobile/patterns/health';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useToast } from '@mobile/hooks/toast.store';
@@ -68,11 +68,16 @@ export default function ConfirmLabs() {
       dismissModal();
       return toast('Saved');
     }
+    const sample = labSampleReports['sample-a'];
     const report: LabReport = {
       id: uid('lab'),
       profileId: s.activeProfileId,
       source,
       labName: labName.trim() || undefined,
+      panelTitle: source !== 'manual' ? sample?.panelTitle : undefined,
+      insight: source !== 'manual' && sample?.insight
+        ? { headline: sample.insight.headline, body: sample.insight.body, status: sample.insight.status }
+        : undefined,
       collectedAt,
       values: complete,
       confirmed: false,
@@ -91,15 +96,15 @@ export default function ConfirmLabs() {
         footer={
           <>
             {error && <p className={styles.error} role="alert">{error}</p>}
-            <Button fullWidth onClick={send}>{stored ? 'Save changes' : 'Looks right — send to Deborah'}</Button>
+            <Button fullWidth onClick={send}>{stored ? 'Save changes' : 'Add Report'}</Button>
           </>
         }
       >
         <div className={styles.body}>
-          <div className={styles.meta}>
+          <Card className={styles.meta}>
             <Input label="Lab" placeholder="e.g. Quest Diagnostics" value={labName} onChange={(e) => setLabName(e.target.value)} />
             <Input label="Collection date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-          </div>
+          </Card>
 
           <div className={styles.values}>
             {values.length === 0 && <p className={styles.empty}>No values on this report.</p>}
@@ -118,8 +123,6 @@ export default function ConfirmLabs() {
               />
             ))}
           </div>
-
-          <p className={styles.disclaimer}>Please make sure these match your report.</p>
         </div>
       </Modal>
     </div>

@@ -9,6 +9,7 @@ import { briefFromAnswer, personalise } from '@shared/engine';
 import { Button, Panel } from '@mobile/ui';
 import { AnswerSections } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
+import { LabInsightCard, LabMetricCard } from '@mobile/patterns/health';
 import { EmergencyInterrupt } from '@mobile/patterns/safety';
 import {
   BookDeborah,
@@ -16,8 +17,10 @@ import {
   DestinationTilePair,
   FullChoicePills,
   FullChoicePillsGrid,
+  GlassCareStrip,
   HealingPlanCard,
   HealingPlanSection,
+  HomeMediaHero,
   InlineChoicePills,
   InlineConsent,
   IntakeCompletionCard,
@@ -27,12 +30,14 @@ import {
   NamedReasonList,
   NextIntentList,
   PhoneField,
+  PhotoDestinationPair,
   PolicyUpdateConsent,
   PrimaryIntentCard,
   PromptStarterList,
   QuestionChoices,
   RecommendationCard,
   ScaleCheck,
+  SuggestionCarousel,
   TodayHabitsCard,
   UploadCard,
   type NamedReason,
@@ -435,5 +440,60 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
         />
       ) : null;
     }
+    case 'mediaHero':
+      return (
+        <HomeMediaHero
+          titleId="lab-media-hero"
+          title="Ongoing tiredness and a question about thyroid function"
+          when="4 days ago"
+          tone="hero"
+          artifact="violet-bloom"
+          ctaLabel="Continue"
+          onCta={() => reply(undefined, 'Opening chat…')}
+        />
+      );
+    case 'suggestCarousel':
+      return (
+        <SuggestionCarousel
+          items={[
+            { key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: () => reply(undefined, 'Opening labs…') },
+            { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps Deborah tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: () => reply('Help me with sleep.', 'Tell me more.') },
+          ]}
+        />
+      );
+    case 'photoDestinations':
+      return (
+        <PhotoDestinationPair
+          tiles={[
+            { title: 'My Health', meta: 'Profile 80%', tone: 'mint', artifact: 'dest-health-art', action: 'chevron', onPress: () => reply(undefined, 'My Health') },
+            { title: 'Family', meta: '2 profiles', tone: 'rose', artifact: 'dest-family-art', action: 'plus', onPress: () => reply(undefined, 'Family') },
+          ]}
+        />
+      );
+    case 'labInsight':
+      return (
+        <LabInsightCard
+          headline="Paula, your tests show that your immune system is functioning very well!"
+          body="Blood tests, such as leukocytes (defense cells) and other components, are within expected values for this panel. This is educational context only — not a diagnosis."
+        />
+      );
+    case 'labMetric':
+      return (
+        <div className={styles.expandStack}>
+          <LabMetricCard value={{ id: 'n1', marker: 'Neutrophils', value: '4487.0', unit: 'µL', statusLabel: 'Normal', statusTone: 'normal' }} onPress={() => reply(undefined, 'Metric')} />
+          <LabMetricCard value={{ id: 'a1', marker: 'AST', value: '38.0', unit: 'U/L', statusLabel: 'Excellent', statusTone: 'excellent' }} onPress={() => reply(undefined, 'Metric')} />
+          <LabMetricCard value={{ id: 'v1', marker: 'VDRL', value: 'Non-Reactive', unit: '', statusTone: 'excellent' }} onPress={() => reply(undefined, 'Metric')} />
+        </div>
+      );
+    case 'glassCare':
+      return (
+        <GlassCareStrip
+          items={[
+            { key: 'intake', label: 'Complete intake', meta: '65%', onPress: () => reply(undefined, 'Intake') },
+            { key: 'plan', label: 'Healing plan', meta: 'Day 18', onPress: () => reply(undefined, 'Plan') },
+            { key: 'reports', label: 'Reports', meta: '2', onPress: () => reply(undefined, 'Reports') },
+          ]}
+        />
+      );
   }
 }

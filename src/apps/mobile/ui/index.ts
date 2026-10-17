@@ -47,4 +47,6 @@ export * from './DateWheel';
 export * from './EdgeLight';
 export * from './ColorField';
 export * from './IconWell';
+export * from './PurpleDockBloom';
+
 

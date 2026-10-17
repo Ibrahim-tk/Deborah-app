@@ -1,5 +1,5 @@
 /**
- * @pattern EmptyState — designed empty list: title-2 invitation, one line of callout, one primary
+ * @pattern EmptyState — designed empty list: body-font invitation, one line of callout, one primary
  *          button (DESIGN.md › Other controls › Empty states)
  *          (docs/ux/00-ux-overview.md §3: every list has an empty state with a next action)
  * @usedBy  M-7.1, M-9.1, M-7.5 (no results)

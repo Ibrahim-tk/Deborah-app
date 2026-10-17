@@ -1,17 +1,207 @@
-.root { display: flex; flex-direction: column; height: 100%; }
-.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.body { display: grid; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6)); }
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-.day { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); }
-.goalLabel { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
-.goal { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); }
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 
-.section { display: grid; gap: var(--space-3); }
-.heading { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
-.group { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
-.group > * + * { border-top: 1px solid var(--color-border-hairline); }
-.empty { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
-.hint { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-tertiary); }
+.body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+}
 
-.productImage { width: 48px; height: 48px; border-radius: var(--radius-md); object-fit: cover; background: var(--color-surface-tonal); }
-.reorder { flex: none; font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-accent); }
+/* Day + progress — warm wash, sans only (no serif in cards). */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(165deg, #fff9f2 0%, #f8ede3 42%, #f3e4d6 72%, #efe0d0 100%);
+  color: var(--color-ink);
+}
+
+.heroMark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--home-tone-icon-radius, var(--radius-full));
+  background: color-mix(in srgb, var(--gold-900) 38%, var(--gold-200));
+  color: var(--white);
+}
+
+.heroCopy {
+  display: grid;
+  flex: 1;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.day {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+/* Goal — lilac mist, circular mark. */
+.goalCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    105deg,
+    color-mix(in srgb, var(--purple-50) 72%, var(--gold-50)) 0%,
+    color-mix(in srgb, var(--gold-50) 68%, var(--white)) 100%
+  );
+  color: var(--color-ink);
+}
+
+.goalMark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-top: 2px;
+  border-radius: var(--home-tone-icon-radius, var(--radius-full));
+  background: color-mix(in srgb, var(--purple-500) 55%, var(--purple-100));
+  color: var(--white);
+}
+
+.goalCopy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.goalLabel {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
+
+.goal {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+/* Habit lists — hairlines only, no nested white card. */
+.group {
+  display: grid;
+  margin: calc(var(--space-2) * -1) calc(var(--space-4) * -1) 0;
+}
+
+.group > * + * {
+  border-top: 1px solid color-mix(in srgb, var(--purple-100) 70%, transparent);
+}
+
+/* Lifestyle + follow-ups — one container, divider. */
+.infoCard {
+  display: grid;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift);
+}
+
+.infoBlock {
+  display: grid;
+  gap: 6px;
+  padding: var(--space-4);
+}
+
+.infoTitle {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.infoBody {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+}
+
+.infoCard > * + * {
+  border-top: 1px solid color-mix(in srgb, var(--purple-100) 70%, transparent);
+}
+
+/* This week — quieter companion to the priority sections. */
+.week {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift);
+}
+
+.weekTitle {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.weekGroup {
+  display: grid;
+  margin: 0 calc(var(--space-4) * -1);
+}
+
+.weekGroup > * + * {
+  border-top: 1px solid color-mix(in srgb, var(--purple-100) 70%, transparent);
+}
+
+.empty {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.hint {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-tertiary);
+}
+
+.product {
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift);
+}
+
+.product :global(button) {
+  padding-inline: var(--space-4);
+}
+
+.productImage {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--color-surface-tonal);
+}
+
+.reorder {
+  flex: none;
+  font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-accent);
+}

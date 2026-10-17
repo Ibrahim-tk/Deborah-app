@@ -1,15 +1,14 @@
 /**
- * Home · State 3 — a few weeks in (Figma 172:145).
- * AI-native overhaul: TodayHabitsCard + shared destination widgets.
+ * Home · State 3 — established. Habits + artifact continue hero + destinations.
  */
 import {
-  DestinationTilePair,
+  GlassCareStrip,
   HealingPlanCard,
+  HomeMediaHero,
   IntakeCompletionCard,
-  LinkStatusCard,
+  PhotoDestinationPair,
   RecommendationCard,
   TodayHabitsCard,
-  type DestinationTileProps,
   type Recommendation,
   type TodayHabit,
 } from '@mobile/patterns/widgets';
@@ -26,31 +25,72 @@ export interface StateEstablishedProps {
   journeyFocus?: string;
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
-  tiles: [DestinationTileProps, DestinationTileProps];
+  destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
 }
 
 export function StateEstablished(p: StateEstablishedProps) {
+  const care: { key: string; label: string; meta?: string; onPress: () => void }[] = [];
+  if (p.reports) {
+    care.push({
+      key: 'reports',
+      label: 'Reports',
+      meta: p.reports.meta,
+      onPress: p.reports.onPress,
+    });
+  }
+
   return (
     <>
       <TodayHabitsCard day={p.day} habits={p.habits} onToggle={p.onToggle} />
 
-      <LinkStatusCard
-        tone="linen"
-        lead="chat"
-        title="Continue with Deborah"
-        meta={p.continueMeta ?? 'Pick up where you left off'}
-        onPress={p.onContinue}
+      <HomeMediaHero
+        titleId="continue-deborah"
+        title={p.continueMeta ?? 'Ongoing conversation and questions with Deborah'}
+        when={p.journeyFocus ? undefined : `Day ${p.day}`}
+        tone="hero"
+        artifact="violet-bloom"
+        ctaLabel="Continue"
+        onCta={p.onContinue}
       />
-      {p.intakeCard && (
-        <IntakeCompletionCard progress={p.intakeCard.progress} complete={p.intakeCard.complete} onAction={p.intakeCard.onAction} />
+
+      <GlassCareStrip items={care} />
+
+      {p.intakeCard && !p.intakeCard.complete && (
+        <IntakeCompletionCard
+          progress={p.intakeCard.progress}
+          onAction={p.intakeCard.onAction}
+        />
       )}
-      <HealingPlanCard day={p.day} focus={p.journeyFocus} onPress={p.onJourney} />
-      {p.reports && (
-        <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta={p.reports.meta} onPress={p.reports.onPress} />
-      )}
-      <DestinationTilePair tiles={p.tiles} compact />
+
+      <HealingPlanCard
+        day={p.day}
+        focus={p.journeyFocus}
+        onPress={p.onJourney}
+      />
+
+      <PhotoDestinationPair
+        tiles={[
+          {
+            title: p.destinations[0].title,
+            meta: p.destinations[0].meta,
+            tone: 'mint',
+            artifact: 'dest-health-art',
+            action: 'chevron',
+            onPress: p.destinations[0].onPress,
+          },
+          {
+            title: p.destinations[1].title,
+            meta: p.destinations[1].meta,
+            tone: 'rose',
+            artifact: 'dest-family-art',
+            action: 'plus',
+            onPress: p.destinations[1].onPress,
+          },
+        ]}
+      />
+
       <RecommendationCard items={p.recommendations} onShop={p.onShop} />
     </>
   );
