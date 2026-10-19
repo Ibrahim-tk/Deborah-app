@@ -39,13 +39,14 @@ function section(answer: Answer, key: string) {
   return answer.sections.find((s) => s.key === key);
 }
 
-/** Split "Name — reason" / "Name: reason" into lab rows; otherwise reason is empty. */
-export function parseLabBullet(bullet: string, index: number): VisitBriefLab {
+/** Split "Name — reason" / "Name: reason" into lab rows. `tier` from JSON wins; else the first three are primary. */
+export function parseLabBullet(bullet: string, index: number, tier?: VisitBriefLab['tier']): VisitBriefLab {
+  const t = tier ?? (index < 3 ? 'primary' : 'also');
   const m = bullet.match(/^(.+?)\s*[—–:]\s*(.+)$/);
   if (m) {
-    return { name: m[1].trim(), tier: index < 3 ? 'primary' : 'also', reason: m[2].trim() };
+    return { name: m[1].trim(), tier: t, reason: m[2].trim() };
   }
-  return { name: bullet.trim(), tier: index < 3 ? 'primary' : 'also', reason: '' };
+  return { name: bullet.trim(), tier: t, reason: '' };
 }
 
 function dobLabel(profile: Profile): string | undefined {
@@ -73,7 +74,7 @@ function medicationsFrom(profile: Profile): VisitBriefMed[] {
   return meds;
 }
 
-function chiefComplaintFrom(conv: Conversation, answer: Answer, profile: Profile): string {
+function concernFrom(conv: Conversation, answer: Answer, profile: Profile): string {
   const concern = profile.intake.mainConcern?.trim();
   if (concern) return concern;
   const hearing = section(answer, 'hearing')?.body?.trim();
@@ -82,20 +83,38 @@ function chiefComplaintFrom(conv: Conversation, answer: Answer, profile: Profile
   return user?.text?.trim() || conv.topic || 'See conversation with Deborah AI';
 }
 
+/** Client's words + a “Duration:” line when intake captured one (mock: “Duration: e.g., 8–12 months”). */
+function chiefComplaintFrom(conv: Conversation, answer: Answer, profile: Profile): string {
+  const text = concernFrom(conv, answer, profile);
+  // OPEN: no intake step saves `concernDuration` yet — the line only prints when a seed or future step sets it.
+  const duration = profile.intake.concernDuration?.trim();
+  return duration ? `${text}\nDuration: ${duration}` : text;
+}
+
 function clinicalContextFrom(answer: Answer): string {
   const hypo = section(answer, 'hypothalamic')?.body?.trim() ?? '';
   const mean = section(answer, 'mayMean')?.body?.trim() ?? '';
   return [hypo, mean].filter(Boolean).join('\n\n') || 'Clinical context from Deborah AI (placeholder).';
 }
 
+const WHY_FALLBACK = 'Why I’m asking: context from my conversation with Deborah AI.';
+
+/** Per-question “why”: JSON `bulletWhy` first, then an inline “ — because …” split, then the placeholder. */
+export function parseQuestionBullet(bullet: string, why?: string): VisitBriefQuestion {
+  if (why?.trim()) return { text: bullet.trim(), why: why.trim() };
+  const m = bullet.match(/^(.+?\?)\s*[—–]\s*(.+)$/) ?? bullet.match(/^(.+?)\s+because\s+(.+)$/i);
+  if (m) return { text: m[1].trim(), why: m[2].trim() };
+  return { text: bullet.trim(), why: WHY_FALLBACK };
+}
+
 function questionsFrom(answer: Answer): VisitBriefQuestion[] {
-  const bullets = section(answer, 'providerQuestions')?.bullets ?? [];
-  const why = 'Why I’m asking: context from my conversation with Deborah AI.';
-  return bullets.map((text) => ({ text, why }));
+  const s = section(answer, 'providerQuestions');
+  return (s?.bullets ?? []).map((b, i) => parseQuestionBullet(b, s?.bulletWhy?.[i]));
 }
 
 function labsFrom(answer: Answer): VisitBriefLab[] {
-  return (section(answer, 'tests')?.bullets ?? []).map(parseLabBullet);
+  const s = section(answer, 'tests');
+  return (s?.bullets ?? []).map((b, i) => parseLabBullet(b, i, s?.bulletTiers?.[i]));
 }
 
 function redFlagsFrom(conv: Conversation, answer: Answer): string {

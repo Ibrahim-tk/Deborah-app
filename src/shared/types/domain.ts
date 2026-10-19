@@ -113,6 +113,8 @@ export interface Intake {
   psaCheck?: string;
   /** Ask Dibora session answers (pending until Review and Confirm). */
   mainConcern?: string;
+  /** How long the main concern has been going on — printed as the Chief Complaint duration line. */
+  concernDuration?: string;
   otherIssues?: string;
   healthGoal?: string;
   newMeds?: string;
@@ -216,6 +218,10 @@ export interface AnswerSection {
   title: string;
   body: string;
   bullets?: string[];
+  /** providerQuestions only: “why I’m asking” per bullet, same order (Visit Notes brief; not shown in chat). */
+  bulletWhy?: string[];
+  /** tests only: provider-brief tier per bullet, same order (Visit Notes brief; not shown in chat). */
+  bulletTiers?: ('primary' | 'also')[];
 }
 
 export interface ProductRef {
