@@ -4,7 +4,6 @@
  */
 import type { Flow, FlowNode } from '../types/flow';
 import type { Profile } from '../types/domain';
-import { journeyFor } from './journey';
 
 export type FlowValue = string | boolean | string[] | undefined;
 
@@ -41,10 +40,9 @@ export function personalise(flow: Flow, text: string | undefined, name: string):
 }
 
 /**
- * Plan C-19: the scripted first consultation (M-2.12, firstConsult.json) is written for a postmenopausal
- * adult talking about sleep; it plays only when the profile already says so. Everyone else — every new user,
- * since Basic details no longer asks the stage — starts in the live conversation (M-2.1) with its journeys.
+ * New users always start in the live conversation (M-2.1). A demographic or hormonal stage does not
+ * open the scripted first consult (M-2.12). That screen remains for the seeded returning demo.
  */
-export function firstConsultFor(profile: Profile | undefined, now: Date): 'first' | null {
-  return profile && journeyFor(profile, now) === 'female-post' ? 'first' : null;
+export function firstConsultFor(_profile: Profile | undefined, _now: Date): 'first' | null {
+  return null;
 }

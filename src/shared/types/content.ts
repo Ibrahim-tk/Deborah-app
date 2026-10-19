@@ -52,6 +52,15 @@ export interface Consent {
     /** Single-select radio options; one required. */
     options: { value: string; label: string }[];
   };
+  /**
+   * Separate health-data consent, required before chat once attorney copy exists.
+   * No `body` means the step is not rendered — do not invent the wording.
+   */
+  healthConsent?: {
+    status: ContentStatus;
+    open: string;
+    body?: string;
+  };
   status: ContentStatus;
 }
 
@@ -386,5 +395,7 @@ export interface HealthBasicsStep {
 }
 export interface HealthBasicsData {
   status: string;
+  /** Step keys asked on M-1.8. Every other step belongs to the Health Profile (M-2.14). */
+  onboardingKeys?: string[];
   steps: HealthBasicsStep[];
 }

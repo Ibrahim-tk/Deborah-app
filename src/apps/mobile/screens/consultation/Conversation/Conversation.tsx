@@ -27,6 +27,8 @@ import { thirdPerson } from './parts/thirdPerson';
 import { useReturnFlows } from './parts/useReturnFlows';
 import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
+import { IntakeCompletionCard } from '@mobile/patterns/widgets';
+import { healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import styles from './Conversation.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 import { useToast } from '@mobile/hooks/toast.store';
@@ -263,6 +265,14 @@ export default function Conversation() {
 
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
+        {profile && healthProfileCompletion(profile) < 1 && (isEmpty || conversation?.status === 'answered') && (
+          <IntakeCompletionCard
+            progress={healthProfileCompletion(profile)}
+            onAction={() => push('M-2.14')}
+            title="Health profile"
+            body="You can keep talking. Finish this when you want Deborah to know more."
+          />
+        )}
         {(isEmpty || conversation?.status === 'empty') && !intakeMode && !profileOpening && !recording && (
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
         )}

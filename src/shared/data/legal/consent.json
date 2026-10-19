@@ -48,5 +48,9 @@
         "label": "{name} can’t make this decision themselves, and I’m authorised to act for them (for example, as their healthcare proxy or power of attorney)"
       }
     ]
+  },
+  "healthConsent": {
+    "status": "placeholder",
+    "open": "Blocked: attorney-approved health-consent wording is not in the repo. Terms and Privacy on Welcome stay. Do not add a second checkbox until this copy is supplied."
   }
 }

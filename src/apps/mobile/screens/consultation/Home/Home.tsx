@@ -86,13 +86,10 @@ export default function Home() {
   const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
   const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
-  const intakeExtended = Boolean(
-    profile?.intake.familyHistory || profile?.intake.lifestyleSleep || profile?.intake.otherMedical,
-  );
   const intakeCard = {
     progress: d.completion,
-    complete: d.intakeDone && intakeExtended,
-    onAction: () => (d.intakeDone ? completeIntake() : openAsk({ startIntake: true })),
+    complete: d.completion >= 1,
+    onAction: () => { closeSheet(); completeIntake(); },
   };
   const planFocus = useAppStore((s) => s.plan90[s.activeProfileId]?.goal);
   const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
@@ -132,8 +129,8 @@ export default function Home() {
           <StateNew
             onPrompt={(prefill) => { closeSheet(); openAsk({ prefill }); }}
             onStart={() => { closeSheet(); openAsk({ focus: true }); }}
-            profile={!d.intakeDone ? { progress: d.completion, onOpen: () => { closeSheet(); openAsk({ startIntake: true }); } } : undefined}
-            intakeCard={d.intakeDone ? intakeCard : undefined}
+            profile={d.completion < 1 ? { progress: d.completion, onOpen: () => { closeSheet(); completeIntake(); } } : undefined}
+            intakeCard={intakeCard}
             onAddFamily={() => addMember(false)}
             destinations={destinations}
           />

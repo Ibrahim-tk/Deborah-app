@@ -12,6 +12,13 @@ export type Answers = Partial<Record<string, string>>;
 
 export const STEPS: Step[] = healthBasicsData.steps;
 
+/** M-1.8 only. Clinical steps stay in the same file for the Health Profile. */
+const ONBOARDING_KEYS = new Set(
+  healthBasicsData.onboardingKeys ?? ['profileFor', 'relationship', 'memberName', 'birthDate', 'consent', 'sex', 'gender', 'pronouns'],
+);
+
+export const isOnboardingStep = (s: Step) => ONBOARDING_KEYS.has(s.key);
+
 /** Whole years from an ISO date of birth (yyyy-mm-dd). */
 export function ageFromAnswers(a: Answers, now = new Date()): number | undefined {
   const dob = a.birthDate;
@@ -25,6 +32,10 @@ export function ageFromAnswers(a: Answers, now = new Date()): number | undefined
  * Pronouns never override this.
  */
 export function effectiveGender(a: Answers): string | undefined {
+  if (a.gender === 'other') {
+    const custom = a.genderOther?.trim();
+    return custom || 'other';
+  }
   return a.gender || a.sex;
 }
 
@@ -59,12 +70,19 @@ export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
   return { ...derived, age, ageGroup: ageGroupFor(age) };
 };
 
-/** Questions to ask, given the answers so far. Inline steps (e.g. hrtType) expand under another step. */
+/** Onboarding questions, given the answers so far. Inline steps expand under another step. */
 export const visibleSteps = (a: Answers) =>
-  STEPS.filter((s) => !s.inline && shows(s.showIf, withDerived(a)));
+  STEPS.filter((s) => !s.inline && isOnboardingStep(s) && shows(s.showIf, withDerived(a)));
 
-/** Step keys visible for a complete answer set (PDF matrix / contract tests). */
+/** Health Profile questions (reproductive, puberty, medicines, Genesis Gold, and their branches). */
+export const profileVisibleSteps = (a: Answers) =>
+  STEPS.filter((s) => !s.inline && !isOnboardingStep(s) && shows(s.showIf, withDerived(a)));
+
+/** Onboarding step keys for a complete answer set (PDF matrix / contract tests). */
 export const visibleStepKeys = (a: Answers) => visibleSteps(a).map((s) => s.key);
+
+/** Health Profile step keys for a complete answer set. */
+export const profileStepKeys = (a: Answers) => profileVisibleSteps(a).map((s) => s.key);
 
 /** True when the profile being set up is for someone else. */
 export const forSomeoneElse = (a: Answers) => a.profileFor === 'dependent';

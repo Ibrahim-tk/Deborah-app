@@ -20,6 +20,30 @@
 }
 
 /* Linen note — same parchment language as Home / Settings tonal fields. */
+.progress {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  letter-spacing: 0.04em;
+  color: var(--color-ink-tertiary);
+}
+
+.question {
+  margin: 0;
+  font: var(--weight-regular) calc(28px * var(--type-scale)) / calc(34px * var(--type-scale)) var(--font-artistic, var(--font-display));
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.reward {
+  display: flex;
+  justify-content: center;
+}
+
+.tree {
+  width: 120px;
+  height: 160px;
+}
+
 .banner {
   margin: 0;
   padding: var(--space-4);

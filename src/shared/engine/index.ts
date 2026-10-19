@@ -235,7 +235,14 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
     // DN-07 · DN-08: what she's asking about and which question bank fits her.
     symptomGroup: symptomGroupOf(text),
     journey: journeyFor(profile, new Date(ctx.now)) ?? undefined,
-    intakePlan: planConsultation(ctx, script.intake, Boolean(script.answer.product), script.ownIntake),
+    intakePlan: planConsultation(
+      ctx,
+      script.intake,
+      Boolean(script.answer.product),
+      script.ownIntake,
+      symptomGroupOf(text),
+      Boolean(text.trim()),
+    ),
     intakeDone: [],
     facts,
     openingText: text.trim(),

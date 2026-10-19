@@ -1,7 +1,7 @@
 /** Home data for intake V2 states: new vs returning, profile completion, next steps, reports. */
 import { useShallow } from 'zustand/react/shallow';
 import { findProduct, scripts } from '@shared/data';
-import { profileCompletion } from '@shared/engine';
+import { healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import { selectActiveConversation, selectHistory, useAppStore } from '@shared/store';
 
 const DEFERRED = [
@@ -20,7 +20,7 @@ export function useHomeData() {
 
   const isNew = history.length === 0 && !active?.messages.length;
   const health = profile?.health;
-  const completion = profileCompletion(health);
+  const completion = profile ? healthProfileCompletion(profile) : 0;
   const intakeDone = Boolean(profile?.intakeV2?.completedAt);
 
   // Next steps: Deborah's follow-up questions from the most recent answered chat.

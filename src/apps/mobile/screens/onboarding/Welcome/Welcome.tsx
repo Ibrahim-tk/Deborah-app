@@ -8,6 +8,8 @@
  *
  * Version 2: Deborah's orb and note, then first-name field, legal checkbox (terms and services +
  * Privacy Notice), Get Started, and Sign in. Must be checked before Get Started enables.
+ * Health-data consent is a separate required step, but legal/consent.json › healthConsent has no
+ * attorney body yet. Do not render that checkbox until `healthConsent.body` is supplied.
  * Sign-up sheet (M-1.4) still follows. Version 1 keeps the single legal line instead.
  * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
  */

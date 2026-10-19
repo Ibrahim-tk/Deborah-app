@@ -8,8 +8,8 @@
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex at birth (routes banks),
- * then gender identity → pronouns → age×sex intake. Steps/`showIf` in healthBasics.json.
+ * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex assigned at birth,
+ * gender identity, and pronouns. Clinical questions live on the Health Profile (M-2.14).
  */
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';

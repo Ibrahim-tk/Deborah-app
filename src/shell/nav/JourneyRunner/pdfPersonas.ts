@@ -61,12 +61,13 @@ const BAND_LABEL: Record<PdfAgeBand, string> = {
 };
 
 /**
- * Sex at birth that routes the bank.
- * Non-binary is identity-only → Prefer not to say sex (same bank), then identity Non-binary.
+ * Sex assigned at birth is only male, female, or intersex.
+ * Trans and non-binary are gender identity, asked after sex, and do not add onboarding steps.
  */
 function sexPickFor(gender: PdfGender): string {
-  if (gender === 'non-binary') return 'prefer-not';
-  return gender;
+  if (gender === 'male' || gender === 'trans-man') return 'male';
+  if (gender === 'female' || gender === 'trans-woman') return 'female';
+  return 'intersex';
 }
 
 const SEX_STEP_LABEL: Record<string, RegExp> = {
@@ -91,62 +92,18 @@ function pronounValueFor(gender: PdfGender): string {
   return 'they-them';
 }
 
-/** Choice-pill puberty bank, ages 13–59 (sex options only — no non-binary on sex). */
-function usesOtherPuberty(sex: string): boolean {
-  return ['trans-man', 'trans-woman', 'prefer-not', 'intersex'].includes(sex);
-}
-
-/** Preferred choice labels: sex → identity → pronouns → banks. */
+/** Onboarding taps only: who, sex assigned at birth, gender, pronouns. Clinical banks are the Health Profile. */
 function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
   if (band === 'lt13') return [/^Myself$/];
   const sex = sexPickFor(gender);
-  const out: RegExp[] = [
-    /^Myself$/,
-    SEX_STEP_LABEL[sex] ?? /^Female$/,
-    PDF_GENDER_LABEL[gender],
-    pronounPickFor(gender),
-  ];
-  if (band === 'senior') {
-    out.push(/^No$/); // Genesis Gold
-  } else if (sex === 'female') {
-    out.push(/^Pre-menopausal$/);
-    if (band === 'teen') out.push(/^No$/); // puberty blockers
-    out.push(/^No$/); // Genesis Gold
-  } else if (sex === 'male') {
-    if (band === 'adult') out.push(/^No$/); // fertility
-    out.push(/^No$/); // Genesis Gold
-  } else if (usesOtherPuberty(sex)) {
-    out.push(/^Yes$/); // otherPuberty
-    out.push(/^Pre-menopausal$/); // reproductive after puberty
-    out.push(/^No$/); // Genesis Gold
-  }
-  return out;
+  const genderLabel = gender === 'prefer-not' ? /^Non-binary$/ : PDF_GENDER_LABEL[gender];
+  return [/^Myself$/, SEX_STEP_LABEL[sex] ?? /^Female$/, genderLabel, pronounPickFor(gender)];
 }
 
-/** Steps that should appear for this persona (mirrors healthBasics.json showIf). */
-export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] {
+/** Onboarding steps for this persona. Clinical questions are not on M-1.8. */
+export function expectedStepsFor(_gender: PdfGender, band: PdfAgeBand): string[] {
   if (band === 'lt13') return ['profileFor', 'birthDate'];
-  const sex = sexPickFor(gender);
-  const keys = ['profileFor', 'birthDate', 'sex', 'gender', 'pronouns'];
-  const teen = band === 'teen';
-  if (band === 'senior') {
-    keys.push('medications', 'supplements', 'genesisGold');
-    return keys;
-  }
-  if (sex === 'female') {
-    // Reproductive first; periods only when status is Menstruation.
-    if (teen) keys.push('reproductiveTeen', 'pubertyBlockers');
-    else keys.push('reproductive');
-  } else if (sex === 'male') {
-    if (teen) keys.push('pubertyStart', 'pubertyNotes');
-    else keys.push('pubertyAge', 'fertilityConcerns');
-  } else if (usesOtherPuberty(sex)) {
-    keys.push('otherPuberty');
-    if (teen) keys.push('reproductiveTeen');
-    else keys.push('reproductive');
-  }
-  keys.push('medications', 'supplements', 'genesisGold');
-  return keys;
+  return ['profileFor', 'birthDate', 'sex', 'gender', 'pronouns'];
 }
 
 /** Complete Health Basics answers for contract tests (self profile). */
@@ -160,30 +117,6 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
   const sex = sexPickFor(gender);
   a.sex = sex;
   a.pronouns = pronounValueFor(gender);
-  const teen = band === 'teen';
-  if (band === 'senior') {
-    // Meds block only.
-  } else if (sex === 'female') {
-    if (teen) {
-      a.reproductiveTeen = 'pre-menopausal';
-      a.pubertyBlockers = 'no';
-    } else {
-      a.reproductive = 'pre-menopausal';
-    }
-  } else if (sex === 'male') {
-    if (teen) a.pubertyStart = '14';
-    else {
-      a.pubertyAge = '14';
-      a.fertilityConcerns = 'no';
-    }
-  } else if (usesOtherPuberty(sex)) {
-    a.otherPuberty = 'yes';
-    if (teen) a.reproductiveTeen = 'pre-menopausal';
-    else a.reproductive = 'pre-menopausal';
-  }
-  a.medications = 'None';
-  a.supplements = 'None';
-  a.genesisGold = 'no';
   a.gender = gender;
   return a;
 }
@@ -202,7 +135,6 @@ function buildProfile(gender: PdfGender, band: PdfAgeBand): ProfileAnswers {
 function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
   const id = `${gender}-${band}`;
   const gate = band === 'lt13';
-  const sexNote = gender === 'non-binary' ? 'sex Prefer not → ' : 'sex → ';
   return {
     id,
     gender,
@@ -210,7 +142,7 @@ function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
     label: `${gender} · ${BAND_LABEL[band]}`,
     description: gate
       ? 'Myself → birth date under 13 → Ask adult sheet (M-1.10).'
-      : `Myself → ${BAND_LABEL[band]} → ${sexNote}identity → pronouns → intake → Deborah → Ask Deborah.`,
+      : `Myself → ${BAND_LABEL[band]} → sex assigned at birth → identity → pronouns → Deborah → Ask Deborah.`,
     scenario: 'S01',
     onboarding: true,
     profile: buildProfile(gender, band),

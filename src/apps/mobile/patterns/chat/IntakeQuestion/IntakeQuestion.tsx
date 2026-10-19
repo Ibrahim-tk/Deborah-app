@@ -49,7 +49,8 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
   const canExpand = Boolean(expandOptions?.length);
   const freeText = intake.input === 'text' || (intake.options.length === 0 && !intake.input);
 
-  const isMedsList = intake.questionId === 'medications' || intake.questionId === 'session-meds';
+  // session-meds stays a Yes/No gate, then the drug list. The safety-gate meds question keeps the name list.
+  const isMedsList = intake.questionId === 'medications';
 
   const finish = (ids: string[]) => {
     if (locked || submitting.current) return;

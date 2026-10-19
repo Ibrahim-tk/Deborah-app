@@ -15,6 +15,7 @@
   font: var(--weight-regular) calc(28px * var(--type-scale)) / calc(34px * var(--type-scale)) var(--font-artistic, var(--font-display));
   letter-spacing: -0.01em;
   color: var(--color-ink);
+  text-shadow: 0 0 16px var(--color-canvas), 0 1px 0 var(--color-canvas);
 }
 .footer { display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-2); padding: 0 var(--margin-screen) calc(var(--safe-bottom) + var(--space-2)); }
 
@@ -60,15 +61,14 @@
   content: '';
   position: absolute;
   inset: auto 0 0 0;
-  height: 52%;
+  height: 78%;
   z-index: 0;
   pointer-events: none;
   background: linear-gradient(to bottom,
     transparent 0%,
-    color-mix(in srgb, var(--color-canvas) 45%, transparent) 30%,
-    color-mix(in srgb, var(--color-canvas) 70%, transparent) 60%);
-  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 55%, rgb(0 0 0 / 0.55) 85%, rgb(0 0 0 / 0.2) 100%);
-  mask-image: linear-gradient(to right, #000 0%, #000 55%, rgb(0 0 0 / 0.55) 85%, rgb(0 0 0 / 0.2) 100%);
+    color-mix(in srgb, var(--color-canvas) 62%, transparent) 22%,
+    color-mix(in srgb, var(--color-canvas) 90%, transparent) 48%,
+    color-mix(in srgb, var(--color-canvas) 96%, transparent) 100%);
 }
 .header, .body, .footer { z-index: 1; }
 
@@ -79,6 +79,12 @@
   position: relative;
   margin-top: calc(var(--space-12, 48px) * -1);
   padding-top: calc(var(--space-12, 48px) + var(--space-2));
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--color-canvas) 94%, transparent) 0%,
+    color-mix(in srgb, var(--color-canvas) 90%, transparent) 78%,
+    color-mix(in srgb, var(--color-canvas) 84%, transparent) 100%
+  );
 }
 /* Progressive blur (screen level, not clipped by the scroller): reaches from the bottom of the screen to just
    above the question title (height measured in useTitleFade). Three stacked bands, each blurrier and feathered by
@@ -95,7 +101,7 @@
 }
 .fade > i:nth-child(1) { --b: 4px; --wash: 0; --from: 0px; --to: calc(var(--feather) * 0.6); }
 .fade > i:nth-child(2) { --b: 12px; --wash: 0.15; --from: calc(var(--feather) * 0.25); --to: var(--feather); }
-.fade > i:nth-child(3) { --b: 24px; --wash: 0.25; --from: calc(var(--feather) * 0.5); --to: calc(var(--feather) + 24px); }
+.fade > i:nth-child(3) { --b: 24px; --wash: 0.55; --from: calc(var(--feather) * 0.5); --to: calc(var(--feather) + 24px); }
 
 /* Choice steps: shared QuestionChoices widget; describe opens an inline field under the pills. */
 .choiceWidget { display: grid; gap: var(--space-3); }

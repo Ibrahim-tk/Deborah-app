@@ -1,189 +1,146 @@
 /**
- * @screen  M-2.14 · Complete Intake
- * @flow    Discovery additive — full intake shell after short onboarding
- * @presentation push / modal
- * @states  sections · resume · saved
- * @spec    Client discovery 2026-10-16 — Dropbox fields deferred; placeholder sections only
+ * @screen  M-2.14 · Health Profile
+ * @flow    Optional clinical questionnaire after short onboarding
+ * @presentation push
+ * @states  question · resume · saved
+ * @spec    Discovery 2026-10-19 — reproductive, puberty, medicines, and Genesis Gold live here
  * @xref    web: not built
- * @status  placeholder
  */
-import { Fragment, useMemo, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { Aura, Button, Divider, Header, Input, ListRow, TextArea } from '@mobile/ui';
-import { ChoicePills, FullChoicePills, IntakeSectionHeader } from '@mobile/patterns/widgets';
+import { Aura, Button, Header } from '@mobile/ui';
+import { namedReasonsComplete } from '@mobile/patterns/widgets';
+import { BloomReveal } from '@mobile/screens/onboarding/HealthBasics/parts/BloomReveal';
+import { StepBody } from '@mobile/screens/onboarding/HealthBasics/parts/StepBody';
+import { healthProfileCompletion, answersFromProfile } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
+import { saveHealthProfile } from '@mobile/screens/onboarding/HealthBasics/saveOnboarding';
+import { profileVisibleSteps, titleFor, type Answers } from '@mobile/screens/onboarding/HealthBasics/steps';
 import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './CompleteIntake.module.css';
 
-type SectionId = 'basics' | 'family' | 'lifestyle' | 'other';
-
-const SECTIONS: { id: SectionId; title: string; lede: string }[] = [
-  { id: 'basics', title: 'Basics', lede: 'From your short onboarding — edit anytime.' },
-  { id: 'family', title: 'Family history', lede: 'Placeholder until the full questionnaire arrives.' },
-  { id: 'lifestyle', title: 'Lifestyle', lede: 'Sleep, stress, activity, and diet — placeholder.' },
-  { id: 'other', title: 'Other medical', lede: 'Anything else Deborah should know.' },
-];
-
-const SECTION_TITLES = SECTIONS.map((s) => s.title);
-
-const SLEEP = [
-  { id: 'great', label: 'Sleeping well' },
-  { id: 'fair', label: 'Hit or miss' },
-  { id: 'poor', label: 'Often poor' },
-];
+const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 
 export default function CompleteIntake() {
   const { pop } = useNav();
   const { previousTitle } = useRoute();
   const { collapsed, onScroll } = useCollapsingTitle();
   const profile = useAppStore(selectActiveProfile);
-  const intake = profile?.intake;
-  const [section, setSection] = useState<SectionId>(
-    (intake?.completeIntakeSection as SectionId) || 'basics',
-  );
-  const [family, setFamily] = useState(intake?.familyHistory ?? '');
-  const [sleep, setSleep] = useState(intake?.lifestyleSleep ?? '');
-  const [stress, setStress] = useState(intake?.lifestyleStress ?? '');
-  const [activity, setActivity] = useState(intake?.lifestyleActivity ?? '');
-  const [diet, setDiet] = useState(intake?.lifestyleDiet ?? '');
-  const [other, setOther] = useState(intake?.otherMedical ?? '');
+  const [answers, setAnswers] = useState<Answers>(() => (profile ? answersFromProfile(profile) : {}));
+  const answersRef = useRef(answers);
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
+  const steps = profileVisibleSteps(answers);
+  const [i, setI] = useState(() => {
+    const seeded = profile ? answersFromProfile(profile) : {};
+    const list = profileVisibleSteps(seeded);
+    const open = list.findIndex((s) => !seeded[s.key]?.trim());
+    return open < 0 ? 0 : open;
+  });
+  const at = Math.min(i, Math.max(0, steps.length - 1));
+  const step = steps[at];
+  const value = step ? (answers[step.key] ?? '') : '';
+  const last = steps.length > 0 && at === steps.length - 1;
+  const done = profile ? healthProfileCompletion(profile) >= 1 : false;
 
-  const idx = SECTIONS.findIndex((s) => s.id === section);
-  const current = SECTIONS[idx] ?? SECTIONS[0];
-
-  const basicsRows = useMemo(() => {
-    if (!profile) return [];
-    const rows: { label: string; value: string }[] = [];
-    if (profile.intake.pronouns) rows.push({ label: 'Pronouns', value: profile.intake.pronouns });
-    if (profile.sexAtBirth) rows.push({ label: 'Sex at birth', value: profile.sexAtBirth });
-    if (profile.dob) rows.push({ label: 'Birth date', value: 'On file' });
-    if (profile.health?.medications?.value) rows.push({ label: 'Medications', value: 'On file' });
-    return rows;
-  }, [profile]);
+  const persist = (final: Answers) => {
+    if (profile) saveHealthProfile(profile.id, final);
+  };
+  const set = (key: string, v: string) => {
+    setAnswers((current) => {
+      const next = { ...current, [key]: v };
+      answersRef.current = next;
+      return next;
+    });
+  };
+  const go = (final: Answers, forward: boolean) => {
+    persist(final);
+    if (!forward) return;
+    if (last) return;
+    setI(at + 1);
+  };
+  const advance = (v: string, extra?: Answers) => {
+    const final = { ...answersRef.current, ...extra, [step.key]: v };
+    answersRef.current = final;
+    setAnswers(final);
+    window.setTimeout(() => go(final, true), step.kind === 'text' ? 0 : 280);
+  };
+  const textOk =
+    !!step &&
+    step.kind === 'text' &&
+    (step.presentation === 'ageWheel' ||
+      (step.presentation === 'namedReasons' && namedReasonsComplete(value, step.none)) ||
+      ((step.presentation === 'chips' || !step.presentation) && Boolean(value.trim())));
+  const canContinue =
+    !!step &&
+    (step.optional === true ||
+      step.kind === 'date' ||
+      step.kind === 'year' ||
+      textOk ||
+      (step.kind === 'name' && NAME_PATTERN.test(value.trim())));
+  const tapToAnswer = step?.kind === 'choice';
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!canContinue) return;
+    const final = answersRef.current;
+    if (step?.presentation === 'ageWheel' && !final[step.key]) {
+      final[step.key] = '12';
+      setAnswers({ ...final });
+    }
+    go(final, !last);
+    if (last) persist(final);
+  };
 
   if (!profile) return null;
 
-  const saveSection = (next?: SectionId) => {
-    const s = useAppStore.getState();
-    s.updateIntake(profile.id, {
-      familyHistory: family.trim() || undefined,
-      lifestyleSleep: sleep || undefined,
-      lifestyleStress: stress.trim() || undefined,
-      lifestyleActivity: activity.trim() || undefined,
-      lifestyleDiet: diet.trim() || undefined,
-      otherMedical: other.trim() || undefined,
-      completeIntakeSection: next ?? section,
-    });
-  };
-
-  const goNext = () => {
-    const next = SECTIONS[idx + 1];
-    saveSection(next?.id ?? 'other');
-    if (next) setSection(next.id);
-    else pop();
-  };
-
-  const pickSection = (title: string) => {
-    const next = SECTIONS.find((s) => s.title === title);
-    if (!next || next.id === section) return;
-    saveSection(next.id);
-    setSection(next.id);
-  };
-
   return (
-    <div className={styles.root} data-xref="M-2.14 · Complete Intake" data-placeholder>
+    <form className={styles.root} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
       <Aura />
-      <Header
-        title="Complete Intake"
-        large
-        collapsed={collapsed}
-        onBack={pop}
-        backLabel={previousTitle}
-      />
+      <Header title="Health profile" large collapsed={collapsed} onBack={pop} backLabel={previousTitle} />
       <div className={styles.body} onScroll={onScroll}>
         <p className={styles.banner}>
-          You can finish later — progress is saved. We’ll invite an annual review of your health profile.
+          {done
+            ? 'Your health profile is filled in. You can change any answer.'
+            : 'Optional. You can talk with Deborah before this is finished, and come back to wherever you stopped.'}
         </p>
-
-        <div className={styles.pills}>
-          <ChoicePills
-            label="Intake sections"
-            options={SECTION_TITLES}
-            selected={[current.title]}
-            onPick={pickSection}
-            onToggle={pickSection}
-          />
-        </div>
-
-        <IntakeSectionHeader title={current.title} lede={current.lede} />
-
-        {section === 'basics' && (
-          basicsRows.length === 0 ? (
-            <div className={styles.panel}>
-              <p className={styles.empty}>
-                No basics saved yet — finish short onboarding or your health profile card.
-              </p>
+        {done && (
+          <div className={styles.reward} aria-hidden>
+            <BloomReveal className={styles.tree} progress={1} />
+          </div>
+        )}
+        {step ? (
+          <>
+            <p className={styles.progress}>
+              Question {at + 1} of {steps.length}
+            </p>
+            <h2 className={styles.question}>{titleFor(step, answers)}</h2>
+            <StepBody step={step} answers={answers} set={set} advance={advance} />
+            <div className={styles.actions}>
+              {at > 0 && (
+                <Button type="button" variant="ghost" fullWidth onClick={() => { persist(answersRef.current); setI(at - 1); }}>
+                  Previous
+                </Button>
+              )}
+              {!tapToAnswer && (
+                <Button type="submit" fullWidth disabled={!canContinue}>
+                  {last ? 'Save profile' : 'Save and continue'}
+                </Button>
+              )}
+              {step.presentation === 'namedReasons' && !value.trim() && (
+                <Button type="button" variant="ghost" fullWidth onClick={() => advance(step.none ?? 'None')}>
+                  Skip
+                </Button>
+              )}
+              <Button type="button" variant="ghost" fullWidth onClick={() => { persist(answersRef.current); pop(); }}>
+                Save and close
+              </Button>
             </div>
-          ) : (
-            <div className={styles.rows}>
-              {basicsRows.map((row, i) => (
-                <Fragment key={row.label}>
-                  {i > 0 && <Divider />}
-                  <ListRow title={row.label} value={row.value} trailing={null} />
-                </Fragment>
-              ))}
-            </div>
-          )
+          </>
+        ) : (
+          <p className={styles.banner}>Nothing else applies to this profile right now.</p>
         )}
-
-        {section === 'family' && (
-          <div className={styles.field}>
-            <p className={styles.fieldLabel}>Family history</p>
-            <TextArea
-              className={styles.textField}
-              label="Family history"
-              placeholder="e.g. mother — thyroid; father — heart disease"
-              value={family}
-              onChange={(e) => setFamily(e.target.value)}
-              minRows={3}
-              maxRows={8}
-            />
-          </div>
-        )}
-
-        {section === 'lifestyle' && (
-          <div className={styles.stack}>
-            <FullChoicePills label="How is your sleep?" options={SLEEP} selected={sleep} onPick={setSleep} />
-            <Input label="Stress" placeholder="What’s draining you lately?" value={stress} onChange={(e) => setStress(e.target.value)} />
-            <Input label="Activity" placeholder="Movement in a typical week" value={activity} onChange={(e) => setActivity(e.target.value)} />
-            <Input label="Diet" placeholder="How you usually eat" value={diet} onChange={(e) => setDiet(e.target.value)} />
-          </div>
-        )}
-
-        {section === 'other' && (
-          <div className={styles.field}>
-            <p className={styles.fieldLabel}>Other medical notes</p>
-            <TextArea
-              className={styles.textField}
-              label="Other medical notes"
-              placeholder="Surgeries, specialists, anything else"
-              value={other}
-              onChange={(e) => setOther(e.target.value)}
-              minRows={3}
-              maxRows={8}
-            />
-          </div>
-        )}
-
-        <div className={styles.actions}>
-          <Button fullWidth onClick={goNext}>
-            {idx < SECTIONS.length - 1 ? 'Save and continue' : 'Save intake'}
-          </Button>
-          <Button fullWidth variant="ghost" onClick={() => { saveSection(); pop(); }}>
-            Save and close
-          </Button>
-        </div>
       </div>
-    </div>
+    </form>
   );
 }
