@@ -74,7 +74,16 @@ export function missingOnboarding(profile: Profile): string[] {
  * Ask Dibora: adults get missing basics, session questions (concern / other / goal / meds /
  * completeness), then `@clarify` → red-flag screen only. Teens and children keep script questions.
  */
-export function planConsultation(ctx: EngineContext, scriptIntake: string[], hasProduct: boolean, own = false): string[] {
+const HORMONE_GROUPS = new Set(['sleep', 'temperature', 'cycle', 'mood']);
+
+export function planConsultation(
+  ctx: EngineContext,
+  scriptIntake: string[],
+  hasProduct: boolean,
+  own = false,
+  symptomGroup?: string,
+  hasConcern = false,
+): string[] {
   // F02f scripted consultation: exactly the script's questions, in order (showIf / repeat run while asking).
   if (own) {
     const topic = scriptIntake.filter((id) => {
@@ -94,6 +103,10 @@ export function planConsultation(ctx: EngineContext, scriptIntake: string[], has
     : minorBoy
       ? ['how-long', 'how-often']
       : planIntake(scriptIntake, ctx.profile);
+  // A stated concern is the consultation. Goal and "any other issues" belong only before one exists.
+  if (hasConcern) topic = topic.filter((id) => id !== 'session-goal' && id !== 'session-other');
+  // Reproductive history is for hormone-shaped concerns, not weight, skin, or an unrelated symptom.
+  if (!HORMONE_GROUPS.has(symptomGroup ?? '')) topic = topic.filter((id) => id !== 'reproductive');
   if (ctx.profileGates === false) return topic;
   // Basics first (date of birth, sex at birth), then the topic, then the product safety gates
   // (medications, allergies) so she's asked about her own concern before her medicine cabinet.

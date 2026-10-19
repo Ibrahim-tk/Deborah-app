@@ -53,10 +53,7 @@ function parseNamed(value: string | undefined, none?: string): { name: string }[
   return list(value, none).map((name) => ({ name }));
 }
 
-/** Writes the onboarding profile; returns the profile the first chat should open as. */
-export function saveOnboarding(a: Answers): string {
-  const s = useAppStore.getState();
-  const now = nowFrom(s);
+function collected(a: Answers, now: Date) {
   const at = now.toISOString();
   const dob = a.birthDate;
   const year = dob ? Number(dob.slice(0, 4)) : NaN;
@@ -145,6 +142,14 @@ export function saveOnboarding(a: Answers): string {
         : undefined,
     }),
   };
+  return { at, dob, sex, gender, age, healthPatch, intakePatch };
+}
+
+/** Writes the onboarding profile; returns the profile the first chat should open as. */
+export function saveOnboarding(a: Answers): string {
+  const s = useAppStore.getState();
+  const now = nowFrom(s);
+  const { at, dob, sex, age, healthPatch, intakePatch } = collected(a, now);
 
   if (!forSomeoneElse(a)) {
     const self = s.profiles.byId[SELF_PROFILE_ID];
@@ -154,7 +159,7 @@ export function saveOnboarding(a: Answers): string {
       health: { ...self?.health, ...healthPatch },
     });
     s.updateIntake(SELF_PROFILE_ID, { profileFor: 'self', ...intakePatch });
-    s.setIntakeProgress(SELF_PROFILE_ID, { step: 'done', completedAt: at, closedAt: at });
+    // Basics are not a finished health history. The Health Profile stays open.
     return SELF_PROFILE_ID;
   }
 
@@ -183,10 +188,31 @@ export function saveOnboarding(a: Answers): string {
       attestedBy: s.accountId ?? SELF_PROFILE_ID,
     },
     ...(minor && { guardianConsentAt: at }),
-    intakeV2: { step: 'done', completedAt: at, closedAt: at },
   };
   s.addProfile(member);
   s.updateIntake(SELF_PROFILE_ID, { profileFor: 'dependent' });
-  s.setIntakeProgress(SELF_PROFILE_ID, { step: 'done', completedAt: at, closedAt: at });
   return member.id;
+}
+
+/** Merges Health Profile answers onto an existing profile. Does not mark intake finished. */
+export function saveHealthProfile(profileId: string, a: Answers) {
+  const s = useAppStore.getState();
+  const existing = s.profiles.byId[profileId];
+  if (!existing) return;
+  const now = nowFrom(s);
+  const { at, dob, sex, healthPatch, intakePatch } = collected(a, now);
+  const prevCare = existing.health?.careContext?.value ?? {};
+  const nextCare = healthPatch.careContext?.value ?? {};
+  s.updateProfile(profileId, {
+    ...(dob && { dob }),
+    ...(sex && { sexAtBirth: sex }),
+    health: {
+      ...existing.health,
+      ...healthPatch,
+      ...(Object.keys(nextCare).length
+        ? { careContext: { value: { ...prevCare, ...nextCare }, source: 'manual' as const, updatedAt: at } }
+        : {}),
+    },
+  });
+  s.updateIntake(profileId, intakePatch);
 }

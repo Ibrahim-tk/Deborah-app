@@ -10,6 +10,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '@shared/store';
 import { Avatar, Header, Icon, ListRow } from '@mobile/ui';
 import { relationshipLabel } from '@mobile/patterns/profile';
+import { healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import { useNav, useRoute } from '@mobile/navigation';
 import { MAX_PROFILES, useAddMember } from '../useAddMember';
 import styles from './ManageProfiles.module.css';
@@ -33,6 +34,7 @@ export default function ManageProfiles() {
               <ListRow
                 title={p.name}
                 subtitle={relationshipLabel(p.relationship, p.intake?.relationshipOther)}
+                value={`${Math.round(healthProfileCompletion(p) * 100)}%`}
                 leading={<Avatar initial={p.name} size={40} />}
                 onPress={() => push('M-6.5', { profileId: p.id })}
               />

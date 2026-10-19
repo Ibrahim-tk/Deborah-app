@@ -1,6 +1,7 @@
 {
   "status": "placeholder",
-  "note": "Version 2 onboarding (M-1.8) — Sex at birth routes banks. Order: sex → pronouns → age×sex banks → identity (always) → Deborah. Non-binary is identity-only (sex Prefer not to say uses that bank). Pronouns do not change banks. Under-13 Myself → M-1.10 sheet. Wording placeholder pending Deborah.",
+  "note": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Sex assigned at birth still routes those profile banks. Under-13 Myself → M-1.10. Wording placeholder pending Deborah.",
+  "onboardingKeys": ["profileFor", "relationship", "memberName", "birthDate", "consent", "sex", "gender", "pronouns"],
   "steps": [
     { "key": "profileFor", "kind": "profileFor", "title": "Who is this profile for?" },
     {
@@ -51,8 +52,8 @@
       "key": "sex",
       "kind": "choice",
       "presentation": "rows",
-      "title": "What was your sex at birth?",
-      "titleOther": "What was {name}’s sex at birth?",
+      "title": "What was your sex assigned at birth?",
+      "titleOther": "What was {name}’s sex assigned at birth?",
       "choices": [
         { "value": "male", "label": "Male" },
         { "value": "female", "label": "Female" },
@@ -72,8 +73,13 @@
         { "value": "trans-man", "label": "Trans man" },
         { "value": "intersex", "label": "Intersex" },
         { "value": "non-binary", "label": "Non-binary" },
-        { "value": "prefer-not", "label": "Prefer not to say" }
-      ]
+        { "value": "other", "label": "Other" }
+      ],
+      "describeValue": "other",
+      "describeKey": "genderOther",
+      "describeLabel": "Gender",
+      "describePlaceholder": "How you describe your gender",
+      "describeAlwaysSpan": true
     },
     {
       "key": "pronouns",
@@ -85,11 +91,7 @@
         { "value": "he-him", "label": "He/Him" },
         { "value": "she-her", "label": "She/Her" },
         { "value": "they-them", "label": "They/Them" },
-        { "value": "he-they", "label": "He/They" },
-        { "value": "she-they", "label": "She/They" },
-        { "value": "any", "label": "Any pronouns" },
-        { "value": "describe", "label": "Other pronouns" },
-        { "value": "prefer-not", "label": "Prefer not to say" }
+        { "value": "describe", "label": "Other" }
       ],
       "describeValue": "describe",
       "describeKey": "pronounsOther",
@@ -298,8 +300,8 @@
       "key": "hrtStatus",
       "kind": "choice",
       "presentation": "yesNo",
-      "title": "Are you currently on hormone therapy (HRT)?",
-      "titleOther": "Is {name} currently on hormone therapy (HRT)?",
+      "title": "Are you currently on hormone replacement therapy (HRT)?",
+      "titleOther": "Is {name} currently on hormone replacement therapy (HRT)?",
       "showIf": {
         "sex": {
           "in": ["female"]
@@ -485,8 +487,8 @@
       "key": "hrtStatus",
       "kind": "choice",
       "presentation": "yesNo",
-      "title": "Are you currently on hormone therapy (HRT)?",
-      "titleOther": "Is {name} currently on hormone therapy (HRT)?",
+      "title": "Are you currently on hormone replacement therapy (HRT)?",
+      "titleOther": "Is {name} currently on hormone replacement therapy (HRT)?",
       "showIf": {
         "sex": {
           "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
