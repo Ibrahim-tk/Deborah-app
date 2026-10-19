@@ -30,9 +30,10 @@ import s22 from './S22-provider-review.json';
 import s23 from './S23-guidance-early.json';
 import s24 from './S24-visit-brief.json';
 import s24b from './S24b-visit-brief-gate.json';
+import s24c from './S24c-visit-brief-urgent.json';
 
 export const SEEDS: Record<string, ScenarioSeed> = Object.fromEntries(
-  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
+  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
 );
 
 export const SCENARIO_GROUPS: ScenarioGroup[] = [
@@ -58,6 +59,7 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S23', label: 'Guidance — early first look', group: 'QA', description: 'Mid-intake on hot flashes. Tap Tell me what you think for an early first look (uncounted), then finish questions for full guidance.', startsAt: 'M-2.1 (intake)', phase: 7 },
   { id: 'S24', label: 'My Visit Notes — provider brief', group: 'QA', description: 'Full guidance on file. Opens My Visit Notes (M-9.7): review chief complaint, save a copy, download PDF, then appointment follow-up.', startsAt: 'M-9.7 My Visit Notes', phase: 7 },
   { id: 'S24b', label: 'My Visit Notes — not enough detail', group: 'QA', description: 'Mid-intake (no full guidance). Visit Notes / Save PDF shows “Let’s talk first — download turned off”.', startsAt: 'M-2.1 (intake)', phase: 7 },
+  { id: 'S24c', label: 'My Visit Notes — urgent', group: 'QA', description: 'Provider-directed answer after a red flag (no What’s next, no product). Tap Visit Notes on the answer: My Visit Notes opens with the urgent priority flag.', startsAt: 'M-2.1 (answered, urgent)', phase: 7 },
   { id: 'S05', label: 'Last free consultation', group: 'Trial', description: 'Two of three free consultations used.', startsAt: 'M-2.1 (empty), 1 left', phase: 3 },
   { id: 'S06', label: 'Trial exhausted', group: 'Conversion', description: 'All three free consultations used. The free-limit sheet shows; any new question is held until a plan is chosen.', startsAt: 'M-2.1 + M-4.1 sheet', phase: 5 },
   { id: 'R01', label: 'Returning — signed in', group: 'Return', description: 'Signed back in: health profile on file, a consultation from 3 days ago. Home shows Continue; Ask Deborah plays the 2am heart-flutter demo.', startsAt: 'M-2.0 Home', phase: 2 },

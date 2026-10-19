@@ -14,7 +14,7 @@ From Step 4 What’s next **Discuss with provider**, AnswerActions **Visit Notes
 | Result | Behaviour |
 |---|---|
 | **Yes** (Rule A: `guidanceGivenAt` set, or a completed 7-section answer) | Open **M-9.7** with assembled brief |
-| **No** | Toast **“Let’s talk first — download turned off”** → stay on Ask Deborah (M-2.1). No PDF. |
+| **No** | Toast **“Let’s talk first — download turned off”** (`VISIT_NOTES_GATE_TOAST`) → stay on Ask Deborah (M-2.1), composer focused. No PDF. One gate (`withVisitBriefGate` in `useMessageActions`) serves Visit Notes, Save PDF and Discuss with provider. |
 
 ## M-9.7 · My Visit Notes
 
@@ -54,6 +54,7 @@ Saved as a Visit Note with `kind: 'provider-brief'` and structured `brief` paylo
 - **S04** / any answered guidance — Discuss with provider opens M-9.7  
 - **S23** / **S24b** — early / mid-intake → gate fails (“Let’s talk first”)  
 - **S24** — opens directly on M-9.7 with a seeded brief  
+- **S24c** — urgent: provider-directed answer after a red flag; Visit Notes on the answer opens M-9.7 with the priority flag (What’s next is hidden on red-flag answers, so AnswerActions is the urgent entry)  
 
 ## Editability
 

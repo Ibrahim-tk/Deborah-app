@@ -1,5 +1,5 @@
 /** Scenario types (docs/05-state-and-scenarios.md §3–4). */
-import type { ID } from './domain';
+import type { Conversation, ID } from './domain';
 
 export type ScenarioGroup =
   | 'Onboarding'
@@ -43,6 +43,8 @@ export interface ScenarioConversationSeed {
   active?: boolean;
   /** Days before `now` the consultation took place. */
   daysAgo?: number;
+  /** Fields merged onto the replayed conversation (S24c: urgent / provider-review). */
+  patch?: Partial<Pick<Conversation, 'redFlag' | 'noProduct' | 'providerReview'>>;
 }
 
 export interface ScenarioSeed {

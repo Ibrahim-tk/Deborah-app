@@ -54,7 +54,7 @@ function expandConversations(seed: ScenarioSeed, data: AppData): AppData['conver
     if (checkpoint === 'answered' && !conv.guidanceGivenAt) {
       conv = { ...conv, guidanceGivenAt: conv.countedAt ?? seed.now };
     }
-    byId[id] = { ...conv, archived: !cs.active };
+    byId[id] = { ...conv, ...cs.patch, archived: !cs.active };
     if (cs.active) activeByProfile[cs.profileId] = id;
   }
   return { byId, activeByProfile };

@@ -44,7 +44,6 @@ export default function Conversation() {
   // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
   const { prefill, focus, startIntake } = useScreenParams<{ prefill: string; focus: boolean; startIntake: boolean }>();
   const clock = useAppStore(useShallow((s) => ({ simulatedNow: s.simulatedNow, clockAnchor: s.clockAnchor })));
-  const actions = useMessageActions(profile?.id);
   const openSwitcher = useProfileSwitcher();
   const [recording, setRecording] = useState(false);
   const [symptomsOpen, setSymptomsOpen] = useState(false);
@@ -53,6 +52,8 @@ export default function Conversation() {
   const [intakeSurface, setIntakeSurface] = useState<'choices' | 'composer'>('composer');
   const safetyBench = useAppStore((s) => s.qa.safetyBench);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Miro Step 5 “No” branch: back to Ask Deborah with the composer ready.
+  const actions = useMessageActions(profile?.id, () => inputRef.current?.focus());
 
   const [draft, setDraft] = useState(prefill ?? '');
   const [pressed, setPressed] = useState<Message | null>(null);
