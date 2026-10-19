@@ -16,8 +16,8 @@ export function AgeWidget({ initial, thisYear, onSet }: { initial: number; thisY
 }
 
 export const SEX_CHOICES: { value: SexAtBirth; label: string }[] = [
-  { value: 'female', label: 'Female' },
   { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
   { value: 'intersex', label: 'Intersex' },
 ];
 

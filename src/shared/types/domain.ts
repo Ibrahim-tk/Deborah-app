@@ -8,7 +8,8 @@ export type ContentStatus = 'placeholder' | 'handbook' | 'approved';
 
 export type PlanTier = 'trial' | 'individual' | 'family' | 'premium';
 export type Billing = 'monthly' | 'annual';
-export type Relationship = 'self' | 'daughter' | 'son' | 'partner' | 'parent' | 'other';
+/** `daughter` / `son` are legacy aliases; new intake saves `child`. */
+export type Relationship = 'self' | 'child' | 'daughter' | 'son' | 'partner' | 'parent' | 'other';
 export type NotificationPermission = 'unknown' | 'granted' | 'denied';
 
 /** Core experience age groups (DN-03): sign-up and chat behave differently for each. */

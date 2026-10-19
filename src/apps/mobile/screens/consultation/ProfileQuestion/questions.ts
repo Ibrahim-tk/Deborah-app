@@ -10,7 +10,7 @@ export interface DeferredQuestion {
 export const DEFERRED: Record<DeferredTopic, { title: string; questions: DeferredQuestion[] }> = {
   genderIdentity: {
     title: 'Gender identity',
-    questions: [{ key: 'gender', prompt: 'How do you describe your gender? (optional)', choices: ['Woman', 'Man', 'Non-binary', 'Prefer to self-describe', 'Prefer not to say'] }],
+    questions: [{ key: 'gender', prompt: 'How do you describe your gender? (optional)', choices: ['Male', 'Female', 'Trans woman', 'Trans man', 'Intersex', 'Non-binary', 'Prefer not to say'] }],
   },
   lifestyle: {
     title: 'Lifestyle',

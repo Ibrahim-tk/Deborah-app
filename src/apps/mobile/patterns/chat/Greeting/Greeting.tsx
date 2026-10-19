@@ -11,16 +11,18 @@ import { DeborahBlob, OptionRow } from '@mobile/ui';
 import styles from './Greeting.module.css';
 
 export interface GreetingProps {
+  /** The orb's question; defaults to the owner's. Family chats pass a personalised line. */
+  line?: string;
   /** Returning user: offers to pick up the last conversation. */
   welcomeBack?: string;
   onContinue?: () => void;
 }
 
-export function Greeting({ welcomeBack, onContinue }: GreetingProps) {
+export function Greeting({ line = 'How are you feeling today?', welcomeBack, onContinue }: GreetingProps) {
   return (
     <div className={styles.root} data-placeholder>
       <DeborahBlob size={140} label="Deborah" />
-      <h2 className={styles.line}>How are you feeling today?</h2>
+      <h2 className={styles.line}>{line}</h2>
       {welcomeBack && onContinue && (
         <div className={styles.continue}>
           <OptionRow chevron onSelect={onContinue}>Continue that conversation</OptionRow>

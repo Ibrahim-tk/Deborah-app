@@ -1,7 +1,7 @@
 /** Form state + validation for M-6.2. "Today" is the simulated clock, never the real one. */
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { ageOn } from '@shared/engine';
+import { ageOn, isChildRelationship } from '@shared/engine';
 import { useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
@@ -34,7 +34,7 @@ export function useMemberForm() {
   const future = dobValid && values.dob > today;
   const age = dobValid && !future ? ageOn(`${values.dob}T12:00:00`, now) : null;
   // Before a DOB is entered, the relationship decides which consent wording is shown.
-  const minor = age !== null ? age < 18 : values.relationship === 'daughter' || values.relationship === 'son';
+  const minor = age !== null ? age < 18 : Boolean(values.relationship && isChildRelationship(values.relationship));
   const underThirteen = age !== null && age < 13;
   const kind = minor ? 'minor' : 'adult';
   const consented = consentFor === kind && Boolean(consentValue);

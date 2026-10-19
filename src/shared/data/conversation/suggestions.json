@@ -31,23 +31,55 @@
       "scriptId": "lab-review"
     }
   ],
+  "family": [
+    {
+      "id": "f1",
+      "text": "Why is {name} so exhausted all the time?",
+      "scriptId": "thyroid-fatigue"
+    },
+    {
+      "id": "f2",
+      "text": "{They} can't sleep — what's going on?",
+      "scriptId": "sleep-3am"
+    },
+    {
+      "id": "f3",
+      "text": "Are {their} hormones out of balance?",
+      "scriptId": "hot-flashes-sleep"
+    },
+    {
+      "id": "f4",
+      "text": "Hot flashes, night sweats — is this menopause for {them}?",
+      "scriptId": "hot-flashes-sleep"
+    },
+    {
+      "id": "f5",
+      "text": "{They} {are} gaining weight and nothing is working",
+      "scriptId": "generic"
+    },
+    {
+      "id": "f6",
+      "text": "{Their} labs look normal but {they} {feel} terrible",
+      "scriptId": "lab-review"
+    }
+  ],
   "teen": [
     {
       "id": "t1",
-      "text": "Are irregular periods normal at her age?",
+      "text": "Are irregular periods normal at {their} age?",
       "scriptId": "teen-irregular-periods"
     },
     {
       "id": "t2",
-      "text": "Her periods are very painful — what should we ask?",
+      "text": "{Their} periods are very painful — what should we ask?",
       "scriptId": "teen-irregular-periods"
     },
     {
       "id": "t3",
-      "text": "She's tired all the time. Could it be her cycle?",
+      "text": "{They} {are} tired all the time. Could it be {their} cycle?",
       "scriptId": "teen-irregular-periods"
     }
   ],
   "status": "placeholder",
-  "note": "Common concerns from Ask Deborah startup list. Icons stay as aiSearch (DESIGN.md bans emoji as icons)."
+  "note": "Common concerns from Ask Deborah startup list. Icons stay as aiSearch (DESIGN.md bans emoji as icons). family/teen use {name} {they} {them} {their} {are} {feel} tokens, filled from the profile's pronouns."
 }

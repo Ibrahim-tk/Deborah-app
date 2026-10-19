@@ -63,7 +63,7 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'R01', label: 'Returning — signed in', group: 'Return', description: 'Signed back in: health profile on file, a consultation from 3 days ago. Home shows Continue; Ask Deborah plays the 2am heart-flutter demo.', startsAt: 'M-2.0 Home', phase: 2 },
   { id: 'S07', label: 'Subscriber — follow-up due', group: 'Return', description: 'Individual plan, one consultation two weeks ago. A follow-up reminder is waiting on the lock screen.', startsAt: 'M-5.1 Lock screen', phase: 5 },
   { id: 'S08', label: 'Labs reviewed', group: 'Return', description: 'Labs confirmed, lab-informed answer delivered, 90-day plan on day 18.', startsAt: 'M-7.2 My Health', phase: 6 },
-  { id: 'S09', label: 'Family plan — daughter added', group: 'Family', description: 'Family plan with Maria and her teen daughter, whose conversation has started.', startsAt: 'M-2.1 as Daughter', phase: 6 },
+  { id: 'S09', label: 'Family plan — child added', group: 'Family', description: 'Family plan with Maria and her teen child, whose conversation has started.', startsAt: 'M-2.1 as Child', phase: 6 },
   { id: 'S10', label: 'Individual plan — wants family', group: 'Family', description: 'Individual plan with one profile. The profile switcher is open.', startsAt: 'M-6.1 sheet', phase: 6 },
   { id: 'S11', label: 'My Health — empty', group: 'Subscriber', description: 'Signed in on a new device: plan active, no history.', startsAt: 'M-7.1 My Health', phase: 6 },
   { id: 'S12', label: 'Escalation ready', group: 'Booking', description: 'Three consultations on the same topic. The next message offers booking Deborah.', startsAt: 'M-2.1', phase: 6 },

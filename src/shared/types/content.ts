@@ -63,6 +63,8 @@ export interface Suggestion {
 
 export interface SuggestionsData {
   default: Suggestion[];
+  /** Another adult's profile: third person, tokens filled from their pronouns. */
+  family: Suggestion[];
   teen: Suggestion[];
   status: ContentStatus;
 }

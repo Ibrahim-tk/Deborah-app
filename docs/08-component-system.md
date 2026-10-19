@@ -75,6 +75,8 @@ export function Icon({ name, size = 24, strokeWidth = 1.5, ...rest }: IconProps)
 
 To switch libraries: change the map only. Same pattern for `Motion`, future `DatePicker`, `Carousel`, `Toaster`, etc. If you like a library's *button*, wrap it inside `ui/Button` rather than using it directly in screens.
 
+**MUI Base UI (progressive migration, mobile first).** We use `@base-ui/react` (MUI's unstyled library), not Material UI, so styling stays in CSS Modules + tokens with no CSS-in-JS. Today `ui/Input` and `ui/TextArea` wrap Base UI `Field` (`Field.Root / Label / Control / Error / Description`) with unchanged props; each has a `USE_BASE_UI` constant to fall back for one iteration. Next candidates, same adapter pattern: `Select`, `Checkbox`, `Toggle` (Switch), `Sheet`/`Modal` (Dialog). Web (`apps/web/ui`) follows with its own adapters.
+
 ## 5. Mobile ↔ web cross-referencing (isolated but traceable)
 
 The apps share **no components**, but every concept is findable in both:

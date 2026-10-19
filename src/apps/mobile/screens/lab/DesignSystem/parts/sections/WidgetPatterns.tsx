@@ -1,6 +1,6 @@
 /** On-the-fly chat widgets (also staged in context at /wid). Same patterns as V2 Conversation. */
 import { useState } from 'react';
-import { findProduct, medicinesData } from '@shared/data';
+import { findProduct } from '@shared/data';
 import {
   BookDeborah,
   ChoicePills,
@@ -59,7 +59,6 @@ function NamedReasonsDemo() {
       noneSelected={none}
       namePlaceholder="e.g. Metformin"
       reasonPlaceholder="What is it for?"
-      nameSuggestions={medicinesData}
       onChange={(next) => {
         setEntries(next);
         setNone(false);

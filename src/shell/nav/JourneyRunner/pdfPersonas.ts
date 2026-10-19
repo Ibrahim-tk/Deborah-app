@@ -96,11 +96,16 @@ function usesOtherPuberty(sex: string): boolean {
   return ['trans-man', 'trans-woman', 'prefer-not', 'intersex'].includes(sex);
 }
 
-/** Preferred choice labels: sex → pronouns → banks → identity (always last). */
+/** Preferred choice labels: sex → identity → pronouns → banks. */
 function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
   if (band === 'lt13') return [/^Myself$/];
   const sex = sexPickFor(gender);
-  const out: RegExp[] = [/^Myself$/, SEX_STEP_LABEL[sex] ?? /^Female$/, pronounPickFor(gender)];
+  const out: RegExp[] = [
+    /^Myself$/,
+    SEX_STEP_LABEL[sex] ?? /^Female$/,
+    PDF_GENDER_LABEL[gender],
+    pronounPickFor(gender),
+  ];
   if (band === 'senior') {
     out.push(/^No$/); // Genesis Gold
   } else if (sex === 'female') {
@@ -115,7 +120,6 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
     out.push(/^Pre-menopausal$/); // reproductive after puberty
     out.push(/^No$/); // Genesis Gold
   }
-  out.push(PDF_GENDER_LABEL[gender]); // identity always last
   return out;
 }
 
@@ -123,10 +127,10 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
 export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] {
   if (band === 'lt13') return ['profileFor', 'birthDate'];
   const sex = sexPickFor(gender);
-  const keys = ['profileFor', 'birthDate', 'sex', 'pronouns'];
+  const keys = ['profileFor', 'birthDate', 'sex', 'gender', 'pronouns'];
   const teen = band === 'teen';
   if (band === 'senior') {
-    keys.push('medications', 'supplements', 'genesisGold', 'gender');
+    keys.push('medications', 'supplements', 'genesisGold');
     return keys;
   }
   if (sex === 'female') {
@@ -141,7 +145,7 @@ export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] 
     if (teen) keys.push('reproductiveTeen');
     else keys.push('reproductive');
   }
-  keys.push('medications', 'supplements', 'genesisGold', 'gender');
+  keys.push('medications', 'supplements', 'genesisGold');
   return keys;
 }
 
@@ -180,7 +184,7 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
   a.medications = 'None';
   a.supplements = 'None';
   a.genesisGold = 'no';
-  a.gender = gender; // identity always
+  a.gender = gender;
   return a;
 }
 
@@ -206,7 +210,7 @@ function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
     label: `${gender} · ${BAND_LABEL[band]}`,
     description: gate
       ? 'Myself → birth date under 13 → Ask adult sheet (M-1.10).'
-      : `Myself → ${BAND_LABEL[band]} → ${sexNote}pronouns → intake → identity → Deborah → Ask Deborah.`,
+      : `Myself → ${BAND_LABEL[band]} → ${sexNote}identity → pronouns → intake → Deborah → Ask Deborah.`,
     scenario: 'S01',
     onboarding: true,
     profile: buildProfile(gender, band),

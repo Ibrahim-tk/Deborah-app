@@ -103,7 +103,7 @@
         "p-daughter": {
           "id": "p-daughter",
           "name": "Sofia",
-          "relationship": "daughter",
+          "relationship": "child",
           "dob": "2011-04-14",
           "sexAtBirth": "female",
           "intake": {

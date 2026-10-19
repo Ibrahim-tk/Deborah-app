@@ -53,10 +53,13 @@ export function Controls() {
           </Variant>
         </Specimen>
 
-        <Specimen name="Input · TextArea" path="ui/Input" note="Label above in subhead; focus = accent border; error names the problem and the fix.">
+        <Specimen name="Input · TextArea (Base UI Field)" path="ui/Input" note="Built on MUI Base UI Field, styled with our tokens. Label above in subhead; focus = accent border; error names the problem and the fix.">
           <Variant label="default"><Input label="First name" placeholder="Maria" value={name} onChange={(e) => setName(e.target.value)} /></Variant>
           <Variant label="hint"><Input label="Email" type="email" placeholder="maria@example.com" hint="We only use this to save your profile." /></Variant>
           <Variant label="error"><Input label="Year of birth" defaultValue="19" error="Enter all four digits, like 1978." /></Variant>
+          <Variant label="password (eye toggle)"><Input label="Password" type="password" placeholder="Enter your password" /></Variant>
+          <Variant label="leading · trailing"><Input label="Weight" placeholder="150" leading="lb" trailing={<span>kg?</span>} /></Variant>
+          <Variant label="disabled"><Input label="Email" defaultValue="maria@example.com" disabled /></Variant>
           <Variant label="TextArea (grows 1–5 lines)"><TextArea label="Note" placeholder="Add a note for Deborah…" value={note} onChange={(e) => setNote(e.target.value)} minRows={2} maxRows={5} /></Variant>
         </Specimen>
 

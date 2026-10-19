@@ -4,8 +4,8 @@
  * navigates away; Stop cancels the remaining steps.
  */
 import { create } from 'zustand';
-import { chunkText, streamInto } from '../engine';
-import { useAppStore } from '../store';
+import { chunkText, forFamilyMember, streamInto } from '../engine';
+import { SELF_PROFILE_ID, useAppStore } from '../store';
 import type { EnginePlan, Step, StoreAction } from '../types/engine';
 import { sleep } from '../utils';
 
@@ -92,8 +92,21 @@ async function stream(step: Extract<Step, { type: 'stream' }>, cid: string, toke
   return true;
 }
 
+/** A family member's chat: Deborah speaks about them in third person, with their pronouns. */
+function inPerspective(plan: EnginePlan, conversationId: string): EnginePlan {
+  const s = useAppStore.getState();
+  const started = plan.find((x) => x.type === 'store' && x.action.type === 'startConversation');
+  const profileId =
+    s.conversations.byId[conversationId]?.profileId ??
+    (started?.type === 'store' && started.action.type === 'startConversation' ? started.action.conversation.profileId : undefined);
+  const profile = profileId ? s.profiles.byId[profileId] : undefined;
+  if (!profile || profile.id === SELF_PROFILE_ID || !profile.name) return plan;
+  return forFamilyMember(plan, profile.name, profile.intake?.pronouns);
+}
+
 /** Returns false when the plan was gated (the caller keeps the user's text in the composer). */
-export async function runPlan(plan: EnginePlan, conversationId: string, handlers: RunHandlers): Promise<boolean> {
+export async function runPlan(source: EnginePlan, conversationId: string, handlers: RunHandlers): Promise<boolean> {
+  const plan = inPerspective(source, conversationId);
   if (plan[0]?.type === 'gate') {
     handlers.onGate();
     return false;

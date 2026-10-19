@@ -4,7 +4,7 @@
  * `reply` lets the widget answer as the user and get Deborah's follow-up.
  */
 import { useState } from 'react';
-import { findProduct, firstConsultFlow, intakeSuggestionData, medicinesData } from '@shared/data';
+import { findProduct, firstConsultFlow } from '@shared/data';
 import { briefFromAnswer, personalise } from '@shared/engine';
 import { Button, Panel } from '@mobile/ui';
 import { AnswerSections } from '@mobile/patterns/chat';
@@ -298,7 +298,6 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
           noneSelected={medsNone}
           namePlaceholder="e.g. Metformin"
           reasonPlaceholder="What is it for?"
-          nameSuggestions={medicinesData}
           onChange={(entries) => {
             const added = entries.length > meds.length;
             setMeds(entries);
@@ -327,7 +326,6 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
           noneSelected={suppsNone}
           namePlaceholder="e.g. Magnesium"
           reasonPlaceholder="What is it for?"
-          nameSuggestions={intakeSuggestionData.supplements}
           onChange={(entries) => {
             const added = entries.length > supps.length;
             setSupps(entries);

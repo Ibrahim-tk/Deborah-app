@@ -16,6 +16,7 @@ import { ageBandFor, ageGroupFor } from '@shared/engine';
 import { useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom, uid } from '@shared/utils';
+import { RELATIONSHIP_OPTIONS } from '@mobile/patterns/profile';
 import { Button, Checkbox, Input, Modal, Panel, Select, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
@@ -34,20 +35,14 @@ function withName(template: string, who: string): ReactNode {
   ));
 }
 
-type Relation = Exclude<Profile['relationship'], 'self'>;
 type Sex = NonNullable<Profile['sexAtBirth']>;
 
-const RELATIONSHIPS: { value: Relation; label: string }[] = [
-  { value: 'daughter', label: 'Daughter' },
-  { value: 'son', label: 'Son' },
-  { value: 'partner', label: 'Partner' },
-  { value: 'parent', label: 'Parent' },
-  { value: 'other', label: 'Other' },
-];
+const RELATIONSHIPS = RELATIONSHIP_OPTIONS;
 
 const SEXES: { value: Sex; label: string }[] = [
-  { value: 'female', label: 'Female' },
   { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+  { value: 'intersex', label: 'Intersex' },
 ];
 
 export default function AddMember() {

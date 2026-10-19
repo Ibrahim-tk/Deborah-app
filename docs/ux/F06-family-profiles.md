@@ -1,8 +1,8 @@
 # F06 — Family profiles
 
-**Goal:** Maria adds her daughter; every profile has its own intake, history, labs, plan and notes. Histories never mix.
+**Goal:** Maria adds her child; every profile has its own intake, history, labs, plan and notes. Histories never mix.
 **Figma:** https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-203
-**Scenarios:** S09 (family, daughter), S10 (individual wants family)
+**Scenarios:** S09 (family, child), S10 (individual wants family)
 
 ```
 Avatar ─► M-6.1 switcher ─ tap profile ─► switch (ask & health stacks reset to that profile)
@@ -20,7 +20,7 @@ Avatar ─► M-6.1 switcher ─ tap profile ─► switch (ask & health stacks 
 | Presentation | Sheet, medium (large if > 3 profiles) |
 | Entry | Avatar on any tab root; M-4.5 secondary; Account › Family profiles |
 
-**Layout:** title "Who is this for?" · `ProfileSwitcherList` rows: avatar (initial), name, relationship label ("You", "Daughter"), check on active · **+ Add a family member** (dashed row; shows lock icon + "Family plan" as plain text when not on Family) · link **Manage profiles**.
+**Layout:** title "Who is this for?" · `ProfileSwitcherList` rows: avatar (initial), name, relationship label ("You", "Child"), check on active · **+ Add a family member** (dashed row; shows lock icon + "Family plan" as plain text when not on Family) · link **Manage profiles**.
 
 **Interactions:** tap row → `switchProfile(id)`, dismiss, toast "Now asking for {name}", Conversation shows that profile's latest conversation/empty state. Add → M-6.2 or M-6.3. Manage → M-6.6.
 
@@ -34,7 +34,7 @@ Avatar ─► M-6.1 switcher ─ tap profile ─► switch (ask & health stacks 
 |---|---|
 | Presentation | Modal; header × + title "Add family member" |
 
-**Layout:** First name · Relationship (Select: Daughter, Son, Partner, Parent, Other) · Date of birth (date picker) · Sex at birth (Select) · **Consent checkbox** "I am their parent/legal guardian and have their consent" (shown for under-18; for adults shows "They know I'm adding them and agree" — ASSUMPTION) · primary **Create profile** (disabled until valid).
+**Layout:** First name · Relationship (Select: Child, Partner, Parent, Other) · Date of birth (date picker) · Sex at birth (Select) · **Consent checkbox** "I am their parent/legal guardian and have their consent" (shown for under-18; for adults shows "They know I'm adding them and agree" — ASSUMPTION) · primary **Create profile** (disabled until valid).
 
 **Validation:** name required; DOB required, not in future; under 13 → inline notice "Profiles for children under 13 need extra consent steps" + disabled (OPEN: COPPA rules — prototype blocks under 13).
 
@@ -56,7 +56,7 @@ M-6.2 still uses its own checkbox copy; OPEN: move M-6.2 to the shared consent c
 
 ## M-2.1 state · Chat for another profile (Figma 6.4)
 
-- Header avatar shows the profile's initial; **ProfileBanner** "Asking for: Daughter (teen) · switch".
+- Header avatar shows the profile's initial; **ProfileBanner** "Asking for: Child (teen) · switch".
 - Intake adapts (teen bank: cycle onset, regularity) and refers to the profile in third person ("How long has she been having periods?").
 - Answers use the `teen-irregular-periods` script; **product card suppressed** (ASSUMPTION pending Deborah).
 

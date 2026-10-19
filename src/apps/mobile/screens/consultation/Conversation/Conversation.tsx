@@ -23,6 +23,7 @@ import { MessageList } from './parts/MessageList';
 import { ABOUT_PLACEHOLDER, ABOUT_VOICE_SAMPLE, IntakeFlow, useIntakeFlow } from './parts/IntakeFlow';
 import { SafetyBench } from './parts/SafetyBench';
 import { useAutoScroll } from './parts/useAutoScroll';
+import { thirdPerson } from './parts/thirdPerson';
 import { useReturnFlows } from './parts/useReturnFlows';
 import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
@@ -179,7 +180,10 @@ export default function Conversation() {
   // F06: another profile's chat greets "Let's talk about {name}." and minors get the teen suggestion set.
   const other = Boolean(profile) && profile?.id !== SELF_PROFILE_ID;
   const minor = profile ? isMinor(profile, now) : false;
-  const suggestions = minor ? suggestionsData.teen : suggestionsData.default;
+  // Someone else's chat: quick start questions in third person, using their pronouns.
+  const suggestions = !other
+    ? suggestionsData.default
+    : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile?.intake?.pronouns);
 
   return (
     <div className={styles.root} data-xref="M-2.1 · Conversation">
@@ -213,6 +217,7 @@ export default function Conversation() {
               const g = greeting(name || 'there', now, last?.topic ?? last?.summary, other);
               return (
                 <Greeting
+                  line={other && name ? `How is ${name} feeling today?` : undefined}
                   welcomeBack={g.welcomeBack}
                   onContinue={g.welcomeBack ? () => chat.continueLast() : undefined}
                 />

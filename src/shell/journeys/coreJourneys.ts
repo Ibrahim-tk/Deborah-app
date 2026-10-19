@@ -23,8 +23,8 @@ export const CORE_JOURNEYS: ManualJourney[] = [
     steps: [s('Choose Myself', 'Choose Myself.', 'Birth-year wheel appears.', 'M-1.8'), s('Under-13 birth year', 'Set birth year to 2018 and Continue.', 'Ask adult to add you replaces onboarding. No chat or self age/gender basics are saved.', 'M-1.10')],
   },
   ...([
-    ['teen-onboarding', 'Teen dependent onboarding', 'Emily', 'S20', 'Daughter', 'Maya', '2011', 'Female', 'guardian-teen', 'Her periods have been really irregular'],
-    ['child-onboarding', 'Child dependent onboarding', 'Emily', 'S20', 'Son', 'Leo', '2017', 'Male', 'guardian-child', 'He has trouble falling asleep'],
+    ['teen-onboarding', 'Teen dependent onboarding', 'Emily', 'S20', 'Child', 'Maya', '2011', 'Female', 'guardian-teen', 'Her periods have been really irregular'],
+    ['child-onboarding', 'Child dependent onboarding', 'Emily', 'S20', 'Child', 'Leo', '2017', 'Male', 'guardian-child', 'He has trouble falling asleep'],
     ['adult-onboarding', 'Adult partner onboarding', 'Helen', 'S21', 'Partner', 'James', '1974', 'Male', 'adult-agreement', 'He has no energy by the afternoon'],
   ] as const).map(([id, name, persona, scenario, relationship, member, year, sex, path, message]): ManualJourney => ({
     id, name, persona, scenario, status: 'IMPLEMENTED', goal: `Create ${member}’s profile and open a conversation about them.`,

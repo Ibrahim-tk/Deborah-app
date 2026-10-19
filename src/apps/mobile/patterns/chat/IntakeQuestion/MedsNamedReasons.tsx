@@ -1,6 +1,5 @@
 /** Chat intake: same NamedReasonList sheet flow as Health Basics medications / supplements. */
 import { useState } from 'react';
-import { medicinesData } from '@shared/data';
 import { NamedReasonList, type NamedReason } from '@mobile/patterns/widgets';
 import { Button } from '@mobile/ui';
 import styles from './IntakeQuestion.module.css';
@@ -36,7 +35,6 @@ export function MedsNamedReasons({
         entries={tiles}
         addLabel={addLabel}
         noneSelected={answered?.includes('none')}
-        nameSuggestions={medicinesData}
         onChange={(next) => {
           if (!locked) setEntries(next);
         }}

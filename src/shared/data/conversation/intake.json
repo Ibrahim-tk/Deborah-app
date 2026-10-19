@@ -56,18 +56,9 @@
       "presentation": "pills",
       "prompt": "What was your sex at birth?",
       "options": [
-        {
-          "id": "female",
-          "label": "Female"
-        },
-        {
-          "id": "male",
-          "label": "Male"
-        },
-        {
-          "id": "intersex",
-          "label": "Intersex"
-        }
+        { "id": "male", "label": "Male" },
+        { "id": "female", "label": "Female" },
+        { "id": "intersex", "label": "Intersex" }
       ],
       "multi": false,
       "profileField": "profile.sexAtBirth",

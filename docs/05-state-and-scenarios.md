@@ -37,7 +37,7 @@ Each scenario is a complete, internally consistent world. File: `src/shared/scen
 | S06 | Trial exhausted | Conversion | 3/3 used; FreeLimit sheet will show on next send (and immediately on load) | M-2.1 + M-4.1 sheet |
 | S07 | Subscriber — follow-up due | Return | Individual plan, 1 conversation 2 weeks ago, follow-up notification queued, phone locked | LockScreen with notification (M-5.1) |
 | S08 | Labs reviewed | Return | Individual plan, labs confirmed, lab-informed answer delivered, 90-day plan day 18 | My Health hub (M-7.2) |
-| S09 | Family plan — daughter added | Family | Family plan, profiles Maria + Daughter (teen), daughter conversation started | M-2.1 as Daughter |
+| S09 | Family plan — child added | Family | Family plan, profiles Maria + Child (teen), child conversation started | M-2.1 as Child |
 | S10 | Individual plan — wants family | Family | Individual plan, 1 profile | M-6.1 sheet open |
 | S11 | My Health — empty | Subscriber | Signed in on new device: plan active, no history | M-7.1 |
 | S12 | Escalation ready | Booking | Several unresolved consultations; next send triggers escalation card | M-2.1 |

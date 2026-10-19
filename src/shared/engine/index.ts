@@ -32,7 +32,8 @@ export { CONSENT_ID } from './intake';
 
 export { ANSWER_REQUEST_LABEL } from './plans';
 export { greeting } from './memory';
-export { ageBandFor, ageGroupFor, ageOf, ageOn, isMinor } from './profile';
+export { forFamilyMember, pronounForms } from './perspective';
+export { ageBandFor, ageGroupFor, ageOf, ageOn, isChildRelationship, isMinor } from './profile';
 export { journeyFor, missingBasics, planClarifiers, CLARIFY } from './journey';
 export { symptomGroupOf } from './classifier';
 export { factFromAnswer, pendingFacts, withFacts } from './facts';

@@ -142,13 +142,13 @@ Full screen, one step at a time, the tree grows as you go (`data/intake/healthBa
 
 | Branch | Steps | Then |
 |---|---|---|
-| Myself, 13+ | Who → date of birth → sex at birth → gender identity → age×gender bank (e.g. Female: periods, reproductive, peri HRT, meds, supplements, Genesis Gold) | M-1.9 "Start chatting" → chat as you |
+| Myself, 13+ | Who → date of birth → sex at birth → gender identity → pronouns → age×sex bank (e.g. Female: periods, reproductive, peri HRT, meds, supplements, Genesis Gold) | M-1.9 "Start chatting" → chat as you |
 | Myself, under 13 | Who → date of birth | **M-1.10** Ask a parent (PDF age gate) |
-| Someone else, 18+ | Who → relationship → first name → DOB → consent → sex at birth → gender identity → adult bank | M-1.9 "Start talking about {name}" → switch profile → chat about them |
-| Someone else, 13–17 | … → teen consent → sex → identity → teen bank | same; teen script, no product |
-| Someone else, under 13 | … → guardian attestation → sex → identity → child basics | same; minor rules, no product |
+| Someone else, 18+ | Who → relationship → first name → DOB → consent → sex at birth → gender identity → pronouns → adult bank | M-1.9 "Start talking about {name}" → switch profile → chat about them |
+| Someone else, 13–17 | … → teen consent → sex → identity → pronouns → teen bank | same; teen script, no product |
+| Someone else, under 13 | … → guardian attestation → sex → identity → pronouns → child basics | same; minor rules, no product |
 
-- Full date of birth (D-1); **sex at birth** then **gender identity** are both mandatory (D-2).
+- Full date of birth (D-1); **sex at birth**, then **gender identity**, then **pronouns** are mandatory before age×sex banks (D-2).
 - Consent copy by age group lives in `legal/consent.json › profileConsent` (placeholder pending legal review).
 - Someone else is allowed on any plan as the first person added (D-3); M-6.1 still asks to upgrade for more.
 - Boys under 18 get only neutral how-long / how-often questions in chat (no cycle questions). OPEN: child and male-teen banks.

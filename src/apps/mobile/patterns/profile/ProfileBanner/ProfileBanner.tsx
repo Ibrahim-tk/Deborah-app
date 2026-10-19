@@ -1,5 +1,5 @@
 /**
- * @pattern ProfileBanner — slim "Asking for: Daughter (teen) · switch" row above the chat for non-self profiles
+ * @pattern ProfileBanner — slim "Asking for: Child (teen) · switch" row above the chat for non-self profiles
  * @usedBy  M-2.1
  * @spec    docs/ux/F06-family-profiles.md#m-21-state--chat-for-another-profile-figma-64
  * @xref    web: apps/web/patterns/profile/ProfileBanner — not built
@@ -7,7 +7,7 @@
 import styles from './ProfileBanner.module.css';
 
 export interface ProfileBannerProps {
-  /** Who the chat is about, e.g. "Daughter". */
+  /** Who the chat is about, e.g. "Child". */
   who: string;
   minor?: boolean;
   /** Under 13 reads "(child)"; otherwise a minor reads "(teen)". */

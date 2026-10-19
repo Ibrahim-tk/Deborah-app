@@ -1,5 +1,4 @@
 /** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / FullChoicePillsGrid / QuestionChoices / ChipPicker. */
-import { intakeSuggestionData, medicinesData } from '@shared/data';
 import { FullChoicePills, FullChoicePillsGrid, InlineChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@mobile/patterns/widgets';
 import { DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
 import { list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
@@ -59,15 +58,13 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
       const expandStep = expandKey ? STEPS.find((s) => s.key === expandKey) : undefined;
       const expandChoices = step.expandChoices ?? expandStep?.choices;
       const expanding = Boolean(expandValues?.includes(value) && expandKey && expandChoices?.length);
-      // Sex / pronouns / gender / relationship: 2-col grid
+      // Pronouns / gender: 2-col grid
       // (describe/Other/Someone else stays in-cell — or always spans — then morphs).
       // Other rows (incl. otherPuberty): stacked FullChoicePills + describe morph + expand follow-up.
       if (step.presentation === 'yesNo' || step.presentation === 'rows' || describeValue || expandValues) {
         const useGrid =
-          step.key === 'sex' ||
           step.key === 'pronouns' ||
-          step.key === 'gender' ||
-          step.key === 'relationship';
+          step.key === 'gender';
         const Pills = useGrid ? FullChoicePillsGrid : FullChoicePills;
         const expandPrompt = step.expandTitle ?? (expandStep ? titleFor(expandStep, answers) : 'Please specify');
         const expandOpts = expandChoices ?? [];
@@ -160,13 +157,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
             noneSelected={value === step.none}
             namePlaceholder={step.namePlaceholder ?? 'Name'}
             reasonPlaceholder={step.reasonPlaceholder ?? 'Reason'}
-            nameSuggestions={
-              step.key === 'medications' || step.key === 'childMedications'
-                ? medicinesData
-                : step.key === 'supplements'
-                  ? intakeSuggestionData.supplements
-                  : undefined
-            }
+            showNone={false}
             onChange={(entries) => set(step.key, encodeNamedReasons(entries))}
             onNone={() => advance(step.none ?? 'None')}
           />

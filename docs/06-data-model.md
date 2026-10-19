@@ -20,7 +20,7 @@ type ID = string;
 type ISODate = string;
 
 type PlanTier = 'trial' | 'individual' | 'family' | 'premium';
-type Relationship = 'self' | 'daughter' | 'son' | 'partner' | 'parent' | 'other';
+type Relationship = 'self' | 'child' | 'daughter' | 'son' | 'partner' | 'parent' | 'other'; // daughter|son = legacy aliases of child
 
 interface Profile {
   id: ID; name: string; relationship: Relationship;

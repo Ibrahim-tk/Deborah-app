@@ -3,7 +3,7 @@
  * @usedBy  Health Basics namedReasons; Widget lab (/wid); chat/intake surfaces with the same shape
  *
  * Main surface shows committed tiles + an add pill. Name/reason draft lives only in the sheet.
- * Quiet "I don't take any" stays under the add control (Continue footer still owned by the screen).
+ * Quiet "I don't take any" stays under the add control unless `showNone={false}` (the screen owns Skip).
  * Tiles are owned locally so remove (X) is not undone by a stale parent render; remount via `key`
  * when the step/answers source changes (Health Basics already keys by step.key).
  */
@@ -20,9 +20,9 @@ import {
   Overlay,
   REDUCED_FADE,
   Sheet,
+  TextArea,
   useReducedMotionPref,
 } from '@mobile/ui';
-import { NameSuggest } from './NameSuggest';
 import { type NamedReason } from './namedReasons';
 import styles from './NamedReasonList.module.css';
 
@@ -37,8 +37,8 @@ export interface NamedReasonListProps {
   noneSelected?: boolean;
   namePlaceholder?: string;
   reasonPlaceholder?: string;
-  /** Seed list for Name autocomplete; omit to use a plain Name field. */
-  nameSuggestions?: string[];
+  /** Show the quiet in-list "none" button. Off when the screen owns its own Skip (Health Basics). */
+  showNone?: boolean;
   onChange: (entries: NamedReason[]) => void;
   onNone: () => void;
 }
@@ -54,7 +54,7 @@ export function NamedReasonList({
   noneSelected,
   namePlaceholder = 'e.g. Metformin',
   reasonPlaceholder = 'What is it for?',
-  nameSuggestions,
+  showNone = true,
   onChange,
   onNone,
 }: NamedReasonListProps) {
@@ -135,7 +135,7 @@ export function NamedReasonList({
       </button>
 
       {/* Escape only when the list is empty — once a tile exists, "none" contradicts it. */}
-      {shown.length === 0 && (
+      {showNone && shown.length === 0 && (
         <button
           type="button"
           className={styles.none}
@@ -181,31 +181,26 @@ export function NamedReasonList({
                   }
                 >
                   <div className={styles.fields}>
-                    {nameSuggestions?.length ? (
-                      <NameSuggest
-                        label="Name"
-                        placeholder={namePlaceholder}
-                        value={draft.name}
-                        suggestions={nameSuggestions}
-                        onChange={(name) => setDraft((d) => ({ ...d, name }))}
-                      />
-                    ) : (
-                      <Input
-                        label="Name"
-                        placeholder={namePlaceholder}
-                        value={draft.name}
-                        autoComplete="off"
-                        autoCapitalize="words"
-                        onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-                      />
-                    )}
                     <Input
-                      label="Reason"
-                      placeholder={reasonPlaceholder}
-                      value={draft.reason}
+                      label="Name"
+                      placeholder={namePlaceholder}
+                      value={draft.name}
                       autoComplete="off"
-                      onChange={(e) => setDraft((d) => ({ ...d, reason: e.target.value }))}
+                      autoCapitalize="words"
+                      onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
                     />
+                    <label className={styles.reason}>
+                      <span className={styles.reasonLabel}>Reason</span>
+                      <TextArea
+                        label="Reason"
+                        className={styles.reasonBox}
+                        placeholder={reasonPlaceholder}
+                        value={draft.reason}
+                        minRows={3}
+                        maxRows={6}
+                        onChange={(e) => setDraft((d) => ({ ...d, reason: e.target.value }))}
+                      />
+                    </label>
                   </div>
                 </Sheet>
               </MotionDiv>

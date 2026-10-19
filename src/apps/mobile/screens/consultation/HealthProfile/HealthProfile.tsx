@@ -18,11 +18,11 @@ import { useNav } from '@mobile/navigation';
 import styles from './HealthProfile.module.css';
 
 const PRONOUN_OPTIONS = [
-  { id: 'she/her', label: 'She/Her' },
   { id: 'he/him', label: 'He/Him' },
+  { id: 'she/her', label: 'She/Her' },
   { id: 'they/them', label: 'They/Them' },
-  { id: 'she/they', label: 'She/They' },
   { id: 'he/they', label: 'He/They' },
+  { id: 'she/they', label: 'She/They' },
   { id: 'any', label: 'Any pronouns' },
 ];
 

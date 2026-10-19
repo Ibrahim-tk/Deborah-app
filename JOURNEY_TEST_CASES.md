@@ -48,7 +48,7 @@ Alternate checks: Invalid email or mismatched passwords → inline error; Sign i
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Relationship and name | Choose Daughter, enter Maya, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Relationship and name | Choose Child, enter Maya, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 2011. Continue, read and check the agreement, then Continue. | Age-appropriate guardian-teen consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
 | 4. Sex at birth | Sex at birth Female (identity skipped) → answer teen Female intake (periods, stage, meds, supplements, Genesis Gold). | Start talking about Maya appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about Maya; send “Her periods have been really irregular”. | Profile banner identifies Maya; questions use third person. No product recommendation is permitted. | ☐ Pass ☐ Fail ☐ Blocked |
@@ -68,7 +68,7 @@ Alternate checks: Unchecked agreement → Continue disabled.
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
 | 1. Who is this for? | Choose Family member or dependent. | Relationship options appear. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Relationship and name | Choose Son, enter Leo, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Relationship and name | Choose Child, enter Leo, then Continue. | The next title refers to this person. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Age and consent | Set birth year to 2017. Continue, read and check the agreement, then Continue. | Age-appropriate guardian-child consent is required. | ☐ Pass ☐ Fail ☐ Blocked |
 | 4. Sex at birth | Sex at birth Male (identity skipped) → child basics (guardians, meds, allergies). | Start talking about Leo appears. | ☐ Pass ☐ Fail ☐ Blocked |
 | 5. Switch and chat | Choose Start talking about Leo; send “He has trouble falling asleep”. | Profile banner identifies Leo; questions use third person. No product recommendation is permitted. | ☐ Pass ☐ Fail ☐ Blocked |
@@ -203,7 +203,7 @@ Alternate checks: Continue → previous conversation; Ask → new/scripted consu
 | Step | Action / input | Expected result | Observed result |
 | --- | --- | --- | --- |
 | 1. Open family profiles | Open the sidebar → Settings → Family profiles (or the profile switcher → Manage profiles). | Existing profiles and Add a family member are available. | ☐ Pass ☐ Fail ☐ Blocked |
-| 2. Add Maya | Choose Add a family member. Enter Maya, Daughter, 2011-04-10 and Female. Read and check guardian consent. | The Create profile action enables only with required data and consent. | ☐ Pass ☐ Fail ☐ Blocked |
+| 2. Add Maya | Choose Add a family member. Enter Maya, Child, 2011-04-10 and Female. Read and check guardian consent. | The Create profile action enables only with required data and consent. | ☐ Pass ☐ Fail ☐ Blocked |
 | 3. Create and switch | Choose Create profile. | Maya becomes active. Chat identifies Maya and uses minor rules. | ☐ Pass ☐ Fail ☐ Blocked |
 | 4. Verify separation | Send a question, then use the profile switcher to return to the account holder. | The teen’s question is absent from the account holder’s chat. Switch back to confirm it remains on Maya’s profile. | ☐ Pass ☐ Fail ☐ Blocked |
 

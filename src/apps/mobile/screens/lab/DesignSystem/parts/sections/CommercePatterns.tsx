@@ -11,7 +11,7 @@ import { Grid, Specimen, Variant } from '../Specimen';
 const noop = () => {};
 const PROFILES = [
   { id: 'p1', name: 'Maria', relationship: 'self' },
-  { id: 'p2', name: 'Sofia', relationship: 'daughter' },
+  { id: 'p2', name: 'Sofia', relationship: 'child' },
 ] as const;
 
 export function CommercePatterns() {
@@ -34,7 +34,7 @@ export function CommercePatterns() {
         </Specimen>
         <Specimen name="ProfileSwitcherList · ProfileBanner" path="patterns/profile/ProfileSwitcherList" note="Initial, name, relationship, check on the active row. The banner sits above a chat about someone else.">
           <ProfileSwitcherList profiles={[...PROFILES]} activeId={active} addState="available" maxProfiles={4} onSelect={setActive} onAdd={noop} />
-          <ProfileBanner who="Daughter" minor onSwitch={noop} />
+          <ProfileBanner who="Child" minor onSwitch={noop} />
         </Specimen>
       </Grid>
     </Section>
