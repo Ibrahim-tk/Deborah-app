@@ -13,6 +13,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-1.2': { title: 'Welcome', component: lazy(() => import('@mobile/screens/onboarding/Welcome')), presentation: 'root', stack: 'preauth', figma: `${FIGMA}47-184`, spec: 'docs/ux/F01-onboarding.md#m-12--welcome' },
   'M-1.3': { title: 'Before we begin', component: lazy(() => import('@mobile/screens/onboarding/Consent')), presentation: 'push', stack: 'preauth', figma: `${FIGMA}47-184`, spec: 'docs/ux/F01-onboarding.md#m-13--before-we-begin-consent' },
   'M-1.4': { title: 'Create profile', component: lazy(() => import('@mobile/screens/onboarding/CreateProfile')), presentation: 'sheet', detent: 'medium', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.4)' },
+  'M-1.5': { title: 'Terms / Privacy', component: lazy(() => import('@mobile/screens/onboarding/LegalSheet')), presentation: 'sheet', detent: 'large', dismissible: true, stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.5)' },
   'M-1.8': { title: 'Health basics', component: lazy(() => import('@mobile/screens/onboarding/HealthBasics')), presentation: 'push', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.8)' },
   'M-1.10': { title: 'Ask an adult', component: lazy(() => import('@mobile/screens/onboarding/AskParent')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: '', spec: 'docs/ux/F01-onboarding.md#m-110--ask-a-parent' },
   'M-1.9': { title: "Deborah's welcome", component: lazy(() => import('@mobile/screens/onboarding/DeborahWelcome')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.9)' },
@@ -69,7 +70,6 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.6': { title: 'PDF preview', component: lazy(() => import('@mobile/screens/records/PdfPreview')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes' },
   'M-9.7': { title: 'My Visit Notes', component: lazy(() => import('@mobile/screens/records/VisitBrief')), presentation: 'modal', figma: '', spec: 'docs/ux/F09b-visit-brief.md' },
   'M-9.8': { title: 'Log your visit', component: lazy(() => import('@mobile/screens/records/LogVisit')), presentation: 'sheet', detent: 'large', dismissible: false, figma: '', spec: 'docs/ux/F09c-log-visit.md#m-98--log-your-visit' },
-
 
   // F11 Documents and reports — OPEN: planned = phases of docs/planning/documents-reports-plan-2026-10-19.md (not docs/11-build-plan.md).
   'M-11.1': { title: 'Documents and reports', component: lazy(() => import('@mobile/screens/documents/Library')), presentation: 'push', tabBar: true, figma: '', spec: 'docs/ux/F11-documents.md#m-111--documents-and-reports' },

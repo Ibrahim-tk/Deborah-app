@@ -1,5 +1,6 @@
 /**
- * @pattern Composer — card composer: optional top banner, auto-growing text area (1–5 lines), attach, Symptoms (opens SymptomPicker), mic, send → Stop while
+ * @pattern Composer — card composer: optional top banner, auto-growing text area (1–5 lines), + menu (Camera · Upload) and
+ *          Symptoms (opens SymptomPicker) on the left, mic beside send → Stop while
  *          generating, counter from 1,800, send disabled above 2,000. Simulated voice recording
  *          shows ✕ (cancel) · live wave · timer · Stop (to field) · Send.
  * @usedBy  M-2.1
@@ -14,11 +15,18 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { EdgeLight, Icon, IconButton, TextArea } from '@mobile/ui';
+import { EdgeLight, Icon, IconButton, Menu, TextArea } from '@mobile/ui';
 import styles from './Composer.module.css';
 
 export const COUNTER_FROM = 1800;
 export const MAX_CHARS = 2000;
+
+export type AttachSource = 'camera' | 'upload';
+const ATTACH_ITEMS = [
+  { id: 'camera', label: 'Camera', icon: 'camera' as const },
+  { id: 'upload', label: 'Upload', icon: 'upload' as const },
+];
+
 
 export interface ComposerProps {
   value: string;
@@ -26,7 +34,8 @@ export interface ComposerProps {
   /** Sends the draft; voice "send" passes the dictated text directly. */
   onSend: (text?: string) => void;
   onStop: () => void;
-  onAttach: () => void;
+  /** + menu: Camera or Upload. */
+  onAttach: (source: AttachSource) => void;
   onFocusChange: (focused: boolean) => void;
   generating: boolean;
   /** When set, the composer is locked and this note is shown (e.g. emergency). */
@@ -42,7 +51,7 @@ export interface ComposerProps {
   options?: ReactNode;
   /** Quiet footnote under the card (educational disclaimer). */
   disclaimer?: string;
-  /** Shows the "Symptoms" button; the screen opens the SymptomPicker sheet. */
+  /** Toolbar "Symptoms" button; the screen opens the SymptomPicker sheet. */
   onSymptoms?: () => void;
   /** Lets the screen hide suggestions while dictating. */
   onRecordingChange?: (recording: boolean) => void;
@@ -191,33 +200,29 @@ export function Composer({
             )}
           </div>
           <div className={styles.toolbar}>
-            <IconButton
-              icon="plus"
-              size="sm"
-              label="Attach lab results"
-              onClick={onAttach}
+            <Menu
+              items={ATTACH_ITEMS}
+              onSelect={(id) => onAttach(id as AttachSource)}
               disabled={Boolean(lockedNote) || generating}
+              trigger={<IconButton icon="plus" size="sm" label="Add attachment" disabled={Boolean(lockedNote) || generating} />}
             />
-            {!generating && (
-              <IconButton
-                icon="mic"
-                size="sm"
-                label="Dictate"
-                onClick={startRecording}
-                disabled={Boolean(lockedNote)}
-              />
-            )}
             {onSymptoms && (
               <button type="button" className={styles.symptoms} onClick={onSymptoms} disabled={Boolean(lockedNote) || generating}>
-                <Icon name="plus" size={16} /> Symptoms
+                <Icon name="health" size={18} />
+                Symptoms
               </button>
             )}
-            <div className={styles.send} data-ready={canSend || generating || undefined}>
-              {generating ? (
-                <IconButton icon="stop" size="sm" label="Stop" onClick={onStop} />
-              ) : (
-                <IconButton icon="send" size="sm" label="Send" onClick={() => onSend()} disabled={!canSend} />
+            <div className={styles.end}>
+              {!generating && (
+                <IconButton icon="mic" size="sm" label="Dictate" onClick={startRecording} disabled={Boolean(lockedNote)} />
               )}
+              <div className={styles.send} data-ready={canSend || generating || undefined}>
+                {generating ? (
+                  <IconButton icon="stop" size="sm" label="Stop" onClick={onStop} />
+                ) : (
+                  <IconButton icon="send" size="sm" label="Send" onClick={() => onSend()} disabled={!canSend} />
+                )}
+              </div>
             </div>
           </div>
         </div>

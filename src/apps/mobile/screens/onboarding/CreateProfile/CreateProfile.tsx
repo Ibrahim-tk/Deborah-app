@@ -119,7 +119,7 @@ export default function CreateProfile() {
           <form key="form" className={styles.stage} onSubmit={submit} noValidate>
             {/* OPEN: placeholder UX copy until reviewed. */}
             <div className={styles.head}>
-              <h2 className={styles.title}>{signin ? 'Welcome back' : `Nice to meet you${first ? `, ${first}` : ''}`}</h2>
+              <h2 className={styles.title}>{signin ? 'Welcome back' : `Welcome${first ? `, ${first}` : ''}`}</h2>
               <p className={styles.sub}>{signin ? 'Sign in to pick up where you left off.' : 'Create your account so Deborah remembers your story.'}</p>
             </div>
             <Input label="Email" type="email" placeholder="Your email" value={email} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors((x) => ({ ...x, email: undefined })); }} />
@@ -140,7 +140,7 @@ export default function CreateProfile() {
         {stage === 'done' && (
           <div key="done" className={styles.done} role="status">
             <span className={styles.check}><Icon name="check" size={32} /></span>
-            <h2 className={styles.title}>{signin ? `Welcome back, ${nameFromEmail(email)}.` : `You’re in${first ? `, ${first}` : ''}.`}</h2>
+            <h2 className={styles.title}>{signin ? `Welcome back, ${nameFromEmail(email)}.` : `Account created${first ? `, ${first}` : ''}.`}</h2>
             <p className={styles.sub}>{signin ? 'Taking you home…' : 'A few quick questions so I know who I’m talking to.'}</p>
           </div>
         )}

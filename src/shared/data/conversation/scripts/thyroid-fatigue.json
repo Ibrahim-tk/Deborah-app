@@ -5,7 +5,7 @@
   "intake": ["age", "meds", "cycle"],
   "voiceSample": "I'm tired all the time, I feel cold, and I wonder if it's my thyroid.",
   "openingMessage": "Should I get my thyroid checked? I'm tired all the time.",
-  "readyLine": "Thank you, {name}. I have what I need. Tap below whenever you're ready for my thoughts.",
+  "readyLine": "Thank you, {name}. I have what I need. My assessment is ready when you are, or add anything else first.",
   "suggestedQuestions": ["My labs look normal but I feel terrible", "I can't sleep — what's going on?", "What else causes tiredness like this?"],
   "answer": {
     "sections": [

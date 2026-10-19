@@ -277,7 +277,7 @@ export default function Conversation() {
           onChange={setDraft}
           onSend={(text) => send(text ?? draft)}
           onStop={chat.stop}
-          onAttach={() => gate('documents', () => open('M-5.3'))}
+          onAttach={(source) => gate('documents', () => open('M-5.3', { source }))}
           onSymptoms={() => setSymptomsOpen(true)}
           onFocusChange={onFocusChange}
           generating={generating}

@@ -38,7 +38,7 @@ export default function BookingConfirmed() {
           ) : (
             <p className={styles.text}>This booking is no longer available.</p>
           )}
-          <Button variant="link" onClick={returnToConversation}>Back to chat</Button>
+          <Button variant="link" onClick={returnToConversation}>Back to conversation</Button>
         </div>
       </div>
     );
@@ -67,7 +67,7 @@ export default function BookingConfirmed() {
         <div className={styles.actions}>
           <Button fullWidth leadingIcon="calendar" onClick={() => toast('Added to your calendar (demo)')}>Add to calendar</Button>
           <Button variant="secondary" fullWidth onClick={() => setReading(true)}>View details</Button>
-          <Button variant="link" onClick={returnToConversation}>Back to chat</Button>
+          <Button variant="link" onClick={returnToConversation}>Back to conversation</Button>
         </div>
       </div>
     </div>

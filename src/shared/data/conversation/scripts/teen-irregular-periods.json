@@ -5,7 +5,7 @@
   "intake": ["teen-onset", "teen-regularity"],
   "voiceSample": "My daughter's periods are all over the place. Is that normal at her age?",
   "openingMessage": "Are irregular periods normal at her age?",
-  "readyLine": "Thank you. I have a good picture of what's going on for {name}. Tap below when you'd like my thoughts, or ask me anything first.",
+  "readyLine": "Thank you. I have a good picture of what's going on for {name}. My assessment is ready when you are, or add anything else first.",
   "suggestedQuestions": ["When should we see a provider?", "What can she track?"],
   "answer": {
     "sections": [

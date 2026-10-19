@@ -1,14 +1,16 @@
 /**
- * @shell StateMenu — Scenarios · Simulate events · Device (docs/03-prototype-shell.md §2).
- * Deliberately has no list of screens: screens are reached by using the app.
+ * @shell StateMenu — Screens · Simulate events · Device (docs/03-prototype-shell.md §2).
+ * Internal surface: a grouped list of every signed-in screen by name (designer request 2026-10-19),
+ * replacing the scenario list here. Scenarios still load via ?scenario= and the Journey runner.
  */
 import { useLocation } from 'react-router-dom';
-import { isLoadable, SCENARIOS, SCENARIO_GROUPS } from '@shared/scenarios';
+import { useState } from 'react';
 import { useAppStore } from '@shared/store';
 import { useShellStore, type DeviceScale } from '../../shell.store';
 import { useScenario } from '../../useScenario';
 import { Popover } from '../Popover';
 import { MenuCheck, MenuChoice, MenuItem, MenuSection } from '../MenuParts';
+import { SCREEN_GROUPS, openScreen } from './screens';
 import styles from './StateMenu.module.css';
 
 const SCALES: { value: DeviceScale; label: string }[] = [
@@ -19,7 +21,8 @@ const SCALES: { value: DeviceScale; label: string }[] = [
 
 export function StateMenu() {
   const isWeb = useLocation().pathname.startsWith('/web');
-  const { scenario, select } = useScenario();
+  const { select } = useScenario();
+  const [screen, setScreen] = useState<string>();
   const scale = useShellStore((s) => s.scale);
   const setScale = useShellStore((s) => s.setScale);
   const simKeyboard = useShellStore((s) => s.simKeyboard);
@@ -37,7 +40,7 @@ export function StateMenu() {
 
   const trigger = (
     <>
-      <span className={styles.muted}>State:</span> {isWeb ? '—' : (scenario?.label ?? 'None')} <span aria-hidden="true">▾</span>
+      <span className={styles.muted}>Screen:</span> {isWeb ? '—' : (screen ?? 'Choose')} <span aria-hidden="true">▾</span>
     </>
   );
 
@@ -48,19 +51,18 @@ export function StateMenu() {
           <p className={styles.empty}>No web scenarios yet.</p>
         ) : (
           <>
-            <MenuSection title="Scenarios">
-              {SCENARIO_GROUPS.map((group) => (
-                <div key={group} className={styles.group}>
-                  <span className={styles.groupLabel}>{group}</span>
-                  {SCENARIOS.filter((s) => s.group === group).map((s) => (
+            <MenuSection title="Screens">
+              {SCREEN_GROUPS.map((group) => (
+                <div key={group.title} className={styles.group}>
+                  <span className={styles.groupLabel}>{group.title}</span>
+                  {group.screens.map((e) => (
                     <MenuItem
-                      key={s.id}
-                      label={s.label}
-                      description={isLoadable(s.id) ? s.description : 'Coming soon.'}
-                      disabled={!isLoadable(s.id)}
-                      active={s.id === scenario?.id}
+                      key={e.id}
+                      label={e.name}
+                      active={e.name === screen}
                       onSelect={() => {
-                        select(s.id);
+                        openScreen(e, select);
+                        setScreen(e.name);
                         close();
                       }}
                     />

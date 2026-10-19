@@ -33,7 +33,7 @@ export function ChatHeader({
       <header className={styles.root}>
         <GlassButton icon="back" aria-label="Back to Home" onClick={onBack} />
         <div className={styles.right}>
-          {canStartNew && <GlassButton icon="edit" aria-label="New chat" onClick={onNewChat} />}
+          {canStartNew && <GlassButton icon="edit" aria-label="New conversation" onClick={onNewChat} />}
           {profile && (
             <button
               type="button"

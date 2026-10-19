@@ -1,0 +1,7 @@
+.body {
+  display: grid;
+  gap: var(--space-4);
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  color: var(--color-ink-body);
+}
+.body p { margin: 0; }

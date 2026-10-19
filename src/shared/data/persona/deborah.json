@@ -23,7 +23,7 @@
       "Looking through my Handbook",
       "Writing to you"
     ],
-    "greetingOther": "Let's talk about {name}.",
+    "greetingOther": "A conversation about {name}.",
     "welcomeBackOther": "Last time we talked about {topic}."
   },
   "status": "placeholder",

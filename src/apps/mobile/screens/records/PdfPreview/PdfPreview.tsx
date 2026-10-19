@@ -1,6 +1,6 @@
 /**
  * @screen  M-9.6 · PDF preview
- * @flow    F09 My Health records (opened from an answer's "Save PDF" in F02, M-9.2, M-9.7 brief, or F11 Saved Reports)
+ * @flow    F09 My Health records (opened from an answer’s "Save PDF" in F02, M-9.2, M-9.7 brief, or F11 Saved Reports)
  * @states  preview (from message) · preview (from conversation) · preview (provider brief) · nothing to print
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes · docs/ux/F09b-visit-brief.md

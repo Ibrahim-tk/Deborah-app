@@ -184,7 +184,7 @@ export default function FirstConsult() {
           onChange={setDraft}
           onSend={(text) => typeInstead(text ?? draft)}
           onStop={() => {}}
-          onAttach={() => open('M-5.3')}
+          onAttach={(source) => open('M-5.3', { source })}
           onSymptoms={() => setSymptomsOpen(true)}
           onFocusChange={() => {}}
           generating={typing}

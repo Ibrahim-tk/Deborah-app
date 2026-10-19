@@ -22,7 +22,7 @@ const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 const SKIP_AUTH_VALIDATION = true;
 
 export default function Welcome() {
-  const { presentSheet, presentModal } = useNav();
+  const { presentSheet } = useNav();
   const legalId = useId();
   const [name, setName] = useState('');
   const [error, setError] = useState<string>();
@@ -45,7 +45,7 @@ export default function Welcome() {
   const openLegal = (section: 'terms' | 'privacy') => (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    presentModal('M-10.5', { section });
+    presentSheet('M-1.5', { section });
   };
 
   return (

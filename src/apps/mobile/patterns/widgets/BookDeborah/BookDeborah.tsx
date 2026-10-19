@@ -60,7 +60,7 @@ export function BookDeborah({
                 Someone from Deborah’s team will contact you soon to set up a time.
               </p>
               <Button fullWidth onClick={() => setOpen(false)}>
-                Got it
+                Done
               </Button>
             </div>
           </div>

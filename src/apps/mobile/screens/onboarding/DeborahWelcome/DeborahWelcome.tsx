@@ -2,7 +2,7 @@
  * @screen  M-1.9 · Deborah's welcome
  * @flow    F01 onboarding (plan P-06): the call to action after the onboarding profile (M-1.8)
  * @presentation sheet over the last onboarding step (hugs its content)
- * @states  for yourself ("Start chatting") · for someone else ("Start talking about {name}")
+ * @states  for yourself ("Start a conversation") · for someone else ("Start a conversation about {name}")
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md#m-19--deborahs-welcome
  * @xref    web: W-1.9 — not built
@@ -45,7 +45,7 @@ export default function DeborahWelcome() {
 
   return (
     <div data-xref="M-1.9 · Deborah's welcome">
-      <Sheet footer={<Button fullWidth onClick={ask}>{member ? `Start talking about ${member.name}` : 'Start chatting'}</Button>}>
+      <Sheet footer={<Button fullWidth onClick={ask}>{member ? `Start a conversation about ${member.name}` : 'Start a conversation'}</Button>}>
         <div className={styles.hello} data-placeholder>
           <DeborahBlob size={88} label="Deborah" />
           <TextReveal className={styles.text} text={hello} delay={350} />

@@ -9,7 +9,7 @@ const SOURCE: Record<FieldSource, string> = {
   inferred: 'from what you said',
   manual: '',
   scan: 'from your scan',
-  chat: 'confirmed in chat',
+  chat: 'confirmed in conversation',
   visit: 'from your provider visit',
 };
 

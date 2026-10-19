@@ -142,7 +142,7 @@
     },
     "emergency": {
       "type": "emergency",
-      "bot": "Chest pain, trouble breathing or feeling faint with a racing heart needs care right now, not a chat. If it's happening now, call 911.",
+      "bot": "Chest pain, trouble breathing or feeling faint with a racing heart needs urgent care, not a conversation here. If it's happening now, call 911.",
       "next": "after_emergency"
     },
     "after_emergency": {
@@ -351,7 +351,7 @@
         {
           "id": 7,
           "title": "A Word from Deborah",
-          "body": "Maria, a fluttering heart at 2am is frightening, and you were right to bring it up. Let's rule out the serious causes first, then work with your hormones, not against them."
+          "body": "Maria, a fluttering heart at 2am is frightening, and you were right to bring it up. The first step is to rule out serious causes, then work with your hormones, not against them."
         }
       ],
       "footer": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",

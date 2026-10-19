@@ -270,7 +270,7 @@ export function MessageList({
       {messages.map((m, i) => [
         // The care disclaimer appears once, right before the first medical answer.
         i === firstAnswer && !disclaimerSeen && (
-          <CareDisclaimer key="care" text={consentDoc.careLine} actionLabel="Got it" onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
+          <CareDisclaimer key="care" text={consentDoc.careLine} actionLabel="Understood" onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
         ),
         // A chat that opens with Deborah (first-visit onboarding) shows her orb once, top left.
         i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="Deborah" className={styles.firstOrb} />,

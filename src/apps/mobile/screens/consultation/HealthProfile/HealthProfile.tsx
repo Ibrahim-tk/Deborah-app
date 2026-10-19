@@ -106,7 +106,7 @@ export default function HealthProfile() {
           <section className={styles.facts} aria-labelledby="from-chats">
             <h2 id="from-chats" className={styles.heading}>From your conversations</h2>
             {profile.confirmedFacts!.map((f) => (
-              <ListRow key={f.key} title={f.label} subtitle={`${f.value} · Confirmed in chat, ${formatShortDate(f.confirmedAt)}`} trailing={null} />
+              <ListRow key={f.key} title={f.label} subtitle={`${f.value} · Confirmed in conversation, ${formatShortDate(f.confirmedAt)}`} trailing={null} />
             ))}
           </section>
         )}

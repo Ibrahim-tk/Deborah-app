@@ -167,7 +167,7 @@ export default function Home() {
             day={d.planDay}
             habits={d.habits}
             onToggle={(id) => useAppStore.getState().toggleHabit(profileId, id, d.today)}
-            continueMeta={d.checkInDue ? 'Your check-in is due' : d.when ? `Last chat ${d.when} · ${d.topic}` : undefined}
+            continueMeta={d.checkInDue ? 'Your check-in is due' : d.when ? `Last conversation ${d.when} · ${d.topic}` : undefined}
             onContinue={d.checkInDue ? () => openAsk({ mode: 'checkin' }) : resume}
             onJourney={journey}
             journeyFocus={planFocus}

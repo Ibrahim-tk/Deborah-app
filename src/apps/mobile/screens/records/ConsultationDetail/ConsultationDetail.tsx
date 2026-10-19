@@ -74,7 +74,7 @@ export default function ConsultationDetail() {
         <Button variant="secondary" size="sm" leadingIcon="pdf" onClick={() => open('M-9.6', { conversationId })}>Download PDF</Button>
         <Button variant="secondary" size="sm" leadingIcon="share" onClick={share}>Share</Button>
         {canContinue && (
-          <Button size="sm" leadingIcon="deborah" onClick={continueChat}>Continue chat</Button>
+          <Button size="sm" leadingIcon="deborah" onClick={continueChat}>Continue conversation</Button>
         )}
       </div>
     </div>

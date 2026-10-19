@@ -17,7 +17,16 @@ export type TabId = 'ask' | 'health' | 'account';
 
 /** Where the navigator lands after a scenario loads. */
 export type ScenarioStart =
-  | { kind: 'screen'; root: 'preauth' | 'main'; tab?: TabId; stack: string[]; sheet?: string; modal?: string }
+  | {
+      kind: 'screen';
+      root: 'preauth' | 'main';
+      tab?: TabId;
+      stack: string[];
+      sheet?: string;
+      modal?: string;
+      /** Route params by screen id (the internal Screens menu opens screens that need an id). */
+      params?: Record<string, Record<string, string | number | boolean | undefined>>;
+    }
   | { kind: 'lockScreen' };
 
 export interface ScenarioMeta {

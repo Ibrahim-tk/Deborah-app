@@ -73,38 +73,35 @@ export default function Account() {
     setPhoneOpen(true);
   };
 
-  const groups: SettingsRow[][] = [
-    // Ends on Family so no hairline under that row.
-    [
-      { title: 'Subscription & billing', icon: 'shop', onPress: () => nav.push('M-10.3') },
-      { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
-    ],
-    [
-      { title: 'Notifications', icon: 'bell', onPress: () => nav.push('M-10.4') },
-      // DESIGN.md › Text size control: Account › Text size.
-      {
-        title: 'Text size',
-        value: textSizeLabel(textSize),
-        icon: 'note',
-        onPress: () => setTextSizeOpen(true),
-      },
-      { title: 'Terms & disclaimer', icon: 'file', onPress: () => nav.open('M-10.5') },
-    ],
-    // Contact · privacy · About — text rows only, no leading icons.
-    [
-      {
-        title: 'Contact info',
-        subtitle: phoneDisplay ?? 'Add a number',
-        value: phoneDisplay ? undefined : 'Optional',
-        onPress: openPhone,
-      },
-      { title: 'Privacy & data', onPress: () => nav.push('M-10.2') },
-      {
-        title: 'About Deborah',
-        subtitle: 'Book a consult with Deborah',
-        onPress: () => nav.push('M-7.6'),
-      },
-    ],
+  // Revamp (design direction 2026-10-19): labelled sections, one leading icon per row, values on the right.
+  const sections: { title: string; rows: SettingsRow[] }[] = [
+    {
+      title: 'Account',
+      rows: [
+        { title: 'Phone number', value: phoneDisplay ?? 'Not added', icon: 'phone', onPress: openPhone },
+        { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') },
+        { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
+      ],
+    },
+    {
+      title: 'Preferences',
+      rows: [
+        { title: 'Notifications', icon: 'bell', onPress: () => nav.push('M-10.4') },
+        // DESIGN.md › Text size control: Account › Text size.
+        { title: 'Text size', value: textSizeLabel(textSize), icon: 'note', onPress: () => setTextSizeOpen(true) },
+      ],
+    },
+    {
+      title: 'Privacy & legal',
+      rows: [
+        { title: 'Privacy & data', icon: 'lock', onPress: () => nav.push('M-10.2') },
+        { title: 'Terms & disclaimer', icon: 'file', onPress: () => nav.open('M-10.5') },
+      ],
+    },
+    {
+      title: 'Support',
+      rows: [{ title: 'About Deborah', subtitle: 'Book a consultation', icon: 'info', onPress: () => nav.push('M-7.6') }],
+    },
   ];
 
   const { canGoBack, previousTitle } = useRoute();
@@ -128,7 +125,7 @@ export default function Account() {
             </span>
             <span className={styles.planCopy}>
               <h2 className={styles.planTitle}>Choose a plan</h2>
-              <p className={styles.planBody}>Unlimited consultations, for you or your family.</p>
+              <p className={styles.planBody}>Unlimited consultations for you and your family.</p>
             </span>
             <span className={styles.planChevron} aria-hidden>
               <Icon name="chevron" size={18} />
@@ -138,28 +135,28 @@ export default function Account() {
 
         <div className={styles.profile}>
           <span className={styles.avatar} aria-hidden>{initial}</span>
-          <div className={styles.profileCopy}>
-            <p className={styles.name}>{name || 'You'}</p>
-            <p className={styles.meta}>{email ?? 'No account yet — trial'}</p>
-            {!trial && planName && <p className={styles.meta}>{planName} plan</p>}
-          </div>
+          <p className={styles.name}>{name || 'You'}</p>
+          <p className={styles.meta}>{email ?? 'Free trial'}</p>
         </div>
 
-        {groups.map((g, i) => (
-          <div key={i} className={styles.group}>
-            {g.map((r, j) => (
-              <Fragment key={r.title}>
-                {j > 0 && <Divider />}
-                <ListRow
-                  title={r.title}
-                  subtitle={r.subtitle}
-                  value={r.value}
-                  leading={r.icon ? leadIcon(r.icon) : undefined}
-                  onPress={r.onPress}
-                />
-              </Fragment>
-            ))}
-          </div>
+        {sections.map((sec) => (
+          <section key={sec.title} className={styles.section} aria-labelledby={`settings-${sec.title}`}>
+            <h2 id={`settings-${sec.title}`} className={styles.sectionTitle}>{sec.title}</h2>
+            <div className={styles.group}>
+              {sec.rows.map((r, j) => (
+                <Fragment key={r.title}>
+                  {j > 0 && <Divider />}
+                  <ListRow
+                    title={r.title}
+                    subtitle={r.subtitle}
+                    value={r.value}
+                    leading={r.icon ? leadIcon(r.icon) : undefined}
+                    onPress={r.onPress}
+                  />
+                </Fragment>
+              ))}
+            </div>
+          </section>
         ))}
 
         <div className={styles.group}>
@@ -167,8 +164,7 @@ export default function Account() {
         </div>
 
         <footer className={styles.footer}>
-          <p>Version {VERSION} (prototype)</p>
-          <p>Prototype — no real data</p>
+          <p>Version {VERSION} · Prototype</p>
         </footer>
       </div>
       <TextSizeSheet open={textSizeOpen} onClose={() => setTextSizeOpen(false)} />
@@ -176,8 +172,8 @@ export default function Account() {
         {phoneOpen && (
           <div className={styles.phoneLayer}>
             <button type="button" className={styles.phoneScrim} aria-label="Close" onClick={() => setPhoneOpen(false)} />
-            <Sheet title="Contact info">
-              <p className={styles.text}>For Deborah’s team only — no texts or verification codes.</p>
+            <Sheet title="Phone number">
+              <p className={styles.text}>Used only by Deborah’s team. We don’t send texts or verification codes.</p>
               <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
               <Button
                 fullWidth

@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Icon, OptionList, OptionRow, ProgressBar, ProgressStatus, Sheet } from '@mobile/ui';
 import { simBetween } from '@mobile/hooks/simTiming';
 import { CaptureCamera } from '@mobile/patterns/widgets';
-import { meta, useNav } from '@mobile/navigation';
+import { meta, useNav, useScreenParams } from '@mobile/navigation';
 import styles from './AddLabs.module.css';
 
 type Source = 'photo' | 'pdf';
@@ -20,7 +20,9 @@ type Source = 'photo' | 'pdf';
 export default function AddLabs() {
   const { dismissSheet, presentModal } = useNav();
   const fileInput = useRef<HTMLInputElement>(null);
-  const [camera, setCamera] = useState(false);
+  // Composer + menu: Camera opens the viewfinder straight away; Upload opens the file picker.
+  const { source: start0 } = useScreenParams<{ source?: 'camera' | 'upload' }>();
+  const [camera, setCamera] = useState(start0 === 'camera');
   const [processing, setProcessing] = useState<{ source: Source; fileName: string } | null>(null);
   const [progress, setProgress] = useState(0);
 
@@ -44,6 +46,10 @@ export default function AddLabs() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot per processing payload
   }, [processing]);
 
+  useEffect(() => {
+    if (start0 === 'upload') fileInput.current?.click();
+  }, [start0]);
+
   const start = (source: Source, fileName: string) => {
     setProgress(0);
     setProcessing({ source, fileName });
@@ -64,10 +70,10 @@ export default function AddLabs() {
           <div className={styles.body}>
             <OptionList label="How would you like to add them?">
               <OptionRow leadingIcon="camera" chevron onSelect={() => setCamera(true)}>
-                Take a photo
+                Camera
               </OptionRow>
               <OptionRow leadingIcon="upload" chevron onSelect={() => fileInput.current?.click()}>
-                Upload lab results
+                Upload
               </OptionRow>
             </OptionList>
           </div>

@@ -504,7 +504,7 @@
     },
     "labs_ack": {
       "type": "message",
-      "bot": "Got it, thank you. I'll keep your thyroid markers right next to your sleep story, so nothing gets looked at in isolation.",
+      "bot": "Thank you. I'll keep your thyroid markers right next to your sleep story, so nothing gets looked at in isolation.",
       "next": "offer_checkin"
     },
     "offer_booking": {

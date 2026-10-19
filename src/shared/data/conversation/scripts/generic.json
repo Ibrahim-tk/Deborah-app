@@ -5,7 +5,7 @@
   "intake": ["age", "meds", "cycle"],
   "voiceSample": "I just haven't been feeling like myself lately.",
   "openingMessage": "I haven't been feeling like myself lately.",
-  "readyLine": "Thank you, {name}. I have a clearer picture now. Tap below when you'd like my thoughts, or tell me more first.",
+  "readyLine": "Thank you, {name}. I have a clearer picture now. My assessment is ready when you are, or add anything else first.",
   "suggestedQuestions": ["Why am I so exhausted all the time?", "Are my hormones out of balance?", "What should I tell my provider?"],
   "answer": {
     "sections": [

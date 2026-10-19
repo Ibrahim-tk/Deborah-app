@@ -180,18 +180,19 @@ export const useNavStore = create<NavState>()((set, get) => {
         });
         return;
       }
-      let stack = start.stack.map((id) => route(id));
+      const p = (id: string) => start.params?.[id];
+      let stack = start.stack.map((id) => route(id, p(id)));
       // Scenarios that start in a chat still get Home underneath it.
       if (start.root !== 'preauth' && (start.tab ?? 'ask') === 'ask' && stack[0]?.id === CHAT)
         stack = [route(TAB_ROOTS.ask), ...stack];
       const layers: Layer[] = [];
-      if (start.modal) layers.push({ kind: 'modal', key: uid('l'), routes: [route(start.modal)] });
+      if (start.modal) layers.push({ kind: 'modal', key: uid('l'), routes: [route(start.modal, p(start.modal))] });
       if (start.sheet) {
         const m = meta(start.sheet);
         layers.push({
           kind: 'sheet',
           key: uid('l'),
-          route: route(start.sheet),
+          route: route(start.sheet, p(start.sheet)),
           detent: m?.detent ?? 'medium',
           dismissible: m?.dismissible ?? true,
         });

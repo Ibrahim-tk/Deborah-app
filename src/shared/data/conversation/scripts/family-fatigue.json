@@ -20,7 +20,7 @@
   ],
   "voiceSample": "My daughter is exhausted all the time, even after a full night's sleep.",
   "openingMessage": "Why is {name} so exhausted all the time?",
-  "readyLine": "Thank you — that gives me a clear picture of {name}'s days. Tap below for my thoughts.",
+  "readyLine": "Thank you — that gives me a clear picture of {name}'s days. My assessment is ready.",
   "suggestedQuestions": [
     "Could low iron explain the tiredness?",
     "How much sleep does a teenager really need?",

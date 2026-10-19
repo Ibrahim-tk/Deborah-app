@@ -5,7 +5,7 @@
   "intake": ["age", "meds", "cycle"],
   "voiceSample": "I wake up at three in the morning almost every night and my mind starts racing.",
   "openingMessage": "Why am I waking up at 3am every night?",
-  "readyLine": "Thank you, {name}. That helps me understand your nights. Tap below when you'd like my thoughts.",
+  "readyLine": "Thank you, {name}. That helps me understand your nights. My assessment is ready when you are, or add anything else first.",
   "suggestedQuestions": ["Why am I so exhausted all the time?", "Are my hormones out of balance?", "Does what I eat in the evening matter?"],
   "answer": {
     "sections": [
