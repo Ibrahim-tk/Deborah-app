@@ -42,6 +42,8 @@ interface NavState {
   switchTab: (tab: TabId) => void;
   presentSheet: (id: string, params?: Params, opts?: { detent?: 'medium' | 'large' }) => void;
   dismissSheet: () => void;
+  /** Lock / unlock swipe-and-scrim dismiss on the top sheet (M-11.3 while uploading). */
+  setSheetDismissible: (dismissible: boolean) => void;
   presentModal: (id: string, params?: Params) => void;
   dismissModal: () => void;
   resetTo: (root: 'preauth' | 'main', id: string, params?: Params) => void;
@@ -136,6 +138,12 @@ export const useNavStore = create<NavState>()((set, get) => {
       set((s) => {
         const i = s.layers.map((l) => l.kind).lastIndexOf('sheet');
         return i < 0 ? {} : { layers: s.layers.filter((_, j) => j !== i) };
+      }),
+    setSheetDismissible: (dismissible) =>
+      set((s) => {
+        const i = s.layers.map((l) => l.kind).lastIndexOf('sheet');
+        if (i < 0) return {};
+        return { layers: s.layers.map((l, j) => (j === i && l.kind === 'sheet' ? { ...l, dismissible } : l)) };
       }),
     presentModal: (id, params) =>
       set((s) => ({

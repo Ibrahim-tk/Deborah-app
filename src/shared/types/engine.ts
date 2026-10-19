@@ -1,5 +1,5 @@
 /** Engine contract (docs/07-ai-simulation.md §1). */
-import type { ContentStatus, Conversation, ID, Intake, LabReport, Message, Note, NotificationPermission, PendingFact, PlanTier, Profile, SectionKey, VisitOutcome } from './domain';
+import type { ContentStatus, Conversation, HealthDocument, ID, Intake, LabReport, Message, Note, NotificationPermission, PendingFact, PlanTier, Profile, SectionKey, VisitOutcome } from './domain';
 
 export interface EngineContext {
   profile: Profile;
@@ -48,7 +48,11 @@ export type UserInput =
   /** F09c: M-9.8 saved the visit opened from this debrief ("Review and save"). */
   | { kind: 'debriefSaved'; noteId: ID; outcome: VisitOutcome; /** Profile updates applied on Save. */ applied?: number }
   /** M-5.4 "Add Report". `direct` skips session-first (e.g. M-9.5). */
-  | { kind: 'shareLabs'; report: LabReport; direct?: boolean };
+  | { kind: 'shareLabs'; report: LabReport; direct?: boolean }
+  /** F11: a document from Documents and reports; `report` is its lab report when type is lab. */
+  | { kind: 'shareDocument'; document: HealthDocument; report?: LabReport }
+  | { kind: 'offerDocument'; document: HealthDocument }
+  | { kind: 'documentOfferReply'; messageId: ID; optionId: string; document?: HealthDocument; report?: LabReport };
 
 /** Store mutations the bridge applies (kept serialisable). */
 export type StoreAction =

@@ -1,6 +1,6 @@
 /** M-7.2 — populated hub: focus · plan · check-in · records · for you · library link. */
 import { scripts } from '@shared/data';
-import { useAppStore } from '@shared/store';
+import { selectDocuments, useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
 import { ListRow } from '@mobile/ui';
 import { CheckInCard, ContentCard, FocusCard, PlanProgressCard, QuickLinks } from '@mobile/patterns/health';
@@ -17,6 +17,7 @@ export function HubPopulated() {
   const gate = useAccountGate();
   const { profileId, focus, plan, checkIn, upcoming, counts } = useHubData();
   const forYou = useForYou().slice(0, 3);
+  const docCount = useAppStore((s) => selectDocuments(s, profileId).length);
 
   const openFocus = () => {
     if (!focus) return;
@@ -54,6 +55,14 @@ export function HubPopulated() {
         ]}
         onSelect={(segment) => push('M-9.1', { segment })}
       />
+      {/* F11: uploads and saved reports live in their own library (docs/ux/F11-documents.md). */}
+      <div className={styles.rowGroup}>
+        <ListRow
+          title="Documents and reports"
+          subtitle={docCount === 0 ? 'Upload labs, imaging and prescriptions' : `${docCount} document${docCount === 1 ? '' : 's'}`}
+          onPress={() => push('M-11.1')}
+        />
+      </div>
       <section className={styles.section} aria-labelledby="hub-for-you">
         <h2 id="hub-for-you" className={styles.heading}>For you from Deborah</h2>
         <div className={styles.list}>

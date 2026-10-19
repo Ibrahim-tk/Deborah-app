@@ -187,5 +187,8 @@ Prices from the brief (≈); annual values are placeholders. OPEN: recommended p
 Values returned by the simulated extractor; any uploaded file maps to `sample-a`.
 `{ "sample-a": { "labName": "Sample Lab", "values": [ { "marker": "TSH", "value": "3.8", "unit": "mIU/L" }, { "marker": "Free T3", "value": "2.4", "unit": "pg/mL" }, { "marker": "Estradiol", "value": "45", "unit": "pg/mL" } ] } }` — demo values, not clinical guidance.
 
+### `documents/types.json` · `documents/extractions.json`
+F11 config and simulated extraction. `types.json`: `{ "maxBytes": 20971520, "formats": [{ "format": "pdf", "mime": ["application/pdf"], "extensions": ["pdf"] }, …], "types": [{ "id": "lab", "label": "Lab result", "icon": "…" }, …] }`. `extractions.json`: `{ "<DocumentType>": { "fields": [{ "label": "Test", "value": "TSH 3.8 mIU/L" }], "status": "placeholder" } }` — demo values, never read from the file. Store type `HealthDocument` (`types/domain.ts`), slice `documents` (soft delete via `deletedAt`). Spec: [ux/F11-documents.md](ux/F11-documents.md).
+
 ### `booking/slots.json`
 `{ "durationMin": 50, "price": null, "statesLicensed": [], "slots": ["2026-10-28T10:00:00-07:00", "…"] }` — OPEN: price and licensed states (empty list = show the state picker but accept every state in the prototype).

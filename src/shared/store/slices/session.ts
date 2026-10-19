@@ -90,6 +90,7 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
       conversations: { byId: {}, activeByProfile: {} },
       labs: { reportsById: {} },
       notes: { byId: {} },
+      documents: { byId: {} },
       plan90: {},
       freeConsultationsUsed: 0,
     }),

@@ -1,0 +1,41 @@
+{
+  "lab": {
+    "status": "placeholder",
+    "fields": [
+      { "label": "Lab", "value": "Sample Lab" },
+      { "label": "Tests", "value": "TSH, Free T3, Estradiol" },
+      { "label": "Values", "value": "TSH 3.8 mIU/L · Free T3 2.4 pg/mL · Estradiol 45 pg/mL" },
+      { "label": "Collected", "value": "Date shown on the report" }
+    ]
+  },
+  "imaging": {
+    "status": "placeholder",
+    "fields": [
+      { "label": "Study", "value": "Pelvic ultrasound" },
+      { "label": "Date", "value": "Date shown on the report" },
+      { "label": "Summary", "value": "Report text Deborah can read with you" }
+    ]
+  },
+  "prescription": {
+    "status": "placeholder",
+    "fields": [
+      { "label": "Medication", "value": "Name shown on the prescription" },
+      { "label": "Prescriber", "value": "Name shown on the prescription" },
+      { "label": "Date", "value": "Date shown on the prescription" }
+    ]
+  },
+  "visit-note": {
+    "status": "placeholder",
+    "fields": [
+      { "label": "Provider", "value": "Name shown on the note" },
+      { "label": "Visit date", "value": "Date shown on the note" },
+      { "label": "Topics", "value": "Main points from the visit" }
+    ]
+  },
+  "other": {
+    "status": "placeholder",
+    "fields": [
+      { "label": "Dates", "value": "Dates found in the document" }
+    ]
+  }
+}

@@ -21,6 +21,7 @@ export function createDefaults(now: string = new Date().toISOString()): AppData 
     labs: { reportsById: {} },
     plan90: {},
     notes: { byId: {} },
+    documents: { byId: {} },
     notifications: { queue: [], followUp: {}, bookingReminders: true },
     booking: { bookings: [] },
     settings: { theme: 'light', textSize: 1 },

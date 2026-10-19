@@ -15,6 +15,7 @@ export function useNav() {
       switchTab: s.switchTab,
       presentSheet: s.presentSheet,
       dismissSheet: s.dismissSheet,
+      setSheetDismissible: s.setSheetDismissible,
       presentModal: s.presentModal,
       dismissModal: s.dismissModal,
       resetTo: s.resetTo,

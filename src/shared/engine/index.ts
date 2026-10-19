@@ -23,6 +23,7 @@ import {
 import { isGated } from './counting';
 import { checkInDetailSteps, checkInReplySteps, isAwaitingCheckInDetail, startCheckInSteps } from './checkin';
 import { shareLabsSteps } from './labs';
+import { documentOfferReplySteps, offerDocumentSteps, shareDocumentSteps } from './documents';
 import { debriefReplySteps, debriefSavedSteps, debriefTextSteps, isVisitReport, visitOfferSteps } from './debrief';
 import { startDebriefSteps } from './visitOutcome';
 import { answerPatch, CONSENT_ID, optionLabels, planConsultation, question } from './intake';
@@ -109,6 +110,12 @@ function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
       return debriefSavedSteps(ctx, input.noteId, input.outcome, input.applied);
     case 'shareLabs':
       return shareLabsSteps(ctx, input.report, input.direct);
+    case 'shareDocument':
+      return shareDocumentSteps(ctx, input.document, input.report);
+    case 'offerDocument':
+      return offerDocumentSteps(ctx, input.document);
+    case 'documentOfferReply':
+      return documentOfferReplySteps(ctx, input.messageId, input.optionId, input.document, input.report);
     case 'finishReview':
       return ctx.conversation.providerReview?.state === 'waiting' && !pendingFacts(ctx.conversation).length
         ? answerSteps(ctx, ctx.conversation, ctx.profile) : [];

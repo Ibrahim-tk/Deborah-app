@@ -1,20 +1,30 @@
 /**
- * Simulated camera (full screen): live lab-report preview, frame guide, white shutter →
- * captured freeze → Retake / Use photo. Prototype only — no device camera.
+ * @pattern CaptureCamera — simulated full-screen camera: live document preview, frame guide,
+ *          white shutter → captured freeze → Retake / Use photo. Prototype only — no device camera.
+ * @usedBy  M-5.3 (Add lab results), M-11.3 (Upload a document)
+ * @spec    docs/ux/F05-followup-labs.md#m-53--add-your-lab-results, docs/ux/F11-documents.md#m-113--upload-a-document
+ * @xref    web: — (mobile only)
  */
 import { useEffect, useState } from 'react';
 import { useDevice } from '@shell/device';
 import { Button, Icon, Overlay } from '@mobile/ui';
-import { meta } from '@mobile/navigation';
-import styles from './CameraView.module.css';
+import styles from './CaptureCamera.module.css';
 
 const PREVIEW = '/images/labs/camera-preview.jpg';
 
-export function CameraView({
+export function CaptureCamera({
+  screenId,
+  screenTitle,
+  hint = 'Fit the whole report inside the frame',
   onCancel,
   onUse,
   onLibrary,
 }: {
+  /** Screen the camera opens over; restores its title and status bar on close. */
+  screenId: string;
+  /** That screen's title (the registry's), shown in the device chrome. */
+  screenTitle: string;
+  hint?: string;
   onCancel: () => void;
   onUse: () => void;
   /** Opens the photo library / file picker (ChatGPT-style gallery control). */
@@ -26,10 +36,10 @@ export function CameraView({
 
   // Light status bar over the dark viewfinder; back to the sheet's own style on close.
   useEffect(() => {
-    const title = meta('M-5.3')?.title ?? 'Add lab results';
-    setScreen({ id: 'M-5.3', title: `${title} · camera`, statusBarStyle: 'light' });
-    return () => setScreen({ id: 'M-5.3', title, statusBarStyle: 'dark' });
-  }, [setScreen]);
+    const title = screenTitle;
+    setScreen({ id: screenId, title: `${title} · camera`, statusBarStyle: 'light' });
+    return () => setScreen({ id: screenId, title, statusBarStyle: 'dark' });
+  }, [setScreen, screenId, screenTitle]);
 
   return (
     <Overlay>
@@ -60,7 +70,7 @@ export function CameraView({
 
           <div className={styles.viewfinder}>
             <div className={styles.frame} data-captured={captured || undefined}>
-              {!captured && <p className={styles.hint}>Fit the whole report inside the frame</p>}
+              {!captured && <p className={styles.hint}>{hint}</p>}
             </div>
           </div>
 

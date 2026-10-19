@@ -49,7 +49,11 @@ import healthBasics from './intake/healthBasics.json';
 import symptoms from './intake/symptoms.json';
 import firstConsult from './conversation/flows/firstConsult.json';
 import returningConsult from './conversation/flows/returningConsult.json';
+import documentTypes from './documents/types.json';
+import extractionsByType from './documents/extractions.json';
+import documentReviewJson from './documents/review.json';
 import type { Flow } from '../types/flow';
+import type { DocumentExtraction, DocumentFormat, DocumentType } from '../types/domain';
 
 export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
@@ -69,6 +73,16 @@ export const libraryItems = library as LibraryItem[];
 /** Script id → library topics + the "Because …" reason line (For you ranking, F07). */
 export const scriptTopics = topicMap as Record<string, { topics: string[]; reason: string } | undefined>;
 export const bookingInfo = slots as unknown as BookingInfo;
+
+/** F11 Documents: accepted formats, the 20 MB limit, type labels (docs/ux/F11-documents.md). */
+export interface DocumentConfig {
+  maxBytes: number;
+  formats: { format: DocumentFormat; label: string; mime: string[]; extensions: string[] }[];
+  types: { id: DocumentType; label: string }[];
+}
+export const documentConfig = documentTypes as DocumentConfig;
+/** Simulated "Reading key details" output by type — placeholder, never read from the file. */
+export const documentExtractions = extractionsByType as Record<DocumentType, DocumentExtraction>;
 
 export const scripts: Record<string, Script> = Object.fromEntries(
   ([hotFlashesSleep, sleep3am, thyroidFatigue, generic, labReview, teenIrregularPeriods, familyFatigue] as Script[]).map((s) => [s.id, s]),
@@ -109,3 +123,15 @@ export const symptomGroups: { id?: string; title: string; items: string[] }[] = 
 export const firstConsultFlow = firstConsult as unknown as Flow;
 /** Demo consultation for a signed-in returning user (seed R01). OPEN: DRAFT copy, needs Deborah's sign-off. */
 export const returningConsultFlow = returningConsult as unknown as Flow;
+
+/** F11 Deborah's replies to a shared document and the one-time upload offer (placeholder copy). */
+export interface DocumentReviewCopy {
+  status: 'placeholder' | 'approved';
+  offer: string;
+  offerOptions: { id: 'doc-discuss' | 'doc-later'; label: string }[];
+  later: string;
+  bubble: string;
+  replies: Record<Exclude<DocumentType, 'lab'>, string>;
+  suggestions: Record<Exclude<DocumentType, 'lab'>, string[]>;
+}
+export const documentReview = documentReviewJson as DocumentReviewCopy;

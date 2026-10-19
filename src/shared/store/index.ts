@@ -10,6 +10,7 @@ import { profilesActions } from './slices/profiles';
 import { conversationsActions } from './slices/conversations';
 import { contentActions } from './slices/content';
 import { notificationsActions } from './slices/notifications';
+import { documentsActions } from './slices/documents';
 import type { AppState } from './types';
 
 export const useAppStore = create<AppState>()((...a) => ({
@@ -20,6 +21,7 @@ export const useAppStore = create<AppState>()((...a) => ({
   ...conversationsActions(...a),
   ...contentActions(...a),
   ...notificationsActions(...a),
+  ...documentsActions(...a),
 }));
 
 export type { AppState, AppData } from './types';

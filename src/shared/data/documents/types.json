@@ -1,0 +1,16 @@
+{
+  "maxBytes": 20971520,
+  "formats": [
+    { "format": "pdf", "label": "PDF", "mime": ["application/pdf"], "extensions": ["pdf"] },
+    { "format": "jpg", "label": "JPG", "mime": ["image/jpeg"], "extensions": ["jpg", "jpeg"] },
+    { "format": "png", "label": "PNG", "mime": ["image/png"], "extensions": ["png"] },
+    { "format": "txt", "label": "TXT", "mime": ["text/plain"], "extensions": ["txt"] }
+  ],
+  "types": [
+    { "id": "lab", "label": "Lab result" },
+    { "id": "imaging", "label": "Imaging report" },
+    { "id": "prescription", "label": "Prescription" },
+    { "id": "visit-note", "label": "Visit note" },
+    { "id": "other", "label": "Other" }
+  ]
+}

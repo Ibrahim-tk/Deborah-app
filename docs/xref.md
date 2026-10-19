@@ -56,6 +56,9 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-10.3 | Subscription | F10 | `account/Subscription` | W-10.3 — not built | [F10](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-695) | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | built (phase 6) |
 | M-10.4 | Notifications | F10 | `account/Notifications` | W-10.4 — not built | [F10](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-695) | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | built (phase 6) |
 | M-10.5 | Terms & disclaimer | F10 | `account/Legal` | W-10.5 — not built | [F10](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-695) | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | built (phase 3; Account entry phase 6) |
+| M-11.1 | Documents and reports (My Uploads · Saved Reports) | F11 | `documents/Library` | W-11.1 — not built | — | [ux/F11-documents.md](ux/F11-documents.md#m-111--documents-and-reports) | built (documents phase 2) |
+| M-11.2 | Document preview | F11 | `documents/DocumentPreview` | W-11.2 — not built | — | [ux/F11-documents.md](ux/F11-documents.md#m-112--document-preview) | built (documents phase 4) |
+| M-11.3 | Upload a document (sheet; M-11.4 result is its last step) | F11 | `documents/UploadDocument` | W-11.3 — not built | — | [ux/F11-documents.md](ux/F11-documents.md#m-113--upload-a-document) | built (documents phase 3) |
 
 ## Patterns with platform counterparts
 
@@ -72,5 +75,8 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | ProfileSwitcherList / ProfileBanner | `patterns/profile/*` | not built | ux/F06-family-profiles.md |
 | FocusCard / PlanProgressCard / CheckInCard / QuickLinks / ContentCard / HabitRow | `patterns/health/*` | not built | ux/F07-my-health-hub.md |
 | ConsultationRow / NoteRow / EmptyState | `patterns/health/*` | not built | ux/F09-records.md |
+| DocumentRow / ReportRow | `patterns/health/*` | not built | ux/F11-documents.md#m-111--documents-and-reports |
+| AttachedDocument | `patterns/chat/AttachedDocument` | not built | ux/F11-documents.md#deborah-handoff-phase-4 |
+| CaptureCamera | `patterns/widgets/CaptureCamera` | — (mobile only) | ux/F05-followup-labs.md · ux/F11-documents.md |
 | InlineConsent / QuestionChoices / ChoicePills / FullChoicePills* / BookDeborah / ConfirmCard / SlotPicker / MoodScale / ScaleCheck / ReminderCard / UploadCard / IntakeCompletionCard / HealingPlanCard / PrimaryIntentCard / PromptStarterList / NextIntentList / TodayHabitsCard / LinkStatusCard / DestinationTilePair / RecommendationCard / HomeMediaHero / SuggestionCarousel / PhotoDestinationPair / GlassCareStrip | `patterns/widgets/*` | not built | Widget lab `/wid` + Design System + Home landing wow (media hero/carousel). See `docs/ui-overhaul-plan.md`. |
 | Design system (every token, ui primitive and pattern, rendered live) | `screens/lab/DesignSystem` | not built | Route `/design-system` (design tool, 2026-10-15); sources DESIGN.md · deborah-design-system.md |

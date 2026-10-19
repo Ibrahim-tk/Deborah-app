@@ -1,0 +1,3 @@
+.icon { display: grid; place-items: center; width: var(--icon-well-size); height: var(--icon-well-size); border-radius: var(--radius-full); background: var(--icon-well-bg); color: var(--icon-well-fg); }
+/* Long file-derived titles wrap instead of pushing the chevron off screen. */
+.title { overflow-wrap: anywhere; }

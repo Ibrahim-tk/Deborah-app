@@ -1,6 +1,6 @@
 /**
  * @screen  M-9.6 · PDF preview
- * @flow    F09 My Health records (opened from an answer's "Save PDF" in F02, M-9.2, or M-9.7 brief)
+ * @flow    F09 My Health records (opened from an answer's "Save PDF" in F02, M-9.2, M-9.7 brief, or F11 Saved Reports)
  * @states  preview (from message) · preview (from conversation) · preview (provider brief) · nothing to print
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes · docs/ux/F09b-visit-brief.md
@@ -51,9 +51,13 @@ export default function PdfPreview() {
         right={<Button variant="ghost" size="md" onClick={dismissModal}>Done</Button>}
         footer={
           hasContent && (
-            <div className={styles.actions}>
-              <Button variant="secondary" leadingIcon="share" onClick={() => toast('Shared (demo)')}>Share</Button>
-              <Button variant="secondary" leadingIcon="file" onClick={() => window.print()}>Print</Button>
+            <div className={styles.footerStack}>
+              {/* F11 Saved Reports: "Print or Download as PDF" (Miro). Prototype: no file is written. */}
+              <Button fullWidth leadingIcon="download" onClick={() => toast('PDF downloaded')}>Download PDF</Button>
+              <div className={styles.actions}>
+                <Button variant="secondary" leadingIcon="share" onClick={() => toast('Shared (demo)')}>Share</Button>
+                <Button variant="secondary" leadingIcon="file" onClick={() => window.print()}>Print</Button>
+              </div>
             </div>
           )
         }

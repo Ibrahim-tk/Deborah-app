@@ -24,3 +24,4 @@ export * from './SaveProfileCard';
 export * from './ReviewFactsCard';
 export * from './GuidanceNextSteps';
 export * from './VisitSummaryCard';
+export * from './AttachedDocument';

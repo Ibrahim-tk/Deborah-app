@@ -28,6 +28,7 @@ import {
 import type { useConversation } from '@mobile/hooks/useConversation';
 import type { useMessageActions } from './useMessageActions';
 import { SafetyMessage } from './SafetyMessage';
+import { DocumentMessage } from './DocumentMessage';
 import { useDebriefReplies } from './useDebriefReplies';
 import { SaveToProfile } from './SaveToProfile';
 import { SAFETY_KINDS } from './safetyKinds';
@@ -82,6 +83,8 @@ export function MessageList({
   // Check-in quick replies: the engine answers; some options also act in the UI.
   const debriefReply = useDebriefReplies(chat, conversation.id, onFocusComposer);
   const reply = (messageId: string, optionId: string) => {
+    const offer = messages.find((x) => x.id === messageId);
+    if (offer?.kind === 'documentOffer') return chat.documentOfferReply(messageId, optionId, offer.meta?.documentId);
     // F09c: debrief replies, and the "Log my visit" offer from any chat.
     if (conversation.scriptId === DEBRIEF_SCRIPT_ID || optionId.startsWith('offer')) return debriefReply(messageId, optionId);
     chat.checkInReply(messageId, optionId);
@@ -97,8 +100,11 @@ export function MessageList({
     const turnStart = m.role === 'deborah' && messages[i - 1]?.role !== 'deborah';
     const isLatestDeborah = i === lastDeborahIndex;
     const placeholder = m.meta?.status === 'placeholder';
-    const showSuggestions = isLatestDeborah && !busy && (status === 'ready' || status === 'answered') && (m.suggestions?.length ?? 0) > 0;
+    // F11: Deborah's reply to a shared document offers its own questions even in an empty chat.
+    const docReply = m.role === 'deborah' && Boolean(m.meta?.documentId) && m.kind === 'text';
+    const showSuggestions = isLatestDeborah && !busy && (status === 'ready' || status === 'answered' || docReply) && (m.suggestions?.length ?? 0) > 0;
 
+    if (m.role === 'user' && m.meta?.documentId) return <DocumentMessage key={m.id} documentId={m.meta.documentId} />;
     if (m.role === 'user') return <MessageBubble key={m.id} role="user" text={m.text} />;
 
     if (SAFETY_KINDS.has(m.kind)) {
@@ -249,7 +255,7 @@ export function MessageList({
         {quick && quickActive && (
           <QuickReplies
             options={quick.options}
-            label={m.kind === 'labRequest' ? 'Lab results' : conversation.scriptId === DEBRIEF_SCRIPT_ID ? 'Your visit' : 'How did it go?'}
+            label={m.kind === 'labRequest' ? 'Lab results' : m.kind === 'documentOffer' ? 'Your document' : conversation.scriptId === DEBRIEF_SCRIPT_ID ? 'Your visit' : 'How did it go?'}
             primary={m.kind === 'labRequest' ? { label: 'Upload my labs', icon: 'upload', onPress: onUploadLabs } : undefined}
             onSelect={(id) => reply(m.id, id)}
           />

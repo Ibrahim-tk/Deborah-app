@@ -71,6 +71,11 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.8': { title: 'Log your visit', component: lazy(() => import('@mobile/screens/records/LogVisit')), presentation: 'sheet', detent: 'large', dismissible: false, figma: '', spec: 'docs/ux/F09c-log-visit.md#m-98--log-your-visit' },
 
 
+  // F11 Documents and reports — OPEN: planned = phases of docs/planning/documents-reports-plan-2026-10-19.md (not docs/11-build-plan.md).
+  'M-11.1': { title: 'Documents and reports', component: lazy(() => import('@mobile/screens/documents/Library')), presentation: 'push', tabBar: true, figma: '', spec: 'docs/ux/F11-documents.md#m-111--documents-and-reports' },
+  'M-11.2': { title: 'Document', component: lazy(() => import('@mobile/screens/documents/DocumentPreview')), presentation: 'push', figma: '', spec: 'docs/ux/F11-documents.md#m-112--document-preview' },
+  'M-11.3': { title: 'Upload a document', component: lazy(() => import('@mobile/screens/documents/UploadDocument')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'docs/ux/F11-documents.md#m-113--upload-a-document' },
+
   // F10 Account, privacy & data
   'M-10.1': { title: 'Settings', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },
   'M-10.2': { title: 'Privacy & data', component: lazy(() => import('@mobile/screens/account/PrivacyData')), presentation: 'push', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-102--privacy--data' },

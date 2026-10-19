@@ -11,8 +11,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Icon, OptionList, OptionRow, ProgressBar, ProgressStatus, Sheet } from '@mobile/ui';
 import { simBetween } from '@mobile/hooks/simTiming';
-import { useNav } from '@mobile/navigation';
-import { CameraView } from './parts/CameraView';
+import { CaptureCamera } from '@mobile/patterns/widgets';
+import { meta, useNav } from '@mobile/navigation';
 import styles from './AddLabs.module.css';
 
 type Source = 'photo' | 'pdf';
@@ -88,7 +88,9 @@ export default function AddLabs() {
       />
 
       {camera && (
-        <CameraView
+        <CaptureCamera
+          screenId="M-5.3"
+          screenTitle={meta('M-5.3')?.title ?? 'Add lab results'}
           onCancel={() => setCamera(false)}
           onLibrary={() => {
             setCamera(false);

@@ -1,5 +1,5 @@
 /** M-7.1 — first time: empty block, start the first consultation, popular starting points. */
-import { Button } from '@mobile/ui';
+import { Button, ListRow } from '@mobile/ui';
 import { ContentCard, EmptyState } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import { useForYou } from '@mobile/hooks/useForYou';
@@ -18,6 +18,10 @@ export function HubEmpty() {
         <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ focus: true })}>
           Start my first consultation
         </Button>
+      </div>
+      {/* F11: documents can be added before the first consultation. */}
+      <div className={styles.rowGroup}>
+        <ListRow title="Documents and reports" subtitle="Upload labs, imaging and prescriptions" onPress={() => push('M-11.1')} />
       </div>
       <section className={styles.section} aria-labelledby="hub-popular">
         <h2 id="hub-popular" className={styles.heading}>Popular starting points from Deborah</h2>

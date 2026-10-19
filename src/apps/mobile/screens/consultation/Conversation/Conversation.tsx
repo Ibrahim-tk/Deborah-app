@@ -25,6 +25,7 @@ import { SafetyBench } from './parts/SafetyBench';
 import { useAutoScroll } from './parts/useAutoScroll';
 import { thirdPerson } from './parts/thirdPerson';
 import { useReturnFlows } from './parts/useReturnFlows';
+import { useDocumentHandoff } from './parts/useDocumentHandoff';
 import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
 import styles from './Conversation.module.css';
@@ -60,6 +61,8 @@ export default function Conversation() {
 
   const messages = conversation?.messages ?? [];
   const isEmpty = messages.length === 0;
+  // F11: once Deborah has replied to a shared document, her questions replace the starter list.
+  const docReplied = messages.some((m) => m.role === 'deborah' && m.meta?.documentId);
   // Intake V2 stays out of the way: the empty chat is only the orb and one question. The in-chat
   // intake shows only when she already started it (resume); otherwise the profile fills from Home
   // (M-2.10) and from Deborah's questions at the point of need.
@@ -159,6 +162,7 @@ export default function Conversation() {
   );
 
   const { interceptFocus } = useReturnFlows({ startCheckIn: chat.startCheckIn, startDebrief: chat.startDebrief, send, status: conversation?.status, busy, atBottom: !showLatest });
+  useDocumentHandoff({ shareDocument: chat.shareDocument, offerDocument: chat.offerDocument, status: conversation?.status, busy });
 
   const onFocusChange = (f: boolean) => {
     if (f && interceptFocus()) return inputRef.current?.blur();
@@ -264,7 +268,7 @@ export default function Conversation() {
 
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
-        {(isEmpty || conversation?.status === 'empty') && !intakeMode && !profileOpening && !recording && (
+        {(isEmpty || conversation?.status === 'empty') && !docReplied && !intakeMode && !profileOpening && !recording && (
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
         )}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}

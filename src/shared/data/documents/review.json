@@ -1,0 +1,22 @@
+{
+  "status": "placeholder",
+  "offer": "You uploaded {title}. Want to talk it through?",
+  "offerOptions": [
+    { "id": "doc-discuss", "label": "Yes, let’s talk about it" },
+    { "id": "doc-later", "label": "Not now" }
+  ],
+  "later": "No problem. It’s in Documents and reports whenever you want to come back to it.",
+  "bubble": "Shared {title}",
+  "replies": {
+    "imaging": "Thanks for sharing your imaging report. I can help you understand the terms it uses and what questions to bring to your provider. What would you like to start with?",
+    "prescription": "Thanks for sharing this. I can explain what a medication is generally used for, but your prescriber is the right person for anything about dose, timing or stopping it.",
+    "visit-note": "Thanks for sharing your visit note. Would you like to go over what your provider said, or plan questions for next time?",
+    "other": "Thanks for sharing this document. Tell me what you’d like to know about it, and I’ll help where I can."
+  },
+  "suggestions": {
+    "imaging": ["What do these terms mean?", "What should I ask my provider?"],
+    "prescription": ["What is this medication usually for?", "What should I ask my prescriber?"],
+    "visit-note": ["Help me understand what my provider said", "Plan questions for my next visit"],
+    "other": ["Help me understand this document"]
+  }
+}

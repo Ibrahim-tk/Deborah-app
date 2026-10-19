@@ -2,7 +2,7 @@
 import { libraryItems, scriptTopics } from '../data';
 import { isMinor } from '../engine/profile';
 import type { LibraryItem } from '../types/content';
-import type { AppNotification, Booking, Conversation, LabReport, Message, Note, Plan90, Profile } from '../types/domain';
+import type { AppNotification, Booking, Conversation, HealthDocument, LabReport, Message, Note, Plan90, Profile } from '../types/domain';
 import { dayKey, daysBetween, nowFrom } from '../utils/dates';
 import type { AppState } from './types';
 
@@ -161,3 +161,21 @@ export const selectVisitToLog = (s: AppState, profileId = s.activeProfileId): st
     .filter((n) => n.kind === 'provider-brief' && n.brief?.appointmentDate && new Date(n.brief.appointmentDate).getTime() < now && !logged.has(n.id))
     .sort((a, b) => (b.brief!.appointmentDate! < a.brief!.appointmentDate! ? -1 : 1))[0]?.id;
 };
+
+/** F11 My Uploads: the profile's documents, newest upload first; deleted ones are hidden. */
+export const selectDocuments = (s: AppState, profileId = s.activeProfileId): HealthDocument[] =>
+  Object.values(s.documents.byId)
+    .filter((d) => d.profileId === profileId && !d.deletedAt)
+    .sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
+
+/** A live (not deleted) document, or undefined. */
+export const selectDocument = (s: AppState, id: string): HealthDocument | undefined => {
+  const d = s.documents.byId[id];
+  return d && !d.deletedAt ? d : undefined;
+};
+
+/** F11 Saved Reports: visit summaries (provider-brief) and saved guidance, newest first. */
+export const selectSavedReports = (s: AppState, profileId = s.activeProfileId): Note[] =>
+  Object.values(s.notes.byId)
+    .filter((n) => n.profileId === profileId && (n.kind === 'provider-brief' || n.kind === 'saved-answer'))
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));

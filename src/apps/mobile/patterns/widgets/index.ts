@@ -37,3 +37,4 @@ export * from './homeArtifacts';
 
 
 
+export * from './CaptureCamera';

@@ -1,0 +1,28 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-5); padding-bottom: var(--space-2); }
+.processing { display: grid; gap: var(--space-4); padding: var(--space-2) 0 var(--space-4); }
+.actions { display: grid; gap: var(--space-2); }
+.hiddenInput { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+.file { display: flex; align-items: center; gap: var(--space-2); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.fileName { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.fileSize { flex: none; color: var(--color-ink-secondary); }
+
+.hint { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.error { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-danger-ink); }
+.rejected { display: grid; justify-items: start; gap: var(--space-2); padding: var(--space-4); border-radius: var(--radius-lg); background: var(--surface-field-lilac); }
+.rejectedName { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); overflow-wrap: anywhere; }
+
+.field { display: grid; gap: var(--space-2); }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+.saved { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); overflow-wrap: anywhere; }
+.details { display: grid; gap: var(--space-3); }
+.sectionTitle { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.fields { display: grid; margin: 0; }
+.fieldRow { display: grid; gap: var(--space-1); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-hairline); }
+.fieldRow dt { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.fieldRow dd { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); overflow-wrap: anywhere; }
+.question { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+/* Focus target for step changes (announced by its label); the sheet itself shows where you are. */
+.step:focus { outline: none; }

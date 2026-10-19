@@ -5,7 +5,7 @@
 import { useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { scripts } from '@shared/data';
-import { selectActiveConversation, selectActiveProfile, selectFreeLeft, selectHistory, useAppStore } from '@shared/store';
+import { selectActiveConversation, selectActiveProfile, selectDocument, selectFreeLeft, selectHistory, useAppStore } from '@shared/store';
 import type { LabReport, VisitOutcome } from '@shared/types/domain';
 import type { UserInput } from '@shared/types/engine';
 import { runInput, stopPlan, useRunnerStore } from '@shared/bridge';
@@ -92,6 +92,25 @@ export function useConversation() {
     /** M-5.4 / M-9.5: share labs into chat. `direct` answers immediately (records Ask). */
     shareLabs: (report: LabReport, opts?: { direct?: boolean }) =>
       run({ kind: 'shareLabs', report, direct: opts?.direct }),
+    /** F11: attach a document from Documents and reports (lab results use their lab report). */
+    shareDocument: (documentId: string) => {
+      const s = useAppStore.getState();
+      const document = selectDocument(s, documentId);
+      if (!document) return Promise.resolve(false);
+      const report = document.labReportId ? s.labs.reportsById[document.labReportId] : undefined;
+      return run({ kind: 'shareDocument', document, report });
+    },
+    /** F11: Deborah offers an upload saved with "Not now" — once. */
+    offerDocument: (documentId: string) => {
+      const document = selectDocument(useAppStore.getState(), documentId);
+      return document ? run({ kind: 'offerDocument', document }) : Promise.resolve(false);
+    },
+    documentOfferReply: (messageId: string, optionId: string, documentId?: string) => {
+      const s = useAppStore.getState();
+      const document = documentId ? selectDocument(s, documentId) : undefined;
+      const report = document?.labReportId ? s.labs.reportsById[document.labReportId] : undefined;
+      return run({ kind: 'documentOfferReply', messageId, optionId, document, report });
+    },
     startNew: () => profile && useAppStore.getState().archiveActive(profile.id),
     /** "Continue that conversation": bring the most recent answered conversation back. */
     continueLast: () => {

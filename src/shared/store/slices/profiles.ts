@@ -77,6 +77,7 @@ export const profilesActions: StateCreator<AppState, [], [], Actions> = (set) =>
         conversations: { byId: without(s.conversations.byId, id), activeByProfile },
         labs: { reportsById: without(s.labs.reportsById, id) },
         notes: { byId: without(s.notes.byId, id) },
+        documents: { byId: without(s.documents.byId, id) },
         plan90,
         booking: { bookings: s.booking.bookings.filter((b) => b.profileId !== id) },
         notifications: {

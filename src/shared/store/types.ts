@@ -5,6 +5,7 @@ import type {
   Booking,
   ContentStatus,
   Conversation,
+  HealthDocument,
   ID,
   Intake,
   LabReport,
@@ -169,6 +170,19 @@ export interface NotesSlice {
   applyVisitUpdates: (profileId: ID, updates: { name: string; change: 'started' | 'stopped' }[]) => number;
 }
 
+/** F11 Documents and reports. Delete is soft (`deletedAt`); selectors hide deleted items. */
+export interface DocumentsSlice {
+  documents: {
+    byId: Record<ID, HealthDocument>;
+    /** Upload saved with "Not now": the next M-2.1 open offers it once (F11 Phase 4). */
+    pendingChatPromptId?: ID;
+  };
+  addDocument: (d: HealthDocument) => void;
+  updateDocument: (id: ID, patch: Partial<HealthDocument>) => void;
+  deleteDocument: (id: ID) => void;
+  setDocumentChatPrompt: (id: ID | undefined) => void;
+}
+
 export interface NotificationsSlice {
   notifications: {
     queue: AppNotification[];
@@ -236,6 +250,7 @@ export type AppState = SessionSlice &
   LabsSlice &
   Plan90Slice &
   NotesSlice &
+  DocumentsSlice &
   NotificationsSlice &
   BookingSlice &
   SettingsSlice &

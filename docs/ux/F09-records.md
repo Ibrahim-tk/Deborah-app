@@ -39,7 +39,7 @@ Read mode of the M-5.4 layout: metadata + values; overflow menu: Edit (→ M-5.4
 
 ## M-9.6 · PDF preview (NOT IN WIREFRAMES)
 
-**Presentation:** modal. When the conversation has enough detail for Miro Step 5 (or `briefNoteId` is passed), prints the structured **My Visit Notes** brief (same layout as M-9.7). Otherwise a shorter A4 page: logo, profile name, date, "Questions for your provider", "Tests worth discussing", summary of sections, closing line, disclaimer footer. Actions: **Share** (toast) · **Print** (`window.print()` of the preview only — optional) · Done.
+**Presentation:** modal. When the conversation has enough detail for Miro Step 5 (or `briefNoteId` is passed), prints the structured **My Visit Notes** brief (same layout as M-9.7). Otherwise a shorter A4 page: logo, profile name, date, "Questions for your provider", "Tests worth discussing", summary of sections, closing line, disclaimer footer. Actions: **Download PDF** (toast "PDF downloaded"; F11 Saved Reports) · **Share** (toast) · **Print** (`window.print()` of the preview only — optional) · Done.
 **Open:** Premium gating for PDF (brief lists it under Premium) — prototype allows for all and shows "Premium" as plain footnote text.
 
 ## M-9.7 · My Visit Notes (Miro Step 5)

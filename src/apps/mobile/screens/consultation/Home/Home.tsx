@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { selectVisitToLog, useAppStore } from '@shared/store';
+import { selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
 import { Aura, GradientShift, PurpleDockBloom, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
@@ -63,6 +63,7 @@ export default function Home() {
   };
   // Signed-in demo (seed R01): Ask Deborah plays the scripted returning consultation (M-2.12).
   const returningDemo = useAppStore((s) => s.scenario.id === 'R01');
+  const docCount = useAppStore((s) => selectDocuments(s).length);
   const chat = () => {
     closeSheet();
     if (returningDemo) push('M-2.12', { flow: 'returning' });
@@ -86,6 +87,7 @@ export default function Home() {
   const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
   const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
+  const documents = { meta: docCount === 0 ? 'Upload and keep' : `${docCount} saved`, onPress: go('M-11.1') };
   const intakeExtended = Boolean(
     profile?.intake.familyHistory || profile?.intake.lifestyleSleep || profile?.intake.otherMedical,
   );
@@ -154,6 +156,7 @@ export default function Home() {
             intakeCard={intakeCard}
             journey={d.planDay ? { day: d.planDay, today: d.nextHabit, focus: planFocus, onPress: journey } : undefined}
             reports={reports}
+            documents={documents}
             destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
@@ -170,6 +173,7 @@ export default function Home() {
             journeyFocus={planFocus}
             intakeCard={intakeCard}
             reports={reports}
+            documents={documents}
             destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}

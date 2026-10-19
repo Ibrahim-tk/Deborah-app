@@ -5,3 +5,5 @@ export { nowFrom, addDays, dayPart, formatShortDate, dayKey, daysBetween, format
 export type { Clock, DayPart } from './dates';
 export { interpolate } from './text';
 export { sleep } from './sleep';
+export { validateDocument, documentFormatOf, isFutureDocumentDate } from './validateDocument';
+export type { DocumentCheck, PickedFile } from './validateDocument';

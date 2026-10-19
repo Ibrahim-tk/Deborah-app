@@ -1,0 +1,486 @@
+{
+  "id": "S26b",
+  "now": "2026-10-23T12:00:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "health",
+    "stack": [
+      "M-7.2",
+      "M-11.1"
+    ]
+  },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 1,
+    "followUpSnoozeUntil": 4,
+    "profiles": {
+      "order": [
+        "p-self",
+        "p-daughter"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "intake": {
+            "ageBand": "46-50",
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "none"
+            ],
+            "cycle": "irregular",
+            "profileFor": "self",
+            "reproductive": "perimenopausal",
+            "allergies": [
+              "none"
+            ],
+            "country": "US",
+            "height": "165 cm",
+            "weight": "68 kg",
+            "mainConcern": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+            "genesisGold": "yes"
+          },
+          "createdAt": "2026-10-07T19:12:00-07:00",
+          "sexAtBirth": "female",
+          "health": {
+            "birthYear": {
+              "value": 1978,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "sexAtBirth": {
+              "value": "female",
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "genderIdentity": {
+              "value": "woman",
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "heightCm": {
+              "value": 165,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "weightKg": {
+              "value": 68,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "medications": {
+              "value": [
+                {
+                  "name": "Magnesium glycinate"
+                }
+              ],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "allergies": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "conditions": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            }
+          },
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-07T19:12:00-07:00",
+            "closedAt": "2026-10-07T19:12:00-07:00"
+          }
+        },
+        "p-daughter": {
+          "id": "p-daughter",
+          "name": "Sofia",
+          "relationship": "child",
+          "dob": "2011-04-14",
+          "sexAtBirth": "female",
+          "intake": {
+            "ageBand": "teen",
+            "conditions": [],
+            "medications": []
+          },
+          "createdAt": "2026-10-28T18:05:00-07:00",
+          "guardianConsentAt": "2026-10-28T18:05:00-07:00"
+        }
+      }
+    },
+    "accountId": "acct-s25c",
+    "accountEmail": "maria@example.com",
+    "healthConsentAt": "2026-10-07T19:12:00-07:00",
+    "notes": {
+      "byId": {
+        "n-brief-s25": {
+          "id": "n-brief-s25",
+          "profileId": "p-self",
+          "kind": "provider-brief",
+          "title": "For my provider",
+          "body": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+          "updatedAt": "2026-10-17T10:00:00-07:00",
+          "brief": {
+            "header": {
+              "name": "Maria",
+              "dob": "1978",
+              "whatThisIs": "Note for the provider — prepared with Deborah AI from our conversation"
+            },
+            "appointmentDate": "2026-10-22T09:30:00-07:00",
+            "chiefComplaint": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+            "clinicalContext": "Placeholder clinical context.",
+            "labs": [
+              {
+                "name": "FSH",
+                "tier": "primary",
+                "reason": "Placeholder reason."
+              }
+            ],
+            "questions": [
+              {
+                "text": "Could this be perimenopause?",
+                "why": "Placeholder."
+              }
+            ],
+            "medications": [
+              {
+                "name": "Magnesium glycinate",
+                "current": true
+              }
+            ],
+            "redFlagsSummary": "No red flags reported.",
+            "recommendation": "Placeholder recommendation.",
+            "disclaimer": [
+              "Placeholder disclaimer."
+            ],
+            "status": "placeholder"
+          }
+        },
+        "n-saved-s26": {
+          "id": "n-saved-s26",
+          "profileId": "p-self",
+          "kind": "saved-answer",
+          "title": "Saved guidance: night sweats",
+          "body": "Placeholder saved guidance from Deborah.",
+          "updatedAt": "2026-10-16T20:00:00-07:00"
+        }
+      }
+    },
+    "plan": "family",
+    "documents": {
+      "byId": {
+        "d-lab-1": {
+          "id": "d-lab-1",
+          "profileId": "p-self",
+          "type": "lab",
+          "format": "pdf",
+          "fileName": "Quest_results_Oct2026.pdf",
+          "sizeBytes": 412000,
+          "title": "Lab result · Oct 8, 2026",
+          "documentDate": "2026-10-08T09:00:00-07:00",
+          "uploadedAt": "2026-10-09T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Lab",
+                "value": "Sample Lab"
+              },
+              {
+                "label": "Tests",
+                "value": "TSH, Free T3, Estradiol"
+              },
+              {
+                "label": "Values",
+                "value": "TSH 3.8 mIU/L · Free T3 2.4 pg/mL · Estradiol 45 pg/mL"
+              },
+              {
+                "label": "Collected",
+                "value": "Date shown on the report"
+              }
+            ]
+          },
+          "description": "Thyroid and hormone panel from my annual physical.",
+          "labReportId": "lab-d-lab-1"
+        },
+        "d-img-1": {
+          "id": "d-img-1",
+          "profileId": "p-self",
+          "type": "imaging",
+          "format": "pdf",
+          "fileName": "Pelvic_ultrasound_report.pdf",
+          "sizeBytes": 1850000,
+          "title": "Imaging report · Oct 2, 2026",
+          "documentDate": "2026-10-02T09:00:00-07:00",
+          "uploadedAt": "2026-10-03T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Study",
+                "value": "Pelvic ultrasound"
+              },
+              {
+                "label": "Date",
+                "value": "Date shown on the report"
+              },
+              {
+                "label": "Summary",
+                "value": "Report text Deborah can read with you"
+              }
+            ]
+          },
+          "sharedWith": [
+            "Dr. Patel"
+          ]
+        },
+        "d-rx-1": {
+          "id": "d-rx-1",
+          "profileId": "p-self",
+          "type": "prescription",
+          "format": "jpg",
+          "fileName": "IMG_2041.jpg",
+          "sizeBytes": 2300000,
+          "title": "Prescription · Oct 15, 2026",
+          "documentDate": "2026-10-15T09:00:00-07:00",
+          "uploadedAt": "2026-10-16T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Medication",
+                "value": "Name shown on the prescription"
+              },
+              {
+                "label": "Prescriber",
+                "value": "Name shown on the prescription"
+              },
+              {
+                "label": "Date",
+                "value": "Date shown on the prescription"
+              }
+            ]
+          }
+        },
+        "d-note-1": {
+          "id": "d-note-1",
+          "profileId": "p-self",
+          "type": "visit-note",
+          "format": "txt",
+          "fileName": "visit-notes.txt",
+          "sizeBytes": 3200,
+          "title": "Visit note · Oct 20, 2026",
+          "documentDate": "2026-10-20T09:00:00-07:00",
+          "uploadedAt": "2026-10-21T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Provider",
+                "value": "Name shown on the note"
+              },
+              {
+                "label": "Visit date",
+                "value": "Date shown on the note"
+              },
+              {
+                "label": "Topics",
+                "value": "Main points from the visit"
+              }
+            ]
+          },
+          "description": "What I wrote down after my gynecology visit."
+        },
+        "d-old-1": {
+          "id": "d-old-1",
+          "profileId": "p-self",
+          "type": "other",
+          "format": "png",
+          "fileName": "insurance-card.png",
+          "sizeBytes": 640000,
+          "title": "Other · Oct 1, 2026",
+          "documentDate": "2026-10-01T09:00:00-07:00",
+          "uploadedAt": "2026-10-02T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Dates",
+                "value": "Dates found in the document"
+              }
+            ]
+          },
+          "deletedAt": "2026-10-21T08:00:00-07:00"
+        },
+        "d-child-1": {
+          "id": "d-child-1",
+          "profileId": "p-daughter",
+          "type": "lab",
+          "format": "pdf",
+          "fileName": "Pediatric_bloodwork.pdf",
+          "sizeBytes": 290000,
+          "title": "Lab result · Oct 12, 2026",
+          "documentDate": "2026-10-12T09:00:00-07:00",
+          "uploadedAt": "2026-10-13T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Lab",
+                "value": "Sample Lab"
+              },
+              {
+                "label": "Tests",
+                "value": "TSH, Free T3, Estradiol"
+              },
+              {
+                "label": "Values",
+                "value": "TSH 3.8 mIU/L · Free T3 2.4 pg/mL · Estradiol 45 pg/mL"
+              },
+              {
+                "label": "Collected",
+                "value": "Date shown on the report"
+              }
+            ]
+          },
+          "labReportId": "lab-d-child-1"
+        }
+      }
+    },
+    "labs": {
+      "reportsById": {
+        "lab-d-lab-1": {
+          "id": "lab-d-lab-1",
+          "profileId": "p-self",
+          "source": "pdf",
+          "labName": "Sample Lab",
+          "panelTitle": "Immunity and Inflammation",
+          "collectedAt": "2026-10-08T09:00:00-07:00",
+          "values": [
+            {
+              "id": "lab-d-lab-1-v0",
+              "marker": "Neutrophils",
+              "value": "4487.0",
+              "unit": "µL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v1",
+              "marker": "AST",
+              "value": "38.0",
+              "unit": "U/L",
+              "statusLabel": "Excellent",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-lab-1-v2",
+              "marker": "VDRL",
+              "value": "Non-Reactive",
+              "unit": "",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-lab-1-v3",
+              "marker": "TSH",
+              "value": "3.8",
+              "unit": "mIU/L",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v4",
+              "marker": "Free T3",
+              "value": "2.4",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v5",
+              "marker": "Estradiol",
+              "value": "45",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            }
+          ],
+          "confirmed": true
+        },
+        "lab-d-child-1": {
+          "id": "lab-d-child-1",
+          "profileId": "p-daughter",
+          "source": "pdf",
+          "labName": "Sample Lab",
+          "panelTitle": "Immunity and Inflammation",
+          "collectedAt": "2026-10-12T09:00:00-07:00",
+          "values": [
+            {
+              "id": "lab-d-child-1-v0",
+              "marker": "Neutrophils",
+              "value": "4487.0",
+              "unit": "µL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-child-1-v1",
+              "marker": "AST",
+              "value": "38.0",
+              "unit": "U/L",
+              "statusLabel": "Excellent",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-child-1-v2",
+              "marker": "VDRL",
+              "value": "Non-Reactive",
+              "unit": "",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-child-1-v3",
+              "marker": "TSH",
+              "value": "3.8",
+              "unit": "mIU/L",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-child-1-v4",
+              "marker": "Free T3",
+              "value": "2.4",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-child-1-v5",
+              "marker": "Estradiol",
+              "value": "45",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            }
+          ],
+          "confirmed": true
+        }
+      }
+    }
+  }
+}

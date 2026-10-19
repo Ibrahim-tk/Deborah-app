@@ -13,3 +13,6 @@ export * from './HabitRow';
 // F09 — Records
 export * from './ConsultationRow';
 export * from './NoteRow';
+// F11 — Documents and reports
+export * from './DocumentRow';
+export * from './ReportRow';

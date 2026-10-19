@@ -26,6 +26,8 @@ export interface StateReturningProps {
   journey?: { day: number; today?: string; focus?: string; onPress: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
+  /** F11 Documents and reports (M-11.1). */
+  documents?: { meta: string; onPress: () => void };
   destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
@@ -41,6 +43,7 @@ export function StateReturning(p: StateReturningProps) {
       onPress: p.reports.onPress,
     });
   }
+  if (p.documents) care.push({ key: 'documents', label: 'Documents', meta: p.documents.meta, onPress: p.documents.onPress });
 
   const heroTitle =
     p.summary?.replace(/^[·\s]+/, '').trim()

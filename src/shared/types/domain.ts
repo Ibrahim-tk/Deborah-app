@@ -162,6 +162,8 @@ export type MessageKind =
   | 'checkIn'
   | 'labRequest'
   | 'followUpPrompt'
+  /** F11: Deborah offers an upload saved with "Not now" (once). */
+  | 'documentOffer'
   /** Review and Confirm (meeting 2026-10-12 · B): facts noted in this conversation, saved only on Confirm. */
   | 'reviewFacts';
 
@@ -256,6 +258,8 @@ export interface MessageMeta {
   /** Demo toast already shown for care-team notify (emergency / crisis). */
   teamNotified?: boolean;
   status?: ContentStatus;
+  /** F11: the document a user bubble shares or a documentOffer is about. */
+  documentId?: ID;
 }
 
 export interface Message {
@@ -496,6 +500,40 @@ export interface Note {
   brief?: VisitBriefContent;
   /** Set when kind === 'after-visit' and logged through F09c. */
   visit?: VisitOutcome;
+}
+
+/** F11 Documents and reports (docs/ux/F11-documents.md). */
+export type DocumentType = 'lab' | 'imaging' | 'prescription' | 'visit-note' | 'other';
+export type DocumentFormat = 'pdf' | 'jpg' | 'png' | 'txt';
+
+/** Simulated "System reads key details" output — never read from the file. */
+export interface DocumentExtraction {
+  fields: { label: string; value: string }[];
+  status: ContentStatus;
+}
+
+export interface HealthDocument {
+  id: ID;
+  profileId: ID;
+  type: DocumentType;
+  format: DocumentFormat;
+  fileName: string;
+  sizeBytes: number;
+  /** Defaults to "{Type label} · {date}". */
+  title: string;
+  description?: string;
+  /** User-entered date on the document (not in the future). */
+  documentDate?: ISODate;
+  /** Stamped automatically at upload. */
+  uploadedAt: ISODate;
+  source: 'camera' | 'file' | 'seed';
+  extraction?: DocumentExtraction;
+  /** Set when type === 'lab' and the M-5.4 confirm path created a report. */
+  labReportId?: ID;
+  /** Display only (delete alert line). */
+  sharedWith?: string[];
+  /** OPEN: soft delete ("we may need it again", Miro). Hidden everywhere once set. */
+  deletedAt?: ISODate;
 }
 
 export interface Booking {
