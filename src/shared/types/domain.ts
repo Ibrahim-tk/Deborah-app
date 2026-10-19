@@ -271,6 +271,8 @@ export interface Message {
   suggestions?: string[];
   /** Option rows under a Deborah message (check-in Yes / Partly / Not yet, lab request). */
   quickReplies?: QuickReplies;
+  /** F09c debrief summary card: one line per filled bucket. */
+  visitSummary?: { label: string; text: string }[];
   meta?: MessageMeta;
 }
 
@@ -289,7 +291,9 @@ export type ConversationStatus =
   | 'error'
   | 'safety'
   /** F05 check-in conversation opened from a follow-up notification. */
-  | 'checkin';
+  | 'checkin'
+  /** F09c visit debrief: Deborah helps log what happened at a provider visit. */
+  | 'debrief';
 
 export interface Conversation {
   id: ID;
@@ -322,6 +326,10 @@ export interface Conversation {
   profileOnly?: boolean;
   /** Check-in progress (docs/ux/F05-followup-labs.md › M-2.1 state · Check-in). */
   checkInStage?: CheckInStage;
+  /** Visit debrief progress (docs/ux/F09c-log-visit.md › M-2.1 state · Visit debrief). */
+  debrief?: DebriefState;
+  /** F09c Step 3: "Discuss this with Deborah" — the consultation that follows carries the logged visit. */
+  afterVisit?: { noteId?: ID; memory: string; summary: string };
   /** Core experience (DN-07 · DN-08): symptom group and journey this consultation was planned for. */
   symptomGroup?: SymptomGroupId;
   journey?: JourneyId;
@@ -345,6 +353,21 @@ export interface Conversation {
   guidanceGivenAt?: ISODate;
   /** Same-topic lab reassess: next answer replaces guidance without counting another free consult. */
   labRefresh?: boolean;
+}
+
+export type DebriefStage = 'opening' | 'listening' | 'probe' | 'summary' | 'saved';
+
+export interface DebriefState {
+  stage: DebriefStage;
+  outcome: VisitOutcome;
+  /** Extraction confidence per field path (`provider.specialty`…); < 0.7 shows "Check this". */
+  confidence: Record<string, number>;
+  /** Probes already asked or skipped (max 3). */
+  asked: VisitProbeId[];
+  /** The probe whose answer the composer is waiting for. */
+  awaiting?: VisitProbeId;
+  /** Saved note, once saved. */
+  noteId?: ID;
 }
 
 export type CheckInStage = 'opening' | 'awaitingDetail' | 'labs' | 'done';
@@ -440,6 +463,26 @@ export interface VisitBriefContent {
   status: ContentStatus;
 }
 
+/** F09c · Miro Step 6: what happened at a provider visit (M-9.8). */
+export type VisitSpecialty = 'primary-care' | 'gynecology' | 'endocrinology' | 'cardiology' | 'functional' | 'other';
+export type VisitTestStatus = 'ordered' | 'done' | 'results';
+export type VisitMedChange = 'started' | 'stopped' | 'dose' | 'continue';
+export type VisitProbeId = 'specialty' | 'said' | 'tests' | 'meds';
+
+export interface VisitOutcome {
+  visitDate: ISODate;
+  /** Linked Step 5 provider-brief note. */
+  briefNoteId?: ID;
+  reason?: string;
+  provider: { specialty?: VisitSpecialty; specialtyOther?: string; name?: string; practice?: string; followUp?: string };
+  takeaway: { said?: string; understanding?: string; unanswered?: string };
+  tests: { name: string; status: VisitTestStatus }[];
+  medChanges: { name: string; change: VisitMedChange; note?: string }[];
+  nextSteps: { text: string; book?: boolean }[];
+  ownNotes?: string;
+  status: ContentStatus;
+}
+
 export interface Note {
   id: ID;
   profileId: ID;
@@ -451,6 +494,8 @@ export interface Note {
   conversationId?: ID;
   /** Set when kind === 'provider-brief'. */
   brief?: VisitBriefContent;
+  /** Set when kind === 'after-visit' and logged through F09c. */
+  visit?: VisitOutcome;
 }
 
 export interface Booking {

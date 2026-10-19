@@ -1,5 +1,5 @@
 /** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
-import { consentDoc, findProduct, productList, scripts } from '@shared/data';
+import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList, scripts } from '@shared/data';
 import { ANSWER_REQUEST_LABEL, isMinor } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
@@ -23,10 +23,12 @@ import {
   ReviewFactsCard,
   SuggestedQuestions,
   ThinkingIndicator,
+  VisitSummaryCard,
 } from '@mobile/patterns/chat';
 import type { useConversation } from '@mobile/hooks/useConversation';
 import type { useMessageActions } from './useMessageActions';
 import { SafetyMessage } from './SafetyMessage';
+import { useDebriefReplies } from './useDebriefReplies';
 import { SaveToProfile } from './SaveToProfile';
 import { SAFETY_KINDS } from './safetyKinds';
 import styles from '../Conversation.module.css';
@@ -78,7 +80,10 @@ export function MessageList({
   const profileName = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
 
   // Check-in quick replies: the engine answers; some options also act in the UI.
+  const debriefReply = useDebriefReplies(chat, conversation.id, onFocusComposer);
   const reply = (messageId: string, optionId: string) => {
+    // F09c: debrief replies, and the "Log my visit" offer from any chat.
+    if (conversation.scriptId === DEBRIEF_SCRIPT_ID || optionId.startsWith('offer')) return debriefReply(messageId, optionId);
     chat.checkInReply(messageId, optionId);
     if (optionId === 'restartPlan') onRestartPlan();
     if (optionId === 'talk') onFocusComposer();
@@ -240,10 +245,11 @@ export function MessageList({
             onAnswerSurface={onIntakeAnswerSurface}
           />
         )}
+        {m.visitSummary && !m.meta?.streaming && <VisitSummaryCard lines={m.visitSummary} />}
         {quick && quickActive && (
           <QuickReplies
             options={quick.options}
-            label={m.kind === 'labRequest' ? 'Lab results' : 'How did it go?'}
+            label={m.kind === 'labRequest' ? 'Lab results' : conversation.scriptId === DEBRIEF_SCRIPT_ID ? 'Your visit' : 'How did it go?'}
             primary={m.kind === 'labRequest' ? { label: 'Upload my labs', icon: 'upload', onPress: onUploadLabs } : undefined}
             onSelect={(id) => reply(m.id, id)}
           />

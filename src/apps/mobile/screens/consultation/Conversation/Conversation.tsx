@@ -158,7 +158,7 @@ export default function Conversation() {
     [chatSend, toBottom, aboutStep, intakeMode, intake, quiz, quizFreeText, chat, askConsent],
   );
 
-  const { interceptFocus } = useReturnFlows({ startCheckIn: chat.startCheckIn, send, status: conversation?.status, busy, atBottom: !showLatest });
+  const { interceptFocus } = useReturnFlows({ startCheckIn: chat.startCheckIn, startDebrief: chat.startDebrief, send, status: conversation?.status, busy, atBottom: !showLatest });
 
   const onFocusChange = (f: boolean) => {
     if (f && interceptFocus()) return inputRef.current?.blur();

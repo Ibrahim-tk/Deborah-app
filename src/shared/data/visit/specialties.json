@@ -1,0 +1,12 @@
+{
+  "// OPEN": "Specialty list needs Deborah's sign-off (docs/ux/F09c-log-visit.md › Open questions 1).",
+  "options": [
+    { "id": "primary-care", "label": "Primary care", "short": "primary care", "keywords": ["primary care", "pcp", "family doctor", "gp", "general practitioner", "internist", "my doctor"] },
+    { "id": "gynecology", "label": "Gynecology", "short": "gynecology", "keywords": ["gyn", "gynecologist", "gynaecologist", "ob-gyn", "obgyn", "ob/gyn"] },
+    { "id": "endocrinology", "label": "Endocrinology", "short": "endocrinology", "keywords": ["endocrinologist", "endo", "thyroid doctor"] },
+    { "id": "cardiology", "label": "Cardiology", "short": "cardiology", "keywords": ["cardiologist", "heart doctor"] },
+    { "id": "functional", "label": "Functional / integrative", "short": "functional medicine", "keywords": ["functional", "integrative", "naturopath"] },
+    { "id": "other", "label": "Other", "short": "provider", "keywords": [] }
+  ],
+  "status": "placeholder"
+}

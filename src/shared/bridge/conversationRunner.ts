@@ -4,7 +4,7 @@
  * navigates away; Stop cancels the remaining steps.
  */
 import { create } from 'zustand';
-import { chunkText, forFamilyMember, streamInto } from '../engine';
+import { chunkText, forFamilyMember, streamInto, visitProfileUpdates } from '../engine';
 import { SELF_PROFILE_ID, useAppStore } from '../store';
 import type { EnginePlan, Step, StoreAction } from '../types/engine';
 import { sleep } from '../utils';
@@ -68,6 +68,15 @@ function applyAction(action: StoreAction, cid: string): string {
     case 'acceptHealthConsent':
       s.acceptHealthConsent();
       break;
+    case 'saveDebriefOutcome': {
+      const c = s.conversations.byId[action.conversationId];
+      if (!c?.debrief) break;
+      const noteId = s.saveVisitOutcome(c.profileId, c.debrief.outcome, c.debrief.noteId);
+      const profile = s.profiles.byId[c.profileId];
+      if (profile) s.applyVisitUpdates(c.profileId, visitProfileUpdates(c.debrief.outcome, profile));
+      s.setConversation(c.id, { debrief: { ...c.debrief, stage: 'saved', noteId, awaiting: undefined } });
+      break;
+    }
     case 'proposeFacts':
       s.proposeFacts(action.conversationId, action.facts);
       break;

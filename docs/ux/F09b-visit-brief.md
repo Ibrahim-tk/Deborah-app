@@ -3,7 +3,7 @@
 **Goal:** After Discuss with provider (or an urgent provider-directed answer), assemble a structured note the client can review, save, and print for their clinician.
 **Engine:** `assembleVisitBrief` / `hasEnoughDetailForVisitBrief` in `src/shared/engine/visitBrief.ts`  
 **UI:** M-9.7 · related PDF via M-9.6  
-**Related:** [F09-records.md](F09-records.md) · [F02e-guidance.md](F02e-guidance.md)
+**Related:** [F09-records.md](F09-records.md) · [F02e-guidance.md](F02e-guidance.md) · next: [F09c-log-visit.md](F09c-log-visit.md) (Miro Step 6, after the visit)
 
 ## Entry
 
@@ -42,7 +42,7 @@ From Step 4 What’s next **Discuss with provider**, AnswerActions **Visit Notes
 
 | Path | Behaviour |
 |---|---|
-| **Yes** | Capture date (scheduling only, not printed) · check-in notification for the **day after** |
+| **Yes** | Capture date (scheduling only, not printed) · notification for the **day after** opens the visit debrief for this brief (`visit:<briefNoteId>`, [F09c](F09c-log-visit.md)); Home also shows “How did your visit go?” once the date has passed |
 | **No** | “Take the notes to the appointment” · follow-up notification in **7 days** regardless |
 
 ## Persistence

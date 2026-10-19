@@ -6,7 +6,7 @@ import { useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { scripts } from '@shared/data';
 import { selectActiveConversation, selectActiveProfile, selectFreeLeft, selectHistory, useAppStore } from '@shared/store';
-import type { LabReport } from '@shared/types/domain';
+import type { LabReport, VisitOutcome } from '@shared/types/domain';
 import type { UserInput } from '@shared/types/engine';
 import { runInput, stopPlan, useRunnerStore } from '@shared/bridge';
 import { useDevice } from '@shell/device';
@@ -82,6 +82,13 @@ export function useConversation() {
     /** Home "Complete your profile": the first onboarding question, no user message first. */
     startProfile: () => run({ kind: 'startProfile' }),
     checkInReply: (messageId: string, optionId: string) => run({ kind: 'checkInReply', messageId, optionId }),
+    /** F09c: open the visit debrief; `briefNoteId` links a Step 5 provider-brief. */
+    startDebrief: (briefNoteId?: string) => {
+      const brief = briefNoteId ? useAppStore.getState().notes.byId[briefNoteId] : undefined;
+      return run({ kind: 'startDebrief', brief });
+    },
+    debriefReply: (messageId: string, optionId: string) => run({ kind: 'debriefReply', messageId, optionId }),
+    debriefSaved: (noteId: string, outcome: VisitOutcome, applied?: number) => run({ kind: 'debriefSaved', noteId, outcome, applied }),
     /** M-5.4 / M-9.5: share labs into chat. `direct` answers immediately (records Ask). */
     shareLabs: (report: LabReport, opts?: { direct?: boolean }) =>
       run({ kind: 'shareLabs', report, direct: opts?.direct }),

@@ -1,0 +1,114 @@
+{
+  "id": "S25b",
+  "now": "2026-10-23T12:00:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "ask",
+    "stack": [
+      "M-2.0",
+      "M-2.1"
+    ],
+    "params": {
+      "M-2.1": {
+        "mode": "debrief"
+      }
+    }
+  },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 1,
+    "followUpSnoozeUntil": 4,
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "intake": {
+            "ageBand": "46-50",
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "none"
+            ],
+            "cycle": "irregular",
+            "profileFor": "self",
+            "reproductive": "perimenopausal",
+            "allergies": [
+              "none"
+            ],
+            "country": "US",
+            "height": "165 cm",
+            "weight": "68 kg",
+            "mainConcern": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+            "genesisGold": "yes"
+          },
+          "createdAt": "2026-10-07T19:12:00-07:00",
+          "sexAtBirth": "female",
+          "health": {
+            "birthYear": {
+              "value": 1978,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "sexAtBirth": {
+              "value": "female",
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "genderIdentity": {
+              "value": "woman",
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "heightCm": {
+              "value": 165,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "weightKg": {
+              "value": 68,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "medications": {
+              "value": [
+                {
+                  "name": "Magnesium glycinate"
+                }
+              ],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "allergies": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "conditions": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            }
+          },
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-07T19:12:00-07:00",
+            "closedAt": "2026-10-07T19:12:00-07:00"
+          }
+        }
+      }
+    },
+    "accountId": "acct-s25b",
+    "accountEmail": "maria@example.com",
+    "healthConsentAt": "2026-10-07T19:12:00-07:00"
+  }
+}

@@ -1,6 +1,7 @@
 /**
  * F04 / F05 behaviour hosted by M-2.1:
  * - `mode: 'checkin'` (deep link followup:<profileId>) starts the check-in once, then is consumed;
+ * - `mode: 'debrief'` (+ `briefNoteId`) starts the F09c visit debrief once, then is consumed;
  * - a message held by the free-limit gate is sent after M-4.5 "Continue my conversation";
  * - after the 3rd free answer, M-4.1 shows when the user next acts (focuses the composer) or after
  *   4 s idle at the bottom of the answer — never mid-answer or mid-intake.
@@ -14,6 +15,7 @@ const IDLE_MS = 4000;
 
 export interface ReturnFlowsOptions {
   startCheckIn: () => void;
+  startDebrief: (briefNoteId?: string) => void;
   /** The screen's send (clears the composer, keeps text if gated). */
   send: (text: string, scriptId?: string) => void;
   status: ConversationStatus | undefined;
@@ -21,17 +23,19 @@ export interface ReturnFlowsOptions {
   atBottom: boolean;
 }
 
-export function useReturnFlows({ startCheckIn, send, status, busy, atBottom }: ReturnFlowsOptions) {
+export function useReturnFlows({ startCheckIn, startDebrief, send, status, busy, atBottom }: ReturnFlowsOptions) {
   const { route } = useRoute();
   const { open } = useNav();
   const setRouteParams = useNavStore((s) => s.setRouteParams);
   const mode = route.params?.mode;
 
   useEffect(() => {
-    if (mode !== 'checkin') return;
-    setRouteParams(route.key, { ...route.params, mode: undefined });
-    startCheckIn();
-  }, [mode, route, setRouteParams, startCheckIn]);
+    if (mode !== 'checkin' && mode !== 'debrief') return;
+    const briefNoteId = route.params?.briefNoteId as string | undefined;
+    setRouteParams(route.key, { ...route.params, mode: undefined, briefNoteId: undefined });
+    if (mode === 'checkin') startCheckIn();
+    else startDebrief(briefNoteId);
+  }, [mode, route, setRouteParams, startCheckIn, startDebrief]);
 
   const held = useAppStore((s) => s.heldMessage);
   useEffect(() => {

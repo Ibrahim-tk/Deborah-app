@@ -245,7 +245,7 @@ export function answerSteps(
     // A retry resumes the answer without repeating the lead line.
     ...(opts.retry
       ? []
-      : deborahText(ctx, provider ? providerReviewCopy.lead : refresh ? 'I’ve updated this with your labs.' : persona.voice.answerLead)),
+      : deborahText(ctx, provider ? providerReviewCopy.lead : refresh ? 'I’ve updated this with your labs.' : afterVisitLead(conv) + persona.voice.answerLead)),
     { type: 'thinking', on: true, label: reviewing },
     { type: 'delay', ms: between(600, 800) },
     { type: 'thinking', on: true, label: handbook },
@@ -347,3 +347,6 @@ export function answerSteps(
   }
   return steps;
 }
+
+/** F09c Step 3: the answer after "Discuss this with Deborah" opens by recalling the visit she logged. */
+const afterVisitLead = (conv: Conversation) => (conv.afterVisit ? `${conv.afterVisit.memory} ` : '');

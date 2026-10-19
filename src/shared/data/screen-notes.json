@@ -174,6 +174,11 @@
     "flow": "F09b Visit brief (Miro Step 5)",
     "note": "A structured note for Maria’s provider: chief complaint she can edit, clinical context, tests, questions, meds, red flags and disclaimer. She can save a copy to Visit Notes or download a PDF, then set a day-after or 7-day check-in depending on whether she has an appointment date."
   },
+  "M-9.8": {
+    "title": "Log your visit",
+    "flow": "F09c Log your visit (Miro Step 6)",
+    "note": "What happened at Maria’s provider visit: date, kind of provider, what they said, tests and their status, medication changes, next steps and her own notes. Usually filled from her chat with Deborah, editable here. Ticked medication changes update her health profile only when she saves."
+  },
   "M-10.1": {
     "title": "Account",
     "flow": "F10 Account, privacy & data",

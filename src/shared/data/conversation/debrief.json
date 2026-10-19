@@ -1,0 +1,96 @@
+{
+  "opening": "Welcome back, {name}. How did your visit go?",
+  "openingWithSpecialty": "Welcome back, {name}. How did your {specialty} visit go?",
+  "openingPrompt": "Tell me in your own words — who you saw, what they said, and anything they ordered or changed.",
+  "openingOptions": [
+    {
+      "id": "tell",
+      "label": "Tell Deborah"
+    },
+    {
+      "id": "manual",
+      "label": "Fill it in myself"
+    },
+    {
+      "id": "notNow",
+      "label": "Not now"
+    }
+  ],
+  "thinking": "Reading your notes",
+  "probes": {
+    "specialty": "What kind of provider did you see?",
+    "said": "What did they tell you — in your words is perfect.",
+    "tests": "Did they order any tests?",
+    "meds": "Did anything change with your medications or supplements?"
+  },
+  "testsOptions": [
+    {
+      "id": "testsYes",
+      "label": "Yes, some tests"
+    },
+    {
+      "id": "testsNo",
+      "label": "No tests"
+    }
+  ],
+  "medsOptions": [
+    {
+      "id": "medsYes",
+      "label": "Yes, something changed"
+    },
+    {
+      "id": "medsNo",
+      "label": "No changes"
+    }
+  ],
+  "skip": {
+    "id": "skip",
+    "label": "Skip"
+  },
+  "summaryTitle": "Here’s what I noted from your visit",
+  "summaryOptions": [
+    {
+      "id": "review",
+      "label": "Review and save"
+    },
+    {
+      "id": "save",
+      "label": "Looks right, save"
+    }
+  ],
+  "saved": "Saved to My Visit Notes.",
+  "savedWithFacts": "Saved to My Visit Notes, and your health profile has {count} {changes}.",
+  "discuss": "Would you like to talk this through with me?",
+  "discussOptions": [
+    {
+      "id": "discussYes",
+      "label": "Yes, let’s talk"
+    },
+    {
+      "id": "discussNo",
+      "label": "Not now"
+    }
+  ],
+  "consultMemory": "After your {specialty} visit on {date}, you noted: {said}",
+  "reflectSaid": "You noted your provider said: {said}",
+  "listening": "I’m listening — take your time.",
+  "notNow": "Of course. You can log your visit any time from My Visit Notes.",
+  "whichTests": "Which tests did they order?",
+  "whichMeds": "What changed? For example, something started, stopped or a new dose.",
+  "discussYes": "{memory} What would you like to talk through?",
+  "discussNo": "Sounds good. It’s saved in My Visit Notes whenever you need it.",
+  "offer": "It sounds like you’ve just seen a provider. Would you like to log how it went? I’ll keep it in My Visit Notes.",
+  "offerOptions": [
+    {
+      "id": "offerLog",
+      "label": "Log my visit"
+    },
+    {
+      "id": "offerNo",
+      "label": "Not now"
+    }
+  ],
+  "offerNo": "Of course. Tell me what’s on your mind.",
+  "offerAck": "Thank you — I’ve noted that.",
+  "status": "placeholder"
+}

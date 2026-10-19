@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { useAppStore } from '@shared/store';
+import { selectVisitToLog, useAppStore } from '@shared/store';
 import { Aura, GradientShift, PurpleDockBloom, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
@@ -95,6 +95,7 @@ export default function Home() {
     onAction: () => (d.intakeDone ? completeIntake() : openAsk({ startIntake: true })),
   };
   const planFocus = useAppStore((s) => s.plan90[s.activeProfileId]?.goal);
+  const visitToLog = useAppStore((s) => selectVisitToLog(s));
   const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
     { title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', onPress: go('M-7.2') },
     { title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
@@ -103,12 +104,16 @@ export default function Home() {
 
   // Next steps fill the profile over time, one tap each (State 2).
   const steps: NextStep[] = [];
+  // F09c: right after an appointment set in Step 5, logging it comes first.
+  if (visitToLog) steps.push({ key: 'visit', icon: 'calendar', title: 'How did your visit go?', sub: 'Tell Deborah what your provider said', onPress: () => openAsk({ mode: 'debrief', briefNoteId: visitToLog }) });
   if (d.checkInDue) steps.push({ key: 'checkin', icon: 'bell', title: 'Check in with Deborah', sub: 'Tell her how things are going', onPress: () => openAsk({ mode: 'checkin' }) });
   if (FLAGS.intakeV2 && !d.profile?.health?.medications) steps.push({ key: 'meds', icon: 'medicine', title: 'Add your current medications', sub: 'So Deborah can check interactions', onPress: openProfile });
   if (d.reports.length === 0) steps.push({ key: 'labs', icon: 'file', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => open('M-5.3') });
   if (FLAGS.intakeV2 && d.intakeDone) {
     for (const x of d.deferred) steps.push({ key: x.key, icon: 'note', title: `Add ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, sub: 'Helps Deborah tailor her guidance', onPress: () => presentSheet('M-2.11', { topic: x.key }) });
   }
+  // F09c: log a provider visit any time.
+  if (!visitToLog) steps.push({ key: 'logVisit', icon: 'note', title: 'Log a provider visit', sub: 'Keep what they said in My Visit Notes', onPress: () => openAsk({ mode: 'debrief' }) });
   for (const q of d.steps) steps.push({ key: `q:${q}`, icon: 'chat', title: q, sub: 'Ask Deborah', onPress: () => openAsk({ prefill: q }) });
 
   return (

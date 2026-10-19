@@ -23,6 +23,8 @@ import {
 import { isGated } from './counting';
 import { checkInDetailSteps, checkInReplySteps, isAwaitingCheckInDetail, startCheckInSteps } from './checkin';
 import { shareLabsSteps } from './labs';
+import { debriefReplySteps, debriefSavedSteps, debriefTextSteps, isVisitReport, visitOfferSteps } from './debrief';
+import { startDebriefSteps } from './visitOutcome';
 import { answerPatch, CONSENT_ID, optionLabels, planConsultation, question } from './intake';
 import { inferFromMessage } from './extract';
 import { ANSWER_REQUEST_LABEL, answerSteps, deborahText, nextIntakeOrReady, pause, redFlagSteps, scriptOf, userBubble } from './plans';
@@ -57,6 +59,24 @@ export {
   VISIT_BRIEF_DISCLAIMER,
   VISIT_BRIEF_WHAT_THIS_IS,
 } from './visitBrief';
+export {
+  debriefToConsultSeed,
+  emptyVisitOutcome,
+  extractVisitOutcome,
+  hasEnoughVisitContext,
+  isDebrief,
+  isVisitOutcomeEmpty,
+  MAX_VISIT_PROBES,
+  nextVisitProbe,
+  specialtyLabel,
+  startDebriefSteps,
+  VISIT_CHECK_THIS,
+  visitProfileUpdates,
+  type VisitProfileUpdate,
+  visitOutcomeToText,
+  visitSummaryLines,
+  type VisitConfidence,
+} from './visitOutcome';
 
 export function createConversationEngine() {
   return { handleUserInput };
@@ -81,6 +101,12 @@ function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
       return startProfileSteps(ctx);
     case 'checkInReply':
       return checkInReplySteps(ctx, input.messageId, input.optionId);
+    case 'startDebrief':
+      return startDebriefSteps(ctx, input.brief);
+    case 'debriefReply':
+      return debriefReplySteps(ctx, input.messageId, input.optionId);
+    case 'debriefSaved':
+      return debriefSavedSteps(ctx, input.noteId, input.outcome, input.applied);
     case 'shareLabs':
       return shareLabsSteps(ctx, input.report, input.direct);
     case 'finishReview':
@@ -105,7 +131,14 @@ function handleText(ctx: EngineContext, text: string, suggestionScript?: string)
   }
   if (conv.gentleNext) return [userBubble(ctx, text), ...pause('Reading your message', 600, 900), ...gentleReplySteps(ctx)];
 
-  const plan = isAwaitingCheckInDetail(conv) ? checkInDetailSteps(ctx, text) : normalText(ctx, text, suggestionScript);
+  // F09c: a debrief is never gated or counted; safety above still applies.
+  // F09c chat intent: "I just saw my doctor" offers to log the visit (never mid-intake or mid-answer).
+  const offerVisit = (conv.status === 'empty' || conv.status === 'answered' || conv.status === 'checkin') && isVisitReport(text);
+  const plan =
+    offerVisit ? visitOfferSteps(ctx, text)
+    : conv.status === 'debrief' ? debriefTextSteps(ctx, text)
+    : isAwaitingCheckInDetail(conv) ? checkInDetailSteps(ctx, text)
+    : normalText(ctx, text, suggestionScript);
   if (plan[0]?.type === 'gate') {
     // Additive safety is never gated: show the card(s), then the free-limit sheet.
     // Without any, nothing is appended and the text stays in the composer.

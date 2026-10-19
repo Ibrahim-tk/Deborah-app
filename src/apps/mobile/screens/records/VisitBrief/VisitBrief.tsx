@@ -132,12 +132,14 @@ export default function VisitBrief() {
 
   const scheduleDayAfter = (appointmentIso: string) => {
     const s = useAppStore.getState();
-    s.updateNote(persist(), { brief: { ...brief, appointmentDate: appointmentIso } });
+    const noteId = persist();
+    s.updateNote(noteId, { brief: { ...brief, appointmentDate: appointmentIso } });
     s.scheduleNotification({
       id: uid('n'),
       title: FOLLOW_UP_TITLE,
       body: BOOKING_DAY_AFTER_BODY,
-      deepLink: `followup:${profileId}`,
+      // F09c: the day after, open the visit debrief for this brief (docs/ux/F09c-log-visit.md › Entry points).
+      deepLink: `visit:${noteId}`,
       deliverAt: addDays(appointmentIso, 1),
       delivered: false,
       read: false,

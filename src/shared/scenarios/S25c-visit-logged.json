@@ -1,0 +1,210 @@
+{
+  "id": "S25c",
+  "now": "2026-10-23T12:00:00-07:00",
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "health",
+    "stack": [
+      "M-7.2",
+      "M-9.1"
+    ]
+  },
+  "state": {
+    "userName": "Maria",
+    "consentAcceptedAt": "2026-10-07T19:12:00-07:00",
+    "consentVersion": "0.1-draft",
+    "activeProfileId": "p-self",
+    "freeConsultationsUsed": 1,
+    "followUpSnoozeUntil": 4,
+    "profiles": {
+      "order": [
+        "p-self"
+      ],
+      "byId": {
+        "p-self": {
+          "id": "p-self",
+          "name": "Maria",
+          "relationship": "self",
+          "intake": {
+            "ageBand": "46-50",
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "none"
+            ],
+            "cycle": "irregular",
+            "profileFor": "self",
+            "reproductive": "perimenopausal",
+            "allergies": [
+              "none"
+            ],
+            "country": "US",
+            "height": "165 cm",
+            "weight": "68 kg",
+            "mainConcern": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+            "genesisGold": "yes"
+          },
+          "createdAt": "2026-10-07T19:12:00-07:00",
+          "sexAtBirth": "female",
+          "health": {
+            "birthYear": {
+              "value": 1978,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "sexAtBirth": {
+              "value": "female",
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "genderIdentity": {
+              "value": "woman",
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "heightCm": {
+              "value": 165,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "weightKg": {
+              "value": 68,
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "medications": {
+              "value": [
+                {
+                  "name": "Magnesium glycinate"
+                }
+              ],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "allergies": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            },
+            "conditions": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-07T19:12:00-07:00"
+            }
+          },
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-07T19:12:00-07:00",
+            "closedAt": "2026-10-07T19:12:00-07:00"
+          }
+        }
+      }
+    },
+    "accountId": "acct-s25c",
+    "accountEmail": "maria@example.com",
+    "healthConsentAt": "2026-10-07T19:12:00-07:00",
+    "notes": {
+      "byId": {
+        "n-brief-s25": {
+          "id": "n-brief-s25",
+          "profileId": "p-self",
+          "kind": "provider-brief",
+          "title": "For my provider",
+          "body": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+          "updatedAt": "2026-10-17T10:00:00-07:00",
+          "brief": {
+            "header": {
+              "name": "Maria",
+              "dob": "1978",
+              "whatThisIs": "Note for the provider — prepared with Deborah AI from our conversation"
+            },
+            "appointmentDate": "2026-10-22T09:30:00-07:00",
+            "chiefComplaint": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+            "clinicalContext": "Placeholder clinical context.",
+            "labs": [
+              {
+                "name": "FSH",
+                "tier": "primary",
+                "reason": "Placeholder reason."
+              }
+            ],
+            "questions": [
+              {
+                "text": "Could this be perimenopause?",
+                "why": "Placeholder."
+              }
+            ],
+            "medications": [
+              {
+                "name": "Magnesium glycinate",
+                "current": true
+              }
+            ],
+            "redFlagsSummary": "No red flags reported.",
+            "recommendation": "Placeholder recommendation.",
+            "disclaimer": [
+              "Placeholder disclaimer."
+            ],
+            "status": "placeholder"
+          }
+        },
+        "n-visit-s25c": {
+          "id": "n-visit-s25c",
+          "profileId": "p-self",
+          "kind": "after-visit",
+          "title": "After my gynecology visit",
+          "body": "She said it is probably perimenopause and wants to check hormones before deciding anything.",
+          "updatedAt": "2026-10-22T18:00:00-07:00",
+          "visit": {
+            "visitDate": "2026-10-22T09:30:00-07:00",
+            "briefNoteId": "n-brief-s25",
+            "reason": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
+            "provider": {
+              "specialty": "gynecology",
+              "name": "Dr. Patel",
+              "followUp": "In 6 weeks"
+            },
+            "takeaway": {
+              "said": "She said it is probably perimenopause and wants to check hormones before deciding anything.",
+              "unanswered": "Didn't have time to ask about sleep."
+            },
+            "tests": [
+              {
+                "name": "FSH",
+                "status": "ordered"
+              },
+              {
+                "name": "estradiol",
+                "status": "ordered"
+              },
+              {
+                "name": "TSH",
+                "status": "done"
+              }
+            ],
+            "medChanges": [
+              {
+                "name": "Magnesium glycinate",
+                "change": "continue"
+              }
+            ],
+            "nextSteps": [
+              {
+                "text": "Go to the lab this week for the blood draw",
+                "book": false
+              },
+              {
+                "text": "Schedule a follow-up in 6 weeks",
+                "book": true
+              }
+            ],
+            "ownNotes": "She listened. I felt less rushed than last time.",
+            "status": "placeholder"
+          }
+        }
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import type {
   Message,
   Note,
   NoteKind,
+  VisitOutcome,
   NotificationPermission,
   PendingFact,
   Plan90,
@@ -162,6 +163,10 @@ export interface NotesSlice {
   deleteNote: (id: ID) => void;
   /** Append a line to the profile's note of this kind, creating it if needed. */
   appendToNote: (profileId: ID, kind: NoteKind, title: string, line: string) => void;
+  /** F09c: create or update an after-visit note from a visit outcome; returns the note id. */
+  saveVisitOutcome: (profileId: ID, outcome: VisitOutcome, noteId?: ID) => ID;
+  /** F09c: apply confirmed medication rows (started adds, stopped removes) with source 'visit'. Returns how many applied. */
+  applyVisitUpdates: (profileId: ID, updates: { name: string; change: 'started' | 'stopped' }[]) => number;
 }
 
 export interface NotificationsSlice {

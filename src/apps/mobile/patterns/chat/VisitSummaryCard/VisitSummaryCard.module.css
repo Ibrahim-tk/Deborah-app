@@ -1,0 +1,16 @@
+/* Same warm glass as ReviewFactsCard: one flat container in the thread, no shadow. */
+.root {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--glass-warm-fill);
+  border: 1px solid var(--glass-warm-rim);
+  -webkit-backdrop-filter: var(--glass-warm-blur);
+  backdrop-filter: var(--glass-warm-blur);
+}
+.line { display: grid; gap: var(--space-1); }
+.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.text { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.empty { margin: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

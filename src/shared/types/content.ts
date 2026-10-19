@@ -1,5 +1,5 @@
 /** Content types for JSON in src/shared/data (docs/06-data-model.md §3). */
-import type { AnswerSection, ContentStatus, ID, Option, ProductRef } from './domain';
+import type { AnswerSection, ContentStatus, ID, Option, ProductRef, VisitSpecialty } from './domain';
 
 export interface Persona {
   name: string;
@@ -238,6 +238,47 @@ export interface CheckInScript {
   labRequestNotYet: Option;
   notYetOptions: Option[];
   status: ContentStatus;
+}
+
+/** F09c visit debrief copy (conversation/debrief.json). */
+export interface DebriefScript {
+  opening: string;
+  openingWithSpecialty: string;
+  openingPrompt: string;
+  openingOptions: Option[];
+  thinking: string;
+  probes: Record<'specialty' | 'said' | 'tests' | 'meds', string>;
+  testsOptions: Option[];
+  medsOptions: Option[];
+  skip: Option;
+  summaryTitle: string;
+  summaryOptions: Option[];
+  saved: string;
+  savedWithFacts: string;
+  discuss: string;
+  discussOptions: Option[];
+  consultMemory: string;
+  reflectSaid: string;
+  listening: string;
+  notNow: string;
+  whichTests: string;
+  whichMeds: string;
+  discussYes: string;
+  discussNo: string;
+  offer: string;
+  offerOptions: Option[];
+  offerNo: string;
+  offerAck: string;
+  status: ContentStatus;
+}
+
+/** visit/specialties.json — provider kinds for F09c. */
+export interface VisitSpecialtyOption {
+  id: VisitSpecialty;
+  label: string;
+  /** Used in sentences: "your {short} visit". */
+  short: string;
+  keywords: string[];
 }
 
 /** commerce/plans.json (docs/06-data-model.md §3). */

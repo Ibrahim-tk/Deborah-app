@@ -46,7 +46,7 @@ interface NavState {
   dismissModal: () => void;
   resetTo: (root: 'preauth' | 'main', id: string, params?: Params) => void;
   applyStart: (start: ScenarioStart, nonce: number) => void;
-  /** `followup:<profileId>` · `booking:<id>` · `content:<id>` (docs/04-navigation.md §6). */
+  /** `followup:<profileId>` · `visit:<briefNoteId>` (F09c) · `booking:<id>` · `content:<id>` (docs/04-navigation.md §6). */
   openDeepLink: (link: string) => void;
   /** Close every layer and show the Ask tab's Conversation (M-4.5 Continue, M-5.4 send). */
   returnToConversation: () => void;
@@ -217,6 +217,18 @@ export const useNavStore = create<NavState>()((set, get) => {
             ask: askChat({ mode: 'checkin' }),
             health: [route(TAB_ROOTS.health)],
           },
+          layers: [],
+          lastAction: 'reset',
+        });
+      } else if (kind === 'visit') {
+        // F09c: day after an appointment set in Step 5 → visit debrief linked to that provider brief.
+        const app = useAppStore.getState();
+        const note = id ? app.notes.byId[id] : undefined;
+        if (note && note.profileId !== app.activeProfileId) app.switchProfile(note.profileId);
+        set({
+          root: 'main',
+          activeTab: 'ask',
+          tabs: { ...s.tabs, ask: askChat({ mode: 'debrief', briefNoteId: note ? id : undefined }), health: [route(TAB_ROOTS.health)] },
           layers: [],
           lastAction: 'reset',
         });

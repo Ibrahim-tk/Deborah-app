@@ -10,6 +10,7 @@ const SOURCE: Record<FieldSource, string> = {
   manual: '',
   scan: 'from your scan',
   chat: 'confirmed in chat',
+  visit: 'from your provider visit',
 };
 
 export interface RowProps {

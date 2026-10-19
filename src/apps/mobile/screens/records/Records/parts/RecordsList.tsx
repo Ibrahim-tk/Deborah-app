@@ -1,9 +1,10 @@
 /** The list for one Records segment: rows newest first, empty state, primary action. */
+import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { selectProfileConversations, selectProfileLabs, selectProfileNotes, useAppStore } from '@shared/store';
 import type { Conversation } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { Button, Divider, Icon, ListRow } from '@mobile/ui';
+import { ActionSheet, Button, Divider, Icon, ListRow } from '@mobile/ui';
 import { ConsultationRow, EmptyState, NoteRow } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import styles from '../Records.module.css';
@@ -30,7 +31,20 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
   const conversations = useAppStore(useShallow((s) => selectProfileConversations(s, profileId)));
   const notes = useAppStore(useShallow((s) => selectProfileNotes(s, profileId)));
   const labs = useAppStore(useShallow((s) => selectProfileLabs(s, profileId)));
-  const newNote = () => open('M-9.4', { kind: 'questions', profileId });
+  const [noteMenu, setNoteMenu] = useState(false);
+  const newNote = () => setNoteMenu(true);
+  // F09c: "+ New note" offers a plain note or logging a provider visit (M-9.8).
+  const noteMenuSheet = (
+    <ActionSheet
+      open={noteMenu}
+      onClose={() => setNoteMenu(false)}
+      actions={[
+        { label: 'Write a note', onSelect: () => { setNoteMenu(false); open('M-9.4', { kind: 'questions', profileId }); } },
+        // Talk first (F09c): the debrief offers "Fill it in myself" for the form. Active profile only — it uses the chat.
+        ...(isActiveProfile ? [{ label: 'Log a provider visit', onSelect: () => { setNoteMenu(false); openAsk({ mode: 'debrief' }); } }] : []),
+      ]}
+    />
+  );
   // ASSUMPTION: viewing another profile's records offers no Ask / Add labs (they act on the active profile).
   const addLabs = isActiveProfile ? () => gate('documents', () => open('M-5.3')) : undefined;
 
@@ -71,6 +85,7 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
       return (
         <div className={styles.top}>
           <EmptyState icon="note" title="Jot down questions before your next visit" actionLabel="New note" actionIcon="plus" onAction={newNote} />
+          {noteMenuSheet}
         </div>
       );
     }
@@ -78,6 +93,7 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
       <>
         <div className={styles.top}>
           <Button variant="secondary" size="md" leadingIcon="plus" onClick={newNote}>New note</Button>
+          {noteMenuSheet}
         </div>
         <ul className={own.list}>
           {notes.map((n) => (
@@ -90,7 +106,9 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
                 onPress={() =>
                   n.kind === 'provider-brief'
                     ? open('M-9.7', { noteId: n.id })
-                    : open('M-9.4', { noteId: n.id })
+                    : n.visit
+                      ? open('M-9.8', { noteId: n.id })
+                      : open('M-9.4', { noteId: n.id })
                 }
               />
               <Divider />

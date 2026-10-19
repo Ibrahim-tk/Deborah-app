@@ -31,9 +31,13 @@ import s23 from './S23-guidance-early.json';
 import s24 from './S24-visit-brief.json';
 import s24b from './S24b-visit-brief-gate.json';
 import s24c from './S24c-visit-brief-urgent.json';
+import s25 from './S25-visit-debrief.json';
+import s25b from './S25b-visit-log-anytime.json';
+import s25c from './S25c-visit-logged.json';
+import s25d from './S25d-visit-safety.json';
 
 export const SEEDS: Record<string, ScenarioSeed> = Object.fromEntries(
-  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
+  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, s25, s25b, s25c, s25d, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
 );
 
 export const SCENARIO_GROUPS: ScenarioGroup[] = [
@@ -60,6 +64,10 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S24', label: 'My Visit Notes — provider brief', group: 'QA', description: 'Full guidance on file. Opens My Visit Notes (M-9.7): review chief complaint, save a copy, download PDF, then appointment follow-up.', startsAt: 'M-9.7 My Visit Notes', phase: 7 },
   { id: 'S24b', label: 'My Visit Notes — not enough detail', group: 'QA', description: 'Mid-intake (no full guidance). Visit Notes / Save PDF shows “Let’s talk first — download turned off”.', startsAt: 'M-2.1 (intake)', phase: 7 },
   { id: 'S24c', label: 'My Visit Notes — urgent', group: 'QA', description: 'Provider-directed answer after a red flag (no What’s next, no product). Tap Visit Notes on the answer: My Visit Notes opens with the urgent priority flag.', startsAt: 'M-2.1 (answered, urgent)', phase: 7 },
+  { id: 'S25', label: 'Log your visit — after the appointment', group: 'QA', description: 'Provider brief saved; appointment was yesterday. Lock screen with the day-after notification (visit:<brief>). Tap it: the visit debrief opens linked to that brief. Home also shows “How did your visit go?”.', startsAt: 'M-5.1 Lock screen', phase: 7 },
+  { id: 'S25b', label: 'Log your visit — anytime', group: 'QA', description: 'No provider brief. Opens the visit debrief directly; Records › New note › Log a provider visit does the same.', startsAt: 'M-2.1 Visit debrief', phase: 7 },
+  { id: 'S25c', label: 'Log your visit — already logged', group: 'QA', description: 'A gynecology visit is saved as an after-visit note. Records › Visit Notes reopens it in read mode (M-9.8).', startsAt: 'M-9.1 Records', phase: 7 },
+  { id: 'S25d', label: 'Log your visit — safety', group: 'QA', description: 'Brief saved. During the debrief, ask “Should I stop taking my magnesium?” — the medication safety response appears and nothing is logged as a change.', startsAt: 'M-2.1 Visit debrief', phase: 7 },
   { id: 'S05', label: 'Last free consultation', group: 'Trial', description: 'Two of three free consultations used.', startsAt: 'M-2.1 (empty), 1 left', phase: 3 },
   { id: 'S06', label: 'Trial exhausted', group: 'Conversion', description: 'All three free consultations used. The free-limit sheet shows; any new question is held until a plan is chosen.', startsAt: 'M-2.1 + M-4.1 sheet', phase: 5 },
   { id: 'R01', label: 'Returning — signed in', group: 'Return', description: 'Signed back in: health profile on file, a consultation from 3 days ago. Home shows Continue; Ask Deborah plays the 2am heart-flutter demo.', startsAt: 'M-2.0 Home', phase: 2 },

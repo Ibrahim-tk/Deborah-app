@@ -40,6 +40,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | Human escalation and booking |
 | [ux/F09-records.md](ux/F09-records.md) | History, consultation detail, Visit Notes, labs |
 | [ux/F09b-visit-brief.md](ux/F09b-visit-brief.md) | Miro Step 5: My Visit Notes / For My Provider brief |
+| [ux/F09c-log-visit.md](ux/F09c-log-visit.md) | Miro Step 6: Log your visit / After my visit (debrief, review, profile update) |
 | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | Account, settings, privacy & data |
 | [web/README.md](web/README.md) | Web app — reserved, not specified yet |
 

@@ -1,5 +1,5 @@
 /** Engine contract (docs/07-ai-simulation.md §1). */
-import type { ContentStatus, Conversation, ID, Intake, LabReport, Message, NotificationPermission, PendingFact, PlanTier, Profile, SectionKey } from './domain';
+import type { ContentStatus, Conversation, ID, Intake, LabReport, Message, Note, NotificationPermission, PendingFact, PlanTier, Profile, SectionKey, VisitOutcome } from './domain';
 
 export interface EngineContext {
   profile: Profile;
@@ -42,6 +42,11 @@ export type UserInput =
   /** Home "Complete your profile": Deborah asks the onboarding questions straight away. */
   | { kind: 'startProfile' }
   | { kind: 'checkInReply'; messageId: string; optionId: string }
+  /** F09c: open the visit debrief, optionally linked to a Step 5 provider-brief note. */
+  | { kind: 'startDebrief'; brief?: Note }
+  | { kind: 'debriefReply'; messageId: string; optionId: string }
+  /** F09c: M-9.8 saved the visit opened from this debrief ("Review and save"). */
+  | { kind: 'debriefSaved'; noteId: ID; outcome: VisitOutcome; /** Profile updates applied on Save. */ applied?: number }
   /** M-5.4 "Add Report". `direct` skips session-first (e.g. M-9.5). */
   | { kind: 'shareLabs'; report: LabReport; direct?: boolean };
 
@@ -60,7 +65,9 @@ export type StoreAction =
   /** Archive the current conversation and continue the plan in this new one. */
   | { type: 'startConversation'; conversation: Conversation }
   /** Auto-queue a guidance check-in (Miro ~14 days) when notifications are already allowed. */
-  | { type: 'scheduleGuidanceFollowUp'; profileId: ID; days: number };
+  | { type: 'scheduleGuidanceFollowUp'; profileId: ID; days: number }
+  /** F09c "Looks right, save": the bridge saves the debrief's outcome as an after-visit note. */
+  | { type: 'saveDebriefOutcome'; conversationId: ID };
 
 export type StreamField = 'text' | `section:${SectionKey}` | `bullet:${SectionKey}:${number}`;
 

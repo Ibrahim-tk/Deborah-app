@@ -146,7 +146,8 @@ export function assembleVisitBrief(conv: Conversation, profile: Profile, answer:
       whatThisIs: VISIT_BRIEF_WHAT_THIS_IS,
     },
     chiefComplaint: chiefComplaintFrom(conv, answer, profile),
-    clinicalContext: clinicalContextFrom(answer),
+    // F09c: what she reported from a recent provider visit, in her words (never interpreted).
+    clinicalContext: [clinicalContextFrom(answer), conv.afterVisit && `Recent provider visit (as reported by the client): ${conv.afterVisit.summary}.`].filter(Boolean).join('\n\n'),
     labs: labsFrom(answer),
     questions: questionsFrom(answer),
     medications: medicationsFrom(profile),

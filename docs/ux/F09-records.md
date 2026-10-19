@@ -18,7 +18,7 @@
 | Segment | Row | Empty state | Primary action |
 |---|---|---|---|
 | Consultations | `ConsultationRow`: topic, date, status as plain subtitle text ("Answered" / "In progress" · "With labs") | "No consultations yet" + Ask Deborah | — |
-| Visit Notes (Figma 9.3) | `NoteRow`: title, kind icon (questions / saved answer / after visit), updated date, first line | "Jot down questions before your next visit" + New note | **+ New note** (→ M-9.4) |
+| Visit Notes (Figma 9.3) | `NoteRow`: title, kind icon (questions / saved answer / after visit), updated date, first line. After-visit notes with visit details open **M-9.8**; text-only notes open M-9.4; provider briefs open M-9.7 | "Jot down questions before your next visit" + New note | **+ New note** → ActionSheet: Write a note (→ M-9.4) · Log a provider visit (→ visit debrief, [F09c](F09c-log-visit.md)) |
 | Labs | report row: lab name, date, n values | "No lab results yet" + Add labs | **+ Add** (→ M-5.3) |
 
 Search (OPEN) not in v1. Newest first.
@@ -45,3 +45,7 @@ Read mode of the M-5.4 layout: metadata + values; overflow menu: Edit (→ M-5.4
 ## M-9.7 · My Visit Notes (Miro Step 5)
 
 See **[F09b-visit-brief.md](F09b-visit-brief.md)**. Structured provider brief: header (name, DOB, priority, what-this-is) · chief complaint (editable) · clinical context · tests · questions · meds · red flags & recommendation · disclaimer. Save to Visit Notes (`provider-brief`) · Download PDF → M-9.6 · then appointment-date follow-up.
+
+## M-9.8 · Log your visit (Miro Step 6)
+
+See **[F09c-log-visit.md](F09c-log-visit.md)**. What happened at a provider visit, usually told to Deborah in a short debrief (M-2.1) and reviewed here: visit, provider seen, what I took away, tests ordered, medication changes, next steps, own notes, and ticked health-profile updates. Saved as an `after-visit` note with a `visit` payload; reopens in read mode (Edit · Share · Delete).

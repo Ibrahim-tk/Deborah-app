@@ -147,3 +147,17 @@ export const selectMessage = (s: AppState, messageId: string): { conversation: C
   }
   return undefined;
 };
+
+
+/**
+ * F09c Home entry: the most recent provider brief whose appointment date has passed and that no
+ * after-visit note links to yet ("How did your visit go?").
+ */
+export const selectVisitToLog = (s: AppState, profileId = s.activeProfileId): string | undefined => {
+  const now = nowFrom(s).getTime();
+  const notes = Object.values(s.notes.byId).filter((n) => n.profileId === profileId);
+  const logged = new Set(notes.map((n) => n.visit?.briefNoteId).filter(Boolean));
+  return notes
+    .filter((n) => n.kind === 'provider-brief' && n.brief?.appointmentDate && new Date(n.brief.appointmentDate).getTime() < now && !logged.has(n.id))
+    .sort((a, b) => (b.brief!.appointmentDate! < a.brief!.appointmentDate! ? -1 : 1))[0]?.id;
+};

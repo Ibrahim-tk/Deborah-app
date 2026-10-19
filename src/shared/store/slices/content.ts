@@ -4,11 +4,21 @@ import { uid } from '../../utils/ids';
 import { addDays, nowFrom } from '../../utils/dates';
 import { createDefaults } from '../defaults';
 import { BOOKING_DAY_AFTER_BODY, BOOKING_REMINDER_BODY, FOLLOW_UP_TITLE } from './notifications';
+import type { Note } from '../../types/domain';
 import type { AppState, BookingSlice, LabsSlice, NotesSlice, Plan90Slice, SettingsSlice } from '../types';
+
+/** Note titles: "After my cardiology visit". */
+const SPECIALTY_TITLE: Record<string, string> = {
+  'primary-care': 'primary care',
+  gynecology: 'gynecology',
+  endocrinology: 'endocrinology',
+  cardiology: 'cardiology',
+  functional: 'functional medicine',
+};
 
 type Actions = Pick<LabsSlice, 'addReport' | 'updateValue' | 'confirmReport' | 'replaceReport' | 'deleteReport'> &
   Pick<Plan90Slice, 'createPlanFromAnswer' | 'toggleHabit' | 'removeHabit'> &
-  Pick<NotesSlice, 'addNote' | 'updateNote' | 'deleteNote' | 'appendToNote'> &
+  Pick<NotesSlice, 'addNote' | 'updateNote' | 'deleteNote' | 'appendToNote' | 'saveVisitOutcome' | 'applyVisitUpdates'> &
   Pick<BookingSlice, 'book' | 'cancelBooking'> &
   Pick<SettingsSlice, 'setTextSize' | 'requestExport' | 'signOut' | 'deleteAccount'>;
 
@@ -95,6 +105,33 @@ export const contentActions: StateCreator<AppState, [], [], Actions> = (set, get
         : { id: uid('n'), profileId, kind, title, body: `• ${line}`, updatedAt: now };
       return { notes: { byId: { ...s.notes.byId, [note.id]: note } } };
     }),
+  saveVisitOutcome: (profileId, outcome, noteId) => {
+    const s = get();
+    const existing = noteId ? s.notes.byId[noteId] : undefined;
+    const id = existing?.id ?? uid('n');
+    const specialty = outcome.provider.specialty === 'other' ? outcome.provider.specialtyOther : SPECIALTY_TITLE[outcome.provider.specialty ?? ''];
+    const note: Note = {
+      id,
+      profileId,
+      kind: 'after-visit',
+      title: specialty ? `After my ${specialty} visit` : 'After my visit',
+      body: outcome.takeaway.said ?? outcome.ownNotes ?? '',
+      updatedAt: nowFrom(s).toISOString(),
+      visit: outcome,
+    };
+    set({ notes: { byId: { ...s.notes.byId, [id]: note } } });
+    return id;
+  },
+  applyVisitUpdates: (profileId, updates) => {
+    const s = get();
+    const p = s.profiles.byId[profileId];
+    if (!p || !updates.length) return 0;
+    const stopped = new Set(updates.filter((u) => u.change === 'stopped').map((u) => u.name.toLowerCase()));
+    const current = (p.health?.medications?.value ?? []).filter((m) => !stopped.has(m.name.toLowerCase()));
+    const added = updates.filter((u) => u.change === 'started' && !current.some((m) => m.name.toLowerCase() === u.name.toLowerCase()));
+    s.setHealth(profileId, { medications: { value: [...current, ...added.map((u) => ({ name: u.name }))], source: 'visit', updatedAt: nowFrom(s).toISOString() } });
+    return updates.length;
+  },
 
   book: (b) =>
     set((s) => {

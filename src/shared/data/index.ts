@@ -2,6 +2,8 @@
 import type {
   BookingInfo,
   CheckInScript,
+  DebriefScript,
+  VisitSpecialtyOption,
   Consent,
   GuardrailsData,
   IntakeData,
@@ -34,6 +36,8 @@ import library from './content/library.json';
 import topicMap from './content/topic-map.json';
 import slots from './booking/slots.json';
 import checkin from './conversation/checkin.json';
+import debrief from './conversation/debrief.json';
+import specialties from './visit/specialties.json';
 import plans from './commerce/plans.json';
 import labSamples from './labs/sample-reports.json';
 import labMarkers from './labs/markers.json';
@@ -56,6 +60,8 @@ export const chatIntakeData = chatIntake as unknown as ChatIntakeData;
 export const productList = products as Product[];
 export const guardrailsData = guardrails as GuardrailsData;
 export const checkInScript = checkin as CheckInScript;
+export const debriefScript = debrief as DebriefScript;
+export const visitSpecialties = specialties.options as VisitSpecialtyOption[];
 export const planList = plans as PlanOption[];
 export const labSampleReports = labSamples as Record<string, LabSample>;
 export const labMarkerList = labMarkers as LabMarker[];
@@ -74,6 +80,8 @@ export const LAB_REVIEW_SCRIPT_ID = 'lab-review';
 export const TEEN_SCRIPT_ID = 'teen-irregular-periods';
 /** Not a topic script: the check-in conversation's scriptId (follow-ups fall back to generic). */
 export const CHECKIN_SCRIPT_ID = 'checkin';
+/** Not a topic script: the visit debrief conversation's scriptId (F09c). */
+export const DEBRIEF_SCRIPT_ID = 'debrief';
 
 export function findProduct(id: string | undefined): Product | undefined {
   return productList.find((p) => p.id === id);
