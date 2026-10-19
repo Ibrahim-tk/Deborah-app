@@ -1,5 +1,5 @@
 /** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
-import { consentDoc, findProduct, productList } from '@shared/data';
+import { consentDoc, findProduct, productList, scripts } from '@shared/data';
 import { ANSWER_REQUEST_LABEL, isMinor } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
@@ -27,6 +27,7 @@ import {
 import type { useConversation } from '@mobile/hooks/useConversation';
 import type { useMessageActions } from './useMessageActions';
 import { SafetyMessage } from './SafetyMessage';
+import { SaveToProfile } from './SaveToProfile';
 import { SAFETY_KINDS } from './safetyKinds';
 import styles from '../Conversation.module.css';
 
@@ -74,6 +75,7 @@ export function MessageList({
   const hasPlan = useAppStore((s) => Boolean(s.plan90[conversation.profileId]));
   // DN-12: no products for anyone under 18, the shop tiles included.
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
+  const profileName = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
 
   // Check-in quick replies: the engine answers; some options also act in the UI.
   const reply = (messageId: string, optionId: string) => {
@@ -187,6 +189,7 @@ export function MessageList({
                   onSelect={onNext}
                 />
               )}
+              {showNext && scripts[conversation.scriptId ?? '']?.ownIntake && profileName && <SaveToProfile name={profileName} />}
             </>
           )}
           {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}

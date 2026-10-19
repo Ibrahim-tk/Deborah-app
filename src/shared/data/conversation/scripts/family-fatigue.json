@@ -1,0 +1,75 @@
+{
+  "id": "family-fatigue",
+  "topic": "tiredness",
+  "match": [],
+  "ownIntake": true,
+  "intake": [
+    "fam-how-long",
+    "fam-sleep",
+    "fam-mood",
+    "fam-periods",
+    "fam-periods-regular",
+    "fam-periods-flow",
+    "fam-meds",
+    "fam-med-name",
+    "fam-med-reason",
+    "fam-med-duration",
+    "fam-med-more",
+    "fam-med-timing",
+    "fam-food"
+  ],
+  "voiceSample": "My daughter is exhausted all the time, even after a full night's sleep.",
+  "openingMessage": "Why is {name} so exhausted all the time?",
+  "readyLine": "Thank you — that gives me a clear picture of {name}'s days. Tap below for my thoughts.",
+  "suggestedQuestions": [
+    "Could low iron explain the tiredness?",
+    "How much sleep does a teenager really need?",
+    "What should we ask at the next appointment?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name} has been tired for a while, and it isn't lifting with rest. From what was shared, sleep, mood, the cycle and everyday eating may all be playing a part — and together they can add up to a body that never quite recharges."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "Ongoing tiredness in young people often comes from a mix of things: sleep that isn't restorative, stress or low mood, energy dips from skipped meals, and sometimes low iron or B12 — especially with heavy periods or a vegetarian diet. None of these is a diagnosis; they're worth exploring with {name}'s provider."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for {name}'s Provider",
+        "body": "",
+        "bullets": [
+          "Could we check iron, ferritin and B12?",
+          "Could any of the medicines or supplements affect sleep or energy?",
+          "Is the cycle part of the picture, and is the bleeding normal for her age?",
+          "What would help with sleep and stress right now?"
+        ]
+      },
+      {
+        "key": "doNow",
+        "title": "Small Things to Try This Week",
+        "body": "",
+        "bullets": [
+          "A regular wind-down time, with screens off an hour before bed.",
+          "A simple breakfast, even something small.",
+          "A short check-in each evening about how the day felt."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word From Deborah",
+        "body": "Paying attention to this is the right instinct. Small, steady changes — and the right questions at the next appointment — usually make a real difference."
+      }
+    ]
+  },
+  "followUps": [
+    { "match": ["iron", "ferritin", "b12"], "reply": "Low iron and B12 are common causes of tiredness, especially with heavy periods or a vegetarian diet. A simple blood test with {name}'s provider can check both." },
+    { "match": ["sleep", "hours"], "reply": "Most teenagers need around eight to ten hours. Late screens and stress are the usual things that cut into it." }
+  ],
+  "fallbackReply": "That's a good question to bring to {name}'s provider. I can help put it into words for the appointment.",
+  "status": "placeholder"
+}

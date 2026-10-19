@@ -282,7 +282,9 @@ export default function Conversation() {
             aboutStep
               ? ABOUT_PLACEHOLDER
               : quizFreeText
-                ? quiz?.questionId === 'session-goal'
+                ? quiz?.placeholder
+                  ? quiz.placeholder
+                  : quiz?.questionId === 'session-goal'
                   ? 'Type your goal…'
                   : quiz?.questionId === 'session-concern'
                     ? 'Type your main concern…'

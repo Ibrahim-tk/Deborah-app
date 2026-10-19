@@ -14,8 +14,12 @@ export const CONSENT_ID = 'health-consent';
 export const COUNTRY_ID = 'country';
 export const SAFETY_GATES = intakeData.safetyGates;
 
+/** Repeat rounds use suffixed ids (`fam-med-name#2`); the base id is the question. */
+export const baseId = (id: string) => id.split('#')[0];
+
 export function question(id: string): IntakeQuestion | undefined {
-  return intakeData.questions.find((q) => q.id === id) ?? chatQuestion(id);
+  const base = baseId(id);
+  return intakeData.questions.find((q) => q.id === base) ?? chatQuestion(base);
 }
 
 function isKnown(profile: Profile, q: IntakeQuestion): boolean {
@@ -70,7 +74,15 @@ export function missingOnboarding(profile: Profile): string[] {
  * Ask Dibora: adults get missing basics, session questions (concern / other / goal / meds /
  * completeness), then `@clarify` → red-flag screen only. Teens and children keep script questions.
  */
-export function planConsultation(ctx: EngineContext, scriptIntake: string[], hasProduct: boolean): string[] {
+export function planConsultation(ctx: EngineContext, scriptIntake: string[], hasProduct: boolean, own = false): string[] {
+  // F02f scripted consultation: exactly the script's questions, in order (showIf / repeat run while asking).
+  if (own) {
+    const topic = scriptIntake.filter((id) => {
+      const q = question(id);
+      return Boolean(q) && !(q!.skipIfKnown && isKnown(ctx.profile, q!));
+    });
+    return topic.length && !ctx.healthConsent && ctx.profileGates !== false ? [CONSENT_ID, ...topic] : topic;
+  }
   const now = new Date(ctx.now);
   const journey = journeyFor(ctx.profile, now);
   const usesBank = ctx.profileGates !== false && !isMinor(ctx.profile, now) && journey !== 'teen' && journey !== 'child';

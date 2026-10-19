@@ -35,7 +35,7 @@
     {
       "id": "f1",
       "text": "Why is {name} so exhausted all the time?",
-      "scriptId": "thyroid-fatigue"
+      "scriptId": "family-fatigue"
     },
     {
       "id": "f2",
@@ -64,6 +64,11 @@
     }
   ],
   "teen": [
+    {
+      "id": "t0",
+      "text": "Why is {name} so exhausted all the time?",
+      "scriptId": "family-fatigue"
+    },
     {
       "id": "t1",
       "text": "Are irregular periods normal at {their} age?",

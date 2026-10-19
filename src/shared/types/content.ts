@@ -69,6 +69,9 @@ export interface SuggestionsData {
   status: ContentStatus;
 }
 
+/** Chat answer widget (F02f): inline pills (single / multi) or the mood scale. */
+export type QuestionWidget = 'inline' | 'inlineMulti' | 'mood';
+
 export interface IntakeQuestion {
   id: string;
   prompt: string;
@@ -96,8 +99,17 @@ export interface IntakeQuestion {
    * inline type form. Include `{ id: "other" }` to route typing to the bottom composer.
    */
   expandOptions?: Option[];
-  /** Core experience bank: asked only when the profile matches. */
+  /**
+   * Core experience bank: asked only when the profile matches. In an `ownIntake` script it may also test
+   * earlier answers in the same conversation, keyed by question id (e.g. `{ "fam-meds": { "has": ["yes"] } }`).
+   */
   showIf?: ShowIf;
+  /** Which widget renders the answer (F02f designer picks). Default: the regular choice pills. */
+  widget?: QuestionWidget;
+  /** Composer hint for typed answers (`input: "text"`). */
+  placeholder?: string;
+  /** Loop: answering `when` re-asks `ids` (then this question again), up to `max` rounds. */
+  repeat?: { when: string; ids: string[]; max: number };
   /** DN-11: the red-flag screen; any option except "none" stops the hormone-only answer. */
   redFlags?: boolean;
   /** Unresolved product question quoted from the spec (kept next to the content). */
@@ -177,6 +189,11 @@ export interface Script {
   variants?: { withLabs?: ScriptVariant };
   followUps: ScriptFollowUp[];
   fallbackReply: string;
+  /**
+   * Scripted consultation (F02f): ask exactly `intake` in order (no session bank, no 3-question cap),
+   * with `showIf` on earlier answers and `repeat` loops. Also wins over the teen script for a suggestion.
+   */
+  ownIntake?: boolean;
   status: ContentStatus;
 }
 

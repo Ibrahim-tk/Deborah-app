@@ -11,6 +11,7 @@ import { InlineConsent, QuestionChoices } from '@mobile/patterns/widgets';
 import { encodeNamedReasons } from '@mobile/patterns/widgets';
 import { IntakeFields } from './IntakeFields';
 import { MedsNamedReasons } from './MedsNamedReasons';
+import { WidgetAnswer } from './WidgetAnswer';
 import styles from './IntakeQuestion.module.css';
 
 /** Prototype: auto-agree health-consent without rendering InlineConsent. */
@@ -115,6 +116,16 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
     setComposerOther(true);
     onOther?.();
   };
+
+  // F02f: the widget design chose for this question (inline pills, multi pills, mood scale).
+  if (intake.widget) {
+    return (
+      <div className={styles.root}>
+        <WidgetAnswer intake={intake} locked={locked || composerOther} onFinish={finish} onOther={focusComposer} />
+        {composerOther && active && !sent && <p className={styles.composerHint}>Type it in the box below, then send.</p>}
+      </div>
+    );
+  }
 
   /** Gate: None / Yes — Yes reveals issue or med pills. */
   const onGate = (ids: string[]) => {

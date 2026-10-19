@@ -9,7 +9,9 @@ import providerReviewCopy from '../data/conversation/provider-review.json';
 import { buildAnswer, buildProviderReview, emptyAnswer } from './answer';
 import { shouldOfferFollowUp } from './counting';
 import { pendingFacts } from './facts';
-import { countryName, missingGates, optionsFor, planIntake, question, recommendsProduct } from './intake';
+import { baseId, countryName, missingGates, optionsFor, planIntake, question, recommendsProduct } from './intake';
+import { journeyVars } from './journey';
+import { shows, type ShowIfValue } from './showIf';
 import { guardrailsData as g } from '../data';
 import { CLARIFY, journeyAllowsProduct, journeyFor, planClarifiers } from './journey';
 import { isUncoveredConcern } from './guidanceGates';
@@ -80,9 +82,31 @@ function expandClarifiers(ctx: EngineContext, conv: Conversation, profile: Profi
 }
 
 /** Next intake question, or the ready line when intake is complete. */
+/**
+ * F02f scripted consultation: questions whose `showIf` fails (profile, or earlier answers in this chat)
+ * are marked done without being asked, so the step count and the next question skip them.
+ */
+function skipHidden(ctx: EngineContext, conv: Conversation, profile: Profile): { conv: Conversation; steps: Step[] } {
+  if (!scripts[conv.scriptId ?? '']?.ownIntake) return { conv, steps: [] };
+  const vars: Record<string, ShowIfValue> = { ...journeyVars(profile, new Date(ctx.now)) };
+  for (const [id, a] of Object.entries(conv.intakeAnswers ?? {})) vars[baseId(id)] = a;
+  // Walk forward from the next open question only: later ones may depend on answers not given yet.
+  const done = [...(conv.intakeDone ?? [])];
+  const before = done.length;
+  for (const id of conv.intakePlan ?? []) {
+    if (done.includes(id)) continue;
+    if (shows(question(id)?.showIf, vars)) break;
+    done.push(id);
+  }
+  if (done.length === before) return { conv, steps: [] };
+  const next = { ...conv, intakeDone: done };
+  return { conv: next, steps: [{ type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone } } }] };
+}
+
 export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, profile: Profile): Step[] {
-  let conv = rawConv;
-  const pre: Step[] = [];
+  const skipped = skipHidden(ctx, rawConv, profile);
+  let conv = skipped.conv;
+  const pre: Step[] = [...skipped.steps];
   const firstOpen = (c: Conversation) => (c.intakePlan ?? []).find((id) => !(c.intakeDone ?? []).includes(id));
   while (firstOpen(conv) === CLARIFY) {
     const expanded = expandClarifiers(ctx, conv, profile);
@@ -144,6 +168,8 @@ export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, pro
         hideStep: q.hideStep,
         presentation: q.presentation,
         expandOptions: q.expandOptions,
+        widget: q.widget,
+        placeholder: q.placeholder,
       },
     }),
   ];

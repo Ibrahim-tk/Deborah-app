@@ -29,6 +29,7 @@ import thyroidFatigue from './conversation/scripts/thyroid-fatigue.json';
 import generic from './conversation/scripts/generic.json';
 import labReview from './conversation/scripts/lab-review.json';
 import teenIrregularPeriods from './conversation/scripts/teen-irregular-periods.json';
+import familyFatigue from './conversation/scripts/family-fatigue.json';
 import library from './content/library.json';
 import topicMap from './content/topic-map.json';
 import slots from './booking/slots.json';
@@ -64,7 +65,7 @@ export const scriptTopics = topicMap as Record<string, { topics: string[]; reaso
 export const bookingInfo = slots as unknown as BookingInfo;
 
 export const scripts: Record<string, Script> = Object.fromEntries(
-  ([hotFlashesSleep, sleep3am, thyroidFatigue, generic, labReview, teenIrregularPeriods] as Script[]).map((s) => [s.id, s]),
+  ([hotFlashesSleep, sleep3am, thyroidFatigue, generic, labReview, teenIrregularPeriods, familyFatigue] as Script[]).map((s) => [s.id, s]),
 );
 
 export const FALLBACK_SCRIPT_ID = 'generic';

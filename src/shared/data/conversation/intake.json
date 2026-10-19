@@ -56,9 +56,18 @@
       "presentation": "pills",
       "prompt": "What was your sex at birth?",
       "options": [
-        { "id": "male", "label": "Male" },
-        { "id": "female", "label": "Female" },
-        { "id": "intersex", "label": "Intersex" }
+        {
+          "id": "male",
+          "label": "Male"
+        },
+        {
+          "id": "female",
+          "label": "Female"
+        },
+        {
+          "id": "intersex",
+          "label": "Intersex"
+        }
       ],
       "multi": false,
       "profileField": "profile.sexAtBirth",
@@ -334,8 +343,14 @@
       "presentation": "pills",
       "prompt": "Just to confirm — your main health concern today is: {concern}. Does that sound right?",
       "options": [
-        { "id": "yes", "label": "Yes, that's it" },
-        { "id": "other", "label": "Something else…" }
+        {
+          "id": "yes",
+          "label": "Yes, that's it"
+        },
+        {
+          "id": "other",
+          "label": "Something else…"
+        }
       ],
       "multi": false,
       "profileField": "intake.mainConcern",
@@ -347,19 +362,52 @@
       "presentation": "pills",
       "prompt": "Are there any other health issues you'd like me to keep in mind?",
       "options": [
-        { "id": "none", "label": "None" },
-        { "id": "yes", "label": "Yes" }
+        {
+          "id": "none",
+          "label": "None"
+        },
+        {
+          "id": "yes",
+          "label": "Yes"
+        }
       ],
       "expandOptions": [
-        { "id": "hypothyroidism", "label": "Hypothyroidism" },
-        { "id": "high-blood-pressure", "label": "High blood pressure" },
-        { "id": "diabetes", "label": "Diabetes" },
-        { "id": "anxiety", "label": "Anxiety" },
-        { "id": "depression", "label": "Depression" },
-        { "id": "migraines", "label": "Migraines" },
-        { "id": "pcos", "label": "PCOS" },
-        { "id": "endometriosis", "label": "Endometriosis" },
-        { "id": "other", "label": "Other…" }
+        {
+          "id": "hypothyroidism",
+          "label": "Hypothyroidism"
+        },
+        {
+          "id": "high-blood-pressure",
+          "label": "High blood pressure"
+        },
+        {
+          "id": "diabetes",
+          "label": "Diabetes"
+        },
+        {
+          "id": "anxiety",
+          "label": "Anxiety"
+        },
+        {
+          "id": "depression",
+          "label": "Depression"
+        },
+        {
+          "id": "migraines",
+          "label": "Migraines"
+        },
+        {
+          "id": "pcos",
+          "label": "PCOS"
+        },
+        {
+          "id": "endometriosis",
+          "label": "Endometriosis"
+        },
+        {
+          "id": "other",
+          "label": "Other…"
+        }
       ],
       "multi": false,
       "profileField": "intake.otherIssues",
@@ -381,17 +429,44 @@
       "presentation": "pills",
       "prompt": "Any new medications since your last visit?",
       "options": [
-        { "id": "none", "label": "None" },
-        { "id": "yes", "label": "Yes" }
+        {
+          "id": "none",
+          "label": "None"
+        },
+        {
+          "id": "yes",
+          "label": "Yes"
+        }
       ],
       "expandOptions": [
-        { "id": "levothyroxine", "label": "Levothyroxine" },
-        { "id": "metformin", "label": "Metformin" },
-        { "id": "lisinopril", "label": "Lisinopril" },
-        { "id": "sertraline", "label": "Sertraline" },
-        { "id": "estradiol", "label": "Estradiol" },
-        { "id": "progesterone", "label": "Progesterone" },
-        { "id": "other", "label": "Other…" }
+        {
+          "id": "levothyroxine",
+          "label": "Levothyroxine"
+        },
+        {
+          "id": "metformin",
+          "label": "Metformin"
+        },
+        {
+          "id": "lisinopril",
+          "label": "Lisinopril"
+        },
+        {
+          "id": "sertraline",
+          "label": "Sertraline"
+        },
+        {
+          "id": "estradiol",
+          "label": "Estradiol"
+        },
+        {
+          "id": "progesterone",
+          "label": "Progesterone"
+        },
+        {
+          "id": "other",
+          "label": "Other…"
+        }
       ],
       "multi": false,
       "profileField": "intake.newMeds",
@@ -403,8 +478,14 @@
       "presentation": "pills",
       "prompt": "Have you sent everything you wanted me to see — symptoms, notes, and any labs?",
       "options": [
-        { "id": "yes", "label": "Yes, that's everything" },
-        { "id": "more", "label": "I have more to add" }
+        {
+          "id": "yes",
+          "label": "Yes, that's everything"
+        },
+        {
+          "id": "more",
+          "label": "I have more to add"
+        }
       ],
       "multi": false,
       "profileField": "session.complete",
@@ -412,6 +493,395 @@
       "noSkip": true,
       "hideStep": true,
       "layout": "list"
+    },
+    {
+      "id": "fam-how-long",
+      "prompt": "That's a real worry, and it's good to look into it early. Tiredness that doesn't lift with sleep is usually a signal — from sleep, the cycle, food, or stress. First: how long has {name} been feeling like this?",
+      "options": [
+        {
+          "id": "few-weeks",
+          "label": "A few weeks"
+        },
+        {
+          "id": "1-3m",
+          "label": "1–3 months"
+        },
+        {
+          "id": "3m-plus",
+          "label": "Longer than 3 months"
+        },
+        {
+          "id": "not-sure",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-how-long",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "fam-sleep",
+      "prompt": "A couple of months or more is long enough to take seriously. How is {name} sleeping at night?",
+      "options": [
+        {
+          "id": "fine",
+          "label": "Falls asleep fine"
+        },
+        {
+          "id": "screens",
+          "label": "Up late on screens"
+        },
+        {
+          "id": "lies-awake",
+          "label": "Lies awake"
+        },
+        {
+          "id": "wakes",
+          "label": "Wakes in the night"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-sleep",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "fam-mood",
+      "prompt": "Sleep and mood often move together — stress, worry or feeling low can keep the body switched on at night. How has {name}'s mood been lately?",
+      "options": [
+        {
+          "id": "mood-1",
+          "label": "Rough"
+        },
+        {
+          "id": "mood-2",
+          "label": "Low"
+        },
+        {
+          "id": "mood-3",
+          "label": "Okay"
+        },
+        {
+          "id": "mood-4",
+          "label": "Good"
+        },
+        {
+          "id": "mood-5",
+          "label": "Great"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-mood",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "mood"
+    },
+    {
+      "id": "fam-periods",
+      "prompt": "Thank you. Periods can affect energy a lot, so I'd like to understand {name}'s cycle too. Has {name} started having periods?",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes"
+        },
+        {
+          "id": "no",
+          "label": "No"
+        },
+        {
+          "id": "not-sure",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-periods",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "sex": {
+          "in": [
+            "female",
+            "intersex"
+          ]
+        },
+        "age": {
+          "min": 10
+        }
+      }
+    },
+    {
+      "id": "fam-periods-regular",
+      "prompt": "Are they fairly regular, or do they come and go?",
+      "options": [
+        {
+          "id": "regular",
+          "label": "Fairly regular"
+        },
+        {
+          "id": "irregular",
+          "label": "Come and go"
+        },
+        {
+          "id": "not-sure",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-periods-regular",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "fam-periods": {
+          "has": [
+            "yes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fam-periods-flow",
+      "prompt": "And are they heavy? For example, needing to change protection every hour or two, or bleeding for more than a week.",
+      "options": [
+        {
+          "id": "heavy",
+          "label": "Yes, heavy"
+        },
+        {
+          "id": "normal",
+          "label": "Not really"
+        },
+        {
+          "id": "not-sure",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-periods-flow",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "fam-periods": {
+          "has": [
+            "yes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fam-meds",
+      "prompt": "Some medicines and supplements can make people tired or affect sleep. Is {name} taking anything regularly right now — prescriptions, over-the-counter medicines or supplements?",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes"
+        },
+        {
+          "id": "no",
+          "label": "No"
+        },
+        {
+          "id": "not-sure",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-meds",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "fam-med-name",
+      "prompt": "Thank you. What is {name} taking? Just the name is enough — type it below.",
+      "options": [],
+      "multi": false,
+      "profileField": "conversation.fam-med-name",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "input": "text",
+      "placeholder": "Type the medicine name…",
+      "showIf": {
+        "fam-meds": {
+          "has": [
+            "yes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fam-med-reason",
+      "prompt": "What is it for?",
+      "options": [
+        {
+          "id": "sleep",
+          "label": "Sleep"
+        },
+        {
+          "id": "pain",
+          "label": "Pain"
+        },
+        {
+          "id": "mood",
+          "label": "Mood or anxiety"
+        },
+        {
+          "id": "allergies",
+          "label": "Allergies"
+        },
+        {
+          "id": "skin",
+          "label": "Skin"
+        },
+        {
+          "id": "other",
+          "label": "Other"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-med-reason",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "fam-meds": {
+          "has": [
+            "yes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fam-med-duration",
+      "prompt": "How long has {name} been taking it?",
+      "options": [
+        {
+          "id": "lt-1m",
+          "label": "Less than a month"
+        },
+        {
+          "id": "1-6m",
+          "label": "1–6 months"
+        },
+        {
+          "id": "longer",
+          "label": "Longer"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-med-duration",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "fam-meds": {
+          "has": [
+            "yes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fam-med-more",
+      "prompt": "Is {name} taking anything else?",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes, something else"
+        },
+        {
+          "id": "no",
+          "label": "No, that's all"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-med-more",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "fam-meds": {
+          "has": [
+            "yes"
+          ]
+        }
+      },
+      "repeat": {
+        "when": "yes",
+        "ids": [
+          "fam-med-name",
+          "fam-med-reason",
+          "fam-med-duration"
+        ],
+        "max": 4
+      }
+    },
+    {
+      "id": "fam-med-timing",
+      "prompt": "Did the tiredness start around the same time as any of these? Nothing should be stopped without checking with a provider first — but the timing is one of the first things a provider will want to know.",
+      "options": [
+        {
+          "id": "yes",
+          "label": "Yes"
+        },
+        {
+          "id": "no",
+          "label": "No"
+        },
+        {
+          "id": "not-sure",
+          "label": "Not sure"
+        }
+      ],
+      "multi": false,
+      "profileField": "conversation.fam-med-timing",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": {
+        "fam-meds": {
+          "has": [
+            "yes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "fam-food",
+      "prompt": "Last area: food. What does a usual day of eating look like for {name}? Pick all that fit.",
+      "options": [
+        {
+          "id": "skips-breakfast",
+          "label": "Skips breakfast"
+        },
+        {
+          "id": "light-lunch",
+          "label": "Light lunch"
+        },
+        {
+          "id": "snacks",
+          "label": "Snacks a lot"
+        },
+        {
+          "id": "eats-well",
+          "label": "Eats well"
+        },
+        {
+          "id": "vegetarian",
+          "label": "Vegetarian or vegan"
+        }
+      ],
+      "multi": true,
+      "profileField": "conversation.fam-food",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inlineMulti"
     }
   ],
   "maxQuestions": 3,

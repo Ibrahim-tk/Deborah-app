@@ -188,6 +188,8 @@ export interface IntakeMeta {
   presentation?: 'pills' | 'quiz';
   /** Shown after gate "Yes" (F02d expand → issue/med pills). */
   expandOptions?: Option[];
+  widget?: import('./content').QuestionWidget;
+  placeholder?: string;
 }
 
 export type SectionKey =
@@ -299,6 +301,8 @@ export interface Conversation {
   intakePlan?: string[];
   /** Intake question ids already handled in this consultation (answered or skipped). */
   intakeDone?: string[];
+  /** Scripted consultations (F02f): answers so far, by question id (typed text as one entry). */
+  intakeAnswers?: Record<string, string[]>;
   archived?: boolean;
   /** Safety state (docs/ux/F03-safety.md). */
   statusBeforeSafety?: ConversationStatus;

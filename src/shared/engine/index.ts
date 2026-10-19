@@ -132,7 +132,9 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
   // Minor profiles use the teen script (docs/ux/F06-family-profiles.md › 6.4) — it's about periods, so only
   // for girls. OPEN: "child and male-teen question banks" — documented default: boys keep the topic's script.
   const minorGirl = isMinor(ctx.profile, new Date(ctx.now)) && (ctx.profile.sexAtBirth ?? ctx.profile.health?.sexAtBirth?.value) !== 'male';
-  const detected = minorGirl ? TEEN_SCRIPT_ID : (suggestionScript ?? detectScript(text));
+  // A scripted (F02f) quick start keeps its own questions, even for a minor.
+  const scripted = suggestionScript && scripts[suggestionScript]?.ownIntake ? suggestionScript : undefined;
+  const detected = scripted ?? (minorGirl ? TEEN_SCRIPT_ID : (suggestionScript ?? detectScript(text)));
 
   // Asking "what do you think" during intake/ready jumps to guidance (early look / coverage / answer).
   if ((conv.status === 'intake' || conv.status === 'ready' || conv.status === 'error') && asksForAnswer(text)) {
@@ -176,12 +178,13 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
       ];
     }
     const current = (conv.intakePlan ?? []).find((id) => !(conv.intakeDone ?? []).includes(id));
-    const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), ...(current ? [current] : [])], facts: mergeFacts(conv.facts, facts) };
+    const intakeAnswers = current ? { ...conv.intakeAnswers, [current]: [text.trim()] } : conv.intakeAnswers;
+    const next: Conversation = { ...conv, intakeDone: [...(conv.intakeDone ?? []), ...(current ? [current] : [])], intakeAnswers, facts: mergeFacts(conv.facts, facts) };
     const profile = withFacts(ctx.profile, facts);
     return [
       userBubble(ctx, text),
       ...proposeSteps(conv.id, facts),
-      { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone } } },
+      { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone, intakeAnswers } } },
       ...pause('Reading your answer'),
       ...nextIntakeOrReady({ ...ctx, profile }, next, profile),
     ];
@@ -232,7 +235,7 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
     // DN-07 · DN-08: what she's asking about and which question bank fits her.
     symptomGroup: symptomGroupOf(text),
     journey: journeyFor(profile, new Date(ctx.now)) ?? undefined,
-    intakePlan: planConsultation(ctx, script.intake, Boolean(script.answer.product)),
+    intakePlan: planConsultation(ctx, script.intake, Boolean(script.answer.product), script.ownIntake),
     intakeDone: [],
     facts,
     openingText: text.trim(),
@@ -257,6 +260,22 @@ function startConsultation(rawCtx: EngineContext, text: string, scriptId: string
 /** Store step for newly noted facts (the bridge merges them into the conversation). */
 function proposeSteps(conversationId: string, facts: PendingFact[]): EnginePlan {
   return facts.length ? [{ type: 'store', action: { type: 'proposeFacts', conversationId, facts } }] : [];
+}
+
+/**
+ * F02f loop ("Anything else she takes?" → Yes): the loop's questions, then this question again, are
+ * inserted right after it with a round suffix (`fam-med-name#2`), up to `repeat.max` rounds.
+ */
+function repeatPlan(conv: Conversation, questionId: string, optionIds: string[]): string[] | undefined {
+  const plan = conv.intakePlan;
+  const rule = question(questionId)?.repeat;
+  if (!plan || !rule || !optionIds.includes(rule.when)) return plan;
+  const round = Number(questionId.split('#')[1] ?? 1) + 1;
+  if (round > rule.max) return plan;
+  const i = plan.indexOf(questionId);
+  const base = questionId.split('#')[0];
+  const added = [...rule.ids, base].map((id) => `${id}#${round}`);
+  return [...plan.slice(0, i + 1), ...added, ...plan.slice(i + 1)];
 }
 
 function handleIntakeAnswer(ctx: EngineContext, questionId: string, optionIds: string[], otherText?: string): EnginePlan {
@@ -355,12 +374,15 @@ function handleIntakeAnswer(ctx: EngineContext, questionId: string, optionIds: s
   const fact = factFromAnswer(q, patch, bubbleLabel);
   const facts = fact ? [fact] : [];
   const profile = withFacts(ctx.profile, facts);
-  const next: Conversation = { ...conv, intakeDone: done, facts: mergeFacts(conv.facts, facts) };
+  // F02f: keep the answer for later showIf rules ("Other" keeps the typed words too).
+  const intakeAnswers = { ...conv.intakeAnswers, [questionId]: resolvedOther?.trim() ? [...optionIds, resolvedOther.trim()] : optionIds };
+  const intakePlan = repeatPlan(conv, questionId, optionIds);
+  const next: Conversation = { ...conv, intakeDone: done, intakeAnswers, intakePlan, facts: mergeFacts(conv.facts, facts) };
   return [
     ...markAnswered,
     bubble,
     ...proposeSteps(conv.id, facts),
-    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone } } },
+    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { intakeDone: next.intakeDone, intakeAnswers, intakePlan } } },
     ...pause('Reading your answer', 600, 1000),
     ...nextIntakeOrReady({ ...ctx, profile }, next, profile),
   ];
