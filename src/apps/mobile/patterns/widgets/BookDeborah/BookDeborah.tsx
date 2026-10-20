@@ -5,7 +5,7 @@
  */
 import { useState } from 'react';
 import { BOOK_CONSULT_LABEL } from '@shared/copy/booking';
-import { Button, Icon, Overlay } from '@mobile/ui';
+import { BottomSheet, Button, Icon } from '@mobile/ui';
 import styles from './BookDeborah.module.css';
 
 export interface BookDeborahProps {
@@ -44,28 +44,22 @@ export function BookDeborah({
         <Icon name={sent ? 'check' : 'chevron'} size={18} className={styles.chevron} />
       </button>
 
-      <Overlay>
-        {open && (
-          <div className={styles.layer}>
-            <button type="button" className={styles.scrim} aria-label="Close" onClick={() => setOpen(false)} />
-            <div className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby="book-deborah-title" data-placeholder>
-              <span className={styles.grabber} aria-hidden />
-              <span className={styles.sheetIcon} aria-hidden>
-                <Icon name="check" size={28} />
-              </span>
-              <h2 id="book-deborah-title" className={styles.sheetTitle}>
-                The team has been notified
-              </h2>
-              <p className={styles.sheetBody}>
-                Someone from Deborah’s team will contact you soon to set up a time.
-              </p>
-              <Button fullWidth onClick={() => setOpen(false)}>
-                Done
-              </Button>
-            </div>
-          </div>
-        )}
-      </Overlay>
+      <BottomSheet open={Boolean(open)} onClose={() => setOpen(false)}>
+        <div className={styles.sheet} role="group" aria-labelledby="book-deborah-title" data-placeholder>
+          <span className={styles.sheetIcon} aria-hidden>
+            <Icon name="check" size={28} />
+          </span>
+          <h2 id="book-deborah-title" className={styles.sheetTitle}>
+            The team has been notified
+          </h2>
+          <p className={styles.sheetBody}>
+            Someone from Deborah’s team will contact you soon to set up a time.
+          </p>
+          <Button fullWidth onClick={() => setOpen(false)}>
+            Done
+          </Button>
+        </div>
+      </BottomSheet>
     </>
   );
 }

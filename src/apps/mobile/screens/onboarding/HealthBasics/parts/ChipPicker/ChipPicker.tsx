@@ -4,7 +4,7 @@
  * Design exception (designer, 2026-10-13): compact chips here, not option rows.
  */
 import { useRef, useState, type KeyboardEvent } from 'react';
-import { Icon } from '@mobile/ui';
+import { Icon, Input } from '@mobile/ui';
 import styles from './ChipPicker.module.css';
 
 export interface ChipPickerProps {
@@ -62,11 +62,13 @@ export function ChipPicker({ label, picked, suggestions, none, noneSelected, onT
         >
           {adding ? (
             <>
-              <input
+              <Input
+                variant="inline"
                 className={styles.field}
+                label={`Other: ${label}`}
+                hideLabel
                 value={draft}
                 placeholder="Add your own"
-                aria-label={`Other: ${label}`}
                 autoFocus
                 enterKeyHint="done"
                 autoComplete="off"

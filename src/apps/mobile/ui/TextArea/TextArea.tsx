@@ -50,7 +50,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
   if (USE_BASE_UI) {
     return (
       <Field.Root className={styles.field} disabled={rest.disabled}>
-        <Field.Control render={area} />
+        {/* Base UI's control replaces the element's focus handlers with its own; pass ours through it. */}
+        <Field.Control render={area} onFocus={rest.onFocus as never} onBlur={rest.onBlur as never} />
       </Field.Root>
     );
   }

@@ -6,7 +6,6 @@ import { ResetButton } from '../ResetButton';
 import { DevToggles } from '../DevToggles';
 import { AutoDemo } from '../AutoDemo';
 import { JourneyRunner } from '../JourneyRunner';
-import { VariantMenu } from '../VariantMenu';
 import styles from './TopNav.module.css';
 
 const VERSION = __APP_VERSION__.split('.').slice(0, 2).join('.');
@@ -24,7 +23,6 @@ export function TopNav() {
       <div className={styles.actions}>
         <AutoDemo />
         <JourneyRunner />
-        <VariantMenu />
         <StateMenu />
         <ResetButton />
         <DevToggles />

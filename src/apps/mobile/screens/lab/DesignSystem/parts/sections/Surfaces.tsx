@@ -1,13 +1,41 @@
 /** Containers and lists: Card, Panel, ListRow, Divider, Sheet, Toast, Skeleton. */
-import { Button, Card, Divider, Icon, ListRow, Panel, Sheet, Skeleton, Toast } from '@mobile/ui';
+import { useState } from 'react';
+import { BottomSheet, Button, Card, Divider, Icon, ListRow, Panel, Sheet, Skeleton, Toast, type SheetHeight } from '@mobile/ui';
 import { Section } from '../Section';
 import { Grid, Specimen, Variant } from '../Specimen';
 import styles from './sections.module.css';
+
+function BottomSheetDemo() {
+  const [open, setOpen] = useState<SheetHeight | null>(null);
+  const heights: SheetHeight[] = ['auto', 'medium', 'large', '70%'];
+  return (
+    <>
+      <div className={styles.listCard}>
+        {heights.map((h) => (
+          <ListRow key={String(h)} title={`height="${h}"`} onPress={() => setOpen(h)} />
+        ))}
+      </div>
+      <BottomSheet
+        open={open !== null}
+        onClose={() => setOpen(null)}
+        height={open ?? 'auto'}
+        title="Bottom sheet"
+        footer={<Button fullWidth onClick={() => setOpen(null)}>Done</Button>}
+      >
+        <p className="t-callout">Drag down, tap outside or press Escape to close. Same interaction for every sheet.</p>
+      </BottomSheet>
+    </>
+  );
+}
 
 export function Surfaces() {
   return (
     <Section id="surfaces" title="Surfaces and lists" lede="Flat tonal layering: Paper on canvas outlined by a hairline, quiet Linen panels, and shadows only on what floats (sheets, toasts).">
       <Grid>
+        <Specimen name="BottomSheet" path="ui/BottomSheet" note="The one bottom sheet: scrim, spring slide, drag / flick / scrim tap / Escape to close, focus handling. height: auto (fits) · medium · large · px · %. variant: default · actions · system.">
+          <BottomSheetDemo />
+        </Specimen>
+
         <Specimen name="Card" path="ui/Card" note="tone: default · subtle · emphasis · danger. Pass onPress for a pressable card.">
           <Variant label="default"><Card><p className="t-headline">Your health profile</p><p className="t-callout">Four answers help Deborah tailor her reply.</p></Card></Variant>
           <Variant label="subtle"><Card tone="subtle"><p className="t-callout">A quieter grouping surface.</p></Card></Variant>

@@ -1,72 +1,5 @@
-/* Full-screen overlay — must stay position:absolute (HealthBasics excludes [data-overlay]
-   from the rule that forces children to position:relative). */
-.root {
-  position: absolute;
-  inset: 0;
-  z-index: 30;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  pointer-events: none;
-}
-
-.scrim {
-  position: absolute;
-  inset: 0;
-  border: 0;
-  padding: 0;
-  background: var(--color-scrim);
-  animation: fade var(--dur-base) var(--ease-out) both;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.sheet {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  /* Medium detent: hug content; leave more of Health Basics visible above. */
-  max-height: calc(100% - var(--safe-top) - 120px);
-  overflow: hidden;
-  padding: var(--space-2) var(--margin-screen) 0;
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-float-lg);
-  animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both;
-  pointer-events: auto;
-}
-
-.handle {
-  align-self: center;
-  flex: none;
-  width: 40px;
-  height: 5px;
-  margin-bottom: var(--space-2);
-  border-radius: var(--radius-full);
-  background: var(--purple-100);
-}
-
-.content {
-  flex: 0 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  display: grid;
-  align-content: start;
-  gap: var(--space-3);
-  padding-bottom: var(--space-3);
-}
-
-.title {
-  margin: 0;
-  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-artistic, var(--font-display));
-  letter-spacing: -0.01em;
-  color: var(--color-ink);
-  text-wrap: balance;
-}
+/* Content of the shared ui/BottomSheet (frame, scrim, motion and title live there). */
+.content { display: grid; align-content: start; gap: var(--space-3); padding-bottom: var(--space-3); }
 
 .body {
   margin: 0;
@@ -86,16 +19,3 @@
   gap: var(--space-2);
 }
 
-.footer {
-  flex: none;
-  padding: var(--space-2) 0 calc(var(--safe-bottom) + var(--space-3));
-  background: var(--color-surface);
-  box-shadow: 0 -8px 16px var(--color-surface);
-}
-
-@keyframes fade { from { opacity: 0; } }
-@keyframes rise { from { transform: translateY(100%); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .scrim, .sheet { animation: none; }
-}

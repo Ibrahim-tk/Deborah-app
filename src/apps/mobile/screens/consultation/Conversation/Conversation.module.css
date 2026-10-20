@@ -28,3 +28,14 @@
 .benchLabel { justify-self: start; min-height: 32px; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui); letter-spacing: 0.04em; color: var(--color-ink-tertiary); }
 /* Deborah's orb, top left above the first message of an onboarding chat (shown once). */
 .firstOrb { justify-self: start; margin-bottom: calc(var(--space-6) * -1 + var(--space-3)); }
+
+/* First message (design 2026-10-20): same screen, no swap. The greeting lifts away (Conversation.tsx exit), the
+   user's message rises from the composer into place, and what follows settles in just after it. */
+.greetingWrap { display: grid; } /* a real box, so the lift-away transform renders */
+.column[data-arriving] [data-role='user'] { animation: rise-from-composer 620ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+.column[data-arriving] [data-role='user'] ~ * { animation: settle-in 420ms 260ms var(--ease-out) both; }
+@keyframes rise-from-composer { from { opacity: 0; transform: translateY(42vh) scale(0.96); } }
+@keyframes settle-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .column[data-arriving] [data-role='user'], .column[data-arriving] [data-role='user'] ~ * { animation: none; }
+}

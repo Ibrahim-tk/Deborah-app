@@ -1,11 +1,11 @@
 /* Palette: orchid / aubergine over cream (Wispr Flow). Warm fields are dusty rose, not yellow. */
 .root {
-  --gs-violet: #804a8a;
-  --gs-lilac: #a66bb3;
-  --gs-cream: #e8e0da;
-  --gs-rose: #d4b8c4;
-  --gs-plum: #3a0353;
-  --gs-parchment: #f9f7f5;
+  --gs-violet: var(--theme-gs-violet, #804a8a);
+  --gs-lilac: var(--theme-gs-lilac, #a66bb3);
+  --gs-cream: var(--theme-gs-cream, #e8e0da);
+  --gs-rose: var(--theme-gs-rose, #d4b8c4);
+  --gs-plum: var(--theme-gs-plum, #3a0353);
+  --gs-parchment: var(--theme-gs-parchment, #f9f7f0);
   display: none;
   position: absolute;
   /* Honor --backdrop-drift so Home purple sits higher; preauth leaves drift at 0. */

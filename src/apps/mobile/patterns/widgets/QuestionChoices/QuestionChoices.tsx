@@ -23,7 +23,10 @@ export interface QuestionChoicesProps {
   /**
    * Multi confirm control: circular tick after the last pill (default), or full-width Continue bar.
    */
-  confirm?: 'bar' | 'tick';
+  confirm?: 'bar' | 'tick' | 'none';
+  /** Controlled selection (multi). With `confirm="none"` the host sends it (e.g. from the composer). */
+  value?: string[];
+  onChange?: (ids: string[]) => void;
   /** When the `other` option is tapped in multi mode, call this instead of toggling it on. */
   onOther?: () => void;
   /**
@@ -44,8 +47,12 @@ export function QuestionChoices({
   confirm = 'tick',
   onOther,
   pills = 'inline',
+  value,
+  onChange,
 }: QuestionChoicesProps) {
-  const [selected, setSelected] = useState<string[]>(initialSelected);
+  const [own, setOwn] = useState<string[]>(initialSelected);
+  const selected = value ?? own;
+  const setSelected = (ids: string[]) => { setOwn(ids); onChange?.(ids); };
   const submitted = useRef(false);
   const [sent, setSent] = useState(false);
   const locked = disabled || sent || Boolean(answered);
@@ -68,7 +75,9 @@ export function QuestionChoices({
       onOther();
       return;
     }
-    setSelected((xs) => toggleSelection(xs, id, exclusive));
+    // Without a confirm control, the exclusive answer ("None of these") is sent straight away.
+    if (confirm === 'none' && id === exclusive && !selected.includes(id)) return submit([id]);
+    setSelected(toggleSelection(selected, id, exclusive));
   };
 
   const canConfirm = multi && !locked && selected.length > 0 && !selected.includes('other');

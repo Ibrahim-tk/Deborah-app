@@ -31,4 +31,5 @@
 
 .text { display: grid; gap: var(--space-1); }
 .label { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.label[data-emphasis] { font-weight: var(--weight-medium); letter-spacing: -0.01em; }
 .description { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

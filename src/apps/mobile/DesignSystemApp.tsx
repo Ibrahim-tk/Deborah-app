@@ -11,6 +11,8 @@ import './styles/mobile.base.css';
 import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/500.css';
 import './styles/mobile.skin.deborah.css';
+// TEMPORARY colour experiment (off unless <html data-color-theme="fig">).
+import './styles/mobile.theme.fig.css';
 
 export default function DesignSystemApp() {
   const textSize = useAppStore((s) => s.settings.textSize);

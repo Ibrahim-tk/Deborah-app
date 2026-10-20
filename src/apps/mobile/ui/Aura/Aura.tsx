@@ -14,5 +14,5 @@ export interface AuraProps {
 }
 
 export function Aura({ rise, className }: AuraProps) {
-  return <span className={cx(styles.root, rise && styles.rise, className)} aria-hidden />;
+  return <span className={cx(styles.root, rise && styles.rise, className)} aria-hidden data-bg-layer />;
 }

@@ -1,3 +1,8 @@
+/* Display serif: Fraunces (variable: weight + optical size, roman + italic), self-hosted via
+   @fontsource-variable/fraunces (design call 2026-10-20, replaces Cormorant Garamond). */
+@import '@fontsource-variable/fraunces/opsz.css';
+@import '@fontsource-variable/fraunces/opsz-italic.css';
+
 /* src/styles/fonts.css — self-host the display serif from public/fonts (Cormorant Garamond 400 + italic 400).
  * Body and UI text use SF Pro through the system stack (-apple-system); it is not bundled (Apple licence).
  * On non-Apple machines the prototype falls back to system-ui. */

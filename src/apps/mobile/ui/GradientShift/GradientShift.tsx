@@ -15,7 +15,7 @@ import styles from './GradientShift.module.css';
 
 export function GradientShift() {
   return (
-    <span className={styles.root} aria-hidden>
+    <span className={styles.root} aria-hidden data-bg-layer>
       <span className={`${styles.field} ${styles.violet}`} />
       <span className={`${styles.field} ${styles.lilac}`} />
       <span className={`${styles.field} ${styles.gold}`} />

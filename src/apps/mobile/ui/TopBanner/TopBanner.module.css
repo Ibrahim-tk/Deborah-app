@@ -1,0 +1,33 @@
+/* Floating element, so a soft shadow is allowed (DESIGN.md). Sits just under the status bar. */
+.host {
+  position: absolute;
+  top: calc(var(--safe-top) + var(--space-2));
+  left: var(--margin-screen);
+  right: var(--margin-screen);
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+}
+/* Let taps through the empty host area (beats the overlay host's `> * { pointer-events: auto }`). */
+.host.host { pointer-events: none; }
+.banner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4) var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-float-md);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.banner svg { flex: none; }
+.text { min-width: 0; }
+
+/* Tones: solid fills with on-colour text (≥7:1). */
+.error { background: var(--color-danger-fill); color: var(--white); }
+.success { background: var(--color-success-ink); color: var(--white); }
+.info { background: var(--color-surface-signature); color: var(--color-ink-on-signature); }

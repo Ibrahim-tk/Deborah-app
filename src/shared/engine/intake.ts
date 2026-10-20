@@ -63,6 +63,13 @@ export function missingGates(profile: Profile): string[] {
   return SAFETY_GATES.filter(unknown(profile));
 }
 
+/** Share (0–1) of the health intake already known: onboarding basics + safety gates. */
+export function intakeProgress(profile: Profile): number {
+  const ids = [...(intakeData.onboarding ?? []), ...SAFETY_GATES];
+  if (!ids.length) return 0;
+  return ids.filter((id) => !unknown(profile)(id)).length / ids.length;
+}
+
 /** Onboarding basics still unknown (date of birth, sex at birth): asked in the consultation, before the topic. */
 export function missingOnboarding(profile: Profile): string[] {
   return (intakeData.onboarding ?? []).filter(unknown(profile));

@@ -87,7 +87,7 @@
 .fade > i {
   position: absolute;
   inset: 0;
-  background: rgb(249 247 245 / var(--wash));
+  background: rgb(249 247 240 / var(--wash));
   -webkit-backdrop-filter: blur(var(--b));
   backdrop-filter: blur(var(--b));
   -webkit-mask-image: linear-gradient(to bottom, transparent var(--from), #000 var(--to));

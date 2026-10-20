@@ -11,7 +11,7 @@
  * OPEN: the spec places this inline in the thread; confirm the sheet presentation with Deborah.
  */
 import { useState } from 'react';
-import { Button, Icon, Overlay } from '@mobile/ui';
+import { ActionTile, BottomSheet, Button } from '@mobile/ui';
 import styles from './EscalationCard.module.css';
 
 export interface EscalationCardProps {
@@ -36,35 +36,22 @@ export function EscalationCard({ body, reasons, details, dismissed, onBook, onDi
   return (
     <>
       {/* Inline record: one quiet row that reopens the sheet (design direction 2026-10-14). */}
-      <button type="button" className={styles.record} onClick={() => setOpen(true)} data-placeholder>
-        <span className={styles.recordIcon} aria-hidden><Icon name="calendar" size={18} /></span>
-        <span className={styles.recordText}>
-          <span className={styles.recordTitle}>Talk with Deborah directly</span>
-          <span className={styles.recordMeta}>{details?.slice(0, 2).join(' · ') || 'Worth a personal look'}</span>
-        </span>
-        <Icon name="chevron" size={18} className={styles.recordChevron} />
-      </button>
-      <Overlay>
-        {open && (
-          <div className={styles.layer}>
-            <button type="button" className={styles.scrim} aria-label="Close" onClick={() => setOpen(false)} />
-            <div className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby="escalation-title" data-placeholder>
-              <span className={styles.grabber} aria-hidden />
-              <h2 id="escalation-title" className={styles.title}>{body}</h2>
-              {reasons && reasons.length > 0 && <ul className={styles.reasons}>{reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
-              {details && details.length > 0 && (
-                <div className={styles.details} aria-label="About the consultation">
-                  {details.map((d) => <span key={d} className={styles.detail}>{d}</span>)}
-                </div>
-              )}
-              <div className={styles.actions}>
-                <Button fullWidth leadingIcon="calendar" onClick={book}>Book a consult with Deborah</Button>
-                <Button variant="ghost" fullWidth className={styles.notNow} onClick={notNow}>Not now</Button>
-              </div>
+      <ActionTile className={styles.record} icon="calendar" title="Talk with Deborah directly" meta={details?.slice(0, 2).join(' · ') || 'Worth a personal look'} onClick={() => setOpen(true)} />
+      <BottomSheet open={Boolean(open)} onClose={() => setOpen(false)}>
+        <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>
+          <h2 id="escalation-title" className={styles.title}>{body}</h2>
+          {reasons && reasons.length > 0 && <ul className={styles.reasons}>{reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
+          {details && details.length > 0 && (
+            <div className={styles.details} aria-label="About the consultation">
+              {details.map((d) => <span key={d} className={styles.detail}>{d}</span>)}
             </div>
+          )}
+          <div className={styles.actions}>
+            <Button fullWidth leadingIcon="calendar" onClick={book}>Book a consult with Deborah</Button>
+            <Button variant="ghost" fullWidth className={styles.notNow} onClick={notNow}>Not now</Button>
           </div>
-        )}
-      </Overlay>
+        </div>
+      </BottomSheet>
     </>
   );
 }

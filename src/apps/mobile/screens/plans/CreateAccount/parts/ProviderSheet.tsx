@@ -3,7 +3,7 @@
  * system UI, so it uses the system font and greys rather than product tokens. No real auth.
  */
 import { useEffect } from 'react';
-import { Icon, Overlay, Spinner } from '@mobile/ui';
+import { BottomSheet, Icon, Spinner } from '@mobile/ui';
 import { simMs } from '@mobile/hooks/simTiming';
 import { useLatest } from '@mobile/hooks/useLatest';
 import styles from './ProviderSheet.module.css';
@@ -11,23 +11,25 @@ import styles from './ProviderSheet.module.css';
 export type Provider = 'apple' | 'google';
 
 export interface ProviderSheetProps {
+  open: boolean;
   provider: Provider;
   email: string;
   onDone: (email: string) => void;
   onCancel: () => void;
 }
 
-export function ProviderSheet({ provider, email, onDone, onCancel }: ProviderSheetProps) {
+export function ProviderSheet({ open, provider, email, onDone, onCancel }: ProviderSheetProps) {
   const done = useLatest(onDone);
   useEffect(() => {
+    if (!open) return;
     const id = window.setTimeout(() => done.current(email), simMs(1200));
     return () => window.clearTimeout(id);
-  }, [email, done]);
+  }, [open, email, done]);
 
   return (
-    <Overlay>
-      <div className={styles.scrim}>
-        <div className={styles.sheet} role="dialog" aria-modal="true" aria-label={provider === 'apple' ? 'Sign in with Apple' : 'Sign in with Google'}>
+    // Shared ui/BottomSheet interaction; `system` keeps Apple's own sheet look (neutral dim, grey surface).
+    <BottomSheet open={open} onClose={onCancel} variant="system" label={provider === 'apple' ? 'Sign in with Apple' : 'Sign in with Google'}>
+        <div className={styles.sheet}>
           <div className={styles.head}>
             <span className={styles.brand}>
               <Icon name={provider} size={20} /> {provider === 'apple' ? 'Apple Account' : 'Google'}
@@ -40,7 +42,6 @@ export function ProviderSheet({ provider, email, onDone, onCancel }: ProviderShe
             <Spinner size={16} /> Continue as {email}
           </p>
         </div>
-      </div>
-    </Overlay>
+    </BottomSheet>
   );
 }

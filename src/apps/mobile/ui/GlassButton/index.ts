@@ -1,2 +1,2 @@
-export { GlassButton } from './GlassButton';
-export type { GlassButtonProps } from './GlassButton';
+export * from './GlassButton';
+export * from './GlassFilters';

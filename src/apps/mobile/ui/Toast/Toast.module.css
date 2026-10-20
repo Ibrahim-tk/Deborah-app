@@ -1,10 +1,14 @@
 .root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   max-width: 100%;
   padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface-signature);
-  color: var(--color-ink-on-signature);
+  border-radius: var(--radius-full);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline), var(--shadow-float-md);
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
-  box-shadow: var(--shadow-float-sm);
   text-align: center;
 }
+.icon { flex: none; color: var(--color-success-ink); }

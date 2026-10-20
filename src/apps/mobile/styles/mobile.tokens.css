@@ -2,10 +2,10 @@
 .phone-root {
   /* Surfaces */
   /* Cream foot of Wispr Flow — fills any gap below the photo so there’s no yellow band. */
-  --color-canvas: #f9f7f5;
+  --color-canvas: #f9f7f0;
   --color-surface: var(--white);
   /* Warm frosted glass for floating chat surfaces (composer, intake options): white melting into cream. */
-  --glass-warm-fill: linear-gradient(170deg, rgb(255 255 255 / 0.8), rgb(249 247 245 / 0.7));
+  --glass-warm-fill: linear-gradient(170deg, rgb(255 255 255 / 0.8), rgb(249 247 240 / 0.7));
   --glass-warm-rim: rgb(255 255 255 / 0.85);
   --glass-warm-blur: blur(24px) saturate(150%);
   /* Shared screen backdrop (Wispr Flow): purple wash → cream. Lift keeps purple to ~top 20%. */
@@ -146,7 +146,7 @@
   -webkit-font-smoothing: antialiased;
 }
 .phone-root ::selection { background: var(--purple-100); color: var(--purple-900); }
-.phone-root :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.phone-root :focus-visible:not(input, textarea) { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 .phone-root input, .phone-root textarea { caret-color: var(--color-accent); }
 
 /* Type role utility classes (optional; components may use the variables directly) */

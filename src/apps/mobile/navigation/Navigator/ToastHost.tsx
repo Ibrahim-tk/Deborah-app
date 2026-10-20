@@ -19,7 +19,7 @@ export function ToastHost({ lifted, overComposer }: { lifted: boolean; overCompo
       <AnimatePresence>
         {toast && (
           <MotionDiv key={toast.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: DURATION.base }}>
-            <Toast message={toast.message} />
+            <Toast message={toast.message} icon={toast.icon} />
           </MotionDiv>
         )}
       </AnimatePresence>

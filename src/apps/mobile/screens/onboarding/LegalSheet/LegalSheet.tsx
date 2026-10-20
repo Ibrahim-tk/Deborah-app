@@ -20,7 +20,7 @@ export default function LegalSheet() {
   const doc = section === 'privacy' ? consentDoc.privacy : consentDoc.terms;
   return (
     <div data-xref="M-1.5 · Terms / Privacy sheet">
-      <Sheet title={doc.title} detent="large" footer={<Button fullWidth onClick={dismissSheet}>Done</Button>}>
+      <Sheet title={doc.title} footer={<Button fullWidth onClick={dismissSheet}>Done</Button>}>
         <div className={styles.body} data-placeholder={consentDoc.status === 'placeholder' || undefined}>
           {doc.body.map((p) => (
             <p key={p}>{p}</p>

@@ -22,6 +22,8 @@ export interface ScreenMeta {
   detent?: 'medium' | 'large';
   /** Sheets: false disables scrim tap and drag-to-dismiss. */
   dismissible?: boolean;
+  /** Sheets: glass X top-right (docs/plans/sheet-close-button.md). Off unless the sheet needs it. */
+  closeButton?: boolean;
   tabBar?: boolean;
   statusBar?: 'dark' | 'light';
   figma: string;

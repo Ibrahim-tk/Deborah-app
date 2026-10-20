@@ -25,10 +25,20 @@ export interface ForgotPasswordProps {
   onCancel: () => void;
   /** Password renewed: sign her in with this email. */
   onComplete: (email: string) => void;
+  /** Each stage's heading + subtitle, shown in the sheet's header row (beside the close). */
+  onHeader?: (header: { title?: string; subtitle?: string }) => void;
 }
 
-export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPasswordProps) {
+const HEADERS: Record<Stage, { title?: string; subtitle?: string }> = {
+  email: { title: 'Reset your password', subtitle: 'Enter your email and I’ll send you a code.' },
+  code: { title: 'Check your email' },
+  password: { title: 'Choose a new password', subtitle: `At least ${MIN_LENGTH} characters.` },
+  set: {}, // centred confirmation, no header heading
+};
+
+export function ForgotPassword({ initialEmail, onCancel, onComplete, onHeader }: ForgotPasswordProps) {
   const [stage, setStage] = useState<Stage>('email');
+  useEffect(() => onHeader?.(HEADERS[stage]), [stage, onHeader]);
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -70,10 +80,6 @@ export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPas
   if (stage === 'email')
     return (
       <form key="email" className={shared.stage} onSubmit={sendCode} noValidate>
-        <div className={shared.head}>
-          <h2 className={shared.title}>Reset your password</h2>
-          <p className={shared.sub}>Enter your email and I’ll send you a code.</p>
-        </div>
         <Input label="Email" type="email" placeholder="Your email" value={email} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors({}); }} />
         <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email}>Send code</Button>
         <Button variant="link" className={styles.back} onClick={onCancel}>Back to sign in</Button>
@@ -83,7 +89,6 @@ export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPas
   if (stage === 'code')
     return (
       <div key="code" className={shared.stage}>
-        <h2 className={shared.title}>Check your email</h2>
         <CodeStep email={email.trim()} onChangeEmail={() => setStage('email')} onVerified={() => setStage('password')} />
       </div>
     );
@@ -91,10 +96,6 @@ export function ForgotPassword({ initialEmail, onCancel, onComplete }: ForgotPas
   if (stage === 'password')
     return (
       <form key="password" className={shared.stage} onSubmit={save} noValidate>
-        <div className={shared.head}>
-          <h2 className={shared.title}>Choose a new password</h2>
-          <p className={shared.sub}>At least {MIN_LENGTH} characters.</p>
-        </div>
         <Input label="New password" type="password" placeholder="Enter a new password" value={password} autoComplete="new-password" error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
         <Input label="Confirm new password" type="password" placeholder="Confirm your new password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />
         <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !password || !confirm}>Update password</Button>

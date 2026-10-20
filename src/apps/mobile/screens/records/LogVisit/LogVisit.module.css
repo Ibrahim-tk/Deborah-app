@@ -7,7 +7,7 @@
 .area { display: grid; gap: var(--space-2); }
 .fieldLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
 .area > textarea { padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border-control); border-radius: var(--radius-md); background: var(--color-surface); }
-.area:focus-within > textarea { padding: calc(var(--space-3) - 1px) calc(var(--space-4) - 1px); border: 2px solid var(--color-border-selected); }
+.area:focus-within > textarea { padding: calc(var(--space-3) - 1px) calc(var(--space-4) - 1px); border: 1px solid var(--field-border-focus); }
 
 .row { display: flex; align-items: flex-start; gap: var(--space-2); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-border-control); }
 .rowFields { flex: 1; min-width: 0; display: grid; gap: var(--space-3); }

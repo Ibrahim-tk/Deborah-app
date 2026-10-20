@@ -1,5 +1,5 @@
 /**
- * @pattern SymptomPicker — bottom sheet from the composer's "Symptoms" button: a search field, common
+ * @pattern SymptomPicker — shared ui/BottomSheet from the composer's "Symptoms" button: a search field, common
  *          symptoms grouped by area as toggle pills (tint when selected, no checkmark), and "Add '…'" for
  *          anything rare or unlisted. "Add to message" drops the picked symptoms into the draft.
  * @usedBy  M-2.1, M-2.12
@@ -7,9 +7,9 @@
  * @xref    web: apps/web/patterns/chat/SymptomPicker — not built
  * OPEN: DESIGN.md bans pills; the toggle pill matches ChoicePills (design direction 2026-10-14).
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { symptomGroups } from '@shared/data';
-import { AnimatePresence, Button, DURATION, EASE_IOS, Icon, IconButton, MotionDiv, Overlay, REDUCED_FADE, useReducedMotionPref } from '@mobile/ui';
+import { BottomSheet, Button, Icon, Input } from '@mobile/ui';
 import styles from './SymptomPicker.module.css';
 
 export interface SymptomPickerProps {
@@ -19,7 +19,6 @@ export interface SymptomPickerProps {
 }
 
 export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
-  const reduced = useReducedMotionPref();
   const [query, setQuery] = useState('');
   const [picked, setPicked] = useState<string[]>([]);
   const [custom, setCustom] = useState<string[]>([]);
@@ -46,61 +45,87 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
     setQuery('');
   };
 
-  const slide = reduced ? REDUCED_FADE : { initial: { y: '100%' }, animate: { y: 0 }, exit: { y: '100%' }, transition: { duration: DURATION.sheet, ease: EASE_IOS } };
+  // Category tabs: jump to a group; the active tab follows the scroll.
+  const listRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<string>();
+  const scroller = () => listRef.current?.closest<HTMLElement>('[data-sheet-scroll]') ?? listRef.current?.parentElement ?? null;
+  const jump = (title: string) => {
+    const el = listRef.current?.querySelector<HTMLElement>(`[data-group="${CSS.escape(title)}"]`);
+    const box = scroller();
+    if (!el || !box) return;
+    setActive(title);
+    box.scrollTo({ top: el.offsetTop - (listRef.current?.offsetTop ?? 0), behavior: 'smooth' });
+  };
+  useEffect(() => {
+    const box = scroller();
+    if (!open || !box) return;
+    const onScroll = () => {
+      const top = box.scrollTop + (listRef.current?.offsetTop ?? 0) + 8;
+      const sections = [...(listRef.current?.querySelectorAll<HTMLElement>('[data-group]') ?? [])];
+      const current = sections.filter((el) => el.offsetTop <= top).at(-1) ?? sections[0];
+      if (current) setActive(current.dataset.group);
+    };
+    box.addEventListener('scroll', onScroll, { passive: true });
+    return () => box.removeEventListener('scroll', onScroll);
+  }, [open, groups.length]);
+  const current = active ?? groups[0]?.title;
 
   return (
-    <Overlay>
-      <AnimatePresence>
-        {open && (
-          <div className={styles.root} key="symptoms">
-            <MotionDiv className={styles.scrim} onClick={close} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: DURATION.base }} />
-            <MotionDiv className={styles.panel} role="dialog" aria-modal="true" aria-label="Add symptoms" {...slide}>
-              <div className={styles.grabber} aria-hidden />
-              <header className={styles.head}>
-                <h2 className={styles.title}>Symptoms</h2>
-                <IconButton icon="close" label="Close" className={styles.close} onClick={close} />
-              </header>
-              <label className={styles.search}>
-                <Icon name="search" size={18} />
-                <input
-                  className={styles.input}
-                  value={query}
-                  placeholder="Search or type any symptom"
-                  aria-label="Search symptoms"
-                  enterKeyHint="done"
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && q && !exact) { e.preventDefault(); addOwn(); } }}
-                />
-              </label>
-              <div className={styles.list}>
-                {q && !exact && (
-                  <button type="button" className={styles.addOwn} onClick={addOwn}>
-                    <Icon name="plus" size={18} /> Add “{query.trim()}”
-                  </button>
-                )}
-                {groups.map((g) => (
-                  <section key={g.title} className={styles.group} aria-label={g.title}>
-                    <p className={styles.groupTitle}>{g.title}</p>
-                    <div className={styles.pills}>
-                      {g.items.map((s) => (
-                        <button key={s} type="button" className={styles.pill} aria-pressed={picked.includes(s)} onClick={() => toggle(s)}>
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </section>
-                ))}
-                {!groups.length && !q && <p className={styles.empty}>No symptoms yet.</p>}
-              </div>
-              <footer className={styles.foot}>
-                <Button fullWidth disabled={!picked.length} onClick={() => { onAdd(picked); close(); }}>
-                  {picked.length ? `Add ${picked.length} to message` : 'Pick what you’re feeling'}
-                </Button>
-              </footer>
-            </MotionDiv>
-          </div>
+    <BottomSheet
+      showClose
+      open={open}
+      onClose={close}
+      height="large"
+      label="Add symptoms"
+      titleEnd={
+        <Input
+          variant="search"
+          label="Search symptoms"
+          hideLabel
+          className={styles.search}
+          value={query}
+          placeholder="Search or type any symptom"
+          enterKeyHint="done"
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter' && q && !exact) { e.preventDefault(); addOwn(); } }}
+        />
+      }
+    >
+      {groups.length > 1 && (
+        <div className={styles.tabs} role="tablist" aria-label="Symptom areas">
+          {groups.map((g) => (
+            <button key={g.title} type="button" role="tab" aria-selected={g.title === current} className={styles.tab} onClick={() => jump(g.title)}>
+              {g.title}
+            </button>
+          ))}
+        </div>
+      )}
+      <div ref={listRef} className={styles.list}>
+        {q && !exact && (
+          <button type="button" className={styles.addOwn} onClick={addOwn}>
+            <Icon name="plus" size={18} /> Add “{query.trim()}”
+          </button>
         )}
-      </AnimatePresence>
-    </Overlay>
+        {groups.map((g) => (
+          <section key={g.title} data-group={g.title} className={styles.group} aria-label={g.title}>
+            <p className={styles.groupTitle}>{g.title}</p>
+            <div className={styles.pills}>
+              {g.items.map((s) => (
+                <button key={s} type="button" className={styles.pill} aria-pressed={picked.includes(s)} onClick={() => toggle(s)}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </section>
+        ))}
+        {!groups.length && !q && <p className={styles.empty}>No symptoms yet.</p>}
+      </div>
+      {/* Pinned to the bottom of the scroll area on a transparent fade, so the list scrolls behind it. */}
+      <div className={styles.cta}>
+        <Button fullWidth disabled={!picked.length} onClick={() => { onAdd(picked); close(); }}>
+          {picked.length ? 'Add' : 'Pick what you’re feeling'}
+        </Button>
+      </div>
+    </BottomSheet>
   );
 }

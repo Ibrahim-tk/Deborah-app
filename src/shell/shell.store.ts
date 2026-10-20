@@ -33,6 +33,9 @@ interface ShellState {
   scale: DeviceScale;
   simKeyboard: boolean;
   showCaption: boolean;
+  /** TEMPORARY colour experiment: Original or Fig (mobile.theme.fig.css). */
+  colorTheme: ColorTheme;
+  setColorTheme: (t: ColorTheme) => void;
   /** Sticky screen-story note beside the phone (remembered in this browser). */
   showNotes: boolean;
   theme: ShellTheme;
@@ -58,6 +61,24 @@ interface ShellState {
   clearToast: () => void;
 }
 
+export type ColorTheme = 'original' | 'fig';
+const COLOR_THEME_KEY = 'oc.color-theme';
+/** Applies the theme to <html> (the fig CSS is scoped to [data-color-theme='fig']). */
+function applyColorTheme(t: ColorTheme) {
+  if (t === 'fig') document.documentElement.dataset.colorTheme = 'fig';
+  else delete document.documentElement.dataset.colorTheme;
+}
+function readColorTheme(): ColorTheme {
+  let t: ColorTheme = 'original';
+  try {
+    if (localStorage.getItem(COLOR_THEME_KEY) === 'fig') t = 'fig';
+  } catch {
+    // Storage unavailable: start on the original theme.
+  }
+  applyColorTheme(t);
+  return t;
+}
+
 const NOTES_KEY = 'oc.show-notes';
 function readShowNotes(): boolean {
   try {
@@ -72,6 +93,7 @@ export const useShellStore = create<ShellState>()((set) => ({
   scale: 'fit',
   simKeyboard: false,
   showCaption: true,
+  colorTheme: readColorTheme(),
   showNotes: readShowNotes(),
   theme: 'light',
   variant: 1,
@@ -92,6 +114,15 @@ export const useShellStore = create<ShellState>()((set) => ({
   setScale: (scale) => set({ scale }),
   setSimKeyboard: (simKeyboard) => set({ simKeyboard }),
   setShowCaption: (showCaption) => set({ showCaption }),
+  setColorTheme: (colorTheme) => {
+    applyColorTheme(colorTheme);
+    try {
+      localStorage.setItem(COLOR_THEME_KEY, colorTheme);
+    } catch {
+      // Storage unavailable: the choice lasts for this session only.
+    }
+    set({ colorTheme });
+  },
   setShowNotes: (showNotes) => {
     try {
       localStorage.setItem(NOTES_KEY, showNotes ? '1' : '0');

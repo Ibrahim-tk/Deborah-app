@@ -15,7 +15,7 @@
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
 import { useEffect, useRef, useState } from 'react';
-import { firstConsultFlow, returningConsultFlow } from '@shared/data';
+import { firstConsultFlow, returningConsultFlow, sandraConsultFlow } from '@shared/data';
 import { briefFromAnswer, visitBriefPreview } from '@shared/engine';
 import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
@@ -38,20 +38,36 @@ const EXITS: Record<string, string> = { '/labs/upload': 'M-5.3', '/book': 'M-8.2
 
 export default function FirstConsult() {
   // `flow: 'returning'`: the signed-in demo (Maria, seed R01) instead of the first consultation.
-  const { flow: which } = useScreenParams<{ flow: 'returning' }>();
-  const flow = which === 'returning' ? returningConsultFlow : firstConsultFlow;
+  // `flow: 'sandra'`: the premade first chat a new sign-up lands in (Sandra, 46, perimenopause happy path).
+  const { flow: which } = useScreenParams<{ flow: 'returning' | 'sandra' }>();
+  const flow = which === 'returning' ? returningConsultFlow : which === 'sandra' ? sandraConsultFlow : firstConsultFlow;
   const { pop, open, push, openAsk } = useNav();
   const toast = useToast();
   const consent = useHealthConsent();
   const name = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
   // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
   const profileCtx = useProfileContext();
-  const player = useFlowPlayer(flow, name, which === 'returning' ? undefined : profileCtx);
+  const player = useFlowPlayer(flow, name, !which ? profileCtx : undefined);
   const { entries, typing } = player;
   const asked = useRef(false);
   const [draft, setDraft] = useState('');
   const [symptomsOpen, setSymptomsOpen] = useState(false);
+  // Picked symptoms ride as pills in the composer; they become words only when the message is sent.
+  const [symptoms, setSymptoms] = useState<string[]>([]);
+  const withPicked = (text: string) => {
+    if (!symptoms.length) return text;
+    setSymptoms([]);
+    return withSymptoms(text, symptoms);
+  };
   const say = player.say;
+  // A multi-choice answer in progress: picked pills mirror into the composer, sent with her words (or alone).
+  const [held, setHeld] = useState<{ entryId: string; node: FlowNode; picked: FlowOption[] } | null>(null);
+  const send = (text: string) => {
+    if (!held?.picked.length) return typeInstead(withPicked(text));
+    const words = withPicked(text).trim();
+    setHeld(null);
+    pick(held.entryId, held.node, words ? [...held.picked, { label: words, value: words }] : held.picked);
+  };
 
   const prep = visitPrepItems(flow.nodes.answer_1);
 
@@ -101,6 +117,7 @@ export default function FirstConsult() {
   };
 
   const action = (value: string) => {
+    if (value === 'book_request') return toast('Request sent. Watch your email.');
     if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with Deborah`); return push('M-8.2'); }
     // Miro Step 5: Visit prep / §7 save land on the structured provider brief (M-9.7).
     if (value === 'visit_notes' || value === 'save') {
@@ -112,6 +129,7 @@ export default function FirstConsult() {
       return;
     }
     if (value === 'exit_product') return open('M-2.7', { productId: 'genesis-gold' });
+    if (value === 'complete_intake' || value === 'edit_profile') return push('M-2.14');
     if (value === 'pdf') {
       const id = saveProviderBrief();
       if (id) open('M-9.6', { briefNoteId: id });
@@ -120,8 +138,16 @@ export default function FirstConsult() {
     toast(value === 'call' ? 'Calling 911 (simulated)' : value === 'find_care' ? 'Finding care near you (simulated)' : 'Saved to My Health');
   };
   // Typing instead of tapping leaves the script for free chat, carrying what she typed.
+  // Premade chat (Sandra): whatever she types answers the question on screen and the script carries on,
+  // so it feels live. Other scripts leave for free chat, carrying what she typed.
   const typeInstead = (text: string) => {
-    if (text.trim()) openAsk({ prefill: text.trim(), focus: true });
+    const t = text.trim();
+    if (!t) return;
+    if (which === 'sandra' && waiting?.kind === 'bot' && (waiting.node.type === 'question' || waiting.node.display === 'greeting')) {
+      setDraft('');
+      return pick(waiting.id, waiting.node, [{ label: t, value: t }]);
+    }
+    openAsk({ prefill: t, focus: true });
   };
   const started = entries.some((e) => e.kind === 'user');
   // The held safety note sits after the answer but never takes the turn: the answer's follow-ups stay live.
@@ -149,7 +175,9 @@ export default function FirstConsult() {
               entry={e}
               active={e === waiting}
               say={say}
-              onPick={(node, picked) => pick(e.id, node, picked)}
+              onPick={(node, picked) => { setHeld(null); pick(e.id, node, picked); }}
+              selection={held?.entryId === e.id ? held.picked : undefined}
+              onSelect={(node, picked) => setHeld({ entryId: e.id, node, picked })}
               onAction={action}
               renderPrep={() => (
                 <VisitPrepCard
@@ -182,17 +210,22 @@ export default function FirstConsult() {
         <Composer
           value={draft}
           onChange={setDraft}
-          onSend={(text) => typeInstead(text ?? draft)}
+          onSend={(text) => send(text ?? draft)}
           onStop={() => {}}
           onAttach={(source) => open('M-5.3', { source })}
           onSymptoms={() => setSymptomsOpen(true)}
+          tokens={[...(held?.picked.map((o) => say(o.label)) ?? []), ...symptoms]}
+          onRemoveToken={(t) => {
+            setSymptoms((xs) => xs.filter((x) => x !== t));
+            if (held) setHeld({ ...held, picked: held.picked.filter((o) => say(o.label) !== t) });
+          }}
           onFocusChange={() => {}}
           generating={typing}
           placeholder="Or tell me in your own words…"
           voiceSample=""
         />
       </div>
-      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => setDraft((d) => withSymptoms(d, xs))} />
+      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
     </div>
   );
 }

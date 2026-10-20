@@ -3,6 +3,8 @@ export interface FlowOption {
   label: string;
   value?: string | boolean;
   next?: string;
+  /** What she "says" when she taps it, if longer than the pill (premade chats). */
+  reply?: string;
 }
 
 export interface FlowWidget {
@@ -10,7 +12,9 @@ export interface FlowWidget {
     /** On-the-fly widgets (patterns/widgets, docs/ux/F02c). */
     | 'mood_scale' | 'scale_check' | 'upload_card' | 'slot_picker' | 'confirm_card' | 'reminder_card'
     /** The human path (EscalationCard) as an inline tile; options = [book, not now]. */
-    | 'escalation';
+    | 'escalation'
+    /** Premade chat (Sandra): quiet banner pointing to the Health profile; `label` is its dismiss link. */
+    | 'intake_banner';
   options?: FlowOption[];
   actions?: FlowOption[];
   multi?: boolean;
@@ -62,6 +66,10 @@ export interface FlowNode {
   skipIfKnown?: string;
   /** `greeting`: the chat's opening line, set large in serif with no bubble (design direction 2026-10-14). */
   display?: 'greeting';
+  /** Answer only: what Deborah noted, offered as "Save to my profile" right under the seven cards. */
+  profileFacts?: { label: string; value: string }[];
+  /** Visit notes drawn inline (premade chat): header lines, then numbered sections. */
+  visitNotes?: { title: string; meta: string[]; sections: { title: string; body: string | string[] }[] };
 }
 
 export interface Flow {

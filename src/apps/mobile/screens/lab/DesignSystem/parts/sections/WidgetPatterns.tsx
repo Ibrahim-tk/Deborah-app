@@ -281,9 +281,9 @@ export function WidgetPatterns() {
           <Variant label="inline"><QuestionChoices label="Still having periods?" options={YES_NO} onSubmit={noop} /></Variant>
           <Variant label="regular"><QuestionChoices label="Any of these?" options={MULTI} multi exclusive="none" pills="regular" onSubmit={noop} /></Variant>
         </Specimen>
-        <Specimen name="MoodScale · ScaleCheck" path="patterns/widgets/MoodScale" note="One tap answers. ScaleCheck: 0–10 in one compact row.">
+        <Specimen name="MoodScale · ScaleCheck" path="patterns/widgets/MoodScale" note="One tap answers. ScaleCheck: a bare five-stop slider; release answers.">
           <MoodScale title="How are you feeling today?" onPick={noop} />
-          <ScaleCheck title="How much is sleep bothering you?" low="Not at all" high="A lot" initial={6} onDone={noop} />
+          <ScaleCheck title="How much is sleep bothering you?" low="Not at all" high="A lot" initial={4} onDone={noop} />
         </Specimen>
         <Specimen name="BookDeborah" path="patterns/widgets/BookDeborah" note="Tile CTA → small sheet: team notified, they’ll contact you. No calendar.">
           <BookDeborah onRequest={noop} />

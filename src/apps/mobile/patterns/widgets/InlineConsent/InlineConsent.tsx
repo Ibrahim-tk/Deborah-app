@@ -7,7 +7,7 @@
  */
 import { useRef, useState } from 'react';
 import { consentDoc } from '@shared/data';
-import { Button, Icon, IconButton, Overlay } from '@mobile/ui';
+import { BottomSheet, Button, Icon } from '@mobile/ui';
 import styles from './InlineConsent.module.css';
 
 type Doc = 'privacy' | 'terms';
@@ -38,6 +38,10 @@ export interface InlineConsentProps {
 
 export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', title, description, agreeLabel, declineLabel, disabled }: InlineConsentProps) {
   const [doc, setDoc] = useState<Doc>();
+  // Last opened document stays rendered while the sheet animates out.
+  const lastDoc = useRef<Doc | undefined>(undefined);
+  if (doc) lastDoc.current = doc;
+  const shown = lastDoc.current ? DOCS[lastDoc.current] : undefined;
   const submitted = useRef(false);
   const act = (agree: boolean) => {
     if (disabled || submitted.current) return;
@@ -74,23 +78,13 @@ export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', t
           )}
         </div>
       )}
-      <Overlay>
-        {doc && (
-          <div className={styles.layer}>
-            <button type="button" className={styles.scrim} aria-label="Close" onClick={() => setDoc(undefined)} />
-            <div className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby="legal-title">
-              <span className={styles.grabber} aria-hidden />
-              <div className={styles.sheetHead}>
-                <h2 id="legal-title" className={styles.sheetTitle}>{DOCS[doc].title}</h2>
-                <IconButton icon="close" label="Close" onClick={() => setDoc(undefined)} />
-              </div>
-              <div className={styles.sheetBody}>
-                {DOCS[doc].body.map((p) => <p key={p}>{p}</p>)}
-              </div>
-            </div>
+      <BottomSheet showClose titleEnd={<h2 id="legal-title" className={styles.sheetTitle}>{shown?.title}</h2>} open={Boolean(doc)} onClose={() => setDoc(undefined)}>
+        <div className={styles.sheet} role="group" aria-labelledby="legal-title">
+          <div className={styles.sheetBody}>
+            {shown?.body.map((p) => <p key={p}>{p}</p>)}
           </div>
-        )}
-      </Overlay>
+        </div>
+      </BottomSheet>
     </section>
   );
 }

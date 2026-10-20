@@ -2,7 +2,7 @@
  * Editable labs / questions / medications for M-9.7 review mode (Phase 2).
  */
 import type { VisitBriefContent, VisitBriefLab, VisitBriefMed, VisitBriefQuestion } from '@shared/types/domain';
-import { Button } from '@mobile/ui';
+import { Button, Input, Select } from '@mobile/ui';
 import styles from './BriefDocument.module.css';
 
 export interface BriefListsProps {
@@ -20,28 +20,27 @@ export function BriefLabs({ brief, onChange }: BriefListsProps) {
       <ul className={styles.list}>
         {labs.map((lab, i) => (
           <li key={`lab-${i}`} className={styles.editRow}>
-            <select
-              className={styles.select}
-              aria-label="Test priority"
+            <Select<VisitBriefLab['tier']>
+              label="Test priority"
+              options={[
+                { value: 'primary', label: 'Primary' },
+                { value: 'also', label: 'Also request' },
+              ]}
               value={lab.tier}
-              onChange={(e) => {
-                const tier = e.target.value as VisitBriefLab['tier'];
-                set(labs.map((x, j) => (j === i ? { ...x, tier } : x)));
-              }}
-            >
-              <option value="primary">Primary</option>
-              <option value="also">Also request</option>
-            </select>
-            <input
+              onChange={(tier) => set(labs.map((x, j) => (j === i ? { ...x, tier } : x)))}
+            />
+            <Input
               className={styles.field}
-              aria-label="Test name"
+              hideLabel
+              label="Test name"
               placeholder="Test name"
               value={lab.name}
               onChange={(e) => set(labs.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))}
             />
-            <input
+            <Input
               className={styles.field}
-              aria-label="Reason for test"
+              hideLabel
+              label="Reason for test"
               placeholder="Reason / timing"
               value={lab.reason}
               onChange={(e) => set(labs.map((x, j) => (j === i ? { ...x, reason: e.target.value } : x)))}
@@ -69,16 +68,18 @@ export function BriefQuestions({ brief, onChange }: BriefListsProps) {
       <ol className={styles.numberedEdit}>
         {questions.map((q, i) => (
           <li key={`q-${i}`} className={styles.editRow}>
-            <input
+            <Input
               className={styles.field}
-              aria-label="Question"
+              hideLabel
+              label="Question"
               placeholder="Question for my provider"
               value={q.text}
               onChange={(e) => set(questions.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)))}
             />
-            <input
+            <Input
               className={styles.field}
-              aria-label="Why I’m asking"
+              hideLabel
+              label="Why I’m asking"
               placeholder="Why I’m asking"
               value={q.why}
               onChange={(e) => set(questions.map((x, j) => (j === i ? { ...x, why: e.target.value } : x)))}
@@ -111,16 +112,18 @@ export function BriefMeds({ brief, onChange }: BriefListsProps) {
       <ul className={styles.list}>
         {medications.map((m, i) => (
           <li key={`med-${i}`} className={m.genesisGoldNote ? `${styles.editRow} ${styles.gold}` : styles.editRow}>
-            <input
+            <Input
               className={styles.field}
-              aria-label="Medication name"
+              hideLabel
+              label="Medication name"
               placeholder="Medication / supplement"
               value={m.name}
               onChange={(e) => set(medications.map((x, j) => (j === i ? { ...x, name: e.target.value } : x)))}
             />
-            <input
+            <Input
               className={styles.field}
-              aria-label="Dose"
+              hideLabel
+              label="Dose"
               placeholder="Dose / frequency"
               value={m.dose ?? ''}
               onChange={(e) => set(medications.map((x, j) => (j === i ? { ...x, dose: e.target.value } : x)))}

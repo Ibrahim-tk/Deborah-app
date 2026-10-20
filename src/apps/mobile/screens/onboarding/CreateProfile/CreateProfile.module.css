@@ -7,7 +7,6 @@
 @keyframes stage-in { from { opacity: 0; transform: translateX(12px); } }
 @keyframes check-in { from { opacity: 0; transform: scale(0.6); } }
 @media (prefers-reduced-motion: reduce) { .stage, .done, .check { animation: none; } }
-.head { display: grid; gap: var(--space-1); }
 /* Quiet text link under the password: callout size, accent colour, no underline (designer, 2026-10-14). */
 .forgot { justify-self: start; min-height: 32px; margin-top: calc(var(--space-3) * -1); padding: 0; border: 0; background: none; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-accent); text-decoration: none; cursor: pointer; }
 .forgot:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }

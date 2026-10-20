@@ -1,24 +1,31 @@
-.tiles { display: grid; gap: var(--space-3); }
-.tile {
-  display: flex; align-items: center; gap: var(--space-4);
-  width: 100%; padding: var(--space-4); border: 0; border-radius: var(--radius-card-sm);
-  background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--surface-border);
-  text-align: start; cursor: pointer;
-  transition: background var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+.tiles {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: var(--space-3);
 }
-.tile:active { transform: scale(0.99); }
+/* Equal-height cards, white with a light stroke (same as the other answer buttons). The icon sits centred
+   in the upper area; the label anchors to the bottom so both cards line up whatever its length. */
+.tile {
+  position: relative; display: grid; grid-template-rows: 1fr auto; justify-items: center; gap: var(--space-3);
+  min-width: 0; min-height: 176px; padding: var(--space-5) var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-card-sm);
+  background: rgb(255 255 255 / 0.75); box-shadow: inset 0 0 0 1px var(--surface-border);
+  text-align: center; cursor: pointer;
+  transition: background 300ms ease-out, box-shadow 300ms ease-out, transform var(--dur-quick) var(--ease-out);
+}
+.tile:hover { background: rgb(255 255 255 / 0.95); }
+.tile:active { transform: scale(0.98); }
 .tile:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .tile[data-on] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
-/* Big icon on a soft circle; selected = filled glyph on the accent. */
 .badge {
-  --icon-cut: var(--color-surface-lilac);
-  flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-full);
-  background: var(--color-surface-lilac); color: var(--color-accent);
+  display: grid; place-items: center; align-self: center; width: 64px; height: 64px; border-radius: 50%;
+  background: var(--color-accent-tint); color: var(--color-accent);
   transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
 }
-.tile[data-on] .badge { --icon-cut: var(--color-accent); background: var(--color-accent); color: var(--color-ink-on-accent); }
-.text { flex: 1; display: grid; gap: 2px; min-width: 0; }
-.tileTitle { font: var(--weight-medium) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); }
-.tileSub { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
-.chevron { flex: none; color: var(--color-ink-secondary); }
-@media (prefers-reduced-motion: reduce) { .tile, .badge { transition: none; } }
+.tile[data-on] .badge { background: var(--color-accent); color: var(--color-ink-on-accent); }
+.tileTitle { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); text-wrap: balance; }
+.check {
+  position: absolute; top: var(--space-3); right: var(--space-3);
+  display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--color-accent); color: var(--color-ink-on-accent);
+  opacity: 0; transform: scale(0.8); transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+}
+.tile[data-on] .check { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .tile, .check, .badge { transition: none; } }

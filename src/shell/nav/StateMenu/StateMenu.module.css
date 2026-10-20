@@ -4,9 +4,13 @@
 
 .groupLabel {
   display: block;
-  padding: 6px 8px 2px;
+  margin: 4px 0 2px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: var(--shell-selected);
   font-size: 12px;
-  color: var(--shell-muted);
+  font-weight: 500;
+  color: var(--shell-text);
 }
 
 .empty {

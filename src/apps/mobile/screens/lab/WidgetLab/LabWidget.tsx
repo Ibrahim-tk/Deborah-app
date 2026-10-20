@@ -346,7 +346,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
         />
       );
     case 'scale':
-      return <ScaleCheck title="Energy today" low="Empty" high="Full" onDone={(v) => reply(`${v} of 10`, v < 5 ? 'Low energy and broken sleep often travel together.' : 'Glad your energy is holding up.')} />;
+      return <ScaleCheck title="Energy today" low="Empty" high="Full" words={['Empty', 'Low', 'Okay', 'Good', 'Full']} onDone={(v, word) => reply(word, v < 3 ? 'Low energy and broken sleep often travel together.' : 'Glad your energy is holding up.')} />;
     case 'mood':
       return <MoodScale title="This week" onPick={(m) => reply(m, 'Thank you for telling me.')} />;
     case 'answer':

@@ -14,7 +14,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
 import { ActionSheet } from '@mobile/ui';
-import { Aura, GradientShift } from '@mobile/ui';
+import { AnimatePresence, Aura, GradientShift, MotionDiv } from '@mobile/ui';
 import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
@@ -50,9 +50,16 @@ export default function Conversation() {
   const openSwitcher = useProfileSwitcher();
   const [recording, setRecording] = useState(false);
   const [symptomsOpen, setSymptomsOpen] = useState(false);
+  // Picked symptoms ride as pills in the composer; they become words only when the message is sent.
+  const [symptoms, setSymptoms] = useState<string[]>([]);
+  const withPicked = (text: string) => {
+    if (!symptoms.length) return text;
+    setSymptoms([]);
+    return withSymptoms(text, symptoms);
+  };
   const [underBar, setUnderBar] = useState(false);
   /** F02d: while expand/gate pills are active, hide the bottom composer until Other. */
-  const [intakeSurface, setIntakeSurface] = useState<'choices' | 'composer'>('composer');
+  const [, setIntakeSurface] = useState<'choices' | 'composer'>('composer');
   const safetyBench = useAppStore((s) => s.qa.safetyBench);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   // Miro Step 5 “No” branch: back to Ask Deborah with the composer ready.
@@ -63,6 +70,18 @@ export default function Conversation() {
 
   const messages = conversation?.messages ?? [];
   const isEmpty = messages.length === 0;
+  // First message: stay on this screen — the greeting lifts away and the message rises into place.
+  const [arriving, setArriving] = useState(false);
+  const wasEmpty = useRef(isEmpty);
+  useEffect(() => {
+    if (wasEmpty.current && !isEmpty) {
+      setArriving(true);
+      const id = window.setTimeout(() => setArriving(false), 900);
+      wasEmpty.current = isEmpty;
+      return () => window.clearTimeout(id);
+    }
+    wasEmpty.current = isEmpty;
+  }, [isEmpty]);
   // F11: once Deborah has replied to a shared document, her questions replace the starter list.
   const docReplied = messages.some((m) => m.role === 'deborah' && m.meta?.documentId);
   // Intake V2 stays out of the way: the empty chat is only the orb and one question. The in-chat
@@ -90,8 +109,6 @@ export default function Conversation() {
       ? quizMsg?.intake
       : undefined;
   const quizFreeText = Boolean(quiz && (quiz.input === 'text' || quiz.options.length === 0));
-  // Expand / gate choice questions own the UI — composer only after Other or for free-text.
-  const hideComposerForChoices = Boolean(quiz && !quizFreeText && intakeSurface === 'choices');
   const { ref: scrollRef, onScroll, showLatest, toBottom } = useAutoScroll(`${intake.progress.step}:${messages.length}:${last?.text?.length}:${JSON.stringify(last?.answer?.sections.map((s) => s.body.length + (s.bullets?.length ?? 0)))}:${conversation?.thinking}`);
 
   useEffect(() => () => setChromeHidden(false), [setChromeHidden]);
@@ -215,55 +232,60 @@ export default function Conversation() {
           setUnderBar((on) => (on ? y > 2 : y > 12));
         }}
       >
-        <div className={styles.column} data-empty={isEmpty || undefined}>
-          {intakeMode ? (
-            <IntakeFlow flow={intake} onScan={(field) => presentSheet('M-2.9', { field })} onPick={(t) => send(t)} />
-          ) : isEmpty ? (
-            !profileOpening && (() => {
-              const last = history[0];
-              const g = greeting(name || 'there', now, last?.topic ?? last?.summary, other);
-              return (
-                <Greeting
-                  line={other && name ? `How is ${name} feeling today?` : undefined}
-                  welcomeBack={g.welcomeBack}
-                  onContinue={g.welcomeBack ? () => chat.continueLast() : undefined}
+        <div className={styles.column} data-empty={isEmpty || undefined} data-arriving={arriving || undefined}>
+          {/* popLayout: the greeting animates out of the flow while the conversation takes its place. */}
+          <AnimatePresence mode="popLayout" initial={false}>
+            {intakeMode ? (
+              <IntakeFlow flow={intake} onScan={(field) => presentSheet('M-2.9', { field })} onPick={(t) => send(t)} />
+            ) : isEmpty ? (
+              !profileOpening && (() => {
+                const last = history[0];
+                const g = greeting(name || 'there', now, last?.topic ?? last?.summary, other);
+                return (
+                  <MotionDiv key="greeting" className={styles.greetingWrap} exit={{ opacity: 0, y: -40, scale: 0.97, transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } }}>
+                    <Greeting
+                      line={other && name ? `How is ${name} feeling today?` : undefined}
+                      welcomeBack={g.welcomeBack}
+                      onContinue={g.welcomeBack ? () => chat.continueLast() : undefined}
+                    />
+                  </MotionDiv>
+                );
+              })()
+            ) : (
+              conversation && (
+                <MessageList
+                  conversation={conversation}
+                  busy={busy}
+                  chat={chat}
+                  actions={actions}
+                  onShop={(id) => open('M-2.7', { productId: id })}
+                  onBook={() => push('M-8.2')}
+                  onUploadLabs={() => gate('documents', () => open('M-5.3'))}
+                  onRestartPlan={() => gate('journey', () => {
+                    switchTab('health');
+                    push('M-7.3');
+                  })}
+                  onVisitNotes={() => {
+                    const msg = [...(conversation?.messages ?? [])].reverse().find((m) => m.kind === 'answer' && m.answer);
+                    if (msg) actions.saveAnswer(msg, conversation?.topic ?? 'your question');
+                    else open('M-9.4');
+                  }}
+                  onOpenPlan={() => {
+                    switchTab('health');
+                    push('M-7.3');
+                  }}
+                  onTeamBook={() => {
+                    toast('Summary sent to Deborah’s team (demo)');
+                    push('M-8.2');
+                  }}
+                  onLongPress={setPressed}
+                  onFocusComposer={() => inputRef.current?.focus()}
+                  onIntakeAnswerSurface={setIntakeSurface}
+                  onEditFacts={() => presentSheet('M-2.13', { conversationId: conversation.id })}
                 />
-              );
-            })()
-          ) : (
-            conversation && (
-              <MessageList
-                conversation={conversation}
-                busy={busy}
-                chat={chat}
-                actions={actions}
-                onShop={(id) => open('M-2.7', { productId: id })}
-                onBook={() => push('M-8.2')}
-                onUploadLabs={() => gate('documents', () => open('M-5.3'))}
-                onRestartPlan={() => gate('journey', () => {
-                  switchTab('health');
-                  push('M-7.3');
-                })}
-                onVisitNotes={() => {
-                  const msg = [...(conversation?.messages ?? [])].reverse().find((m) => m.kind === 'answer' && m.answer);
-                  if (msg) actions.saveAnswer(msg, conversation?.topic ?? 'your question');
-                  else open('M-9.4');
-                }}
-                onOpenPlan={() => {
-                  switchTab('health');
-                  push('M-7.3');
-                }}
-                onTeamBook={() => {
-                  toast('Summary sent to Deborah’s team (demo)');
-                  push('M-8.2');
-                }}
-                onLongPress={setPressed}
-                onFocusComposer={() => inputRef.current?.focus()}
-                onIntakeAnswerSurface={setIntakeSurface}
-                onEditFacts={() => presentSheet('M-2.13', { conversationId: conversation.id })}
-              />
-            )
-          )}
+              )
+            )}
+          </AnimatePresence>
           {consent.widget}
         </div>
       </div>
@@ -282,13 +304,17 @@ export default function Conversation() {
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
         )}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
-        {(!profiling || Boolean(quiz)) && !hideComposerForChoices && <Composer
+        {/* The composer never leaves the chat (design 2026-10-20): during intake and choice questions it stays,
+            and typing there answers "Other". */}
+        {<Composer
           value={draft}
           onChange={setDraft}
-          onSend={(text) => send(text ?? draft)}
+          onSend={(text) => send(withPicked(text ?? draft))}
           onStop={chat.stop}
           onAttach={(source) => gate('documents', () => open('M-5.3', { source }))}
           onSymptoms={() => setSymptomsOpen(true)}
+          tokens={symptoms}
+          onRemoveToken={(t) => setSymptoms((xs) => xs.filter((x) => x !== t))}
           onFocusChange={onFocusChange}
           generating={generating}
           lockedNote={emergencyOpen ? 'Please get help first.' : undefined}
@@ -321,7 +347,7 @@ export default function Conversation() {
         />}
       </div>
 
-      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => { setDraft((d) => withSymptoms(d, xs)); inputRef.current?.focus(); }} />
+      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => { setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))]); inputRef.current?.focus(); }} />
       <ActionSheet
         open={Boolean(pressed)}
         onClose={() => setPressed(null)}

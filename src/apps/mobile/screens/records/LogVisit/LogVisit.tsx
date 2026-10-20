@@ -117,12 +117,8 @@ export default function LogVisit() {
     open('M-9.7', { noteId: briefId });
   };
 
-  const titleEnd =
-    mode === 'read' ? (
-      <IconButton icon="more" label="More" onClick={() => setMenu(true)} />
-    ) : (
-      <IconButton icon="close" label="Close" onClick={close} />
-    );
+  // Edit mode exits through the footer's "Not now" (same unsaved-changes check); no separate X.
+  const titleEnd = mode === 'read' ? <IconButton icon="more" label="More" onClick={() => setMenu(true)} /> : undefined;
 
   const footer =
     mode === 'read' ? (

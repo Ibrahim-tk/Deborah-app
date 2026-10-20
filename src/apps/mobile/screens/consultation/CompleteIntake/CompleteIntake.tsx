@@ -2,28 +2,33 @@
  * @screen  M-2.14 · Health Profile
  * @flow    Optional clinical questionnaire after short onboarding
  * @presentation push
- * @states  question · resume · saved
+ * @states  question (one per screen, bloom grows per step) · resume at first unanswered · saved
  * @spec    Discovery 2026-10-19 — reproductive, puberty, medicines, and Genesis Gold live here
  * @xref    web: not built
+ *
+ * Same template as the onboarding intake (M-1.8, design request 2026-10-20): living backdrop, the
+ * flowering tree as progress (paced to this profile's step count), one question at a time.
+ * Nav bar: glass back (previous question, or leave) · "Health profile" · glass check (save and close).
  */
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { Aura, Button, Header } from '@mobile/ui';
+import { Aura, Button, GlassButton, GradientShift, Header } from '@mobile/ui';
 import { namedReasonsComplete } from '@mobile/patterns/widgets';
 import { StepBody } from '@mobile/screens/onboarding/HealthBasics/parts/StepBody';
-import { healthProfileCompletion, answersFromProfile } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
+import { BloomReveal } from '@mobile/screens/onboarding/HealthBasics/parts/BloomReveal';
+import { useTitleFade } from '@mobile/screens/onboarding/HealthBasics/parts/useTitleFade';
+import { answersFromProfile } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import { saveHealthProfile } from '@mobile/screens/onboarding/HealthBasics/saveOnboarding';
-import { profileVisibleSteps, titleFor, type Answers } from '@mobile/screens/onboarding/HealthBasics/steps';
-import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
-import { useNav, useRoute } from '@mobile/navigation';
+import { bloomProgress, profileVisibleSteps, titleFor, type Answers } from '@mobile/screens/onboarding/HealthBasics/steps';
+import template from '@mobile/screens/onboarding/HealthBasics/HealthBasics.module.css';
+import { useNav } from '@mobile/navigation';
 import styles from './CompleteIntake.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
+const CONFIRM_MS = 280;
 
 export default function CompleteIntake() {
   const { pop } = useNav();
-  const { previousTitle } = useRoute();
-  const { collapsed, onScroll } = useCollapsingTitle();
   const profile = useAppStore(selectActiveProfile);
   const [answers, setAnswers] = useState<Answers>(() => (profile ? answersFromProfile(profile) : {}));
   const answersRef = useRef(answers);
@@ -31,20 +36,24 @@ export default function CompleteIntake() {
     answersRef.current = answers;
   }, [answers]);
   const steps = profileVisibleSteps(answers);
+  // Resume at the first unanswered question.
   const [i, setI] = useState(() => {
     const seeded = profile ? answersFromProfile(profile) : {};
-    const list = profileVisibleSteps(seeded);
-    const open = list.findIndex((s) => !seeded[s.key]?.trim());
+    const open = profileVisibleSteps(seeded).findIndex((s) => !seeded[s.key]?.trim());
     return open < 0 ? 0 : open;
   });
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];
+  const fade = useTitleFade(step?.key ?? 'none');
   const value = step ? (answers[step.key] ?? '') : '';
   const last = steps.length > 0 && at === steps.length - 1;
-  const done = profile ? healthProfileCompletion(profile) >= 1 : false;
 
   const persist = (final: Answers) => {
     if (profile) saveHealthProfile(profile.id, final);
+  };
+  const close = () => {
+    persist(answersRef.current);
+    pop();
   };
   const set = (key: string, v: string) => {
     setAnswers((current) => {
@@ -53,18 +62,28 @@ export default function CompleteIntake() {
       return next;
     });
   };
-  const go = (final: Answers, forward: boolean) => {
+  const next = (final: Answers) => {
+    if (step?.presentation === 'ageWheel' && !final[step.key]) {
+      final = { ...final, [step.key]: '12' };
+      answersRef.current = final;
+      setAnswers(final);
+    }
     persist(final);
-    if (!forward) return;
-    if (last) return;
-    setI(at + 1);
+    if (last) pop();
+    else setI(at + 1);
   };
   const advance = (v: string, extra?: Answers) => {
     const final = { ...answersRef.current, ...extra, [step.key]: v };
     answersRef.current = final;
     setAnswers(final);
-    window.setTimeout(() => go(final, true), step.kind === 'text' ? 0 : 280);
+    window.setTimeout(() => next(final), step.kind === 'text' ? 0 : CONFIRM_MS);
   };
+  const goBack = () => {
+    persist(answersRef.current);
+    if (at > 0) setI(at - 1);
+    else pop();
+  };
+
   const textOk =
     !!step &&
     step.kind === 'text' &&
@@ -74,68 +93,47 @@ export default function CompleteIntake() {
   const canContinue =
     !!step &&
     (step.optional === true ||
-      step.kind === 'date' ||
-      step.kind === 'year' ||
+      step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
       textOk ||
       (step.kind === 'name' && NAME_PATTERN.test(value.trim())));
   const tapToAnswer = step?.kind === 'choice';
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    if (!canContinue) return;
-    const final = answersRef.current;
-    if (step?.presentation === 'ageWheel' && !final[step.key]) {
-      final[step.key] = '12';
-      setAnswers({ ...final });
-    }
-    go(final, !last);
-    if (last) persist(final);
+    if (canContinue) next(answersRef.current);
   };
 
   if (!profile) return null;
 
   return (
-    <form className={styles.root} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
+    <form className={template.root} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
       <Aura />
-      <Header title="Health profile" large collapsed={collapsed} onBack={pop} backLabel={previousTitle} />
-      <div className={styles.body} onScroll={onScroll}>
-        <p className={styles.banner}>
-          {done
-            ? 'Your health profile is filled in. You can change any answer.'
-            : 'Optional. You can talk with Deborah before this is finished, and come back to wherever you stopped.'}
-        </p>
-        {step ? (
-          <>
-            {/* Existing Complete Intake field panel and label styles; no new visuals. */}
-            <div className={styles.field}>
-              <p className={styles.fieldLabel}>
-                Question {at + 1} of {steps.length}
-              </p>
-              <h2 className={styles.fieldLabel}>{titleFor(step, answers)}</h2>
-              <StepBody step={step} answers={answers} set={set} advance={advance} />
-            </div>
-            <div className={styles.actions}>
-              {at > 0 && (
-                <Button type="button" variant="ghost" fullWidth onClick={() => { persist(answersRef.current); setI(at - 1); }}>
-                  Previous
-                </Button>
-              )}
-              {!tapToAnswer && (
-                <Button type="submit" fullWidth disabled={!canContinue}>
-                  {last ? 'Save profile' : 'Save and continue'}
-                </Button>
-              )}
-              {step.presentation === 'namedReasons' && !value.trim() && (
-                <Button type="button" variant="ghost" fullWidth onClick={() => advance(step.none ?? 'None')}>
-                  Skip
-                </Button>
-              )}
-              <Button type="button" variant="ghost" fullWidth onClick={() => { persist(answersRef.current); pop(); }}>
-                Save and close
-              </Button>
-            </div>
-          </>
-        ) : (
-          <p className={styles.banner}>Nothing else applies to this profile right now.</p>
+      <GradientShift />
+      <div className={styles.bar}>
+        <Header
+          title="Health profile"
+          large={false}
+          transparent
+          left={<GlassButton icon="back" aria-label={at > 0 ? 'Previous question' : 'Back'} onClick={goBack} />}
+          right={<GlassButton icon="check" aria-label="Save and close" onClick={close} />}
+        />
+      </div>
+      {/* Progress: the flowering tree grows across this profile's own number of questions. */}
+      <div className={template.art} role="progressbar" aria-label="Health profile" aria-valuemin={1} aria-valuemax={Math.max(1, steps.length)} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
+        <BloomReveal className={template.bloom} progress={bloomProgress(at, Math.max(1, steps.length))} />
+      </div>
+      <div className={template.fade} style={{ height: fade.height, '--feather': `${fade.feather}px` } as CSSProperties} aria-hidden="true"><i /><i /><i /></div>
+      <div className={template.body}>
+        <div key={step?.key ?? 'none'} className={template.step}>
+          <h1 ref={fade.titleRef} className={`${template.title} ${template.heading}`}>
+            {step ? titleFor(step, answers) : 'Nothing else applies to this profile right now.'}
+          </h1>
+          {step && <StepBody step={step} answers={answers} set={set} advance={advance} />}
+        </div>
+      </div>
+      <div className={template.footer}>
+        {step && !tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>{last ? 'Save profile' : 'Continue'}</Button>}
+        {step?.presentation === 'namedReasons' && !value.trim() && (
+          <Button type="button" variant="ghost" fullWidth onClick={() => advance(step.none ?? 'None')}>Skip</Button>
         )}
       </div>
     </form>

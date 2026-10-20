@@ -35,27 +35,7 @@
 .chevron { flex: none; color: var(--color-ink-secondary); }
 
 /* Small confirmation sheet */
-.layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
-.scrim { position: absolute; inset: 0; border: 0; background: var(--color-scrim); animation: fade var(--dur-base) var(--ease-out) both; }
-.sheet {
-  position: relative;
-  display: grid;
-  gap: var(--space-3);
-  justify-items: start;
-  padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
-  border-radius: 32px 32px 0 0;
-  background: var(--color-canvas);
-  box-shadow: 0 -12px 40px rgb(18 7 33 / 0.12);
-  animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both;
-}
-.grabber {
-  justify-self: center;
-  width: 36px;
-  height: 5px;
-  margin-bottom: var(--space-2);
-  border-radius: var(--radius-full);
-  background: var(--color-border-hairline);
-}
+.sheet { /* Content of the shared ui/BottomSheet (frame, surface, motion live there). */ display: grid; gap: var(--space-3); justify-items: start; }
 .sheetIcon {
   display: grid;
   place-items: center;

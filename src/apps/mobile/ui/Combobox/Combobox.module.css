@@ -24,12 +24,13 @@
   margin: var(--space-2);
   padding: 0 var(--space-3);
   min-height: 44px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full); /* search pill, same as ui/Input variant="search" */
   background: var(--field-fill);
   box-shadow: inset 0 0 0 1px var(--field-border);
   color: var(--color-ink-secondary);
 }
-.search:focus-within { box-shadow: inset 0 0 0 1px var(--color-border-selected), var(--field-focus-ring); }
+.search:focus-within { box-shadow: inset 0 0 0 1px var(--field-border-focus); } /* neutral, like ui/Input */
+.input:focus, .input:focus-visible { outline: none; }
 .input {
   flex: 1;
   min-width: 0;

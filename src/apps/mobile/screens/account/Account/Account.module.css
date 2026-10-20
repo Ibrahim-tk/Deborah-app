@@ -156,7 +156,7 @@
 }
 
 .text {
-  margin: 0;
+  margin: 0 0 var(--space-4);
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   color: var(--color-ink-secondary);
 }
@@ -170,20 +170,6 @@
   color: var(--color-ink-secondary);
 }
 
-.phoneLayer {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
-.phoneScrim {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-}
 
 @media (prefers-reduced-motion: reduce) {
   .plan:active { transform: none; }

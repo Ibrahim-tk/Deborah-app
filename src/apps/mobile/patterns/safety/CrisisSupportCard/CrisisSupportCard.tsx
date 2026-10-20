@@ -7,7 +7,7 @@
  */
 // OPEN: "exact behaviour and copy with Deborah + attorney (SOW requires crisis safeguards)".
 import { useState } from 'react';
-import { Button, Icon, Overlay } from '@mobile/ui';
+import { BottomSheet, Button, Icon } from '@mobile/ui';
 import styles from './CrisisSupportCard.module.css';
 
 export interface CrisisSupportCardProps {
@@ -50,34 +50,28 @@ export function CrisisSupportCard({
         </span>
         <Icon name="chevron" size={18} className={styles.recordChevron} />
       </button>
-      <Overlay>
-        {open && (
-          <div className={styles.layer}>
-            <button type="button" className={styles.scrim} aria-label="Close" onClick={close} />
-            <div className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby="crisis-title" data-placeholder>
-              <span className={styles.grabber} aria-hidden />
-              <h2 id="crisis-title" className={styles.title}>{body}</h2>
-              <div className={styles.actions}>
-                <Button fullWidth leadingIcon="phone" variant="emergency" onClick={() => { if (onCall911) onCall911(); else onCall(); }}>
-                  Call 911
-                </Button>
-                <Button fullWidth leadingIcon="phone" onClick={onCall}>
-                  {lifelineLabel}
-                </Button>
-                <Button variant="secondary" fullWidth onClick={() => { if (onText) onText(); else onCall(); }}>
-                  Text HOME to 741741
-                </Button>
-                {moreSupport[1] && (
-                  <p className={styles.note}>{moreSupport[1]}</p>
-                )}
-                <Button variant="ghost" fullWidth onClick={keep}>
-                  Keep talking with Deborah
-                </Button>
-              </div>
-            </div>
+      <BottomSheet open={Boolean(open)} onClose={close}>
+        <div className={styles.sheet} role="group" aria-labelledby="crisis-title" data-placeholder>
+          <h2 id="crisis-title" className={styles.title}>{body}</h2>
+          <div className={styles.actions}>
+            <Button fullWidth leadingIcon="phone" variant="emergency" onClick={() => { if (onCall911) onCall911(); else onCall(); }}>
+              Call 911
+            </Button>
+            <Button fullWidth leadingIcon="phone" onClick={onCall}>
+              {lifelineLabel}
+            </Button>
+            <Button variant="secondary" fullWidth onClick={() => { if (onText) onText(); else onCall(); }}>
+              Text HOME to 741741
+            </Button>
+            {moreSupport[1] && (
+              <p className={styles.note}>{moreSupport[1]}</p>
+            )}
+            <Button variant="ghost" fullWidth onClick={keep}>
+              Keep talking with Deborah
+            </Button>
           </div>
-        )}
-      </Overlay>
+        </div>
+      </BottomSheet>
     </>
   );
 }

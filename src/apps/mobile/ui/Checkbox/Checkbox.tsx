@@ -8,9 +8,11 @@ export interface CheckboxProps {
   onChange: (checked: boolean) => void;
   label: ReactNode;
   description?: ReactNode;
+  /** Medium-weight label, for choices that must stand out from the copy around them (e.g. consent). */
+  emphasis?: boolean;
 }
 
-export function Checkbox({ checked, onChange, label, description }: CheckboxProps) {
+export function Checkbox({ checked, onChange, label, description, emphasis }: CheckboxProps) {
   const id = useId();
   return (
     <div className={styles.root}>
@@ -20,7 +22,7 @@ export function Checkbox({ checked, onChange, label, description }: CheckboxProp
           {checked && <Icon name="check" size={18} strokeWidth={2} />}
         </span>
         <span className={styles.text}>
-          <span className={styles.label}>{label}</span>
+          <span className={styles.label} data-emphasis={emphasis || undefined}>{label}</span>
           {description && <span className={styles.description}>{description}</span>}
         </span>
       </label>

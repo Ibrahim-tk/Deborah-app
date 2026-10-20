@@ -32,7 +32,10 @@ export default function DeborahWelcome() {
     dismissSheet();
     resetTo('main', 'M-2.0');
     if (member) switchProfile(member.id);
-    push('M-2.1', { focus: true });
+    // Design request 2026-10-20: a new sign-up (for herself) lands in the premade first chat (Sandra's script).
+    // Someone else's profile keeps the live chat. OPEN: confirm this replaces the live first chat for every new user.
+    if (member) push('M-2.1', { focus: true });
+    else push('M-2.12', { flow: 'sandra' });
   };
 
   return (

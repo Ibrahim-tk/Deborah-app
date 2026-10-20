@@ -49,6 +49,7 @@ import healthBasics from './intake/healthBasics.json';
 import symptoms from './intake/symptoms.json';
 import firstConsult from './conversation/flows/firstConsult.json';
 import returningConsult from './conversation/flows/returningConsult.json';
+import sandraConsult from './conversation/flows/sandraConsult.json';
 import documentTypes from './documents/types.json';
 import extractionsByType from './documents/extractions.json';
 import documentReviewJson from './documents/review.json';
@@ -125,6 +126,8 @@ export const quickSymptoms: string[] = symptoms.quick;
 export const firstConsultFlow = firstConsult as unknown as Flow;
 /** Demo consultation for a signed-in returning user (seed R01). OPEN: DRAFT copy, needs Deborah's sign-off. */
 export const returningConsultFlow = returningConsult as unknown as Flow;
+/** Premade first chat for a new sign-up (Sandra, 46, perimenopause happy path). Placeholder copy. */
+export const sandraConsultFlow = sandraConsult as unknown as Flow;
 
 /** F11 Deborah's replies to a shared document and the one-time upload offer (placeholder copy). */
 export interface DocumentReviewCopy {

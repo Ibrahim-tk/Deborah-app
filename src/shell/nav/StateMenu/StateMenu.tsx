@@ -1,10 +1,11 @@
 /**
  * @shell StateMenu — Screens · Simulate events · Device (docs/03-prototype-shell.md §2).
  * Internal surface: a grouped list of every signed-in screen by name (designer request 2026-10-19),
- * replacing the scenario list here. Scenarios still load via ?scenario= and the Journey runner.
+ * then every app state (scenario) by name — no descriptions.
  */
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { isLoadable, SCENARIOS, SCENARIO_GROUPS } from '@shared/scenarios';
 import { useAppStore } from '@shared/store';
 import { useShellStore, type DeviceScale } from '../../shell.store';
 import { useScenario } from '../../useScenario';
@@ -21,7 +22,7 @@ const SCALES: { value: DeviceScale; label: string }[] = [
 
 export function StateMenu() {
   const isWeb = useLocation().pathname.startsWith('/web');
-  const { select } = useScenario();
+  const { scenario, select } = useScenario();
   const [screen, setScreen] = useState<string>();
   const scale = useShellStore((s) => s.scale);
   const setScale = useShellStore((s) => s.setScale);
@@ -29,6 +30,8 @@ export function StateMenu() {
   const setSimKeyboard = useShellStore((s) => s.setSimKeyboard);
   const showCaption = useShellStore((s) => s.showCaption);
   const setShowCaption = useShellStore((s) => s.setShowCaption);
+  const colorTheme = useShellStore((s) => s.colorTheme);
+  const setColorTheme = useShellStore((s) => s.setColorTheme);
   const showToast = useShellStore((s) => s.showToast);
   const advanceClock = useAppStore((s) => s.advanceClock);
   const setDev = useAppStore((s) => s.setDev);
@@ -57,12 +60,31 @@ export function StateMenu() {
                   <span className={styles.groupLabel}>{group.title}</span>
                   {group.screens.map((e) => (
                     <MenuItem
-                      key={e.id}
+                      key={`${e.id}-${e.name}`}
                       label={e.name}
                       active={e.name === screen}
                       onSelect={() => {
                         openScreen(e, select);
                         setScreen(e.name);
+                        close();
+                      }}
+                    />
+                  ))}
+                </div>
+              ))}
+            </MenuSection>
+            <MenuSection title="States">
+              {SCENARIO_GROUPS.map((group) => (
+                <div key={group} className={styles.group}>
+                  <span className={styles.groupLabel}>{group}</span>
+                  {SCENARIOS.filter((s) => s.group === group && isLoadable(s.id)).map((s) => (
+                    <MenuItem
+                      key={s.id}
+                      label={s.label}
+                      active={!screen && s.id === scenario?.id}
+                      onSelect={() => {
+                        select(s.id);
+                        setScreen(undefined);
                         close();
                       }}
                     />
@@ -117,6 +139,13 @@ export function StateMenu() {
             </MenuSection>
             <MenuSection title="Device">
               <MenuChoice label="Scale" value={scale} options={SCALES} onChange={setScale} />
+              {/* TEMPORARY colour experiment (mobile.theme.fig.css). */}
+              <MenuChoice
+                label="Color theme"
+                value={colorTheme}
+                options={[{ value: 'original', label: 'Original' }, { value: 'fig', label: 'Fig' }]}
+                onChange={setColorTheme}
+              />
               <MenuCheck label="Simulated keyboard" checked={simKeyboard} onChange={setSimKeyboard} />
               <MenuCheck label="Show screen caption" checked={showCaption} onChange={setShowCaption} />
               {/* Appearance (Light / Dark) is omitted: DESIGN.md has no dark mode in v1. */}

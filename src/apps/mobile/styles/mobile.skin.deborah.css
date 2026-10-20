@@ -21,16 +21,16 @@
 
   /* Type families (export §1). SF Pro → DM Sans; display stays Cormorant; Georgia italic for emphasis. */
   /* Headings and titles keep the original Cormorant serif (design call 2026-10-14); body/UI move to DM Sans. */
-  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-body: 'DM Sans', Arial, sans-serif;
   --font-ui: 'DM Sans', Arial, sans-serif;
   --font-editorial: Georgia, serif;
   /* The big artistic headings keep the original Cormorant Garamond: health questions, Welcome, Home greeting,
      Deborah's own words. Components opt in with var(--font-artistic, var(--font-display)). */
-  --font-artistic: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-artistic: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 
   /* Surfaces: cream canvas + Wispr Flow photo (same as chat / /wid). Soft lilac mesh only. */
-  --color-canvas: #f9f7f5;
+  --color-canvas: #f9f7f0;
   --bg-mesh:
     radial-gradient(ellipse at 87% -10%, #e9dbee77, transparent 45%);
   --surface-canvas:
@@ -77,6 +77,8 @@
   --field-fill: #ffffffaf;
   --field-border: #e0d2e5;
   --field-focus-ring: 0 0 0 3px #b579c433;
+  /* Focused field (design 2026-10-20): a darker neutral border, no ring, no purple. */
+  --field-border-focus: color-mix(in srgb, var(--color-ink) 28%, transparent);
 
   /* Buttons (§6): flat plum, full round, 48px (was 57px; designer, 2026-10-14). */
   --button-h: 48px;
@@ -101,4 +103,6 @@
   /* Motion (§9) */
   --ease-out: cubic-bezier(.2, .8, .2, 1);
 }
-.phone-root :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+.phone-root :focus-visible:not(input, textarea) { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+/* Text fields show focus with their own neutral border (ui/Input, ui/TextArea). */
+.phone-root :is(input, textarea):focus-visible { outline: none; }

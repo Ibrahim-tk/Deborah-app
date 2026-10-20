@@ -191,17 +191,17 @@ export default function CreateAccount() {
   );
   const providerSheet = (
     <>
-      {provider && (
-        <ProviderSheet
-          provider={provider}
-          email={`${handle}@${provider === 'apple' ? 'icloud.com' : 'gmail.com'}`}
-          onCancel={() => setProvider(null)}
-          onDone={(address) => {
-            setProvider(null);
-            succeed(address);
-          }}
-        />
-      )}
+      {/* Always mounted so the shared sheet can animate out after Cancel / Continue. */}
+      <ProviderSheet
+        open={Boolean(provider)}
+        provider={provider ?? 'apple'}
+        email={`${handle}@${provider === 'google' ? 'gmail.com' : 'icloud.com'}`}
+        onCancel={() => setProvider(null)}
+        onDone={(address) => {
+          setProvider(null);
+          succeed(address);
+        }}
+      />
     </>
   );
 

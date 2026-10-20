@@ -17,15 +17,19 @@ export interface FlowChoiceProps {
   onPick: (picked: FlowOption[]) => void;
   onSkip?: () => void;
   earlyExit?: { label: string; onPress: () => void };
+  /** Multi: selection lives in the composer as pills and is sent from there (no tick). */
+  selected?: FlowOption[];
+  onSelect?: (picked: FlowOption[]) => void;
 }
 
-export function FlowChoice({ label, options, multi, exclusive, step, onPick, onSkip, earlyExit }: FlowChoiceProps) {
+export function FlowChoice({ label, options, multi, exclusive, step, onPick, onSkip, earlyExit, selected, onSelect }: FlowChoiceProps) {
   // Index IDs preserve even duplicate labels and each original value/next transition.
   const exclusiveIndex = options.findIndex((o) => String(o.value ?? o.label) === exclusive);
   return (
     <div className={styles.root}>
       {step && <p className={styles.step}>Question {step}</p>}
-      <QuestionChoices label={label} options={options.map((o, i) => ({ id: String(i), label: o.label }))} multi={multi} exclusive={exclusiveIndex < 0 ? undefined : String(exclusiveIndex)} onSubmit={(ids) => onPick(ids.map((id) => options[Number(id)]))} />
+      <QuestionChoices label={label} options={options.map((o, i) => ({ id: String(i), label: o.label }))} multi={multi} exclusive={exclusiveIndex < 0 ? undefined : String(exclusiveIndex)} onSubmit={(ids) => onPick(ids.map((id) => options[Number(id)]))}
+        {...(multi && onSelect ? { confirm: 'none' as const, value: (selected ?? []).map((o) => String(options.indexOf(o))), onChange: (ids: string[]) => onSelect(ids.map((id) => options[Number(id)])) } : {})} />
       {(onSkip || earlyExit) && <div className={styles.links}>
         {onSkip && <Button variant="ghost" onClick={onSkip}>Skip</Button>}
         {earlyExit && <Button variant="ghost" onClick={earlyExit.onPress}>{earlyExit.label}</Button>}

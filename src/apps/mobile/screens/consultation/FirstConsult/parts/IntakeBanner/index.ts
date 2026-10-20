@@ -1,0 +1,1 @@
+export { IntakeBanner } from './IntakeBanner';

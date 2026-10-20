@@ -1,0 +1,23 @@
+/* One sheet frame for the whole app (BottomSheet.tsx). Sheets and modals share one level: presentation order
+   decides which is on top. */
+.layer { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; }
+.scrim { position: absolute; inset: 0; background: var(--color-scrim); }
+/* Simulated Apple sheets (Payment, Sign in with Apple) use the system's neutral dim. */
+.scrimSystem { background: rgb(0 0 0 / 0.32); }
+
+.panel {
+  --sheet-max: calc(100% - var(--safe-top) - 12px);
+  position: relative;
+  width: 100%;
+  max-height: var(--sheet-max);
+  touch-action: none;
+  outline: none;
+}
+.panel[data-height='medium'] { height: min(55%, var(--sheet-max)); }
+.panel[data-height='large'] { height: var(--sheet-max); }
+.panel[data-height='custom'] { max-height: var(--sheet-max); }
+/* Fixed heights (medium / large / custom): the sheet surface fills the frame down to the bottom edge, even when
+   the screen wraps its <Sheet> in an extra element (routed screens: <div data-xref><Sheet/></div>). */
+.panel:not([data-height='auto']) > * { height: 100%; }
+.panel:not([data-height='auto']) > * > [data-detent] { height: 100%; }
+

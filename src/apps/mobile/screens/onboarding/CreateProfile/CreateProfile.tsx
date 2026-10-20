@@ -55,10 +55,12 @@ function restoreReturning(email: string) {
 }
 
 export default function CreateProfile() {
-  const { first = '', mode } = useScreenParams<{ first: string; mode: 'signin' }>();
+  // `stage` lets the internal Screens menu open straight on 2FA or forgot password.
+  const { first = '', mode, stage: initialStage = 'form' } = useScreenParams<{ first: string; mode: 'signin'; stage: Stage }>();
   const signin = mode === 'signin';
   const { dismissSheet, push } = useNav();
-  const [stage, setStage] = useState<Stage>('form');
+  const [stage, setStage] = useState<Stage>(initialStage);
+  const [forgotHeader, setForgotHeader] = useState<{ title?: string; subtitle?: string }>({});
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -114,14 +116,13 @@ export default function CreateProfile() {
 
   return (
     <div data-xref="M-1.4 · Create your profile">
-      <Sheet>
+      <Sheet
+        title={stage === 'form' ? (signin ? 'Welcome back' : `Welcome${first ? `, ${first}` : ''}`) : stage === 'code' ? 'Check your email' : stage === 'forgot' ? forgotHeader.title : undefined}
+        subtitle={stage === 'form' ? (signin ? 'Sign in to pick up where you left off.' : 'Create your account so Deborah remembers your story.') : stage === 'forgot' ? forgotHeader.subtitle : undefined}
+      >
         {stage === 'form' && (
           <form key="form" className={styles.stage} onSubmit={submit} noValidate>
-            {/* OPEN: placeholder UX copy until reviewed. */}
-            <div className={styles.head}>
-              <h2 className={styles.title}>{signin ? 'Welcome back' : `Welcome${first ? `, ${first}` : ''}`}</h2>
-              <p className={styles.sub}>{signin ? 'Sign in to pick up where you left off.' : 'Create your account so Deborah remembers your story.'}</p>
-            </div>
+            {/* OPEN: placeholder UX copy until reviewed. Heading + subtitle live in the sheet header. */}
             <Input label="Email" type="email" placeholder="Your email" value={email} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors((x) => ({ ...x, email: undefined })); }} />
             <Input label="Password" type="password" placeholder="Enter your password" value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
             {signin && <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>Forgot password?</button>}
@@ -132,11 +133,10 @@ export default function CreateProfile() {
         )}
         {stage === 'code' && (
           <div key="code" className={styles.stage}>
-            <h2 className={styles.title}>Check your email</h2>
             <CodeStep email={email.trim()} onChangeEmail={() => setStage('form')} onVerified={verified} />
           </div>
         )}
-        {stage === 'forgot' && <ForgotPassword initialEmail={email} onCancel={() => setStage('form')} onComplete={signIn} />}
+        {stage === 'forgot' && <ForgotPassword initialEmail={email} onCancel={() => setStage('form')} onComplete={signIn} onHeader={setForgotHeader} />}
         {stage === 'done' && (
           <div key="done" className={styles.done} role="status">
             <span className={styles.check}><Icon name="check" size={32} /></span>

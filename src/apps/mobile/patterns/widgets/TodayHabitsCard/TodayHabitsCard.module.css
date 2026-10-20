@@ -52,8 +52,9 @@
 
 .title {
   margin: 0;
-  font: var(--weight-medium) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
-  letter-spacing: -0.02em;
+  /* Serif card title (design try 2026-10-20). */
+  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display);
+  letter-spacing: -0.01em;
   color: var(--color-ink);
 }
 

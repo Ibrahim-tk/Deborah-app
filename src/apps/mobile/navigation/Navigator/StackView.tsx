@@ -65,6 +65,12 @@ export function StackView({ routes, action, container, onBack, active = true, ho
   );
 }
 
+/**
+ * Screens that keep the gradient / photo backdrop (design direction 2026-10-20): Home, chat, Splash, Welcome and the
+ * intake forms. Every other screen sits on the plain canvas colour.
+ */
+const GRADIENT_SCREENS = new Set(['M-1.1', 'M-1.2', 'M-1.8', 'M-2.0', 'M-2.1', 'M-2.12', 'M-2.14']);
+
 /** One stack layer — keeps a stable node ref so exit can flip `inert` immediately. */
 function StackScreen({
   route,
@@ -95,6 +101,7 @@ function StackScreen({
     <MotionDiv
       className={styles.screen}
       data-hidden={hidden || undefined}
+      data-bg={GRADIENT_SCREENS.has(route.id) ? 'gradient' : 'plain'}
       // Non-top screens never intercept taps (AnimatePresence exit keeps the outgoing
       // chat mounted above Home; without this, Home freezes until the slide finishes —
       // and if anything goes wrong with exit cleanup, forever).

@@ -90,7 +90,8 @@
         "type": "scale_check",
         "title": "Sleep this week",
         "low": "Awful",
-        "high": "Restful"
+        "high": "Restful",
+        "steps": ["Awful", "Poor", "Okay", "Good", "Restful"]
       },
       "saveAs": "sleepScore",
       "next": "memory"

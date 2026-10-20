@@ -16,6 +16,7 @@ import { useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
 import { Aura, Button, GlassButton, GradientShift } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
+import { useStartAtDetails } from './useStartAtDetails';
 import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, type Answers } from './steps';
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
@@ -34,12 +35,14 @@ const CONFIRM_MS = 280;
 
 export default function HealthBasics() {
   const { presentSheet, pop } = useNav();
-  const [answers, setAnswers] = useState<Answers>({ birthDate: DEFAULT_DOB });
+  const atDetails = useStartAtDetails();
+  // `start: 'details'` (internal Screens menu): skip "who is this for" as Myself, open on basic details.
+  const [answers, setAnswers] = useState<Answers>(atDetails ? { profileFor: 'self', birthDate: DEFAULT_DOB } : { birthDate: DEFAULT_DOB });
   const answersRef = useRef(answers);
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
-  const [i, setI] = useState(0);
+  const [i, setI] = useState(atDetails ? 1 : 0);
   const steps = visibleSteps(answers);
   // Back/edit can shrink the visible tree (e.g. leave peri → drop HRT); clamp for render.
   const at = Math.min(i, Math.max(0, steps.length - 1));
@@ -148,15 +151,14 @@ export default function HealthBasics() {
         </>
       )}
 
-      {consentOpen && (
-        <ConsentSheet
-          name={answers.memberName ?? ''}
-          value={value}
-          onChange={(v) => set('consent', v)}
-          onBack={() => setI(at - 1)}
-          onContinue={() => next(answersRef.current)}
-        />
-      )}
+      <ConsentSheet
+        open={consentOpen}
+        name={answers.memberName ?? ''}
+        value={value}
+        onChange={(v) => set('consent', v)}
+        onBack={() => setI(at - 1)}
+        onContinue={() => next(answersRef.current)}
+      />
     </form>
   );
 }

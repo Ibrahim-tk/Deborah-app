@@ -5,7 +5,7 @@
  * @usedBy  FullChoicePills (describe morph); WidgetLab / DesignSystem specimens
  */
 import { useEffect, useId, useRef, type KeyboardEvent } from 'react';
-import { Icon } from '@mobile/ui';
+import { Icon, Input } from '@mobile/ui';
 import styles from './PillDescribeField.module.css';
 
 export interface PillDescribeFieldProps {
@@ -52,11 +52,13 @@ export function PillDescribeField({
 
   return (
     <div className={styles.root} data-pill-describe-field>
-      <label htmlFor={fieldId} className={styles.srOnly}>{label}</label>
-      <input
+      <Input
         ref={fieldRef}
         id={fieldId}
+        variant="inline"
         className={styles.field}
+        label={label}
+        hideLabel
         type="text"
         placeholder={placeholder}
         value={value}

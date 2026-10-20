@@ -5,6 +5,7 @@
  */
 import type { VisitBriefContent } from '@shared/types/domain';
 import { BriefLabs, BriefMeds, BriefQuestions } from './BriefLists';
+import { TextArea } from '@mobile/ui';
 import styles from './BriefDocument.module.css';
 
 export interface BriefDocumentProps {
@@ -47,10 +48,11 @@ export function BriefDocument({ brief, onChange }: BriefDocumentProps) {
       <section className={styles.block}>
         <h3 className={styles.h3}>1. Chief Complaint</h3>
         {editable ? (
-          <textarea
+          <TextArea
             className={styles.edit}
-            aria-label="Chief complaint"
-            rows={4}
+            label="Chief complaint"
+            minRows={4}
+            maxRows={10}
             value={brief.chiefComplaint}
             onChange={(e) => patch({ chiefComplaint: e.target.value })}
           />

@@ -1,5 +1,5 @@
 /**
- * @pattern NamedReasonList — medications / supplements: add pill → Sheet (name + reason) → tiles.
+ * @pattern NamedReasonList — medications / supplements: add pill → BottomSheet (name + reason) → tiles.
  * @usedBy  Health Basics namedReasons; Widget lab (/wid); chat/intake surfaces with the same shape
  *
  * Main surface shows committed tiles + an add pill. Name/reason draft lives only in the sheet.
@@ -7,22 +7,8 @@
  * Tiles are owned locally so remove (X) is not undone by a stale parent render; remount via `key`
  * when the step/answers source changes (Health Basics already keys by step.key).
  */
-import { useEffect, useState } from 'react';
-import {
-  AnimatePresence,
-  Button,
-  DURATION,
-  EASE_IOS,
-  Icon,
-  IconButton,
-  Input,
-  MotionDiv,
-  Overlay,
-  REDUCED_FADE,
-  Sheet,
-  TextArea,
-  useReducedMotionPref,
-} from '@mobile/ui';
+import { useState } from 'react';
+import { BottomSheet, Button, Icon, IconButton, Input, TextArea } from '@mobile/ui';
 import { type NamedReason } from './namedReasons';
 import styles from './NamedReasonList.module.css';
 
@@ -58,7 +44,6 @@ export function NamedReasonList({
   onChange,
   onNone,
 }: NamedReasonListProps) {
-  const reduced = useReducedMotionPref();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<NamedReason>(blank);
   // Local tiles: X remove updates this immediately. Remount (key) reloads from `entries`.
@@ -93,16 +78,7 @@ export function NamedReasonList({
     publish(tiles.filter((_, idx) => idx !== i));
   };
 
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
 
-  const slide = reduced
-    ? REDUCED_FADE
-    : { initial: { y: '100%' }, animate: { y: 0 }, exit: { y: '100%' }, transition: { duration: DURATION.sheet, ease: EASE_IOS } };
 
   return (
     <div className={styles.root} role="group" aria-label={label}>
@@ -151,63 +127,40 @@ export function NamedReasonList({
         </button>
       )}
 
-      <Overlay>
-        <AnimatePresence>
-          {open && (
-            <div className={styles.layer} key="named-reason-sheet">
-              <MotionDiv
-                className={styles.scrim}
-                onClick={close}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: DURATION.base }}
-              />
-              <MotionDiv
-                className={styles.panel}
-                role="dialog"
-                aria-modal="true"
-                aria-label={addLabel}
-                {...slide}
-              >
-                <Sheet
-                  title={addLabel}
-                  detent="medium"
-                  className={styles.sheet}
-                  footer={
-                    <Button fullWidth disabled={!canAdd} onClick={commit}>
-                      {addLabel}
-                    </Button>
-                  }
-                >
-                  <div className={styles.fields}>
-                    <Input
-                      label="Name"
-                      placeholder={namePlaceholder}
-                      value={draft.name}
-                      autoComplete="off"
-                      autoCapitalize="words"
-                      onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
-                    />
-                    <label className={styles.reason}>
-                      <span className={styles.reasonLabel}>Reason</span>
-                      <TextArea
-                        label="Reason"
-                        className={styles.reasonBox}
-                        placeholder={reasonPlaceholder}
-                        value={draft.reason}
-                        minRows={3}
-                        maxRows={6}
-                        onChange={(e) => setDraft((d) => ({ ...d, reason: e.target.value }))}
-                      />
-                    </label>
-                  </div>
-                </Sheet>
-              </MotionDiv>
-            </div>
-          )}
-        </AnimatePresence>
-      </Overlay>
+      <BottomSheet
+        showClose
+        open={open}
+        onClose={close}
+        title={addLabel}
+        footer={
+          <Button fullWidth disabled={!canAdd} onClick={commit}>
+            {addLabel}
+          </Button>
+        }
+      >
+        <div className={styles.fields}>
+          <Input
+            label="Name"
+            placeholder={namePlaceholder}
+            value={draft.name}
+            autoComplete="off"
+            autoCapitalize="words"
+            onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
+          />
+          <label className={styles.reason}>
+            <span className={styles.reasonLabel}>Reason</span>
+            <TextArea
+              label="Reason"
+              className={styles.reasonBox}
+              placeholder={reasonPlaceholder}
+              value={draft.reason}
+              minRows={3}
+              maxRows={6}
+              onChange={(e) => setDraft((d) => ({ ...d, reason: e.target.value }))}
+            />
+          </label>
+        </div>
+      </BottomSheet>
     </div>
   );
 }

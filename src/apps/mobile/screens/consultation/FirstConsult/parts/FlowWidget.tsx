@@ -27,7 +27,7 @@ export function FlowWidget({ widget: w, active, say, onPick }: FlowWidgetProps) 
       case 'mood_scale':
         return <MoodScale title={w.title ?? 'Today'} onPick={(m) => answer(m)} />;
       case 'scale_check':
-        return <ScaleCheck title={w.title ?? ''} low={w.low ?? '0'} high={w.high ?? '10'} onDone={(v) => answer(`${v} of 10`, String(v))} />;
+        return <ScaleCheck title={w.title ?? ''} low={w.low ?? 'Not at all'} high={w.high ?? 'Completely'} words={w.steps} onDone={(v, word) => answer(word, String(v))} />;
       case 'upload_card':
         return <UploadCard onUploaded={(f) => answer(`Uploaded ${f}`, f)} />;
       case 'slot_picker':

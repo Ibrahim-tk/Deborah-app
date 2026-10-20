@@ -9,7 +9,7 @@
 import { Fragment, useState, type ReactNode } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Button, Divider, Header, Icon, ListRow, Overlay, Sheet, useAlert, type IconName } from '@mobile/ui';
+import { BottomSheet, Button, Divider, Header, Icon, ListRow, useAlert, type IconName } from '@mobile/ui';
 import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
 import { TextSizeSheet, textSizeLabel } from '@mobile/patterns/settings';
 import { PhoneField, formatPhone, type PhoneValue } from '@mobile/patterns/widgets';
@@ -168,26 +168,26 @@ export default function Account() {
         </footer>
       </div>
       <TextSizeSheet open={textSizeOpen} onClose={() => setTextSizeOpen(false)} />
-      <Overlay>
-        {phoneOpen && (
-          <div className={styles.phoneLayer}>
-            <button type="button" className={styles.phoneScrim} aria-label="Close" onClick={() => setPhoneOpen(false)} />
-            <Sheet title="Phone number">
-              <p className={styles.text}>Used only by Deborah’s team. We don’t send texts or verification codes.</p>
-              <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
-              <Button
-                fullWidth
-                onClick={() => {
-                  useAppStore.getState().setContactPhone(phoneDraft.countryCode, phoneDraft.number);
-                  setPhoneOpen(false);
-                }}
-              >
-                Save
-              </Button>
-            </Sheet>
-          </div>
-        )}
-      </Overlay>
+      <BottomSheet
+        showClose
+        open={phoneOpen}
+        onClose={() => setPhoneOpen(false)}
+        title="Phone number"
+        footer={
+          <Button
+            fullWidth
+            onClick={() => {
+              useAppStore.getState().setContactPhone(phoneDraft.countryCode, phoneDraft.number);
+              setPhoneOpen(false);
+            }}
+          >
+            Save
+          </Button>
+        }
+      >
+        <p className={styles.text}>Used only by Deborah’s team. We don’t send texts or verification codes.</p>
+        <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
+      </BottomSheet>
     </div>
   );
 }

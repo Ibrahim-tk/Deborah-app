@@ -9,7 +9,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import type { IntakeMeta } from '@shared/types/domain';
-import { Icon } from '@mobile/ui';
+import { Icon, Input } from '@mobile/ui';
 import styles from './ComposerOptions.module.css';
 
 const OTHER_ID = 'other';
@@ -52,13 +52,15 @@ export function AnswerPanel({ intake, onAnswer, onOther }: AnswerPanelProps) {
                 submit();
               }}
             >
-              <input
+              <Input
                 ref={field}
+                variant="inline"
                 className={styles.otherField}
+                label="Other answer"
+                hideLabel
                 value={text}
                 enterKeyHint="send"
                 placeholder="Type your answer…"
-                aria-label="Other answer"
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => e.key === 'Escape' && setTyping(false)}
               />

@@ -50,12 +50,8 @@
 .root[data-variant='dark'] .notNow { background: rgb(255 255 255 / 0.1); color: #fff; }
 
 /* Privacy policy / Terms and disclaimer: a bottom sheet over the chat. */
-.layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; }
-.scrim { position: absolute; inset: 0; border: 0; background: var(--color-scrim); animation: fade var(--dur-base) var(--ease-out) both; }
-.sheet { position: relative; display: flex; flex-direction: column; max-height: 82%; padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4)); border-radius: 32px 32px 0 0; background: var(--color-canvas); box-shadow: 0 -12px 40px rgb(18 7 33 / 0.12); animation: rise var(--dur-sheet, 420ms) var(--ease-ios, cubic-bezier(0.32, 0.72, 0, 1)) both; }
-.grabber { align-self: center; flex: none; width: 36px; height: 5px; margin-bottom: var(--space-3); border-radius: var(--radius-full); background: var(--color-border-hairline); }
-.sheetHead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-3); }
-.sheetTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.sheet { /* Content of the shared ui/BottomSheet (frame, surface, motion live there). */ display: flex; flex-direction: column; }
+.sheetTitle { flex: 1; min-width: 0; margin: 0; font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
 .sheetBody { display: grid; gap: var(--space-3); min-height: 0; overflow-y: auto; overscroll-behavior: contain; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 @keyframes fade { from { opacity: 0; } }
 @keyframes rise { from { transform: translateY(100%); } }

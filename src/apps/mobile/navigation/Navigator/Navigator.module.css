@@ -15,12 +15,7 @@
 
 .edge { position: absolute; top: 0; bottom: 0; left: 0; z-index: 5; width: 12px; touch-action: none; }
 
-/* Sheets and modals share one level: presentation order (DOM order) decides which is on top,
-   so a sheet presented over a modal (M-4.4 over M-4.2) sits above it, and vice versa. */
-.layer { position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end; }
-.scrim { position: absolute; inset: 0; background: var(--color-scrim); }
-.sheet { position: relative; width: 100%; max-height: calc(100% - var(--safe-top) - 12px); touch-action: none; }
-.sheet[data-detent='large'] { height: calc(100% - var(--safe-top) - 12px); }
+/* Sheets: ui/BottomSheet (same z level as modals; presentation order decides which is on top). */
 
 .modal { position: absolute; inset: 0; z-index: 40; overflow: clip; background: var(--surface-canvas); box-shadow: var(--shadow-float-lg); }
 
@@ -40,3 +35,8 @@
 
 .overlayHost { position: absolute; inset: 0; z-index: 100; pointer-events: none; }
 .overlayHost > * { pointer-events: auto; }
+
+/* Plain screens (everything outside GRADIENT_SCREENS in StackView): flat canvas colour, and the screen's own
+   Aura / GradientShift layers are hidden. */
+.screen[data-bg='plain'] { background: var(--color-canvas); }
+.screen[data-bg='plain'] [data-bg-layer] { display: none; }

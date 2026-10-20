@@ -309,7 +309,7 @@
           "id": 1,
           "title": "What I'm Hearing",
           "defaultOpen": true,
-          "body": "You've been living with {symptoms} for {duration}, and it's sitting at about {impact} out of 10 in your days. You're {age} and {stage}{medClause}. That's a lot to carry, and it makes complete sense that you're tired."
+          "body": "You've been living with {symptoms} for {duration}, and you said it gets in the way of your days {impact}. You're {age} and {stage}{medClause}. That's a lot to carry, and it makes complete sense that you're tired."
         },
         {
           "id": 2,

@@ -183,14 +183,13 @@ export default function Home() {
         <ChatLauncher glow placeholder="Ask Deborah how you’re feeling…" onOpen={chat} />
       </div>
 
-      {sheet && eligible && (
-        <GreetingSheet
-          name={name}
-          onDismiss={closeSheet}
-          // Sign-up only collects name and email, so Deborah opens with her onboarding questions (age, gender).
-          onOpenChat={() => { closeSheet(); openAsk({ startIntake: true }); }}
-        />
-      )}
+      <GreetingSheet
+        open={Boolean(sheet && eligible)}
+        name={name}
+        onDismiss={closeSheet}
+        // Sign-up only collects name and email, so Deborah opens with her onboarding questions (age, gender).
+        onOpenChat={() => { closeSheet(); openAsk({ startIntake: true }); }}
+      />
     </div>
   );
 }

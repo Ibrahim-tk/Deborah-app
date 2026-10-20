@@ -38,7 +38,7 @@ export function MessageBubble({ role, text, streaming, turnStart, placeholder, o
 
   if (role === 'user') {
     return (
-      <div className={styles.userRow}>
+      <div className={styles.userRow} data-role="user">
         <p className={styles.user}>{text}</p>
       </div>
     );

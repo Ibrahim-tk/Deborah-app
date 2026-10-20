@@ -1,0 +1,41 @@
+/* One soft pill holding the digits (design 2026-10-20). */
+.root {
+  display: flex;
+  width: 100%; /* full width of its column (design 2026-10-20); digits spread evenly across it */
+  align-items: center;
+  justify-content: space-evenly;
+  gap: var(--space-1);
+  min-height: 64px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-full);
+  background: var(--field-fill);
+  box-shadow: inset 0 0 0 1px var(--field-border);
+  transition: box-shadow var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+}
+/* Focus: darker neutral border on the pill, no ring, no purple. */
+.root:focus-within { box-shadow: inset 0 0 0 1px var(--field-border-focus); }
+
+/* Each digit: borderless, one character wide; empty slots show a faint dash (placeholder). */
+.slot {
+  width: 1.15ch;
+  min-width: 0;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  caret-color: var(--color-ink);
+  font: var(--weight-medium) 28px / 1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  outline: none;
+}
+.slot::placeholder { color: var(--color-ink-placeholder); opacity: 0.6; }
+.slot:focus::placeholder { color: transparent; }
+.slot:focus, .slot:focus-visible { outline: none; box-shadow: none; }
+
+/* Checking: the pill keeps its normal look (design 2026-10-20); the status line below says what's happening. */
+.root[data-verifying] { box-shadow: inset 0 0 0 1px var(--field-border); }
+.slot:disabled { opacity: 1; color: var(--color-ink); -webkit-text-fill-color: var(--color-ink); }
+/* No selection highlight on a digit (Base UI selects the active slot's character). */
+.slot::selection { background: transparent; }

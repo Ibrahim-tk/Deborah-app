@@ -6,9 +6,11 @@ import { type FormEvent, type ReactNode, useId, useState } from 'react';
 import styles from './InternalGate.module.css';
 
 const CODE = '1234';
+/** Temporarily off (designer request 2026-10-20). Set back to `true` to re-enable the lock. */
+const GATE_ENABLED = false;
 
 export function InternalGate({ children }: { children: ReactNode }) {
-  const [unlocked, setUnlocked] = useState(false);
+  const [unlocked, setUnlocked] = useState(!GATE_ENABLED);
   const [digits, setDigits] = useState('');
   const [error, setError] = useState(false);
   const inputId = useId();

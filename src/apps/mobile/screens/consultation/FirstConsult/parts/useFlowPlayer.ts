@@ -64,6 +64,8 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
           push({ id: uid(), kind: 'answer', nodeId: id, node });
           const held = heldSafety.current;
           if (held) later(() => push({ id: uid(), kind: 'bot', nodeId: held.id, text: say(held.node.bot), node: held.node }), typingMs);
+          // No follow-up suggestions: the script carries on once the seven cards have revealed.
+          if (node.next && !node.suggestedReplies?.length) later(() => go(node.next), 3200);
           return;
         }
         // The opening greeting is already on screen in spirit: no "writing…", it reveals in place (EntryView).
@@ -92,7 +94,7 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
 
   const echo = (entryId: string, picked: FlowOption[]) => {
     setEntries((xs) => xs.map((x) => (x.id === entryId ? { ...x, answered: true } : x)));
-    push({ id: uid(), kind: 'user', text: picked.map((p) => say(p.label)).join(', ') });
+    push({ id: uid(), kind: 'user', text: picked.map((p) => say(p.reply ?? p.label)).join(', ') });
   };
 
   /** An off-script Deborah line (typing first), e.g. before the consent card. Resolves once it shows. */
@@ -113,9 +115,9 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
       const values = picked.map((p) => p.value).filter((v) => v !== undefined);
       vars.current[node.saveAs] = node.widget?.multi ? (values as string[]) : (values[0] as FlowValue);
       // Words she tapped become `{saveAs}` in later lines: pills in lower case ("night sweats and brain fog"),
-      // a scale as its number, a slot as written. A skip leaves the profile's fallback wording.
+      // a scale as its word ("quite a bit"), a slot as written. A skip leaves the profile's fallback wording.
       const type = node.widget?.type;
-      const words = picked.map((p) => (type === 'scale_check' ? String(p.value) : type === 'pill_select' ? p.label.toLowerCase() : p.label));
+      const words = picked.map((p) => (type === 'scale_check' || type === 'pill_select' ? p.label.toLowerCase() : p.label));
       if (values.length) labels.current[node.saveAs] = words.length > 1 ? `${words.slice(0, -1).join(', ')} and ${words.at(-1)}` : words[0];
     }
     const single = picked.length === 1 ? picked[0] : undefined;

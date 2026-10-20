@@ -21,6 +21,9 @@ import styles from './Composer.module.css';
 export const COUNTER_FROM = 1800;
 export const MAX_CHARS = 2000;
 
+/** Simulated speech while dictating (design 2026-10-20): [flat ms, talking ms, …], then it loops. */
+const SPEECH_PATTERN = [3000, 2500, 2000, 2500, 4000];
+
 export type AttachSource = 'camera' | 'upload';
 const ATTACH_ITEMS = [
   { id: 'camera', label: 'Camera', icon: 'camera' as const },
@@ -53,6 +56,9 @@ export interface ComposerProps {
   disclaimer?: string;
   /** Toolbar "Symptoms" button; the screen opens the SymptomPicker sheet. */
   onSymptoms?: () => void;
+  /** Picked symptoms shown as small selected pills above the text (not typed into it). */
+  tokens?: string[];
+  onRemoveToken?: (token: string) => void;
   /** Lets the screen hide suggestions while dictating. */
   onRecordingChange?: (recording: boolean) => void;
 }
@@ -64,6 +70,8 @@ export function Composer({
   onStop,
   onAttach,
   onSymptoms,
+  tokens = [],
+  onRemoveToken,
   onFocusChange,
   generating,
   lockedNote,
@@ -76,24 +84,36 @@ export function Composer({
   onRecordingChange,
 }: ComposerProps) {
   const [recordingSince, setRecordingSince] = useState<number | null>(null);
-  const [now, setNow] = useState(() => Date.now());
+  const [focused, setFocused] = useState(false);
   const recording = recordingSince !== null;
-  const seconds = recording ? Math.max(0, Math.floor((now - recordingSince) / 1000)) : 0;
   const ownRef = useRef<HTMLTextAreaElement>(null);
   const area = inputRef ?? ownRef;
   const length = value.length;
-  const canSend = value.trim().length > 0 && length <= MAX_CHARS && !generating && !lockedNote;
+  const canSend = (value.trim().length > 0 || tokens.length > 0) && length <= MAX_CHARS && !generating && !lockedNote;
 
   useEffect(() => onRecordingChange?.(recording), [recording, onRecordingChange]);
 
+  // Flat while "silent", moving while "talking", following SPEECH_PATTERN in a loop.
+  const [talking, setTalking] = useState(false);
   useEffect(() => {
     if (!recording) return;
-    const id = window.setInterval(() => setNow(Date.now()), 250);
-    return () => window.clearInterval(id);
+    let step = 0;
+    let id = 0;
+    const next = () => {
+      setTalking(step % 2 === 1);
+      id = window.setTimeout(() => {
+        step = (step + 1) % SPEECH_PATTERN.length;
+        next();
+      }, SPEECH_PATTERN[step]);
+    };
+    next();
+    return () => {
+      window.clearTimeout(id);
+      setTalking(false);
+    };
   }, [recording]);
 
   const startRecording = () => {
-    setNow(Date.now());
     setRecordingSince(Date.now());
   };
 
@@ -122,39 +142,35 @@ export function Composer({
   };
 
   if (recording) {
-    const time = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
     return (
       <div className={styles.wrap}>
+        {/* Same element slots as the typing view (locked note · bar › glow), so React keeps the one EdgeLight
+            and it freezes in place instead of restarting. */}
+        {null}
         <div className={styles.bar}>
+          <EdgeLight className={styles.edgeLight} gather />
           <div className={styles.root}>
             {banner && <div className={styles.banner}>{banner}</div>}
-            <div className={styles.recordingRow} role="group" aria-label="Voice message">
-              <IconButton icon="close" label="Cancel recording" onClick={cancelRecording} />
+            {/* Same two rows as typing, so nothing moves: wave + timer where the text sits; ✕ · Stop · Send at
+                the exact size and place of + · mic · send. */}
+            <div className={styles.recordingField} role="group" aria-label="Voice message">
               {/* User-requested exception to the DESIGN.md "no wave animation" rule (2026-10-08). */}
-              <span className={styles.wave} aria-hidden>
-                {Array.from({ length: 24 }, (_, i) => (
+              {/* Full-width level bars, faded at both ends (no timer, design 2026-10-20). */}
+              <span className={styles.wave} data-talking={talking || undefined} aria-hidden>
+                {Array.from({ length: 56 }, (_, i) => (
                   <span key={i} style={{ animationDelay: `${(i * 97) % 900}ms` }} />
                 ))}
               </span>
-              <span className={styles.timer} role="timer" aria-label={`Recording, ${time}`}>
-                {time}
-              </span>
-              <button
-                type="button"
-                className={styles.stopRec}
-                onClick={stopRecording}
-                aria-label="Stop recording"
-              >
-                <Icon name="stop" size={18} />
-              </button>
-              <button
-                type="button"
-                className={styles.sendRec}
-                onClick={sendRecording}
-                aria-label="Send voice message"
-              >
-                <Icon name="send" size={18} />
-              </button>
+              <span className={styles.srOnly} role="status">Recording</span>
+            </div>
+            <div className={styles.toolbar}>
+              <IconButton icon="close" size="sm" label="Cancel recording" onClick={cancelRecording} />
+              <div className={styles.end}>
+                <IconButton icon="stop" size="sm" label="Stop recording" onClick={stopRecording} />
+                <div className={styles.send} data-ready>
+                  <IconButton icon="send" size="sm" label="Send voice message" onClick={sendRecording} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -176,10 +192,23 @@ export function Composer({
         }}
       >
         {/* Glow behind the white card only — not drawn on the composer rim. */}
-        {!options && <EdgeLight className={styles.edgeLight} />}
+        {/* Glow always runs; while typing it gathers at the bottom (design 2026-10-20). */}
+        <EdgeLight className={styles.edgeLight} gather={focused} />
         <div className={styles.root}>
           {banner && <div className={styles.banner}>{banner}</div>}
           {options}
+          {tokens.length > 0 && (
+            <ul className={styles.tokens} aria-label="Added symptoms">
+              {tokens.map((t) => (
+                <li key={t} className={styles.token}>
+                  {t}
+                  <button type="button" className={styles.tokenRemove} aria-label={`Remove ${t}`} onClick={() => onRemoveToken?.(t)}>
+                    <Icon name="close" size={12} strokeWidth={2} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
           <div className={styles.field}>
             <TextArea
               ref={area}
@@ -190,8 +219,14 @@ export function Composer({
               maxRows={5}
               onChange={(e) => onChange(e.target.value)}
               onKeyDown={onKeyDown}
-              onFocus={() => onFocusChange(true)}
-              onBlur={() => onFocusChange(false)}
+              onFocus={() => {
+                setFocused(true);
+                onFocusChange(true);
+              }}
+              onBlur={() => {
+                setFocused(false);
+                onFocusChange(false);
+              }}
             />
             {length >= COUNTER_FROM && (
               <span className={styles.counter} data-over={length > MAX_CHARS || undefined}>

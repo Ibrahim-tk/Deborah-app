@@ -1,11 +1,33 @@
 /** Progress and presence: spinner, status line, bars and rings, Deborah's avatar and blob, the app bar. */
 import { useEffect, useState } from 'react';
-import { Avatar, DeborahBlob, Header, IconButton, ProgressBar, ProgressRing, ProgressStatus, Spinner } from '@mobile/ui';
+import { Avatar, Button, DeborahBlob, Header, IconButton, ProgressBar, ProgressRing, ProgressStatus, Spinner, TopBanner, type TopBannerTone } from '@mobile/ui';
 import { Section } from '../Section';
 import { Grid, Row, Specimen, Variant } from '../Specimen';
 import styles from './sections.module.css';
 
 const STEPS = ['Reading your answers', 'Looking through my Handbook', 'Writing to you'];
+
+const BANNERS: { tone: TopBannerTone; message: string }[] = [
+  { tone: 'error', message: 'That’s not the correct code. Try again?' },
+  { tone: 'success', message: 'Profile saved.' },
+  { tone: 'info', message: 'You’re offline. Changes will sync later.' },
+];
+
+function TopBannerDemo() {
+  const [shown, setShown] = useState<(typeof BANNERS)[number] | null>(null);
+  return (
+    <>
+      <Row>
+        {BANNERS.map((b) => (
+          <Button key={b.tone} variant="secondary" size="sm" onClick={() => setShown(b)}>
+            {b.tone}
+          </Button>
+        ))}
+      </Row>
+      <TopBanner open={Boolean(shown)} tone={shown?.tone} message={shown?.message ?? ''} onClose={() => setShown(null)} />
+    </>
+  );
+}
 
 export function Feedback() {
   const [step, setStep] = useState(0);
@@ -16,6 +38,10 @@ export function Feedback() {
   return (
     <Section id="feedback" title="Progress, presence and navigation" lede="A single rotating ring and words that change as steps complete; never typing dots. Deborah is always shown with her gold ring or her glass blob.">
       <Grid>
+        <Specimen name="TopBanner" path="ui/TopBanner" note="Drops in from the top, auto-hides after 3.5 s (tap to dismiss). tone: error · success · info. Controlled: open + message + onClose.">
+          <TopBannerDemo />
+        </Specimen>
+
         <Specimen name="Spinner · ProgressStatus" path="ui/ProgressStatus" note="Status crossfades (160 ms) as steps change.">
           <Row>
             <Variant label="Spinner 16"><Spinner label="Loading" /></Variant>
