@@ -35,7 +35,9 @@ export function useHomeView() {
   const when = last ? relative(daysBetween(last.startedAt, now)) : undefined;
   const topic = sentenceCase(hub.focus?.topic ?? last?.topic ?? 'Your last conversation');
 
-  const state: HomeState = d.isNew ? 'new' : hub.plan && hub.plan.day >= ESTABLISHED_FROM_DAY && !d.midIntake ? 'established' : 'returning';
+  // Sign-up keeps one Home (the sign-up one); its cards come and go as she acts (design 2026-10-20).
+  const signup = useAppStore((s) => s.authFlow === 'signup');
+  const state: HomeState = d.isNew || signup ? 'new' : hub.plan && hub.plan.day >= ESTABLISHED_FROM_DAY && !d.midIntake ? 'established' : 'returning';
 
   const habits = (plan?.habits ?? []).map((h) => ({ id: h.id, text: h.text, done: h.doneDates.includes(today) }));
   const nextHabit = habits.find((h) => !h.done)?.text;

@@ -16,3 +16,5 @@ export * from './NoteRow';
 // F11 — Documents and reports
 export * from './DocumentRow';
 export * from './ReportRow';
+export * from './IntakeTile';
+export * from './VisitNoteCard';

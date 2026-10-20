@@ -14,7 +14,6 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-1.9 | Deborah's welcome: "Start chatting" or "Start talking about {name}" (sheet over the last step) | F01 | `onboarding/DeborahWelcome` | W-1.9 — not built | — | [ux/F01-onboarding.md](ux/F01-onboarding.md) (OPEN: add) | built |
 | M-2.0 | Home (landing, first-visit greeting sheet) | F02 | `consultation/Home` | W-2.0 — not built | — | design direction 2026-10-08 (OPEN: add to ux/F02) | built |
 | M-2.9 | Scan a label (intake V2 Step E) | F02 | `consultation/ScanLabel` | W-2.9 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
-| M-2.10 | Build your health profile (intake V2 card on its own) | F02 | `consultation/HealthProfile` | W-2.10 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
 | M-2.11 | Profile question (deferred fields) | F02 | `consultation/ProfileQuestion` | W-2.11 — not built | — | intake V2 brief (OPEN: add to ux/F02) | built |
 | M-2.13 | What Deborah noted (Review and Confirm edit sheet) | F02 | `consultation/ReviewFacts` | W-2.13 — not built | — | [ux/F02b-profile-aware-chat-intake.md](ux/F02b-profile-aware-chat-intake.md#review-and-confirm) | built (core experience) |
 | M-2.14 | Complete Intake (placeholder full questionnaire shell) | F02 | `consultation/CompleteIntake` | W-2.14 — not built | — | Client discovery 2026-10-16 | built (additive; Dropbox fields deferred) |

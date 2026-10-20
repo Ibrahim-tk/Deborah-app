@@ -17,9 +17,10 @@ export interface StateNewProps {
   reports?: { meta: string; onPress: () => void };
   documents?: { meta: string; onPress: () => void };
   onLabs: () => void;
+  onNotes: () => void;
 }
 
-export function StateNew({ onStart, chat, intakeCard, destinations, recommendations, onShop, reports, documents, onLabs }: StateNewProps) {
+export function StateNew({ onStart, chat, intakeCard, destinations, recommendations, onShop, reports, documents, onLabs, onNotes }: StateNewProps) {
   return (
     <>
       {chat ? (
@@ -49,7 +50,7 @@ export function StateNew({ onStart, chat, intakeCard, destinations, recommendati
         <IntakeCompletionCard progress={intakeCard.progress} complete={intakeCard.complete} onAction={intakeCard.onAction} />
       )}
 
-      <HomeSections reports={reports} documents={documents} onLabs={onLabs} destinations={destinations} recommendations={recommendations} onShop={onShop} />
+      <HomeSections reports={reports} documents={documents} onLabs={onLabs} onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} />
     </>
   );
 }

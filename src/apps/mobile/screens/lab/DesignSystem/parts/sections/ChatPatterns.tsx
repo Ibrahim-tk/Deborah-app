@@ -78,7 +78,7 @@ export function ChatPatterns() {
           <Variant label="ChatLauncher · glow"><ChatLauncher glow onOpen={noop} /></Variant>
           <Variant label="TrialCounter"><TrialCounter left={3} onChoosePlan={noop} /></Variant>
           <Variant label="TrialCounter · 0"><TrialCounter left={0} onChoosePlan={noop} /></Variant>
-          <Variant label="CareDisclaimer"><CareDisclaimer text="Not a substitute for medical care." onDismiss={noop} actionLabel="Got it" /></Variant>
+          <Variant label="CareDisclaimer"><CareDisclaimer text="Not a substitute for medical care." onDismiss={noop} /></Variant>
         </Specimen>
       </Grid>
     </Section>

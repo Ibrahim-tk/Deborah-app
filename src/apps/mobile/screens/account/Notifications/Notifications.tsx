@@ -1,12 +1,12 @@
 /**
  * @screen  M-10.4 · Notifications
  * @flow    F10 Account, privacy & data
- * @states  reminders off (interval disabled) · on · system permission alert · permission denied (Settings banner)
+ * @states  all off · per-type on/off · system permission alert · permission denied (Settings banner)
+ * Notification settings (Miro 2026-10-20); the inbox of arrived notifications is M-10.6.
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F10-account-privacy.md#m-104--notifications-not-in-wireframes
  * @xref    web: W-10.4 (apps/web/screens/account/Notifications) — not built
  */
-import { useState } from 'react';
 import { FOLLOW_UP_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
 import { addDays, nowFrom, uid } from '@shared/utils';
 import { Button, Header, Panel, Segmented, Toggle, useAlert } from '@mobile/ui';
@@ -89,20 +89,17 @@ export default function Notifications() {
     reschedule(true, Number(value));
   };
 
-  const [awayFollowUp, setAwayFollowUp] = useState(() => {
-    try {
-      return localStorage.getItem('oc.away-followup') === '1';
-    } catch {
-      return false;
-    }
-  });
-  const toggleAway = (on: boolean) => {
-    setAwayFollowUp(on);
-    try {
-      localStorage.setItem('oc.away-followup', on ? '1' : '0');
-    } catch {
-      /* session-only */
-    }
+  // Per-type preferences (missing = on); critical and re-consent can't be turned off.
+  const prefs = useAppStore((s) => s.notifications.prefs);
+  const enabled = useAppStore((s) => s.notifications.enabled !== false);
+  const setPref = async (type: 'inactivity' | 'plan', on: boolean) => {
+    if (on && !(await ensurePermission())) return;
+    useAppStore.getState().setNotificationPref(type, on);
+  };
+  const setEnabled = async (on: boolean) => {
+    if (on && !(await ensurePermission())) return;
+    useAppStore.getState().setNotificationsEnabled(on);
+    toast(on ? 'Notifications on' : 'Notifications off — important ones still come through');
   };
 
   const setBooking = async (on: boolean) => {
@@ -119,7 +116,7 @@ export default function Notifications() {
 
   return (
     <div className={styles.root} data-xref="M-10.4 · Notifications">
-      <Header title="Notifications" onBack={pop} backLabel={previousTitle} />
+      <Header title="Notification settings" onBack={pop} backLabel={previousTitle} />
       <div className={styles.body}>
         {denied && (
           <Panel tone="warning" icon="alert">
@@ -130,37 +127,36 @@ export default function Notifications() {
           </Panel>
         )}
 
-        <section className={styles.group} aria-label="Check-in reminders">
-          <Toggle checked={checkIns} onChange={setCheckIns} label="Check-in reminders" description="Deborah asks how you’re doing." />
-          {checkIns && (
-            <fieldset className={styles.interval}>
-              <legend className={styles.legend}>Preferred frequency</legend>
-              <Segmented
-                label="Preferred frequency"
-                options={INTERVALS}
-                value={String(days)}
-                onChange={changeInterval}
-              />
-            </fieldset>
-          )}
+        <section className={styles.group} aria-label="Notifications">
+          <Toggle checked={enabled && !denied} onChange={setEnabled} label="Allow notifications" description="Push notifications from Deborah on this phone." />
         </section>
 
-        <section className={styles.group} aria-label="Booking reminders">
-          <Toggle
-            checked={bookingReminders && !denied}
-            onChange={setBooking}
-            label="Booking reminders"
-            description="The day before a consultation with Deborah."
-          />
-        </section>
+        {enabled && !denied && (
+          <>
+            <section className={styles.group} aria-label="Follow-up after guidance">
+              <Toggle checked={checkIns} onChange={setCheckIns} label="Follow-up after guidance" description="Deborah asks how you’re doing after she’s shared guidance." />
+              {checkIns && (
+                <fieldset className={styles.interval}>
+                  <legend className={styles.legend}>Preferred frequency</legend>
+                  <Segmented label="Preferred frequency" options={INTERVALS} value={String(days)} onChange={changeInterval} />
+                </fieldset>
+              )}
+            </section>
+            <section className={styles.group} aria-label="Healing Plan check-in">
+              <Toggle checked={prefs?.plan !== false} onChange={(on) => void setPref('plan', on)} label="Healing Plan check-in" description="A nudge to log today’s habits while your plan is running." />
+            </section>
+            <section className={styles.group} aria-label="30-day inactivity reminder">
+              <Toggle checked={prefs?.inactivity !== false} onChange={(on) => void setPref('inactivity', on)} label="30-day inactivity reminder" description="If you haven’t talked with Deborah for 30 days." />
+            </section>
+            <section className={styles.group} aria-label="Booking reminders">
+              <Toggle checked={bookingReminders} onChange={setBooking} label="Booking reminders" description="The day before a consultation with Deborah." />
+            </section>
+          </>
+        )}
 
-        <section className={styles.group} aria-label="Inactivity follow-up">
-          <Toggle
-            checked={awayFollowUp && !denied}
-            onChange={toggleAway}
-            label="Follow-up when I’ve been away"
-            description="Design only for now — no automatic inactivity schedule yet."
-          />
+        <section className={styles.group} aria-label="Always on">
+          <Toggle checked disabled onChange={() => {}} label="Critical follow-up" description="Always on: safety follow-ups when something needs attention." />
+          <Toggle checked disabled onChange={() => {}} label="Re-consent on policy update" description="Always on: we ask again when our privacy policy changes." />
         </section>
       </div>
     </div>

@@ -11,9 +11,25 @@ export interface HomeSectionsProps {
   destinations: Destinations;
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
+  /** First-time home: one row of what she already has (My Notes · My Health · My Family) instead of records + the pair. */
+  onNotes?: () => void;
 }
 
-export function HomeSections({ reports, documents, onLabs, destinations, recommendations, onShop }: HomeSectionsProps) {
+export function HomeSections({ reports, documents, onLabs, destinations, recommendations, onShop, onNotes }: HomeSectionsProps) {
+  if (onNotes) {
+    return (
+      <>
+        <SuggestionCarousel
+          items={[
+            { key: 'notes', title: 'My Notes', sub: 'Visit notes and saved answers', tone: 'lilac', artifact: 'blue-bloom', icon: 'note', onPress: onNotes },
+            { key: 'health', title: 'My Health', sub: destinations[0].meta, tone: 'mint', artifact: 'leaf-flower', icon: 'health', onPress: destinations[0].onPress },
+            { key: 'family', title: 'My Family', sub: destinations[1].meta, tone: 'rose', artifact: 'pink-bloom', icon: 'family', onPress: destinations[1].onPress },
+          ]}
+        />
+        <RecommendationCard items={recommendations} onShop={onShop} />
+      </>
+    );
+  }
   return (
     <>
       <SuggestionCarousel

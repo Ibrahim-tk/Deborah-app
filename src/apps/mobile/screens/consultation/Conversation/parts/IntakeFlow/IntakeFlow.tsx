@@ -30,7 +30,7 @@ export function IntakeFlow({ flow, onScan, onPick }: IntakeFlowProps) {
   return (
     <div className={styles.root}>
       {/* Step A: once, dismissible. */}
-      {!disclaimerSeen && <CareDisclaimer text={DISCLAIMER} actionLabel="Understood" onDismiss={() => useAppStore.getState().dismissDisclaimer()} />}
+      {!disclaimerSeen && <CareDisclaimer text={DISCLAIMER} onDismiss={() => useAppStore.getState().dismissDisclaimer()} />}
 
       {/* Step B: consent + import (can't be skipped). */}
       <MessageBubble role="deborah" turnStart text={`Hi ${name}. To personalise things, I’d like to use some health details. Want me to pull the basics from Apple Health? It’s faster.`}>

@@ -17,7 +17,7 @@ import {
 } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, GlassButton, Modal } from '@mobile/ui';
+import { BottomSheet, Button, GlassButton, Modal } from '@mobile/ui';
 import { EmptyState } from '@mobile/patterns/health';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
@@ -65,7 +65,7 @@ function resolveBrief(
 
 export default function VisitBrief() {
   const params = useScreenParams<{ messageId: string; conversationId: string; noteId: string }>();
-  const { dismissModal, open } = useNav();
+  const { dismissModal, open, openAsk } = useNav();
   const toast = useToast();
   const seed = useMemo(
     () => resolveBrief(params),
@@ -77,6 +77,8 @@ export default function VisitBrief() {
   const [noteId, setNoteId] = useState<string | undefined>(() => seed?.noteId);
   const [followUp, setFollowUp] = useState(false);
   const profileId = seed?.profileId;
+  // The after-visit note logged for this brief, if any (F09c links it by briefNoteId).
+  const outcomeId = useAppStore((s) => Object.values(s.notes.byId).find((n) => noteId && n.visit?.briefNoteId === noteId)?.id);
 
   // Keep store clock in sync for follow-up scheduling.
   useAppStore(useShallow((s) => ({ now: s.simulatedNow, anchor: s.clockAnchor })));
@@ -84,7 +86,7 @@ export default function VisitBrief() {
   if (!brief || !profileId) {
     return (
       <div className={styles.root} data-xref="M-9.7 · My Visit Notes">
-        <Modal title="My Visit Notes" right={<Button variant="ghost" size="md" onClick={dismissModal}>Done</Button>}>
+        <Modal title="For my provider" right={<Button variant="ghost" size="md" onClick={dismissModal}>Done</Button>}>
           <EmptyState icon="note" text="There’s not enough from this conversation yet for a provider note. Keep talking with Deborah first." />
         </Modal>
       </div>
@@ -128,7 +130,7 @@ export default function VisitBrief() {
   const onShare = async () => {
     persist();
     if (!navigator.share) return toast('Sharing isn’t available in this browser');
-    try { await navigator.share({ title: 'My Visit Notes', text: 'My Visit Notes from Your Oracle Clinician' }); } catch { /* dismissed */ }
+    try { await navigator.share({ title: 'For my provider', text: 'Notes for my provider from Your Oracle Clinician' }); } catch { /* dismissed */ }
   };
 
   const onPdf = () => {
@@ -173,14 +175,20 @@ export default function VisitBrief() {
   return (
     <div className={styles.root} data-xref="M-9.7 · My Visit Notes">
       <Modal
-        title="My Visit Notes"
+        title="For my provider"
         left={<GlassButton icon="share" aria-label="Share" onClick={onShare} />}
         right={<GlassButton icon="check" aria-label="Save" onClick={onSave} />}
         footer={
-          followUp ? (
-            <AppointmentFollowUp onWithDate={scheduleDayAfter} onWithoutDate={scheduleSevenDay} />
-          ) : (
-            <Button variant="secondary" fullWidth leadingIcon="pdf" onClick={onPdf}>Download PDF</Button>
+          (
+            <div className={styles.footer}>
+              {/* Miro Step 6: after the appointment, log how it went (chat debrief), or read the outcome already logged. */}
+              {noteId && (outcomeId ? (
+                <Button fullWidth leadingIcon="note" onClick={() => { dismissModal(); open('M-9.8', { noteId: outcomeId }); }}>View visit outcome</Button>
+              ) : (
+                <Button fullWidth leadingIcon="calendar" onClick={() => { dismissModal(); openAsk({ mode: 'debrief', briefNoteId: noteId }); }}>Log how the visit went</Button>
+              ))}
+              <Button variant="secondary" fullWidth leadingIcon="pdf" onClick={onPdf}>Download PDF</Button>
+            </div>
           )
         }
       >
@@ -188,6 +196,10 @@ export default function VisitBrief() {
           <BriefDocument brief={brief} onChange={setBrief} />
         </div>
       </Modal>
+      {/* After save / download: the appointment question in a bottom sheet (design 2026-10-20). */}
+      <BottomSheet open={followUp} onClose={() => setFollowUp(false)} showClose title="Do you have an appointment date?">
+        <AppointmentFollowUp onWithDate={scheduleDayAfter} onWithoutDate={scheduleSevenDay} />
+      </BottomSheet>
     </div>
   );
 }

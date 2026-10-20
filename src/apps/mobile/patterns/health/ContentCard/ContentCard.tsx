@@ -53,18 +53,18 @@ export function ContentCard({ item, reason, onPress }: ContentCardProps) {
   return (
     <button type="button" className={`${styles.root} ${styles[type.tone]}`} onClick={onPress}>
       <span className={styles.copy}>
-        <span className={styles.kind}>{type.label}</span>
+        <span className={styles.kind}>{type.label} · {durationLabel}</span>
         <span className={styles.title} data-placeholder={item.status === 'placeholder' || undefined}>
           {item.title}
         </span>
         {reason && <span className={styles.reason}>{reason}</span>}
-        <span className={styles.go} data-action={type.action} aria-hidden>
-          <Icon name={type.action} size={type.action === 'play' ? 16 : 18} />
-        </span>
       </span>
       <span className={styles.media}>
         <img className={styles.cover} src={cover} alt="" decoding="async" />
-        <span className={styles.duration}>{durationLabel}</span>
+        {/* Affordance sits on the cover, bottom right (design 2026-10-20: lighter card). */}
+        <span className={styles.go} data-action={type.action} aria-hidden>
+          <Icon name={type.action} size={type.action === 'play' ? 14 : 16} />
+        </span>
       </span>
     </button>
   );

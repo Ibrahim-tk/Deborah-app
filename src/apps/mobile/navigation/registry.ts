@@ -24,7 +24,6 @@ export const registry: Record<string, ScreenMeta> = {
   'M-2.7': { title: 'Shop', component: lazy(() => import('@mobile/screens/consultation/InAppShop')), presentation: 'modal', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-27--shop-in-app-browser' },
   'M-2.8': { title: 'Follow-up opt-in', component: lazy(() => import('@mobile/screens/consultation/FollowUpOptIn')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-28--follow-up-opt-in' },
   'M-2.9': { title: 'Scan a label', component: lazy(() => import('@mobile/screens/consultation/ScanLabel')), presentation: 'sheet', closeButton: true, detent: 'large', dismissible: true, figma: '', spec: 'intake V2 brief §3 Step E (OPEN: add to ux/F02)' },
-  'M-2.10': { title: 'Your health profile', component: lazy(() => import('@mobile/screens/consultation/HealthProfile')), presentation: 'modal', figma: '', spec: 'intake V2 brief §7 (OPEN: add to ux/F02)' },
   'M-2.11': { title: 'Profile question', component: lazy(() => import('@mobile/screens/consultation/ProfileQuestion')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: '', spec: 'intake V2 brief §4 (OPEN: add to ux/F02)' },
   'M-2.13': { title: 'What Deborah noted', component: lazy(() => import('@mobile/screens/consultation/ReviewFacts')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'docs/ux/F02b-profile-aware-chat-intake.md#review-and-confirm' },
   'M-2.14': { title: 'Complete Intake', component: lazy(() => import('@mobile/screens/consultation/CompleteIntake')), presentation: 'push', figma: '', spec: 'Client discovery 2026-10-16 (placeholder sections)' },
@@ -56,6 +55,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.4': { title: 'For you', component: lazy(() => import('@mobile/screens/myhealth/ContentDetail')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-74--for-you-content-detail' },
   'M-7.5': { title: 'Deborah’s library', component: lazy(() => import('@mobile/screens/myhealth/Library')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-75--deborahs-library' },
   'M-7.6': { title: 'About Deborah', component: lazy(() => import('@mobile/screens/myhealth/AboutDeborah')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-76--about-deborah' },
+  'M-7.8': { title: 'Edit health profile', component: lazy(() => import('@mobile/screens/myhealth/EditHealthSection')), presentation: 'modal', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@mobile/screens/myhealth/EditHealthDetail')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
   // F08 Book Deborah
@@ -70,6 +70,8 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.5': { title: 'Lab report', component: lazy(() => import('@mobile/screens/records/LabReport')), presentation: 'push', figma: '', spec: 'docs/ux/F09-records.md#m-95--lab-report-not-in-wireframes' },
   'M-9.6': { title: 'PDF preview', component: lazy(() => import('@mobile/screens/records/PdfPreview')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes' },
   'M-9.7': { title: 'My Visit Notes', component: lazy(() => import('@mobile/screens/records/VisitBrief')), presentation: 'modal', figma: '', spec: 'docs/ux/F09b-visit-brief.md' },
+  'M-9.10': { title: 'New note', component: lazy(() => import('@mobile/screens/records/MyVisitNote')), presentation: 'modal', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F09)' },
+  'M-9.9': { title: 'Log your visit', component: lazy(() => import('@mobile/screens/records/VisitLog')), presentation: 'modal', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F09)' },
   'M-9.8': { title: 'Log your visit', component: lazy(() => import('@mobile/screens/records/LogVisit')), presentation: 'sheet', detent: 'large', dismissible: false, figma: '', spec: 'docs/ux/F09c-log-visit.md#m-98--log-your-visit' },
 
   // F11 Documents and reports — OPEN: planned = phases of docs/planning/documents-reports-plan-2026-10-19.md (not docs/11-build-plan.md).
@@ -81,8 +83,9 @@ export const registry: Record<string, ScreenMeta> = {
   'M-10.1': { title: 'Settings', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },
   'M-10.2': { title: 'Privacy & data', component: lazy(() => import('@mobile/screens/account/PrivacyData')), presentation: 'push', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-102--privacy--data' },
   'M-10.3': { title: 'Subscription', component: lazy(() => import('@mobile/screens/account/Subscription')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-103--subscription-not-in-wireframes' },
-  'M-10.4': { title: 'Notifications', component: lazy(() => import('@mobile/screens/account/Notifications')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-104--notifications-not-in-wireframes' },
+  'M-10.4': { title: 'Notification settings', component: lazy(() => import('@mobile/screens/account/Notifications')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-104--notifications-not-in-wireframes' },
   // Modal everywhere (opened read-only from M-1.3 too); same component per the spec.
+  'M-10.6': { title: 'Notifications', component: lazy(() => import('@mobile/screens/account/NotificationInbox')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md' },
   'M-10.5': { title: 'Terms & disclaimer', component: lazy(() => import('@mobile/screens/account/Legal')), presentation: 'modal', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-105--terms--disclaimer-not-in-wireframes' },
 };
 

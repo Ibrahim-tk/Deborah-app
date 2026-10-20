@@ -5,6 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { nextNodeId, personalise, type FlowValue } from '@shared/engine';
 import type { Flow, FlowNode, FlowOption } from '@shared/types/flow';
+import { getFlowSession, saveFlowSession } from './flowSessions';
 
 export type Entry =
   | { id: string; kind: 'bot'; nodeId: string; text: string; node: FlowNode; answered?: boolean }
@@ -19,12 +20,14 @@ const uid = () => `f${++seq}`;
 /** Fills `{token}` from the profile context and from earlier answers (their labels, as she tapped them). */
 const fill = (text: string, values: Record<string, string>) => text.replace(/\{(\w+)\}/g, (m, k: string) => values[k] ?? m);
 
-export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<string, string>; vars: Record<string, FlowValue> }) {
-  const [entries, setEntries] = useState<Entry[]>([]);
+export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<string, string>; vars: Record<string, FlowValue> }, resumeKey?: string) {
+  // Resume where she left off (Home "Continue your chat"), else start the script fresh.
+  const saved = resumeKey ? getFlowSession(resumeKey) : undefined;
+  const [entries, setEntries] = useState<Entry[]>(() => saved?.entries.filter((e) => e.kind !== 'thinking') ?? []);
   const [typing, setTyping] = useState(false);
-  const [extraPrep, setExtraPrep] = useState<string[]>([]);
-  const vars = useRef<Record<string, FlowValue>>({ ...ctx?.vars });
-  const labels = useRef<Record<string, string>>({});
+  const [extraPrep, setExtraPrep] = useState<string[]>(() => saved?.extraPrep ?? []);
+  const vars = useRef<Record<string, FlowValue>>(saved?.vars ?? { ...ctx?.vars });
+  const labels = useRef<Record<string, string>>(saved?.labels ?? {});
   const timers = useRef<number[]>([]);
   const later = (fn: () => void, ms: number) => { timers.current.push(window.setTimeout(fn, ms)); };
   const push = (e: Entry) => setEntries((xs) => [...xs, e]);
@@ -86,7 +89,11 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
   // Start on a timer: React dev runs this effect twice (mount → cleanup → mount), and the cleanup cancels
   // the first run's timer, so the script starts exactly once whether its first line is hers or Deborah's.
   useEffect(() => {
-    later(() => go(flow.startNode), 0);
+    if (resumeKey) saveFlowSession(resumeKey, { entries, vars: vars.current, labels: labels.current, extraPrep });
+  }, [resumeKey, entries, extraPrep]);
+
+  useEffect(() => {
+    if (!saved?.entries.length) later(() => go(flow.startNode), 0);
     const t = timers.current;
     return () => t.forEach(window.clearTimeout);
   // eslint-disable-next-line react-hooks/exhaustive-deps

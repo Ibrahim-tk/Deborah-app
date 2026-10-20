@@ -1,9 +1,9 @@
-/** M-7.2 — populated hub: focus · plan · check-in · history and notes · health profile · for you · library link. */
+/** M-7.2 — populated hub: focus · plan · check-in · health profile · for you · library link. */
 import { scripts } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { ListRow } from '@mobile/ui';
-import { CheckInCard, ContentCard, FocusCard, PlanProgressCard, QuickLinks } from '@mobile/patterns/health';
+import { ActionTile } from '@mobile/ui';
+import { CheckInCard, ContentCard, FocusCard, PlanProgressCard } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import { useForYou } from '@mobile/hooks/useForYou';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
@@ -11,12 +11,10 @@ import { HealthDetails } from './HealthDetails';
 import styles from './Hub.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
-type Segment = 'consultations' | 'notes';
-
 export function HubPopulated() {
   const { push, openAsk } = useNav();
   const gate = useAccountGate();
-  const { profileId, focus, plan, checkIn, upcoming, counts } = useHubData();
+  const { profileId, focus, plan, checkIn, upcoming } = useHubData();
   const forYou = useForYou().slice(0, 3);
 
   const openFocus = () => {
@@ -47,13 +45,7 @@ export function HubPopulated() {
         />
       )}
       <CheckInCard state={checkIn} upcoming={upcoming} onCheckIn={() => openAsk({ mode: 'checkin' })} onReminders={() => push('M-10.4')} />
-      <QuickLinks<Segment>
-        links={[
-          { key: 'consultations', label: 'History', icon: 'chat', count: counts.consultations },
-          { key: 'notes', label: 'Visit Notes', icon: 'note', count: counts.notes },
-        ]}
-        onSelect={(segment) => push('M-9.1', { segment })}
-      />
+      {/* History and Visit Notes live on My Notes (M-9.1), not here (design 2026-10-20). */}
       {/* Design request 2026-10-20: the health profile lives here; labs and documents have their own tab. */}
       <HealthDetails />
       <section className={styles.section} aria-labelledby="hub-for-you">
@@ -63,9 +55,7 @@ export function HubPopulated() {
             <ContentCard key={item.id} item={item} reason={reason} onPress={() => push('M-7.4', { itemId: item.id })} />
           ))}
         </div>
-        <div className={styles.rowGroup}>
-          <ListRow title="Browse all of Deborah’s library" onPress={() => push('M-7.5')} />
-        </div>
+        <ActionTile icon="book" title="Browse Deborah’s library" meta="Articles, videos and lessons" onClick={() => push('M-7.5')} />
       </section>
     </>
   );

@@ -143,7 +143,7 @@ export interface Profile {
   guardianConsentAt?: ISODate;
   /** Set up by someone else in onboarding or M-6.2: which consent they gave, by age group (plan P-01). */
   consent?: { path: 'adult-agreement' | 'guardian-teen' | 'guardian-child'; attestedAt: ISODate; attestedBy?: ID };
-  /** DN-14: facts the user confirmed from a conversation (shown on M-2.10 with where they came from). */
+  /** DN-14: facts the user confirmed from a conversation (shown on the My Health Health profile card, M-7.2). */
   confirmedFacts?: ConfirmedFact[];
 }
 
@@ -500,6 +500,27 @@ export interface Note {
   brief?: VisitBriefContent;
   /** Set when kind === 'after-visit' and logged through F09c. */
   visit?: VisitOutcome;
+  /** Provider visit summary logged from the Visit Notes tile (M-9.9, design 2026-10-20). */
+  visitLog?: VisitLog;
+}
+
+export interface VisitLog {
+  visitDate?: string;
+  chiefComplaint?: string;
+  duration?: string;
+  providerName?: string;
+  specialty?: string;
+  clinic?: string;
+  followUp?: string;
+  diagnosis?: string;
+  understanding?: string;
+  unaddressed?: string;
+  labs: { test: string; orderedBy: string; status: string }[];
+  labNotes?: string;
+  changes: { name: string; change: string; dose: string }[];
+  nextSteps: { priority: string; text: string }[];
+  ownNotes?: string;
+  loggedAt: ISODate;
 }
 
 /** F11 Documents and reports (docs/ux/F11-documents.md). */
@@ -547,8 +568,12 @@ export interface Booking {
   status: 'booked' | 'cancelled';
 }
 
+/** Notification types (Miro "Notification & Reminders", 2026-10-20); each can be turned off in settings except the required ones. */
+export type NotificationType = 'followup' | 'inactivity' | 'plan' | 'critical' | 'reconsent' | 'booking';
+
 export interface AppNotification {
   id: ID;
+  type?: NotificationType;
   title: string;
   body: string;
   deepLink: string;

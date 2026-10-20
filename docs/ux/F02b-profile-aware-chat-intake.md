@@ -260,7 +260,7 @@ Meeting 2026-10-12 · B: the AI must not silently update the health profile.
   what was saved.
 - **M-2.13 · What Deborah noted** (large sheet): tap a fact to change it (the same options as the question, or text
   for facts from a message), then Save to my profile or Don't save.
-- Only `confirmFacts` writes the profile. Confirmed facts are listed on M-2.10 under "From your conversations" with
+- Only `confirmFacts` writes the profile. Confirmed facts are listed on the My Health Health profile card (M-7.2; M-2.10 removed 2026-10-20) with
   the date; list facts also fill the structured health profile marked "confirmed in chat".
 - Declining health-data consent drops every pending fact in that conversation.
 - Scenario replays (seeded histories) settle their facts: no card in seeded conversations.

@@ -50,6 +50,7 @@ import symptoms from './intake/symptoms.json';
 import firstConsult from './conversation/flows/firstConsult.json';
 import returningConsult from './conversation/flows/returningConsult.json';
 import sandraConsult from './conversation/flows/sandraConsult.json';
+import proxyConsult from './conversation/flows/proxyConsult.json';
 import documentTypes from './documents/types.json';
 import extractionsByType from './documents/extractions.json';
 import documentReviewJson from './documents/review.json';
@@ -128,6 +129,8 @@ export const firstConsultFlow = firstConsult as unknown as Flow;
 export const returningConsultFlow = returningConsult as unknown as Flow;
 /** Premade first chat for a new sign-up (Sandra, 46, perimenopause happy path). Placeholder copy. */
 export const sandraConsultFlow = sandraConsult as unknown as Flow;
+/** Premade proxy chat (Pathway C, elderly): a daughter asking about her mother. Placeholder copy. */
+export const proxyConsultFlow = proxyConsult as unknown as Flow;
 
 /** F11 Deborah's replies to a shared document and the one-time upload offer (placeholder copy). */
 export interface DocumentReviewCopy {

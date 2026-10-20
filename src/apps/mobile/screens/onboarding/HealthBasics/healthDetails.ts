@@ -68,6 +68,17 @@ export function healthDetailRows(a: Answers): DetailRow[] {
   return [...basics, ...clinical].map((step) => ({ key: step.key, label: LABELS[step.key] ?? step.title, value: words(step, a), step }));
 }
 
+export interface DetailSection { id: 'about' | 'history'; title: string; rows: DetailRow[] }
+
+/** Profile split into sections, each edited on its own page (LinkedIn-style, design 2026-10-20). */
+export function healthDetailSections(a: Answers): DetailSection[] {
+  const row = (step: Step) => ({ key: step.key, label: LABELS[step.key] ?? step.title, value: words(step, a), step });
+  return [
+    { id: 'about', title: 'About you', rows: visibleSteps(a).filter((s) => !SETUP.has(s.key)).map(row) },
+    { id: 'history', title: 'Health history', rows: profileVisibleSteps(a).map(row) },
+  ];
+}
+
 /** The step to edit for a key, given the current answers (keys can repeat across age/sex branches). */
 export function stepFor(key: string, a: Answers): Step | undefined {
   return [...visibleSteps(a), ...profileVisibleSteps(a)].find((s) => s.key === key);

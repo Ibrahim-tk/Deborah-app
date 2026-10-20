@@ -37,6 +37,8 @@ function Column({ label, items, value, onChange, className }: ColumnProps) {
     }, 90);
   };
   const step = (d: number) => onChange(items[Math.min(items.length - 1, Math.max(0, index + d))].value);
+  // No options yet (e.g. an empty date before a month is known): render nothing rather than crash.
+  if (!items.length) return null;
 
   return (
     <div

@@ -10,6 +10,8 @@ export function useDebriefReplies(chat: ReturnType<typeof useConversation>, conv
   return (messageId: string, optionId: string) => {
     chat.debriefReply(messageId, optionId);
     if (optionId === 'manual' || optionId === 'review') open('M-9.8', { conversationId });
+    // After saving: file a document from the visit (Miro Step 6 · upload supporting documents).
+    if (optionId === 'uploadDoc') open('M-11.3');
     if (optionId === 'tell' || optionId === 'testsYes' || optionId === 'medsYes') focusComposer();
   };
 }

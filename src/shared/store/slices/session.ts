@@ -63,7 +63,7 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
   setPermission: (notificationPermission) => set({ notificationPermission }),
   setLocked: (isLocked) => set({ isLocked }),
   snoozeFollowUp: (followUpSnoozeUntil) => set({ followUpSnoozeUntil }),
-  createAccount: (email, lastName) => set({ accountId: uid('acct'), accountEmail: email, accountLastName: lastName }),
+  createAccount: (email, lastName) => set({ accountId: uid('acct'), accountEmail: email, accountLastName: lastName, authFlow: 'signup' }),
   setContactPhone: (countryCode, number) =>
     set({
       accountPhoneCountry: countryCode || undefined,
@@ -74,6 +74,7 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
     set((s) => ({
       accountId: uid('acct'),
       accountEmail: email,
+      authFlow: 'login',
       consentAcceptedAt: s.consentAcceptedAt ?? nowFrom(s).toISOString(),
       consentVersion: s.consentVersion ?? consentDoc.version,
       // ASSUMPTION: the restored account has an active Individual plan (S11 world).

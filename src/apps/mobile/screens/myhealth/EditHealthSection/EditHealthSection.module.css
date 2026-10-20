@@ -1,0 +1,5 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-5); /* Modal's body already pads the sides. */ }
+.note { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.field { display: grid; }
+.label { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }

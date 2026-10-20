@@ -23,6 +23,11 @@ export function useDeviceNotifications() {
     seen.current = new Set(deliveredIds(useAppStore.getState()));
 
     return useAppStore.subscribe((s, prev) => {
+      // A scenario load (page refresh, State menu, Reset) brings seeded notifications: history, not new.
+      if (s.scenario.loadNonce !== prev.scenario.loadNonce) {
+        seen.current = new Set(deliveredIds(s));
+        return setBanner(null);
+      }
       const set = seen.current!;
       const fresh = s.notifications.queue.filter((n) => n.delivered && !n.read && !set.has(n.id));
       fresh.forEach((n) => set.add(n.id));

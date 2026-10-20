@@ -76,6 +76,8 @@ export function MessageList({
   const { messages, status } = conversation;
   const reports = useAppStore((s) => s.labs.reportsById);
   const hasPlan = useAppStore((s) => Boolean(s.plan90[conversation.profileId]));
+  // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
+  const keepAnswered = useAppStore((s) => s.authFlow === 'login');
   // DN-12: no products for anyone under 18, the shop tiles included.
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
   const profileName = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
@@ -252,12 +254,14 @@ export function MessageList({
           />
         )}
         {m.visitSummary && !m.meta?.streaming && <VisitSummaryCard lines={m.visitSummary} />}
-        {quick && quickActive && (
+        {/* Login flow: answered widgets stay in the thread beside her reply (design 2026-10-20). */}
+        {quick && (quickActive || (keepAnswered && quick.answered)) && (
           <QuickReplies
             options={quick.options}
             label={m.kind === 'labRequest' ? 'Lab results' : m.kind === 'documentOffer' ? 'Your document' : conversation.scriptId === DEBRIEF_SCRIPT_ID ? 'Your visit' : 'How did it go?'}
             primary={m.kind === 'labRequest' ? { label: 'Upload my labs', icon: 'upload', onPress: onUploadLabs } : undefined}
             onSelect={(id) => reply(m.id, id)}
+            answered={quickActive ? undefined : quick.answered}
           />
         )}
         {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}
@@ -270,7 +274,7 @@ export function MessageList({
       {messages.map((m, i) => [
         // The care disclaimer appears once, right before the first medical answer.
         i === firstAnswer && !disclaimerSeen && (
-          <CareDisclaimer key="care" text={consentDoc.careLine} actionLabel="Understood" onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
+          <CareDisclaimer key="care" text={consentDoc.careLine} onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
         ),
         // A chat that opens with Deborah (first-visit onboarding) shows her orb once, top left.
         i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="Deborah" className={styles.firstOrb} />,

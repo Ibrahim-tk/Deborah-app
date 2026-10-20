@@ -11,15 +11,26 @@ import { FLAGS } from '@shared/flags';
 import { useAppStore } from '@shared/store';
 import { hasPendingHealthBasics, saveHealthBasics } from '@mobile/hooks/healthBasics';
 import { MessageBubble } from '@mobile/patterns/chat';
-import { InlineConsent } from '@mobile/patterns/widgets';
+import { InlineConsent, MedicalConsentSheet } from '@mobile/patterns/widgets';
 
 export function useHealthConsent() {
   const [open, setOpen] = useState(false);
   const resolve = useRef<(agreed: boolean) => void>(undefined);
 
+  const [sheet, setSheet] = useState(false);
+
   const ask = useCallback(async () => {
-    if (!hasPendingHealthBasics()) return;
     const s = useAppStore.getState();
+    // Sign-up only, once (design 2026-10-20): medical consent in a bottom sheet before Deborah's first answer.
+    if (s.authFlow === 'signup' && !s.healthConsentAt) {
+      setSheet(true);
+      await new Promise<boolean>((r) => { resolve.current = r; });
+      setSheet(false);
+      s.acceptHealthConsent();
+      if (hasPendingHealthBasics()) saveHealthBasics();
+      return;
+    }
+    if (!hasPendingHealthBasics()) return;
     if (FLAGS.skipHealthConsent) {
       if (!s.healthConsentAt) s.acceptHealthConsent();
       saveHealthBasics();
@@ -46,16 +57,26 @@ export function useHealthConsent() {
     if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   }, [open]);
 
-  const widget = !FLAGS.skipHealthConsent && open ? (
+  const inline = !FLAGS.skipHealthConsent && open ? (
     <div ref={anchor}>
       <MessageBubble role="deborah" turnStart>
         <InlineConsent onAgree={() => resolve.current?.(true)} onDecline={() => resolve.current?.(false)} />
       </MessageBubble>
     </div>
   ) : null;
+  const widget = (
+    <>
+      {inline}
+      <MedicalConsentSheet open={sheet} onAgree={() => resolve.current?.(true)} />
+    </>
+  );
   /** True while there are held answers and no consent yet, i.e. `ask` will show the card. */
   const needed = useCallback(
-    () => !FLAGS.skipHealthConsent && hasPendingHealthBasics() && !useAppStore.getState().healthConsentAt,
+    () => {
+      const s = useAppStore.getState();
+      if (s.authFlow === 'signup') return !s.healthConsentAt;
+      return !FLAGS.skipHealthConsent && hasPendingHealthBasics() && !s.healthConsentAt;
+    },
     [],
   );
   return { ask, needed, widget };

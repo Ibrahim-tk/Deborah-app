@@ -266,6 +266,9 @@ export interface DebriefScript {
   savedWithFacts: string;
   discuss: string;
   discussOptions: Option[];
+  /** After saving: offer to file documents from the visit (after-visit summary, lab order, results). */
+  upload: string;
+  uploadOptions: Option[];
   consultMemory: string;
   reflectSaid: string;
   listening: string;

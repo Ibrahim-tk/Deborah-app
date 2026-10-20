@@ -15,7 +15,7 @@
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
 import { useEffect, useRef, useState } from 'react';
-import { firstConsultFlow, returningConsultFlow, sandraConsultFlow } from '@shared/data';
+import { firstConsultFlow, proxyConsultFlow, returningConsultFlow, sandraConsultFlow } from '@shared/data';
 import { briefFromAnswer, visitBriefPreview } from '@shared/engine';
 import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
@@ -32,6 +32,7 @@ import { buildAnswer, visitPrepItems } from './parts/buildAnswer';
 import { useFlowPlayer } from './parts/useFlowPlayer';
 import { useAutoScroll } from '@mobile/screens/consultation/Conversation/parts/useAutoScroll';
 import { useProfileContext } from './parts/profileContext';
+import { useProxyContext } from './parts/proxyContext';
 import styles from './FirstConsult.module.css';
 
 const EXITS: Record<string, string> = { '/labs/upload': 'M-5.3', '/book': 'M-8.2', '/shop/genesis-gold': 'M-2.7' };
@@ -39,15 +40,18 @@ const EXITS: Record<string, string> = { '/labs/upload': 'M-5.3', '/book': 'M-8.2
 export default function FirstConsult() {
   // `flow: 'returning'`: the signed-in demo (Maria, seed R01) instead of the first consultation.
   // `flow: 'sandra'`: the premade first chat a new sign-up lands in (Sandra, 46, perimenopause happy path).
-  const { flow: which } = useScreenParams<{ flow: 'returning' | 'sandra' }>();
-  const flow = which === 'returning' ? returningConsultFlow : which === 'sandra' ? sandraConsultFlow : firstConsultFlow;
+  // `flow: 'proxy'`: the premade caregiver chat (a daughter about her mother, Pathway C) for a female family profile.
+  const { flow: which } = useScreenParams<{ flow: 'returning' | 'sandra' | 'proxy' }>();
+  const flow = which === 'returning' ? returningConsultFlow : which === 'sandra' ? sandraConsultFlow : which === 'proxy' ? proxyConsultFlow : firstConsultFlow;
+  const premade = which === 'sandra' || which === 'proxy';
   const { pop, open, push, openAsk } = useNav();
   const toast = useToast();
   const consent = useHealthConsent();
   const name = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
   // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
   const profileCtx = useProfileContext();
-  const player = useFlowPlayer(flow, name, !which ? profileCtx : undefined);
+  const proxyCtx = useProxyContext();
+  const player = useFlowPlayer(flow, name, !which ? profileCtx : which === 'proxy' ? proxyCtx : undefined, premade ? which : undefined);
   const { entries, typing } = player;
   const asked = useRef(false);
   const [draft, setDraft] = useState('');
@@ -152,7 +156,7 @@ export default function FirstConsult() {
   const typeInstead = (text: string) => {
     const t = text.trim();
     if (!t) return;
-    if (which === 'sandra' && waiting?.kind === 'bot' && (waiting.node.type === 'question' || waiting.node.display === 'greeting')) {
+    if (premade && waiting?.kind === 'bot' && (waiting.node.type === 'question' || waiting.node.display === 'greeting')) {
       setDraft('');
       return pick(waiting.id, waiting.node, [{ label: t, value: t }]);
     }

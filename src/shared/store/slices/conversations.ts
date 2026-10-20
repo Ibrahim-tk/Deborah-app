@@ -95,7 +95,7 @@ export const conversationsActions: StateCreator<AppState, [], [], Actions> = (se
     if (!c || !picked.length) return;
     const at = nowFrom(s).toISOString();
     for (const f of picked) {
-      // Lists also land in the structured health profile (M-2.10, Home), marked as confirmed in chat.
+      // Lists also land in the structured health profile (My Health card M-7.2, Home), marked as confirmed in chat.
       // First, so the intake patch below keeps the option ids the engine's rules read ("hrt", "thyroid-med").
       if (f.key === 'medications' || f.key === 'allergies' || f.key === 'conditions') {
         const names = f.value === 'None' ? [] : f.value.split(',').map((x) => x.trim()).filter(Boolean);

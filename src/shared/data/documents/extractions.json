@@ -2,7 +2,7 @@
   "lab": {
     "status": "placeholder",
     "fields": [
-      { "label": "Lab", "value": "Sample Lab" },
+      { "label": "Lab", "value": "Quest Diagnostics" },
       { "label": "Tests", "value": "TSH, Free T3, Estradiol" },
       { "label": "Values", "value": "TSH 3.8 mIU/L · Free T3 2.4 pg/mL · Estradiol 45 pg/mL" },
       { "label": "Collected", "value": "Date shown on the report" }

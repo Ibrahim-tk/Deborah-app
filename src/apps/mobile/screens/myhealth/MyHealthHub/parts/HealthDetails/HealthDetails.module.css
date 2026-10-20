@@ -1,6 +1,9 @@
-.root { display: grid; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-2); border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
-.head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
-.title { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); color: var(--color-ink); }
+.stack { display: grid; gap: var(--space-3); }
+.intro { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.heading { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.root { display: grid; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-2); border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
+.head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
 .meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .list { display: grid; margin: 0; }
 .row {
@@ -13,5 +16,5 @@ button.row:focus-visible { outline: 2px solid var(--color-accent); outline-offse
 .text { flex: 1; display: grid; gap: 2px; min-width: 0; }
 .label { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .value { margin: 0; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); overflow-wrap: anywhere; }
-.value[data-empty] { color: var(--color-ink-secondary); }
+.value[data-empty] { color: var(--color-accent); }
 .pencil { flex: none; color: var(--color-accent); }

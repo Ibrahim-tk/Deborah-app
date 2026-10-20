@@ -7,9 +7,11 @@ export interface ToggleProps {
   onChange: (checked: boolean) => void;
   label: string;
   description?: string;
+  /** Locked (e.g. required notifications that can't be turned off). */
+  disabled?: boolean;
 }
 
-export function Toggle({ checked, onChange, label, description }: ToggleProps) {
+export function Toggle({ checked, onChange, label, description, disabled }: ToggleProps) {
   const id = useId();
   return (
     <div className={styles.root}>
@@ -17,7 +19,7 @@ export function Toggle({ checked, onChange, label, description }: ToggleProps) {
         <label htmlFor={id} className={styles.label}>{label}</label>
         {description && <span className={styles.description}>{description}</span>}
       </span>
-      <button id={id} type="button" role="switch" aria-checked={checked} className={styles.switch} onClick={() => onChange(!checked)}>
+      <button id={id} type="button" role="switch" aria-checked={checked} className={styles.switch} disabled={disabled} onClick={() => onChange(!checked)}>
         <span className={styles.thumb} />
       </button>
     </div>

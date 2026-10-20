@@ -27,3 +27,5 @@
 }
 .item svg { color: var(--color-accent); }
 .item[data-highlighted] { background: var(--color-accent-tint); }
+.item[data-destructive] { color: var(--color-danger, #b3261e); }
+.item[data-destructive] svg { color: inherit; }

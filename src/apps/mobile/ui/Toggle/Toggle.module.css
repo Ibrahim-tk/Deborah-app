@@ -28,3 +28,6 @@
   transition: transform var(--dur-base) var(--ease-ios);
 }
 .switch[aria-checked='true'] .thumb { transform: translateX(20px); }
+
+/* Locked: readable state, no interaction. */
+.switch:disabled { opacity: 0.5; cursor: not-allowed; }

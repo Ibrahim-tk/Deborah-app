@@ -92,5 +92,16 @@
   ],
   "offerNo": "Of course. Tell me what’s on your mind.",
   "offerAck": "Thank you — I’ve noted that.",
-  "status": "placeholder"
+  "status": "placeholder",
+  "upload": "Did your provider give you anything to keep, like an after-visit summary, a lab order or results? I can file it with this visit.",
+  "uploadOptions": [
+    {
+      "id": "uploadDoc",
+      "label": "Upload a document"
+    },
+    {
+      "id": "uploadNo",
+      "label": "Nothing to add"
+    }
+  ]
 }

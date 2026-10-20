@@ -1,6 +1,7 @@
 /** Store shape (docs/05-state-and-scenarios.md §1). One slice interface per concern. */
 import type {
   AppNotification,
+  NotificationType,
   Billing,
   Booking,
   ContentStatus,
@@ -27,6 +28,8 @@ export interface SessionSlice {
   accountId?: string;
   /** Shown on the store sheet's account row (M-4.4). */
   accountEmail?: string;
+  /** Which major flow the account came through (design 2026-10-20): sign-up keeps the sign-up Home; login gets its own. */
+  authFlow?: 'signup' | 'login';
   /** Optional at sign-up (F01 step 4). */
   accountLastName?: string;
   /** Best contact phone — manual outreach only (no OTP/SMS). */
@@ -189,7 +192,13 @@ export interface NotificationsSlice {
     followUp: Record<ID, { enabled: boolean; intervalDays: number } | undefined>;
     /** M-10.4 Booking reminders toggle (default on). */
     bookingReminders: boolean;
+    /** Master switch (Enable/disable notifications) and per-type preferences; missing = on. */
+    enabled?: boolean;
+    prefs?: Partial<Record<NotificationType, boolean>>;
   };
+  setNotificationsEnabled: (on: boolean) => void;
+  setNotificationPref: (type: NotificationType, on: boolean) => void;
+  markAllRead: () => void;
   scheduleNotification: (n: AppNotification) => void;
   /** After guidance when permission already granted — default ~14 days (Miro Step 4). */
   scheduleGuidanceFollowUp: (profileId: ID, days: number) => void;

@@ -25,6 +25,7 @@ Sticky: the client can log a visit outcome anytime.
 | Notification the day after an appointment date set in Step 5 (deep link `visit:<briefNoteId>`) | M-2.1 Visit debrief | linked brief → reason + specialty prefilled |
 | Home row **Log a provider visit**; contextual "How did your {specialty} visit go?" when a brief's appointment date has passed | M-2.1 Visit debrief | linked brief if any |
 | Records › Visit Notes › **+ New note** → ActionSheet **Log a provider visit** | M-2.1 Visit debrief | none |
+| M-9.7 My Visit Notes footer **Log how the visit went** (saved brief, no outcome yet; becomes **View visit outcome** once logged) | M-2.1 Visit debrief / M-9.8 read | linked brief |
 | Chat intent ("I just saw my doctor", "back from my appointment") | Deborah offers the debrief in the current conversation | none |
 | Reopen a saved after-visit note from Records | M-9.8 read mode | saved outcome |
 
@@ -56,7 +57,7 @@ Specialty options (default): Primary care · Gynecology · Endocrinology · Card
 2. **Listening** — composer with voice. Thinking line "Reading your notes".
 3. **Probe** — for each empty required bucket, then tests, then med changes: **one** question, at most **3** in total, each with **Skip**. Small answer sets use quick replies / option rows; open answers use the composer.
 4. **Summary** — card "Here's what I noted from your visit": one line per filled bucket, empty buckets hidden. Actions **Review and save** (→ M-9.8 prefilled) · **Looks right, save**.
-5. **Saved** — "Saved to My Visit Notes." + "{n} updates to your health profile" when confirmed. Then **Discuss this with Deborah?** — **Yes, let's talk** · **Not now**.
+5. **Saved** — "Saved to My Visit Notes." + "{n} updates to your health profile" when confirmed. Then **documents from the visit?** ("after-visit summary, a lab order or results") — **Upload a document** (→ M-11.3) · **Nothing to add**. Then **Discuss this with Deborah?** — **Yes, let's talk** · **Not now**. (2026-10-20)
 6. **Yes** → same conversation becomes a normal consultation (Step 3), topic = visit reason, memory line "After your {specialty} visit on {date}…". The conversation keeps `afterVisit` (note id, memory line, summary): her answer opens with the memory line, and a Visit Brief built from it adds "Recent provider visit (as reported by the client): …" to Clinical Context. **Not now** → end, toast "Saved to My Visit Notes".
 
 **Copy rules:** Deborah repeats what the client reports ("You noted your provider said…"); she never states a diagnosis as fact, interprets results, or comments on doses. All copy lives in `src/shared/data/conversation/debrief.json` with `"status": "placeholder"`.

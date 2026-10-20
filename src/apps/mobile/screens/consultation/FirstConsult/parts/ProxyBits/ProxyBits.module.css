@@ -1,0 +1,3 @@
+.block { display: grid; gap: var(--space-3); justify-items: start; margin-top: var(--space-3); padding: var(--space-4); border-radius: var(--radius-card-sm); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--surface-border); }
+.head { composes: label from '../../../../../patterns/widgets/widget.module.css'; }
+.text { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); user-select: text; }

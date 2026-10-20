@@ -28,6 +28,7 @@ export type { AppState, AppData } from './types';
 export { SELF_PROFILE_ID, createDefaults } from './defaults';
 export * from './selectors';
 export { loadScenario } from './loadScenario';
+export { watchSignup, restoreSignup, clearSignup, readFlow, writeFlow } from './signupSnapshot';
 export {
   BOOKING_DAY_AFTER_BODY,
   FOLLOW_UP_BODY,

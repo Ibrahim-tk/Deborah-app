@@ -1,6 +1,6 @@
 /**
  * Visit debrief in chat (docs/ux/F09c-log-visit.md › M-2.1 state · Visit debrief).
- * opening → listening → probe (≤ 3, each skippable) → summary → saved → Discuss this with Deborah?
+ * opening → listening → probe (≤ 3, each skippable) → summary → saved → documents from the visit? → Discuss this with Deborah?
  * Guardrails run before any of this in handleText; debrief turns are never counted.
  * OPEN: "medication card on plain reports" and "out-of-scope on specialty words" in a debrief
  * (docs/ux/F09c-log-visit.md › Safety) — F03 is left exactly as specified.
@@ -118,6 +118,10 @@ export function debriefReplySteps(ctx: EngineContext, messageId: string, optionI
       const afterVisit = { noteId: db.noteId, memory: seed.memory, summary: visitSummaryLines(db.outcome).map((l) => `${l.label}: ${l.text}`).join('. ') };
       return [...head, ...say(ctx, interpolate(d.discussYes, { memory: seed.memory })), { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'empty', scriptId: undefined, topic: seed.topic, afterVisit } } }];
     }
+    case 'uploadDoc':
+    case 'uploadNo':
+      // The UI opens M-11.3 for an upload; either way Deborah moves on to "talk it through?".
+      return [...head, ...say(ctx, d.discuss, { quickReplies: { options: d.discussOptions } })];
     case 'discussNo':
       return [...head, endDebrief(conv), ...say(ctx, d.discussNo)];
     default:
@@ -142,7 +146,7 @@ export function debriefSavedSteps(ctx: EngineContext, noteId: string, outcome: V
 }
 
 const savedSteps = (ctx: EngineContext, applied = 0) =>
-  say(ctx, `${applied ? interpolate(d.savedWithFacts, { count: String(applied), changes: applied === 1 ? 'change' : 'changes' }) : d.saved} ${d.discuss}`, { quickReplies: { options: d.discussOptions } });
+  say(ctx, `${applied ? interpolate(d.savedWithFacts, { count: String(applied), changes: applied === 1 ? 'change' : 'changes' }) : d.saved} ${d.upload}`, { quickReplies: { options: d.uploadOptions } });
 
 /** Leave the debrief: the conversation behaves like an answered one from here. */
 const endDebrief = (conv: Conversation): Step => ({

@@ -8,12 +8,12 @@
  */
 // OPEN: "real photography, approved bio." — portrait and copy come from persona JSON (placeholder).
 import { persona } from '@shared/data';
-import { DeborahBlob, Button, Header } from '@mobile/ui';
+import { DeborahBlob, Header } from '@mobile/ui';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './AboutDeborah.module.css';
 
 export default function AboutDeborah() {
-  const { pop, push } = useNav();
+  const { pop } = useNav();
   const { previousTitle } = useRoute();
   const placeholder = persona.status === 'placeholder' || undefined;
 
@@ -46,10 +46,6 @@ export default function AboutDeborah() {
               ))}
             </ul>
           </section>
-
-          <Button fullWidth leadingIcon="calendar" onClick={() => push('M-8.2')}>
-            Book a consult with Deborah
-          </Button>
         </div>
       </div>
     </div>

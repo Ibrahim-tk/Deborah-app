@@ -14,8 +14,15 @@ type Actions = Pick<
   | 'setBookingReminders'
   | 'deliverBookingReminderNow'
   | 'cancelNotifications'
+  | 'setNotificationsEnabled'
+  | 'setNotificationPref'
+  | 'markAllRead'
 > &
   Pick<DevSlice, 'setDev'>;
+
+const REQUIRED = new Set(['critical', 'reconsent']);
+const allowed = (s: AppState, type?: string) =>
+  !type || REQUIRED.has(type) || (s.notifications.enabled !== false && s.notifications.prefs?.[type as keyof NonNullable<AppState['notifications']['prefs']>] !== false);
 
 // Lock-screen text stays generic: never symptoms, conditions or product names (PHI).
 export const FOLLOW_UP_TITLE = 'Your Oracle Clinician';
@@ -26,7 +33,9 @@ export const BOOKING_DAY_AFTER_BODY = 'Deborah: How did your appointment go?';
 export const VISIT_NOTES_TAKE_BODY = 'Deborah: Take your visit notes to the appointment — how did it go?';
 
 export const notificationsActions: StateCreator<AppState, [], [], Actions> = (set, get) => ({
-  scheduleNotification: (n) => set((s) => ({ notifications: { ...s.notifications, queue: [...s.notifications.queue, n] } })),
+  // Settings decide what arrives: the master switch and per-type prefs; critical and re-consent always come through.
+  scheduleNotification: (n) =>
+    set((s) => (allowed(s, n.type) ? { notifications: { ...s.notifications, queue: [...s.notifications.queue, n] } } : {})),
   scheduleGuidanceFollowUp: (profileId, days) =>
     set((s) => {
       const deepLink = `followup:${profileId}`;
@@ -69,6 +78,11 @@ export const notificationsActions: StateCreator<AppState, [], [], Actions> = (se
       );
       return { notifications: { ...s.notifications, queue } };
     }),
+  setNotificationsEnabled: (enabled) => set((s) => ({ notifications: { ...s.notifications, enabled } })),
+  setNotificationPref: (type, on) =>
+    set((s) => ({ notifications: { ...s.notifications, prefs: { ...s.notifications.prefs, [type]: on } } })),
+  markAllRead: () =>
+    set((s) => ({ notifications: { ...s.notifications, queue: s.notifications.queue.map((n) => (n.delivered ? { ...n, read: true } : n)) } })),
   markRead: (id) =>
     set((s) => ({ notifications: { ...s.notifications, queue: s.notifications.queue.map((n) => (n.id === id ? { ...n, read: true } : n)) } })),
   setFollowUp: (profileId, enabled, intervalDays) =>

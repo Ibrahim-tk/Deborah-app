@@ -38,3 +38,5 @@ export * from './homeArtifacts';
 
 
 export * from './CaptureCamera';
+export * from './MedicalConsentSheet';
+export * from './ReportProcessing';

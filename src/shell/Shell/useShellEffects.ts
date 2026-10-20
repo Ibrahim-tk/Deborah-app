@@ -1,7 +1,7 @@
 /** Global shell side effects: dev-toggle classes on <html>, ?scenario= on open, last web route. */
 import { useEffect, useRef } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { useAppStore } from '@shared/store';
+import { useAppStore, watchSignup } from '@shared/store';
 import { useShellStore } from '../shell.store';
 import { useScenario } from '../useScenario';
 
@@ -31,12 +31,15 @@ export function useShellEffects() {
     useAppStore.getState().setDev({ speed: toggles.network });
   }, [toggles.network]);
 
-  // Nothing is stored, so every page load starts the scenario fresh: `?scenario=S04` or the default.
+  // Save the sign-up as it changes, so a reload can restore it.
+  useEffect(() => watchSignup(), []);
+
+  // A page load starts the scenario fresh (`?scenario=S04` or the default), unless a sign-up was saved.
   useEffect(() => {
     if (handledUrl.current) return;
     handledUrl.current = true;
     const fromUrl = params.get('scenario');
-    select(fromUrl ?? scenarioId);
+    select(fromUrl ?? scenarioId, { restore: true });
   }, [params, scenarioId, select]);
 
   useEffect(() => {

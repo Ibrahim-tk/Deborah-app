@@ -13,6 +13,8 @@ export interface MenuItem {
   id: string;
   label: string;
   icon?: IconName;
+  /** Red text, e.g. Delete. */
+  destructive?: boolean;
 }
 
 export interface MenuProps {
@@ -33,7 +35,7 @@ export function Menu({ trigger, items, onSelect, side = 'top', align = 'start', 
         <BaseMenu.Positioner side={side} align={align} sideOffset={8} className={styles.positioner}>
           <BaseMenu.Popup className={styles.popup}>
             {items.map((item) => (
-              <BaseMenu.Item key={item.id} className={styles.item} onClick={() => onSelect(item.id)}>
+              <BaseMenu.Item key={item.id} className={styles.item} data-destructive={item.destructive || undefined} onClick={() => onSelect(item.id)}>
                 {item.icon && <Icon name={item.icon} size={20} />}
                 <span>{item.label}</span>
               </BaseMenu.Item>

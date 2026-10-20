@@ -1,52 +1,46 @@
 /**
- * My Health · health profile card: every detail the profile holds, read-only by default. "Edit" turns on
- * edit mode: each row gets a pencil and opens its own bottom sheet (M-7.7) with that question's control.
- * No tree, no stepper.
+ * My Health · health profile, LinkedIn-style (design 2026-10-20): one card per section, a pencil in each
+ * section's header. The pencil (or any row) opens that section's full-screen editor (M-7.8) with Save.
  */
-import { useState } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { Button, Icon } from '@mobile/ui';
+import { IconButton } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
 import { answersFromProfile, healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
-import { healthDetailRows } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
+import { healthDetailSections } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
 import styles from './HealthDetails.module.css';
 
 export function HealthDetails() {
-  const { presentSheet } = useNav();
+  const { presentModal } = useNav();
   const profile = useAppStore(selectActiveProfile);
-  const [editing, setEditing] = useState(false);
   if (!profile) return null;
-  const rows = healthDetailRows(answersFromProfile(profile));
+  const sections = healthDetailSections(answersFromProfile(profile));
   const pct = Math.round(healthProfileCompletion(profile) * 100);
-  const open = (key: string) => presentSheet('M-7.7', { profileId: profile.id, key });
+  const edit = (section: string) => presentModal('M-7.8', { profileId: profile.id, section });
 
   return (
-    <section className={styles.root} aria-labelledby="hub-health-profile">
-      <div className={styles.head}>
-        <div>
-          <h2 id="hub-health-profile" className={styles.title}>Health profile</h2>
-          <p className={styles.meta}>{pct}% complete</p>
-        </div>
-        <Button variant="link" onClick={() => setEditing((e) => !e)}>{editing ? 'Done' : 'Edit'}</Button>
+    <div className={styles.stack}>
+      <div className={styles.intro}>
+        <h2 className={styles.heading}>Health profile</h2>
+        <p className={styles.meta}>{pct === 100 ? 'Complete' : `${pct}% complete`}</p>
       </div>
-      <dl className={styles.list}>
-        {rows.map((r) => {
-          const body = (
-            <>
-              <dt className={styles.label}>{r.label}</dt>
-              <dd className={styles.value} data-empty={!r.value || undefined}>{r.value ?? 'Not added'}</dd>
-            </>
-          );
-          return editing ? (
-            <button key={r.key} type="button" className={styles.row} onClick={() => open(r.key)} aria-label={`Edit ${r.label}`}>
-              <span className={styles.text}>{body}</span>
-              <Icon name="edit" size={18} className={styles.pencil} />
-            </button>
-          ) : (
-            <div key={r.key} className={styles.row}><span className={styles.text}>{body}</span></div>
-          );
-        })}
-      </dl>
-    </section>
+      {sections.filter((s) => s.rows.length > 0).map((s) => (
+        <section key={s.id} className={styles.root} aria-labelledby={`hp-${s.id}`}>
+          <div className={styles.head}>
+            <h3 id={`hp-${s.id}`} className={styles.title}>{s.title}</h3>
+            <IconButton icon="edit" size="sm" label={`Edit ${s.title.toLowerCase()}`} onClick={() => edit(s.id)} />
+          </div>
+          <dl className={styles.list}>
+            {s.rows.map((r) => (
+              <button key={r.key} type="button" className={styles.row} onClick={() => edit(s.id)}>
+                <span className={styles.text}>
+                  <dt className={styles.label}>{r.label}</dt>
+                  <dd className={styles.value} data-empty={!r.value || undefined}>{r.value ?? 'Add'}</dd>
+                </span>
+              </button>
+            ))}
+          </dl>
+        </section>
+      ))}
+    </div>
   );
 }

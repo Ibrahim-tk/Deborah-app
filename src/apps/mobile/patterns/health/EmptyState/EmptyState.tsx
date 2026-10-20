@@ -7,7 +7,8 @@
  * @xref    web: apps/web/patterns/health/EmptyState — not built
  */
 import type { ReactNode } from 'react';
-import { Button, Icon, type IconName } from '@mobile/ui';
+import { Button, type IconName } from '@mobile/ui';
+import { EmptyDoodle } from './EmptyDoodle';
 import styles from './EmptyState.module.css';
 
 export interface EmptyStateProps {
@@ -22,11 +23,8 @@ export interface EmptyStateProps {
 export function EmptyState({ icon, title, text, actionLabel, actionIcon, onAction }: EmptyStateProps) {
   return (
     <div className={styles.root}>
-      {icon && (
-        <span className={styles.icon}>
-          <Icon name={icon} size={28} />
-        </span>
-      )}
+      {/* Line doodle in the "who is this for" style (design 2026-10-20), chosen from the icon. */}
+      <EmptyDoodle icon={icon} />
       {title && <h2 className={styles.title}>{title}</h2>}
       {text && <p className={styles.text}>{text}</p>}
       {actionLabel && onAction && (

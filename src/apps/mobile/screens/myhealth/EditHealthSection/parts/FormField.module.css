@@ -1,0 +1,14 @@
+.group { display: grid; gap: var(--space-3); }
+.groupLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+/* Read-only field that looks like an input, edit icon at the end; tap opens the wheel sheet. */
+.picker { display: grid; gap: var(--space-2); width: 100%; text-align: left; }
+.pickerLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.pickerValue {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: 48px; padding: 0 var(--space-4);
+  border-radius: var(--radius-lg); background: var(--field-fill); box-shadow: inset 0 0 0 1px var(--field-border);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink);
+}
+.pickerValue[data-empty] { color: var(--color-ink-placeholder); }
+.pickerIcon { flex: none; color: var(--color-ink-secondary); }
+.picker:focus-visible .pickerValue { box-shadow: inset 0 0 0 1px var(--field-border-focus); }

@@ -1,0 +1,1 @@
+export { MedicalConsentSheet } from './MedicalConsentSheet';

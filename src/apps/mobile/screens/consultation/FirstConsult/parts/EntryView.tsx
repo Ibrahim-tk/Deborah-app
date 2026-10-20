@@ -8,6 +8,8 @@ import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
 import { buildAnswer } from './buildAnswer';
 import { FlowWidget } from './FlowWidget';
 import { IntakeBanner } from './IntakeBanner';
+import { CopyBlock, SessionBanner } from './ProxyBits';
+import { EmergencySheet } from './EmergencySheet';
 import { ProfileFacts } from './ProfileFacts';
 import { VisitNotesCard } from './VisitNotesCard';
 import { FlowChoice } from './FlowChoice';
@@ -112,6 +114,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, se
     );
   }
 
+  if (w?.type === 'proxy_banner') return <SessionBanner text={say(w.text)} />;
   if (w?.type === 'intake_banner') return <IntakeBanner onComplete={() => onAction('complete_intake')} />;
 
   const custom = w && FlowWidget.handles(w.type);
@@ -145,6 +148,10 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, se
       )}
       {w?.type === 'inline_tip' && <Panel tone="lilac" icon="check">{w.text}</Panel>}
       {w?.type === 'visit_prep_card' && renderPrep()}
+      {w?.type === 'copy_block' && <CopyBlock title={w.title ?? 'Copy'} text={say(w.text)} />}
+      {w?.type === 'emergency_sheet' && (
+        <EmergencySheet title={w.title ?? 'Call 911 now'} text={say(w.text)} active={active} onDone={() => w.options?.[0] && onPick(node, [w.options[0]])} />
+      )}
       {node.visitNotes && <VisitNotesCard notes={node.visitNotes} say={say} onSave={() => onAction('save')} onShare={() => onAction('pdf')} />}
       {w?.type === 'reminder_chip' && <Panel tone="linen" icon="calendar">{w.label}</Panel>}
       {node.footer && <ClosingLine text={node.footer} />}

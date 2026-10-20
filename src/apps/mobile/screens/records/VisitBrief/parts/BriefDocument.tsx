@@ -22,8 +22,6 @@ export function BriefDocument({ brief, onChange }: BriefDocumentProps) {
   return (
     <article className={styles.page} aria-label="My Visit Notes" data-placeholder={brief.status === 'placeholder' || undefined}>
       <header className={styles.pageHeader}>
-        <p className={styles.brand}>Your Oracle Clinician · Pre-visit brief</p>
-        <h2 className={styles.h2}>For My Provider</h2>
         <p className={styles.purpose}>{header.whatThisIs}</p>
         <dl className={styles.meta}>
           <div>

@@ -40,8 +40,9 @@ export function CheckInCard({ state, upcoming, onCheckIn, onReminders }: CheckIn
       <Card tone="emphasis" className={styles.root}>
         <span className={styles.icon}><Icon name="calendar" size={22} /></span>
         <span className={styles.text}>
-          <span className={styles.eyebrow}>Check-in with Deborah</span>
-          <span className={styles.title}>Due today</span>
+          {/* Hierarchy (design 2026-10-20): what it is leads, when sits under it, then the action. */}
+          <span className={styles.title}>Check in with Deborah</span>
+          <span className={styles.meta}><span className={styles.due}>Due today</span> · about 2 minutes</span>
         </span>
         <Button fullWidth onClick={onCheckIn} className={styles.action}>Check in now</Button>
         {upcomingLine}

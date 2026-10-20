@@ -17,15 +17,17 @@ export interface QuickRepliesProps {
   /** A primary action above the rows (e.g. "Upload my labs"). */
   primary?: { label: string; icon?: IconName; onPress: () => void };
   label?: string;
+  /** Show the rows locked with this option picked (login seed keeps answered widgets, design 2026-10-20). */
+  answered?: string;
 }
 
-export function QuickReplies({ options, onSelect, primary, label = 'Reply' }: QuickRepliesProps) {
+export function QuickReplies({ options, onSelect, primary, label = 'Reply', answered }: QuickRepliesProps) {
   return (
     <div className={styles.root}>
-      {primary && (primary.icon === 'upload'
+      {primary && !answered && (primary.icon === 'upload'
         ? <UploadCard label={primary.label} onAdd={primary.onPress} />
         : <Button fullWidth leadingIcon={primary.icon} onClick={primary.onPress}>{primary.label}</Button>)}
-      <QuestionChoices label={label} options={options} onSubmit={(ids) => onSelect(ids[0])} />
+      <QuestionChoices label={label} options={options} answered={answered ? [answered] : undefined} onSubmit={(ids) => onSelect(ids[0])} />
     </div>
   );
 }

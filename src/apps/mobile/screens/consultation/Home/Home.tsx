@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
+import { SELF_PROFILE_ID, selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
 import { Aura, GradientShift, PurpleDockBloom, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
@@ -22,6 +22,7 @@ import { StateEstablished } from './parts/StateEstablished';
 import { useHomeView } from './parts/useHomeView';
 
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
+import { hasFlowSession } from '@mobile/screens/consultation/FirstConsult/parts/flowSessions';
 import styles from './Home.module.css';
 
 /** Profiles that have already seen the first-visit greeting this session (in memory only). */
@@ -29,7 +30,7 @@ const greeted = new Set<string>();
 const GREETING_DELAY_MS = 1500;
 
 export default function Home() {
-  const { open, push, presentSheet, presentModal, setSidebarOpen, switchTab } = useNav();
+  const { open, push, presentSheet, setSidebarOpen, switchTab } = useNav();
   const openAsk = useNavStore((s) => s.openAsk);
   const gate = useAccountGate();
   const d = useHomeView();
@@ -78,7 +79,8 @@ export default function Home() {
   };
   const go = (id: string) => () => push(id);
   const pct = Math.round(d.completion * 100);
-  const openProfile = () => presentModal('M-2.10');
+  // The health profile lives on My Health (its Health profile card); M-2.10 was removed (2026-10-20).
+  const openProfile = () => push('M-7.2');
   const journey = () => gate('journey', () => push('M-7.3'));
   const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
@@ -117,7 +119,7 @@ export default function Home() {
       <GradientShift />
       <ScrollEdge active={scrolled} />
       <div className={styles.top}>
-        <ConversationHeader title="" transparent onMenu={() => setSidebarOpen(true)} onNotifications={() => push('M-10.4')}
+        <ConversationHeader title="" transparent onMenu={() => setSidebarOpen(true)} onNotifications={() => push('M-10.6')}
           profile={{ name, guest: false, onPress: () => switchTab('account') }} />
       </div>
 
@@ -131,7 +133,12 @@ export default function Home() {
         {d.state === 'new' && (
           <StateNew
             onStart={() => { closeSheet(); openAsk({ focus: true }); }}
-            chat={history.length || d.midIntake ? { title: d.summary ?? d.topic, when: d.when, onContinue: () => { closeSheet(); resume(); } } : undefined}
+            chat={
+              // A new sign-up's premade first chat (Sandra) resumes exactly where she stopped.
+              hasFlowSession('proxy') && profileId !== SELF_PROFILE_ID ? { title: 'Your conversation with Deborah', onContinue: () => { closeSheet(); push('M-2.12', { flow: 'proxy' }); } }
+              : hasFlowSession('sandra') ? { title: 'Your first conversation with Deborah', onContinue: () => { closeSheet(); push('M-2.12', { flow: 'sandra' }); } }
+              : history.length || d.midIntake ? { title: d.summary ?? d.topic, when: d.when, onContinue: () => { closeSheet(); resume(); } } : undefined
+            }
             intakeCard={intakeCard}
             destinations={destinations}
             recommendations={d.recommendations}
@@ -139,6 +146,7 @@ export default function Home() {
             onLabs={() => open('M-5.3')}
             reports={reports}
             documents={documents}
+            onNotes={go('M-9.1')}
           />
         )}
         {d.state === 'returning' && (

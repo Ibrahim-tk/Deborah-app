@@ -1,9 +1,12 @@
 .root { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
 .text { display: grid; gap: var(--space-1); }
-.topic { /* Serif card title, 22 px (design 2026-10-20). */ font: var(--weight-regular) calc(22px * var(--type-scale)) / calc(28px * var(--type-scale)) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.topic { /* Serif card title, 19 px (design 2026-10-20). */ font: var(--weight-regular) calc(19px * var(--type-scale)) / calc(24px * var(--type-scale)) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
 .summary {
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   color: var(--color-ink-body);
 }
 .meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-tertiary); }
 .chevron { color: var(--color-ink-secondary); }
+
+/* Tighter card (design 2026-10-20). */
+.root { --card-pad: var(--space-4); }

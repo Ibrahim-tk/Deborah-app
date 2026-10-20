@@ -1,23 +1,24 @@
 /**
  * @screen  M-9.1 · My Health records
  * @flow    F09 My Health records
- * @states  loading (skeleton) · consultations · notes · labs · each segment empty · other profile
+ * @states  loading (skeleton) · notes · labs · search overlay (page dimmed · dropdown: lab tiles, reports, notes · no results) (consultations removed, design 2026-10-20) · each segment empty · other profile
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598
  * @spec    docs/ux/F09-records.md#m-91--records
  * @xref    web: W-9.1 (apps/web/screens/records/Records) — not built
  */
 import { useEffect, useState } from 'react';
 import { useAppStore } from '@shared/store';
-import { Header, Segmented, Skeleton } from '@mobile/ui';
+import { GlassButton, Header, Segmented, Skeleton, type IconName } from '@mobile/ui';
 import { simBetween } from '@mobile/hooks/simTiming';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
 import { RecordsList, type Segment } from './parts/RecordsList';
+import { RecordsSearch } from './parts/RecordsSearch';
+import { SearchResults } from './parts/SearchResults';
 import styles from './Records.module.css';
 
-const SEGMENTS: { value: Segment; label: string }[] = [
-  { value: 'consultations', label: 'Consultations' },
-  { value: 'notes', label: 'Visit Notes' },
-  { value: 'labs', label: 'Labs' },
+const SEGMENTS: { value: Segment; label: string; icon: IconName }[] = [
+  { value: 'notes', label: 'Visit Notes', icon: 'note' },
+  { value: 'labs', label: 'Labs', icon: 'labs' },
 ];
 
 export default function Records() {
@@ -27,8 +28,13 @@ export default function Records() {
   const activeProfileId = useAppStore((s) => s.activeProfileId);
   const profileId = params.profileId ?? activeProfileId;
   const profile = useAppStore((s) => s.profiles.byId[profileId]);
-  const [segment, setSegment] = useState<Segment>(params.segment ?? 'consultations');
+  const [segment, setSegment] = useState<Segment>(params.segment === 'labs' ? 'labs' : 'notes');
   const [loading, setLoading] = useState(true);
+  // Search (design direction 2026-10-20): the nav bar's search button stretches into a field; results span labs and notes.
+  const [searching, setSearching] = useState(false);
+  const [query, setQuery] = useState('');
+  const [expanded, setExpanded] = useState(false);
+  const closeSearch = () => { setSearching(false); setQuery(''); setExpanded(false); };
 
   // Simulated first load (docs/ux/00-ux-overview.md §3: skeletons 300–600 ms).
   useEffect(() => {
@@ -40,7 +46,12 @@ export default function Records() {
 
   return (
     <div className={styles.root} data-xref="M-9.1 · My Health records">
-      <Header title="My Health records" onBack={canGoBack ? pop : undefined} backLabel={previousTitle} />
+      <Header
+        title="My Health records"
+        onBack={canGoBack ? pop : undefined}
+        backLabel={previousTitle}
+        right={<GlassButton icon="search" aria-label="Search records" onClick={() => setSearching(true)} />}
+      />
       <div className={styles.body}>
         <div className={styles.top}>
           {otherProfile && <p className={styles.context}>{`${profile?.name}’s records`}</p>}
@@ -62,6 +73,11 @@ export default function Records() {
           <RecordsList segment={segment} profileId={profileId} isActiveProfile={profileId === activeProfileId} />
         )}
       </div>
+      {searching && (
+        <RecordsSearch query={query} onChange={(q) => { setQuery(q); if (!q.trim()) setExpanded(false); }} onClose={closeSearch} expanded={expanded} onExpand={() => setExpanded(true)}>
+          <SearchResults query={query} profileId={profileId} onPick={closeSearch} variant={expanded ? 'full' : 'list'} onSeeAll={() => setExpanded(true)} />
+        </RecordsSearch>
+      )}
     </div>
   );
 }

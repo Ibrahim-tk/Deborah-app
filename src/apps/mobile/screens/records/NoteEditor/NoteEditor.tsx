@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { selectMessage, useAppStore } from '@shared/store';
 import type { NoteKind } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { ActionSheet, IconButton, Input, Modal, Segmented, TextArea, useAlert } from '@mobile/ui';
+import { ActionSheet, IconButton, Input, Modal, Segmented, TextArea, useAlert, type IconName } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { ChecklistPreview } from './parts/ChecklistPreview';
@@ -20,10 +20,10 @@ import { DEFAULT_TITLE, useNoteAutosave } from './parts/useNoteAutosave';
 import styles from './NoteEditor.module.css';
 
 type EditableKind = Exclude<NoteKind, 'saved-answer'>;
-const KINDS: { value: EditableKind; label: string }[] = [
-  { value: 'questions', label: 'Questions for my visit' },
-  { value: 'after-visit', label: 'After my visit' },
-  { value: 'free', label: 'Other' },
+const KINDS: { value: EditableKind; label: string; icon: IconName }[] = [
+  { value: 'questions', label: 'Questions for my visit', icon: 'chat' },
+  { value: 'after-visit', label: 'After my visit', icon: 'calendar' },
+  { value: 'free', label: 'Other', icon: 'note' },
 ];
 
 export default function NoteEditor() {

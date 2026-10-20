@@ -44,7 +44,11 @@ export interface RouteContextValue {
   container: 'stack' | 'sheet' | 'modal';
 }
 
-export const RouteContext = createContext<RouteContextValue | null>(null);
+// Kept across Vite hot updates: a fresh context per update left screens (new module) unable to see the
+// provider (old module), crashing the app until a full reload.
+export const RouteContext: React.Context<RouteContextValue | null> =
+  (import.meta.hot?.data.RouteContext as React.Context<RouteContextValue | null> | undefined) ?? createContext<RouteContextValue | null>(null);
+if (import.meta.hot) import.meta.hot.data.RouteContext = RouteContext;
 
 export function useRoute(): RouteContextValue {
   const ctx = useContext(RouteContext);

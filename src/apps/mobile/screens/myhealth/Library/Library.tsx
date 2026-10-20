@@ -7,7 +7,7 @@
  * @xref    web: W-7.5 (apps/web/screens/myhealth/Library) — not built
  */
 import { useState } from 'react';
-import { Header, Icon, Input, ListRow, Segmented, useAlert } from '@mobile/ui';
+import { Header, Icon, Input, ListRow, Segmented, useAlert, type IconName } from '@mobile/ui';
 import { ContentCard, EmptyState } from '@mobile/patterns/health';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute } from '@mobile/navigation';
@@ -15,10 +15,10 @@ import { TopicSelect } from './parts/TopicSelect';
 import { TOPIC_ALL, useLibraryResults, type LibraryTab } from './parts/useLibraryResults';
 import styles from './Library.module.css';
 
-const TABS: { value: LibraryTab; label: string }[] = [
-  { value: 'forYou', label: 'For you' },
-  { value: 'all', label: 'All' },
-  { value: 'new', label: 'New' },
+const TABS: { value: LibraryTab; label: string; icon: IconName }[] = [
+  { value: 'forYou', label: 'For you', icon: 'health' },
+  { value: 'all', label: 'All', icon: 'book' },
+  { value: 'new', label: 'New', icon: 'flash' },
 ];
 
 export default function Library() {

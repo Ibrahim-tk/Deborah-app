@@ -1,7 +1,14 @@
 {
   "id": "R01",
   "now": "2026-10-14T19:30:00-07:00",
-  "start": { "kind": "screen", "root": "main", "tab": "ask", "stack": ["M-2.0"] },
+  "start": {
+    "kind": "screen",
+    "root": "main",
+    "tab": "ask",
+    "stack": [
+      "M-2.0"
+    ]
+  },
   "state": {
     "userName": "Maria",
     "accountId": "acct-returning",
@@ -12,31 +19,797 @@
     "activeProfileId": "p-self",
     "freeConsultationsUsed": 1,
     "profiles": {
-      "order": ["p-self"],
+      "order": [
+        "p-self"
+      ],
       "byId": {
         "p-self": {
           "id": "p-self",
           "name": "Maria",
           "relationship": "self",
           "sexAtBirth": "female",
-          "intake": { "ageBand": "46-50", "profileFor": "self", "reproductive": "perimenopausal", "cycle": "irregular", "conditions": ["none"], "medications": ["hrt"], "allergies": ["none"], "country": "US", "height": "165 cm", "weight": "68 kg" },
-          "health": {
-            "birthYear": { "value": 1978, "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "sexAtBirth": { "value": "female", "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "genderIdentity": { "value": "woman", "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "heightCm": { "value": 165, "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "weightKg": { "value": 68, "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "medications": { "value": [{ "name": "Estradiol patch" }, { "name": "Progesterone" }], "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "allergies": { "value": [], "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" },
-            "conditions": { "value": [], "source": "manual", "updatedAt": "2026-10-01T09:05:00-07:00" }
+          "intake": {
+            "ageBand": "46-50",
+            "profileFor": "self",
+            "reproductive": "perimenopausal",
+            "cycle": "irregular",
+            "conditions": [
+              "none"
+            ],
+            "medications": [
+              "hrt"
+            ],
+            "allergies": [
+              "none"
+            ],
+            "country": "US",
+            "height": "165 cm",
+            "weight": "68 kg"
           },
-          "intakeV2": { "step": "done", "completedAt": "2026-10-01T09:05:00-07:00", "closedAt": "2026-10-01T09:05:00-07:00" },
+          "health": {
+            "birthYear": {
+              "value": 1978,
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "sexAtBirth": {
+              "value": "female",
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "genderIdentity": {
+              "value": "woman",
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "heightCm": {
+              "value": 165,
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "weightKg": {
+              "value": 68,
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "medications": {
+              "value": [
+                {
+                  "name": "Estradiol patch"
+                },
+                {
+                  "name": "Progesterone"
+                }
+              ],
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "allergies": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            },
+            "conditions": {
+              "value": [],
+              "source": "manual",
+              "updatedAt": "2026-10-01T09:05:00-07:00"
+            }
+          },
+          "intakeV2": {
+            "step": "done",
+            "completedAt": "2026-10-01T09:05:00-07:00",
+            "closedAt": "2026-10-01T09:05:00-07:00"
+          },
           "createdAt": "2026-10-01T09:00:00-07:00"
         }
       }
+    },
+    "authFlow": "login",
+    "plan": "family",
+    "documents": {
+      "byId": {
+        "d-lab-1": {
+          "id": "d-lab-1",
+          "profileId": "p-self",
+          "type": "lab",
+          "format": "pdf",
+          "fileName": "Quest_results_Oct2026.pdf",
+          "sizeBytes": 412000,
+          "title": "Lab result · Oct 8, 2026",
+          "documentDate": "2026-10-08T09:00:00-07:00",
+          "uploadedAt": "2026-10-09T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Lab",
+                "value": "Sample Lab"
+              },
+              {
+                "label": "Tests",
+                "value": "TSH, Free T3, Estradiol"
+              },
+              {
+                "label": "Values",
+                "value": "TSH 3.8 mIU/L · Free T3 2.4 pg/mL · Estradiol 45 pg/mL"
+              },
+              {
+                "label": "Collected",
+                "value": "Date shown on the report"
+              }
+            ]
+          },
+          "description": "Thyroid and hormone panel from my annual physical.",
+          "labReportId": "lab-d-lab-1"
+        },
+        "d-img-1": {
+          "id": "d-img-1",
+          "profileId": "p-self",
+          "type": "imaging",
+          "format": "pdf",
+          "fileName": "Pelvic_ultrasound_report.pdf",
+          "sizeBytes": 1850000,
+          "title": "Imaging report · Oct 2, 2026",
+          "documentDate": "2026-10-02T09:00:00-07:00",
+          "uploadedAt": "2026-10-03T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Study",
+                "value": "Pelvic ultrasound"
+              },
+              {
+                "label": "Date",
+                "value": "Date shown on the report"
+              },
+              {
+                "label": "Summary",
+                "value": "Report text Deborah can read with you"
+              }
+            ]
+          },
+          "sharedWith": [
+            "Dr. Patel"
+          ]
+        },
+        "d-rx-1": {
+          "id": "d-rx-1",
+          "profileId": "p-self",
+          "type": "prescription",
+          "format": "jpg",
+          "fileName": "IMG_2041.jpg",
+          "sizeBytes": 2300000,
+          "title": "Prescription · Oct 15, 2026",
+          "documentDate": "2026-10-15T09:00:00-07:00",
+          "uploadedAt": "2026-10-16T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Medication",
+                "value": "Name shown on the prescription"
+              },
+              {
+                "label": "Prescriber",
+                "value": "Name shown on the prescription"
+              },
+              {
+                "label": "Date",
+                "value": "Date shown on the prescription"
+              }
+            ]
+          }
+        },
+        "d-note-1": {
+          "id": "d-note-1",
+          "profileId": "p-self",
+          "type": "visit-note",
+          "format": "txt",
+          "fileName": "visit-notes.txt",
+          "sizeBytes": 3200,
+          "title": "Visit note · Oct 20, 2026",
+          "documentDate": "2026-10-20T09:00:00-07:00",
+          "uploadedAt": "2026-10-21T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Provider",
+                "value": "Name shown on the note"
+              },
+              {
+                "label": "Visit date",
+                "value": "Date shown on the note"
+              },
+              {
+                "label": "Topics",
+                "value": "Main points from the visit"
+              }
+            ]
+          },
+          "description": "What I wrote down after my gynecology visit."
+        },
+        "d-old-1": {
+          "id": "d-old-1",
+          "profileId": "p-self",
+          "type": "other",
+          "format": "png",
+          "fileName": "insurance-card.png",
+          "sizeBytes": 640000,
+          "title": "Other · Oct 1, 2026",
+          "documentDate": "2026-10-01T09:00:00-07:00",
+          "uploadedAt": "2026-10-02T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Dates",
+                "value": "Dates found in the document"
+              }
+            ]
+          },
+          "deletedAt": "2026-10-21T08:00:00-07:00"
+        },
+        "d-child-1": {
+          "id": "d-child-1",
+          "profileId": "p-daughter",
+          "type": "lab",
+          "format": "pdf",
+          "fileName": "Pediatric_bloodwork.pdf",
+          "sizeBytes": 290000,
+          "title": "Lab result · Oct 12, 2026",
+          "documentDate": "2026-10-12T09:00:00-07:00",
+          "uploadedAt": "2026-10-13T18:20:00-07:00",
+          "source": "seed",
+          "extraction": {
+            "status": "placeholder",
+            "fields": [
+              {
+                "label": "Lab",
+                "value": "Sample Lab"
+              },
+              {
+                "label": "Tests",
+                "value": "TSH, Free T3, Estradiol"
+              },
+              {
+                "label": "Values",
+                "value": "TSH 3.8 mIU/L · Free T3 2.4 pg/mL · Estradiol 45 pg/mL"
+              },
+              {
+                "label": "Collected",
+                "value": "Date shown on the report"
+              }
+            ]
+          },
+          "labReportId": "lab-d-child-1"
+        }
+      }
+    },
+    "labs": {
+      "reportsById": {
+        "lab-d-lab-1": {
+          "id": "lab-d-lab-1",
+          "profileId": "p-self",
+          "source": "pdf",
+          "labName": "Quest Diagnostics",
+          "panelTitle": "Thyroid and hormone panel",
+          "collectedAt": "2026-10-08T09:00:00-07:00",
+          "values": [
+            {
+              "id": "lab-d-lab-1-v0",
+              "marker": "Neutrophils",
+              "value": "4487.0",
+              "unit": "µL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v1",
+              "marker": "AST",
+              "value": "38.0",
+              "unit": "U/L",
+              "statusLabel": "Excellent",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-lab-1-v2",
+              "marker": "VDRL",
+              "value": "Non-Reactive",
+              "unit": "",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-lab-1-v3",
+              "marker": "TSH",
+              "value": "3.8",
+              "unit": "mIU/L",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v4",
+              "marker": "Free T3",
+              "value": "2.4",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v5",
+              "marker": "Estradiol",
+              "value": "45",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            }
+          ],
+          "confirmed": true
+        },
+        "lab-d-child-1": {
+          "id": "lab-d-child-1",
+          "profileId": "p-self",
+          "source": "pdf",
+          "labName": "Labcorp",
+          "panelTitle": "Immunity and inflammation",
+          "collectedAt": "2026-10-12T09:00:00-07:00",
+          "values": [
+            {
+              "id": "lab-d-child-1-v0",
+              "marker": "Neutrophils",
+              "value": "4487.0",
+              "unit": "µL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-child-1-v1",
+              "marker": "AST",
+              "value": "38.0",
+              "unit": "U/L",
+              "statusLabel": "Excellent",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-child-1-v2",
+              "marker": "VDRL",
+              "value": "Non-Reactive",
+              "unit": "",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-child-1-v3",
+              "marker": "TSH",
+              "value": "3.8",
+              "unit": "mIU/L",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-child-1-v4",
+              "marker": "Free T3",
+              "value": "2.4",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-child-1-v5",
+              "marker": "Estradiol",
+              "value": "45",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            }
+          ],
+          "confirmed": true
+        },
+        "lab-r01-metabolic": {
+          "id": "lab-r01-metabolic",
+          "profileId": "p-self",
+          "source": "pdf",
+          "labName": "Quest Diagnostics",
+          "panelTitle": "Comprehensive metabolic panel",
+          "collectedAt": "2026-09-20T09:00:00-07:00",
+          "values": [
+            {
+              "id": "lab-d-lab-1-v0-m",
+              "marker": "Neutrophils",
+              "value": "4487.0",
+              "unit": "µL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v1-m",
+              "marker": "AST",
+              "value": "38.0",
+              "unit": "U/L",
+              "statusLabel": "Excellent",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-lab-1-v2-m",
+              "marker": "VDRL",
+              "value": "Non-Reactive",
+              "unit": "",
+              "statusTone": "excellent"
+            },
+            {
+              "id": "lab-d-lab-1-v3-m",
+              "marker": "TSH",
+              "value": "3.8",
+              "unit": "mIU/L",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v4-m",
+              "marker": "Free T3",
+              "value": "2.4",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            },
+            {
+              "id": "lab-d-lab-1-v5-m",
+              "marker": "Estradiol",
+              "value": "45",
+              "unit": "pg/mL",
+              "statusLabel": "Normal",
+              "statusTone": "normal"
+            }
+          ],
+          "confirmed": true
+        }
+      }
+    },
+    "notes": {
+      "byId": {
+        "n-brief-r01-1": {
+          "id": "n-brief-r01-1",
+          "profileId": "p-self",
+          "kind": "provider-brief",
+          "title": "Night sweats and 3am waking",
+          "body": "Waking hot around 3am most nights for about a year.",
+          "updatedAt": "2026-10-11T10:00:00-07:00",
+          "brief": {
+            "header": {
+              "name": "Maria",
+              "dob": "1978",
+              "whatThisIs": "Note for the provider — prepared with Deborah AI from our conversation"
+            },
+            "appointmentDate": "2026-10-10T09:30:00-07:00",
+            "chiefComplaint": "Night sweats and waking at 3am for about 8–12 months.",
+            "clinicalContext": "Placeholder clinical context.",
+            "labs": [
+              {
+                "name": "FSH",
+                "tier": "primary",
+                "reason": "Placeholder reason."
+              },
+              {
+                "name": "Estradiol",
+                "tier": "primary",
+                "reason": "Placeholder reason."
+              }
+            ],
+            "questions": [
+              {
+                "text": "Could this be perimenopause?",
+                "why": "Placeholder."
+              }
+            ],
+            "medications": [
+              {
+                "name": "Magnesium glycinate",
+                "current": true
+              }
+            ],
+            "redFlagsSummary": "No red flags reported.",
+            "recommendation": "Placeholder recommendation.",
+            "disclaimer": [
+              "Placeholder disclaimer."
+            ],
+            "status": "placeholder"
+          },
+          "visitLog": {
+            "visitDate": "2026-10-10",
+            "chiefComplaint": "Night sweats and waking at 3am for about a year.",
+            "duration": "About 12 months",
+            "providerName": "Dr. Patel",
+            "specialty": "Gynecology",
+            "clinic": "Bay Women’s Health",
+            "followUp": "6 weeks, after labs",
+            "diagnosis": "Likely perimenopause; wants hormone labs before deciding on treatment.",
+            "understanding": "Night waking may be linked to shifting progesterone.",
+            "unaddressed": "Didn’t get to ask about magnesium.",
+            "labs": [
+              {
+                "test": "FSH",
+                "orderedBy": "Provider",
+                "status": "Drawn"
+              },
+              {
+                "test": "Estradiol",
+                "orderedBy": "Provider",
+                "status": "Pending"
+              }
+            ],
+            "labNotes": "Results in 5–7 days.",
+            "changes": [
+              {
+                "name": "Magnesium glycinate",
+                "change": "Continued",
+                "dose": "200 mg at night"
+              }
+            ],
+            "nextSteps": [
+              {
+                "priority": "Routine",
+                "text": "Get FSH and estradiol drawn this week"
+              },
+              {
+                "priority": "Schedule",
+                "text": "Book follow-up in 6 weeks"
+              }
+            ],
+            "ownNotes": "",
+            "loggedAt": "2026-10-11T10:00:00-07:00"
+          }
+        },
+        "n-brief-r01-2": {
+          "id": "n-brief-r01-2",
+          "profileId": "p-self",
+          "kind": "provider-brief",
+          "title": "Thyroid and afternoon fatigue",
+          "body": "Questions about checking more than TSH.",
+          "updatedAt": "2026-10-06T10:00:00-07:00",
+          "brief": {
+            "header": {
+              "name": "Maria",
+              "dob": "1978",
+              "whatThisIs": "Note for the provider — prepared with Deborah AI from our conversation"
+            },
+            "appointmentDate": "2026-10-29T14:00:00-07:00",
+            "chiefComplaint": "Tired most afternoons; TSH checked last year only.",
+            "clinicalContext": "Placeholder clinical context.",
+            "labs": [
+              {
+                "name": "Free T3, Free T4, TSH",
+                "tier": "primary",
+                "reason": "Placeholder reason."
+              },
+              {
+                "name": "Thyroid antibodies",
+                "tier": "secondary",
+                "reason": "Placeholder reason."
+              }
+            ],
+            "questions": [
+              {
+                "text": "Should we check more than TSH?",
+                "why": "Placeholder."
+              }
+            ],
+            "medications": [
+              {
+                "name": "Magnesium glycinate",
+                "current": true
+              }
+            ],
+            "redFlagsSummary": "No red flags reported.",
+            "recommendation": "Placeholder recommendation.",
+            "disclaimer": [
+              "Placeholder disclaimer."
+            ],
+            "status": "placeholder"
+          }
+        },
+        "n-brief-r01-3": {
+          "id": "n-brief-r01-3",
+          "profileId": "p-self",
+          "kind": "provider-brief",
+          "title": "Thyroid panel follow-up",
+          "body": "Go through my October thyroid and hormone results.",
+          "updatedAt": "2026-10-12T10:00:00-07:00",
+          "brief": {
+            "header": {
+              "name": "Maria",
+              "dob": "1978",
+              "whatThisIs": "Note for the provider — prepared with Deborah AI from our conversation"
+            },
+            "appointmentDate": "2026-11-05T11:00:00-08:00",
+            "chiefComplaint": "Reviewing my October thyroid and hormone panel.",
+            "clinicalContext": "Placeholder clinical context.",
+            "labs": [
+              {
+                "name": "Vitamin D",
+                "tier": "secondary",
+                "reason": "Placeholder reason."
+              }
+            ],
+            "questions": [
+              {
+                "text": "What do these values mean for me?",
+                "why": "Placeholder."
+              }
+            ],
+            "medications": [
+              {
+                "name": "Magnesium glycinate",
+                "current": true
+              }
+            ],
+            "redFlagsSummary": "No red flags reported.",
+            "recommendation": "Placeholder recommendation.",
+            "disclaimer": [
+              "Placeholder disclaimer."
+            ],
+            "status": "placeholder"
+          }
+        },
+        "n-saved-s26": {
+          "id": "n-saved-s26",
+          "profileId": "p-self",
+          "kind": "saved-answer",
+          "title": "Night sweats guidance",
+          "body": "Saved from our chat: steady blood sugar and a cooler room may help.",
+          "updatedAt": "2026-10-16T20:00:00-07:00"
+        }
+      }
+    },
+    "plan90": {
+      "p-self": {
+        "profileId": "p-self",
+        "startDate": "2026-09-27T09:00:00-07:00",
+        "goal": "Calmer nights and steadier energy",
+        "productId": "genesis-gold",
+        "productStartDate": "2026-09-27T09:00:00-07:00",
+        "habits": [
+          {
+            "id": "h-1",
+            "text": "Lights out by 10:30pm",
+            "doneDates": [
+              "2026-10-10",
+              "2026-10-11",
+              "2026-10-12",
+              "2026-10-13"
+            ]
+          },
+          {
+            "id": "h-2",
+            "text": "Protein at breakfast",
+            "doneDates": [
+              "2026-10-10",
+              "2026-10-11",
+              "2026-10-12",
+              "2026-10-13"
+            ]
+          },
+          {
+            "id": "h-3",
+            "text": "Ten-minute evening wind-down",
+            "doneDates": [
+              "2026-10-10",
+              "2026-10-11",
+              "2026-10-12",
+              "2026-10-13"
+            ]
+          }
+        ]
+      }
+    },
+    "notificationPermission": "granted",
+    "notifications": {
+      "queue": [
+        {
+          "id": "n-r01-1",
+          "type": "plan",
+          "title": "Today’s habits are waiting",
+          "body": "Day 19 of your Healing Plan. A minute to check in?",
+          "deepLink": "plan",
+          "deliverAt": "2026-10-14T08:00:00-07:00",
+          "delivered": true,
+          "read": false
+        },
+        {
+          "id": "n-r01-2",
+          "type": "followup",
+          "title": "How are you doing?",
+          "body": "Deborah would like to hear how the last few nights have been.",
+          "deepLink": "followup:p-self",
+          "deliverAt": "2026-10-13T18:30:00-07:00",
+          "delivered": true,
+          "read": false
+        },
+        {
+          "id": "n-r01-3",
+          "type": "critical",
+          "title": "Please check in with Deborah",
+          "body": "You mentioned something earlier that’s worth a closer look. Tap to continue.",
+          "deepLink": "followup:p-self",
+          "deliverAt": "2026-10-12T10:15:00-07:00",
+          "delivered": true,
+          "read": true
+        },
+        {
+          "id": "n-r01-4",
+          "type": "booking",
+          "title": "Your consultation is tomorrow",
+          "body": "30 min with Deborah · Video. Tap to see the details.",
+          "deepLink": "chat",
+          "deliverAt": "2026-10-10T09:00:00-07:00",
+          "delivered": true,
+          "read": true
+        },
+        {
+          "id": "n-r01-5",
+          "type": "reconsent",
+          "title": "We’ve updated our privacy policy",
+          "body": "Please review and agree to keep using Your Oracle Clinician.",
+          "deepLink": "terms",
+          "deliverAt": "2026-10-08T12:00:00-07:00",
+          "delivered": true,
+          "read": true
+        },
+        {
+          "id": "n-r01-6",
+          "type": "inactivity",
+          "title": "It’s been a while",
+          "body": "It’s been 30 days since we last talked. Anything new with your sleep?",
+          "deepLink": "chat",
+          "deliverAt": "2026-09-30T19:00:00-07:00",
+          "delivered": true,
+          "read": true
+        }
+      ],
+      "followUp": {
+        "p-self": {
+          "enabled": true,
+          "intervalDays": 14
+        }
+      },
+      "bookingReminders": true
     }
   },
   "conversations": {
-    "c-r01": { "profileId": "p-self", "scriptId": "sleep-3am", "messages": "@script:sleep-3am#answered", "active": true, "daysAgo": 3 }
+    "c-r01": {
+      "profileId": "p-self",
+      "scriptId": "sleep-3am",
+      "messages": "@script:sleep-3am#answered",
+      "active": true,
+      "daysAgo": 3
+    },
+    "c-r02": {
+      "profileId": "p-self",
+      "scriptId": "hot-flashes-sleep",
+      "messages": "@script:hot-flashes-sleep#answered",
+      "daysAgo": 9
+    },
+    "c-r03": {
+      "profileId": "p-self",
+      "scriptId": "lab-review",
+      "messages": "@script:lab-review#answered",
+      "daysAgo": 5
+    },
+    "c-r04": {
+      "profileId": "p-self",
+      "scriptId": "thyroid-fatigue",
+      "messages": "@script:thyroid-fatigue#answered",
+      "daysAgo": 14
+    },
+    "c-r05": {
+      "profileId": "p-self",
+      "scriptId": "generic",
+      "messages": "@script:generic#answered",
+      "daysAgo": 21
+    }
   }
 }

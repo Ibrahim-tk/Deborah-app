@@ -1,0 +1,248 @@
+{
+  "flowId": "proxy_elderly_uti_v1",
+  "startNode": "p_banner",
+  "contentStatus": "placeholder",
+  "description": "Premade proxy chat (Pathway C, elderly): Lisa asks about her mother Eleanor, 80. Same-day care escalation for a suspected UTI / urosepsis; 911 sheet only if she is hard to wake, breathing badly or fainted. Placeholder clinical copy.",
+  "carriedFromIntake": {
+    "firstName": "Eleanor",
+    "profileFor": "dependent",
+    "age": 80
+  },
+  "uiDefaults": {
+    "typingIndicatorMs": 900
+  },
+  "nodes": {
+    "p_banner": {
+      "type": "message",
+      "widget": {
+        "type": "proxy_banner",
+        "text": "Asking about: Eleanor · Proxy session — Elderly / caregiver"
+      },
+      "next": "opener"
+    },
+    "opener": {
+      "type": "question",
+      "display": "greeting",
+      "bot": "How is Eleanor doing today, {you}?",
+      "widget": {
+        "type": "suggested_replies",
+        "options": [
+          {
+            "label": "She’s suddenly more confused than usual",
+            "value": "She’s suddenly more confused than usual",
+            "reply": "My mom is {age} with early Alzheimer’s. The last two days she’s been wetting herself, which she never does — she’s always been continent. She also seems a lot more confused than usual, not eating well, and just not herself. I thought it was just her dementia getting worse but it happened so suddenly.",
+            "next": "p_urgent"
+          },
+          {
+            "label": "Help me understand her medications",
+            "value": "Help me understand her medications",
+            "next": "chat_free"
+          },
+          {
+            "label": "Prepare questions for her next appointment",
+            "value": "Prepare questions for her next appointment",
+            "next": "chat_free"
+          }
+        ]
+      },
+      "next": "p_urgent"
+    },
+    "p_urgent": {
+      "type": "question",
+      "bot": "I want to be direct with you, {you}: please take your mother to urgent care or the emergency room today — not tomorrow, today. What you’re describing is a classic presentation of a urinary tract infection in an elderly woman, and in someone your mother’s age — especially with a dementia diagnosis — a UTI can progress to sepsis within hours.\n\nLet me explain why this is urgent: older women, and especially women with cognitive decline, very often do not present with the burning and urgency that you or I would feel with a UTI. Instead, their only symptoms may be exactly what you’re seeing: sudden new incontinence, increased confusion, behavioral change, and reduced appetite. The “sudden” part is the key word you used — her dementia doesn’t suddenly worsen in 48 hours. That’s infection until proven otherwise.\n\nHas she had any fever? Even a low-grade one, 99–100°F?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes, a low one",
+            "value": "Yes, a low one",
+            "reply": "She was 99.7 when I checked earlier. I didn’t think that was very high."
+          },
+          {
+            "label": "No fever",
+            "value": "No fever"
+          },
+          {
+            "label": "I haven’t checked",
+            "value": "I haven’t checked"
+          }
+        ]
+      },
+      "saveAs": "fever",
+      "next": "p_fever"
+    },
+    "p_fever": {
+      "type": "message",
+      "bot": "In an {age}-year-old, 99.7°F combined with new confusion and new incontinence is significant. Older adults often cannot mount the high fevers younger people do — their immune response is blunted — so even a low-grade fever in this context is a warning sign, not reassurance.",
+      "next": "p_check"
+    },
+    "p_check": {
+      "type": "question",
+      "bot": "One quick check, right now: is she very hard to wake, breathing fast or struggling to breathe, or has she fainted or turned grey or blue?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "No, she’s awake and breathing normally",
+            "value": "No, she’s awake and breathing normally",
+            "reply": "No, she’s awake and breathing normally."
+          },
+          {
+            "label": "Yes, one of these",
+            "value": "Yes, one of these",
+            "reply": "Yes — she’s really hard to wake right now.",
+            "next": "p_emergency"
+          }
+        ]
+      },
+      "saveAs": "emergencyCheck",
+      "next": "p_plan"
+    },
+    "p_emergency": {
+      "type": "question",
+      "bot": "Please call 911 now. Being very hard to wake, or struggling to breathe, can mean the infection has reached her blood. This can’t wait for urgent care.",
+      "widget": {
+        "type": "emergency_sheet",
+        "title": "Call 911 now",
+        "text": "Eleanor may be developing sepsis. Being very hard to wake, struggling to breathe, fainting, or turning grey or blue is an emergency. Call 911, stay with her, and tell them about her fever, confusion and incontinence.",
+        "options": [
+          {
+            "label": "I’ve called, what next?",
+            "value": "I’ve called, what next?",
+            "reply": "I’ve called 911.",
+            "next": "p_while"
+          }
+        ]
+      },
+      "next": "p_while"
+    },
+    "p_while": {
+      "type": "message",
+      "bot": "You did the right thing. While you wait: stay with her, keep her lying on her side if she’s drowsy, don’t give food or drink, and have her medication list ready — donepezil, lisinopril, metoprolol and calcium. Read the paramedics the note below.",
+      "widget": {
+        "type": "copy_block",
+        "title": "For the paramedics",
+        "text": "“My {age}-year-old mother with early Alzheimer’s has had new onset incontinence and acute confusion over the past 48 hours, and a low-grade fever of 99.7. I’m concerned about a UTI or sepsis.”"
+      },
+      "next": "p_next"
+    },
+    "p_plan": {
+      "type": "message",
+      "bot": "Here is what to do right now: take Eleanor to urgent care or the ER today. Tell the triage nurse exactly this:",
+      "widget": {
+        "type": "copy_block",
+        "title": "For the triage nurse",
+        "text": "“My {age}-year-old mother with early Alzheimer’s has had new onset incontinence and acute confusion over the past 48 hours, and a low-grade fever of 99.7. I’m concerned about a UTI or sepsis.”"
+      },
+      "next": "p_tests"
+    },
+    "p_tests": {
+      "type": "message",
+      "bot": "They will need a urinalysis and urine culture, blood work including a CBC and BMP, and possibly blood cultures if sepsis is suspected.\n\nPlease don’t wait to see if she improves. I know this feels like a lot — but you’re doing the right thing by paying attention and acting quickly.",
+      "next": "p_next"
+    },
+    "p_next": {
+      "type": "question",
+      "bot": "Would you like me to put this together as notes you can hand to the care team?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Create notes for the care team",
+            "value": "Create notes for the care team",
+            "reply": "Yes, please."
+          },
+          {
+            "label": "Not now",
+            "value": "Not now",
+            "next": "p_close"
+          }
+        ]
+      },
+      "saveAs": "notes",
+      "next": "p_answer"
+    },
+    "p_answer": {
+      "type": "answer",
+      "layout": "progressive",
+      "sections": [
+        {
+          "id": 1,
+          "title": "What You’re Seeing",
+          "defaultOpen": true,
+          "body": [
+            "Eleanor, {age}, early Alzheimer’s, stable until recently.",
+            "Sudden new incontinence for 2 days; she has always been continent.",
+            "More confused than usual, not eating well, “just not herself.”",
+            "Temperature 99.7°F (37.6°C) earlier today."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Why This Is Urgent",
+          "body": [
+            "Dementia does not suddenly worsen over 48 hours. A sudden change is infection or a metabolic cause until proven otherwise.",
+            "Older adults often cannot mount high fevers, so a low-grade fever here is a warning sign.",
+            "Eating less adds dehydration risk, which compounds sepsis risk."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "What This May Mean",
+          "body": "A urinary tract infection is the most likely explanation, with a risk of urosepsis. Only an in-person assessment and tests can confirm it."
+        },
+        {
+          "id": 4,
+          "title": "What to Tell Triage",
+          "body": [
+            "“My {age}-year-old mother with early Alzheimer’s has had new onset incontinence and acute confusion over the past 48 hours, and a low-grade fever of 99.7. I’m concerned about a UTI or sepsis.”"
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Tests to Expect",
+          "body": [
+            {
+              "test": "Urinalysis and urine culture",
+              "why": "to confirm a UTI and find the right antibiotic"
+            },
+            {
+              "test": "CBC and BMP",
+              "why": "infection markers, kidney function and hydration"
+            },
+            {
+              "test": "Blood cultures",
+              "why": "if sepsis is suspected"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "title": "What to Do Now",
+          "body": [
+            "Go to urgent care or the ER today. Not “see your doctor this week.”",
+            "Bring her medication list: donepezil, lisinopril, metoprolol, calcium.",
+            "Call 911 if she becomes very hard to wake, struggles to breathe, faints, or turns grey or blue.",
+            "Do not wait at home to see if she improves."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "A Word from Deborah",
+          "body": "{you}, you noticed something that many people miss. Acting on it today is exactly the right thing for your mom."
+        }
+      ],
+      "footer": "This is educational information for a caregiver, not a diagnosis. In an emergency, call 911.",
+      "next": "p_close"
+    },
+    "p_close": {
+      "type": "message",
+      "bot": "I’m here if anything changes. If she becomes very hard to wake, has trouble breathing, or faints, call 911.",
+      "next": "p_end"
+    },
+    "p_end": {
+      "type": "end",
+      "route": "/chat"
+    }
+  }
+}

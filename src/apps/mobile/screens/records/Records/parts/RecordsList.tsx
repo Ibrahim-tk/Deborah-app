@@ -2,10 +2,10 @@
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { selectProfileConversations, selectProfileLabs, selectProfileNotes, useAppStore } from '@shared/store';
-import type { Conversation } from '@shared/types/domain';
+import type { Conversation, Note } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { ActionSheet, Button, Divider, Icon, ListRow } from '@mobile/ui';
-import { ConsultationRow, EmptyState, NoteRow } from '@mobile/patterns/health';
+import { ActionTile, BottomSheet, Button, Divider } from '@mobile/ui';
+import { ConsultationRow, EmptyState, VisitNoteCard } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import styles from '../Records.module.css';
 import own from './RecordsList.module.css';
@@ -23,6 +23,22 @@ export interface RecordsListProps {
 const topicOf = (c: Conversation) =>
   c.topic ?? (c.scriptId === 'checkin' ? 'Check-in' : c.messages.find((m) => m.role === 'user')?.text) ?? 'Consultation';
 const isAnswered = (c: Conversation) => Boolean(c.countedAt) || c.messages.some((m) => m.kind === 'answer' && m.answer && !m.meta?.streaming);
+/** First line: just the date (the appointment when set, else when it was saved). */
+const dateFor = (n: Note) =>
+  new Date(n.brief?.appointmentDate ?? n.visitLog?.visitDate ?? n.updatedAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+/** Third line: what the provider said once logged, else the note's own first line. */
+const detailFor = (n: Note) => n.visitLog?.diagnosis?.trim() || n.body.split('\n').find((l) => l.trim())?.trim();
+/** A new chat already carrying the visit as context (design 2026-10-20). */
+function askAbout(n: Note): string {
+  const log = n.visitLog;
+  const parts = [`About my visit on ${dateFor(n)} (${n.title}).`];
+  if (log?.diagnosis) parts.push(`My provider said: ${log.diagnosis}`);
+  if (log?.labs.length) parts.push(`Labs ordered: ${log.labs.map((l) => `${l.test} (${l.status.toLowerCase()})`).join(', ')}.`);
+  if (log?.changes.length) parts.push(`Changes: ${log.changes.map((c) => `${c.name} ${c.change.toLowerCase()}`).join(', ')}.`);
+  parts.push('What should I understand from this, and what should I ask next?');
+  return parts.join(' ');
+}
+
 const hasLabs = (c: Conversation) => c.messages.some((m) => (m.answer?.labsReferenced?.length ?? 0) > 0);
 
 export function RecordsList({ segment, profileId, isActiveProfile }: RecordsListProps) {
@@ -33,17 +49,16 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
   const labs = useAppStore(useShallow((s) => selectProfileLabs(s, profileId)));
   const [noteMenu, setNoteMenu] = useState(false);
   const newNote = () => setNoteMenu(true);
-  // F09c: "+ New note" offers a plain note or logging a provider visit (M-9.8).
+  // "+ New note" (design 2026-10-20): a sheet with two choices — a note for herself, or log a provider visit
+  // in the same form as the visit notes Deborah prepares (M-9.9).
+  const pick = (go: () => void) => { setNoteMenu(false); go(); };
   const noteMenuSheet = (
-    <ActionSheet
-      open={noteMenu}
-      onClose={() => setNoteMenu(false)}
-      actions={[
-        { label: 'Write a note', onSelect: () => { setNoteMenu(false); open('M-9.4', { kind: 'questions', profileId }); } },
-        // Talk first (F09c): the debrief offers "Fill it in myself" for the form. Active profile only — it uses the chat.
-        ...(isActiveProfile ? [{ label: 'Log a provider visit', onSelect: () => { setNoteMenu(false); openAsk({ mode: 'debrief' }); } }] : []),
-      ]}
-    />
+    <BottomSheet open={noteMenu} onClose={() => setNoteMenu(false)} showClose title="New note">
+      <div className={own.choices}>
+        <ActionTile icon="edit" title="A note for myself" meta="Questions, reminders, anything to remember" onClick={() => pick(() => open('M-9.10', { profileId }))} />
+        <ActionTile icon="calendar" title="Log a provider visit" meta="What they said, labs ordered and next steps" onClick={() => pick(() => open('M-9.9', { profileId }))} />
+      </div>
+    </BottomSheet>
   );
   // ASSUMPTION: viewing another profile's records offers no Ask / Add labs (they act on the active profile).
   const addLabs = isActiveProfile ? () => gate('documents', () => open('M-5.3')) : undefined;
@@ -91,30 +106,24 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
     }
     return (
       <>
-        <div className={styles.top}>
-          <Button variant="secondary" size="md" leadingIcon="plus" onClick={newNote}>New note</Button>
-          {noteMenuSheet}
-        </div>
-        <ul className={own.list}>
+        {noteMenuSheet}
+        <ul className={own.cards}>
           {notes.map((n) => (
             <li key={n.id}>
-              <NoteRow
+              <VisitNoteCard
+                date={dateFor(n)}
                 title={n.title || 'Untitled note'}
-                kind={n.kind}
-                updated={formatShortDate(n.updatedAt)}
-                body={n.body}
-                onPress={() =>
-                  n.kind === 'provider-brief'
-                    ? open('M-9.7', { noteId: n.id })
-                    : n.visit
-                      ? open('M-9.8', { noteId: n.id })
-                      : open('M-9.4', { noteId: n.id })
-                }
+                detail={detailFor(n)}
+                logged={Boolean(n.visitLog)}
+                onOpen={() => (n.kind === 'provider-brief' ? open('M-9.7', { noteId: n.id }) : n.visit ? open('M-9.8', { noteId: n.id }) : open('M-9.4', { noteId: n.id }))}
+                onLog={() => open('M-9.9', { noteId: n.id })}
+                onAsk={() => { useAppStore.getState().archiveActive(n.profileId); openAsk({ prefill: askAbout(n), focus: true }); }}
               />
-              <Divider />
             </li>
           ))}
         </ul>
+        {/* New sits bottom right, floating (design 2026-10-20). */}
+        <Button className={own.fab} leadingIcon="plus" onClick={newNote}>New note</Button>
       </>
     );
   }
@@ -128,26 +137,21 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
   }
   return (
     <>
-      {addLabs && (
-        <div className={styles.top}>
-          <Button variant="secondary" size="md" leadingIcon="plus" onClick={addLabs}>Add</Button>
-        </div>
-      )}
-      <ul className={own.list}>
+      {/* Same card language as Visit Notes, compact (design 2026-10-20). */}
+      <ul className={own.cards}>
         {labs.map((r) => (
           <li key={r.id}>
-            <ListRow
-              title={r.labName || 'Lab results'}
-              subtitle={[r.collectedAt && formatShortDate(r.collectedAt), `${r.values.length} ${r.values.length === 1 ? 'value' : 'values'}`]
-                .filter(Boolean)
-                .join(' · ')}
-              leading={<span className={own.icon}><Icon name="labs" size={22} /></span>}
-              onPress={() => open('M-9.5', { reportId: r.id })}
+            <VisitNoteCard
+              doodle="file"
+              date={r.collectedAt ? new Date(r.collectedAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date not set'}
+              title={r.panelTitle || r.labName || 'Lab results'}
+              detail={[r.labName, `${r.values.length} ${r.values.length === 1 ? 'result' : 'results'}`].filter(Boolean).join(' · ')}
+              onOpen={() => open('M-9.5', { reportId: r.id })}
             />
-            <Divider />
           </li>
         ))}
       </ul>
+      {addLabs && <Button className={own.fab} leadingIcon="plus" onClick={addLabs}>Add labs</Button>}
     </>
   );
 }

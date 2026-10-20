@@ -7,15 +7,12 @@
  * @xref    web: W-2.1 (apps/web/screens/consultation/Conversation) — not built
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useShallow } from 'zustand/react/shallow';
-import { suggestionsData } from '@shared/data';
-import { asksForAnswer, greeting, isMinor, pendingFacts } from '@shared/engine';
+import { asksForAnswer, pendingFacts } from '@shared/engine';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
-import { nowFrom } from '@shared/utils';
 import { ActionSheet } from '@mobile/ui';
 import { AnimatePresence, Aura, GradientShift, MotionDiv } from '@mobile/ui';
-import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
+import { ChatHeader, Composer, Greeting, ScrollToLatest, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -23,12 +20,11 @@ import { MessageList } from './parts/MessageList';
 import { ABOUT_PLACEHOLDER, ABOUT_VOICE_SAMPLE, IntakeFlow, useIntakeFlow } from './parts/IntakeFlow';
 import { SafetyBench } from './parts/SafetyBench';
 import { useAutoScroll } from './parts/useAutoScroll';
-import { thirdPerson } from './parts/thirdPerson';
 import { useReturnFlows } from './parts/useReturnFlows';
 import { useDocumentHandoff } from './parts/useDocumentHandoff';
 import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
-import { IntakeCompletionCard } from '@mobile/patterns/widgets';
+import { IntakeTile } from '@mobile/patterns/health';
 import { healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import styles from './Conversation.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
@@ -38,7 +34,7 @@ const SHOW_TRIAL_COUNTER = false;
 
 export default function Conversation() {
   const chat = useConversation();
-  const { conversation, profile, freeLeft, busy, history } = chat;
+  const { conversation, profile, freeLeft, busy } = chat;
   const { open, push, pop, switchTab, presentSheet } = useNav();
   const gate = useAccountGate();
   const toast = useToast();
@@ -46,9 +42,7 @@ export default function Conversation() {
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
   // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
   const { prefill, focus, startIntake } = useScreenParams<{ prefill: string; focus: boolean; startIntake: boolean }>();
-  const clock = useAppStore(useShallow((s) => ({ simulatedNow: s.simulatedNow, clockAnchor: s.clockAnchor })));
   const openSwitcher = useProfileSwitcher();
-  const [recording, setRecording] = useState(false);
   const [symptomsOpen, setSymptomsOpen] = useState(false);
   // Picked symptoms ride as pills in the composer; they become words only when the message is sent.
   const [symptoms, setSymptoms] = useState<string[]>([]);
@@ -83,10 +77,9 @@ export default function Conversation() {
     wasEmpty.current = isEmpty;
   }, [isEmpty]);
   // F11: once Deborah has replied to a shared document, her questions replace the starter list.
-  const docReplied = messages.some((m) => m.role === 'deborah' && m.meta?.documentId);
   // Intake V2 stays out of the way: the empty chat is only the orb and one question. The in-chat
   // intake shows only when she already started it (resume); otherwise the profile fills from Home
-  // (M-2.10) and from Deborah's questions at the point of need.
+  // (My Health card, M-7.2) and from Deborah's questions at the point of need.
   const intakeMode = intake.enabled && isEmpty && intake.progress.step !== 'consent' && intake.progress.step !== 'done';
   const aboutStep = intakeMode && intake.progress.step === 'about';
   const generating = busy && conversation?.status === 'generating';
@@ -200,14 +193,9 @@ export default function Conversation() {
   };
 
   const name = profile?.name ?? '';
-  const now = nowFrom(clock);
   // F06: another profile's chat greets "Let's talk about {name}." and minors get the teen suggestion set.
   const other = Boolean(profile) && profile?.id !== SELF_PROFILE_ID;
-  const minor = profile ? isMinor(profile, now) : false;
   // Someone else's chat: quick start questions in third person, using their pronouns.
-  const suggestions = !other
-    ? suggestionsData.default
-    : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile?.intake?.pronouns);
 
   return (
     <div className={styles.root} data-xref="M-2.1 · Conversation">
@@ -239,14 +227,10 @@ export default function Conversation() {
               <IntakeFlow flow={intake} onScan={(field) => presentSheet('M-2.9', { field })} onPick={(t) => send(t)} />
             ) : isEmpty ? (
               !profileOpening && (() => {
-                const last = history[0];
-                const g = greeting(name || 'there', now, last?.topic ?? last?.summary, other);
                 return (
                   <MotionDiv key="greeting" className={styles.greetingWrap} exit={{ opacity: 0, y: -40, scale: 0.97, transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } }}>
                     <Greeting
                       line={other && name ? `How is ${name} feeling today?` : undefined}
-                      welcomeBack={g.welcomeBack}
-                      onContinue={g.welcomeBack ? () => chat.continueLast() : undefined}
                     />
                   </MotionDiv>
                 );
@@ -293,16 +277,9 @@ export default function Conversation() {
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
         {profile && healthProfileCompletion(profile) < 1 && (isEmpty || conversation?.status === 'answered') && (
-          <IntakeCompletionCard
-            progress={healthProfileCompletion(profile)}
-            onAction={() => push('M-2.14')}
-            title="Health profile"
-            body="You can keep talking. Finish this when you want Deborah to know more."
-          />
+          <IntakeTile onOpen={() => push('M-2.14')} />
         )}
-        {(isEmpty || conversation?.status === 'empty') && !docReplied && !intakeMode && !profileOpening && !recording && (
-          <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
-        )}
+        {/* No scripted starter suggestions on the empty chat (design 2026-10-20): she starts in her own words. */}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
         {/* The composer never leaves the chat (design 2026-10-20): during intake and choice questions it stays,
             and typing there answers "Other". */}
@@ -340,7 +317,6 @@ export default function Conversation() {
                     ? 'Or type your answer…'
                     : 'Ask me anything'
           }
-          onRecordingChange={setRecording}
           voiceSample={aboutStep ? ABOUT_VOICE_SAMPLE : chat.voiceSample}
           // Trial counter hidden for now (design direction 2026-10-08); the free-limit sheet still gates.
           banner={SHOW_TRIAL_COUNTER && freeLeft !== null && <TrialCounter inline left={freeLeft} onChoosePlan={() => open('M-4.1')} />}

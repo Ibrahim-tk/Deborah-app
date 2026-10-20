@@ -1,15 +1,13 @@
 .panel {
+  /* Content of a bottom sheet: no own surface or border. */
   display: grid;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  border-top: 1px solid var(--color-border-hairline);
-  background: var(--color-surface);
+  gap: var(--space-4);
 }
 
 .q {
   margin: 0;
   font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
-  text-align: center;
+  color: var(--color-ink-secondary);
 }
 
 .row {

@@ -3,7 +3,7 @@
  *          rows show the value and where it came from (tap to edit); missing rows show their widget
  *          inline. "Looks right" stays disabled until every row has a value or "None"; saving fills
  *          the progress ring. Country is inferred from the device and only shown in the footer.
- * @usedBy  M-2.1 (intake V2), M-2.10 (Build your health profile)
+ * @usedBy  M-2.1 (intake V2)
  * @spec    intake V2 brief §3 Step D (design direction 2026-10-12) — OPEN: not in docs/ux yet
  * @xref    web: apps/web/patterns/intake/ProfileCard — not built
  */

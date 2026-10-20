@@ -8,7 +8,7 @@
  */
 import { useEffect, useState } from 'react';
 import { selectDocuments, useAppStore } from '@shared/store';
-import { Button, Header, Segmented, Skeleton } from '@mobile/ui';
+import { Button, Header, Segmented, Skeleton, type IconName } from '@mobile/ui';
 import { simBetween } from '@mobile/hooks/simTiming';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
 import { ProfileLine } from './parts/ProfileLine';
@@ -18,9 +18,9 @@ import styles from './Library.module.css';
 
 type Tab = 'uploads' | 'reports';
 
-const TABS: { value: Tab; label: string }[] = [
-  { value: 'uploads', label: 'My Uploads' },
-  { value: 'reports', label: 'Saved Reports' },
+const TABS: { value: Tab; label: string; icon: IconName }[] = [
+  { value: 'uploads', label: 'My Uploads', icon: 'upload' },
+  { value: 'reports', label: 'Saved Reports', icon: 'file' },
 ];
 
 export default function Library() {

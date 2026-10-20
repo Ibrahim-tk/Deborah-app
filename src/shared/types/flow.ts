@@ -14,7 +14,13 @@ export interface FlowWidget {
     /** The human path (EscalationCard) as an inline tile; options = [book, not now]. */
     | 'escalation'
     /** Premade chat (Sandra): quiet banner pointing to the Health profile; `label` is its dismiss link. */
-    | 'intake_banner';
+    | 'intake_banner'
+    /** Proxy chats: who the session is about (`text`), pinned at the start. */
+    | 'proxy_banner'
+    /** A block she can copy word for word (`title`, `text`), e.g. what to tell triage. */
+    | 'copy_block'
+    /** Emergency: opens a bottom sheet with Call 911 (`title`, `text`); `options[0]` continues the script. */
+    | 'emergency_sheet';
   options?: FlowOption[];
   actions?: FlowOption[];
   multi?: boolean;

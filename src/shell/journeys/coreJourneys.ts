@@ -41,7 +41,7 @@ export const CORE_JOURNEYS: ManualJourney[] = [
   {
     id: 'chat-profile', name: 'Health profile through conversation', persona: 'Sarah', scenario: 'S14', status: 'IMPLEMENTED',
     goal: 'Build a health profile gradually without silent saving.', behavior: 'Scripted questions and answers; local pending/confirmed facts.', evidence: ['src/shared/engine/facts.ts', 'src/shared/store/slices/conversations.ts'], gaps: [],
-    steps: [ask, s('Answer relevant questions', 'Choose Regular cycles; answer the headache questions. Choose None for conditions, medicines or allergies when offered.', 'The female-cycling path is selected. Safety questions precede any product recommendation.', 'M-2.1'), review, s('Inspect health profile', 'Open the conversation’s Your health profile action/menu.', 'Confirmed information is shown with its conversation source.', 'M-2.10')],
+    steps: [ask, s('Answer relevant questions', 'Choose Regular cycles; answer the headache questions. Choose None for conditions, medicines or allergies when offered.', 'The female-cycling path is selected. Safety questions precede any product recommendation.', 'M-2.1'), review, s('Inspect health profile', 'Open My Health and find the Health profile card.', 'Confirmed information is shown on the card.', 'M-7.2')],
   },
   {
     id: 'returning', name: 'Returning user consultation', persona: 'Maria', scenario: 'R01', status: 'IMPLEMENTED',
@@ -60,6 +60,6 @@ export const CORE_JOURNEYS: ManualJourney[] = [
     steps: [s('Inspect pending facts', 'Read the Review and Confirm card.', 'Three facts are pending, not yet confirmed.', 'M-2.1'),
       ...(action === 'edit' ? [s('Edit a fact', 'Choose Edit, open a fact, select a different value, then Use this.', 'The revised value remains pending until Save.', 'M-2.13')] : []),
       s('Resolve review', action === 'discard' ? 'Choose Don’t save.' : 'Choose Save to my profile.', action === 'discard' ? 'Pending facts are discarded; existing profile fields are unchanged.' : 'Selected facts reach the correct profile and carry a confirmation source.'),
-      s('Check resulting profile', 'Open Your health profile from the chat header/menu.', 'The profile agrees with the choice you made. Discarded facts do not appear as confirmed.', 'M-2.10')],
+      s('Check resulting profile', 'Open My Health and find the Health profile card.', 'The profile agrees with the choice you made. Discarded facts do not appear as confirmed.', 'M-7.2')],
   })),
 ];
