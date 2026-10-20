@@ -1,17 +1,9 @@
 /**
- * Home · State 3 — established. Habits + artifact continue hero + destinations.
+ * Home · State 3 — established (plan running). Order (design 2026-10-20): last conversation · intake if
+ * unfinished, else today's habits · records · My health + Family · shop.
  */
-import {
-  GlassCareStrip,
-  HealingPlanCard,
-  HomeMediaHero,
-  IntakeCompletionCard,
-  PhotoDestinationPair,
-  RecommendationCard,
-  TodayHabitsCard,
-  type Recommendation,
-  type TodayHabit,
-} from '@mobile/patterns/widgets';
+import { HomeMediaHero, IntakeCompletionCard, TodayHabitsCard, type Recommendation, type TodayHabit } from '@mobile/patterns/widgets';
+import { HomeSections, type Destinations } from './HomeSections';
 
 export type { TodayHabit };
 
@@ -21,80 +13,32 @@ export interface StateEstablishedProps {
   onToggle: (habitId: string) => void;
   continueMeta?: string;
   onContinue: () => void;
-  onJourney: () => void;
-  journeyFocus?: string;
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
-  /** F11 Documents and reports (M-11.1). */
   documents?: { meta: string; onPress: () => void };
-  destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
+  onLabs: () => void;
+  destinations: Destinations;
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
 }
 
 export function StateEstablished(p: StateEstablishedProps) {
-  const care: { key: string; label: string; meta?: string; onPress: () => void }[] = [];
-  if (p.reports) {
-    care.push({
-      key: 'reports',
-      label: 'Reports',
-      meta: p.reports.meta,
-      onPress: p.reports.onPress,
-    });
-  }
-  if (p.documents) care.push({ key: 'documents', label: 'Documents', meta: p.documents.meta, onPress: p.documents.onPress });
-
   return (
     <>
-      <TodayHabitsCard day={p.day} habits={p.habits} onToggle={p.onToggle} />
-
       <HomeMediaHero
         titleId="continue-deborah"
         title={p.continueMeta ?? 'Ongoing conversation and questions with Deborah'}
-        when={p.journeyFocus ? undefined : `Day ${p.day}`}
         tone="hero"
         artifact="violet-bloom"
         ctaLabel="Continue"
         onCta={p.onContinue}
       />
-
-      <GlassCareStrip items={care} />
-
-      {p.intakeCard && !p.intakeCard.complete && (
-        <IntakeCompletionCard
-          progress={p.intakeCard.progress}
-          onAction={p.intakeCard.onAction}
-        />
+      {p.intakeCard && !p.intakeCard.complete ? (
+        <IntakeCompletionCard progress={p.intakeCard.progress} onAction={p.intakeCard.onAction} />
+      ) : (
+        <TodayHabitsCard day={p.day} habits={p.habits} onToggle={p.onToggle} />
       )}
-
-      <HealingPlanCard
-        day={p.day}
-        focus={p.journeyFocus}
-        onPress={p.onJourney}
-      />
-
-      <PhotoDestinationPair
-        tiles={[
-          {
-            title: p.destinations[0].title,
-            meta: p.destinations[0].meta,
-            tone: 'mint',
-            artifact: 'dest-health-art',
-            action: 'chevron',
-            onPress: p.destinations[0].onPress,
-          },
-          {
-            title: p.destinations[1].title,
-            meta: p.destinations[1].meta,
-            tone: 'rose',
-            artifact: 'dest-family-art',
-            action: 'plus',
-            onPress: p.destinations[1].onPress,
-          },
-        ]}
-      />
-
-      <RecommendationCard items={p.recommendations} onShop={p.onShop} />
+      <HomeSections {...p} />
     </>
   );
 }

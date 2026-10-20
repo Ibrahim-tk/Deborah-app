@@ -1,2 +1,5 @@
 /* Layout comes from the onboarding template (HealthBasics.module.css); this only lifts the glass nav bar above the bloom. */
 .bar { position: relative; z-index: 2; flex: none; }
+
+/* Done button wears the question progress as a thin ring (lilac track, purple arc); -5px keeps the button aligned. */
+.doneRing { --ring-stroke: 2; --ring-track: var(--color-accent-tint); margin: -5px; }

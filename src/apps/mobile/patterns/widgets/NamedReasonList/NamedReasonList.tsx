@@ -91,8 +91,9 @@ export function NamedReasonList({
                 {item.reason ? <span className={styles.tileReason}>{item.reason}</span> : null}
               </div>
               <IconButton
-                icon="close"
+                icon="delete"
                 size="sm"
+                className={styles.remove}
                 label={`Remove ${item.name}`}
                 onClick={(e) => {
                   e.preventDefault();

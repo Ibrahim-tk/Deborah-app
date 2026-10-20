@@ -1,23 +1,23 @@
-/** M-7.2 — populated hub: focus · plan · check-in · records · for you · library link. */
+/** M-7.2 — populated hub: focus · plan · check-in · history and notes · health profile · for you · library link. */
 import { scripts } from '@shared/data';
-import { selectDocuments, useAppStore } from '@shared/store';
+import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
 import { ListRow } from '@mobile/ui';
 import { CheckInCard, ContentCard, FocusCard, PlanProgressCard, QuickLinks } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import { useForYou } from '@mobile/hooks/useForYou';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
+import { HealthDetails } from './HealthDetails';
 import styles from './Hub.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
-type Segment = 'consultations' | 'notes' | 'labs';
+type Segment = 'consultations' | 'notes';
 
 export function HubPopulated() {
   const { push, openAsk } = useNav();
   const gate = useAccountGate();
   const { profileId, focus, plan, checkIn, upcoming, counts } = useHubData();
   const forYou = useForYou().slice(0, 3);
-  const docCount = useAppStore((s) => selectDocuments(s, profileId).length);
 
   const openFocus = () => {
     if (!focus) return;
@@ -51,18 +51,11 @@ export function HubPopulated() {
         links={[
           { key: 'consultations', label: 'History', icon: 'chat', count: counts.consultations },
           { key: 'notes', label: 'Visit Notes', icon: 'note', count: counts.notes },
-          { key: 'labs', label: 'Labs', icon: 'labs', count: counts.labs },
         ]}
         onSelect={(segment) => push('M-9.1', { segment })}
       />
-      {/* F11: uploads and saved reports live in their own library (docs/ux/F11-documents.md). */}
-      <div className={styles.rowGroup}>
-        <ListRow
-          title="Documents and reports"
-          subtitle={docCount === 0 ? 'Upload labs, imaging and prescriptions' : `${docCount} document${docCount === 1 ? '' : 's'}`}
-          onPress={() => push('M-11.1')}
-        />
-      </div>
+      {/* Design request 2026-10-20: the health profile lives here; labs and documents have their own tab. */}
+      <HealthDetails />
       <section className={styles.section} aria-labelledby="hub-for-you">
         <h2 id="hub-for-you" className={styles.heading}>For you from Deborah</h2>
         <div className={styles.list}>

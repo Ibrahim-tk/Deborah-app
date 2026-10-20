@@ -24,10 +24,12 @@
             "label": "I’m exhausted all the time"
           },
           {
-            "label": "I can’t think straight lately"
+            "label": "I can’t sleep through the night",
+            "reply": "I’m exhausted all the time and I can’t think straight at work. I’ve gained about 12 pounds this year even though I’m eating the same as always, and I keep waking up at night. I feel like I’m falling apart.",
+            "next": "s_hello"
           },
           {
-            "label": "I’m gaining weight no matter what"
+            "label": "I’m gaining weight no matter what I eat"
           }
         ]
       },
@@ -408,6 +410,508 @@
       "next": "close"
     },
     "close": {
+      "type": "end",
+      "route": "/chat"
+    },
+    "s_hello": {
+      "type": "message",
+      "bot": "You’re not falling apart, Sandra. Your body is trying to tell you something, and we’re going to listen to it together. Fatigue, brain fog, stubborn weight gain and broken sleep, all arriving at once at 46, is a pattern I know well. But I don’t want to assume anything, so let me ask a few questions.",
+      "next": "s_wake"
+    },
+    "s_wake": {
+      "type": "question",
+      "bot": "When you wake in the night, what time is it usually, and what does it feel like?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Around 2–3 am, my mind is racing",
+            "value": "Around 2–3 am, my mind is racing"
+          },
+          {
+            "label": "Around 2–3 am, I’m just wide awake",
+            "value": "Around 2–3 am, I’m just wide awake"
+          },
+          {
+            "label": "I wake up hot or sweaty",
+            "value": "I wake up hot or sweaty",
+            "reply": "Around 2 or 3. Sometimes I’m drenched in sweat, sometimes I’m just awake. My mind isn’t racing."
+          },
+          {
+            "label": "It varies",
+            "value": "It varies"
+          }
+        ]
+      },
+      "next": "s_wake_ack",
+      "saveAs": "wake"
+    },
+    "s_wake_ack": {
+      "type": "message",
+      "bot": "That’s a really helpful clue. Waking at that hour without a racing mind, sometimes with a sweat, often points to hormones rather than worry.",
+      "next": "s_periods"
+    },
+    "s_periods": {
+      "type": "question",
+      "bot": "Are you still having periods? And if so, have they changed?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes, no real change",
+            "value": "Yes, no real change"
+          },
+          {
+            "label": "Yes, but they’ve changed",
+            "value": "Yes, but they’ve changed",
+            "reply": "Yes, but they come every three weeks now, they’re much heavier with clots, and I spot for a few days before."
+          },
+          {
+            "label": "No, they’ve stopped",
+            "value": "No, they’ve stopped"
+          },
+          {
+            "label": "Not sure",
+            "value": "Not sure"
+          }
+        ]
+      },
+      "next": "s_periods_ack",
+      "saveAs": "periods"
+    },
+    "s_periods_ack": {
+      "type": "message",
+      "bot": "Thank you for telling me. That’s a lot to manage on top of feeling exhausted. Cycles that come closer together, heavier and with clots, plus spotting before your period, is a classic sign that progesterone is dropping relative to estrogen. That’s often how the Pause begins.",
+      "next": "s_safety"
+    },
+    "s_safety": {
+      "type": "question",
+      "bot": "Two quick safety checks:\n• Are you soaking through a pad or tampon every hour for several hours?\n• Have you had any fevers, or lost weight without trying?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "No to both",
+            "value": "No to both"
+          },
+          {
+            "label": "Yes to one or both",
+            "value": "Yes to one or both",
+            "next": "s_safety_yes"
+          }
+        ]
+      },
+      "next": "s_safety_ack",
+      "saveAs": "redFlags"
+    },
+    "s_safety_yes": {
+      "type": "safety",
+      "bot": "Thank you for telling me. Bleeding that heavy, a fever, or weight loss you can’t explain should be checked by a provider today. Please get same-day care. I’ll still share what I can.",
+      "next": "s_safety_ack"
+    },
+    "s_safety_ack": {
+      "type": "message",
+      "bot": "Good, I’m glad. If your bleeding ever becomes that heavy, or you feel faint, please get care the same day.",
+      "next": "s_hormones"
+    },
+    "s_hormones": {
+      "type": "question",
+      "bot": "Are you using any hormonal birth control or hormone therapy, like the pill, a hormonal IUD, patches or creams?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "Yes"
+          },
+          {
+            "label": "No",
+            "value": "No",
+            "reply": "No, nothing."
+          },
+          {
+            "label": "I used to",
+            "value": "I used to"
+          }
+        ]
+      },
+      "next": "s_hormones_ack",
+      "saveAs": "hrt"
+    },
+    "s_hormones_ack": {
+      "type": "message",
+      "bot": "Okay, so we’re seeing your own hormones at work.",
+      "next": "s_meds"
+    },
+    "s_meds": {
+      "type": "question",
+      "bot": "Are you taking any medications right now?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "Yes",
+            "reply": "Yes, levothyroxine. I was diagnosed with an underactive thyroid five years ago. My doctor says my thyroid is fine."
+          },
+          {
+            "label": "No",
+            "value": "No"
+          }
+        ]
+      },
+      "next": "s_tests",
+      "saveAs": "meds"
+    },
+    "s_tests": {
+      "type": "question",
+      "bot": "I’m really glad you mentioned that. Your thyroid and the Pause are closely linked. Do you know which tests your doctor checked?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Only TSH",
+            "value": "Only TSH",
+            "reply": "I think just TSH."
+          },
+          {
+            "label": "TSH and T4",
+            "value": "TSH and T4"
+          },
+          {
+            "label": "A full panel with Free T3",
+            "value": "A full panel with Free T3"
+          },
+          {
+            "label": "Not sure",
+            "value": "Not sure"
+          }
+        ]
+      },
+      "next": "s_tests_ack",
+      "saveAs": "thyroidTests"
+    },
+    "s_tests_ack": {
+      "type": "message",
+      "bot": "That’s very common, and it only tells part of the story. TSH can look normal while your cells aren’t getting the thyroid hormone they need. That’s what Free T3 shows. And as your hormones shift in the Pause, a dose that was right a few years ago may not be right today. That’s something for your provider to review. I’d never suggest changing it on your own.",
+      "next": "s_timing"
+    },
+    "s_timing": {
+      "type": "question",
+      "bot": "How do you usually take your levothyroxine?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "With water, before eating",
+            "value": "With water, before eating"
+          },
+          {
+            "label": "With coffee or breakfast",
+            "value": "With coffee or breakfast",
+            "reply": "Honestly, with my morning coffee."
+          },
+          {
+            "label": "At night",
+            "value": "At night"
+          },
+          {
+            "label": "It varies",
+            "value": "It varies"
+          }
+        ]
+      },
+      "next": "s_timing_ack",
+      "saveAs": "timing"
+    },
+    "s_timing_ack": {
+      "type": "message",
+      "bot": "So many people do, and nobody tells them! Coffee can reduce how much levothyroxine your body absorbs, so it’s worth asking your provider or pharmacist about timing.",
+      "next": "s_supps"
+    },
+    "s_supps": {
+      "type": "question",
+      "bot": "Are you taking any supplements, vitamins or herbs?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "Yes",
+            "reply": "Magnesium at night and vitamin D."
+          },
+          {
+            "label": "No",
+            "value": "No"
+          }
+        ]
+      },
+      "next": "s_save",
+      "saveAs": "supplements"
+    },
+    "s_save": {
+      "type": "question",
+      "bot": "Lovely. Magnesium can be really supportive for sleep. Would you like me to add your levothyroxine, magnesium and vitamin D to your health profile, so you don’t have to tell me again?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes, add them",
+            "value": "Yes, add them",
+            "reply": "Yes."
+          },
+          {
+            "label": "Not now",
+            "value": "Not now"
+          }
+        ]
+      },
+      "next": "s_life",
+      "saveAs": "saveMeds"
+    },
+    "s_life": {
+      "type": "message",
+      "bot": "Done. Has anything big shifted in your life over the last year or two, like a loss, a move, work stress, or an illness such as COVID?",
+      "next": "s_life_reply"
+    },
+    "s_life_reply": {
+      "type": "user_message",
+      "user": "My dad passed away last year, and work has been brutal since.",
+      "next": "s_life_ack"
+    },
+    "s_life_ack": {
+      "type": "message",
+      "bot": "I’m so sorry about your dad, Sandra. Grief and stress on that scale ask a lot of your body. Sustained stress is one of the most powerful disruptors of your hypothalamus, and it often makes the Pause feel much harder. Thank you for trusting me with that.",
+      "next": "s_mom"
+    },
+    "s_mom": {
+      "type": "question",
+      "bot": "Do you know when your mom went through menopause, and how it was for her?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Before 45",
+            "value": "Before 45"
+          },
+          {
+            "label": "45–50",
+            "value": "45–50",
+            "reply": "Around 48. She said it was awful."
+          },
+          {
+            "label": "After 50",
+            "value": "After 50"
+          },
+          {
+            "label": "I don’t know",
+            "value": "I don’t know"
+          }
+        ]
+      },
+      "next": "s_mom_ack",
+      "saveAs": "mom"
+    },
+    "s_mom_ack": {
+      "type": "message",
+      "bot": "That’s useful to know. Your mother’s experience often gives us a sense of your own timing. But your story isn’t set in stone, and with the right support yours can be very different.",
+      "next": "s_day"
+    },
+    "s_day": {
+      "type": "message",
+      "bot": "Last question: what does a typical day of eating and movement look like for you?",
+      "next": "s_day_reply"
+    },
+    "s_day_reply": {
+      "type": "user_message",
+      "user": "Coffee and no breakfast, a salad for lunch, a big dinner, and usually something sweet at night. I walk a couple of times a week.",
+      "next": "s_day_ack"
+    },
+    "s_day_ack": {
+      "type": "message",
+      "bot": "Thank you, that fills in the picture beautifully. Skipping breakfast and having sweets late in the evening can swing your blood sugar, and that can wake you in the night too.",
+      "next": "s_ready"
+    },
+    "s_ready": {
+      "type": "question",
+      "bot": "I have a clear picture now, Sandra. Would you like me to share what I’m seeing?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Show me what you’re thinking",
+            "value": "Show me what you’re thinking",
+            "reply": "Yes, please."
+          }
+        ]
+      },
+      "next": "s_thinking"
+    },
+    "s_thinking": {
+      "type": "loading",
+      "widget": {
+        "type": "thinking_steps",
+        "steps": [
+          "Your 2–3 am waking and night sweats",
+          "Your shorter, heavier cycles at 46",
+          "Your levothyroxine and a TSH-only check",
+          "A hard year: grief and work stress"
+        ],
+        "durationMs": 2800
+      },
+      "next": "s_root"
+    },
+    "s_root": {
+      "type": "message",
+      "bot": "Here’s what’s happening at the root.\n\nYour hypothalamus is the maestro of your whole symphony of hormones, neurotransmitters and immune factors. Hormones control everything, but the hypothalamus controls your hormones. At 46, you’re entering what I call the Pause, and your hypothalamus is navigating a major transition.\n\nOn top of that, losing your dad and a brutal year at work have put it under real strain. When that happens, it struggles to keep your stress hormones balanced overnight:\n• Your cortisol rises at 2–3 am, which wakes you up.\n• That higher night-time cortisol also makes your body hold weight around the middle, even though you’re eating the same.\n• Shifting progesterone explains your shorter, heavier cycles.\n• Your thyroid, already needing support, is caught in the same off-rhythm.\n\nYour symptoms aren’t in your head, Sandra. They’re in your hypothalamus.\n\nThe good news is that we can support it right at the source. I developed Genesis Gold® to give the hypothalamus the foundational nutrients it needs to conduct the whole symphony again: sleep, stress response, thyroid, blood sugar and cycles. For many women in the Pause, this upstream support settles a big part of the picture. I’d suggest giving it 60–90 days, alongside some baseline labs so you and your provider have a clear starting point.",
+      "next": "s_answer"
+    },
+    "s_exit_product": {
+      "type": "end",
+      "route": "/shop/genesis-gold"
+    },
+    "s_exit_notes": {
+      "type": "end",
+      "route": "/visit-notes"
+    },
+    "s_answer": {
+      "type": "answer",
+      "layout": "progressive",
+      "sections": [
+        {
+          "id": 1,
+          "title": "What I’m Hearing",
+          "defaultOpen": true,
+          "body": [
+            "For the past year you’ve been exhausted and foggy, and you’ve gained 12 pounds without changing how you eat.",
+            "You wake at 2–3 am, sometimes drenched in sweat.",
+            "Your periods now come every three weeks, heavier, with clots and spotting beforehand.",
+            "You take levothyroxine (usually with coffee), magnesium and vitamin D.",
+            "You lost your dad last year, and work has been relentless since.",
+            "Your mom went through a hard menopause around 48."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Hypothalamic Connection",
+          "body": [
+            "Your hypothalamus is the maestro of your hormonal symphony. In the Pause, and under the weight of grief and stress, it loses its rhythm.",
+            "Cortisol rises at night, which wakes you and holds weight around your middle.",
+            "Progesterone falls, which brings shorter, heavier cycles.",
+            "Your thyroid struggles to keep pace.",
+            "The musicians aren’t broken. The conductor needs support."
+          ]
+        },
+        {
+          "id": 3,
+          "title": "What This May Mean",
+          "body": [
+            "Your symptoms fit the pattern of perimenopause (the Pause), made harder by sustained stress.",
+            "Heavier, more frequent periods may be lowering your iron, adding to fatigue and fog.",
+            "Your thyroid may need a fresh look. A TSH-only check doesn’t show how your cells are using thyroid hormone, and taking levothyroxine with coffee may reduce how much you absorb."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Questions for Your Provider",
+          "body": [
+            "“Could I be in perimenopause? Can we check my FSH on day 3–5 of my cycle?”",
+            "“Can we look at my full thyroid picture, including Free T3, not just TSH?”",
+            "“Should my levothyroxine dose or timing be reviewed?”",
+            "“Could my heavier periods be lowering my iron?”"
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Tests Worth Discussing",
+          "body": [
+            {
+              "test": "FSH on day 3–5 of your cycle",
+              "why": "the most useful marker of where you are in the Pause"
+            },
+            {
+              "test": "Free T3, Free T4, TSH and thyroid antibodies",
+              "why": "a complete picture of your thyroid"
+            },
+            {
+              "test": "Morning cortisol and DHEA-S",
+              "why": "how your stress system is coping"
+            },
+            {
+              "test": "CBC and ferritin",
+              "why": "to check for low iron from heavier periods"
+            },
+            "These are for discussion with your provider, not orders."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "What You Can Do Now",
+          "body": [
+            "Support your hypothalamus at the source: Genesis Gold® for 60–90 days. It contains no hormones, but let your provider know you’re taking it with your levothyroxine.",
+            "Protect an 8-hour sleep window, in a cool, dark room.",
+            "Steady your blood sugar: eat breakfast with protein, and cut back on refined carbs and sweets after 2 pm.",
+            "Ask about taking levothyroxine with water on an empty stomach, 30–60 minutes before coffee.",
+            "Five minutes of CALM each day to settle your stress response.",
+            "Track your cycle and night sweats to take to your appointment.",
+            "Next steps: start upstream hypothalamic support and get your baseline labs; book a visit with your primary care provider or gynaecologist; reassess together in 60–90 days.",
+            "Get same-day care if your bleeding becomes very heavy or you feel faint. I’ll check in with you in about two weeks."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "A Word from Deborah",
+          "body": "Sandra, you’re carrying so much: grief, a demanding job, and a body in transition. Of course you’re exhausted. This isn’t the end of feeling like yourself. It’s the Pause, and it can be the beginning of a stronger, wiser chapter. Let’s give your hypothalamus what it needs, and walk through this together."
+        }
+      ],
+      "footer": "This is educational information, not medical advice, a diagnosis or a prescription. Please talk to your healthcare provider before changing any medication or supplement.",
+      "next": "s_whats_next"
+    },
+    "s_whats_next": {
+      "type": "question",
+      "bot": "Would you like me to put together notes for your provider, or tell you more about Genesis Gold®?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Create notes for my provider",
+            "value": "Create notes for my provider",
+            "next": "s_exit_notes"
+          },
+          {
+            "label": "Learn about Genesis Gold®",
+            "value": "Learn about Genesis Gold®",
+            "next": "s_exit_product"
+          }
+        ]
+      }
+    },
+    "s_intake": {
+      "type": "question",
+      "bot": "Your health profile is 30% complete, Sandra. Filling in your full intake takes about 10–15 minutes, and it helps me go even deeper with you, especially your gynaecological and family history. Would you like to do it now?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Complete my intake",
+            "value": "Complete my intake",
+            "next": "s_exit_intake"
+          },
+          {
+            "label": "Later",
+            "value": "Later",
+            "next": "s_close"
+          }
+        ]
+      },
+      "next": "s_close",
+      "saveAs": "intakeNow"
+    },
+    "s_exit_intake": {
+      "type": "end",
+      "route": "/intake"
+    },
+    "s_close": {
       "type": "end",
       "route": "/chat"
     }

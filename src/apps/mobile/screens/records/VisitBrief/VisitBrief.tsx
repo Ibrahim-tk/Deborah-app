@@ -17,7 +17,7 @@ import {
 } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Modal } from '@mobile/ui';
+import { Button, GlassButton, Modal } from '@mobile/ui';
 import { EmptyState } from '@mobile/patterns/health';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
@@ -124,6 +124,13 @@ export default function VisitBrief() {
     afterAction();
   };
 
+  // Share: the device's own share sheet (iOS / macOS Safari); browsers without it get a quiet note.
+  const onShare = async () => {
+    persist();
+    if (!navigator.share) return toast('Sharing isn’t available in this browser');
+    try { await navigator.share({ title: 'My Visit Notes', text: 'My Visit Notes from Your Oracle Clinician' }); } catch { /* dismissed */ }
+  };
+
   const onPdf = () => {
     const id = persist();
     open('M-9.6', { briefNoteId: id });
@@ -167,15 +174,13 @@ export default function VisitBrief() {
     <div className={styles.root} data-xref="M-9.7 · My Visit Notes">
       <Modal
         title="My Visit Notes"
-        right={<Button variant="ghost" size="md" onClick={dismissModal}>Done</Button>}
+        left={<GlassButton icon="share" aria-label="Share" onClick={onShare} />}
+        right={<GlassButton icon="check" aria-label="Save" onClick={onSave} />}
         footer={
           followUp ? (
             <AppointmentFollowUp onWithDate={scheduleDayAfter} onWithoutDate={scheduleSevenDay} />
           ) : (
-            <div className={styles.actions}>
-              <Button variant="secondary" leadingIcon="note" onClick={onSave}>Save a copy</Button>
-              <Button variant="secondary" leadingIcon="pdf" onClick={onPdf}>Download PDF</Button>
-            </div>
+            <Button variant="secondary" fullWidth leadingIcon="pdf" onClick={onPdf}>Download PDF</Button>
           )
         }
       >

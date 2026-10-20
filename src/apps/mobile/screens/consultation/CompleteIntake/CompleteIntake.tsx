@@ -12,7 +12,7 @@
  */
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { Aura, Button, GlassButton, GradientShift, Header } from '@mobile/ui';
+import { Aura, Button, GlassButton, GradientShift, Header, ProgressRing } from '@mobile/ui';
 import { namedReasonsComplete } from '@mobile/patterns/widgets';
 import { StepBody } from '@mobile/screens/onboarding/HealthBasics/parts/StepBody';
 import { BloomReveal } from '@mobile/screens/onboarding/HealthBasics/parts/BloomReveal';
@@ -114,7 +114,12 @@ export default function CompleteIntake() {
           large={false}
           transparent
           left={<GlassButton icon="back" aria-label={at > 0 ? 'Previous question' : 'Back'} onClick={goBack} />}
-          right={<GlassButton icon="check" aria-label="Save and close" onClick={close} />}
+          right={
+            // Progress through this profile's questions, drawn around the Done button (design 2026-10-20).
+            <ProgressRing className={styles.doneRing} size={54} value={steps.length ? at / steps.length : 0} label={`Question ${at + 1} of ${steps.length}`} showValue={false}>
+              <GlassButton icon="check" aria-label="Save and close" onClick={close} />
+            </ProgressRing>
+          }
         />
       </div>
       {/* Progress: the flowering tree grows across this profile's own number of questions. */}

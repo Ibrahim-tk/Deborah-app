@@ -134,6 +134,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-7.4', name: 'For you', ...HEALTH, as: 'push', params: () => ({ itemId: libraryItems[0]?.id }) },
       { id: 'M-7.5', name: 'Library', ...HEALTH, as: 'push' },
       { id: 'M-7.6', name: 'About Deborah', ...HEALTH, as: 'push' },
+      { id: 'M-7.7', name: 'Edit health detail', ...HEALTH, as: 'sheet', params: (s) => ({ profileId: s.activeProfileId, key: 'medications' }) },
     ],
   },
   {

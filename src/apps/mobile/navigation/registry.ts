@@ -56,6 +56,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.4': { title: 'For you', component: lazy(() => import('@mobile/screens/myhealth/ContentDetail')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-74--for-you-content-detail' },
   'M-7.5': { title: 'Deborah’s library', component: lazy(() => import('@mobile/screens/myhealth/Library')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-75--deborahs-library' },
   'M-7.6': { title: 'About Deborah', component: lazy(() => import('@mobile/screens/myhealth/AboutDeborah')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-76--about-deborah' },
+  'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@mobile/screens/myhealth/EditHealthDetail')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
   // F08 Book Deborah
   'M-8.2': { title: 'Consult with Deborah', component: lazy(() => import('@mobile/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },

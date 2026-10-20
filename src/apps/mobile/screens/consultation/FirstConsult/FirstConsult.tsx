@@ -93,7 +93,16 @@ export default function FirstConsult() {
     }
     asked.current = true;
     player.respond(entryId, node, picked);
+    // Premade chats: some answers leave for an app screen (provider notes, the full intake).
+    const route = picked.length === 1 && picked[0].next ? flow.nodes[picked[0].next]?.route : undefined;
+    if (route === '/visit-notes') action('visit_notes');
+    if (route === '/intake') push('M-2.14');
   };
+  // The answer the notes are built from: the one on screen, else the path's own (Sarah's path is `s_*`).
+  const answerNode = () =>
+    [...entries].reverse().find((e) => e.kind === 'answer')?.node ??
+    (entries.some((e) => e.kind === 'bot' && e.nodeId.startsWith('s_')) ? flow.nodes.s_answer : undefined) ??
+    flow.nodes.answer_1;
   const saveProviderBrief = (): string | undefined => {
     const s = useAppStore.getState();
     const profile = selectActiveProfile(s);
@@ -101,7 +110,7 @@ export default function FirstConsult() {
       toast('No active profile');
       return undefined;
     }
-    const answer = buildAnswer(flow.nodes.answer_1, say);
+    const answer = buildAnswer(answerNode(), say);
     const brief = briefFromAnswer(profile, answer, 'First consultation');
     const id = uid('n');
     s.addNote({

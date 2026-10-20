@@ -22,7 +22,6 @@ import { StateEstablished } from './parts/StateEstablished';
 import { useHomeView } from './parts/useHomeView';
 
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
-import { useAddMember } from '@mobile/screens/profiles/useAddMember';
 import styles from './Home.module.css';
 
 /** Profiles that have already seen the first-visit greeting this session (in memory only). */
@@ -33,9 +32,8 @@ export default function Home() {
   const { open, push, presentSheet, presentModal, setSidebarOpen, switchTab } = useNav();
   const openAsk = useNavStore((s) => s.openAsk);
   const gate = useAccountGate();
-  const { add: addMember } = useAddMember();
   const d = useHomeView();
-  const { profile, active, history, isNew } = d;
+  const { profile, history, isNew } = d;
   const { profileId, focus } = useHubData();
   // Not after sign-up's health basics (M-1.8): that form already hands over to the chat.
   const eligible = isNew && !!profile && !greeted.has(profile.id) && !d.intakeDone && !profile.intake.profileFor;
@@ -61,14 +59,12 @@ export default function Home() {
     if (profile) greeted.add(profile.id);
     setSheet(false);
   };
-  // Signed-in demo (seed R01): Ask Deborah plays the scripted returning consultation (M-2.12).
-  const returningDemo = useAppStore((s) => s.scenario.id === 'R01');
   const docCount = useAppStore((s) => selectDocuments(s).length);
   const chat = () => {
     closeSheet();
-    if (returningDemo) push('M-2.12', { flow: 'returning' });
-    else if (active?.messages.length) push('M-2.1');
-    else openAsk({ focus: true });
+    // The home composer always starts a new chat (design 2026-10-20); the hero card continues the last one.
+    useAppStore.getState().archiveActive(profileId);
+    openAsk({ focus: true });
   };
   // Continue with Deborah: a half-answered intake question resumes exactly where it stopped.
   const resume = () => {
@@ -134,12 +130,15 @@ export default function Home() {
 
         {d.state === 'new' && (
           <StateNew
-            onPrompt={(prefill) => { closeSheet(); openAsk({ prefill }); }}
             onStart={() => { closeSheet(); openAsk({ focus: true }); }}
-            profile={d.completion < 1 ? { progress: d.completion, onOpen: () => { closeSheet(); completeIntake(); } } : undefined}
+            chat={history.length || d.midIntake ? { title: d.summary ?? d.topic, when: d.when, onContinue: () => { closeSheet(); resume(); } } : undefined}
             intakeCard={intakeCard}
-            onAddFamily={() => addMember(false)}
             destinations={destinations}
+            recommendations={d.recommendations}
+            onShop={shop}
+            onLabs={() => open('M-5.3')}
+            reports={reports}
+            documents={documents}
           />
         )}
         {d.state === 'returning' && (
@@ -157,6 +156,7 @@ export default function Home() {
             destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
+            onLabs={() => open('M-5.3')}
           />
         )}
         {d.state === 'established' && d.planDay && (
@@ -166,21 +166,20 @@ export default function Home() {
             onToggle={(id) => useAppStore.getState().toggleHabit(profileId, id, d.today)}
             continueMeta={d.checkInDue ? 'Your check-in is due' : d.when ? `Last conversation ${d.when} · ${d.topic}` : undefined}
             onContinue={d.checkInDue ? () => openAsk({ mode: 'checkin' }) : resume}
-            onJourney={journey}
-            journeyFocus={planFocus}
             intakeCard={intakeCard}
             reports={reports}
             documents={documents}
             destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
+            onLabs={() => open('M-5.3')}
           />
         )}
       </div>
 
       <PurpleDockBloom />
       <div className={styles.dock}>
-        <ChatLauncher glow placeholder="Ask Deborah how you’re feeling…" onOpen={chat} />
+        <ChatLauncher glow placeholder="Ask me anything" onOpen={chat} />
       </div>
 
       <GreetingSheet

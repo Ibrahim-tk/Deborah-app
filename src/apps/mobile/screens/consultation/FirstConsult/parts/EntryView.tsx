@@ -56,7 +56,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, se
           {/* Premade chat: "Save to my profile" sits right under the seven cards, instead of the booking times. */}
           {node.profileFacts ? (
             <ProfileFacts facts={node.profileFacts.map((f) => ({ label: f.label, value: say(f.value) }))} onEdit={() => onAction('edit_profile')} />
-          ) : (
+          ) : node.next ? null : (
             <>
               <p className={styles.afterLine}>If you’d like to go through this with me in person, I have time this week.</p>
               <BookTile onBook={() => onAction('book_request')} />

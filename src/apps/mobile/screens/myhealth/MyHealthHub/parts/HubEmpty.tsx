@@ -1,8 +1,9 @@
-/** M-7.1 — first time: empty block, start the first consultation, popular starting points. */
-import { Button, ListRow } from '@mobile/ui';
+/** M-7.1 — first time: empty block, start the first consultation, health profile, popular starting points. */
+import { Button } from '@mobile/ui';
 import { ContentCard, EmptyState } from '@mobile/patterns/health';
 import { useNav } from '@mobile/navigation';
 import { useForYou } from '@mobile/hooks/useForYou';
+import { HealthDetails } from './HealthDetails';
 import styles from './Hub.module.css';
 
 export function HubEmpty() {
@@ -19,10 +20,8 @@ export function HubEmpty() {
           Start my first consultation
         </Button>
       </div>
-      {/* F11: documents can be added before the first consultation. */}
-      <div className={styles.rowGroup}>
-        <ListRow title="Documents and reports" subtitle="Upload labs, imaging and prescriptions" onPress={() => push('M-11.1')} />
-      </div>
+      {/* Design request 2026-10-20: My Health holds the health profile; labs and documents live in their own tab. */}
+      <HealthDetails />
       <section className={styles.section} aria-labelledby="hub-popular">
         <h2 id="hub-popular" className={styles.heading}>Popular starting points from Deborah</h2>
         <div className={styles.list}>
