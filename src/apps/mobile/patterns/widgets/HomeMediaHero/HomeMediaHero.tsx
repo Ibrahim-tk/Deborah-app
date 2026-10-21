@@ -1,6 +1,6 @@
 /**
  * HomeMediaHero — main continue card (compact hero) or tonal artifact hero.
- * Compact: left stack (orb + title) · right column (when + chevron).
+ * Compact: orb + arrow on top · title + one line at the bottom, on the vibrant aurora field (white copy).
  */
 import type { ReactNode } from 'react';
 import { DeborahBlob } from '@mobile/ui/DeborahBlob';
@@ -43,18 +43,19 @@ export function HomeMediaHero({
   if (compactHero) {
     return (
       <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>
+        {/* Same hierarchy as the health-detail cards (2026-10-21): orb + arrow on top, title + one line at the bottom. */}
         <div className={styles.bodyCompact}>
-          <div className={styles.main}>
-            <DeborahBlob size={52} label="Deborah" className={styles.orb} />
-            <h2 id={titleId} className={styles.titleCompact}>{title}</h2>
-          </div>
-          <div className={styles.aside}>
-            {when && <p className={styles.when}>{when}</p>}
+          <div className={styles.top}>
+            <DeborahBlob size={44} label="Deborah" className={styles.orb} />
             {onCta && (
               <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
                 <Icon name="chevron" size={18} />
               </button>
             )}
+          </div>
+          <div className={styles.copy}>
+            <h2 id={titleId} className={styles.titleCompact}>{title}</h2>
+            {(meta || when) && <p className={styles.when}>{meta ?? when}</p>}
           </div>
           {children}
         </div>

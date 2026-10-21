@@ -18,7 +18,7 @@ import { useToast } from '@mobile/hooks/toast.store';
 import { FormField } from './parts/FormField';
 import { answersFromProfile } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import { saveHealthProfile } from '@mobile/screens/onboarding/HealthBasics/saveOnboarding';
-import { healthDetailSections } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
+import { LOCKED_KEYS, healthDetailSections } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
 import type { Answers } from '@mobile/screens/onboarding/HealthBasics/steps';
 import styles from './EditHealthSection.module.css';
 
@@ -54,7 +54,15 @@ export default function EditHealthSection() {
           <p className={styles.note}>The Oracle uses these to tailor its guidance.</p>
           {current?.rows.map((r) => (
             <section key={r.key} className={styles.field} aria-label={r.label}>
-              <FormField step={r.step} label={r.label} shown={r.value} answers={answers} set={set} />
+              {LOCKED_KEYS.has(r.key) ? (
+                // Read-only: set at sign-up, never edited here (designer, 2026-10-21).
+                <div className={styles.locked}>
+                  <span className={styles.lockedLabel}>{r.label}</span>
+                  <span className={styles.lockedValue}>{r.value ?? 'Not set'}</span>
+                </div>
+              ) : (
+                <FormField step={r.step} label={r.label} shown={r.value} answers={answers} set={set} />
+              )}
             </section>
           ))}
         </div>

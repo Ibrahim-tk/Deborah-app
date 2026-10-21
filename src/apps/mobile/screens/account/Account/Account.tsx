@@ -31,7 +31,7 @@ interface SettingsRow {
 function leadIcon(icon: IconName): ReactNode {
   return (
     <span className={styles.lead} aria-hidden>
-      <Icon name={icon} size={20} />
+      <Icon name={icon} size={18} />
     </span>
   );
 }
@@ -159,6 +159,7 @@ export default function Account() {
                     value={r.value}
                     leading={r.icon ? leadIcon(r.icon) : undefined}
                     onPress={r.onPress}
+                    density="compact"
                   />
                 </Fragment>
               ))}
@@ -167,7 +168,7 @@ export default function Account() {
         ))}
 
         <div className={styles.group}>
-          <ListRow title="Sign out" trailing={null} destructive onPress={signOut} />
+          <ListRow title="Sign out" trailing={null} destructive density="compact" onPress={signOut} />
         </div>
 
         <footer className={styles.footer}>

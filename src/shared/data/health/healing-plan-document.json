@@ -1,0 +1,136 @@
+{
+  "status": "placeholder",
+  "brand": "Your Oracle Clinician · Genesis Health",
+  "preparedBy": "Deborah Maragopoulos, MN FNP",
+  "dateLabel": "October 2026",
+  "clinical": {
+    "title": "Clinical Summary",
+    "items": [
+      { "label": "Primary Concerns", "value": "Fatigue, irregular menses, memory issues, weight gain" },
+      { "label": "History", "value": "PCOS, Hashimoto's, microprolactinoma, Lyme + Bartonella" },
+      { "label": "Cycle Pattern", "value": "~42–45 day cycles; spotting up to 10 days; LMP 9-23 (spotted)" },
+      { "label": "Family History", "value": "PCOS, Type II Diabetes" },
+      { "label": "Care Team", "value": "Naturopath (Lyme specialist)" },
+      { "label": "Allergies", "value": "NKDA" }
+    ]
+  },
+  "callout": {
+    "title": "Immediate dietary action",
+    "body": "Keep a 3-day diet log and send your lean body mass (lbs) — use the body fat calculator in your resources. Protein needs will be calculated from your LBM."
+  },
+  "conditions": [
+    {
+      "id": "pcos",
+      "title": "For PCOS",
+      "icon": "health",
+      "items": [
+        "Reduce hypothalamic inflammation — Genesis Gold will support this directly",
+        "Order AMH now to check ovarian reserve",
+        "Menstrual cycle control — take a break from current progesterone once Gen-Pro arrives, then follow the dosing note below"
+      ],
+      "note": "Day 4: Gen-Pro 25–50 mg AM and PM. Day 14: Increase to 200 mg AM and 200 mg PM. One pump = 25 mg."
+    },
+    {
+      "id": "gut",
+      "title": "Intestinal Dysbiosis",
+      "icon": "medicine",
+      "items": [
+        "Order Genova GI Effects — check microbiology, H. pylori, and gut membrane efficiency",
+        "Stop berberine and probiotics now — wait two full weeks before collecting stool sample"
+      ],
+      "note": "Begin Genesis Gold® once intestinal dysbiosis is resolved."
+    },
+    {
+      "id": "prolactin",
+      "title": "Hyperprolactinemia",
+      "icon": "labs",
+      "items": [
+        "Request from HCP: Bromocriptine 2.5 mg tablet intravaginally by 8 AM"
+      ],
+      "note": "Intravaginal route avoids first-pass liver metabolism, reducing risk of hypertension and headaches."
+    },
+    {
+      "id": "todo",
+      "title": "To Do",
+      "icon": "note",
+      "items": [
+        "Keep a 3-day diet log and send your lean body mass (lbs)",
+        "Consider adding 2 Brazil nuts/day for selenium to support T4→T3 conversion",
+        "Request AMH lab to check ovarian reserve",
+        "Request Bromocriptine 2.5 mg prescription from HCP",
+        "Order Genova GI Effects stool test — stop berberine and probiotics 2 weeks before collecting"
+      ]
+    }
+  ],
+  "pillarsIntro": {
+    "eyebrow": "Your Path to Healing",
+    "title": "The Five Pillars of Hypothalamic Health"
+  },
+  "pillars": [
+    {
+      "id": "1",
+      "roman": "I",
+      "name": "Foundational Support",
+      "tag": "Nutraceuticals",
+      "lede": "Balance your neuro-immune-endocrine system from the top down — hypothalamic support first. Wait 15 minutes to eat after taking.",
+      "products": [
+        { "productId": "genesis-gold", "name": "Genesis Gold®", "dose": "1/3 scoop per 50 lbs of body weight · daily" },
+        { "productId": "sacred-seven", "name": "Sacred Seven®", "dose": "1 scoop · daily" }
+      ],
+      "items": []
+    },
+    {
+      "id": "2",
+      "roman": "II",
+      "name": "Diet",
+      "tag": "Nutrition",
+      "items": [
+        "Follow the DMAR nutritional path to healing",
+        "Macronutrients calculated from lean body mass (LBM)",
+        "Chrononutrition: eat heaviest meals early in the day; no more than 20% of daily protein needs after dark",
+        "Increase breakfast protein"
+      ]
+    },
+    {
+      "id": "3",
+      "roman": "III",
+      "name": "Activity",
+      "tag": "Movement",
+      "items": [
+        "Aerobic activity in the morning — goal: HIIT 3× per week",
+        "Resistance training at least 2× per week",
+        "Don't forget to stretch"
+      ]
+    },
+    {
+      "id": "4",
+      "roman": "IV",
+      "name": "Sleep",
+      "tag": "Recovery",
+      "items": [
+        "Get off digital devices after dusk",
+        "Use white noise if needed",
+        "Sleep in complete darkness"
+      ]
+    },
+    {
+      "id": "5",
+      "roman": "V",
+      "name": "Mindset",
+      "tag": "Inner Work",
+      "items": [
+        "Daily CALM practice — Connect · Attitude · Love · Meditation"
+      ]
+    }
+  ],
+  "resources": [
+    { "label": "Educational videos", "href": "https://youtube.com/c/DeborahMaragopoulosFNP", "external": true },
+    { "label": "Fullscript dispensary", "href": "https://us.fullscript.com/welcome/dmaragopoulos-", "external": true },
+    { "label": "CALM practice guide", "href": "https://genesisgold.com/blog/how-to-be-the-calm-in-your-life/", "external": true },
+    { "label": "Lean body mass calculator", "href": "https://www.calculator.net/body-fat-calculator.html", "external": true }
+  ],
+  "signature": {
+    "name": "Deborah Maragopoulos",
+    "title": "MN, FNP · The Hormone Queen® · Genesis Health"
+  }
+}

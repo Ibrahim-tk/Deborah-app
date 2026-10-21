@@ -3,3 +3,8 @@
 .note { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .field { display: grid; }
 .label { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+
+/* Read-only fields (date of birth, sex at birth): label over plain value, no control. */
+.locked { display: grid; gap: 2px; }
+.lockedLabel { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: #5a4f55; }
+.lockedValue { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }

@@ -1,6 +1,6 @@
 /**
  * Generative appointment form (design 2026-10-21): after "Yes, I have an appointment", one small card with
- * the provider's name and the date, and the flow's own primary button. Nothing else.
+ * the provider's name and the date, and a small Save at the bottom right (2026-10-21). Nothing else.
  */
 import { useState } from 'react';
 import { Button, Input } from '@mobile/ui';
@@ -23,7 +23,7 @@ export function AppointmentForm({ active, onSave }: { active: boolean; onSave: (
     >
       <Input label="Provider name" placeholder="e.g. Dr. Patel" value={provider} autoCapitalize="words" disabled={!active} onChange={(e) => setProvider(e.target.value)} />
       <Input label="Appointment date" type="date" value={date} disabled={!active} onChange={(e) => setDate(e.target.value)} />
-      {active && <Button type="submit" fullWidth disabled={!date}>Save appointment</Button>}
+      {active && <Button type="submit" size="sm" className={styles.save} disabled={!date}>Save</Button>}
     </form>
   );
 }

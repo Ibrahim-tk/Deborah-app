@@ -12,9 +12,11 @@ export interface ListRowProps {
   value?: string;
   destructive?: boolean;
   onPress?: () => void;
+  /** `compact`: 48 pt, regular-weight callout title in body ink — for dense settings lists. */
+  density?: 'default' | 'compact';
 }
 
-export function ListRow({ title, subtitle, leading, trailing = 'chevron', value, destructive, onPress }: ListRowProps) {
+export function ListRow({ title, subtitle, leading, trailing = 'chevron', value, destructive, onPress, density = 'default' }: ListRowProps) {
   const content = (
     <>
       {leading && <span className={styles.leading}>{leading}</span>}
@@ -23,9 +25,9 @@ export function ListRow({ title, subtitle, leading, trailing = 'chevron', value,
         {subtitle && <span className={styles.subtitle}>{subtitle}</span>}
       </span>
       {value && <span className={styles.value}>{value}</span>}
-      {trailing === 'chevron' ? onPress && <Icon name="chevron" size={20} className={styles.chevron} /> : trailing}
+      {trailing === 'chevron' ? onPress && <Icon name="chevron" size={density === 'compact' ? 18 : 20} className={styles.chevron} /> : trailing}
     </>
   );
-  const cls = cx(styles.root, destructive && styles.destructive);
+  const cls = cx(styles.root, density === 'compact' && styles.compact, destructive && styles.destructive);
   return onPress ? <button type="button" className={cls} onClick={onPress}>{content}</button> : <div className={cls}>{content}</div>;
 }

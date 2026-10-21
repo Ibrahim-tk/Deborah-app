@@ -13,6 +13,10 @@ export interface SuggestionCard {
   artifact?: HomeArtifactId;
   icon?: IconName;
   onPress: () => void;
+  /** Middle figure under the title, e.g. Profile complete · 40%. */
+  stat?: { label: string; value: string };
+  /** Quiet bottom row: [left, right]. */
+  foot?: [string, string];
   /** @deprecated Prefer tone + artifact. */
   imageSrc?: string;
 }
@@ -63,12 +67,24 @@ export function SuggestionCarousel({
                 onClick={item.onPress}
               >
                 <span className={styles.icon} aria-hidden>
-                  <Icon name={icon} size={18} />
+                  <Icon name={icon} size={20} />
                 </span>
-                <span className={styles.copy}>
+                {/* Serif title centred in the card's open middle (reference: finance card). */}
+                <span className={styles.middle}>
                   <span className={styles.title}>{item.title}</span>
-                  {item.sub && <span className={styles.sub}>{item.sub}</span>}
+                  {item.stat ? (
+                    <span className={styles.stat}>
+                      <span className={styles.statLabel}>{item.stat.label}</span>
+                      <span className={styles.statValue}>{item.stat.value}</span>
+                    </span>
+                  ) : item.sub && <span className={styles.sub}>{item.sub}</span>}
                 </span>
+                {item.foot && (
+                  <span className={styles.foot}>
+                    <span>{item.foot[0]}</span>
+                    <span>{item.foot[1]}</span>
+                  </span>
+                )}
                 <span className={styles.arrow} aria-hidden>
                   <Icon name="chevron" size={18} />
                 </span>

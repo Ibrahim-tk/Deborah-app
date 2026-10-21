@@ -6,7 +6,7 @@ import { selectActiveProfile, useAppStore } from '@shared/store';
 import { IconButton } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
 import { answersFromProfile, healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
-import { healthDetailSections } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
+import { LOCKED_KEYS, healthDetailSections } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
 import styles from './HealthDetails.module.css';
 
 export function HealthDetails() {
@@ -30,14 +30,19 @@ export function HealthDetails() {
             <IconButton icon="edit" size="sm" label={`Edit ${s.title.toLowerCase()}`} onClick={() => edit(s.id)} />
           </div>
           <dl className={styles.list}>
-            {s.rows.map((r) => (
-              <button key={r.key} type="button" className={styles.row} onClick={() => edit(s.id)}>
+            {s.rows.map((r) => {
+              const locked = LOCKED_KEYS.has(r.key);
+              const body = (
                 <span className={styles.text}>
                   <dt className={styles.label}>{r.label}</dt>
-                  <dd className={styles.value} data-empty={!r.value || undefined}>{r.value ?? 'Add'}</dd>
+                  <dd className={styles.value} data-empty={!r.value || undefined} data-locked={locked || undefined}>{r.value ?? (locked ? 'Not set' : 'Add')}</dd>
                 </span>
-              </button>
-            ))}
+              );
+              // Date of birth and sex at birth are read-only: plain rows, no tap target.
+              return locked
+                ? <div key={r.key} className={styles.row}>{body}</div>
+                : <button key={r.key} type="button" className={styles.row} onClick={() => edit(s.id)}>{body}</button>;
+            })}
           </dl>
         </section>
       ))}

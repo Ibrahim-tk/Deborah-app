@@ -53,3 +53,11 @@
   letter-spacing: -0.015em;
   color: var(--color-ink-secondary);
 }
+
+/* Text hierarchy matched to Settings compact rows (designer, 2026-10-21):
+   title 15px regular ink · description 13px lighter plum (#5a4f55, 7.8:1) · legend as a quiet label. */
+.group { gap: var(--space-3); padding: var(--space-4) var(--space-5); }
+.group label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); }
+.group label + span { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: 0; color: #5a4f55; }
+.legend { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: 0; color: #5a4f55; }
+.text { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }

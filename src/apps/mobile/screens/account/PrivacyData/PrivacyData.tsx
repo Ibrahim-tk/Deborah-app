@@ -9,7 +9,7 @@
 import { useCallback, useState } from 'react';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Divider, Header, ListRow, Panel, useAlert } from '@mobile/ui';
+import { Divider, Icon, Header, ListRow, useAlert } from '@mobile/ui';
 import { useNav, useRoute } from '@mobile/navigation';
 import { DeleteConfirmSheet } from './parts/DeleteConfirmSheet';
 import { RevokeConsentSheet } from './parts/RevokeConsentSheet';
@@ -80,10 +80,14 @@ export default function PrivacyData() {
           />
         </div>
 
-        <Panel tone="lilac" icon="lock">
-          <p className={styles.heading}>How your data is used</p>
-          <p className={styles.text}>Your health information is never used for training without your consent.</p>
-        </Panel>
+        {/* Open note on the canvas, no tinted panel (design 2026-10-21). */}
+        <div className={styles.info}>
+          <span className={styles.infoIcon} aria-hidden><Icon name="lock" size={18} /></span>
+          <div>
+            <p className={styles.infoTitle}>How your data is used</p>
+            <p className={styles.infoText}>Your health information is never used for training without your consent.</p>
+          </div>
+        </div>
 
         <div className={styles.group}>
           <ListRow title="Delete my account and all data" destructive trailing={null} onPress={startDelete} />

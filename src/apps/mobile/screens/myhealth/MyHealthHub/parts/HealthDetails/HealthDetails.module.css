@@ -18,3 +18,18 @@ button.row:focus-visible { outline: 2px solid var(--color-accent); outline-offse
 .value { margin: 0; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); overflow-wrap: anywhere; }
 .value[data-empty] { color: var(--color-accent); }
 .pencil { flex: none; color: var(--color-accent); }
+
+/* Home card language (designer, 2026-10-21): sans section label like "Manage your health details"; 32px white card, 20px sides. */
+.heading { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }
+.root { padding: var(--space-4) var(--space-5) var(--space-2); border-radius: 32px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 6%, transparent); }
+.title { font-weight: var(--weight-regular); }
+
+/* Calm text hierarchy (designer, 2026-10-21): card title leads · labels quiet · values steady · only "Add" in accent. */
+.title { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.015em; }
+.meta { color: #5a4f55; }
+.row { padding: 10px 0; }
+.text { gap: 0; }
+.label { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: #5a4f55; }
+.value { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
+.value[data-empty] { color: var(--color-accent); }
+.value[data-locked][data-empty] { color: #5a4f55; }

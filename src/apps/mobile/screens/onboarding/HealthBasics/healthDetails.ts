@@ -32,6 +32,10 @@ const LABELS: Record<string, string> = {
   guardianNames: 'Guardians',
 };
 
+/** Set once at onboarding and shown read-only afterwards (designer, 2026-10-21).
+ *  OPEN: how does someone correct a wrong date of birth or sex at birth — support request? */
+export const LOCKED_KEYS = new Set(['birthDate', 'sex']);
+
 /** Onboarding steps that are about setup, not health details. */
 const SETUP = new Set(['profileFor', 'relationship', 'memberName', 'consent']);
 

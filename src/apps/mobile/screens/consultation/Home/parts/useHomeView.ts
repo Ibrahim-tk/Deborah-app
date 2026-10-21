@@ -8,10 +8,10 @@ import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import type { Recommendation } from './HomeKit';
 import { useHomeData } from './useHomeData';
 
-export type HomeState = 'new' | 'returning' | 'established';
+/** Two Homes (designer, 2026-10-21): brand new after sign-up, otherwise returning (every login). */
+export type HomeState = 'new' | 'returning';
 
 // OPEN: "when does Home switch to the few-weeks-in layout?" — documented default: day 14 of the plan.
-const ESTABLISHED_FROM_DAY = 14;
 
 const relative = (days: number) => (days <= 0 ? 'today' : days === 1 ? 'yesterday' : `${days} days ago`);
 const sentenceCase = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -37,7 +37,7 @@ export function useHomeView() {
 
   // Sign-up keeps one Home (the sign-up one); its cards come and go as she acts (design 2026-10-20).
   const signup = useAppStore((s) => s.authFlow === 'signup');
-  const state: HomeState = d.isNew || signup ? 'new' : hub.plan && hub.plan.day >= ESTABLISHED_FROM_DAY && !d.midIntake ? 'established' : 'returning';
+  const state: HomeState = d.isNew || signup ? 'new' : 'returning';
 
   const habits = (plan?.habits ?? []).map((h) => ({ id: h.id, text: h.text, done: h.doneDates.includes(today) }));
   const nextHabit = habits.find((h) => !h.done)?.text;

@@ -8,9 +8,12 @@
  * { position: static }, which is what broke the locked fixed-tree layout.
  */
 .root > :not(span):not([data-overlay]):not(.art):not(.fade) { position: relative; }
-.step { display: flex; flex-direction: column; gap: var(--space-5); animation: step-in 0.4s ease-out both; }
-@keyframes step-in { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .step { animation: none; } }
+.step { display: flex; flex-direction: column; gap: var(--space-5); animation: step-in 420ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both; }
+/* Outgoing question: quick fade + slight lift (keep in sync with EXIT_MS in parts/useStepTransition.ts). */
+.stepLeaving { animation: step-out 220ms cubic-bezier(0.4, 0, 1, 1) both; pointer-events: none; }
+@keyframes step-in { from { opacity: 0; transform: translateY(12px); } }
+@keyframes step-out { to { opacity: 0; transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) { .step, .stepLeaving { animation: none; } }
 .title {
   font: var(--weight-regular) calc(28px * var(--type-scale)) / calc(34px * var(--type-scale)) var(--font-artistic, var(--font-display));
   letter-spacing: -0.01em;

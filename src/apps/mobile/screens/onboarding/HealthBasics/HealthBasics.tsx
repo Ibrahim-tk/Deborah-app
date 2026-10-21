@@ -23,6 +23,7 @@ import { StepBody } from './parts/StepBody';
 import { ConsentSheet } from './parts/ConsentSheet';
 import { BloomReveal } from './parts/BloomReveal';
 import { useTitleFade } from './parts/useTitleFade';
+import { useStepTransition } from './parts/useStepTransition';
 import { namedReasonsComplete } from '@mobile/patterns/widgets';
 import styles from './HealthBasics.module.css';
 
@@ -50,7 +51,9 @@ export default function HealthBasics() {
   const consentOpen = step.kind === 'consent';
   // Under the consent sheet, keep showing the previous question (usually DOB).
   const under = consentOpen && at > 0 ? steps[at - 1] : step;
-  const fade = useTitleFade(under.key);
+  // Outgoing question fades out before the next fades in.
+  const { shown, leaving } = useStepTransition(under);
+  const fade = useTitleFade(shown.key);
   const value = answers[step.key] ?? '';
   const underValue = answers[under.key] ?? '';
   const last = at === steps.length - 1;
@@ -136,9 +139,9 @@ export default function HealthBasics() {
       {!consentOpen && (
         <>
           <div className={styles.body}>
-            <div key={under.key} className={styles.step}>
-              <h1 ref={fade.titleRef} className={`${styles.title} ${styles.heading}`}>{titleFor(under, answers)}</h1>
-              <StepBody step={under} answers={answers} set={set} advance={advance} />
+            <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''}`}>
+              <h1 ref={fade.titleRef} className={`${styles.title} ${styles.heading}`}>{titleFor(shown, answers)}</h1>
+              <StepBody step={shown} answers={answers} set={set} advance={advance} />
             </div>
           </div>
           <div className={styles.footer}>

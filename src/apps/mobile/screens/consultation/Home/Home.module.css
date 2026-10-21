@@ -6,8 +6,8 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   /* Bottom melt into PurpleDockBloom only — top mask was washing the greeting. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 88px), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 88px), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 56px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 56px), transparent);
   display: grid;
   align-content: start;
   /* auto rows shrink overflow:hidden cards to padding when the feed is taller than the phone. */

@@ -11,7 +11,7 @@
  * OPEN: the spec places this inline in the thread; confirm the sheet presentation with Deborah.
  */
 import { useState } from 'react';
-import { ActionTile, BottomSheet, Button } from '@mobile/ui';
+import { BottomSheet, Button, Icon } from '@mobile/ui';
 import styles from './EscalationCard.module.css';
 
 export interface EscalationCardProps {
@@ -35,8 +35,16 @@ export function EscalationCard({ body, reasons, details, dismissed, onBook, onDi
 
   return (
     <>
-      {/* Inline record: one quiet row that reopens the sheet (design direction 2026-10-14). */}
-      <ActionTile className={styles.record} icon="calendar" title="Talk with Deborah directly" meta={details?.slice(0, 2).join(' · ') || 'Worth a personal look'} onClick={() => setOpen(true)} />
+      {/* Inline record → branded hero card (designer, 2026-10-21): Deborah cut-out on the aurora field, headline,
+          and a "Talk with Deborah" CTA that reopens the sheet. The sheet's actions and labels are unchanged. */}
+      <div className={styles.hero}>
+        <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" aria-hidden />
+        <span className={styles.arrow} aria-hidden><Icon name="chevron" size={18} /></span>
+        <div className={styles.heroCopy}>
+          <p className={styles.heroTitle}>Talk with Deborah directly</p>
+        </div>
+        <Button size="sm" className={styles.cta} onClick={() => setOpen(true)}>Talk with Deborah</Button>
+      </div>
       <BottomSheet open={Boolean(open)} onClose={() => setOpen(false)}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>
           <h2 id="escalation-title" className={styles.title}>{body}</h2>

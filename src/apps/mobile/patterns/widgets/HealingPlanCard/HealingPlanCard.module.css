@@ -61,3 +61,55 @@
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
 }
+
+/* Unlocked: full-width white dot-track card (design 2026-10-21). Count left, week dots right, one-line context. */
+.plan {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-5);
+  border-radius: 32px;
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 6%, transparent);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.plan::after { display: none; }
+button.plan:active { transform: scale(0.99); }
+button.plan:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.top { display: flex; align-items: center; justify-content: space-between; }
+.plan .icon { width: 44px; height: 44px; background: none; color: var(--color-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 14%, transparent); }
+.arrow { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-ink) 5%, var(--white)); color: var(--color-ink); }
+.copy { display: grid; gap: 2px; }
+.plan .title { font: var(--weight-regular) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.plan .meta { color: #5a4f55; }
+.bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); }
+.count {
+  display: flex;
+  align-items: baseline;
+  font: var(--weight-regular) calc(48px * var(--type-scale, 1)) / 1 var(--font-body);
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--color-ink);
+}
+.of { font-size: 0.42em; letter-spacing: 0; color: #5a4f55; }
+.unit { margin-left: var(--space-2); font: var(--weight-regular) var(--fs-footnote) / 1 var(--font-body); letter-spacing: 0; color: #5a4f55; }
+.dots { display: grid; grid-template-columns: repeat(7, 10px); grid-auto-rows: 10px; gap: 8px; padding-bottom: 6px; }
+.dots > i { border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 22%, transparent); }
+.dots > i[data-on] { background: var(--color-ink); box-shadow: none; }
+.dots > i[data-now] { background: var(--color-accent); box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { button.plan:active { transform: none; } }
+
+/* Standard card spacing (2026-10-21): matches SuggestionCarousel cards. */
+.plan { padding: var(--space-4); gap: var(--space-3); }
+.plan .copy { margin-top: var(--space-1); }
+.plan { padding-inline: var(--space-5); }
+
+/* Day dots (2026-10-21): 90 small dots, 15 × 6; empty days softly filled so the track stays visible. */
+.dots { grid-template-columns: repeat(15, 6px); grid-auto-rows: 6px; gap: 4px; padding-bottom: 4px; }
+.dots > i { box-shadow: none; background: color-mix(in srgb, var(--color-ink) 16%, transparent); }
+.dots > i[data-on] { background: var(--color-ink); }
+.dots > i[data-now] { background: var(--color-accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-accent) 25%, transparent); }
+.dots > i[data-now] { box-shadow: none; }

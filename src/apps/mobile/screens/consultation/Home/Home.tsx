@@ -1,7 +1,7 @@
 /**
  * @screen  M-2.0 · Home
  * @flow    F02 Core consultation (landing)
- * @states  1 new / skipped chat · 2 returning after a chat · 3 a few weeks in (see parts/State*.tsx)
+ * @states  new (just signed up) · returning (every login) — see parts/State*.tsx
  *          · account (sign-up comes before onboarding, so there's no guest save prompt — plan P-10)
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=191-3398
  * @spec    intake V2 brief §7 (design direction 2026-10-12) — OPEN: not in docs/ux/F02 yet
@@ -18,7 +18,6 @@ import { useAccountGate } from '@mobile/hooks/useAccountGate';
 import { GreetingSheet } from './parts/GreetingSheet';
 import { StateNew } from './parts/StateNew';
 import { StateReturning, type NextStep } from './parts/StateReturning';
-import { StateEstablished } from './parts/StateEstablished';
 import { useHomeView } from './parts/useHomeView';
 
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
@@ -162,22 +161,7 @@ export default function Home() {
             steps={steps.slice(0, 3)}
             intakeCard={intakeCard}
             journey={d.planDay ? { day: d.planDay, today: d.nextHabit, focus: planFocus, onPress: journey } : undefined}
-            reports={reports}
-            documents={documents}
-            destinations={destinations}
-            recommendations={d.recommendations}
-            onShop={shop}
-            onLabs={() => open('M-5.3')}
-          />
-        )}
-        {d.state === 'established' && d.planDay && (
-          <StateEstablished
-            day={d.planDay}
-            habits={d.habits}
-            onToggle={(id) => useAppStore.getState().toggleHabit(profileId, id, d.today)}
-            continueMeta={d.checkInDue ? 'Your check-in is due' : d.when ? `Last conversation ${d.when} · ${d.topic}` : undefined}
-            onContinue={d.checkInDue ? () => openAsk({ mode: 'checkin' }) : resume}
-            intakeCard={intakeCard}
+            onNotes={go('M-9.1')}
             reports={reports}
             documents={documents}
             destinations={destinations}

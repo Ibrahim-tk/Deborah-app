@@ -1,6 +1,6 @@
 /**
  * Home · State 2 — returning. Order (design 2026-10-20): last conversation · intake if unfinished, else
- * the healing plan · records · My health + Family · shop.
+ * the healing plan · Manage your health details · shop.
  */
 import { HealingPlanCard, HomeMediaHero, IntakeCompletionCard, type NextIntent, type Recommendation } from '@mobile/patterns/widgets';
 import { HomeSections } from './HomeSections';
@@ -23,6 +23,7 @@ export interface StateReturningProps {
   destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
+  onNotes: () => void;
 }
 
 export function StateReturning(p: StateReturningProps) {

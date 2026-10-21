@@ -55,6 +55,7 @@ import proxyConsult from './conversation/flows/proxyConsult.json';
 import documentTypes from './documents/types.json';
 import extractionsByType from './documents/extractions.json';
 import documentReviewJson from './documents/review.json';
+import healingPlanDocumentJson from './health/healing-plan-document.json';
 import type { Flow } from '../types/flow';
 import type { DocumentExtraction, DocumentFormat, DocumentType } from '../types/domain';
 
@@ -146,3 +147,33 @@ export interface DocumentReviewCopy {
   suggestions: Record<Exclude<DocumentType, 'lab'>, string[]>;
 }
 export const documentReview = documentReviewJson as DocumentReviewCopy;
+
+/** Clinical healing-plan document shown on M-7.3 (placeholder copy until Deborah approves). */
+export interface HealingPlanDocument {
+  status: 'placeholder' | 'approved';
+  brand: string;
+  preparedBy: string;
+  dateLabel: string;
+  clinical: { title: string; items: { label: string; value: string }[] };
+  callout: { title: string; body: string };
+  conditions: {
+    id: string;
+    title: string;
+    icon: string;
+    items: string[];
+    note?: string;
+  }[];
+  pillarsIntro: { eyebrow: string; title: string };
+  pillars: {
+    id: string;
+    roman: string;
+    name: string;
+    tag: string;
+    lede?: string;
+    products?: { productId: string; name: string; dose: string }[];
+    items: string[];
+  }[];
+  resources: { label: string; href: string; external?: boolean }[];
+  signature: { name: string; title: string };
+}
+export const healingPlanDocument = healingPlanDocumentJson as HealingPlanDocument;
