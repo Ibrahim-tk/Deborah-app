@@ -277,6 +277,8 @@ export interface Message {
   quickReplies?: QuickReplies;
   /** F09c debrief summary card: one line per filled bucket. */
   visitSummary?: { label: string; text: string }[];
+  /** User photos / files sent from the composer (design 2026-10-21); `src` previews images. */
+  attachments?: { name: string; src?: string }[];
   meta?: MessageMeta;
 }
 

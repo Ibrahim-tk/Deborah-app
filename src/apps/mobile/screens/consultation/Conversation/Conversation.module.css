@@ -39,3 +39,6 @@
 @media (prefers-reduced-motion: reduce) {
   .column[data-arriving] [data-role='user'], .column[data-arriving] [data-role='user'] ~ * { animation: none; }
 }
+
+/* Sent photos + optional text, stacked on the right (design 2026-10-21). */
+.sentGroup { display: grid; gap: var(--space-1); justify-items: end; }

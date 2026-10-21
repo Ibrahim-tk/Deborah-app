@@ -1,3 +1,4 @@
+import { properName } from '../../utils/text';
 import type { StateCreator } from 'zustand';
 import { FLAGS } from '../../flags';
 import { SELF_PROFILE_ID } from '../defaults';
@@ -46,12 +47,17 @@ export const profilesActions: StateCreator<AppState, [], [], Actions> = (set) =>
       const intakeV2 = { step: 'consent' as const, ...p.intakeV2, ...patch };
       return { profiles: { ...s.profiles, byId: { ...s.profiles.byId, [id]: { ...p, intakeV2 } } } };
     }),
-  addProfile: (p) =>
-    set((s) => ({ profiles: { byId: { ...s.profiles.byId, [p.id]: p }, order: [...s.profiles.order, p.id] } })),
+  // Names are always proper-cased on save (design 2026-10-21).
+  addProfile: (raw) =>
+    set((s) => {
+      const p = raw.name ? { ...raw, name: properName(raw.name) } : raw;
+      return { profiles: { byId: { ...s.profiles.byId, [p.id]: p }, order: [...s.profiles.order, p.id] } };
+    }),
   updateProfile: (id, patch) =>
     set((s) => {
       const p = s.profiles.byId[id];
-      return p ? { profiles: { ...s.profiles, byId: { ...s.profiles.byId, [id]: { ...p, ...patch } } } } : {};
+      const next = patch.name ? { ...patch, name: properName(patch.name) } : patch;
+      return p ? { profiles: { ...s.profiles, byId: { ...s.profiles.byId, [id]: { ...p, ...next } } } } : {};
     }),
   updateIntake: (id, patch) =>
     set((s) => {

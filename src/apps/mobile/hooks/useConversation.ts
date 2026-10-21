@@ -80,7 +80,6 @@ export function useConversation() {
     /** F05: opened from a follow-up notification (deep link `followup:<profileId>`). */
     startCheckIn: () => run({ kind: 'startCheckIn' }),
     /** Home "Complete your profile": the first onboarding question, no user message first. */
-    startProfile: () => run({ kind: 'startProfile' }),
     checkInReply: (messageId: string, optionId: string) => run({ kind: 'checkInReply', messageId, optionId }),
     /** F09c: open the visit debrief; `briefNoteId` links a Step 5 provider-brief. */
     startDebrief: (briefNoteId?: string) => {
@@ -100,6 +99,8 @@ export function useConversation() {
       const report = document.labReportId ? s.labs.reportsById[document.labReportId] : undefined;
       return run({ kind: 'shareDocument', document, report });
     },
+    /** Composer photos / files (design 2026-10-21): posted as images, then a placeholder reply. */
+    shareAttachments: (attachments: { name: string; src?: string }[], text?: string) => run({ kind: 'shareAttachments', attachments, text }),
     /** F11: Deborah offers an upload saved with "Not now" — once. */
     offerDocument: (documentId: string) => {
       const document = selectDocument(useAppStore.getState(), documentId);

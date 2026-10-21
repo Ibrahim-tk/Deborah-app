@@ -6,7 +6,7 @@
   display: flex;
   gap: var(--space-3);
   min-height: var(--tap-min);
-  align-items: center;
+  align-items: flex-start;
   padding: var(--space-2) 0;
   cursor: pointer;
 }
@@ -34,9 +34,7 @@
 .label { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
 .label[data-emphasis] { font-weight: var(--weight-medium); letter-spacing: -0.01em; }
 .description { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-/* With a description the box stays on the first line. */
-.row:has(.description) { align-items: flex-start; }
-.row:not(:has(.description)) .box { margin-top: 0; }
+/* Box always sits on the label's first line (design 2026-10-21), centred on that line via .box margin-top. */
 /* Small: 18 pt box, subhead label / footnote description; tighter row. */
 .root[data-size='sm'] .row { gap: var(--space-2); min-height: 36px; padding: 6px 0; }
 .root[data-size='sm'] .box { width: 18px; height: 18px; border-radius: 5px; margin-top: calc((var(--lh-subhead) - 18px) / 2); }

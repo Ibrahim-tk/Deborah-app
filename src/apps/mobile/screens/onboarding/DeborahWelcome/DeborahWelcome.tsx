@@ -22,9 +22,11 @@ export default function DeborahWelcome() {
   const { dismissSheet, resetTo, push, switchProfile } = useNav();
   const you = useAppStore((s) => s.profiles.byId[SELF_PROFILE_ID]?.name ?? '');
   const member = useAppStore((s) => (profileId === SELF_PROFILE_ID ? undefined : s.profiles.byId[profileId]));
-  const hello = member
-    ? `Thank you${you ? `, ${you}` : ''}. I’m glad you’re here for ${member.name}. Tell me what’s been going on, and I’ll ask what I need as we go.`
-    : `Thank you${you ? `, ${you}` : ''}. I’m so glad you’re here. Tell me what’s on your mind, and I’ll ask what I need as we go.`;
+  // Heading (serif) then body text, same hierarchy as Welcome (M-1.2).
+  const title = `Thank you${you ? `, ${you}` : ''}.`;
+  const body = member
+    ? `I’m glad you’re here for ${member.name}. Tell me what’s been going on, and I’ll ask what I need as we go.`
+    : 'I’m so glad you’re here. Tell me what’s on your mind, and I’ll ask what I need as we go.';
 
   const ask = () => {
     // The first conversation opens on top of Home, so Back lands there.
@@ -45,7 +47,10 @@ export default function DeborahWelcome() {
       <Sheet footer={<Button fullWidth onClick={ask}>{member ? `Start a conversation about ${member.name}` : 'Start a conversation'}</Button>}>
         <div className={styles.hello} data-placeholder>
           <DeborahBlob size={88} label="Deborah" />
-          <TextReveal className={styles.text} text={hello} delay={350} />
+          <div className={styles.copy}>
+            <TextReveal as="h1" className={styles.text} text={title} delay={350} />
+            <TextReveal className={styles.body} text={body} delay={650} />
+          </div>
         </div>
       </Sheet>
     </div>

@@ -1,5 +1,5 @@
 /**
- * @ui DeborahBlob — Deborah's AI presence: real portrait inside a lavender glass drop.
+ * @ui DeborahBlob — the Oracle's presence: real portrait inside a lavender glass drop.
  * Figma: Genesis › Deborah/AI blob (node 69:2527). Sizes in use: 160 hero, 40 chat avatar, 24 chat bar.
  * Layers are exported from Figma into /images/deborah/blob and scale with `size`.
  */

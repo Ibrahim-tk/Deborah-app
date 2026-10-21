@@ -94,7 +94,7 @@ export function BriefQuestions({ brief, onChange }: BriefListsProps) {
         variant="ghost"
         size="sm"
         leadingIcon="plus"
-        onClick={() => set([...questions, { text: '', why: 'Why I’m asking: context from my conversation with Deborah AI.' }])}
+        onClick={() => set([...questions, { text: '', why: 'Why I’m asking: context from my conversation with the Oracle.' }])}
       >
         Add question
       </Button>

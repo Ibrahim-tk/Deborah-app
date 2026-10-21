@@ -4,7 +4,8 @@
  * title; `onBack` shows a round glass back chevron (iOS 26). Titles wrap rather than
  * truncate at large text sizes (DESIGN.md › Text size control).
  *
- * Auto large title (design direction 2026-10-20): on plain-background screens ([data-bg='plain']), a titled
+ * Large titles are OFF app-wide (design 2026-10-21): the title always sits inline in the bar.
+ * Previously — auto large title (design direction 2026-10-20): on plain-background screens ([data-bg='plain']), a titled
  * header with no explicit `large` shows the large title just under the back button and folds it into the
  * bar by itself once the screen's content scrolls (no per-screen wiring).
  */
@@ -83,10 +84,14 @@ function useUnderlay(ref: RefObject<HTMLElement | null>, enabled: boolean) {
 }
 
 export function Header({ title, left, right, large: largeProp, transparent, onBack, backLabel = 'Back', safeTop = true, collapsed: collapsedProp = false }: HeaderProps) {
-  const auto = useAutoLarge(largeProp === undefined && Boolean(title));
+  // No large titles anywhere (design 2026-10-21): the title only ever sits small in the bar. `large` /
+  // `collapsed` are still accepted from screens but ignored; the auto large title is off.
+  void largeProp;
+  void collapsedProp;
+  const auto = useAutoLarge(false);
   useUnderlay(auto.ref, !transparent);
-  const large = largeProp ?? auto.on;
-  const collapsed = largeProp !== undefined ? collapsedProp : auto.collapsed;
+  const large = false;
+  const collapsed = false;
   // iOS 26 nav bar: a round Liquid Glass back button with only the chevron; the previous
   // title lives in the accessible name (and the button's tooltip).
   const back = onBack && <GlassButton icon="back" aria-label={`Back to ${backLabel}`} title={backLabel} onClick={onBack} />;

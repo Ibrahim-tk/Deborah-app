@@ -56,6 +56,10 @@ export interface SessionSlice {
   setName: (name: string) => void;
   acceptConsent: (version: string) => void;
   acceptHealthConsent: () => void;
+  /** M-10.2: clears health-data consent; the chat asks again the next time it needs health details. */
+  revokeHealthConsent: () => void;
+  /** M-10.1: edit account name / email (email already verified by the sheet's code step). */
+  updateAccount: (patch: { firstName?: string; lastName?: string; email?: string }) => void;
   dismissDisclaimer: () => void;
   switchProfile: (id: ID) => void;
   advanceClock: (days: number) => void;

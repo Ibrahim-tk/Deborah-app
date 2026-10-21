@@ -27,6 +27,7 @@ import {
   VisitSummaryCard,
   SourceTrace,
   labTrace,
+  SentAttachments,
 } from '@mobile/patterns/chat';
 import type { useConversation } from '@mobile/hooks/useConversation';
 import type { useMessageActions } from './useMessageActions';
@@ -111,6 +112,15 @@ export function MessageList({
     const showSuggestions = isLatestDeborah && !busy && (status === 'ready' || status === 'answered' || docReply) && (m.suggestions?.length ?? 0) > 0;
 
     if (m.role === 'user' && m.meta?.documentId) return <DocumentMessage key={m.id} documentId={m.meta.documentId} />;
+    // Composer photos: the images themselves, then any text in its usual bubble (design 2026-10-21).
+    if (m.role === 'user' && m.attachments?.length) {
+      return (
+        <div key={m.id} className={styles.sentGroup}>
+          <SentAttachments items={m.attachments} />
+          {m.text?.trim() && <MessageBubble role="user" text={m.text} />}
+        </div>
+      );
+    }
     if (m.role === 'user') return <MessageBubble key={m.id} role="user" text={m.text} />;
 
     if (SAFETY_KINDS.has(m.kind)) {

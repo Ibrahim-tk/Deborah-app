@@ -60,7 +60,8 @@
 
 .title {
   max-width: 220px;
-  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
+  /* iOS-native nav title size (17 pt, design 2026-10-21). */
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
   text-align: center;
   overflow-wrap: break-word;
 }

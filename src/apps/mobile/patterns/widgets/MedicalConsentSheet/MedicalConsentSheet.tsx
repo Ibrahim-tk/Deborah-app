@@ -5,7 +5,9 @@
  * @status  placeholder copy — OPEN: Deborah / legal to approve wording.
  */
 import { useState } from 'react';
-import { consentDoc } from '@shared/data';
+import { pronounForms } from '@shared/engine';
+import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
+import { properName } from '@shared/utils';
 import { BottomSheet, Button, Checkbox } from '@mobile/ui';
 import styles from './MedicalConsentSheet.module.css';
 
@@ -16,45 +18,34 @@ export interface MedicalConsentSheetProps {
 
 export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps) {
   const [checked, setChecked] = useState(false);
-  const [terms, setTerms] = useState(false);
+  // Family member's profile: consent is about them, by first name and their pronouns (copy 2026-10-21).
+  const member = useAppStore((s) => {
+    const p = selectActiveProfile(s);
+    return p && p.id !== SELF_PROFILE_ID && p.name ? p : undefined;
+  });
+  const name = member ? properName(member.name.trim().split(/\s+/)[0]) : '';
+  const their = member ? pronounForms(member.intake?.pronouns).their : '';
+  const title = member ? `Can the Oracle use ${name}’s health information?` : 'Can the Oracle use your health information?';
   return (
-    <>
     <BottomSheet
       open={open}
       onClose={() => {}}
       dismissible={false}
-      title="Can Deborah use your health information?"
-      footer={<Button fullWidth disabled={!checked} onClick={onAgree}>Agree to terms and conditions</Button>}
+      title={title}
+      footer={<Button fullWidth disabled={!checked} onClick={onAgree}>Agree and continue</Button>}
     >
       <div className={styles.body} data-placeholder>
         <p className={styles.copy}>
-          To answer you, Deborah uses what you share about your health: symptoms, medications and history. It stays private
-          to your account and is never sold. Her guidance is education, not a diagnosis or prescription.
+          {member ? (
+            <>To answer your questions about {name}, the Oracle uses what you share about {their} health: </>
+          ) : (
+            <>To answer you, the Oracle uses what you share about your health: </>
+          )}
+          symptoms, medications and history. It stays private to your account and is never sold. The Oracle is an AI
+          that speaks in Deborah’s voice. Its guidance is education, not a diagnosis or prescription.
         </p>
-        <Checkbox
-          checked={checked}
-          onChange={setChecked}
-          label={
-            <>
-              I accept the{' '}
-              {/* Opens the terms in their own sheet; must not toggle the box (design 2026-10-21). */}
-              <button
-                type="button"
-                className={styles.link}
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setTerms(true); }}
-              >
-                <span className={styles.u}>terms</span> and <span className={styles.u}>conditions</span>
-              </button>
-            </>
-          }
-        />
+        <Checkbox checked={checked} onChange={setChecked} label="I accept the Health Consent" />
       </div>
     </BottomSheet>
-    <BottomSheet open={terms} onClose={() => setTerms(false)} showClose height="large" title={consentDoc.terms.title}>
-      <div className={styles.terms} data-placeholder>
-        {consentDoc.terms.body.map((p) => <p key={p} className={styles.copy}>{p}</p>)}
-      </div>
-    </BottomSheet>
-    </>
   );
 }

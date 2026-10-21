@@ -3,7 +3,6 @@
  * mobile semantic tokens. --type-scale follows settings.textSize (docs/12-design-system.md §1).
  */
 import { useEffect, type CSSProperties } from 'react';
-import { useAppStore } from '@shared/store';
 import { CLIENT_NAV_EVENT, type ClientNavAction } from '@shared/utils/clientNavEvent';
 import { Navigator } from './navigation/Navigator';
 import { useNavStore } from './navigation/nav.store';
@@ -19,7 +18,8 @@ import './styles/mobile.skin.deborah.css';
 import './styles/mobile.theme.fig.css';
 
 export default function MobileApp() {
-  const textSize = useAppStore((s) => s.settings.textSize);
+  // Text size setting removed (design 2026-10-21): always the default scale, even if an old value is stored.
+  const textSize = 1;
 
   useEffect(() => {
     const onNav = (e: Event) => {

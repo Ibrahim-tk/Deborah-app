@@ -6,9 +6,9 @@
  * @spec    docs/ux/F02-consultation.md#m-21-conversation
  * @xref    web: W-2.1 (apps/web/screens/consultation/Conversation) — not built
  */
-import { useComposerAttachments } from '@mobile/patterns/chat';
+import { HeldChoiceContext, useComposerAttachments, type HeldChoice } from '@mobile/patterns/chat';
 import { meta } from '@mobile/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { asksForAnswer, isMinor, pendingFacts } from '@shared/engine';
 import { suggestionsData } from '@shared/data';
 import { thirdPerson } from './parts/thirdPerson';
@@ -45,11 +45,14 @@ export default function Conversation() {
   const intake = useIntakeFlow();
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
   // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
-  const { prefill, focus, startIntake } = useScreenParams<{ prefill: string; focus: boolean; startIntake: boolean }>();
+  const { prefill, focus } = useScreenParams<{ prefill: string; focus: boolean }>();
   const openSwitcher = useProfileSwitcher();
-  const [symptomsOpen, setSymptomsOpen] = useState(false);
   // Picked symptoms ride as pills in the composer; they become words only when the message is sent.
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [symptomSheet, setSymptomSheet] = useState(false);
+  // Multi-choice answers held in the composer (design 2026-10-21, same as M-2.12).
+  const [held, setHeld] = useState<HeldChoice | null>(null);
+  const heldValue = useMemo(() => ({ held, setHeld }), [held]);
   const attachments = useComposerAttachments('M-2.1', meta('M-2.1')?.title ?? 'Conversation');
   const withPicked = (text: string) => {
     if (!symptoms.length) return text;
@@ -96,8 +99,7 @@ export default function Conversation() {
   // The about-you step still needs free text, so it keeps the composer.
   // Opened from "Complete your health profile": stay blank until Deborah's first question lands,
   // never flashing the empty-chat greeting or suggestions.
-  const profileOpening = Boolean(startIntake) && isEmpty;
-  const profiling = (conversation?.status === 'intake' || (intakeMode && !aboutStep) || profileOpening) && !emergencyOpen;
+  const profiling = (conversation?.status === 'intake' || (intakeMode && !aboutStep)) && !emergencyOpen;
   const quizMsg = [...messages].reverse().find((m) => m.kind === 'intakeQuestion');
   // Wheel fields (year/height/weight) own the UI; `text` is composer-only (F02d) and still counts as quiz.
   const fieldWheel = quizMsg?.intake?.input && quizMsg.intake.input !== 'text';
@@ -124,16 +126,6 @@ export default function Conversation() {
     s.setConversation(conversation.id, { followUpAfterReview: false });
     if (s.notificationPermission === 'unknown') presentSheet('M-2.8');
   }, [conversation?.followUpAfterReview, conversation?.id, reviewOpen, presentSheet]);
-  // Home's first-visit sheet ("Complete your profile") lands straight on Deborah's first onboarding
-  // question (`startIntake`): no greeting screen in between (design direction 2026-10-12).
-  const profileStarted = useRef(false);
-  const startProfile = chat.startProfile;
-  useEffect(() => {
-    if (!startIntake || profileStarted.current || messages.length > 0 || busy) return;
-    profileStarted.current = true;
-    startProfile();
-  }, [startIntake, messages.length, busy, startProfile]);
-
   useEffect(() => {
     if (focus || prefill) inputRef.current?.focus();
   }, [focus, prefill]);
@@ -208,6 +200,7 @@ export default function Conversation() {
   // Someone else's chat: quick start questions in third person, using their pronouns.
 
   return (
+    <HeldChoiceContext.Provider value={heldValue}>
     <div className={styles.root} data-xref="M-2.1 · Conversation">
       {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
       <Aura />
@@ -236,7 +229,7 @@ export default function Conversation() {
             {intakeMode ? (
               <IntakeFlow flow={intake} onScan={(field) => presentSheet('M-2.9', { field })} onPick={(t) => send(t)} />
             ) : isEmpty ? (
-              !profileOpening && (() => {
+              (() => {
                 return (
                   <MotionDiv key="greeting" className={styles.greetingWrap} exit={{ opacity: 0, y: -40, scale: 0.97, transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } }}>
                     <Greeting
@@ -287,7 +280,7 @@ export default function Conversation() {
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
         {/* Empty chat shows starter suggestions; the intake tile waits until after an answer (design 2026-10-21). */}
-        {isEmpty && !intakeMode && !profileOpening && (
+        {isEmpty && !intakeMode && (
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
         )}
         {profile && healthProfileCompletion(profile) < 1 && conversation?.status === 'answered' && (
@@ -296,22 +289,44 @@ export default function Conversation() {
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
         {/* The composer never leaves the chat (design 2026-10-20): during intake and choice questions it stays,
             and typing there answers "Other". */}
+        <SymptomPicker open={symptomSheet} onClose={() => setSymptomSheet(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
         {<Composer
           value={draft}
           onChange={setDraft}
           onSend={(text) => {
-            const n = attachments.items.length;
+            // Multi-choice picks held in the composer: Send submits them (as in M-2.12); typed text stays for later.
+            if (held?.ids.length) {
+              held.finish(held.ids);
+              setHeld(null);
+              return;
+            }
             const typed = withPicked(text ?? draft);
-            attachments.clear();
-            send(typed.trim() || (n ? (n > 1 ? `I’ve attached ${n} files.` : 'I’ve attached a file.') : typed));
+            // Photos / files: post them as images, "Reading your photo…", then a placeholder reply (dummy).
+            if (attachments.items.length) {
+              const items = attachments.items.map((a) => ({ name: a.name, src: a.image }));
+              attachments.clear();
+              setDraft('');
+              chat.shareAttachments(items, typed);
+              return;
+            }
+            send(typed);
           }}
           onStop={chat.stop}
           onAttach={(source) => gate('documents', () => attachments.attach(source))}
           attachments={attachments.items}
           onRemoveAttachment={attachments.remove}
-          onSymptoms={() => setSymptomsOpen(true)}
-          tokens={symptoms}
-          onRemoveToken={(t) => setSymptoms((xs) => xs.filter((x) => x !== t))}
+          // Symptoms open the SymptomPicker sheet (search + close, area tabs, pills).
+          onSymptoms={() => setSymptomSheet(true)}
+          symptomsActive={symptoms.length > 0}
+          tokens={[...(held?.labels ?? []), ...symptoms]}
+          onRemoveToken={(t) => {
+            if (held?.labels.includes(t)) {
+              const ids = held.ids.filter((_, i) => held.labels[i] !== t);
+              setHeld(ids.length ? { ...held, ids, labels: held.labels.filter((x) => x !== t) } : null);
+              return;
+            }
+            setSymptoms((xs) => xs.filter((x) => x !== t));
+          }}
           onFocusChange={onFocusChange}
           generating={generating}
           lockedNote={emergencyOpen ? 'Please get help first.' : undefined}
@@ -344,7 +359,6 @@ export default function Conversation() {
       </div>
 
       {attachments.overlay}
-      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => { setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))]); inputRef.current?.focus(); }} />
       <ActionSheet
         open={Boolean(pressed)}
         onClose={() => setPressed(null)}
@@ -354,5 +368,6 @@ export default function Conversation() {
         ]}
       />
     </div>
+    </HeldChoiceContext.Provider>
   );
 }

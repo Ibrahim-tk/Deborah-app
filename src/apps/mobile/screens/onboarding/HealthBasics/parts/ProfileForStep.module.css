@@ -1,10 +1,11 @@
-/* Tall tonal cards (design 2026-10-21, collections / goal-category moodboard). Flat: no shadow (DESIGN.md). */
+/* Compact white cards — titles one step under the question (title-3), so the page reads question → option → detail.
+   Was: tall tonal cards (design 2026-10-21, collections / goal-category moodboard). Flat: no shadow (DESIGN.md). */
 .tiles { display: grid; gap: var(--space-3); }
 .tile {
   position: relative; overflow: hidden; isolation: isolate;
   display: grid; grid-template-columns: 1fr; align-items: start; gap: var(--space-3);
-  width: 100%; min-width: 0; min-height: 156px;
-  padding: var(--space-5); border: 0; border-radius: var(--radius-card);
+  width: 100%; min-width: 0; min-height: 0;
+  padding: var(--space-4) var(--space-5); border: 0; border-radius: var(--radius-card);
   background: var(--color-surface);
   box-shadow: inset 0 0 0 1px var(--surface-border);
   text-align: start; cursor: pointer; -webkit-tap-highlight-color: transparent;
@@ -16,8 +17,8 @@
 .tile[data-on] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
 
 /* Words sit top-left; the card's height gives them air. */
-.text { align-self: start; display: grid; gap: var(--space-2); min-width: 0; padding-right: var(--space-6); }
-.tileTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.text { align-self: start; display: grid; gap: var(--space-1); min-width: 0; padding-right: var(--space-6); }
+.tileTitle { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
 .tileSub { max-width: 22ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 
 /* Floral art, soft and partly off the bottom-right corner (as on the Home cards). */

@@ -9,7 +9,8 @@
   },
   "yearsPractice": 30,
   "shortBio": "Family nurse practitioner and author of The Hypothalamus Handbook, helping women understand their hormones for over thirty years.",
-  "welcomeNote": "Hello, I'm Deborah Maragopoulos FNP. I've spent thirty years helping women make sense of what their bodies are telling them, and I'd love to listen to you too.",
+  "welcomeTitle": "Hello, I’m the Oracle.",
+  "welcomeNote": "Everything I share comes from Deborah Maragopoulos’s thirty years of helping women and families make sense of their bodies, and I’d love to listen to you too.",
   "portrait": "/images/deborah/portrait-placeholder.svg",
   "voice": {
     "greetingMorning": "Good morning, {name}.",

@@ -15,7 +15,8 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { EdgeLight, Icon, IconButton, Menu, TextArea } from '@mobile/ui';
+import { BottomSheet, EdgeLight, Icon, IconButton, Menu, TextArea } from '@mobile/ui';
+import { SymptomDropdown } from '../SymptomDropdown';
 import styles from './Composer.module.css';
 
 export const COUNTER_FROM = 1800;
@@ -29,8 +30,6 @@ const ATTACH_ITEMS = [
   { id: 'camera', label: 'Camera', icon: 'camera' as const },
   { id: 'upload', label: 'Upload', icon: 'upload' as const },
 ];
-/* Symptoms moved from the toolbar into the + menu (design 2026-10-21) so the row is just + · mic · send. */
-const SYMPTOMS_ITEM = { id: 'symptoms', label: 'Symptoms', icon: 'health' as const };
 
 /** A photo or file waiting in the composer (shown as a thumbnail tile with ×). */
 export interface ComposerAttachment {
@@ -68,6 +67,11 @@ export interface ComposerProps {
   /** Picked symptoms shown as small selected pills above the text (not typed into it). */
   tokens?: string[];
   onRemoveToken?: (token: string) => void;
+  /** Symptoms button active state; defaults to "any tokens". */
+  symptomsActive?: boolean;
+  /** Dropdown mode: picked symptoms and a toggle; the Symptoms button opens SymptomDropdown over the composer. */
+  symptomsSelected?: string[];
+  onSymptomToggle?: (symptom: string) => void;
   /** Photos / files added from the + menu, shown as tiles above the text. */
   attachments?: ComposerAttachment[];
   onRemoveAttachment?: (id: string) => void;
@@ -86,6 +90,9 @@ export function Composer({
   onRemoveToken,
   attachments = [],
   onRemoveAttachment,
+  symptomsActive,
+  symptomsSelected,
+  onSymptomToggle,
   onFocusChange,
   generating,
   lockedNote,
@@ -103,6 +110,8 @@ export function Composer({
   const ownRef = useRef<HTMLTextAreaElement>(null);
   const area = inputRef ?? ownRef;
   const length = value.length;
+  const symptomsOn = symptomsActive ?? tokens.length > 0;
+  const [symptomMenu, setSymptomMenu] = useState(false);
   const canSend = (value.trim().length > 0 || tokens.length > 0 || attachments.length > 0) && length <= MAX_CHARS && !generating && !lockedNote;
 
   useEffect(() => onRecordingChange?.(recording), [recording, onRecordingChange]);
@@ -195,6 +204,12 @@ export function Composer({
 
   return (
     <div className={styles.wrap}>
+      {/* Symptoms open in a bottom sheet (design 2026-10-21, was a floating overlay); taps still toggle straight in. */}
+      {onSymptomToggle && (
+        <BottomSheet open={symptomMenu} onClose={() => setSymptomMenu(false)} showClose height="large" title="Symptoms">
+          <SymptomDropdown inSheet selected={symptomsSelected ?? []} onToggle={onSymptomToggle} onClose={() => setSymptomMenu(false)} />
+        </BottomSheet>
+      )}
       {lockedNote && <p className={styles.locked}>{lockedNote}</p>}
       <div
         className={styles.bar}
@@ -262,11 +277,29 @@ export function Composer({
           </div>
           <div className={styles.toolbar}>
             <Menu
-              items={onSymptoms ? [...ATTACH_ITEMS, SYMPTOMS_ITEM] : ATTACH_ITEMS}
-              onSelect={(id) => (id === SYMPTOMS_ITEM.id ? onSymptoms?.() : onAttach(id as AttachSource))}
+              items={ATTACH_ITEMS}
+              onSelect={(id) => onAttach(id as AttachSource)}
               disabled={Boolean(lockedNote) || generating}
               trigger={<IconButton icon="plus" size="sm" label="Add attachment" disabled={Boolean(lockedNote) || generating} />}
             />
+            {/* Symptoms (design 2026-10-21): a labelled dropdown trigger beside +, opening a floating overlay above
+                the composer (SymptomDropdown) instead of the full sheet. Picked → tinted, label only. */}
+            {(onSymptomToggle || onSymptoms) && (
+              <button
+                type="button"
+                className={styles.symptomsBtn}
+                data-active={symptomsOn || undefined}
+                data-open={symptomMenu || undefined}
+                aria-haspopup="dialog"
+                aria-expanded={symptomMenu}
+                onClick={() => (onSymptomToggle ? setSymptomMenu((o) => !o) : onSymptoms?.())}
+                disabled={Boolean(lockedNote) || generating}
+              >
+                {/* Label only, no stethoscope or count (design 2026-10-21). */}
+                <span>Symptoms</span>
+                <Icon name="chevronDown" size={14} className={styles.symptomsChevron} />
+              </button>
+            )}
             <div className={styles.end}>
               {!generating && (
                 <IconButton icon="mic" size="sm" label="Dictate" onClick={startRecording} disabled={Boolean(lockedNote)} />

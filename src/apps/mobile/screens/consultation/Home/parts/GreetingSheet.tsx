@@ -14,7 +14,7 @@ export interface GreetingSheetProps {
 
 export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m Deborah. Ask me anything about how you’re feeling, and we’ll take it from there together.`;
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m the Oracle, an AI that speaks in Deborah’s voice. Ask me anything about how you’re feeling, and we’ll take it from there together.`;
   return (
     <BottomSheet
       showClose

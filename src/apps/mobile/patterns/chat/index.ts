@@ -26,3 +26,6 @@ export * from './GuidanceNextSteps';
 export * from './VisitSummaryCard';
 export * from './AttachedDocument';
 export * from './SourceTrace';
+export * from './SymptomDropdown';
+export * from './SentAttachments';
+export * from './HeldChoice';

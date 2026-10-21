@@ -12,6 +12,8 @@ import { formatShortDate } from '@shared/utils';
 import { Divider, Header, ListRow, Panel, useAlert } from '@mobile/ui';
 import { useNav, useRoute } from '@mobile/navigation';
 import { DeleteConfirmSheet } from './parts/DeleteConfirmSheet';
+import { RevokeConsentSheet } from './parts/RevokeConsentSheet';
+import { useToast } from '@mobile/hooks/toast.store';
 import styles from './PrivacyData.module.css';
 
 export default function PrivacyData() {
@@ -20,6 +22,14 @@ export default function PrivacyData() {
   const alert = useAlert();
   const requestedAt = useAppStore((s) => s.settings.dataExportRequestedAt);
   const [confirming, setConfirming] = useState(false);
+  const consentAt = useAppStore((s) => s.healthConsentAt);
+  const [revoking, setRevoking] = useState(false);
+  const toast = useToast();
+  const revoke = () => {
+    useAppStore.getState().revokeHealthConsent();
+    setRevoking(false);
+    toast('Consent revoked');
+  };
   const closeConfirm = useCallback(() => setConfirming(false), []);
 
   const download = async () => {
@@ -60,6 +70,16 @@ export default function PrivacyData() {
           <ListRow title="Delete a profile" subtitle="In Family profiles" onPress={() => nav.push('M-6.6')} />
         </div>
 
+        {/* Consent (design 2026-10-21): health-data consent can be revoked here; the chat asks again when needed. */}
+        <div className={styles.group}>
+          <ListRow
+            title="Health data consent"
+            subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — Deborah will ask in chat'}
+            onPress={consentAt ? () => setRevoking(true) : undefined}
+            trailing={consentAt ? undefined : null}
+          />
+        </div>
+
         <Panel tone="lilac" icon="lock">
           <p className={styles.heading}>How your data is used</p>
           <p className={styles.text}>Your health information is never used for training without your consent.</p>
@@ -71,6 +91,7 @@ export default function PrivacyData() {
         <p className={styles.note}>Deletion is certified within 30 days.</p>
       </div>
       <DeleteConfirmSheet open={confirming} onClose={closeConfirm} onConfirm={deleteAll} />
+      <RevokeConsentSheet open={revoking} onClose={() => setRevoking(false)} onRevoke={revoke} />
     </div>
   );
 }

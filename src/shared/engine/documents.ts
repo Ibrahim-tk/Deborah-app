@@ -63,3 +63,24 @@ export function documentOfferReplySteps(ctx: EngineContext, messageId: string, o
   if (optionId === 'doc-discuss' && doc && !doc.deletedAt) return [...answered, ...shareDocumentSteps(ctx, doc, report)];
   return [...answered, ...deborahText(ctx, r.later)];
 }
+
+/**
+ * Composer attachments (design 2026-10-21): the photos post as images in the thread, Deborah "reads" them,
+ * then a short placeholder reply. Prototype only — nothing is analysed. Not a counted consultation.
+ */
+export function shareAttachmentsSteps(ctx: EngineContext, attachments: { name: string; src?: string }[], text?: string): Step[] {
+  if (isGated(ctx)) return [{ type: 'gate', reason: 'freeLimit' }];
+  const step = userBubble(ctx, text?.trim() ?? '');
+  const sent: Step = step.type === 'message' ? { ...step, message: { ...step.message, attachments } } : step;
+  const photos = attachments.some((a) => a.src);
+  const what = attachments.length > 1 ? (photos ? 'photos' : 'files') : photos ? 'photo' : 'file';
+  return [
+    sent,
+    ...pause(`Reading your ${what}`),
+    ...deborahText(
+      ctx,
+      `Thanks for sharing your ${what}. I can see it here. Tell me a little about what you’ve noticed and when it started, and I’ll take it from there.`,
+      { meta: { streaming: true, status: 'placeholder' } },
+    ),
+  ];
+}

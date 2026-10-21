@@ -1,3 +1,4 @@
+import { properName } from '../../utils/text';
 import type { StateCreator } from 'zustand';
 import { consentDoc } from '../../data';
 import { addDays, nowFrom } from '../../utils/dates';
@@ -10,6 +11,8 @@ type Actions = Pick<
   | 'setName'
   | 'acceptConsent'
   | 'acceptHealthConsent'
+  | 'revokeHealthConsent'
+  | 'updateAccount'
   | 'dismissDisclaimer'
   | 'switchProfile'
   | 'advanceClock'
@@ -53,6 +56,14 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
     }),
   acceptConsent: (version) => set((s) => ({ consentAcceptedAt: nowFrom(s).toISOString(), consentVersion: version })),
   acceptHealthConsent: () => set((s) => ({ healthConsentAt: s.healthConsentAt ?? nowFrom(s).toISOString() })),
+  revokeHealthConsent: () => set({ healthConsentAt: undefined }),
+  updateAccount: ({ firstName, lastName, email }) => {
+    if (firstName !== undefined && firstName.trim()) get().setName(properName(firstName.trim()));
+    set({
+      ...(lastName !== undefined && { accountLastName: lastName.trim() ? properName(lastName.trim()) : undefined }),
+      ...(email !== undefined && email.trim() && { accountEmail: email.trim() }),
+    });
+  },
   dismissDisclaimer: () => set((s) => ({ disclaimerSeenAt: s.disclaimerSeenAt ?? nowFrom(s).toISOString() })),
   switchProfile: (id) => set({ activeProfileId: id }),
   advanceClock: (days) => {

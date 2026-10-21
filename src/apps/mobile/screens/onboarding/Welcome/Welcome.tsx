@@ -58,7 +58,8 @@ export default function Welcome() {
         <div className={styles.intro}>
           <DeborahBlob size={112} label={persona.name} />
           <div className={styles.note} data-placeholder={persona.status === 'placeholder' || undefined}>
-            <TextReveal className={styles.hello} text={persona.welcomeNote} delay={500} />
+            <TextReveal as="h1" className={styles.hello} text={persona.welcomeTitle} delay={500} />
+            <TextReveal className={styles.lede} text={persona.welcomeNote} delay={800} />
           </div>
         </div>
         <div className={styles.bottom}>

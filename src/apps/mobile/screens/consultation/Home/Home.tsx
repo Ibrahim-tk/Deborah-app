@@ -110,7 +110,7 @@ export default function Home() {
   if (FLAGS.intakeV2 && !d.profile?.health?.medications) steps.push({ key: 'meds', icon: 'medicine', title: 'Add your current medications', sub: 'So Deborah can check interactions', onPress: openProfile });
   if (d.reports.length === 0) steps.push({ key: 'labs', icon: 'file', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => open('M-5.3') });
   if (FLAGS.intakeV2 && d.intakeDone) {
-    for (const x of d.deferred) steps.push({ key: x.key, icon: 'note', title: `Add ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, sub: 'Helps Deborah tailor her guidance', onPress: () => presentSheet('M-2.11', { topic: x.key }) });
+    for (const x of d.deferred) steps.push({ key: x.key, icon: 'note', title: `Add ${x.label.charAt(0).toLowerCase()}${x.label.slice(1)}`, sub: 'Helps the Oracle tailor its guidance', onPress: () => presentSheet('M-2.11', { topic: x.key }) });
   }
   // F09c: log a provider visit any time.
   if (!visitToLog) steps.push({ key: 'logVisit', icon: 'note', title: 'Log a provider visit', sub: 'Keep what they said in My Visit Notes', onPress: () => openAsk({ mode: 'debrief' }) });
@@ -189,15 +189,15 @@ export default function Home() {
       </div>
 
       <div className={styles.dock}>
-        <ChatLauncher glow placeholder="Ask me anything" onOpen={chat} />
+        <ChatLauncher glow placeholder="Tell the Oracle how you’re feeling…" onOpen={chat} />
       </div>
 
       <GreetingSheet
         open={Boolean(sheet && eligible)}
         name={name}
         onDismiss={closeSheet}
-        // Sign-up only collects name and email, so Deborah opens with her onboarding questions (age, gender).
-        onOpenChat={() => { closeSheet(); openAsk({ startIntake: true }); }}
+        // Profile basics live in onboarding / Edit health profile, never in chat (design request 2026-10-21).
+        onOpenChat={() => { closeSheet(); openAsk({ focus: true }); }}
       />
     </div>
   );

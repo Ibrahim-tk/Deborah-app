@@ -40,7 +40,6 @@ export type UserInput =
   /** Deep link `followup:<profileId>` opened the Conversation in check-in mode. */
   | { kind: 'startCheckIn' }
   /** Home "Complete your profile": Deborah asks the onboarding questions straight away. */
-  | { kind: 'startProfile' }
   | { kind: 'checkInReply'; messageId: string; optionId: string }
   /** F09c: open the visit debrief, optionally linked to a Step 5 provider-brief note. */
   | { kind: 'startDebrief'; brief?: Note }
@@ -52,6 +51,8 @@ export type UserInput =
   /** F11: a document from Documents and reports; `report` is its lab report when type is lab. */
   | { kind: 'shareDocument'; document: HealthDocument; report?: LabReport }
   | { kind: 'offerDocument'; document: HealthDocument }
+  /** Composer attachments (photos / files) sent with optional text. */
+  | { kind: 'shareAttachments'; attachments: { name: string; src?: string }[]; text?: string }
   | { kind: 'documentOfferReply'; messageId: ID; optionId: string; document?: HealthDocument; report?: LabReport };
 
 /** Store mutations the bridge applies (kept serialisable). */

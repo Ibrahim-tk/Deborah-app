@@ -14,7 +14,7 @@ export function IntakeTile({ onOpen, className }: { onOpen: () => void; classNam
       className={className}
       icon="health"
       title="Finish your health intake"
-      meta="Helps Deborah personalise her guidance"
+      meta="Helps the Oracle personalise its guidance"
       progress={progress}
       progressLabel="Health intake progress"
       showPercent

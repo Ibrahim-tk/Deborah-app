@@ -11,9 +11,10 @@ import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { BottomSheet, Button, Divider, Header, Icon, ListRow, useAlert, type IconName } from '@mobile/ui';
 import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
-import { TextSizeSheet, textSizeLabel } from '@mobile/patterns/settings';
 import { PhoneField, formatPhone, type PhoneValue } from '@mobile/patterns/widgets';
 import { useNav, useNavStore, useRoute } from '@mobile/navigation';
+import { NameSheet } from './parts/NameSheet';
+import { EmailSheet } from './parts/EmailSheet';
 import styles from './Account.module.css';
 
 const VERSION = '0.1';
@@ -47,6 +48,10 @@ export default function Account() {
   const planName = findPlan(plan)?.name;
   const { collapsed, onScroll } = useCollapsingTitle();
   const [phoneOpen, setPhoneOpen] = useState(false);
+  const [sheet, setSheet] = useState<'name' | 'email' | null>(null);
+  const [sheetKey, setSheetKey] = useState(0);
+  const openSheet = (which: 'name' | 'email') => { setSheetKey((k) => k + 1); setSheet(which); };
+  const lastName = useAppStore((s) => s.accountLastName);
   const [phoneDraft, setPhoneDraft] = useState<PhoneValue>({ countryCode: '+1', number: '' });
   const phoneDisplay = formatPhone(
     phoneNumber ? { countryCode: phoneCountry || '+1', number: phoneNumber } : undefined,
@@ -65,8 +70,6 @@ export default function Account() {
     nav.resetTo('preauth', 'M-1.2');
   };
 
-  const textSize = useAppStore((s) => s.settings.textSize);
-  const [textSizeOpen, setTextSizeOpen] = useState(false);
 
   const openPhone = () => {
     setPhoneDraft({ countryCode: phoneCountry || '+1', number: phoneNumber || '' });
@@ -78,6 +81,9 @@ export default function Account() {
     {
       title: 'Account',
       rows: [
+        // Account details (design 2026-10-21): edited in sheets, like Phone number.
+        { title: 'Name', value: [name, lastName].filter(Boolean).join(' ') || 'Not added', icon: 'account', onPress: () => openSheet('name') },
+        { title: 'Email', value: email ?? 'Not added', icon: 'mail', onPress: () => openSheet('email') },
         { title: 'Phone number', value: phoneDisplay ?? 'Not added', icon: 'phone', onPress: openPhone },
         { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') },
         { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
@@ -87,8 +93,7 @@ export default function Account() {
       title: 'Preferences',
       rows: [
         { title: 'Notifications', icon: 'bell', onPress: () => nav.push('M-10.4') },
-        // DESIGN.md › Text size control: Account › Text size.
-        { title: 'Text size', value: textSizeLabel(textSize), icon: 'note', onPress: () => setTextSizeOpen(true) },
+        // Text size setting removed (design 2026-10-21); the app always uses the default scale.
       ],
     },
     {
@@ -167,7 +172,6 @@ export default function Account() {
           <p>Version {VERSION} · Prototype</p>
         </footer>
       </div>
-      <TextSizeSheet open={textSizeOpen} onClose={() => setTextSizeOpen(false)} />
       <BottomSheet
         showClose
         open={phoneOpen}
@@ -188,6 +192,8 @@ export default function Account() {
         <p className={styles.text}>Used only by Deborah’s team. We don’t send texts or verification codes.</p>
         <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
       </BottomSheet>
+      <NameSheet key={`name-${sheetKey}`} open={sheet === 'name'} onClose={() => setSheet(null)} />
+      <EmailSheet key={`email-${sheetKey}`} open={sheet === 'email'} onClose={() => setSheet(null)} />
     </div>
   );
 }

@@ -8,6 +8,9 @@
 ## M-10.1 · Account
 
 **Presentation:** tab root (account). **Layout:** profile summary card (name, email or "No account yet — trial", plan name as plain text) · grouped `ListRow`s:
+- **Name** → bottom sheet (first + last, Save) — design 2026-10-21
+- **Email** → bottom sheet (new address → 6-digit code, simulated → saved) — design 2026-10-21
+- **Phone number** → bottom sheet
 - **Subscription & billing** → M-10.3
 - **Family profiles** → M-6.6
 - **Notifications** → M-10.4
@@ -21,7 +24,7 @@ Trial users see **Choose a plan** card at the top (→ M-4.2) instead of the pla
 
 ## M-10.2 · Privacy & data
 
-**Layout:** **Download my data** (→ SystemAlert "We'll prepare your data and email you (demo)" → stores `dataExportRequestedAt`) · info card "How your data is used: never used for training without your consent" · **Delete a profile** (→ M-6.6) · **Delete my account and all data** (destructive).
+**Layout:** **Download my data** (→ SystemAlert "We'll prepare your data and email you (demo)" → stores `dataExportRequestedAt`) · info card "How your data is used: never used for training without your consent" · **Delete a profile** (→ M-6.6) · **Health data consent** ("Given on {date}" → sheet: what revoking means → **Revoke consent** clears `healthConsentAt`; the chat's consent prompt asks again when it next needs health details — design 2026-10-21) · **Delete my account and all data** (destructive).
 **Delete account:** two-step: SystemAlert "Delete everything?" → typed confirmation sheet ("Type DELETE") → wipes store → M-1.1. SOW: deletion certified within 30 days (copy mentions it).
 
 ## M-10.3 · Subscription (NOT IN WIREFRAMES)

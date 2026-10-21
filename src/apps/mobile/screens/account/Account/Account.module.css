@@ -182,3 +182,6 @@
     background: color-mix(in srgb, var(--white) 88%, transparent);
   }
 }
+
+/* Name / Email sheets: stacked fields with the sheet's own rhythm. */
+.sheetFields { display: grid; gap: var(--space-4); }

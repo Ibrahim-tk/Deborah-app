@@ -20,7 +20,9 @@ export const registry: Record<string, ScreenMeta> = {
 
   // F02 Consultation
   'M-2.0': { title: 'Home', component: lazy(() => import('@mobile/screens/consultation/Home')), presentation: 'tabRoot', tab: 'ask', stack: 'main', figma: '', spec: 'docs/ux/F02-consultation.md#m-20-home' },
-  'M-2.1': { title: 'Conversation', component: lazy(() => import('@mobile/screens/consultation/Conversation')), presentation: 'push', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-21-conversation' },
+  // Every chat routes to the first-consultation chat (design 2026-10-21): M-2.1 renders FirstConsult.
+  // Old engine chat kept on disk (screens/consultation/Conversation) but no longer routed.
+  'M-2.1': { title: 'Conversation', component: lazy(() => import('@mobile/screens/consultation/FirstConsult')), presentation: 'push', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-21-conversation' },
   'M-2.7': { title: 'Shop', component: lazy(() => import('@mobile/screens/consultation/InAppShop')), presentation: 'modal', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-27--shop-in-app-browser' },
   'M-2.8': { title: 'Follow-up opt-in', component: lazy(() => import('@mobile/screens/consultation/FollowUpOptIn')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-28--follow-up-opt-in' },
   'M-2.9': { title: 'Scan a label', component: lazy(() => import('@mobile/screens/consultation/ScanLabel')), presentation: 'sheet', closeButton: true, detent: 'large', dismissible: true, figma: '', spec: 'intake V2 brief §3 Step E (OPEN: add to ux/F02)' },

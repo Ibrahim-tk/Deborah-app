@@ -69,7 +69,7 @@ export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
       </section>
 
       <section className={styles.block}>
-        <h3 className={styles.h3}>2. Clinical Context — What Deborah AI Identified</h3>
+        <h3 className={styles.h3}>2. Clinical Context — What the Oracle Identified</h3>
         <p className={styles.body}>{brief.clinicalContext}</p>
       </section>
 
@@ -135,12 +135,12 @@ export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
       )}
 
       <section className={styles.block}>
-        <h3 className={styles.h3}>6. Red Flags — Screened by Deborah AI</h3>
+        <h3 className={styles.h3}>6. Red Flags — Screened by the Oracle</h3>
         <p className={styles.body}>{brief.redFlagsSummary}</p>
       </section>
 
       <section className={styles.block}>
-        <h3 className={styles.h3}>7. Deborah AI’s Recommendation</h3>
+        <h3 className={styles.h3}>7. The Oracle’s Recommendation</h3>
         <p className={styles.body}>{brief.recommendation}</p>
       </section>
 

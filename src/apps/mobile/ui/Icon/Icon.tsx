@@ -5,6 +5,7 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import { DeborahBlob } from '../DeborahBlob';
 import {
+  StethoscopeIcon,
   Menu01Icon,
   Notification03Icon,
   Settings01Icon,
@@ -122,6 +123,7 @@ const map = {
   menu: Menu01Icon,
   aiSearch: AiSearch02Icon,
   family: UserGroupIcon,
+  symptoms: StethoscopeIcon,
 } as const;
 
 /** `deborah` is not a glyph: it renders the small Deborah orb wherever an action means "Ask Deborah". */

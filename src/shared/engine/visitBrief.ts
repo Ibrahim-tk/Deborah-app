@@ -19,7 +19,7 @@ export const VISIT_BRIEF_DISCLAIMER = [
   'Not a licensed prescriber',
 ] as const;
 
-export const VISIT_BRIEF_WHAT_THIS_IS = 'Note for the provider — prepared with Deborah AI from our conversation';
+export const VISIT_BRIEF_WHAT_THIS_IS = 'Note for the provider — prepared with the Oracle, Deborah’s AI health education tool, from our conversation';
 
 const GENESIS_GOLD_NOTE =
   'Genesis Gold contains no hormones and is not a pharmaceutical product. Please monitor response alongside any other care.';
@@ -80,7 +80,7 @@ function concernFrom(conv: Conversation, answer: Answer, profile: Profile): stri
   const hearing = section(answer, 'hearing')?.body?.trim();
   if (hearing) return hearing;
   const user = [...conv.messages].reverse().find((m) => m.role === 'user' && m.text?.trim());
-  return user?.text?.trim() || conv.topic || 'See conversation with Deborah AI';
+  return user?.text?.trim() || conv.topic || 'See conversation with the Oracle';
 }
 
 /** Client's words + a “Duration:” line when intake captured one (mock: “Duration: e.g., 8–12 months”). */
@@ -94,10 +94,10 @@ function chiefComplaintFrom(conv: Conversation, answer: Answer, profile: Profile
 function clinicalContextFrom(answer: Answer): string {
   const hypo = section(answer, 'hypothalamic')?.body?.trim() ?? '';
   const mean = section(answer, 'mayMean')?.body?.trim() ?? '';
-  return [hypo, mean].filter(Boolean).join('\n\n') || 'Clinical context from Deborah AI (placeholder).';
+  return [hypo, mean].filter(Boolean).join('\n\n') || 'Context from the Oracle (placeholder).';
 }
 
-const WHY_FALLBACK = 'Why I’m asking: context from my conversation with Deborah AI.';
+const WHY_FALLBACK = 'Why I’m asking: context from my conversation with the Oracle.';
 
 /** Per-question “why”: JSON `bulletWhy` first, then an inline “ — because …” split, then the placeholder. */
 export function parseQuestionBullet(bullet: string, why?: string): VisitBriefQuestion {

@@ -51,7 +51,7 @@ export default function EditHealthSection() {
         footer={<Button fullWidth onClick={save}>Save</Button>}
       >
         <div className={styles.body}>
-          <p className={styles.note}>Deborah uses these to tailor her guidance.</p>
+          <p className={styles.note}>The Oracle uses these to tailor its guidance.</p>
           {current?.rows.map((r) => (
             <section key={r.key} className={styles.field} aria-label={r.label}>
               <FormField step={r.step} label={r.label} shown={r.value} answers={answers} set={set} />

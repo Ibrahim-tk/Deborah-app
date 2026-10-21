@@ -29,7 +29,7 @@ export function IntakeCompletionCard({
     body
     ?? (complete
       ? 'Your profile is saved. Refresh it anytime as things change.'
-      : 'A few quiet details so Deborah can tailor her guidance to you.');
+      : 'A few quiet details so the Oracle can tailor its guidance to you.');
 
   return (
     <button

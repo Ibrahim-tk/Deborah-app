@@ -23,7 +23,8 @@
 .intro { flex: 1; display: grid; align-content: center; justify-items: start; gap: var(--space-6); }
 .bottom { display: grid; gap: var(--space-3); }
 .note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: start; color: var(--color-ink-body); }
-.hello { font: var(--weight-regular) calc(24px * var(--type-scale)) / calc(31px * var(--type-scale)) var(--font-artistic, var(--font-display)); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
+.hello { margin: 0; font: var(--weight-regular) calc(34px * var(--type-scale)) / calc(38px * var(--type-scale)) var(--font-artistic, var(--font-display)); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
+.lede { margin: 0; text-wrap: pretty; max-width: 34ch; }
 .legal { position: relative; }
 .legalInput { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .legalRow {

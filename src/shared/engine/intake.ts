@@ -7,12 +7,14 @@ import { intakeData } from '../data';
 import type { IntakeQuestion } from '../types/content';
 import type { Intake, Option, Profile } from '../types/domain';
 import type { EngineContext } from '../types/engine';
-import { CLARIFY, SESSION_QUESTIONS, chatQuestion, journeyAllowsProduct, journeyFor, missingBasics } from './journey';
+import { CLARIFY, SESSION_QUESTIONS, chatQuestion, journeyAllowsProduct, journeyFor } from './journey';
 import { ageBandFor, ageOn, isMinor } from './profile';
 
 export const CONSENT_ID = 'health-consent';
 export const COUNTRY_ID = 'country';
 export const SAFETY_GATES = intakeData.safetyGates;
+/** Profile basics owned by onboarding (M-1.8) / Edit health profile (M-7.8): never asked in chat. */
+const PROFILE_BASICS = new Set<string>(['profile-for', 'dob', 'sex', 'age', 'reproductive', 'height', 'weight']);
 
 /** Repeat rounds use suffixed ids (`fam-med-name#2`); the base id is the question. */
 export const baseId = (id: string) => id.split('#')[0];
@@ -48,7 +50,7 @@ export function stillOpen(plan: string[], done: string[], profile: Profile): str
 export function planIntake(scriptIntake: string[], profile: Profile): string[] {
   return scriptIntake
     .map(question)
-    .filter((q): q is IntakeQuestion => Boolean(q) && !(q!.skipIfKnown && isKnown(profile, q!)))
+    .filter((q): q is IntakeQuestion => Boolean(q) && !PROFILE_BASICS.has(q!.id) && !(q!.skipIfKnown && isKnown(profile, q!)))
     .slice(0, intakeData.maxQuestions)
     .map((q) => q.id);
 }
@@ -95,7 +97,7 @@ export function planConsultation(
   if (own) {
     const topic = scriptIntake.filter((id) => {
       const q = question(id);
-      return Boolean(q) && !(q!.skipIfKnown && isKnown(ctx.profile, q!));
+      return Boolean(q) && !PROFILE_BASICS.has(q!.id) && !(q!.skipIfKnown && isKnown(ctx.profile, q!));
     });
     return topic.length && !ctx.healthConsent && ctx.profileGates !== false ? [CONSENT_ID, ...topic] : topic;
   }
@@ -105,25 +107,26 @@ export function planConsultation(
   // OPEN: "child and male-teen question banks" (plan § Scope) — documented default: a boy under 18 gets only
   // the neutral how-long / how-often questions, never the scripts' cycle questions.
   const minorBoy = isMinor(ctx.profile, now) && (ctx.profile.sexAtBirth ?? ctx.profile.health?.sexAtBirth?.value) === 'male';
-  let topic = usesBank
-    ? [...missingBasics(ctx.profile, now), ...SESSION_QUESTIONS, CLARIFY]
+  let topic = (usesBank
+    ? [...SESSION_QUESTIONS, CLARIFY]
     : minorBoy
       ? ['how-long', 'how-often']
-      : planIntake(scriptIntake, ctx.profile);
+      : planIntake(scriptIntake, ctx.profile)).filter((id) => !PROFILE_BASICS.has(id));
   // A stated concern is the consultation. Goal and "any other issues" belong only before one exists.
   if (hasConcern) topic = topic.filter((id) => id !== 'session-goal' && id !== 'session-other');
   // Reproductive history is for hormone-shaped concerns, not weight, skin, or an unrelated symptom.
   if (!HORMONE_GROUPS.has(symptomGroup ?? '')) topic = topic.filter((id) => id !== 'reproductive');
   if (ctx.profileGates === false) return topic;
-  // Basics first (date of birth, sex at birth), then the topic, then the product safety gates
-  // (medications, allergies) so she's asked about her own concern before her medicine cabinet.
-  const basics = missingOnboarding(ctx.profile);
+  // Profile basics (date of birth, sex at birth, hormonal stage) are never asked in chat: onboarding
+  // (M-1.8) and Edit health profile (M-7.8) own them (design request 2026-10-21). The topic comes first,
+  // then the product safety gates (medications, allergies).
+  const basics: string[] = [];
   // No gates when the journey never carries a product (pregnancy, breastfeeding).
   const product = recommendsProduct(ctx, hasProduct) && journeyAllowsProduct(journey);
-  const gates = product ? missingGates(ctx.profile).filter((id) => !basics.includes(id)) : [];
+  // Date of birth and sex at birth stay safety gates (a missing one still suppresses the product,
+  // plans.ts › productAllowed) but are never asked in chat.
+  const gates = product ? missingGates(ctx.profile).filter((id) => !basics.includes(id) && !PROFILE_BASICS.has(id)) : [];
   topic = topic.filter((id) => !gates.includes(id) && !basics.includes(id));
-  // Date of birth answers the age band, so the topic's age question would repeat it.
-  if (basics.includes('dob')) topic = topic.filter((id) => id !== 'age');
   const self = ctx.profile.relationship === 'self';
   const country = self && !ctx.profile.intake.country ? [COUNTRY_ID] : [];
   const health = [...basics, ...topic, ...gates];
@@ -205,8 +208,9 @@ export function optionLabels(q: IntakeQuestion, optionIds: string[], otherText?:
   const catalog = options.length ? options : [...q.options, ...(q.expandOptions ?? [])];
   const full = [...catalog, ...(q.expandOptions ?? []).filter((o) => !catalog.some((c) => c.id === o.id))];
   // The "other" option echoes what the user typed; the scripted reply stays the same.
-  return optionIds
-    .filter((id) => id !== 'yes')
+  // Gate "yes" is dropped only when expand picks follow it; a lone "yes" keeps its label (no empty bubble).
+  const ids = optionIds.length > 1 ? optionIds.filter((id) => id !== 'yes') : optionIds;
+  return ids
     .map((id) => (id === 'other' && otherText?.trim() ? otherText.trim() : full.find((o) => o.id === id)?.label ?? id))
     .join(', ');
 }

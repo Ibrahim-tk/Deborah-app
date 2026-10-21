@@ -54,9 +54,9 @@ export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', t
 
   return (
     <section className={styles.root} data-variant={variant} aria-label="Health data consent" data-placeholder>
-      <h3 className={styles.title}>{title ?? 'Can I use your health details?'}</h3>
+      <h3 className={styles.title}>{title ?? 'Can the Oracle use your health information?'}</h3>
       {description !== null && <p className={styles.body}>
-        {description ?? <>Only to tailor my guidance. You accept our {link('privacy')} and {link('terms')}.</>}
+        {description ?? <>Only to tailor the Oracle’s guidance. You accept our {link('privacy')} and {link('terms')}.</>}
       </p>}
       {answered ? (
         <p className={styles.done}>

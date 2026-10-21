@@ -8,6 +8,8 @@ export interface Persona {
   brand: { appName: string; tagline: string; byline: string };
   yearsPractice: number;
   shortBio: string;
+  /** Welcome (M-1.2): large serif greeting line. */
+  welcomeTitle: string;
   welcomeNote: string;
   /** M-7.6 About Deborah. OPEN: approved bio. */
   credentialsLine: string;

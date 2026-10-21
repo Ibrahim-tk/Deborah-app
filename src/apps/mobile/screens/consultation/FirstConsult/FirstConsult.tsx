@@ -59,9 +59,9 @@ export default function FirstConsult() {
   const { entries, typing } = player;
   const asked = useRef(false);
   const [draft, setDraft] = useState('');
-  const [symptomsOpen, setSymptomsOpen] = useState(false);
   // Picked symptoms ride as pills in the composer; they become words only when the message is sent.
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [symptomSheet, setSymptomSheet] = useState(false);
   const withPicked = (text: string) => {
     if (!symptoms.length) return text;
     setSymptoms([]);
@@ -239,6 +239,7 @@ export default function FirstConsult() {
           />
           </div>
         )}
+        <SymptomPicker open={symptomSheet} onClose={() => setSymptomSheet(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
         <Composer
           value={draft}
           onChange={setDraft}
@@ -253,7 +254,9 @@ export default function FirstConsult() {
           onAttach={attachments.attach}
           attachments={attachments.items}
           onRemoveAttachment={attachments.remove}
-          onSymptoms={() => setSymptomsOpen(true)}
+          // Symptoms open the SymptomPicker sheet (search + close, area tabs, pills).
+          onSymptoms={() => setSymptomSheet(true)}
+          symptomsActive={symptoms.length > 0}
           tokens={[...(held?.picked.map((o) => say(o.label)) ?? []), ...symptoms]}
           onRemoveToken={(t) => {
             setSymptoms((xs) => xs.filter((x) => x !== t));
@@ -266,7 +269,6 @@ export default function FirstConsult() {
         />
       </div>
       {attachments.overlay}
-      <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
     </div>
   );
 }

@@ -1,11 +1,12 @@
 /**
- * Per-question answer widget chosen by design (F02f `widget` on the question): inline pills (single or
- * multi with a tick to confirm) or the mood scale. Engine ids in, engine ids out — copy stays in the engine.
+ * Per-question answer widget chosen by design (F02f `widget` on the question). Choice questions use the same
+ * QuestionChoices as the first consultation (M-2.12 FlowChoice, design 2026-10-21): single choice answers on
+ * tap; multi choice holds the picks in the composer (HeldChoice) and is sent from there — no tick. Mood keeps
+ * its scale. Engine ids in, engine ids out — copy stays in the engine.
  */
-import { useState } from 'react';
 import type { IntakeMeta } from '@shared/types/domain';
-import { IconButton } from '@mobile/ui';
-import { InlineChoicePills, MoodScale } from '@mobile/patterns/widgets';
+import { MoodScale, QuestionChoices } from '@mobile/patterns/widgets';
+import { useHeldChoice } from '../HeldChoice';
 
 export interface WidgetAnswerProps {
   intake: IntakeMeta;
@@ -17,58 +18,43 @@ export interface WidgetAnswerProps {
 }
 
 export function WidgetAnswer({ intake, locked, onFinish, onOther }: WidgetAnswerProps) {
-  const [chosen, setChosen] = useState<string[]>([]);
-  const ids = intake.options.map((o) => o.id);
-  const labels = intake.options.map((o) => o.label);
+  const { held, setHeld } = useHeldChoice();
+  const options = intake.options.map((o) => ({ id: o.id, label: o.label }));
+  const ids = options.map((o) => o.id);
   const answered = intake.answered;
-  const labelOf = (id: string) => intake.options.find((o) => o.id === id)?.label ?? id;
+  const labelOf = (id: string) => options.find((o) => o.id === id)?.label ?? id;
+  const key = intake.questionId;
 
   if (intake.widget === 'mood') {
     if (answered) return null; // the answer bubble already shows the pick
     return <MoodScale title="Mood" onPick={(_label, i) => !locked && ids[i] && onFinish([ids[i]])} />;
   }
 
-  const pick = (_label: string, i: number) => {
-    if (locked) return;
-    const id = ids[i];
-    if (id === 'other') return onOther();
-    onFinish([id]);
-  };
-
   if (intake.widget === 'inlineMulti') {
-    const toggle = (_label: string, i: number) => {
-      if (locked) return;
-      const id = ids[i];
-      setChosen((c) => (c.includes(id) ? c.filter((x) => x !== id) : [...c, id]));
-    };
-    const shown = (answered ?? chosen).map(labelOf);
     return (
-      <InlineChoicePills
+      <QuestionChoices
         label="Pick all that apply"
-        options={labels}
-        optionIds={ids}
-        selected={shown}
+        options={options}
+        multi
+        exclusive={ids.find((id) => id === 'none')}
         disabled={locked}
-        onPick={toggle}
-        onToggle={toggle}
-        endSlot={
-          !locked && chosen.length > 0 ? (
-            <IconButton icon="check" size="sm" tone="accent" label="Done" onClick={() => onFinish(chosen)} />
-          ) : null
-        }
+        answered={answered}
+        confirm="none"
+        value={held?.key === key ? held.ids : []}
+        onChange={(next) => setHeld(next.length ? { key, ids: next, labels: next.map(labelOf), finish: onFinish } : null)}
+        onOther={onOther}
+        onSubmit={(next) => { setHeld(null); onFinish(next); }}
       />
     );
   }
 
   return (
-    <InlineChoicePills
+    <QuestionChoices
       label="Answer options"
-      options={labels}
-      optionIds={ids}
-      keepAnswer
-      selected={answered?.map(labelOf)}
+      options={options}
       disabled={locked}
-      onPick={pick}
+      answered={answered}
+      onSubmit={(next) => (next[0] === 'other' ? onOther() : onFinish(next))}
     />
   );
 }

@@ -2,6 +2,7 @@
  * Medical-advocate consent on the shared ui/BottomSheet over Health Basics (same copy + checkboxes).
  * Drag, scrim tap or Escape go back a question (same as back); Continue moves on. Placeholder until legal review.
  */
+import { properName } from '@shared/utils';
 import { Fragment, type ReactNode } from 'react';
 import { consentDoc } from '@shared/data';
 import { BottomSheet, Button, Checkbox } from '@mobile/ui';
@@ -30,7 +31,7 @@ function withName(template: string, who: string): ReactNode {
 
 export function ConsentSheet({ open, name, value, onChange, onContinue, onBack }: ConsentSheetProps) {
   const { title, body, options } = consentDoc.profileConsent;
-  const who = name.trim() || 'them';
+  const who = properName(name.trim()) || 'them';
   const canContinue = ['agreed', 'guardian', 'proxy', 'yes'].includes(value);
 
   return (

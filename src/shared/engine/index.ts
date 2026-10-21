@@ -9,7 +9,7 @@ import type { EngineContext, EnginePlan, UserInput } from '../types/engine';
 import { uid } from '../utils/ids';
 import { asksForAnswer, detectScript, followUpReply, symptomGroupOf } from './classifier';
 import { factFromAnswer, factsFromMessage, mergeFacts, mergeSessionKnowledge, pendingFacts, withFacts } from './facts';
-import { CLARIFY, SESSION_QUESTIONS, journeyFor } from './journey';
+import { journeyFor } from './journey';
 import { classify } from './guardrails';
 import {
   acknowledgeEmergencySteps,
@@ -23,7 +23,7 @@ import {
 import { isGated } from './counting';
 import { checkInDetailSteps, checkInReplySteps, isAwaitingCheckInDetail, startCheckInSteps } from './checkin';
 import { shareLabsSteps } from './labs';
-import { documentOfferReplySteps, offerDocumentSteps, shareDocumentSteps } from './documents';
+import { documentOfferReplySteps, offerDocumentSteps, shareAttachmentsSteps, shareDocumentSteps } from './documents';
 import { debriefReplySteps, debriefSavedSteps, debriefTextSteps, isVisitReport, visitOfferSteps } from './debrief';
 import { startDebriefSteps } from './visitOutcome';
 import { answerPatch, CONSENT_ID, optionLabels, planConsultation, question } from './intake';
@@ -98,8 +98,6 @@ function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
       return acknowledgeEmergencySteps(ctx, input.messageId);
     case 'startCheckIn':
       return startCheckInSteps(ctx);
-    case 'startProfile':
-      return startProfileSteps(ctx);
     case 'checkInReply':
       return checkInReplySteps(ctx, input.messageId, input.optionId);
     case 'startDebrief':
@@ -114,6 +112,8 @@ function handleUserInput(rawCtx: EngineContext, input: UserInput): EnginePlan {
       return shareDocumentSteps(ctx, input.document, input.report);
     case 'offerDocument':
       return offerDocumentSteps(ctx, input.document);
+    case 'shareAttachments':
+      return shareAttachmentsSteps(ctx, input.attachments, input.text);
     case 'documentOfferReply':
       return documentOfferReplySteps(ctx, input.messageId, input.optionId, input.document, input.report);
     case 'finishReview':
@@ -232,25 +232,6 @@ function normalText(ctx: EngineContext, text: string, suggestionScript?: string)
 
   // ready / answered / checkin / error: a short follow-up reply, not a new answer.
   return [userBubble(ctx, text), ...pause('Thinking about your question'), ...deborahText(ctx, followUpReply(conv.scriptId, text))];
-}
-
-/**
- * Home "Complete your profile" (design direction 2026-10-12): an onboarding-only chat. Deborah asks
- * the first onboarding question straight away; when the basics are in she says so and the chat
- * waits for the user's first topic, which then starts a consultation in the same conversation.
- */
-function startProfileSteps(ctx: EngineContext): EnginePlan {
-  const conv = ctx.conversation;
-  // Profile only: the basics, never session questions or a red-flag screen (there's no topic yet).
-  const plan = planConsultation(ctx, [], false).filter(
-    (id) => id !== CLARIFY && !(SESSION_QUESTIONS as readonly string[]).includes(id),
-  );
-  const next: Conversation = { ...conv, status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [] };
-  return [
-    { type: 'store', action: { type: 'setConversation', conversationId: conv.id, patch: { status: 'intake', profileOnly: true, intakePlan: plan, intakeDone: [], startedAt: ctx.now } } },
-    ...pause('Getting ready', 400, 700),
-    ...nextIntakeOrReady(ctx, next, ctx.profile),
-  ];
 }
 
 function startConsultation(rawCtx: EngineContext, text: string, scriptId: string): EnginePlan {
