@@ -45,6 +45,7 @@ export * from './RulerSlider';
 export * from './KnobSlider';
 export * from './ProgressRing';
 export * from './DateWheel';
+export * from './CalendarGrid';
 export * from './EdgeLight';
 export * from './ColorField';
 export * from './IconWell';

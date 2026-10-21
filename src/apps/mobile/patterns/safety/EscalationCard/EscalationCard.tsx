@@ -21,42 +21,37 @@ export interface EscalationCardProps {
   /** What booking means, e.g. ['30 min', 'Video or phone', 'Next opening Thu 16']. */
   details?: string[];
   dismissed?: boolean;
-  onBook: () => void;
+  /** @deprecated No booking screen any more (2026-10-21); kept so callers compile. */
+  onBook?: () => void;
   onDismiss: () => void;
   /** Open as a bottom sheet on arrival (default). `false`: only the inline row; the sheet opens on tap. */
   sheet?: boolean;
 }
 
-export function EscalationCard({ body, reasons, details, dismissed, onBook, onDismiss, sheet = true }: EscalationCardProps) {
-  // Opens on arrival; closing (Not now or the scrim) leaves the inline record.
+export function EscalationCard({ dismissed, onDismiss, sheet = true }: EscalationCardProps) {
+  // Request-sent confirmation (designer, 2026-10-21): no booking screen. The sheet confirms that Deborah's team
+  // has been emailed and will reach out; its only action is Done, which lets the conversation carry on.
+  // OPEN: docs/ux/F03-safety.md still specifies "Book a consultation with Deborah · Not now" — update the spec.
   const [open, setOpen] = useState(sheet && !dismissed);
-  const book = () => { setOpen(false); onBook(); };
-  const notNow = () => { setOpen(false); if (!dismissed) onDismiss(); };
+  const done = () => { setOpen(false); if (!dismissed) onDismiss(); };
 
   return (
     <>
-      {/* Inline record → branded hero card (designer, 2026-10-21): Deborah cut-out on the aurora field, headline,
-          and a "Talk with Deborah" CTA that reopens the sheet. The sheet's actions and labels are unchanged. */}
+      {/* Branded hero card (designer, 2026-10-21): Deborah cut-out on the aurora field, heading, small CTA. */}
       <div className={styles.hero}>
         <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" aria-hidden />
-        <span className={styles.arrow} aria-hidden><Icon name="chevron" size={18} /></span>
         <div className={styles.heroCopy}>
           <p className={styles.heroTitle}>Talk with Deborah directly</p>
         </div>
         <Button size="sm" className={styles.cta} onClick={() => setOpen(true)}>Talk with Deborah</Button>
       </div>
-      <BottomSheet open={Boolean(open)} onClose={() => setOpen(false)}>
+      <BottomSheet open={Boolean(open)} onClose={done}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>
-          <h2 id="escalation-title" className={styles.title}>{body}</h2>
-          {reasons && reasons.length > 0 && <ul className={styles.reasons}>{reasons.map((r) => <li key={r}>{r}</li>)}</ul>}
-          {details && details.length > 0 && (
-            <div className={styles.details} aria-label="About the consultation">
-              {details.map((d) => <span key={d} className={styles.detail}>{d}</span>)}
-            </div>
-          )}
+          <span className={styles.check} aria-hidden><Icon name="check" size={28} /></span>
+          <h2 id="escalation-title" className={styles.title}>Request sent</h2>
+          <p className={styles.sent}>Your request has been sent. Someone from Deborah’s team will contact you soon.</p>
           <div className={styles.actions}>
-            <Button fullWidth leadingIcon="calendar" onClick={book}>Book a consult with Deborah</Button>
-            <Button variant="ghost" fullWidth className={styles.notNow} onClick={notNow}>Not now</Button>
+            <Button fullWidth onClick={done}>Done</Button>
           </div>
         </div>
       </BottomSheet>

@@ -3,3 +3,17 @@
 /* Compact fields (designer, 2026-10-21): shorter inputs and smaller entry text, scoped to this card only. */
 .root { --field-h: 44px; --fs-callout: calc(15px * var(--type-scale, 1)); --lh-callout: calc(20px * var(--type-scale, 1)); gap: var(--space-2); }
 .save { justify-self: end; margin-top: var(--space-1); }
+/* Date field + inline calendar (2026-10-21): looks like the Input above; the grid opens beneath it. */
+.dateField { display: grid; gap: var(--space-2); }
+.dateLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
+.dateButton {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  width: 100%; min-height: var(--field-h); padding: 0 var(--space-4);
+  border: 1px solid var(--color-border-hairline); border-radius: var(--radius-full); background: var(--white);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); text-align: left; cursor: pointer;
+}
+.dateButton [data-empty] { color: var(--color-ink-placeholder); }
+.dateButton[aria-expanded='true'] { border-color: var(--color-border-selected); }
+.dateButton:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.dateButton:disabled { cursor: default; opacity: 0.6; }
+.calendar { padding: var(--space-3); border-radius: var(--radius-lg); background: var(--white); border: 1px solid var(--color-border-hairline); }

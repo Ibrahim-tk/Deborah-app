@@ -79,3 +79,14 @@
 /* Heading only (designer, 2026-10-21): no brand line, no consult details on the card. */
 .heroTitle { font-size: calc(32px * var(--type-scale, 1)); line-height: calc(34px * var(--type-scale, 1)); }
 .heroCopy { align-content: center; min-height: 100%; padding-top: var(--space-12, 48px); }
+/* Half-height card (designer, 2026-10-21): ~160px, no top-right arrow, smaller heading; portrait sized by height. */
+.hero { min-height: 160px; }
+.portrait { left: 0; width: auto; height: 152px; max-width: 48%; object-fit: cover; object-position: top center; }
+.heroCopy { min-height: 160px; width: 50%; padding: var(--space-4) var(--space-5) 60px 0; align-content: center; }
+.heroTitle { font-size: calc(22px * var(--type-scale, 1)); line-height: calc(26px * var(--type-scale, 1)); }
+
+/* Request-sent confirmation (2026-10-21). */
+.sheet { justify-items: center; text-align: center; }
+.check { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-full); background: var(--color-accent-tint); color: var(--color-accent); }
+.sent { margin: 0; max-width: 32ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
+.actions { width: 100%; }
