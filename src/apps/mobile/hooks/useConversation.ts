@@ -113,7 +113,7 @@ export function useConversation() {
       return run({ kind: 'documentOfferReply', messageId, optionId, document, report });
     },
     startNew: () => profile && useAppStore.getState().archiveActive(profile.id),
-    /** "Continue that conversation": bring the most recent answered conversation back. */
+    /** Resume the most recent answered conversation (Home / nav — not shown on Greeting). */
     continueLast: () => {
       const last = history[0];
       if (!last || !profile) return;

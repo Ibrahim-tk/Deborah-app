@@ -18,9 +18,9 @@ export function SafetyPatterns() {
         <Specimen name="EmergencyInterrupt" path="patterns/safety/EmergencyInterrupt" note="2 px danger border, Call 911 as the largest button, Find nearest ER, “I’m safe”. Nothing else competes.">
           <div data-placeholder><EmergencyInterrupt title={g.emergency.title} body={g.emergency.body} onCall={noop} onFindER={noop} onSafe={noop} /></div>
         </Specimen>
-        <Specimen name="CrisisSupportCard" path="patterns/safety/CrisisSupportCard" note="Hairline card, calm tone, 988 first.">
+        <Specimen name="CrisisSupportCard" path="patterns/safety/CrisisSupportCard" note="Hairline card, calm tone, 988 first. Tap the row to open the sheet (closed on load so the lab page stays clear).">
           <div data-placeholder>
-            <CrisisSupportCard body={g.crisis.body} lifelineLabel={g.crisis.lifeline.label} moreSupport={g.crisis.moreSupport} onCall={noop} onKeepTalking={noop} />
+            <CrisisSupportCard body={g.crisis.body} lifelineLabel={g.crisis.lifeline.label} moreSupport={g.crisis.moreSupport} onCall={noop} onKeepTalking={noop} defaultOpen={false} />
           </div>
         </Specimen>
         <Specimen name="MedicationSafetyCard" path="patterns/safety/MedicationSafetyCard" note="Additive Linen panel. Never contains dosing.">

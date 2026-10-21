@@ -1,34 +1,33 @@
-/** Overview: what the system is, where its values come from, and the rules every component follows. */
+/** Overview: live V2 phone tokens and the components product screens actually use. */
 import { Section, Group } from '../Section';
 import styles from './sections.module.css';
 
 const PRINCIPLES: [string, string][] = [
-  ['The consulting room at dusk', 'A reading-and-listening experience first. Deborah’s words are the interface; everything around them recedes.'],
-  ['One action colour', 'Plum is the only colour that means “you can do something here”. Gold marks Deborah; rose is her signature only.'],
-  ['Seven to one', 'Every readable text pair reaches 7:1 on its surface. Only placeholders and decorative numerals sit below.'],
-  ['Medium is the ceiling', 'Nothing heavier than 500. Hierarchy comes from size, family, colour and space; emphasis uses italic.'],
+  ['What ships is the source', 'This lab reads live CSS on .phone-root and mounts the same ui/ and patterns/ modules V2 screens import. No parallel mock kit.'],
+  ['One action colour', 'Accent is the only colour that means “you can do something here”. Gold and rose stay for Deborah moments.'],
+  ['Seven to one', 'Readable text pairs aim for 7:1 on their surface. Contrast is measured live on the Colour page.'],
+  ['Medium is the ceiling', 'Nothing heavier than 500. Hierarchy comes from size, family, colour and space.'],
   ['Only floating things cast shadows', 'Cards, options and inputs are flat. Composer, sheets, menus and toasts float.'],
-  ['Option rows, not chips', 'Choices are full-width rows at least 56 pt tall. Labels like “New” are plain text, never a capsule.'],
-  ['Calm motion', 'iOS easing with no overshoot. No waves, ripples, shimmer, bounce, pulse or typing dots.'],
+  ['Option rows, not chips', 'Choices are full-width rows. Labels like “New” are plain text, never a capsule.'],
+  ['Calm motion', 'iOS easing with no overshoot. No waves, ripples, shimmer, bounce, pulse or typing dots (Composer recording wave is the documented exception).'],
 ];
 
 const LAYERS: [string, string][] = [
-  ['src/styles/tokens.primitives.css', 'Brand ramps, spacing, radius, motion (DESIGN.md).'],
-  ['apps/mobile/styles/mobile.tokens.css', 'Semantic roles, type scale × text size, layout, elevation.'],
-  ['apps/mobile/styles/mobile.refresh.css', 'Soft refresh: translucent surfaces, field and button recipes.'],
-  ['apps/mobile/styles/mobile.skin.deborah.css', 'Deborah skin (loaded last): plum / mauve, DM Sans, flat plum buttons.'],
+  ['src/styles/tokens.primitives.css', 'Brand ramps, spacing, radius, motion primitives.'],
+  ['apps/mobile/styles/mobile.tokens.css', 'Semantic roles, type scale, layout, elevation on .phone-root.'],
+  ['apps/mobile/styles/mobile.refresh.css', 'Translucent surfaces, field and button recipes.'],
+  ['apps/mobile/styles/mobile.skin.deborah.css', 'Deborah skin (loaded last) — the values this lab shows.'],
 ];
 
 export function Foundations() {
   return (
     <Section
       id="overview"
-      title="Your Oracle Clinician"
+      title="Oracle Clinician"
       lede={
         <>
-          The mobile design system, rendered from the app’s own code. Every swatch, size and component on this page
-          is read live from the same stylesheets and components the phone app uses, so it cannot drift from what ships.
-          DESIGN.md stays the authority for visual rules; this page shows the current implementation.
+          Mobile design system for <strong>Version 2</strong> only. Swatches are computed from the phone’s live stylesheets;
+          blocks mount components used in product flows — not v1, not unused lab experiments.
         </>
       }
     >
@@ -43,7 +42,7 @@ export function Foundations() {
           ))}
         </ol>
       </Group>
-      <Group title="Where the values come from" note="Later layers override earlier ones. Components read semantic tokens only, never primitives.">
+      <Group title="Where the values come from" note="Later layers override earlier ones. Components read semantic tokens; this page reads whatever .phone-root currently resolves.">
         <ol className={styles.layers}>
           {LAYERS.map(([file, what]) => (
             <li key={file} className={styles.layer}>

@@ -1,33 +1,11 @@
-/** Progress and presence: spinner, status line, bars and rings, Deborah's avatar and blob, the app bar. */
+/** Progress and presence used in V2: spinner, status, bars/rings, Deborah presence, app bar. */
 import { useEffect, useState } from 'react';
-import { Avatar, Button, DeborahBlob, Header, IconButton, ProgressBar, ProgressRing, ProgressStatus, Spinner, TopBanner, type TopBannerTone } from '@mobile/ui';
+import { Avatar, DeborahBlob, Header, IconButton, ProgressBar, ProgressRing, ProgressStatus, Spinner } from '@mobile/ui';
 import { Section } from '../Section';
 import { Grid, Row, Specimen, Variant } from '../Specimen';
 import styles from './sections.module.css';
 
 const STEPS = ['Reading your answers', 'Looking through my Handbook', 'Writing to you'];
-
-const BANNERS: { tone: TopBannerTone; message: string }[] = [
-  { tone: 'error', message: 'That’s not the correct code. Try again?' },
-  { tone: 'success', message: 'Profile saved.' },
-  { tone: 'info', message: 'You’re offline. Changes will sync later.' },
-];
-
-function TopBannerDemo() {
-  const [shown, setShown] = useState<(typeof BANNERS)[number] | null>(null);
-  return (
-    <>
-      <Row>
-        {BANNERS.map((b) => (
-          <Button key={b.tone} variant="secondary" size="sm" onClick={() => setShown(b)}>
-            {b.tone}
-          </Button>
-        ))}
-      </Row>
-      <TopBanner open={Boolean(shown)} tone={shown?.tone} message={shown?.message ?? ''} onClose={() => setShown(null)} />
-    </>
-  );
-}
 
 export function Feedback() {
   const [step, setStep] = useState(0);
@@ -36,13 +14,9 @@ export function Feedback() {
     return () => window.clearInterval(t);
   }, []);
   return (
-    <Section id="feedback" title="Progress, presence and navigation" lede="A single rotating ring and words that change as steps complete; never typing dots. Deborah is always shown with her gold ring or her glass blob.">
+    <Section id="feedback" title="Progress and presence" lede="A rotating ring and changing words — never typing dots. Deborah with her gold ring or glass blob.">
       <Grid>
-        <Specimen name="TopBanner" path="ui/TopBanner" note="Drops in from the top, auto-hides after 3.5 s (tap to dismiss). tone: error · success · info. Controlled: open + message + onClose.">
-          <TopBannerDemo />
-        </Specimen>
-
-        <Specimen name="Spinner · ProgressStatus" path="ui/ProgressStatus" note="Status crossfades (160 ms) as steps change.">
+        <Specimen name="Spinner · ProgressStatus" path="ui/ProgressStatus" note="Status crossfades as steps change.">
           <Row>
             <Variant label="Spinner 16"><Spinner label="Loading" /></Variant>
             <Variant label="Spinner 24"><Spinner size={24} label="Loading" /></Variant>
@@ -50,7 +24,7 @@ export function Feedback() {
           <Variant label="ProgressStatus (cycling)"><ProgressStatus label={STEPS[step]} /></Variant>
         </Specimen>
 
-        <Specimen name="ProgressBar · ProgressRing" path="ui/ProgressBar" note="8 pt bar, value written beside it. Ring reads its percentage aloud.">
+        <Specimen name="ProgressBar · ProgressRing" path="ui/ProgressBar" note="Bar with value text; ring announces percentage.">
           <Variant label="ProgressBar"><ProgressBar value={12 / 90} label="90-day plan" valueText="Day 12 of 90" /></Variant>
           <Row>
             <Variant label="ProgressRing 44"><ProgressRing value={0.4} label="Profile complete" /></Variant>
@@ -59,7 +33,7 @@ export function Feedback() {
           </Row>
         </Specimen>
 
-        <Specimen name="Avatar · DeborahBlob" path="ui/Avatar" note="Profiles: Cormorant initial on Lilac. Deborah: portrait with a gold ring, or her glass blob (AI presence).">
+        <Specimen name="Avatar · DeborahBlob" path="ui/Avatar" note="Profiles: Cormorant initial on lilac. Deborah: portrait + gold ring, or glass blob.">
           <Row>
             <Variant label="initial"><Avatar initial="Maria" size={40} /></Variant>
             <Variant label="initial 56"><Avatar initial="Sofia" size={56} /></Variant>
@@ -72,7 +46,7 @@ export function Feedback() {
           </Row>
         </Specimen>
 
-        <Specimen name="Header" path="ui/Header" note="Large title on tab roots (folds into the inline title on scroll); inline title with back on pushed screens.">
+        <Specimen name="Header" path="ui/Header" note="Large title on tab roots; inline title with back on pushed screens.">
           <Variant label="inline · back">
             <div className={styles.headerStage}><Header title="Health profile" onBack={() => {}} backLabel="Account" safeTop={false} /></div>
           </Variant>

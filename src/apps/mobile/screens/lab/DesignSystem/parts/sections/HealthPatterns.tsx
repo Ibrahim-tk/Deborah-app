@@ -1,8 +1,8 @@
-/** My Health patterns: plan, focus, check-ins, habits, records rows, library cards, empty states. */
+/** My Health patterns used in V2 product screens. */
 import { useState } from 'react';
 import {
   CheckInCard, ConsultationRow, ContentCard, EmptyState, FocusCard, HabitRow,
-  LabInsightCard, LabMetricCard, LabValueRow, NoteRow, PlanProgressCard, QuickLinks,
+  LabValueRow, PlanProgressCard,
 } from '@mobile/patterns/health';
 import { libraryItems, labSampleReports } from '@shared/data';
 import type { LabValue } from '@shared/types/domain';
@@ -19,7 +19,7 @@ export function HealthPatterns() {
   const [editing, setEditing] = useState(false);
   const flip = (i: number) => setHabits((h) => h.map((x, j) => (j === i ? !x : x)));
   return (
-    <Section id="health" title="My Health" lede="The hub after a consultation: a 90-day plan, the current focus, gentle check-ins and records — rows and tonal cards, plain-text statuses.">
+    <Section id="health" title="My Health" lede="Hub after a consultation: plan, focus, check-ins, habits and records — patterns V2 screens import.">
       <Grid>
         <Specimen name="PlanProgressCard · FocusCard" path="patterns/health/PlanProgressCard">
           <PlanProgressCard day={12} habitsDone={3} habitsTotal={5} onPress={noop} />
@@ -29,19 +29,16 @@ export function HealthPatterns() {
           <Variant label="due"><CheckInCard state={{ kind: 'due' }} onCheckIn={noop} onReminders={noop} /></Variant>
           <Variant label="scheduled"><CheckInCard state={{ kind: 'scheduled', daysUntil: 4 }} upcoming="Tuesday, Oct 28 · 10:00 AM" onCheckIn={noop} onReminders={noop} /></Variant>
         </Specimen>
-        <Specimen name="HabitRow · QuickLinks" path="patterns/health/HabitRow" note="Checkbox habit with a plain-text source. Counts as plain text, never a badge.">
+        <Specimen name="HabitRow" path="patterns/health/HabitRow" note="Checkbox habit with a plain-text source.">
           <div className={styles.listCard}>
             <HabitRow text="Lights low an hour before bed" done={habits[0]} source="from your answer" onToggle={() => flip(0)} onLongPress={noop} />
             <HabitRow text="Protein with breakfast" done={habits[1]} source="from your answer" onToggle={() => flip(1)} onLongPress={noop} />
           </div>
-          <QuickLinks links={[{ key: 'h', label: 'History', icon: 'chat', count: 4 }, { key: 'n', label: 'Visit Notes', icon: 'note', count: 2 }, { key: 'l', label: 'Labs', icon: 'labs', count: 1 }]} onSelect={noop} />
         </Specimen>
-        <Specimen name="ConsultationRow · NoteRow · LabValueRow" path="patterns/health/ConsultationRow" note="Records rows: topic, date and status on one subtitle line. Lab values edit in place (tap the pencil).">
+        <Specimen name="ConsultationRow · LabValueRow" path="patterns/health/ConsultationRow" note="Records rows; lab values edit in place.">
           <div className={styles.listCard}>
             <ConsultationRow topic="Sleep and night waking" date="12 Sep" status="answered" withLabs onPress={noop} />
             <ConsultationRow topic="Afternoon energy" date="3 Oct" status="in-progress" onPress={noop} />
-            <NoteRow title="Questions for my visit" kind="questions" updated="5 Oct" body="Ask about timing of evening routine." onPress={noop} />
-            <NoteRow title="For my provider" kind="provider-brief" updated="16 Oct" body="Night sweats and waking hot for about 8–12 months." onPress={noop} />
             <LabValueRow value={lab} editing={editing} onEdit={() => setEditing(true)} onDone={() => setEditing(false)} onDelete={noop}
               onChange={(p) => setLab((l) => ({ ...l, ...p, edited: true }))} />
           </div>
@@ -51,15 +48,6 @@ export function HealthPatterns() {
         </Specimen>
         <Specimen name="EmptyState" path="patterns/health/EmptyState" note="title-2 invitation, one line of callout, one primary button.">
           <EmptyState icon="note" title="No notes yet" text="Save an answer or jot down questions for your visit." actionLabel="Ask Deborah" actionIcon="chat" onAction={noop} />
-        </Specimen>
-        <Specimen name="LabInsightCard · LabMetricCard" path="patterns/health/LabInsightCard" note="M-9.5 lab results grammar — parchment tokens, plain-text status (no pills).">
-          <LabInsightCard
-            headline="Paula, your tests show that your immune system is functioning very well!"
-            body="Blood tests, such as leukocytes (defense cells) and other components, are within expected values for this panel. This is educational context only — not a diagnosis."
-          />
-          <LabMetricCard value={{ id: 'n1', marker: 'Neutrophils', value: '4487.0', unit: 'µL', statusLabel: 'Normal', statusTone: 'normal' }} onPress={noop} />
-          <LabMetricCard value={{ id: 'a1', marker: 'AST', value: '38.0', unit: 'U/L', statusLabel: 'Excellent', statusTone: 'excellent' }} onPress={noop} />
-          <LabMetricCard value={{ id: 'v1', marker: 'VDRL', value: 'Non-Reactive', unit: '', statusTone: 'excellent' }} onPress={noop} />
         </Specimen>
       </Grid>
     </Section>

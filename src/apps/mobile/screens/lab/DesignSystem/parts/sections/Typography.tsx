@@ -58,7 +58,7 @@ export function Typography() {
     <Section
       id="type"
       title="Typography"
-      lede="Cormorant Garamond for Deborah’s display moments; DM Sans for everything people read and tap. The whole scale multiplies by the in-app text size."
+      lede="Families and roles as computed on .phone-root today. Change text size to see the same scale Account uses in the app."
     >
       <Group title="Families">
         <div className={styles.families}>

@@ -1,69 +1,216 @@
+/*
+ * Button — MUI Button anatomy (contained · outlined · text), skinned with Oracle tokens.
+ * Shared base keeps every variant the same height, padding rhythm, and press behaviour.
+ */
+
 .root {
+  /* MUI Button base */
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
   border-radius: var(--radius-full);
+  min-width: 64px;
+  padding: 0 var(--space-6);
+  min-height: var(--button-h);
   font: var(--weight-medium) var(--fs-button) / var(--lh-button) var(--font-body);
   letter-spacing: -0.015em;
   text-align: center;
-  transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  text-decoration: none;
+  text-transform: none;
+  vertical-align: middle;
+  user-select: none;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-quick) var(--ease-out),
+    color var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out),
+    border-color var(--dur-quick) var(--ease-out),
+    opacity var(--dur-quick) var(--ease-out);
 }
 
-.root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
-.root:active:not(:disabled) { transform: scale(0.98); }
+.root:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 4px;
+}
 
-.label { overflow-wrap: anywhere; }
+.root:active:not(:disabled) {
+  opacity: 0.92;
+}
 
-.lg { min-height: var(--button-h); padding: var(--space-2) var(--space-6); }
-.md { min-height: 36px; padding: 6px var(--space-4); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
-.sm { min-height: 32px; padding: var(--space-1) var(--space-3); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
-/* Keep a 48 pt hit area around the smaller visuals. */
-.md::after { content: ''; position: absolute; inset: -6px 0; }
-.sm::after { content: ''; position: absolute; inset: -8px 0; }
-/* Small ghost = quiet utility (Expand all, Edit…): secondary ink, regular weight, so it never outranks content. */
-.ghost.sm { padding-inline: var(--space-2); font-weight: var(--weight-regular); color: var(--color-ink-secondary); }
+.label {
+  overflow-wrap: anywhere;
+}
 
-.fullWidth { width: 100%; }
+/* —— sizes (same structure, scaled padding / type) —— */
+.lg {
+  min-height: var(--button-h);
+  padding-inline: var(--space-6);
+}
 
-.primary { background: var(--button-primary-fill); color: var(--color-ink-on-accent); box-shadow: var(--button-primary-shadow); }
-.primary:active:not(:disabled) { background: var(--color-accent-pressed); }
+.md {
+  min-height: 40px;
+  padding-inline: var(--space-4);
+  font-size: var(--fs-subhead);
+  line-height: var(--lh-subhead);
+}
 
+.sm {
+  min-height: 32px;
+  padding-inline: var(--space-3);
+  font-size: var(--fs-subhead);
+  line-height: var(--lh-subhead);
+}
+
+/* 48 pt hit area around smaller visuals (MUI touch target) */
+.md::after,
+.sm::after {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* —— Contained (MUI) —— */
+.primary {
+  background: var(--button-primary-fill);
+  color: var(--color-ink-on-accent);
+  box-shadow: var(--button-primary-shadow);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--color-accent-pressed);
+}
+
+.primary:active:not(:disabled) {
+  background: var(--color-accent-pressed);
+  box-shadow: none;
+  opacity: 1;
+}
+
+/* Soft / tonal contained */
 .secondary {
-  background: var(--surface-1);
+  background: var(--color-accent-tint);
   color: var(--color-ink);
-  box-shadow: inset 0 0 0 1px var(--surface-border), var(--surface-highlight);
-  -webkit-backdrop-filter: var(--surface-blur);
-  backdrop-filter: var(--surface-blur);
-}
-.secondary:active:not(:disabled) { background: var(--surface-1-pressed); }
-
-.outline { background: transparent; color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
-.outline:active:not(:disabled) { background: var(--color-accent-tint); }
-
-.ghost, .link { background: transparent; color: var(--color-accent); }
-.ghost:active:not(:disabled), .link:active:not(:disabled) { text-decoration: underline; text-underline-offset: 3px; transform: none; }
-.link { min-height: var(--tap-min); min-width: var(--tap-min); padding: 0 var(--space-1); }
-
-.destructive {
-  background: var(--color-surface);
-  color: var(--color-danger-ink);
-  box-shadow: inset 0 0 0 1px var(--color-danger-border);
+  box-shadow: none;
 }
 
+.secondary:hover:not(:disabled),
+.secondary:active:not(:disabled) {
+  background: var(--color-accent-tint-pressed);
+  opacity: 1;
+}
+
+/* Contained error — same height & padding as primary */
 .emergency {
-  min-height: var(--button-h-emergency);
   background: var(--color-danger-fill);
   color: var(--color-ink-on-accent);
+  box-shadow: 0 3px 10px color-mix(in srgb, var(--color-danger-fill) 28%, transparent);
 }
 
-/* Disabled is avoided where possible; when unavoidable: purple-50 fill, purple-400 text. */
+.emergency:hover:not(:disabled) {
+  background: var(--color-danger-border);
+}
+
+.emergency:active:not(:disabled) {
+  background: var(--color-danger-border);
+  box-shadow: none;
+  opacity: 1;
+}
+
+/* —— Outlined (MUI) —— */
+.outline {
+  background: transparent;
+  color: var(--color-accent);
+  box-shadow: inset 0 0 0 1.5px var(--color-accent);
+}
+
+.outline:hover:not(:disabled),
+.outline:active:not(:disabled) {
+  background: var(--color-accent-tint);
+  opacity: 1;
+}
+
+.destructive {
+  background: transparent;
+  color: var(--color-danger-ink);
+  box-shadow: inset 0 0 0 1.5px var(--color-danger-border);
+}
+
+.destructive:hover:not(:disabled),
+.destructive:active:not(:disabled) {
+  background: var(--color-danger-tint);
+  opacity: 1;
+}
+
+/* —— Text (MUI) —— */
+.ghost,
+.link {
+  background: transparent;
+  color: var(--color-accent);
+  box-shadow: none;
+  min-width: auto;
+}
+
+.ghost:hover:not(:disabled),
+.link:hover:not(:disabled) {
+  background: var(--color-accent-tint);
+}
+
+.ghost:active:not(:disabled),
+.link:active:not(:disabled) {
+  background: var(--color-accent-tint);
+  opacity: 1;
+}
+
+.link {
+  min-height: var(--tap-min);
+  padding-inline: var(--space-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link:hover:not(:disabled) {
+  background: transparent;
+  text-decoration-thickness: 2px;
+}
+
+.ghost.sm {
+  padding-inline: var(--space-2);
+  font-weight: var(--weight-regular);
+  color: var(--color-ink-secondary);
+}
+
+/* —— Disabled (MUI-like: muted, no elevation) —— */
 .root:disabled {
   cursor: not-allowed;
   background: var(--purple-50);
   color: var(--purple-400);
   box-shadow: none;
+  opacity: 1;
 }
-.ghost:disabled, .link:disabled { background: transparent; }
+
+.ghost:disabled,
+.link:disabled,
+.outline:disabled,
+.destructive:disabled {
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-ink-placeholder);
+}
+
+.outline:disabled {
+  box-shadow: inset 0 0 0 1.5px var(--color-border-hairline);
+}
+
+.destructive:disabled {
+  box-shadow: inset 0 0 0 1.5px var(--color-border-hairline);
+}

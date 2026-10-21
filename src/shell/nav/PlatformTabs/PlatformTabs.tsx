@@ -1,4 +1,4 @@
-/** @shell PlatformTabs — Profile | Web | Design system | Widget Library. Keyboard: 1–4. */
+/** @shell PlatformTabs — Mobile | Web | Design system | Components. Keyboard: 1–4. */
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShellStore } from '../../shell.store';
@@ -39,8 +39,8 @@ export function PlatformTabs() {
 
   return (
     <div className={styles.root} role="tablist" aria-label="Platform">
-      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets} className={styles.tab} onClick={goProfile} title="Profile (1)">
-        Profile
+      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets} className={styles.tab} onClick={goProfile} title="Mobile (1)">
+        Mobile
       </button>
       <button type="button" role="tab" aria-selected={isWeb} className={styles.tab} onClick={goWeb} title="Web (2)">
         Web
@@ -48,8 +48,8 @@ export function PlatformTabs() {
       <button type="button" role="tab" aria-selected={isSystem} className={styles.tab} onClick={goSystem} title="Design system (3)">
         Design system
       </button>
-      <button type="button" role="tab" aria-selected={isWidgets} className={styles.tab} onClick={goWidgets} title="Widget Library (4)">
-        Widget Library
+      <button type="button" role="tab" aria-selected={isWidgets} className={styles.tab} onClick={goWidgets} title="Components (4)">
+        Components
       </button>
     </div>
   );

@@ -1,30 +1,30 @@
-/** Do's and don'ts (DESIGN.md › Do's and Don'ts, CLAUDE.md rule 8). */
+/** Do's and don'ts enforced by V2 components and CSS Modules. */
 import { Icon } from '@mobile/ui';
 import { Section } from '../Section';
 import styles from './sections.module.css';
 
 const DO = [
-  'Set every screen on the canvas with ink text; keep 20 pt side margins and 32 pt between sections.',
-  'Keep readable text at 7:1 or higher; check every new pair.',
-  'Use option rows for every set of choices, at least 56 pt tall.',
-  'Carry hierarchy with size, family (Cormorant vs DM Sans), colour and space.',
+  'Read colours and type from live semantic tokens on .phone-root — never invent hex in a screen.',
+  'Keep readable text at 7:1 or higher; check new pairs on the Colour page.',
+  'Use option rows for choices, at least the row minimum height.',
+  'Carry hierarchy with size, family, colour and space — not weight above 500.',
   'Show Deborah with her gold ring or glass blob wherever she speaks.',
-  'Pair every colour-coded state with an icon and words.',
-  'Consume third-party libraries through their ui adapter (Icon, Motion).',
+  'Pair colour-coded states with an icon and words.',
+  'Consume third-party libraries through the ui adapter (Icon, Motion).',
 ];
 const DONT = [
   'Use any weight above 500, or Medium outside buttons, answer titles, selected options and row titles.',
   'Use pills, tags, badges or chips for labels, statuses, filters or suggestions.',
-  'Use wave, ripple, shimmer, bounce or pulse animations, audio waveforms or typing dots.',
-  'Use gold as text on light surfaces (except Gold Ink) or as a button on the canvas.',
-  'Put shadows on cards, options or inputs; only floating things cast shadows.',
+  'Use wave, ripple, shimmer, bounce or pulse animations, or typing dots (Composer recording wave is the one exception).',
+  'Use gold as a primary button fill on the canvas.',
+  'Put shadows on cards, options or inputs; only floating chrome casts shadows.',
   'Use a coloured side stripe on cards, callouts or alerts.',
-  'Use gradient text, eyebrow labels above headings, or emoji as icons.',
+  'Ship v1-only or unused components in this catalog.',
 ];
 
 export function Rules() {
   return (
-    <Section id="rules" title="Do’s and don’ts" lede="The bans are part of the system. Components on this page follow them; anything that doesn’t is marked OPEN in its note.">
+    <Section id="rules" title="Do’s and don’ts" lede="Bans mirrored by V2 ui/ and patterns/. Specimens on this page follow them.">
       <div className={styles.rules}>
         <div className={styles.ruleCol}>
           <h3 className={styles.ruleHead}><Icon name="success" size={22} /> Do</h3>

@@ -1,9 +1,11 @@
-/** Page order and sidebar groups for the design system. */
+/** Page order and sidebar groups for the design system. V2 mobile flows only. */
 import type { ComponentType } from 'react';
 import { Foundations } from './sections/Foundations';
 import { Colors } from './sections/Colors';
 import { Typography } from './sections/Typography';
-import { SpaceShape } from './sections/SpaceShape';
+import { Space } from './sections/Space';
+import { Shape } from './sections/Shape';
+import { Depth } from './sections/Depth';
 import { Motion } from './sections/Motion';
 import { Icons } from './sections/Icons';
 import { Actions } from './sections/Actions';
@@ -28,7 +30,9 @@ export const NAV: { title: string; items: Entry[] }[] = [
       { id: 'overview', label: 'Overview', Component: Foundations },
       { id: 'color', label: 'Colour', Component: Colors },
       { id: 'type', label: 'Typography', Component: Typography },
-      { id: 'space', label: 'Space, shape, depth', Component: SpaceShape },
+      { id: 'space', label: 'Space', Component: Space },
+      { id: 'shape', label: 'Shape', Component: Shape },
+      { id: 'depth', label: 'Depth', Component: Depth },
       { id: 'motion', label: 'Motion', Component: Motion },
       { id: 'icons', label: 'Iconography', Component: Icons },
     ],

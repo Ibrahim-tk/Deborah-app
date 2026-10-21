@@ -11,9 +11,9 @@ export function Actions() {
     window.setTimeout(() => setLoading(false), 1600);
   };
   return (
-    <Section id="buttons" title="Buttons" lede="Calm, large and unmistakable. One primary per view, bottom-anchored on forms. Pressed: a darker fill plus scale 0.98.">
+    <Section id="buttons" title="Buttons" lede="MUI Button anatomy (contained · outlined · text), skinned with Oracle tokens. One primary per view. Deborah actions use the orb.">
       <Specimen name="Button" path="ui/Button" note="variant: primary · secondary · outline · ghost · link · destructive · emergency. size: lg · md · sm. Loading keeps the label and width.">
-        <Variant label="primary"><Button fullWidth leadingIcon="chat">Ask Deborah</Button></Variant>
+        <Variant label="primary"><Button fullWidth leadingIcon="deborah">Ask Oracle</Button></Variant>
         <Variant label="secondary"><Button variant="secondary" fullWidth>Not now</Button></Variant>
         <Variant label="outline"><Button variant="outline" fullWidth>Edit answers</Button></Variant>
         <Row>

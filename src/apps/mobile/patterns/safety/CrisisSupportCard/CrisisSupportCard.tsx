@@ -20,6 +20,8 @@ export interface CrisisSupportCardProps {
   /** Text / SMS crisis line (simulated). */
   onText?: () => void;
   onKeepTalking: () => void;
+  /** When false, sheet stays closed until the record is tapped (Design System). Product defaults to open. */
+  defaultOpen?: boolean;
 }
 
 export function CrisisSupportCard({
@@ -30,8 +32,9 @@ export function CrisisSupportCard({
   onCall911,
   onText,
   onKeepTalking,
+  defaultOpen = true,
 }: CrisisSupportCardProps) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(defaultOpen);
   const close = () => setOpen(false);
   const keep = () => {
     close();

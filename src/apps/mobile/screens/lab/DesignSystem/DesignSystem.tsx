@@ -1,12 +1,11 @@
 /**
- * @screen  LAB · Design system (route /design-system) — not a product screen
+ * @screen  LAB · Design system (route /internal/design-system) — not a product screen
  * @flow    — design tool
- * @states  one long page: foundations (live tokens) · components (ui) · patterns · do's and don'ts
- * @spec    DESIGN.md · deborah-design-system.md · docs/12-design-system.md
+ * @states  one long page: foundations (live .phone-root tokens) · V2 ui/ · V2 patterns · guidelines
  * @xref    web: — not built
  *
- * The living design system. Every value is read from the app's stylesheets at runtime and every specimen is
- * the real component from ui/ or patterns/, so this page always matches what the phone renders.
+ * Living catalog for Version 2 mobile only. Values come from computed CSS on .phone-root;
+ * specimens are components imported by product screens (not v1, not unused lab experiments).
  */
 import { useEffect, useState } from 'react';
 import { DeborahBlob, OVERLAY_HOST_ID } from '@mobile/ui';

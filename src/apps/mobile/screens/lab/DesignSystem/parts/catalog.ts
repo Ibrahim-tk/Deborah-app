@@ -1,6 +1,6 @@
 /**
- * Token catalog — the names (not values) the design system page shows. Values are read live (parts/live.ts).
- * Grouped as in src/apps/mobile/styles/mobile.tokens.css and mobile.skin.deborah.css.
+ * Token catalog — names only; values are read live from .phone-root (parts/live.ts).
+ * Sourced from what V2 mobile CSS actually uses (mobile.tokens + deborah skin), not DESIGN.md.
  */
 import type { IconName } from '@mobile/ui';
 

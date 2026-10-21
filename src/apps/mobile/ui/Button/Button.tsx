@@ -1,6 +1,7 @@
 /**
- * @ui Button — DESIGN.md › Buttons. primary · secondary · ghost (tertiary text) · destructive ·
- * emergency · link. Fully rounded, 56 pt (lg) / 48 pt (md); sm keeps a 48 pt hit area.
+ * @ui Button — MUI Button anatomy (contained · outlined · text), Oracle tokens.
+ * Variants: primary · secondary · outline · ghost · link · destructive · emergency.
+ * Fully rounded; heights from `--button-h`. `deborah` leading icon renders the orb.
  */
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cx } from '@shared/utils';
@@ -18,6 +19,11 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   loading?: boolean;
   leadingIcon?: IconName;
 }
+
+const iconSize = (size: NonNullable<ButtonProps['size']>, name?: IconName) => {
+  if (name === 'deborah') return size === 'sm' ? 22 : 26;
+  return size === 'sm' ? 18 : size === 'md' ? 20 : 22;
+};
 
 export function Button({
   children,
@@ -37,7 +43,7 @@ export function Button({
       aria-busy={loading || undefined}
       {...rest}
     >
-      {loading ? <Spinner size={16} /> : leadingIcon && <Icon name={leadingIcon} size={22} />}
+      {loading ? <Spinner size={16} /> : leadingIcon && <Icon name={leadingIcon} size={iconSize(size, leadingIcon)} />}
       <span className={styles.label}>{children}</span>
     </button>
   );

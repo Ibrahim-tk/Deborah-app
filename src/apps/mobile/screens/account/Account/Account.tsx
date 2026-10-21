@@ -83,7 +83,7 @@ export default function Account() {
       rows: [
         // Account details (design 2026-10-21): edited in sheets, like Phone number.
         { title: 'Name', value: [name, lastName].filter(Boolean).join(' ') || 'Not added', icon: 'account', onPress: () => openSheet('name') },
-        { title: 'Email', value: email ?? 'Not added', icon: 'mail', onPress: () => openSheet('email') },
+        { title: 'Email', value: email || 'Not added', icon: 'mail', onPress: () => openSheet('email') },
         { title: 'Phone number', value: phoneDisplay ?? 'Not added', icon: 'phone', onPress: openPhone },
         { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') },
         { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
@@ -123,6 +123,14 @@ export default function Account() {
         backLabel={canGoBack ? previousTitle : 'Home'}
       />
       <div className={styles.body} onScroll={onScroll}>
+
+        <div className={styles.profile}>
+          <span className={styles.avatar} aria-hidden>{initial}</span>
+          <p className={styles.name}>{name || 'You'}</p>
+          <p className={styles.meta}>{email || 'Free trial'}</p>
+        </div>
+
+        {/* Choose a plan sits under the profile, right above the Account section (design 2026-10-21). */}
         {trial && (
           <button type="button" className={styles.plan} onClick={() => nav.open('M-4.2')}>
             <span className={styles.planMark} aria-hidden>
@@ -137,12 +145,6 @@ export default function Account() {
             </span>
           </button>
         )}
-
-        <div className={styles.profile}>
-          <span className={styles.avatar} aria-hidden>{initial}</span>
-          <p className={styles.name}>{name || 'You'}</p>
-          <p className={styles.meta}>{email ?? 'Free trial'}</p>
-        </div>
 
         {sections.map((sec) => (
           <section key={sec.title} className={styles.section} aria-labelledby={`settings-${sec.title}`}>

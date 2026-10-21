@@ -1,4 +1,4 @@
-/** Colour: primitive ramps, semantic roles (with live contrast for text) and the semantic state pairs. */
+/** Colour: semantic roles first (what V2 uses), then ramps. Values from live .phone-root. */
 import type { CSSProperties } from 'react';
 import { Section, Group } from '../Section';
 import { useTokenReader, contrast } from '../live';
@@ -16,26 +16,7 @@ export function Colors() {
   const read = useTokenReader();
   const canvas = read('--color-canvas');
   return (
-    <Section id="color" title="Colour" lede="A warm paper-and-plum palette. Primitives are re-pointed by the Deborah skin; components only ever use the semantic roles below.">
-      <Group title="Primitive ramps" note="Read from :root, then overridden inside the phone by the skin. These are the values the app renders.">
-        <div className={styles.ramps}>
-          {RAMPS.map((ramp) => (
-            <div key={ramp.name} className={styles.ramp}>
-              <span className={styles.rampName}>{ramp.name}</span>
-              <div className={styles.rampSteps}>
-                {ramp.tokens.map((t) => (
-                  <div key={t} className={styles.step}>
-                    <span className={styles.stepChip} style={fill(read(t))} />
-                    <span className={styles.mono}>{t.replace(/^--[a-z]+-/, '')}</span>
-                    <span className={styles.monoMuted}>{read(t)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </Group>
-
+    <Section id="color" title="Colour" lede="Colours as computed on .phone-root today (mobile tokens + Deborah skin). Product CSS uses semantic roles; ramps are the primitives underneath.">
       {COLOR_GROUPS.map((g) => (
         <Group key={g.title} title={g.title} note={g.note}>
           <div className={styles.swatches}>
@@ -59,7 +40,7 @@ export function Colors() {
         </Group>
       ))}
 
-      <Group title="Semantic states" note="Information is never carried by colour alone: every state pairs its ink with an icon and words.">
+      <Group title="Semantic states" note="Danger · Success · Warning — ink on tint, measured live.">
         <div className={styles.swatches}>
           {SEMANTIC.map((s) => {
             const ink = read(s.ink);
@@ -73,6 +54,25 @@ export function Colors() {
               </div>
             );
           })}
+        </div>
+      </Group>
+
+      <Group title="Primitive ramps" note="Under the semantics. Skin may remap steps; chips show the resolved value.">
+        <div className={styles.ramps}>
+          {RAMPS.map((ramp) => (
+            <div key={ramp.name} className={styles.ramp}>
+              <span className={styles.rampName}>{ramp.name}</span>
+              <div className={styles.rampSteps}>
+                {ramp.tokens.map((t) => (
+                  <div key={t} className={styles.step}>
+                    <span className={styles.stepChip} style={fill(read(t))} />
+                    <span className={styles.mono}>{t.replace(/^--[a-z]+-/, '')}</span>
+                    <span className={styles.monoMuted}>{read(t)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </Group>
     </Section>

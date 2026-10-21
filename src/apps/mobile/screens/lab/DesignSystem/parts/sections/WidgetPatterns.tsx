@@ -2,13 +2,10 @@
 import { useState } from 'react';
 import { findProduct } from '@shared/data';
 import {
-  BookDeborah,
   ChoicePills,
   ConfirmCard,
-  DestinationTilePair,
   FullChoicePills,
   FullChoicePillsGrid,
-  GlassCareStrip,
   HealingPlanCard,
   HealingPlanSection,
   HomeMediaHero,
@@ -16,16 +13,12 @@ import {
   InlineConsent,
   IntakeCompletionCard,
   IntakeSectionHeader,
-  LinkStatusCard,
   MoodScale,
   NamedReasonList,
-  NextIntentList,
   PhoneField,
   PhotoDestinationPair,
   PillDescribeField,
   PolicyUpdateConsent,
-  PrimaryIntentCard,
-  PromptStarterList,
   QuestionChoices,
   RecommendationCard,
   ReminderCard,
@@ -36,7 +29,6 @@ import {
   type NamedReason,
   type PhoneValue,
 } from '@mobile/patterns/widgets';
-import { Button } from '@mobile/ui';
 import { Section } from '../Section';
 import { Grid, Specimen, Variant } from '../Specimen';
 import styles from './sections.module.css';
@@ -285,9 +277,6 @@ export function WidgetPatterns() {
           <MoodScale title="How are you feeling today?" onPick={noop} />
           <ScaleCheck title="How much is sleep bothering you?" low="Not at all" high="A lot" initial={4} onDone={noop} />
         </Specimen>
-        <Specimen name="BookDeborah" path="patterns/widgets/BookDeborah" note="Tile CTA → small sheet: team notified, they’ll contact you. No calendar.">
-          <BookDeborah onRequest={noop} />
-        </Specimen>
         <Specimen name="ConfirmCard · ReminderCard" path="patterns/widgets/ConfirmCard" note="Dark glass confirm for actions with consequences; reminder with an on/off switch.">
           <Variant label="ConfirmCard">
             <ConfirmCard eyebrow="Confirm purchase" icon="shop" title="Genesis Gold" value="$48" detail="One-time · Ships in 2 days" detailValue="Card ending 4242" confirmedText="Ordered. You’ll get a confirmation." onConfirm={noop} onCancel={noop} />
@@ -317,25 +306,8 @@ export function WidgetPatterns() {
         <Specimen name="PolicyUpdateConsent" path="patterns/widgets/PolicyUpdateConsent" note="Returning-user re-consent when legal version bumps.">
           <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={noop} />
         </Specimen>
-        <Specimen name="PrimaryIntentCard" path="patterns/widgets/PrimaryIntentCard" note="Home hero — continue / start / complete profile.">
-          <PrimaryIntentCard titleId="ds-intent" title="Sleep and night waking" body="Ready to pick up where you left off." kicker="Continue with Deborah" kickerIcon="chat">
-            <Button fullWidth onClick={noop}>Continue</Button>
-          </PrimaryIntentCard>
-        </Specimen>
-        <Specimen name="PromptStarterList" path="patterns/widgets/PromptStarterList" note="Full-width starter rows (not chips).">
-          <PromptStarterList items={[{ label: 'I’ve been feeling tired', prefill: 'x' }, { label: 'Help me with sleep', prefill: 'y' }]} onPrompt={noop} />
-        </Specimen>
-        <Specimen name="NextIntentList" path="patterns/widgets/NextIntentRow" note="Returning-user next steps.">
-          <NextIntentList items={[{ key: 'a', icon: 'bell', title: 'Check in with Deborah', sub: 'How things are going', onPress: noop }]} />
-        </Specimen>
         <Specimen name="TodayHabitsCard" path="patterns/widgets/TodayHabitsCard" note="Established Home — today’s habits.">
           <TodayHabitsCard day={18} habits={[{ id: '1', text: 'Cool bedroom', done: true }, { id: '2', text: 'Magnesium', done: false }]} onToggle={noop} />
-        </Specimen>
-        <Specimen name="LinkStatusCard" path="patterns/widgets/LinkStatusCard" note="Tonal link/status row (Reports, Continue).">
-          <LinkStatusCard tone="lilac" lead="labs" title="Reports" meta="2 lab reports" onPress={noop} />
-        </Specimen>
-        <Specimen name="DestinationTilePair" path="patterns/widgets/DestinationTilePair" note="My Health · Family destinations.">
-          <DestinationTilePair tiles={[{ tone: 'linen', lead: 'health', title: 'My Health', meta: 'Profile 80%', progress: 0.8, onPress: noop }, { tone: 'rose', lead: 'family', title: 'Family', meta: '2 profiles', onPress: noop }]} />
         </Specimen>
         <Specimen name="RecommendationCard" path="patterns/widgets/RecommendationCard" note="Personalised product rail on Home.">
           {findProduct('genesis-gold') && (
@@ -350,9 +322,6 @@ export function WidgetPatterns() {
         </Specimen>
         <Specimen name="PhotoDestinationPair" path="patterns/widgets/PhotoDestinationPair" note="My Health · Family — art + circular chevron/plus.">
           <PhotoDestinationPair tiles={[{ title: 'My Health', meta: 'Profile 80%', tone: 'mint', artifact: 'dest-health-art', action: 'chevron', onPress: noop }, { title: 'Family', meta: '2 profiles', tone: 'rose', artifact: 'dest-family-art', action: 'plus', onPress: noop }]} />
-        </Specimen>
-        <Specimen name="GlassCareStrip" path="patterns/widgets/GlassCareStrip" note="Quiet care shortcuts.">
-          <GlassCareStrip items={[{ key: 'a', label: 'Complete intake', meta: '65%', onPress: noop }, { key: 'b', label: 'Healing plan', meta: 'Day 18', onPress: noop }]} />
         </Specimen>
       </Grid>
     </Section>

@@ -126,7 +126,7 @@ const map = {
   symptoms: StethoscopeIcon,
 } as const;
 
-/** `deborah` is not a glyph: it renders the small Deborah orb wherever an action means "Ask Deborah". */
+/** `deborah` is not a glyph: it renders the small Deborah orb wherever an action means "Ask Oracle". */
 export type IconName = keyof typeof map | 'deborah' | 'appleFilled';
 
 // Solid Apple logo — Hugeicons' free set only ships the outline.

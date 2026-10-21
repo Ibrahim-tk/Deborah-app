@@ -1,7 +1,7 @@
-/** Plans, products and family profiles. */
+/** Plans, products and family profiles used in V2. */
 import { useState } from 'react';
 import { PlanCard, ProductCard, ShopTiles } from '@mobile/patterns/commerce';
-import { ProfileBanner, ProfileSwitcherList } from '@mobile/patterns/profile';
+import { ProfileSwitcherList } from '@mobile/patterns/profile';
 import { Segmented } from '@mobile/ui';
 import { planList, productList } from '@shared/data';
 import type { Billing } from '@shared/types/domain';
@@ -20,21 +20,20 @@ export function CommercePatterns() {
   const [active, setActive] = useState('p1');
   const product = productList[0];
   return (
-    <Section id="commerce" title="Plans, products and family" lede="Radio cards for plans (“Most chosen” as plain text), Deborah’s formulations as calm product cards, and the profile switcher.">
+    <Section id="commerce" title="Plans and family" lede="Plan radio cards, product cards, and the profile switcher — as used in V2 flows.">
       <Grid>
         <Specimen name="PlanCard" path="patterns/commerce/PlanCard" note="Price crossfades on billing change. Selected = accent outline.">
           <Segmented label="Billing" value={billing} onChange={setBilling} options={[{ value: 'monthly', label: 'Monthly' }, { value: 'annual', label: 'Annual' }]} />
           {planList.map((p) => <PlanCard key={p.id} plan={p} billing={billing} selected={plan === p.id} onSelect={() => setPlan(p.id)} />)}
         </Specimen>
-        <Specimen name="ProductCard · ShopTiles" path="patterns/commerce/ProductCard" note="Only inside answer §6 or the shop. Personal note in small text under the card.">
+        <Specimen name="ProductCard · ShopTiles" path="patterns/commerce/ProductCard" note="Answer §6 or the shop.">
           <Variant label="ProductCard">
             <div data-placeholder><ProductCard product={product} productRef={{ productId: product.id, why: product.tagline, frame90: 'Try it for 90 days, then check in.' }} onShop={noop} /></div>
           </Variant>
           <Variant label="ShopTiles"><ShopTiles title="Formulated by Deborah" products={productList.slice(0, 3)} onShop={noop} /></Variant>
         </Specimen>
-        <Specimen name="ProfileSwitcherList · ProfileBanner" path="patterns/profile/ProfileSwitcherList" note="Initial, name, relationship, check on the active row. The banner sits above a chat about someone else.">
+        <Specimen name="ProfileSwitcherList" path="patterns/profile/ProfileSwitcherList" note="Initial, name, relationship, check on the active row.">
           <ProfileSwitcherList profiles={[...PROFILES]} activeId={active} addState="available" maxProfiles={4} onSelect={setActive} onAdd={noop} />
-          <ProfileBanner who="Child" minor onSwitch={noop} />
         </Specimen>
       </Grid>
     </Section>
