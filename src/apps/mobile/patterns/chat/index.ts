@@ -25,3 +25,4 @@ export * from './ReviewFactsCard';
 export * from './GuidanceNextSteps';
 export * from './VisitSummaryCard';
 export * from './AttachedDocument';
+export * from './SourceTrace';

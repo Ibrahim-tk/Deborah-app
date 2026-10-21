@@ -93,6 +93,15 @@
   text-wrap: pretty;
 }
 
+/* Clearer progress (design 2026-10-21): thicker arc, visible lilac track, on a frosted disc. */
 .ring {
   flex: none;
+  position: relative;
+  z-index: 1;
+  --ring-stroke: 4;
+  --ring-track: color-mix(in srgb, var(--purple-500) 22%, transparent);
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.6);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }

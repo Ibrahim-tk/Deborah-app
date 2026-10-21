@@ -1,8 +1,8 @@
 /**
  * @ui CodeInput — verification code boxes on MUI Base UI `OTPField` (paste fills all, auto-advance,
  * backspace steps back, one-time-code autofill). Base UI is imported only here (CLAUDE.md rule 7).
- * One soft pill: digits sit inline, each empty slot shows a faint dash, the caret marks the active slot;
- * focus = neutral border on the pill (no purple).
+ * Separate soft boxes, one per digit (design direction 2026-10-20): tonal fill, no outline; the active box
+ * deepens a little, filled boxes stay soft.
  */
 import { OTPField } from '@base-ui/react/otp-field';
 import { cx } from '@shared/utils';
@@ -37,7 +37,7 @@ export function CodeInput({ value, onChange, onComplete, length = 6, label = 'Ve
       data-verifying={verifying || undefined}
     >
       {Array.from({ length }, (_, i) => (
-        <OTPField.Input key={i} className={styles.slot} placeholder="–" aria-label={`Digit ${i + 1}`} autoFocus={autoFocus && i === 0} />
+        <OTPField.Input key={i} className={styles.slot} aria-label={`Digit ${i + 1}`} autoFocus={autoFocus && i === 0} />
       ))}
     </OTPField.Root>
   );

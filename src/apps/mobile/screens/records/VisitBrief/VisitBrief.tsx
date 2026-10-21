@@ -1,7 +1,11 @@
 /**
  * @screen  M-9.7 · My Visit Notes (For My Provider)
  * @flow    F09b Visit brief (Miro Step 5) · entered from F02e Discuss with provider
- * @states  review · saved · appointment follow-up · empty
+ * @states  review (read-only notes; provider name + appointment date editable) · saved · empty
+ *
+ * Design direction 2026-10-20: the notes sit straight on the page (no white card); only the provider's name and the
+ * appointment date can be changed; ✓ saves in one tap (a date also schedules the day-after visit check-in);
+ * footer: Save PDF (left) · Log visit (right).
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F09b-visit-brief.md
  * @xref    web: W-9.7 — not built
@@ -9,19 +13,13 @@
 import { useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { assembleVisitBrief, latestCompletedAnswer, visitBriefPreview } from '@shared/engine';
-import {
-  BOOKING_DAY_AFTER_BODY,
-  FOLLOW_UP_TITLE,
-  useAppStore,
-  VISIT_NOTES_TAKE_BODY,
-} from '@shared/store';
+import { BOOKING_DAY_AFTER_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { BottomSheet, Button, GlassButton, Modal } from '@mobile/ui';
+import { Button, GlassButton, Input, Modal } from '@mobile/ui';
 import { EmptyState } from '@mobile/patterns/health';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
-import { AppointmentFollowUp } from './parts/AppointmentFollowUp';
 import { BriefDocument } from './parts/BriefDocument';
 import styles from './VisitBrief.module.css';
 
@@ -75,8 +73,11 @@ export default function VisitBrief() {
   );
   const [brief, setBrief] = useState<VisitBriefContent | null>(() => seed?.brief ?? null);
   const [noteId, setNoteId] = useState<string | undefined>(() => seed?.noteId);
-  const [followUp, setFollowUp] = useState(false);
   const profileId = seed?.profileId;
+  // Heading about this conversation: the brief's seeded title, else the chat's topic, else the generic name.
+  const topic = useAppStore((s) => (seed?.conversationId ? s.conversations.byId[seed.conversationId]?.topic : undefined));
+  const raw = brief?.title?.trim() || topic?.trim();
+  const heading = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : 'My Visit Notes';
   // The after-visit note logged for this brief, if any (F09c links it by briefNoteId).
   const outcomeId = useAppStore((s) => Object.values(s.notes.byId).find((n) => noteId && n.visit?.briefNoteId === noteId)?.id);
 
@@ -97,7 +98,7 @@ export default function VisitBrief() {
     const s = useAppStore.getState();
     const next: VisitBriefContent = { ...brief };
     const body = visitBriefPreview(next);
-    const title = 'For my provider';
+    const title = heading === 'My Visit Notes' ? 'For my provider' : heading;
     if (noteId) {
       s.updateNote(noteId, { title, body, brief: next, kind: 'provider-brief', sourceMessageId: seed?.sourceMessageId, conversationId: seed?.conversationId });
       return noteId;
@@ -118,12 +119,24 @@ export default function VisitBrief() {
     return id;
   };
 
-  const afterAction = () => setFollowUp(true);
-
+  // ✓: one tap saves. With an appointment date, the visit check-in is set for the day after — no extra step.
   const onSave = () => {
-    persist();
+    const id = persist();
+    if (brief.appointmentDate) {
+      const s = useAppStore.getState();
+      s.scheduleNotification({
+        id: uid('n'),
+        title: FOLLOW_UP_TITLE,
+        body: BOOKING_DAY_AFTER_BODY,
+        // F09c: the day after, open the visit debrief for this brief (docs/ux/F09c-log-visit.md › Entry points).
+        deepLink: `visit:${id}`,
+        deliverAt: addDays(brief.appointmentDate, 1),
+        delivered: false,
+        read: false,
+      });
+    }
     toast('Saved to My Visit Notes');
-    afterAction();
+    dismissModal();
   };
 
   // Share: the device's own share sheet (iOS / macOS Safari); browsers without it get a quiet note.
@@ -133,73 +146,49 @@ export default function VisitBrief() {
     try { await navigator.share({ title: 'For my provider', text: 'Notes for my provider from Your Oracle Clinician' }); } catch { /* dismissed */ }
   };
 
-  const onPdf = () => {
+  const onPdf = () => open('M-9.6', { briefNoteId: persist() });
+  const onLog = () => {
     const id = persist();
-    open('M-9.6', { briefNoteId: id });
-    afterAction();
-  };
-
-  const scheduleDayAfter = (appointmentIso: string) => {
-    const s = useAppStore.getState();
-    const noteId = persist();
-    s.updateNote(noteId, { brief: { ...brief, appointmentDate: appointmentIso } });
-    s.scheduleNotification({
-      id: uid('n'),
-      title: FOLLOW_UP_TITLE,
-      body: BOOKING_DAY_AFTER_BODY,
-      // F09c: the day after, open the visit debrief for this brief (docs/ux/F09c-log-visit.md › Entry points).
-      deepLink: `visit:${noteId}`,
-      deliverAt: addDays(appointmentIso, 1),
-      delivered: false,
-      read: false,
-    });
-    toast('Check-in set for the day after your appointment');
     dismissModal();
+    if (outcomeId) open('M-9.8', { noteId: outcomeId });
+    else openAsk({ mode: 'debrief', briefNoteId: id });
   };
-
-  const scheduleSevenDay = () => {
-    const s = useAppStore.getState();
-    s.scheduleNotification({
-      id: uid('n'),
-      title: FOLLOW_UP_TITLE,
-      body: VISIT_NOTES_TAKE_BODY,
-      deepLink: `followup:${profileId}`,
-      deliverAt: addDays(nowFrom(s).toISOString(), 7),
-      delivered: false,
-      read: false,
-    });
-    toast('Take the notes to the appointment — we’ll check in after 7 days');
-    dismissModal();
-  };
+  const dateValue = brief.appointmentDate ? brief.appointmentDate.slice(0, 10) : '';
 
   return (
     <div className={styles.root} data-xref="M-9.7 · My Visit Notes">
       <Modal
-        title="For my provider"
+        title={heading}
         left={<GlassButton icon="share" aria-label="Share" onClick={onShare} />}
         right={<GlassButton icon="check" aria-label="Save" onClick={onSave} />}
         footer={
-          (
-            <div className={styles.footer}>
-              {/* Miro Step 6: after the appointment, log how it went (chat debrief), or read the outcome already logged. */}
-              {noteId && (outcomeId ? (
-                <Button fullWidth leadingIcon="note" onClick={() => { dismissModal(); open('M-9.8', { noteId: outcomeId }); }}>View visit outcome</Button>
-              ) : (
-                <Button fullWidth leadingIcon="calendar" onClick={() => { dismissModal(); openAsk({ mode: 'debrief', briefNoteId: noteId }); }}>Log how the visit went</Button>
-              ))}
-              <Button variant="secondary" fullWidth leadingIcon="pdf" onClick={onPdf}>Download PDF</Button>
-            </div>
-          )
+          <div className={styles.actions}>
+            <Button variant="secondary" fullWidth leadingIcon="pdf" onClick={onPdf}>Save PDF</Button>
+            <Button fullWidth leadingIcon={outcomeId ? 'note' : 'calendar'} onClick={onLog}>{outcomeId ? 'View visit' : 'Log visit'}</Button>
+          </div>
         }
       >
         <div className={styles.body}>
-          <BriefDocument brief={brief} onChange={setBrief} />
+          {/* The only two things to fill in here; the rest of the notes are read-only. */}
+          <section className={styles.fields} aria-label="Your appointment">
+            <Input
+              label="Provider’s name"
+              placeholder="e.g. Dr. Patel"
+              autoComplete="off"
+              autoCapitalize="words"
+              value={brief.providerName ?? ''}
+              onChange={(e) => setBrief({ ...brief, providerName: e.target.value })}
+            />
+            <Input
+              label="Appointment date"
+              type="date"
+              value={dateValue}
+              onChange={(e) => setBrief({ ...brief, appointmentDate: e.target.value ? new Date(`${e.target.value}T12:00:00`).toISOString() : undefined })}
+            />
+          </section>
+          <BriefDocument brief={brief} flat />
         </div>
       </Modal>
-      {/* After save / download: the appointment question in a bottom sheet (design 2026-10-20). */}
-      <BottomSheet open={followUp} onClose={() => setFollowUp(false)} showClose title="Do you have an appointment date?">
-        <AppointmentFollowUp onWithDate={scheduleDayAfter} onWithoutDate={scheduleSevenDay} />
-      </BottomSheet>
     </div>
   );
 }

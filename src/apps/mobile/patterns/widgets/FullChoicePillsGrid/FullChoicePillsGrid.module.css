@@ -31,10 +31,11 @@
   padding: var(--space-2) var(--space-5);
   border: 0;
   border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.75);
-  box-shadow: inset 0 0 0 1px var(--surface-border);
-  -webkit-backdrop-filter: var(--surface-blur);
-  backdrop-filter: var(--surface-blur);
+  position: relative;
+  isolation: isolate;
+  /* Glass tile: light tint so the tree reads through; edge highlight instead of a fill. */
+  background: rgb(255 255 255 / 0.22);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.7);
   font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
   letter-spacing: -0.015em;
   color: var(--color-ink);
@@ -43,11 +44,38 @@
   transition: background 300ms ease-out, box-shadow 300ms ease-out;
   -webkit-tap-highlight-color: transparent;
 }
-.option:hover { background: rgb(255 255 255 / 0.95); }
+.option:hover { background: rgb(255 255 255 / 0.32); }
+/* Light whole-tile blur on a pseudo layer (no backdrop-filter on .option, so the label halo samples the real backdrop). */
+.option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: inherit;
+  -webkit-backdrop-filter: blur(4px) saturate(140%);
+  backdrop-filter: blur(4px) saturate(140%);
+}
+/* Frosted halo hugging the label: heavy blur fading at its edges keeps text ≥ 7:1 over busy foliage. */
+.label { position: relative; }
+.label::before {
+  content: '';
+  position: absolute;
+  inset: -8px -16px;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 0.5);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
+  mask-image: radial-gradient(closest-side, #000 55%, transparent);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .option { background: rgb(255 255 255 / 0.85); }
+}
 .option:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .option:disabled { opacity: 0.45; cursor: default; }
 .option[aria-checked='true'] {
-  background: var(--selected-tint);
+  background: color-mix(in srgb, var(--selected-tint) 70%, transparent);
   box-shadow: inset 0 0 0 1.5px var(--color-border-selected);
 }
 

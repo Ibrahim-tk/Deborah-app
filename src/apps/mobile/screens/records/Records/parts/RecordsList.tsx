@@ -9,9 +9,10 @@ import { ConsultationRow, EmptyState, VisitNoteCard } from '@mobile/patterns/hea
 import { useNav } from '@mobile/navigation';
 import styles from '../Records.module.css';
 import own from './RecordsList.module.css';
+import { AttachmentsGallery } from './AttachmentsGallery';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
-export type Segment = 'consultations' | 'notes' | 'labs';
+export type Segment = 'consultations' | 'notes' | 'labs' | 'attachments';
 
 export interface RecordsListProps {
   segment: Segment;
@@ -94,6 +95,8 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
       </ul>
     );
   }
+
+  if (segment === 'attachments') return <AttachmentsGallery profileId={profileId} />;
 
   if (segment === 'notes') {
     if (notes.length === 0) {

@@ -5,7 +5,7 @@
 import type { ReactNode } from 'react';
 import { DeborahBlob } from '@mobile/ui/DeborahBlob';
 import { Icon } from '@mobile/ui';
-import { artifactSrc, type HomeArtifactId, type HomeTone } from '../homeArtifacts';
+import { type HomeArtifactId, type HomeTone } from '../homeArtifacts';
 import styles from './HomeMediaHero.module.css';
 
 export interface HomeMediaHeroProps {
@@ -30,7 +30,7 @@ export function HomeMediaHero({
   titleId,
   title,
   tone = 'hero',
-  artifact = 'violet-bloom',
+  artifact: _artifact,
   when,
   meta,
   pending,
@@ -43,13 +43,6 @@ export function HomeMediaHero({
   if (compactHero) {
     return (
       <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>
-        <img
-          className={styles.artifact}
-          src={artifactSrc(artifact)}
-          alt=""
-          decoding="async"
-          aria-hidden
-        />
         <div className={styles.bodyCompact}>
           <div className={styles.main}>
             <DeborahBlob size={52} label="Deborah" className={styles.orb} />
@@ -71,13 +64,6 @@ export function HomeMediaHero({
 
   return (
     <section className={styles.root} data-tone={tone} aria-labelledby={titleId}>
-      <img
-        className={styles.artifact}
-        src={artifactSrc(artifact)}
-        alt=""
-        decoding="async"
-        aria-hidden
-      />
       <div className={styles.body}>
         <h2 id={titleId} className={styles.title}>{title}</h2>
         {meta && <p className={styles.meta}>{meta}</p>}

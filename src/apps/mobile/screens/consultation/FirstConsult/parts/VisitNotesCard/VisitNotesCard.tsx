@@ -1,31 +1,47 @@
-/** Visit notes drawn inline in a premade chat: header lines, numbered sections, then save / share. */
-import type { FlowNode } from '@shared/types/flow';
+/**
+ * Generative visit-notes card (design 2026-10-21, receipt-card reference): a thumbnail and title, then plain
+ * label/value facts — provider, appointment, what's in the notes — and two small buttons. No badge (DESIGN.md).
+ */
+import { formatShortDate } from '@shared/utils';
 import { Button, Icon } from '@mobile/ui';
+import type { Appointment } from '../AppointmentForm';
 import styles from './VisitNotesCard.module.css';
 
 export interface VisitNotesCardProps {
-  notes: NonNullable<FlowNode['visitNotes']>;
-  say: (s?: string) => string;
-  onSave: () => void;
-  onShare: () => void;
+  title: string;
+  appointment?: Appointment;
+  /** e.g. "4 questions · 2 tests to ask about". */
+  summary: string;
+  onOpen: () => void;
+  onPdf: () => void;
 }
 
-export function VisitNotesCard({ notes, say, onSave, onShare }: VisitNotesCardProps) {
+export function VisitNotesCard({ title, appointment, summary, onOpen, onPdf }: VisitNotesCardProps) {
+  const facts = [
+    appointment && { label: 'Provider', value: appointment.provider || 'Not added yet' },
+    appointment && { label: 'Appointment', value: formatShortDate(appointment.date) },
+    { label: 'Visit notes', value: summary },
+  ].filter(Boolean) as { label: string; value: string }[];
   return (
-    <section className={styles.root} aria-label={notes.title}>
-      <p className={styles.head}><Icon name="note" size={16} />{notes.title}</p>
-      <ul className={styles.meta}>{notes.meta.map((m) => <li key={m}>{say(m)}</li>)}</ul>
-      {notes.sections.map((s) => (
-        <div key={s.title} className={styles.section}>
-          <h4 className={styles.title}>{s.title}</h4>
-          {typeof s.body === 'string'
-            ? <p className={styles.body}>{say(s.body)}</p>
-            : <ul className={styles.list}>{s.body.map((b) => <li key={b}>{say(b)}</li>)}</ul>}
+    <section className={styles.root} aria-label={title}>
+      <div className={styles.head}>
+        <span className={styles.thumb} aria-hidden><Icon name="note" size={24} /></span>
+        <div className={styles.titles}>
+          <p className={styles.title}>{title}</p>
+          <p className={styles.sub}>Ready to review</p>
         </div>
-      ))}
+      </div>
+      <dl className={styles.facts}>
+        {facts.map((f) => (
+          <div key={f.label} className={styles.fact}>
+            <dt>{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
       <div className={styles.actions}>
-        <Button fullWidth leadingIcon="note" onClick={onSave}>Save to My Visit Notes</Button>
-        <Button variant="secondary" fullWidth onClick={onShare}>Share as PDF</Button>
+        <Button size="sm" fullWidth leadingIcon="note" onClick={onOpen}>Open notes</Button>
+        <Button size="sm" variant="secondary" fullWidth onClick={onPdf}>Save PDF</Button>
       </div>
     </section>
   );

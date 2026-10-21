@@ -1,4 +1,5 @@
 /** Step builders for each conversation phase (docs/07-ai-simulation.md §2). */
+import { formatShortDate } from '../utils/dates';
 import { persona, scripts } from '../data';
 import type { Script } from '../types/content';
 import type { Conversation, LabReport, Message, Profile } from '../types/domain';
@@ -246,7 +247,8 @@ export function answerSteps(
     ...(opts.retry
       ? []
       : deborahText(ctx, provider ? providerReviewCopy.lead : refresh ? 'I’ve updated this with your labs.' : afterVisitLead(conv) + persona.voice.answerLead)),
-    { type: 'thinking', on: true, label: reviewing },
+    // Grounded in the user's own labs: say so while thinking (SourceTrace, design 2026-10-21).
+    { type: 'thinking', on: true, label: opts.labs?.values.length ? `Reading your lab report${opts.labs.collectedAt ? ` from ${formatShortDate(opts.labs.collectedAt)}` : ''}…` : reviewing },
     { type: 'delay', ms: between(600, 800) },
     { type: 'thinking', on: true, label: handbook },
     { type: 'delay', ms: between(400, 700) },

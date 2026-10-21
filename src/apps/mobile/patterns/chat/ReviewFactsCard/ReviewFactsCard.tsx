@@ -9,7 +9,7 @@
  */
 import { useState } from 'react';
 import type { PendingFact } from '@shared/types/domain';
-import { Button, Checkbox, Icon } from '@mobile/ui';
+import { Button, Checkbox, Icon, IconButton } from '@mobile/ui';
 import styles from './ReviewFactsCard.module.css';
 
 export interface ReviewFactsCardProps {
@@ -20,7 +20,8 @@ export interface ReviewFactsCardProps {
   onDiscard: (ids: string[]) => void;
 }
 
-export function ReviewFactsCard({ facts, onConfirm, onEdit, onDiscard }: ReviewFactsCardProps) {
+// `onEdit` stays in the props for callers; the Edit button was removed (design 2026-10-21).
+export function ReviewFactsCard({ facts, onConfirm, onDiscard }: ReviewFactsCardProps) {
   const pending = facts.filter((f) => f.status === 'pending');
   const [off, setOff] = useState<string[]>([]);
 
@@ -39,22 +40,21 @@ export function ReviewFactsCard({ facts, onConfirm, onEdit, onDiscard }: ReviewF
 
   return (
     <section className={styles.root} aria-labelledby="review-facts-title">
+      {/* Simplified (design 2026-10-21): title · small checkboxes · Save; × top-right = Don't save. */}
       <div className={styles.intro}>
-        <h3 id="review-facts-title" className={styles.title}>Add this to your health profile?</h3>
-        <p className={styles.body}>I noted these while we talked. Nothing is saved until you say so.</p>
+        <h3 id="review-facts-title" className={styles.title}>Add this to your health profile</h3>
+        <IconButton icon="close" size="sm" label="Don’t save" className={styles.close} onClick={() => onDiscard(pending.map((f) => f.id))} />
       </div>
       <ul className={styles.list}>
         {pending.map((f) => (
           <li key={f.id}>
-            <Checkbox checked={!off.includes(f.id)} onChange={(on) => toggle(f.id, on)} label={f.label} description={f.value} />
+            <Checkbox size="sm" checked={!off.includes(f.id)} onChange={(on) => toggle(f.id, on)} label={f.label} description={f.value} />
           </li>
         ))}
       </ul>
       <div className={styles.actions}>
         {/* Nothing ticked: saving saves nothing, the same as Don't save (no disabled state, DESIGN.md › Buttons). */}
-        <Button fullWidth onClick={() => onConfirm(keep, off)}>Save to my profile</Button>
-        <Button variant="secondary" fullWidth onClick={onEdit}>Edit</Button>
-        <Button variant="link" onClick={() => onDiscard(pending.map((f) => f.id))}>Don’t save</Button>
+        <Button className={styles.save} fullWidth onClick={() => onConfirm(keep, off)}>Save to my profile</Button>
       </div>
     </section>
   );

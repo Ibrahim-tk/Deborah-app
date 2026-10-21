@@ -1,39 +1,39 @@
 /**
- * @pattern ChatLauncher — looks like the chat composer but is one button: tapping anywhere opens
- *          the Conversation (M-2.1) with the field focused. Used where chat is offered, not held.
- * @usedBy  M-2.0 (Home hero, with glow)
- * @spec    design direction 2026-10-08 (Home)
+ * @pattern ChatLauncher — renders the real Composer (pixel-identical) under a transparent button:
+ *          tapping anywhere opens the Conversation (M-2.1) with the field focused.
+ * @usedBy  M-2.0 (Home hero)
+ * @spec    design direction 2026-10-08 (Home) · 2026-10-21: exact copy of the Composer
  * @xref    web: apps/web/patterns/chat/ChatLauncher — not built
  */
-import { EdgeLight, Icon } from '@mobile/ui';
+import { Composer } from '../Composer';
 import styles from './ChatLauncher.module.css';
 
 export interface ChatLauncherProps {
   placeholder?: string;
-  /** Hero use on Home: a slow travelling light around the rim to draw the eye. */
+  /** Kept for callers; the Composer's own EdgeLight glow is always on. */
   glow?: boolean;
   onOpen: () => void;
 }
 
-export function ChatLauncher({ placeholder = 'Describe how you’re feeling…', glow, onOpen }: ChatLauncherProps) {
+const noop = () => {};
+
+export function ChatLauncher({ placeholder = 'Describe how you’re feeling…', onOpen }: ChatLauncherProps) {
   return (
     <div className={styles.wrap}>
-      {/* Glow behind the white launcher — not on the rim. */}
-      {glow && <EdgeLight className={styles.edgeLight} />}
-      <button type="button" className={glow ? `${styles.root} ${styles.glow}` : styles.root} onClick={onOpen} aria-label="Message Deborah">
-        <span className={styles.placeholder}>{placeholder}</span>
-        <span className={styles.tools} aria-hidden>
-          <span className={styles.tool}>
-            <Icon name="plus" size={20} />
-          </span>
-          <span className={styles.tool}>
-            <Icon name="mic" size={20} />
-          </span>
-          <span className={`${styles.tool} ${styles.send}`}>
-            <Icon name="send" size={18} />
-          </span>
-        </span>
-      </button>
+      <div className={styles.composer} aria-hidden {...{ inert: "" }}>
+        <Composer
+          value=""
+          onChange={noop}
+          onSend={noop}
+          onStop={noop}
+          onAttach={noop}
+          onFocusChange={noop}
+          generating={false}
+          placeholder={placeholder}
+          voiceSample=""
+        />
+      </div>
+      <button type="button" className={styles.hit} onClick={onOpen} aria-label="Message Deborah" />
     </div>
   );
 }

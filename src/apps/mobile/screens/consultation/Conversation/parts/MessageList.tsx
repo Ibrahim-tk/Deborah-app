@@ -1,4 +1,5 @@
 /** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
+import { useNav } from '@mobile/navigation';
 import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList, scripts } from '@shared/data';
 import { ANSWER_REQUEST_LABEL, isMinor } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
@@ -24,6 +25,8 @@ import {
   SuggestedQuestions,
   ThinkingIndicator,
   VisitSummaryCard,
+  SourceTrace,
+  labTrace,
 } from '@mobile/patterns/chat';
 import type { useConversation } from '@mobile/hooks/useConversation';
 import type { useMessageActions } from './useMessageActions';
@@ -74,6 +77,7 @@ export function MessageList({
   onEditFacts,
 }: MessageListProps) {
   const { messages, status } = conversation;
+  const { push } = useNav();
   const reports = useAppStore((s) => s.labs.reportsById);
   const hasPlan = useAppStore((s) => Boolean(s.plan90[conversation.profileId]));
   // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
@@ -172,6 +176,7 @@ export function MessageList({
             activeSection={m.meta?.activeSection}
             onAddQuestion={actions.addQuestion}
             labsNote={lab?.collectedAt ? `Based on your labs from ${formatShortDate(lab.collectedAt)}` : undefined}
+            sourceSlot={lab && <SourceTrace {...labTrace(lab, () => push('M-9.5', { reportId: lab.id }))} />}
             productSlot={
               product && m.answer.product && <ProductCard product={product} productRef={m.answer.product} onShop={() => onShop(product.id)} />
             }

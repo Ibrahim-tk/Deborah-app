@@ -25,7 +25,7 @@
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   /* Light lilac card (design direction 2026-10-12): reads as a tappable suggestion on the parchment. */
   background: linear-gradient(170deg, color-mix(in srgb, var(--purple-50) 85%, var(--white)), color-mix(in srgb, var(--purple-50) 60%, var(--white)));
   border: 1px solid color-mix(in srgb, var(--purple-100) 45%, var(--white));

@@ -3,7 +3,7 @@ import { findProduct } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { AnswerSections, ClosingLine, MessageBubble } from '@mobile/patterns/chat';
+import { AnswerSections, ClosingLine, MessageBubble, SourceTrace, labTrace } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { IntakeSummary } from './IntakeSummary';
 import { buildTranscript } from './transcriptModel';
@@ -47,6 +47,7 @@ export function Transcript({ messages, onShop }: TranscriptProps) {
               <AnswerSections
                 answer={m.answer}
                 labsNote={lab?.collectedAt ? `Based on your labs from ${formatShortDate(lab.collectedAt)}` : undefined}
+                sourceSlot={lab && <SourceTrace {...labTrace(lab)} />}
                 productSlot={product && m.answer.product && <ProductCard product={product} productRef={m.answer.product} onShop={() => onShop(product.id)} />}
               />
               <ClosingLine text={m.answer.closingLine} />

@@ -7,27 +7,34 @@
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
   animation: fade 160ms ease-out;
   background: #000000;
+  /* Black control bar under the feed: holds shutter / Retake · Use photo. */
+  /* ~15% of the screen (design 2026-10-21), never too short for the shutter. */
+  --cam-bar: max(15%, calc(var(--safe-bottom) + 90px));
 }
 @keyframes fade { from { opacity: 0; } }
 
-/* Full-bleed “camera” feed. */
+/* Feed: edge to edge, top to just above the control bar; bottom corners rounded like the iOS camera. */
 .feed {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: var(--cam-bar);
   overflow: hidden;
+  border-radius: 0 0 28px 28px;
   background: #1a1a1a;
 }
 .feedImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 35%;
-  transform: scale(1.06);
+  object-position: center 40%;
+  /* Zoomed out a touch so more of the report and desk shows. */
+  transform: scale(1);
   user-select: none;
   pointer-events: none;
 }
 .feed[data-frozen] .feedImg {
-  transform: scale(1);
   filter: saturate(1.05) contrast(1.02);
 }
 
@@ -76,19 +83,23 @@
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
 }
 .glassBtn[data-active] { color: #f5c542; }
+/* iOS 26 round glass: close (left) and flash (right) share it. */
+.top .glassBtn { border-radius: 50%; }
+.close { background: rgb(30 30 30 / 0.5); box-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.3); }
 
 .viewfinder {
   display: grid;
   place-items: center;
   min-height: 0;
-  padding: 12px 28px 8px;
+  padding: 8px 16px 16px;
 }
 .frame {
   position: relative;
   display: grid;
   place-items: center;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  /* Taller frame so more of the report fits. */
+  aspect-ratio: 5 / 7.5;
   max-height: 100%;
   border-radius: 18px;
   /* Cutout: bright feed inside the frame, dimmed world outside. */
@@ -118,8 +129,8 @@
 .bottom {
   display: grid;
   place-items: center;
-  min-height: 108px;
-  padding: 8px 20px 4px;
+  height: calc(var(--cam-bar) - var(--safe-bottom) - 12px);
+  padding: 0 20px;
   z-index: 2;
 }
 .controls {

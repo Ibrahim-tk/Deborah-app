@@ -5,6 +5,7 @@
  * @status  placeholder copy — OPEN: Deborah / legal to approve wording.
  */
 import { useState } from 'react';
+import { consentDoc } from '@shared/data';
 import { BottomSheet, Button, Checkbox } from '@mobile/ui';
 import styles from './MedicalConsentSheet.module.css';
 
@@ -15,7 +16,9 @@ export interface MedicalConsentSheetProps {
 
 export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps) {
   const [checked, setChecked] = useState(false);
+  const [terms, setTerms] = useState(false);
   return (
+    <>
     <BottomSheet
       open={open}
       onClose={() => {}}
@@ -28,8 +31,30 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
           To answer you, Deborah uses what you share about your health: symptoms, medications and history. It stays private
           to your account and is never sold. Her guidance is education, not a diagnosis or prescription.
         </p>
-        <Checkbox checked={checked} onChange={setChecked} label="I accept the terms and conditions" />
+        <Checkbox
+          checked={checked}
+          onChange={setChecked}
+          label={
+            <>
+              I accept the{' '}
+              {/* Opens the terms in their own sheet; must not toggle the box (design 2026-10-21). */}
+              <button
+                type="button"
+                className={styles.link}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setTerms(true); }}
+              >
+                <span className={styles.u}>terms</span> and <span className={styles.u}>conditions</span>
+              </button>
+            </>
+          }
+        />
       </div>
     </BottomSheet>
+    <BottomSheet open={terms} onClose={() => setTerms(false)} showClose height="large" title={consentDoc.terms.title}>
+      <div className={styles.terms} data-placeholder>
+        {consentDoc.terms.body.map((p) => <p key={p} className={styles.copy}>{p}</p>)}
+      </div>
+    </BottomSheet>
+    </>
   );
 }

@@ -67,7 +67,7 @@ export default function NotificationInbox() {
           </button>
         )}
         {items.length === 0 ? (
-          <EmptyState icon="calendar" title="You’re all caught up" text="Reminders and follow-ups from Deborah will show here." />
+          <div className={styles.empty}><EmptyState icon="calendar" title="You’re all caught up" text="Reminders and follow-ups from Deborah will show here." /></div>
         ) : (
           <>
             <ul className={styles.list}>

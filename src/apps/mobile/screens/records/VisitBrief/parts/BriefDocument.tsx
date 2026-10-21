@@ -12,22 +12,31 @@ export interface BriefDocumentProps {
   brief: VisitBriefContent;
   /** When set, chief complaint + lists are editable (review mode). */
   onChange?: (brief: VisitBriefContent) => void;
+  /** Straight on the page, no card surface (M-9.7, design 2026-10-20). The PDF keeps the card. */
+  flat?: boolean;
 }
 
-export function BriefDocument({ brief, onChange }: BriefDocumentProps) {
+export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
   const { header } = brief;
   const editable = Boolean(onChange);
   const patch = (p: Partial<VisitBriefContent>) => onChange?.({ ...brief, ...p });
 
   return (
-    <article className={styles.page} aria-label="My Visit Notes" data-placeholder={brief.status === 'placeholder' || undefined}>
+    <article className={styles.page} data-flat={flat || undefined} aria-label="My Visit Notes" data-placeholder={brief.status === 'placeholder' || undefined}>
       <header className={styles.pageHeader}>
-        <p className={styles.purpose}>{header.whatThisIs}</p>
+        {/* M-9.7 drops the purpose line (design 2026-10-20); the PDF keeps it. */}
+        {!flat && <p className={styles.purpose}>{header.whatThisIs}</p>}
         <dl className={styles.meta}>
           <div>
             <dt>Patient</dt>
             <dd>{header.name}</dd>
           </div>
+          {brief.providerName?.trim() && (
+            <div>
+              <dt>Provider</dt>
+              <dd>{brief.providerName.trim()}</dd>
+            </div>
+          )}
           {header.dob && (
             <div>
               <dt>Date of birth</dt>

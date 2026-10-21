@@ -233,7 +233,8 @@
         }
       ],
       "footer": "This is educational information for a caregiver, not a diagnosis. In an emergency, call 911.",
-      "next": "p_close"
+      "next": "p_close",
+      "notesTitle": "Sudden confusion — possible UTI"
     },
     "p_close": {
       "type": "message",

@@ -1,7 +1,8 @@
 /**
- * @pattern PhoneField — the shared ui/Input (MUI Base UI field): country dial code prefix, national number formatted as you type
- *          (libphonenumber), validated on blur. The trailing flag opens a searchable dropdown of every
- *          country (common ones first) — a Base UI Combobox via `ui/Combobox`, not a full sheet.
+ * @pattern PhoneField — the shared ui/Input (MUI Base UI field), national number formatted as you type (libphonenumber),
+ *          validated on blur. Country picker on the LEFT as its own segment (flag · dial code · chevron, then a divider;
+ *          design direction 2026-10-20): it opens the same searchable dropdown of every country (common ones first),
+ *          a Base UI Combobox via `ui/Combobox`, not a full sheet.
  * @usedBy  M-1.4 CreateProfile · M-4.3 CreateAccount · M-10.1 Account · Widget lab · Design System
  * @status  placeholder
  */
@@ -58,7 +59,7 @@ export function PhoneField({ value, onChange, label = 'Phone number', hint, opti
   };
 
   return (
-    <div className={className} data-placeholder>
+    <div className={[styles.phone, className].filter(Boolean).join(' ')} data-placeholder>
       <Input
         id={inputId}
         label={title}
@@ -69,7 +70,6 @@ export function PhoneField({ value, onChange, label = 'Phone number', hint, opti
         value={value.number}
         error={shownError}
         hint={hint}
-        leading={current.dial}
         onChange={(e) => setNumber(e.target.value)}
         onBlur={() => setInvalid(Boolean(value.number) && !isValidPhone(current.iso as CountryCode, value.number))}
         trailing={
@@ -93,11 +93,12 @@ export function PhoneField({ value, onChange, label = 'Phone number', hint, opti
                 </>
               )}
               trigger={
-                <button type="button" className={styles.flagBtn}>
+                <button type="button" className={styles.flagBtn} aria-label={`Country code ${current.name} ${current.dial}`}>
                   <span className={styles.flag} aria-hidden="true">
                     {current.flag}
                   </span>
-                  <Icon name="chevronDown" size={16} />
+                  <span className={styles.dial}>{current.dial}</span>
+                  <Icon name="chevronDown" size={16} className={styles.chevron} />
                 </button>
               }
             />

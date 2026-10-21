@@ -28,3 +28,6 @@
 .pill:focus-visible, .addOwn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .empty { color: var(--color-ink-secondary); }
 @media (prefers-reduced-motion: reduce) { .pill { transition: none; } }
+
+/* Search heading above the tabs. */
+.results { padding-bottom: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

@@ -8,7 +8,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useAppStore } from '@shared/store';
-import { GlassButton, Header, Segmented, Skeleton, type IconName } from '@mobile/ui';
+import { GlassButton, Header, Segmented, Skeleton } from '@mobile/ui';
 import { simBetween } from '@mobile/hooks/simTiming';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
 import { RecordsList, type Segment } from './parts/RecordsList';
@@ -16,9 +16,11 @@ import { RecordsSearch } from './parts/RecordsSearch';
 import { SearchResults } from './parts/SearchResults';
 import styles from './Records.module.css';
 
-const SEGMENTS: { value: Segment; label: string; icon: IconName }[] = [
-  { value: 'notes', label: 'Visit Notes', icon: 'note' },
-  { value: 'labs', label: 'Labs', icon: 'labs' },
+// Text-only segments (design 2026-10-21): no icons; Attachments is the image gallery.
+const SEGMENTS: { value: Segment; label: string }[] = [
+  { value: 'notes', label: 'Visit Notes' },
+  { value: 'labs', label: 'Labs' },
+  { value: 'attachments', label: 'Attachments' },
 ];
 
 export default function Records() {
@@ -28,7 +30,7 @@ export default function Records() {
   const activeProfileId = useAppStore((s) => s.activeProfileId);
   const profileId = params.profileId ?? activeProfileId;
   const profile = useAppStore((s) => s.profiles.byId[profileId]);
-  const [segment, setSegment] = useState<Segment>(params.segment === 'labs' ? 'labs' : 'notes');
+  const [segment, setSegment] = useState<Segment>(params.segment === 'labs' || params.segment === 'attachments' ? params.segment : 'notes');
   const [loading, setLoading] = useState(true);
   // Search (design direction 2026-10-20): the nav bar's search button stretches into a field; results span labs and notes.
   const [searching, setSearching] = useState(false);

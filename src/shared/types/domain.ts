@@ -456,6 +456,10 @@ export interface VisitBriefContent {
   };
   /** Scheduling metadata only — not printed on the brief (Miro: appointment date “will not be there”). */
   appointmentDate?: ISODate;
+  /** Heading for M-9.7, about this conversation (seeded per chat; falls back to the conversation topic). */
+  title?: string;
+  /** Who she is seeing; typed on M-9.7 (design 2026-10-20) and printed in the header. */
+  providerName?: string;
   chiefComplaint: string;
   clinicalContext: string;
   labs: VisitBriefLab[];

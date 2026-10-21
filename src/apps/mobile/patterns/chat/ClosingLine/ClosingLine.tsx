@@ -8,6 +8,8 @@ import { Panel } from '@mobile/ui';
 import styles from './ClosingLine.module.css';
 
 export function ClosingLine({ text }: { text: string }) {
+  // No text, no panel: an empty Linen panel read as a stray grey bar under §7.
+  if (!text?.trim()) return null;
   return (
     <Panel tone="linen">
       <p className={styles.text}>{text}</p>

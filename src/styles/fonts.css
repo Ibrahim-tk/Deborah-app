@@ -1,10 +1,13 @@
-/* Display serif: Fraunces (variable: weight + optical size, roman + italic), self-hosted via
-   @fontsource-variable/fraunces (design call 2026-10-20, replaces Cormorant Garamond). */
-@import '@fontsource-variable/fraunces/opsz.css';
-@import '@fontsource-variable/fraunces/opsz-italic.css';
+/* Display serif: Cormorant Garamond (restored 2026-10-20; Fraunces was tried and reverted). */
 
 /* src/styles/fonts.css — self-host the display serif from public/fonts (Cormorant Garamond 400 + italic 400).
  * Body and UI text use SF Pro through the system stack (-apple-system); it is not bundled (Apple licence).
  * On non-Apple machines the prototype falls back to system-ui. */
-@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
-@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
+/* Heavier display serif (design call 2026-10-20): every heading asks for weight 400, so 400–600 are served by the
+   SemiBold (600) cut — one switch here instead of every heading. Regular stays available as 300.
+   OPEN: DESIGN.md caps weight at 500; this 600 was chosen by the designer and needs the rule updated.
+   SemiBold files: @fontsource/cormorant-garamond 5.2.5 (latin subset), OFL — see OFL-CormorantGaramond.txt. */
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Regular.woff2') format('woff2'); font-weight:300; font-style:normal; font-display:swap; }
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-Italic.woff2') format('woff2'); font-weight:300; font-style:italic; font-display:swap; }
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-SemiBold.woff2') format('woff2'); font-weight:400 600; font-style:normal; font-display:swap; }
+@font-face { font-family:'Cormorant Garamond'; src:url('/fonts/CormorantGaramond-SemiBoldItalic.woff2') format('woff2'); font-weight:400 600; font-style:italic; font-display:swap; }

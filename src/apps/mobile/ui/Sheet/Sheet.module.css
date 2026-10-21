@@ -57,3 +57,5 @@
 .close::after { content: ''; position: absolute; inset: -4px; } /* 44 × 44 touch target */
 .close:active { background: color-mix(in srgb, var(--color-surface) 86%, var(--color-ink)); }
 .close:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+/* With a close button, the subtitle keeps clear of the close's column so it never runs under it (2026-10-20). */
+.root:has(.close) .subtitle { padding-right: calc(var(--sheet-close) + var(--space-3)); }

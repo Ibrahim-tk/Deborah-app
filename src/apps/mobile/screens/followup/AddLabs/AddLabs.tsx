@@ -50,12 +50,13 @@ export default function AddLabs() {
   const [processing, setProcessing] = useState<{ source: Source; fileName: string } | null>(null);
   const [progress, setProgress] = useState(0);
 
-  // Simulated extraction: 1.5–2.5 s, then the confirm screen with the sample-a values.
+  // Simulated extraction: 4–5 s, then the confirm screen with the sample-a values.
   // Only depend on `processing` — nav helpers from useNav() are new refs each render and would
   // clear the timer before M-5.4 opens (labs journey idle on “Reading your report…”).
   useEffect(() => {
     if (!processing) return;
-    const total = simBetween(1500, 2500);
+    // 4–5 s (design 2026-10-21) so both FluxLabel phases can play at their slower pace.
+    const total = simBetween(4000, 5000);
     const started = Date.now();
     const { source } = processing;
     const tick = window.setInterval(() => setProgress(Math.min(1, (Date.now() - started) / Math.max(total, 1))), 80);

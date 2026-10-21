@@ -20,6 +20,7 @@ import type {
 } from '../types/content';
 import deborah from './persona/deborah.json';
 import consent from './legal/consent.json';
+import attachments from './attachments.json';
 import suggestions from './conversation/suggestions.json';
 import intake from './conversation/intake.json';
 import chatIntake from './conversation/chatIntake.json';
@@ -59,6 +60,8 @@ import type { DocumentExtraction, DocumentFormat, DocumentType } from '../types/
 
 export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
+/** Seed photos for Records › Attachments (prototype). */
+export const seedAttachments: { id: string; src: string; alt: string; date: string }[] = attachments.items;
 export const suggestionsData = suggestions as SuggestionsData;
 export const intakeData = intake as IntakeData;
 /** Core experience bank: journeys × symptom groups → clarifiers and red flags (plan C-05). */

@@ -301,7 +301,8 @@
           "value": "Not tried yet"
         }
       ],
-      "next": "handoff"
+      "next": "handoff",
+      "notesTitle": "Night sweats & 2–3 am waking"
     },
     "handoff": {
       "type": "question",
@@ -330,84 +331,43 @@
     },
     "appointment": {
       "type": "question",
-      "bot": "Of course. Do you already have an appointment? If you do, tell me the provider’s name as well.",
+      "bot": "Of course. Do you already have an appointment?",
       "widget": {
         "type": "quick_replies",
         "options": [
           {
             "label": "Yes",
             "value": "yes",
-            "reply": "Yes, next Thursday. I don’t have the provider’s name handy."
+            "reply": "Yes, I do.",
+            "next": "appointment_form"
           },
           {
             "label": "Not yet",
             "value": "no",
-            "reply": "Not yet."
+            "reply": "Not yet.",
+            "next": "visit_notes"
           }
         ]
       },
       "saveAs": "appointment",
       "next": "visit_notes"
     },
+    "appointment_form": {
+      "type": "question",
+      "bot": "Add who you’re seeing and when, and I’ll put it on your notes.",
+      "widget": {
+        "type": "appointment_form"
+      },
+      "next": "visit_notes"
+    },
     "visit_notes": {
       "type": "message",
-      "bot": "Here are your visit notes. You can review and edit them before sharing.",
-      "visitNotes": {
-        "title": "Visit notes",
-        "meta": [
-          "Client: Sandra, 46",
-          "Date of birth: June 16, 1980",
-          "Appointment: Next Thursday; provider name not provided",
-          "Purpose: Prepare for a provider visit"
-        ],
-        "sections": [
-          {
-            "title": "1. Chief complaint",
-            "body": "“I’m exhausted and gaining weight no matter what I eat. I can’t think straight at work.” Sandra reports waking around 2–3 a.m. for eight months. She sometimes wakes drenched in sweat and estimates 15 pounds of weight gain over the past year."
-          },
-          {
-            "title": "2. Clinical context",
-            "body": [
-              "Periods are still occurring but have become less predictable.",
-              "Sleep averages 5–6 hours per night.",
-              "Walks 30 minutes, about three times a week.",
-              "Her doctor has said her thyroid is “fine,” but Sandra remains concerned about her symptoms.",
-              "Perimenopause was discussed as a possibility, not established as the cause."
-            ]
-          },
-          {
-            "title": "3. Tests to discuss",
-            "body": "No specific tests were agreed on in the chat. Sandra can ask whether her thyroid treatment and recent thyroid results need review, and whether any further evaluation would help explain the fatigue and night sweats."
-          },
-          {
-            "title": "4. Questions for my provider",
-            "body": [
-              "Could perimenopause be contributing to my changing periods, night sweats, and sleep problems?",
-              "Should we review my levothyroxine treatment and thyroid results?",
-              "Could disrupted sleep be contributing to my fatigue and brain fog?",
-              "Is any additional evaluation useful for the weight gain and night sweats?"
-            ]
-          },
-          {
-            "title": "5. Current medications & supplements",
-            "body": [
-              "Levothyroxine: 50 mcg, as reported by Sandra.",
-              "Hormone therapy: None.",
-              "Genesis Gold®: Has not tried it; asked to learn about it later.",
-              "Other medications or supplements: Not discussed."
-            ]
-          },
-          {
-            "title": "6. Red flags & recommendation",
-            "body": "Sandra denied fever and unexplained weight loss when asked. This was a brief chat, not a complete medical assessment. Sandra has an appointment next Thursday to review her recurring symptoms. She should continue taking levothyroxine as prescribed unless her prescriber advises a change."
-          },
-          {
-            "title": "7. Important note",
-            "body": "These notes summarize Sandra’s conversation with an AI app. They are not a diagnosis, prescription, or substitute for a provider’s assessment. Sandra can review and edit them before sharing."
-          }
-        ]
-      },
-      "next": "close"
+      "bot": "Done. Here are your visit notes, ready to take with you.",
+      "next": "close",
+      "widget": {
+        "type": "visit_notes_card",
+        "title": "Your visit notes"
+      }
     },
     "close": {
       "type": "end",
@@ -865,7 +825,8 @@
         }
       ],
       "footer": "This is educational information, not medical advice, a diagnosis or a prescription. Please talk to your healthcare provider before changing any medication or supplement.",
-      "next": "s_whats_next"
+      "next": "s_whats_next",
+      "notesTitle": "Perimenopause, thyroid & sleep"
     },
     "s_whats_next": {
       "type": "question",

@@ -2,7 +2,7 @@
  * SuggestionCarousel — next-step artifact cards (icon well · title · sub · arrow · floral PNG).
  */
 import { Icon, type IconName } from '@mobile/ui';
-import { artifactForIntent, artifactSrc, type HomeArtifactId, type HomeTone } from '../homeArtifacts';
+import { artifactForIntent, type HomeArtifactId, type HomeTone } from '../homeArtifacts';
 import styles from './SuggestionCarousel.module.css';
 
 export interface SuggestionCard {
@@ -62,13 +62,6 @@ export function SuggestionCarousel({
                 data-tone={spec.tone}
                 onClick={item.onPress}
               >
-                <img
-                  className={styles.artifact}
-                  src={artifactSrc(spec.artifact)}
-                  alt=""
-                  decoding="async"
-                  aria-hidden
-                />
                 <span className={styles.icon} aria-hidden>
                   <Icon name={icon} size={18} />
                 </span>

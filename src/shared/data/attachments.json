@@ -1,0 +1,14 @@
+{
+  "_note": "Seed photos for the Records › Attachments gallery (design 2026-10-21). Free Unsplash licence; files in public/images/attachments. Non-graphic: hands, hair, scalp, skin.",
+  "items": [
+    { "id": "att-1", "src": "/images/attachments/1.jpg", "alt": "Freckles across cheeks and nose", "date": "2026-10-16" },
+    { "id": "att-2", "src": "/images/attachments/2.jpg", "alt": "Close-up of a palm", "date": "2026-10-14" },
+    { "id": "att-3", "src": "/images/attachments/3.jpg", "alt": "Split ends of hair", "date": "2026-10-12" },
+    { "id": "att-4", "src": "/images/attachments/4.jpg", "alt": "Comb with loose strands of hair", "date": "2026-10-09" },
+    { "id": "att-5", "src": "/images/attachments/5.jpg", "alt": "Dry scalp with flakes", "date": "2026-10-07" },
+    { "id": "att-6", "src": "/images/attachments/6.jpg", "alt": "Hand and nails", "date": "2026-10-03" },
+    { "id": "att-7", "src": "/images/attachments/7.jpg", "alt": "Hands with lotion", "date": "2026-09-28" },
+    { "id": "att-8", "src": "/images/attachments/8.jpg", "alt": "Loose hair on fabric", "date": "2026-09-22" },
+    { "id": "att-9", "src": "/images/attachments/9.jpg", "alt": "Hands resting on a table", "date": "2026-09-18" }
+  ]
+}

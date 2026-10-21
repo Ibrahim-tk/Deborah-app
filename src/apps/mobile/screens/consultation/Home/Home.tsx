@@ -10,7 +10,7 @@
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
 import { SELF_PROFILE_ID, selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
-import { Aura, GradientShift, PurpleDockBloom, ScrollEdge } from '@mobile/ui';
+import { Aura, GradientShift, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
 import { useNav, useNavStore } from '@mobile/navigation';
@@ -61,10 +61,13 @@ export default function Home() {
     setSheet(false);
   };
   const docCount = useAppStore((s) => selectDocuments(s).length);
+  // Home composer opens the same chat as the "Continue your chat" card (design 2026-10-21);
+  // only with nothing to continue does it start a new one.
   const chat = () => {
     closeSheet();
-    // The home composer always starts a new chat (design 2026-10-20); the hero card continues the last one.
-    useAppStore.getState().archiveActive(profileId);
+    if (hasFlowSession('proxy') && profileId !== SELF_PROFILE_ID) return push('M-2.12', { flow: 'proxy' });
+    if (hasFlowSession('sandra')) return push('M-2.12', { flow: 'sandra' });
+    if (d.midIntake || focus || history.length) return resume();
     openAsk({ focus: true });
   };
   // Continue with Deborah: a half-answered intake question resumes exactly where it stopped.
@@ -185,7 +188,6 @@ export default function Home() {
         )}
       </div>
 
-      <PurpleDockBloom />
       <div className={styles.dock}>
         <ChatLauncher glow placeholder="Ask me anything" onOpen={chat} />
       </div>

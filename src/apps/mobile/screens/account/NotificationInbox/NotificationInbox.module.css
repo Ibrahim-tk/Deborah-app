@@ -16,3 +16,5 @@
 .row[data-unread] .title { font-weight: var(--weight-medium); }
 .body2 { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .kind { text-transform: uppercase; letter-spacing: 0.04em; }
+/* Body is full bleed for the rows; the empty state keeps the screen margin. */
+.empty { margin: 0 var(--margin-screen); }

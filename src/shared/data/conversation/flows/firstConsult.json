@@ -419,7 +419,8 @@
           "next": "save_visit_prep"
         }
       ],
-      "simulatedAnswer": "Can I take Genesis Gold with my thyroid medicine?"
+      "simulatedAnswer": "Can I take Genesis Gold with my thyroid medicine?",
+      "notesTitle": "Night sweats & broken sleep"
     },
     "followup_q": {
       "type": "user_message",

@@ -3,7 +3,7 @@
  * (centered art · title/meta bottom-left · circular action bottom-right).
  */
 import { Icon, type IconName } from '@mobile/ui';
-import { artifactSrc, type HomeArtifactId, type HomeTone } from '../homeArtifacts';
+import { type HomeArtifactId, type HomeTone } from '../homeArtifacts';
 import styles from './PhotoDestinationPair.module.css';
 
 export interface PhotoDestination {
@@ -22,7 +22,6 @@ export function PhotoDestinationPair({ tiles }: { tiles: [PhotoDestination, Phot
     <div className={styles.pair}>
       {tiles.map((t, i) => {
         const tone = t.tone ?? (i === 0 ? 'mint' : 'rose');
-        const artifact = t.artifact ?? (i === 0 ? 'dest-health-art' : 'dest-family-art');
         const action: IconName = t.action ?? (i === 0 ? 'chevron' : 'plus');
         return (
           <button
@@ -32,13 +31,6 @@ export function PhotoDestinationPair({ tiles }: { tiles: [PhotoDestination, Phot
             data-tone={tone}
             onClick={t.onPress}
           >
-            <img
-              className={styles.art}
-              src={artifactSrc(artifact)}
-              alt=""
-              decoding="async"
-              aria-hidden
-            />
             <span className={styles.foot}>
               <span className={styles.copy}>
                 <span className={styles.title}>{t.title}</span>

@@ -211,3 +211,6 @@
     resize: none;
   }
 }
+
+/* M-9.7: the notes sit straight on the page — no card fill, no inset. */
+.page[data-flat] { padding: 0; border-radius: 0; background: transparent; }

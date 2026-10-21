@@ -1,7 +1,7 @@
 /**
  * @screen  M-9.5 · Lab report
  * @flow    F09 My Health records (read mode of F05's M-5.4 layout)
- * @states  default (preview · name · value tile grid) · edit values sheet · overflow menu · delete confirm · other profile (no Ask) · not found
+ * @states  default (preview · name · value tile grid) · edit (M-9.11 modal) · overflow menu · delete confirm · other profile (no Ask) · not found
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F09-records.md#m-95--lab-report-not-in-wireframes
  * @xref    web: W-9.5 (apps/web/screens/records/LabReport) — not built
@@ -16,12 +16,11 @@ import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
 import { LabValueGrid } from './parts/LabValueGrid';
 import { LabPreview } from './parts/LabPreview';
-import { EditValuesSheet } from './parts/EditValuesSheet';
 import styles from './LabReport.module.css';
 
 export default function LabReport() {
   const { reportId = '' } = useScreenParams<{ reportId: string }>();
-  const { pop, returnToConversation } = useNav();
+  const { pop, returnToConversation, open } = useNav();
   const { previousTitle, canGoBack } = useRoute();
   const chat = useConversation();
   const alert = useAlert();
@@ -32,7 +31,6 @@ export default function LabReport() {
   if (live && live !== kept) setKept(live);
   const report = live ?? kept;
   const isActiveProfile = useAppStore((s) => s.activeProfileId === report?.profileId);
-  const [editing, setEditing] = useState(false);
   const back = canGoBack ? pop : undefined;
 
   if (!report) {
@@ -79,7 +77,7 @@ export default function LabReport() {
               align="end"
               trigger={<IconButton icon="more" label="More options" />}
               items={[{ id: 'edit', label: 'Edit', icon: 'edit' }, { id: 'delete', label: 'Delete', icon: 'delete', destructive: true }]}
-              onSelect={(id) => (id === 'edit' ? setEditing(true) : remove())}
+              onSelect={(id) => (id === 'edit' ? open('M-9.11', { reportId: report.id }) : remove())}
             />
           </>
         }
@@ -102,7 +100,6 @@ export default function LabReport() {
           <Button fullWidth leadingIcon="deborah" onClick={ask}>Ask Deborah about these labs</Button>
         </div>
       )}
-      <EditValuesSheet open={editing} report={report} onClose={() => setEditing(false)} />
     </div>
   );
 }

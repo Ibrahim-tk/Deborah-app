@@ -14,13 +14,17 @@
  * OPEN: "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off."
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
+import { VisitNotesCard } from './parts/VisitNotesCard';
+import type { Appointment } from './parts/AppointmentForm';
+import { useComposerAttachments } from '@mobile/patterns/chat';
+import { meta } from '@mobile/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { firstConsultFlow, proxyConsultFlow, returningConsultFlow, sandraConsultFlow } from '@shared/data';
 import { briefFromAnswer, visitBriefPreview } from '@shared/engine';
 import { nowFrom, uid } from '@shared/utils';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
-import { Button, DeborahBlob } from '@mobile/ui';
+import { DeborahBlob } from '@mobile/ui';
 import { Aura, GradientShift } from '@mobile/ui';
 import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
@@ -114,14 +118,16 @@ export default function FirstConsult() {
       toast('No active profile');
       return undefined;
     }
-    const answer = buildAnswer(answerNode(), say);
-    const brief = briefFromAnswer(profile, answer, 'First consultation');
+    const node = answerNode();
+    const answer = buildAnswer(node, say);
+    const title = node.notesTitle ? say(node.notesTitle) : undefined;
+    const brief = { ...briefFromAnswer(profile, answer, title ?? 'First consultation'), ...(title && { title }) };
     const id = uid('n');
     s.addNote({
       id,
       profileId: profile.id,
       kind: 'provider-brief',
-      title: 'For my provider',
+      title: title ?? 'For my provider',
       body: visitBriefPreview(brief),
       brief,
       updatedAt: nowFrom(s).toISOString(),
@@ -171,6 +177,8 @@ export default function FirstConsult() {
   const opener = !started && waiting?.kind === 'bot' && waiting.node.display === 'greeting' ? waiting : undefined;
   const starters = opener?.node.widget?.options ?? [];
 
+  const [appointment, setAppointment] = useState<Appointment>();
+  const attachments = useComposerAttachments('M-2.12', meta('M-2.12')?.title ?? 'First consultation');
   return (
     <div className={styles.root} data-xref="M-2.12 · First consultation">
       {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
@@ -192,6 +200,19 @@ export default function FirstConsult() {
               selection={held?.entryId === e.id ? held.picked : undefined}
               onSelect={(node, picked) => setHeld({ entryId: e.id, node, picked })}
               onAction={action}
+              onAppointment={setAppointment}
+              renderNotesCard={(title) => (
+                <VisitNotesCard
+                  title={title}
+                  appointment={appointment}
+                  summary={[
+                    `${prep.questions.length + player.extraPrep.length} questions`,
+                    prep.tests.length ? `${prep.tests.length} tests to ask about` : '',
+                  ].filter(Boolean).join(' · ')}
+                  onOpen={() => action('visit_notes')}
+                  onPdf={() => action('pdf')}
+                />
+              )}
               renderPrep={() => (
                 <VisitPrepCard
                   title={(e.kind === 'bot' && e.node.widget?.title) || 'For my next appointment'}
@@ -206,9 +227,7 @@ export default function FirstConsult() {
           ))}
           {consent.widget}
           {typing && <ThinkingIndicator label="Deborah is writing…" />}
-          {last?.kind === 'end' && last.route === '/chat' && (
-            <Button fullWidth onClick={() => openAsk({ focus: true })}>Keep talking with Deborah</Button>
-          )}
+          {/* No "Keep talking with Deborah" CTA at the end (design 2026-10-21): the composer is right there. */}
         </div>
       </div>
       <div className={styles.bottom}>
@@ -223,9 +242,17 @@ export default function FirstConsult() {
         <Composer
           value={draft}
           onChange={setDraft}
-          onSend={(text) => send(text ?? draft)}
+          onSend={(text) => {
+            const n = attachments.items.length;
+            const typed = text ?? draft;
+            attachments.clear();
+            send(typed.trim() || (n ? (n > 1 ? `I’ve attached ${n} files.` : 'I’ve attached a file.') : typed));
+          }}
           onStop={() => {}}
-          onAttach={(source) => open('M-5.3', { source })}
+          // Camera / Upload drop straight into the composer — no lab processing (design 2026-10-21).
+          onAttach={attachments.attach}
+          attachments={attachments.items}
+          onRemoveAttachment={attachments.remove}
           onSymptoms={() => setSymptomsOpen(true)}
           tokens={[...(held?.picked.map((o) => say(o.label)) ?? []), ...symptoms]}
           onRemoveToken={(t) => {
@@ -238,6 +265,7 @@ export default function FirstConsult() {
           voiceSample=""
         />
       </div>
+      {attachments.overlay}
       <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
     </div>
   );

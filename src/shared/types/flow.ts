@@ -20,7 +20,13 @@ export interface FlowWidget {
     /** A block she can copy word for word (`title`, `text`), e.g. what to tell triage. */
     | 'copy_block'
     /** Emergency: opens a bottom sheet with Call 911 (`title`, `text`); `options[0]` continues the script. */
-    | 'emergency_sheet';
+    | 'emergency_sheet'
+    /** One button that opens the visit notes screen (M-9.7); `label` is its text. */
+    | 'visit_notes_button'
+    /** Generative: provider name + date form after "Yes, I have an appointment" (design 2026-10-21). */
+    | 'appointment_form'
+    /** Generative: receipt-style visit-notes card (provider · date · notes · small buttons). */
+    | 'visit_notes_card';
   options?: FlowOption[];
   actions?: FlowOption[];
   multi?: boolean;
@@ -72,10 +78,10 @@ export interface FlowNode {
   skipIfKnown?: string;
   /** `greeting`: the chat's opening line, set large in serif with no bubble (design direction 2026-10-14). */
   display?: 'greeting';
+  /** Answer only: the visit notes' heading when saved from this answer (M-9.7), e.g. "Night sweats & 2–3 am waking". */
+  notesTitle?: string;
   /** Answer only: what Deborah noted, offered as "Save to my profile" right under the seven cards. */
   profileFacts?: { label: string; value: string }[];
-  /** Visit notes drawn inline (premade chat): header lines, then numbered sections. */
-  visitNotes?: { title: string; meta: string[]; sections: { title: string; body: string | string[] }[] };
 }
 
 export interface Flow {

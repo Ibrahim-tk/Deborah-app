@@ -2,7 +2,6 @@
  * TodayHabitsCard — established Home habits on a solid artifact field (no photo, no eyebrow).
  */
 import { Icon } from '@mobile/ui';
-import { artifactSrc } from '../homeArtifacts';
 import { ProgressHairline } from '../ProgressHairline';
 import styles from './TodayHabitsCard.module.css';
 
@@ -28,13 +27,6 @@ export function TodayHabitsCard({
     <div className={styles.wrap}>
       <span className={styles.stack} aria-hidden />
       <section className={styles.root} aria-labelledby="today-habits" data-placeholder>
-        <img
-          className={styles.artifact}
-          src={artifactSrc('leaf-flower')}
-          alt=""
-          decoding="async"
-          aria-hidden
-        />
         <div className={styles.panel}>
           <div className={styles.text}>
             <h2 id="today-habits" className={styles.title}>Your habits for today</h2>

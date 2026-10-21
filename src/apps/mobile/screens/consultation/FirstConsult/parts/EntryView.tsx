@@ -1,5 +1,6 @@
 /** One line of the scripted consult, drawn with the chat's own patterns (M-2.1) plus a few flow widgets. */
 import { findProduct } from '@shared/data';
+import { formatShortDate } from '@shared/utils';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, Panel, TextReveal } from '@mobile/ui';
 import { AnswerSections, ClosingLine, MessageBubble, SuggestionList } from '@mobile/patterns/chat';
@@ -11,11 +12,11 @@ import { IntakeBanner } from './IntakeBanner';
 import { CopyBlock, SessionBanner } from './ProxyBits';
 import { EmergencySheet } from './EmergencySheet';
 import { ProfileFacts } from './ProfileFacts';
-import { VisitNotesCard } from './VisitNotesCard';
 import { FlowChoice } from './FlowChoice';
 import { BookTile } from './BookTile';
 import { FlowText } from './FlowText';
 import { ThinkingSteps } from './ThinkingSteps';
+import { AppointmentForm, type Appointment } from './AppointmentForm';
 import type { Entry } from './useFlowPlayer';
 import styles from '../FirstConsult.module.css';
 
@@ -27,12 +28,16 @@ export interface EntryViewProps {
   onPick: (node: FlowNode, picked: FlowOption[]) => void;
   onAction: (value: string) => void;
   renderPrep: () => React.ReactNode;
+  /** Generative visit-notes card (receipt style) for `visit_notes_card`. */
+  renderNotesCard?: (title: string) => React.ReactNode;
+  /** `appointment_form` saved: provider + date. */
+  onAppointment?: (a: Appointment) => void;
   /** Multi-choice picks held in the composer until she sends. */
   selection?: FlowOption[];
   onSelect?: (node: FlowNode, picked: FlowOption[]) => void;
 }
 
-export function EntryView({ entry, active, say, onPick, onAction, renderPrep, selection, onSelect }: EntryViewProps) {
+export function EntryView({ entry, active, say, onPick, onAction, renderPrep, renderNotesCard, onAppointment, selection, onSelect }: EntryViewProps) {
   if (entry.kind === 'user') return <MessageBubble role="user" text={entry.text} />;
   if (entry.kind === 'thinking') return <ThinkingSteps steps={entry.steps} durationMs={entry.durationMs} />;
   if (entry.kind === 'end') return null;
@@ -152,7 +157,19 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, se
       {w?.type === 'emergency_sheet' && (
         <EmergencySheet title={w.title ?? 'Call 911 now'} text={say(w.text)} active={active} onDone={() => w.options?.[0] && onPick(node, [w.options[0]])} />
       )}
-      {node.visitNotes && <VisitNotesCard notes={node.visitNotes} say={say} onSave={() => onAction('save')} onShare={() => onAction('pdf')} />}
+      {w?.type === 'visit_notes_button' && (
+        <div className={styles.widget}><Button leadingIcon="note" onClick={() => onAction('visit_notes')}>{w.label ?? 'Visit Notes'}</Button></div>
+      )}
+      {w?.type === 'appointment_form' && (
+        <AppointmentForm
+          active={active}
+          onSave={(a) => {
+            onAppointment?.(a);
+            onPick(node, [{ label: formatShortDate(a.date), value: a.date, reply: `${a.provider ? `With ${a.provider}, ` : ''}${formatShortDate(a.date)}.` }]);
+          }}
+        />
+      )}
+      {w?.type === 'visit_notes_card' && renderNotesCard?.(w.title ?? 'Your visit notes')}
       {w?.type === 'reminder_chip' && <Panel tone="linen" icon="calendar">{w.label}</Panel>}
       {node.footer && <ClosingLine text={node.footer} />}
     </MessageBubble>

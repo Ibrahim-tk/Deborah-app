@@ -9,7 +9,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { symptomGroups } from '@shared/data';
-import { BottomSheet, Button, Icon, Input } from '@mobile/ui';
+import { BottomSheet, Button, Input } from '@mobile/ui';
 import styles from './SymptomPicker.module.css';
 
 export interface SymptomPickerProps {
@@ -77,6 +77,12 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
       onClose={close}
       height="large"
       label="Add symptoms"
+      /* Sheet footer: pinned to the very bottom of the sheet. */
+      footer={
+        <Button fullWidth disabled={!picked.length} onClick={() => { onAdd(picked); close(); }}>
+          {picked.length ? 'Add' : 'Pick what you’re feeling'}
+        </Button>
+      }
       titleEnd={
         <Input
           variant="search"
@@ -91,7 +97,9 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
         />
       }
     >
-      {groups.length > 1 && (
+      {/* Searching: a plain heading, no "Add …" row (design 2026-10-21); Enter still adds the typed words. */}
+      {q && <p className={styles.results}>Results for “{query.trim()}”</p>}
+      {!q && groups.length > 1 && (
         <div className={styles.tabs} role="tablist" aria-label="Symptom areas">
           {groups.map((g) => (
             <button key={g.title} type="button" role="tab" aria-selected={g.title === current} className={styles.tab} onClick={() => jump(g.title)}>
@@ -101,11 +109,6 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
         </div>
       )}
       <div ref={listRef} className={styles.list}>
-        {q && !exact && (
-          <button type="button" className={styles.addOwn} onClick={addOwn}>
-            <Icon name="plus" size={18} /> Add “{query.trim()}”
-          </button>
-        )}
         {groups.map((g) => (
           <section key={g.title} data-group={g.title} className={styles.group} aria-label={g.title}>
             <p className={styles.groupTitle}>{g.title}</p>
@@ -119,12 +122,6 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
           </section>
         ))}
         {!groups.length && !q && <p className={styles.empty}>No symptoms yet.</p>}
-      </div>
-      {/* Pinned to the bottom of the scroll area on a transparent fade, so the list scrolls behind it. */}
-      <div className={styles.cta}>
-        <Button fullWidth disabled={!picked.length} onClick={() => { onAdd(picked); close(); }}>
-          {picked.length ? 'Add' : 'Pick what you’re feeling'}
-        </Button>
       </div>
     </BottomSheet>
   );

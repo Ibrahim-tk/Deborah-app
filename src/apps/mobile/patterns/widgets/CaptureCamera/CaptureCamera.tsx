@@ -18,7 +18,6 @@ export function CaptureCamera({
   hint = 'Fit the whole report inside the frame',
   onCancel,
   onUse,
-  onLibrary,
 }: {
   /** Screen the camera opens over; restores its title and status bar on close. */
   screenId: string;
@@ -28,6 +27,7 @@ export function CaptureCamera({
   onCancel: () => void;
   onUse: () => void;
   /** Opens the photo library / file picker (ChatGPT-style gallery control). */
+  /** Unused since the shutter-only bar (design 2026-10-21); kept so callers compile. */
   onLibrary?: () => void;
 }) {
   const { setScreen } = useDevice();
@@ -44,15 +44,16 @@ export function CaptureCamera({
   return (
     <Overlay>
       <div className={styles.root} role="dialog" aria-modal="true" aria-label="Camera">
-        {/* Simulated live feed — full bleed behind the chrome. */}
+        {/* Simulated live feed — edge to edge from the top, rounded above a black control bar (design 2026-10-21). */}
         <div className={styles.feed} data-frozen={captured || undefined} aria-hidden>
           <img src={PREVIEW} alt="" className={styles.feedImg} draggable={false} />
         </div>
 
         <div className={styles.chrome}>
           <div className={styles.top}>
-            <button type="button" className={styles.textButton} onClick={onCancel}>
-              Cancel
+            {/* iOS-native round glass close (xmark) floating over the feed (design 2026-10-21). */}
+            <button type="button" className={`${styles.glassBtn} ${styles.close}`} aria-label="Close camera" onClick={onCancel}>
+              <Icon name="close" size={20} strokeWidth={2} />
             </button>
             {!captured && (
               <button
@@ -83,27 +84,8 @@ export function CaptureCamera({
                 <Button onClick={onUse}>Use photo</Button>
               </div>
             ) : (
-              <div className={styles.controls}>
-                <span className={styles.sideSlot} aria-hidden />
-                <button
-                  type="button"
-                  className={styles.shutter}
-                  aria-label="Take photo"
-                  onClick={() => setCaptured(true)}
-                />
-                {onLibrary ? (
-                  <button
-                    type="button"
-                    className={styles.glassBtn}
-                    aria-label="Choose from library"
-                    onClick={onLibrary}
-                  >
-                    <Icon name="image" size={22} />
-                  </button>
-                ) : (
-                  <span className={styles.sideSlot} aria-hidden />
-                )}
-              </div>
+              // Shutter only, centred high in the black bar (design 2026-10-21, iOS camera reference).
+              <button type="button" className={styles.shutter} aria-label="Take photo" onClick={() => setCaptured(true)} />
             )}
           </div>
         </div>

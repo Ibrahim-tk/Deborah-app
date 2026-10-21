@@ -1,0 +1,2 @@
+/* Same warm glass as the in-chat cards (ReviewFactsCard): one flat container, no shadow. */
+.root { display: grid; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-lg); background: var(--glass-warm-fill); border: 1px solid var(--glass-warm-rim); -webkit-backdrop-filter: var(--glass-warm-blur); backdrop-filter: var(--glass-warm-blur); }

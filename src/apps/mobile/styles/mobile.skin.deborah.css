@@ -21,13 +21,13 @@
 
   /* Type families (export §1). SF Pro → DM Sans; display stays Cormorant; Georgia italic for emphasis. */
   /* Headings and titles keep the original Cormorant serif (design call 2026-10-14); body/UI move to DM Sans. */
-  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-body: 'DM Sans', Arial, sans-serif;
   --font-ui: 'DM Sans', Arial, sans-serif;
   --font-editorial: Georgia, serif;
   /* The big artistic headings keep the original Cormorant Garamond: health questions, Welcome, Home greeting,
      Deborah's own words. Components opt in with var(--font-artistic, var(--font-display)). */
-  --font-artistic: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-artistic: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
   /* Surfaces: cream canvas + Wispr Flow photo (same as chat / /wid). Soft lilac mesh only. */
   --color-canvas: #f9f7f0;

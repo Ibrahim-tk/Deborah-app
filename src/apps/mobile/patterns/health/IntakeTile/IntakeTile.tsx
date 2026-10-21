@@ -1,5 +1,5 @@
 /**
- * @pattern IntakeTile — the in-chat Health intake tile: ActionTile with a progress ring around the heart.
+ * @pattern IntakeTile — the in-chat Health intake tile: ActionTile with a percentage progress ring (as on Home, design 2026-10-21).
  * @usedBy  M-2.12 First consultation · M-2.1 Conversation
  */
 import { intakeProgress } from '@shared/engine/intake';
@@ -17,6 +17,7 @@ export function IntakeTile({ onOpen, className }: { onOpen: () => void; classNam
       meta="Helps Deborah personalise her guidance"
       progress={progress}
       progressLabel="Health intake progress"
+      showPercent
       onClick={onOpen}
     />
   );

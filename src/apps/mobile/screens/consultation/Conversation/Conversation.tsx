@@ -6,13 +6,17 @@
  * @spec    docs/ux/F02-consultation.md#m-21-conversation
  * @xref    web: W-2.1 (apps/web/screens/consultation/Conversation) — not built
  */
+import { useComposerAttachments } from '@mobile/patterns/chat';
+import { meta } from '@mobile/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { asksForAnswer, pendingFacts } from '@shared/engine';
+import { asksForAnswer, isMinor, pendingFacts } from '@shared/engine';
+import { suggestionsData } from '@shared/data';
+import { thirdPerson } from './parts/thirdPerson';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { ActionSheet } from '@mobile/ui';
 import { AnimatePresence, Aura, GradientShift, MotionDiv } from '@mobile/ui';
-import { ChatHeader, Composer, Greeting, ScrollToLatest, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
+import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -46,6 +50,7 @@ export default function Conversation() {
   const [symptomsOpen, setSymptomsOpen] = useState(false);
   // Picked symptoms ride as pills in the composer; they become words only when the message is sent.
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const attachments = useComposerAttachments('M-2.1', meta('M-2.1')?.title ?? 'Conversation');
   const withPicked = (text: string) => {
     if (!symptoms.length) return text;
     setSymptoms([]);
@@ -195,6 +200,11 @@ export default function Conversation() {
   const name = profile?.name ?? '';
   // F06: another profile's chat greets "Let's talk about {name}." and minors get the teen suggestion set.
   const other = Boolean(profile) && profile?.id !== SELF_PROFILE_ID;
+  const minor = profile ? isMinor(profile) : false;
+  // Starter suggestions are back on the empty chat (design 2026-10-21); third person for someone else's chat.
+  const suggestions = !other
+    ? suggestionsData.default
+    : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile?.intake?.pronouns);
   // Someone else's chat: quick start questions in third person, using their pronouns.
 
   return (
@@ -276,19 +286,29 @@ export default function Conversation() {
 
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
-        {profile && healthProfileCompletion(profile) < 1 && (isEmpty || conversation?.status === 'answered') && (
+        {/* Empty chat shows starter suggestions; the intake tile waits until after an answer (design 2026-10-21). */}
+        {isEmpty && !intakeMode && !profileOpening && (
+          <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
+        )}
+        {profile && healthProfileCompletion(profile) < 1 && conversation?.status === 'answered' && (
           <IntakeTile onOpen={() => push('M-2.14')} />
         )}
-        {/* No scripted starter suggestions on the empty chat (design 2026-10-20): she starts in her own words. */}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
         {/* The composer never leaves the chat (design 2026-10-20): during intake and choice questions it stays,
             and typing there answers "Other". */}
         {<Composer
           value={draft}
           onChange={setDraft}
-          onSend={(text) => send(withPicked(text ?? draft))}
+          onSend={(text) => {
+            const n = attachments.items.length;
+            const typed = withPicked(text ?? draft);
+            attachments.clear();
+            send(typed.trim() || (n ? (n > 1 ? `I’ve attached ${n} files.` : 'I’ve attached a file.') : typed));
+          }}
           onStop={chat.stop}
-          onAttach={(source) => gate('documents', () => open('M-5.3', { source }))}
+          onAttach={(source) => gate('documents', () => attachments.attach(source))}
+          attachments={attachments.items}
+          onRemoveAttachment={attachments.remove}
           onSymptoms={() => setSymptomsOpen(true)}
           tokens={symptoms}
           onRemoveToken={(t) => setSymptoms((xs) => xs.filter((x) => x !== t))}
@@ -323,6 +343,7 @@ export default function Conversation() {
         />}
       </div>
 
+      {attachments.overlay}
       <SymptomPicker open={symptomsOpen} onClose={() => setSymptomsOpen(false)} onAdd={(xs) => { setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))]); inputRef.current?.focus(); }} />
       <ActionSheet
         open={Boolean(pressed)}

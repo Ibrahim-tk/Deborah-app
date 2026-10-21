@@ -1,20 +1,40 @@
+/* Tall tonal cards (design 2026-10-21, collections / goal-category moodboard). Flat: no shadow (DESIGN.md). */
 .tiles { display: grid; gap: var(--space-3); }
-/* Stacked cards on the shared surface tokens (same as the other answer buttons): doodle left, words right. */
 .tile {
-  display: flex; align-items: center; gap: var(--space-4);
-  width: 100%; min-width: 0; min-height: calc(var(--tap-min) * 2 + var(--space-2));
-  padding: var(--space-5) var(--space-5) var(--space-5) var(--space-4); border: 0; border-radius: var(--radius-card-sm);
-  background: var(--surface-1); box-shadow: inset 0 0 0 1px var(--surface-border);
-  text-align: start; cursor: pointer;
-  transition: background var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+  position: relative; overflow: hidden; isolation: isolate;
+  display: grid; grid-template-columns: 1fr; align-items: start; gap: var(--space-3);
+  width: 100%; min-width: 0; min-height: 156px;
+  padding: var(--space-5); border: 0; border-radius: var(--radius-card);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--surface-border);
+  text-align: start; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform var(--dur-quick) var(--ease-out);
 }
-.tile:hover { background: var(--color-surface); }
-.tile:active { background: var(--surface-1-pressed); transform: scale(0.99); }
-.tile:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
-/* Selected: the same tokens as the other answer buttons (sex, gender, pronouns). */
+.tile:active { transform: scale(0.985); }
+.tile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+/* Selected: the shared answer-button active state. */
 .tile[data-on] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
-.art { flex: none; display: grid; place-items: center; width: calc(var(--space-8) * 2); height: calc(var(--space-8) * 2); }
-.text { flex: 1; display: grid; gap: var(--space-1); min-width: 0; }
-.tileTitle { font: var(--weight-medium) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); }
-.tileSub { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
-@media (prefers-reduced-motion: reduce) { .tile { transition: none; } }
+
+/* Words sit top-left; the card's height gives them air. */
+.text { align-self: start; display: grid; gap: var(--space-2); min-width: 0; padding-right: var(--space-6); }
+.tileTitle { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.tileSub { max-width: 22ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+/* Floral art, soft and partly off the bottom-right corner (as on the Home cards). */
+.art {
+  position: absolute; right: -14px; bottom: -22px; z-index: -1;
+  width: 120px; height: auto; opacity: 0.55; pointer-events: none;
+  transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
+}
+.tile[data-on] .art { opacity: 0.8; transform: rotate(-6deg) scale(1.05); }
+
+/* Round check, top-right: empty ring → filled accent with a tick. */
+.check {
+  position: absolute; top: var(--space-4); right: var(--space-4);
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-ink) 25%, transparent);
+  color: var(--color-ink-on-accent); transition: background var(--dur-quick) var(--ease-out);
+}
+.tile[data-on] .check { background: var(--color-accent); box-shadow: none; }
+
+@media (prefers-reduced-motion: reduce) { .tile, .art { transition: none; } .tile[data-on] .art { transform: none; } }

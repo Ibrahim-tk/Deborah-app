@@ -8,3 +8,5 @@
 .title { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
 .meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .chevron { flex: none; color: var(--color-ink-secondary); }
+/* Percentage ring, matching the Home intake card: thicker arc, visible lilac track. */
+.percent { --ring-stroke: 4; --ring-track: color-mix(in srgb, var(--purple-500) 22%, transparent); }

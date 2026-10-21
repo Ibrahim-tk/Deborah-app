@@ -21,11 +21,13 @@ export interface AnswerSectionsProps {
   wordSlot?: ReactNode;
   /** Lab-informed answer: "Based on your labs from {date}" as plain text (no tag). */
   labsNote?: string;
+  /** SourceTrace disclosure; takes the labsNote slot when present (design 2026-10-21). */
+  sourceSlot?: ReactNode;
 }
 
 const DEFAULT_OPEN: SectionKey[] = ['hearing'];
 
-export function AnswerSections({ answer, streaming, activeSection, productSlot, wordSlot, onAddQuestion, labsNote }: AnswerSectionsProps) {
+export function AnswerSections({ answer, streaming, activeSection, productSlot, wordSlot, onAddQuestion, labsNote, sourceSlot }: AnswerSectionsProps) {
   const [userOpen, setOpen] = useState<SectionKey[]>(DEFAULT_OPEN);
   // While streaming, the streaming section is open and the previous one collapses (except §1).
   const open = streaming && activeSection ? ['hearing', activeSection] : userOpen;
@@ -37,7 +39,8 @@ export function AnswerSections({ answer, streaming, activeSection, productSlot, 
 
   return (
     <div className={styles.root} data-placeholder={answer.status === 'placeholder' || undefined}>
-      {labsNote && (
+      {sourceSlot}
+      {!sourceSlot && labsNote && (
         <p className={styles.labsNote}>
           <Icon name="labs" size={18} /> {labsNote}
         </p>
