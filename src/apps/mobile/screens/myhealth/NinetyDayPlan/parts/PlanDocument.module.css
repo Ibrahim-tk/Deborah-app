@@ -323,3 +323,6 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Pillar numbers as 1 2 3 in the sans face (2026-10-21). */
+.pillarRoman { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); font-variant-numeric: lining-nums tabular-nums; }

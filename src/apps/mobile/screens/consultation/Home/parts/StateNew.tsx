@@ -27,6 +27,7 @@ export function StateNew({ onStart, chat, intakeCard, destinations, recommendati
         <HomeMediaHero
           titleId="continue-chat"
           title="Continue your chat"
+          eyebrow="In progress"
           meta={chat.title}
           when={chat.when}
           tone="hero"
@@ -38,6 +39,7 @@ export function StateNew({ onStart, chat, intakeCard, destinations, recommendati
         <HomeMediaHero
           titleId="start-deborah"
           title="Start with Deborah"
+          eyebrow="New"
           meta="Tell her what’s going on. She’ll ask a few questions, then share what she thinks."
           tone="hero"
           artifact="violet-bloom"

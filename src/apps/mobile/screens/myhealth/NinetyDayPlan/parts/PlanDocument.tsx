@@ -1,6 +1,6 @@
 /**
  * Healing plan document — clinical structure as a calm Oracle reading surface.
- * Header · clinical summary · conditions · pillars · resources · signature.
+ * Header · clinical summary · conditions · pillars · resources.
  */
 import { useState } from 'react';
 import { findProduct, healingPlanDocument } from '@shared/data';
@@ -83,7 +83,7 @@ export function PlanDocument({ patientName, onShopProduct, onOpenExternal }: Pla
         <p className={styles.pillarsLede}>{doc.pillarsIntro.eyebrow}</p>
 
         <div className={styles.pillars}>
-          {doc.pillars.map((p) => {
+          {doc.pillars.map((p, i) => {
             const open = openPillar === p.id;
             return (
               <div key={p.id} className={styles.pillar} data-open={open || undefined}>
@@ -93,7 +93,8 @@ export function PlanDocument({ patientName, onShopProduct, onOpenExternal }: Pla
                   aria-expanded={open}
                   onClick={() => setOpenPillar(open ? '' : p.id)}
                 >
-                  <span className={styles.pillarRoman}>{p.roman}</span>
+                  {/* Arabic numerals in our sans (designer, 2026-10-21), not the roman figures in the data. */}
+                  <span className={styles.pillarRoman}>{i + 1}</span>
                   <span className={styles.pillarText}>
                     <span className={styles.pillarName}>{p.name}</span>
                     <span className={styles.pillarTag}>{p.tag}</span>
@@ -157,12 +158,7 @@ export function PlanDocument({ patientName, onShopProduct, onOpenExternal }: Pla
         </div>
       </section>
 
-      {/* —— Signature —— */}
-      <footer className={styles.signature}>
-        <p className={styles.signatureMark}>—</p>
-        <p className={styles.signatureName}>{doc.signature.name}</p>
-        <p className={styles.signatureTitle}>{doc.signature.title}</p>
-      </footer>
+      {/* Signature removed from the end of the plan (designer, 2026-10-21). */}
     </article>
   );
 }

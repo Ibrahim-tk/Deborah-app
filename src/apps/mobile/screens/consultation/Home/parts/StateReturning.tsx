@@ -33,7 +33,8 @@ export function StateReturning(p: StateReturningProps) {
 
   return (
     <>
-      <HomeMediaHero titleId="continue-deborah" title={heroTitle} when={p.when} tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
+      <HomeMediaHero titleId="continue-deborah" title={heroTitle} when={p.when} eyebrow="Continue with Deborah"
+        stats={[{ icon: 'chat', label: p.topic.replace(/^Your /i, '').replace(/^./, (c) => c.toUpperCase()) }, ...(p.when ? [{ icon: 'calendar' as const, label: p.when }] : [])]} tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
       {p.intakeCard && !p.intakeCard.complete ? (
         <IntakeCompletionCard progress={p.intakeCard.progress} onAction={p.intakeCard.onAction} />
       ) : (

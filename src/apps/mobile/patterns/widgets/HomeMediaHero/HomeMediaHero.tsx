@@ -4,7 +4,7 @@
  */
 import type { ReactNode } from 'react';
 import { DeborahBlob } from '@mobile/ui/DeborahBlob';
-import { Icon } from '@mobile/ui';
+import { Icon, type IconName } from '@mobile/ui';
 import { type HomeArtifactId, type HomeTone } from '../homeArtifacts';
 import styles from './HomeMediaHero.module.css';
 
@@ -24,6 +24,10 @@ export interface HomeMediaHeroProps {
   imageAlt?: string;
   kicker?: string;
   kickerIcon?: string;
+  /** Small uppercase line above the title (compact hero). */
+  eyebrow?: string;
+  /** Supporting facts under the title, icon + short label (compact hero). */
+  stats?: { icon: IconName; label: string }[];
 }
 
 export function HomeMediaHero({
@@ -37,6 +41,8 @@ export function HomeMediaHero({
   ctaLabel,
   onCta,
   children,
+  eyebrow,
+  stats,
 }: HomeMediaHeroProps) {
   const compactHero = tone === 'hero';
 
@@ -46,7 +52,7 @@ export function HomeMediaHero({
         {/* Same hierarchy as the health-detail cards (2026-10-21): orb + arrow on top, title + one line at the bottom. */}
         <div className={styles.bodyCompact}>
           <div className={styles.top}>
-            <DeborahBlob size={44} label="Deborah" className={styles.orb} />
+            <DeborahBlob size={40} label="Deborah" className={styles.orb} />
             {onCta && (
               <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
                 <Icon name="chevron" size={18} />
@@ -54,8 +60,15 @@ export function HomeMediaHero({
             )}
           </div>
           <div className={styles.copy}>
+            {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
             <h2 id={titleId} className={styles.titleCompact}>{title}</h2>
-            {(meta || when) && <p className={styles.when}>{meta ?? when}</p>}
+            {stats && stats.length > 0 ? (
+              <ul className={styles.stats}>
+                {stats.map((st) => (
+                  <li key={st.label}><Icon name={st.icon} size={14} />{st.label}</li>
+                ))}
+              </ul>
+            ) : (meta || when) && <p className={styles.when}>{meta ?? when}</p>}
           </div>
           {children}
         </div>

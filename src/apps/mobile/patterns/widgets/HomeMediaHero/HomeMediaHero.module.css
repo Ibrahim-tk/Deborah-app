@@ -245,3 +245,15 @@
 /* Shorter main card (2026-10-21): hugs its content. */
 .root[data-tone='hero'][data-compact] { min-height: 0; }
 .root[data-tone='hero'] .bodyCompact { min-height: 0; gap: var(--space-4); }
+
+/* File-card layout (designer, 2026-10-21): bigger orb top-left, eyebrow · title · icon stats row. */
+.eyebrow { margin: 0 0 2px; font: var(--weight-medium) 11px / 14px var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); }
+.root[data-tone='hero'] .titleCompact { font: var(--weight-medium) calc(20px * var(--type-scale, 1)) / calc(25px * var(--type-scale, 1)) var(--font-body); letter-spacing: -0.015em; }
+.stats { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.stats li { display: inline-flex; align-items: center; gap: 6px; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--white); }
+.root[data-tone='hero'] .bodyCompact { gap: var(--space-5); }
+/* Compact pass (2026-10-21): smaller orb/arrow, tighter rhythm, title one step down. */
+.root[data-tone='hero'] .bodyCompact { gap: var(--space-3); padding-block: var(--space-3); }
+.root[data-tone='hero'] .arrow { width: 36px; height: 36px; }
+.root[data-tone='hero'] .titleCompact { font-size: var(--fs-headline); line-height: var(--lh-headline); }
+.stats { margin-top: var(--space-1); }

@@ -5,6 +5,9 @@ import { findScenario } from '@shared/scenarios';
 import { clearSignup, loadScenario, restoreSignup } from '@shared/store';
 import { useShellStore } from './shell.store';
 
+/** The brand-new user, opening on the splash. */
+const FIRST_RUN_SCENARIO = 'S01';
+
 export function useScenario() {
   const [, setParams] = useSearchParams();
   const scenarioId = useShellStore((s) => s.scenarioId);
@@ -35,12 +38,16 @@ export function useScenario() {
     [setParams, setScenario, showToast],
   );
 
+  // Reset = start over (designer, 2026-10-21): first-run scenario from the splash, via a full reload so every
+  // in-memory screen, sheet and timer is gone. Toggles live in the shell store and are kept.
   const reset = useCallback(() => {
     clearSignup();
-    const result = loadScenario(scenarioId);
-    const scenario = findScenario(scenarioId);
-    showToast(result.ok ? `Reset: ${scenario?.label ?? scenarioId}` : result.error);
-  }, [scenarioId, showToast]);
+    loadScenario(FIRST_RUN_SCENARIO);
+    setScenario(FIRST_RUN_SCENARIO);
+    const url = new URL(window.location.href);
+    url.searchParams.set('scenario', FIRST_RUN_SCENARIO);
+    window.location.assign(url.toString());
+  }, [setScenario]);
 
   return { scenarioId, scenario: findScenario(scenarioId), select, reset };
 }
