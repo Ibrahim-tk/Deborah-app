@@ -39,6 +39,13 @@
   color: var(--color-gold-ink);
 }
 
+.advocate,
+.reference {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
 .meta {
   margin: 0;
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);

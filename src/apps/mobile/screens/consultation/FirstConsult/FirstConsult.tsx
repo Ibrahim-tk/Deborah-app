@@ -28,6 +28,7 @@ import { DeborahBlob } from '@mobile/ui';
 import { Aura, GradientShift } from '@mobile/ui';
 import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
+import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { useHealthConsent } from '@mobile/screens/consultation/Conversation/parts/useHealthConsent';
 import { EntryView } from './parts/EntryView';
@@ -52,6 +53,7 @@ export default function FirstConsult() {
   const toast = useToast();
   const consent = useHealthConsent();
   const name = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
+  const openSwitcher = useProfileSwitcher();
   // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
   const profileCtx = useProfileContext();
   const proxyCtx = useProxyContext();
@@ -106,10 +108,12 @@ export default function FirstConsult() {
     if (route === '/visit-notes') action('visit_notes');
     if (route === '/intake') push('M-2.14');
   };
-  // The answer the notes are built from: the one on screen, else the path's own (Sarah's path is `s_*`).
+  // The answer the notes are built from: the one on screen, else the path's own (`m_` mood, `s_` premade).
   const answerNode = () =>
     [...entries].reverse().find((e) => e.kind === 'answer')?.node ??
+    (entries.some((e) => e.kind === 'bot' && e.nodeId.startsWith('m_')) ? flow.nodes.m_answer : undefined) ??
     (entries.some((e) => e.kind === 'bot' && e.nodeId.startsWith('s_')) ? flow.nodes.s_answer : undefined) ??
+    (entries.some((e) => e.kind === 'bot' && e.nodeId.startsWith('p_')) ? flow.nodes.p_answer : undefined) ??
     flow.nodes.answer_1;
   const saveProviderBrief = (): string | undefined => {
     const s = useAppStore.getState();
@@ -184,7 +188,12 @@ export default function FirstConsult() {
       {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
       <Aura />
       <GradientShift />
-      <ChatHeader onBack={pop} onNewChat={() => openAsk()} canStartNew />
+      <ChatHeader
+        onBack={pop}
+        onNewChat={() => openAsk()}
+        canStartNew={started}
+        profile={{ name, onPress: openSwitcher }}
+      />
       <div ref={scrollRef} className={styles.scroll} onScroll={onScroll}>
         <div className={styles.column} data-started={started || undefined} data-placeholder>
           {/* Before she answers: the orb and serif greeting sit centred, as on the empty chat (M-2.1). Once she

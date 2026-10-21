@@ -12,7 +12,7 @@ import styles from './ChatHeader.module.css';
 export interface ChatHeaderProps {
   onBack: () => void;
   onNewChat: () => void;
-  /** Hide the new-chat icon when the chat is already empty. */
+  /** Show new-chat only once the thread has messages (welcome shows profile alone). */
   canStartNew: boolean;
   /** Content has scrolled under the bar: show the iOS scroll-edge blur. */
   scrolled?: boolean;
@@ -33,7 +33,7 @@ export function ChatHeader({
       <header className={styles.root}>
         <GlassButton icon="back" aria-label="Back to Home" onClick={onBack} />
         <div className={styles.right}>
-          {canStartNew && <GlassButton icon="edit" aria-label="New conversation" onClick={onNewChat} />}
+          {canStartNew && <GlassButton icon="newChat" aria-label="New conversation" onClick={onNewChat} />}
           {profile && (
             <button
               type="button"

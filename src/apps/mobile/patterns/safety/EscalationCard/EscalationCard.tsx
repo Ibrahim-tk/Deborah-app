@@ -28,22 +28,34 @@ export interface EscalationCardProps {
   sheet?: boolean;
 }
 
-export function EscalationCard({ dismissed, onDismiss, sheet = true }: EscalationCardProps) {
+export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: EscalationCardProps) {
   // Request-sent confirmation (designer, 2026-10-21): no booking screen. The sheet confirms that Deborah's team
   // has been emailed and will reach out; its only action is Done, which lets the conversation carry on.
   // OPEN: docs/ux/F03-safety.md still specifies "Book a consultation with Deborah · Not now" — update the spec.
   const [open, setOpen] = useState(sheet && !dismissed);
+  const [sent, setSent] = useState(false);
+  const request = () => {
+    if (!sent) {
+      setSent(true);
+      onBook?.();
+    }
+    setOpen(true);
+  };
   const done = () => { setOpen(false); if (!dismissed) onDismiss(); };
 
   return (
     <>
-      {/* Branded hero card (designer, 2026-10-21): Deborah cut-out on the aurora field, heading, small CTA. */}
+      {/* Branded hero card (designer, 2026-10-21): Deborah cut-out on white, heading + CTA left-aligned.
+          Portrait uses a sharp layer + blurred clone so the bottom dissolves into the card (not opacity alone). */}
       <div className={styles.hero}>
-        <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" aria-hidden />
+        <div className={styles.portraitStack} aria-hidden>
+          <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" />
+          <img className={styles.portraitBlur} src="/images/deborah/cutout.png" alt="" />
+        </div>
         <div className={styles.heroCopy}>
           <p className={styles.heroTitle}>Talk with Deborah directly</p>
+          <Button size="sm" className={styles.cta} onClick={request}>Talk with Deborah</Button>
         </div>
-        <Button size="sm" className={styles.cta} onClick={() => setOpen(true)}>Talk with Deborah</Button>
       </div>
       <BottomSheet open={Boolean(open)} onClose={done}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>

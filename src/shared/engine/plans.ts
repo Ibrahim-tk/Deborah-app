@@ -247,6 +247,10 @@ export function answerSteps(
     ...(opts.retry
       ? []
       : deborahText(ctx, provider ? providerReviewCopy.lead : refresh ? 'I’ve updated this with your labs.' : afterVisitLead(conv) + persona.voice.answerLead)),
+    // The healing plan is the ongoing chart: concerns, open actions, visits, medicines.
+    ...(ctx.healingPlan
+      ? [{ type: 'thinking' as const, on: true, label: 'Reading your healing plan' }, { type: 'delay' as const, ms: between(400, 600) }]
+      : []),
     // Grounded in the user's own labs: say so while thinking (SourceTrace, design 2026-10-21).
     { type: 'thinking', on: true, label: opts.labs?.values.length ? `Reading your lab report${opts.labs.collectedAt ? ` from ${formatShortDate(opts.labs.collectedAt)}` : ''}…` : reviewing },
     { type: 'delay', ms: between(600, 800) },
@@ -326,6 +330,7 @@ export function answerSteps(
           type: 'createPlanFromAnswer',
           profileId: profile.id,
           goal: interpolate(script.answer.goal, { name: profile.name }),
+          topic: conv.topic?.trim() || script.topic,
           habits: script.answer.habitsForPlan.map((h) => interpolate(h, { name: profile.name })),
           productId: answer.product?.productId,
           status: script.status,

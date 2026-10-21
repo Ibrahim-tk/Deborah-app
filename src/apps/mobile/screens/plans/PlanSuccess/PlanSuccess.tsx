@@ -7,61 +7,61 @@
  * @xref    web: W-4.5 (apps/web/screens/plans/PlanSuccess) — not built
  */
 import { useAppStore } from '@shared/store';
-import { Button, DURATION, EASE_OUT, Icon, MotionDiv, useReducedMotionPref } from '@mobile/ui';
+import { Button } from '@mobile/ui';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import styles from './PlanSuccess.module.css';
 
 export default function PlanSuccess() {
-  const { returnToConversation, open } = useNav();
-  const reduced = useReducedMotionPref();
-  const name = useAppStore((s) => s.userName);
+  const { returnToConversation, open, presentSheet } = useNav();
   const plan = useAppStore((s) => s.plan);
   // Upgrading from M-6.3 returns to M-6.2: adding the family member becomes the main action.
   const { returnTo } = useScreenParams<{ returnTo: string }>();
-  const addFirst = returnTo === 'M-6.2' && plan === 'family';
+  const addFirst = returnTo === 'M-6.2' && (plan === 'family' || plan === 'premium');
+  const canAddFamily = plan === 'family' || plan === 'premium';
 
-  const addMember = (variant: 'primary' | 'secondary') => (
-    <Button
-      variant={variant}
-      fullWidth
-      onClick={() => {
-        returnToConversation();
-        open('M-6.2');
-      }}
-    >
-      Add a family member
-    </Button>
-  );
+  const continueChat = () => {
+    returnToConversation();
+    // A message held by the free-limit gate is sent now (F04 M-4.1 behaviour).
+    useAppStore.getState().releaseHeld();
+  };
+
+  const onAddMember = () => {
+    returnToConversation();
+    if (canAddFamily) open('M-6.2');
+    else presentSheet('M-6.3');
+  };
 
   return (
     <div className={styles.root} data-xref="M-4.5 · Plan success">
-      <div className={styles.content}>
-        {/* Calm arrival: fade and settle, no confetti, no overshoot (DESIGN.md › Motion). */}
-        <MotionDiv
-          className={styles.mark}
-          initial={reduced ? { opacity: 0 } : { opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: reduced ? DURATION.reduced : DURATION.base, ease: EASE_OUT }}
-        >
-          <Icon name="check" size={40} strokeWidth={1.5} />
-        </MotionDiv>
-        <h1 className={styles.title}>You’re all set{name ? `, ${name}` : ''}</h1>
-        <p className={styles.text}>Unlimited consultations are unlocked.</p>
+      <div className={styles.content} role="status">
+        {/* Same green check draw-in as OTP / account-created (M-1.4). */}
+        <span className={styles.check}>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              className={styles.tick}
+              d="M5 12.5l4.5 4.5L19 7.5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              pathLength={1}
+            />
+          </svg>
+        </span>
+        <h1 className={styles.title}>You are all set.</h1>
       </div>
       <div className={styles.actions}>
-        {addFirst && addMember('primary')}
-        <Button
-          variant={addFirst ? 'secondary' : 'primary'}
-          fullWidth
-          onClick={() => {
-            returnToConversation();
-            // A message held by the free-limit gate is sent now (F04 M-4.1 behaviour).
-            useAppStore.getState().releaseHeld();
-          }}
-        >
-          Continue my conversation
-        </Button>
-        {plan === 'family' && !addFirst && addMember('secondary')}
+        {addFirst ? (
+          <>
+            <Button fullWidth onClick={onAddMember}>Add a family member</Button>
+            <Button variant="secondary" fullWidth onClick={continueChat}>Continue my conversation</Button>
+          </>
+        ) : (
+          <>
+            <Button fullWidth onClick={continueChat}>Continue my conversation</Button>
+            <Button variant="secondary" fullWidth onClick={onAddMember}>Add a family member</Button>
+          </>
+        )}
       </div>
     </div>
   );

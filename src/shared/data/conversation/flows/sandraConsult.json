@@ -301,11 +301,12 @@
           "value": "Not tried yet"
         }
       ],
-      "next": "handoff",
+      "uiNote": "F02g: AfterGuidanceTrail owns Gold + visit-notes pills; do not next into handoff.",
       "notesTitle": "Night sweats & 2–3 am waking"
     },
     "handoff": {
       "type": "question",
+      "uiNote": "Superseded by F02g AfterGuidanceTrail on the answer entry. Kept for reference only.",
       "bot": "Would you like to learn more about Genesis Gold®, or would visit notes be more useful right now?",
       "widget": {
         "type": "quick_replies",
@@ -326,8 +327,15 @@
       "next": "appointment"
     },
     "exit_product": {
-      "type": "end",
-      "route": "/shop/genesis-gold"
+      "type": "message",
+      "bot": "Genesis Gold® is whole-food nutrition I formulated for the hypothalamus — the gland that conducts your hormones, sleep, stress response and metabolism.\n\nIt isn’t a hormone or a pharmaceutical. Many women give it 60 to 90 days alongside clearer labs and everyday habits.\n\nLet your provider know if you start it, especially if you already take thyroid medicine or other supplements.",
+      "widget": {
+        "type": "product_card",
+        "productId": "genesis-gold",
+        "why": "Plant-based nutrition designed to support the hypothalamus.",
+        "frame90": "Most women give it at least 60–90 days. Optional — you don’t need it to use the app."
+      },
+      "next": "appointment"
     },
     "appointment": {
       "type": "question",
@@ -723,16 +731,32 @@
     },
     "s_root": {
       "type": "message",
-      "bot": "Here’s what’s happening at the root.\n\nYour hypothalamus is the maestro of your whole symphony of hormones, neurotransmitters and immune factors. Hormones control everything, but the hypothalamus controls your hormones. At 46, you’re entering what I call the Pause, and your hypothalamus is navigating a major transition.\n\nOn top of that, losing your dad and a brutal year at work have put it under real strain. When that happens, it struggles to keep your stress hormones balanced overnight:\n• Your cortisol rises at 2–3 am, which wakes you up.\n• That higher night-time cortisol also makes your body hold weight around the middle, even though you’re eating the same.\n• Shifting progesterone explains your shorter, heavier cycles.\n• Your thyroid, already needing support, is caught in the same off-rhythm.\n\nYour symptoms aren’t in your head, Sandra. They’re in your hypothalamus.\n\nThe good news is that we can support it right at the source. I developed Genesis Gold® to give the hypothalamus the foundational nutrients it needs to conduct the whole symphony again: sleep, stress response, thyroid, blood sugar and cycles. For many women in the Pause, this upstream support settles a big part of the picture. I’d suggest giving it 60–90 days, alongside some baseline labs so you and your provider have a clear starting point.",
+      "bot": "Here’s what’s happening at the root.\n\nAt 46, your hypothalamus is navigating the Pause under real strain — grief, work, and shifting hormones. That can wake you at 2–3 am, hold weight around the middle, and throw cycles and thyroid off rhythm.",
       "next": "s_answer"
     },
     "s_exit_product": {
-      "type": "end",
-      "route": "/shop/genesis-gold"
+      "type": "message",
+      "bot": "Genesis Gold® is whole-food nutrition I formulated for the hypothalamus — the gland that conducts your hormones, sleep, stress response and metabolism.\n\nIt isn’t a hormone or a pharmaceutical. Many women give it 60 to 90 days alongside clearer labs and everyday habits.\n\nLet your provider know if you start it, especially if you already take thyroid medicine or other supplements.",
+      "widget": {
+        "type": "product_card",
+        "productId": "genesis-gold",
+        "why": "Plant-based nutrition designed to support the hypothalamus.",
+        "frame90": "Most women give it at least 60–90 days. Optional — you don’t need it to use the app."
+      },
+      "next": "s_notes_close"
     },
     "s_exit_notes": {
+      "type": "message",
+      "bot": "Done. Here are your visit notes, ready to take with you.",
+      "widget": {
+        "type": "visit_notes_card",
+        "title": "Perimenopause, thyroid & sleep"
+      },
+      "next": "s_notes_close"
+    },
+    "s_notes_close": {
       "type": "end",
-      "route": "/visit-notes"
+      "route": "/chat"
     },
     "s_answer": {
       "type": "answer",
@@ -824,13 +848,14 @@
           "body": "Sandra, you’re carrying so much: grief, a demanding job, and a body in transition. Of course you’re exhausted. This isn’t the end of feeling like yourself. It’s the Pause, and it can be the beginning of a stronger, wiser chapter. Let’s give your hypothalamus what it needs, and walk through this together."
         }
       ],
-      "footer": "This is educational guidance from the Oracle, an AI that speaks in Deborah's voice, not medical advice, a diagnosis or a prescription. Please talk to your healthcare provider before changing any medication or supplement.",
-      "next": "s_whats_next",
+      "footer": "This is educational guidance from the Oracle — not a diagnosis or prescription. Please talk with your healthcare provider.",
+      "uiNote": "F02g: AfterGuidanceTrail owns Gold + visit-notes pills; do not next into s_whats_next.",
       "notesTitle": "Perimenopause, thyroid & sleep"
     },
     "s_whats_next": {
       "type": "question",
-      "bot": "Would you like me to put together notes for your provider, or tell you more about Genesis Gold®?",
+      "uiNote": "Superseded by F02g AfterGuidanceTrail on the answer entry. Kept for reference only.",
+      "bot": "Would you like to create notes for your provider, or learn about Genesis Gold®?",
       "widget": {
         "type": "quick_replies",
         "options": [

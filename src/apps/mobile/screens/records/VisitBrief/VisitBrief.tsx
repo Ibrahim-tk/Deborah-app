@@ -3,9 +3,9 @@
  * @flow    F09b Visit brief (Miro Step 5) · entered from F02e Discuss with provider
  * @states  review (read-only notes; provider name + appointment date editable) · saved · empty
  *
- * Design direction 2026-10-20: the notes sit straight on the page (no white card); only the provider's name and the
- * appointment date can be changed; ✓ saves in one tap (a date also schedules the day-after visit check-in);
- * footer: Save PDF (left) · Log visit (right).
+ * Design direction 2026-10-20 / 2026-10-21: the notes sit straight on the page (no white card); only the provider's
+ * name and the appointment date can be changed. Header: Share · Download. Footer: Done (saves; a date also schedules
+ * the day-after visit check-in).
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F09b-visit-brief.md
  * @xref    web: W-9.7 — not built
@@ -13,7 +13,8 @@
 import { useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { assembleVisitBrief, latestCompletedAnswer, visitBriefPreview } from '@shared/engine';
-import { BOOKING_DAY_AFTER_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
+import { healingPlanContext } from '@shared/engine/planConcerns';
+import { BOOKING_DAY_AFTER_BODY, FOLLOW_UP_TITLE, selectPlan90, selectProfileNotes, useAppStore } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
 import { Button, GlassButton, Input, Modal } from '@mobile/ui';
@@ -22,6 +23,13 @@ import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { BriefDocument } from './parts/BriefDocument';
 import styles from './VisitBrief.module.css';
+
+function healingPlanNote(profileId: string): string | undefined {
+  const s = useAppStore.getState();
+  const profile = s.profiles.byId[profileId];
+  if (!profile) return undefined;
+  return healingPlanContext(selectPlan90(s, profileId), profile, selectProfileNotes(s, profileId));
+}
 
 function resolveBrief(
   params: { messageId?: string; conversationId?: string; noteId?: string },
@@ -54,7 +62,7 @@ function resolveBrief(
   const profile = s.profiles.byId[conv.profileId];
   if (!profile) return null;
   return {
-    brief: assembleVisitBrief(conv, profile, msg.answer),
+    brief: assembleVisitBrief(conv, profile, msg.answer, healingPlanNote(profile.id)),
     conversationId: conv.id,
     sourceMessageId: msg.id,
     profileId: profile.id,
@@ -63,7 +71,7 @@ function resolveBrief(
 
 export default function VisitBrief() {
   const params = useScreenParams<{ messageId: string; conversationId: string; noteId: string }>();
-  const { dismissModal, open, openAsk } = useNav();
+  const { dismissModal, open } = useNav();
   const toast = useToast();
   const seed = useMemo(
     () => resolveBrief(params),
@@ -78,8 +86,6 @@ export default function VisitBrief() {
   const topic = useAppStore((s) => (seed?.conversationId ? s.conversations.byId[seed.conversationId]?.topic : undefined));
   const raw = brief?.title?.trim() || topic?.trim();
   const heading = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : 'My Visit Notes';
-  // The after-visit note logged for this brief, if any (F09c links it by briefNoteId).
-  const outcomeId = useAppStore((s) => Object.values(s.notes.byId).find((n) => noteId && n.visit?.briefNoteId === noteId)?.id);
 
   // Keep store clock in sync for follow-up scheduling.
   useAppStore(useShallow((s) => ({ now: s.simulatedNow, anchor: s.clockAnchor })));
@@ -119,8 +125,8 @@ export default function VisitBrief() {
     return id;
   };
 
-  // ✓: one tap saves. With an appointment date, the visit check-in is set for the day after — no extra step.
-  const onSave = () => {
+  // Done: one tap saves. With an appointment date, the visit check-in is set for the day after — no extra step.
+  const onDone = () => {
     const id = persist();
     if (brief.appointmentDate) {
       const s = useAppStore.getState();
@@ -146,13 +152,7 @@ export default function VisitBrief() {
     try { await navigator.share({ title: 'For my provider', text: 'Notes for my provider from Your Oracle Clinician' }); } catch { /* dismissed */ }
   };
 
-  const onPdf = () => open('M-9.6', { briefNoteId: persist() });
-  const onLog = () => {
-    const id = persist();
-    dismissModal();
-    if (outcomeId) open('M-9.8', { noteId: outcomeId });
-    else openAsk({ mode: 'debrief', briefNoteId: id });
-  };
+  const onDownload = () => open('M-9.6', { briefNoteId: persist() });
   const dateValue = brief.appointmentDate ? brief.appointmentDate.slice(0, 10) : '';
 
   return (
@@ -160,11 +160,10 @@ export default function VisitBrief() {
       <Modal
         title={heading}
         left={<GlassButton icon="share" aria-label="Share" onClick={onShare} />}
-        right={<GlassButton icon="check" aria-label="Save" onClick={onSave} />}
+        right={<GlassButton icon="download" aria-label="Download PDF" onClick={onDownload} />}
         footer={
           <div className={styles.actions}>
-            <Button variant="secondary" fullWidth leadingIcon="pdf" onClick={onPdf}>Save PDF</Button>
-            <Button fullWidth leadingIcon={outcomeId ? 'note' : 'calendar'} onClick={onLog}>{outcomeId ? 'View visit' : 'Log visit'}</Button>
+            <Button fullWidth onClick={onDone}>Done</Button>
           </div>
         }
       >

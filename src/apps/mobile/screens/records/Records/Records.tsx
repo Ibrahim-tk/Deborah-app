@@ -8,6 +8,7 @@
  */
 import { useEffect, useState } from 'react';
 import { useAppStore } from '@shared/store';
+import { useDevice } from '@shell/device';
 import { GlassButton, Header, Segmented, Skeleton } from '@mobile/ui';
 import { simBetween } from '@mobile/hooks/simTiming';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
@@ -36,6 +37,7 @@ export default function Records() {
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState(false);
+  const { setClientGuide } = useDevice();
   const closeSearch = () => { setSearching(false); setQuery(''); setExpanded(false); };
 
   // Simulated first load (docs/ux/00-ux-overview.md §3: skeletons 300–600 ms).
@@ -43,6 +45,14 @@ export default function Records() {
     const t = window.setTimeout(() => setLoading(false), simBetween(300, 600));
     return () => window.clearTimeout(t);
   }, []);
+
+  // Client sticky follows the Visit Notes / Labs / Attachments tab.
+  useEffect(() => {
+    const guide =
+      segment === 'labs' ? 'records-labs' : segment === 'attachments' ? 'records-attachments' : 'records-notes';
+    setClientGuide(guide);
+    return () => setClientGuide(null);
+  }, [segment, setClientGuide]);
 
   const otherProfile = Boolean(profile) && (profileId !== activeProfileId || profile?.relationship !== 'self');
 

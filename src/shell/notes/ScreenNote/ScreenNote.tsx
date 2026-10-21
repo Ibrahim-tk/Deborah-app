@@ -1,12 +1,14 @@
 /**
  * @shell ScreenNote — sticky note beside the phone with the story/intent of the visible screen.
- * Seeded from shared/data/screen-notes.json; edits are live and remembered per screen ID in
- * localStorage (prototype chrome only — never product UI).
+ *
+ * Internal: seeded from screen-notes.json, editable, hide via Toggles.
+ * Client: body-only guide on a short list of screens (clientGuide.ts); silent elsewhere.
  */
 import { useEffect, useState } from 'react';
-import { useAppStore } from '@shared/store';
+import { selectActiveConversation, useAppStore } from '@shared/store';
 import seed from '@shared/data/screen-notes.json';
 import { useShellStore } from '../../shell.store';
+import { CLIENT_GUIDE } from './clientGuide';
 import styles from './ScreenNote.module.css';
 
 interface Seed {
@@ -33,17 +35,57 @@ function writeAll(all: Record<string, string>) {
   }
 }
 
-export function ScreenNote() {
+/** Which client sticky to show for this screen, or null to hide. */
+function clientNoteKey(screenId: string, chatEmpty: boolean, recordsGuide: string | null): string | null {
+  if (screenId === 'M-2.1') return chatEmpty ? 'chat-empty' : 'chat-running';
+  if (screenId === 'M-9.7') return 'visit-notes';
+  if (screenId === 'M-7.3') return 'healing-plan';
+  if (screenId === 'M-9.1') {
+    if (recordsGuide === 'records-labs' || recordsGuide === 'records-attachments' || recordsGuide === 'records-notes') {
+      return recordsGuide;
+    }
+    return 'records-notes';
+  }
+  if (screenId === 'M-9.5' || screenId === 'M-5.3' || screenId === 'M-5.4') return 'records-labs';
+  if (screenId === 'M-11.1' || screenId === 'M-11.3') return 'records-attachments';
+  return null;
+}
+
+export interface ScreenNoteProps {
+  /** Client page: guide copy only. Internal: editable + hide via Toggles. */
+  audience?: 'internal' | 'client';
+}
+
+export function ScreenNote({ audience = 'internal' }: ScreenNoteProps) {
+  const forClient = audience === 'client';
   const appScreen = useShellStore((s) => s.screen);
+  const recordsGuide = useShellStore((s) => s.clientGuide);
   const isLocked = useAppStore((s) => s.isLocked);
+  const conversation = useAppStore(selectActiveConversation);
   const screen = isLocked ? { id: 'M-5.1', title: 'Lock screen' } : appScreen;
   const [edits, setEdits] = useState<Record<string, string>>(readAll);
   const [collapsed, setCollapsed] = useState(false);
   const hide = useShellStore((s) => s.setShowNotes);
 
-  useEffect(() => writeAll(edits), [edits]);
+  useEffect(() => {
+    if (forClient) return;
+    writeAll(edits);
+  }, [edits, forClient]);
 
   if (!screen) return null;
+
+  if (forClient) {
+    const chatEmpty = !(conversation?.messages?.length);
+    const key = clientNoteKey(screen.id, chatEmpty, recordsGuide);
+    const text = key ? CLIENT_GUIDE[key] : undefined;
+    if (!text) return null;
+    return (
+      <aside className={styles.root} data-audience="client" aria-label="Guide">
+        <p className={styles.clientBody}>{text}</p>
+      </aside>
+    );
+  }
+
   const base = NOTES[screen.id];
   const edited = screen.id in edits;
   const text = edited ? edits[screen.id] : base?.note ?? '';

@@ -11,7 +11,7 @@ import type { EngineContext, Step } from '../types/engine';
 import { interpolate } from '../utils/text';
 import { deborahText, pause, userBubble } from './plans';
 import { uid } from '../utils/ids';
-import { debriefToConsultSeed, emptyVisitOutcome, extractVisitOutcome, nextVisitProbe, visitProfileUpdates, visitSummaryLines } from './visitOutcome';
+import { debriefToConsultSeed, emptyVisitOutcome, extractVisitOutcome, hasProviderSpecialty, nextVisitProbe, visitProfileUpdates, visitSummaryLines } from './visitOutcome';
 
 /** Chat intent: "I just saw my doctor", "back from my appointment" (not a question about one). */
 const VISIT_REPORT = /\b(?:just|today|yesterday|this morning)?\s*(?:saw|seen|visited|went to|got back from|back from|had (?:my|an?|the))\b[^.?!]{0,40}\b(?:doctor|provider|appointment|gyn\w*|ob-?gyn|cardiolog\w*|endocrinolog\w*|pcp|gp|specialist|np|nurse practitioner|physician)\b/i;
@@ -44,7 +44,7 @@ function advance(ctx: EngineContext, outcome: VisitOutcome, asked: VisitProbeId[
   const probe = nextVisitProbe(outcome, asked);
   if (probe) {
     const replies =
-      probe === 'specialty' ? [...SPECIALTY_REPLIES, d.skip]
+      probe === 'specialty' ? SPECIALTY_REPLIES
       : probe === 'tests' ? [...d.testsOptions, d.skip]
       : probe === 'meds' ? [...d.medsOptions, d.skip]
       : [d.skip];
@@ -104,12 +104,18 @@ export function debriefReplySteps(ctx: EngineContext, messageId: string, optionI
     case 'skip':
     case 'testsNo':
     case 'medsNo':
+      if (db.awaiting === 'specialty' && !hasProviderSpecialty(o)) {
+        return [...head, ...advance(ctx, o, db.asked.filter((p) => p !== 'specialty'), db.confidence)];
+      }
       return [...head, ...advance(ctx, o, db.asked, db.confidence)];
     case 'testsYes':
       return [...head, setDebrief(conv, { awaiting: 'tests' }), ...say(ctx, d.whichTests)];
     case 'medsYes':
       return [...head, setDebrief(conv, { awaiting: 'meds' }), ...say(ctx, d.whichMeds)];
     case 'save':
+      if (!hasProviderSpecialty(o)) {
+        return [...head, ...advance(ctx, o, db.asked.filter((p) => p !== 'specialty'), db.confidence)];
+      }
       return [...head, { type: 'store', action: { type: 'saveDebriefOutcome', conversationId: conv.id } }, ...savedSteps(ctx, visitProfileUpdates(db.outcome, ctx.profile).length)];
     case 'discussYes': {
       const seed = debriefToConsultSeed(db.outcome);

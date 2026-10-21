@@ -1,0 +1,73 @@
+/* LAB Simple Home — orb · welcome · actions · suggestions · composer dock. Oracle tokens only. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  align-content: start;
+  gap: var(--space-6);
+  padding: calc(var(--safe-top, 0px) + var(--space-8)) var(--margin-screen) var(--space-4);
+}
+
+.hero {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.body {
+  margin: 0;
+  max-width: 32ch;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: grid;
+}
+
+.actionList {
+  display: grid;
+  /* Bleed so ListRow’s own screen-margin padding lines up with the page. */
+  margin-inline: calc(var(--margin-screen) * -1);
+}
+
+.actionIcon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+}
+
+.suggestions {
+  min-width: 0;
+}
+
+.dock {
+  flex: none;
+  padding: var(--space-3) var(--margin-screen) calc(var(--safe-bottom, 0px) + var(--space-4));
+  background: linear-gradient(180deg, transparent, var(--color-canvas) 28%);
+}

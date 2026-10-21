@@ -65,6 +65,7 @@ export {
   emptyVisitOutcome,
   extractVisitOutcome,
   hasEnoughVisitContext,
+  hasProviderSpecialty,
   isDebrief,
   isVisitOutcomeEmpty,
   MAX_VISIT_PROBES,

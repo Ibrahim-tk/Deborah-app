@@ -16,14 +16,14 @@
       "type": "message",
       "widget": {
         "type": "proxy_banner",
-        "text": "Asking about: Eleanor · Proxy session — Elderly / caregiver"
+        "text": "Asking about: {name} · Proxy session — Elderly / caregiver"
       },
       "next": "opener"
     },
     "opener": {
       "type": "question",
       "display": "greeting",
-      "bot": "How is Eleanor doing today, {you}?",
+      "bot": "What are {name}’s concerns for today, {you}?",
       "widget": {
         "type": "suggested_replies",
         "options": [
@@ -143,14 +143,15 @@
     },
     "p_next": {
       "type": "question",
-      "bot": "Would you like me to put this together as notes you can hand to the care team?",
+      "bot": "Would you like me to share the full guidance for the care team?",
       "widget": {
         "type": "quick_replies",
         "options": [
           {
-            "label": "Create notes for the care team",
-            "value": "Create notes for the care team",
-            "reply": "Yes, please."
+            "label": "Show me what you’re thinking",
+            "value": "Show me what you’re thinking",
+            "reply": "Yes, please.",
+            "next": "p_answer"
           },
           {
             "label": "Not now",
@@ -159,8 +160,16 @@
           }
         ]
       },
-      "saveAs": "notes",
       "next": "p_answer"
+    },
+    "p_exit_notes": {
+      "type": "message",
+      "bot": "Done. Here are notes you can hand to the care team.",
+      "widget": {
+        "type": "visit_notes_card",
+        "title": "Sudden confusion — possible UTI"
+      },
+      "next": "p_close"
     },
     "p_answer": {
       "type": "answer",
@@ -232,9 +241,39 @@
           "body": "{you}, you noticed something that many people miss. Acting on it today is exactly the right thing for your mom."
         }
       ],
-      "footer": "This is educational guidance from the Oracle, an AI that speaks in Deborah's voice, for a caregiver — not a diagnosis. In an emergency, call 911.",
-      "next": "p_close",
+      "footer": "This is educational guidance from the Oracle for a caregiver — not a diagnosis. In an emergency, call 911.",
+      "next": "p_whats_next",
       "notesTitle": "Sudden confusion — possible UTI"
+    },
+    "p_whats_next": {
+      "type": "question",
+      "bot": "Would you like to create notes for the care team, or learn about Genesis Gold®?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Create notes for the care team",
+            "value": "Create notes for the care team",
+            "next": "p_exit_notes"
+          },
+          {
+            "label": "Learn about Genesis Gold®",
+            "value": "Learn about Genesis Gold®",
+            "next": "p_exit_product"
+          }
+        ]
+      }
+    },
+    "p_exit_product": {
+      "type": "message",
+      "bot": "Genesis Gold® is whole-food nutrition I formulated for the hypothalamus — the gland that conducts hormones, sleep, stress response and metabolism.\n\nIt isn’t a hormone or a pharmaceutical. Many people give it 60 to 90 days alongside clearer labs and everyday habits.\n\nLet the care team know if {name} starts it, especially alongside other medicines or supplements.",
+      "widget": {
+        "type": "product_card",
+        "productId": "genesis-gold",
+        "why": "Plant-based nutrition designed to support the hypothalamus.",
+        "frame90": "Most people give it at least 60–90 days. Optional — you don’t need it to use the app."
+      },
+      "next": "p_close"
     },
     "p_close": {
       "type": "message",

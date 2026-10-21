@@ -36,6 +36,7 @@ export function IPhoneFrame({ children }: IPhoneFrameProps) {
   const isLocked = useAppStore((s) => s.isLocked);
   const tone = isLocked ? 'light' : screenTone;
   const setScreen = useShellStore((s) => s.setScreen);
+  const setClientGuide = useShellStore((s) => s.setClientGuide);
 
   const scale = useFitScale(stageRef, scaleMode);
   const [alert, setAlert] = useState<{ options: DeviceAlertOptions; resolve: (i: number) => void } | null>(null);
@@ -51,8 +52,9 @@ export function IPhoneFrame({ children }: IPhoneFrameProps) {
       notify,
       haptic: () => {},
       setScreen,
+      setClientGuide,
     }),
-    [keyboardHeight, setScreen, notify],
+    [keyboardHeight, setScreen, setClientGuide, notify],
   );
 
   const vars = {

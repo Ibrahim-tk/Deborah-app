@@ -7,7 +7,6 @@ import {
   FullChoicePills,
   FullChoicePillsGrid,
   HealingPlanCard,
-  HealingPlanSection,
   HomeMediaHero,
   InlineChoicePills,
   InlineConsent,
@@ -16,7 +15,6 @@ import {
   MoodScale,
   NamedReasonList,
   PhoneField,
-  PhotoDestinationPair,
   PillDescribeField,
   PolicyUpdateConsent,
   QuestionChoices,
@@ -24,7 +22,6 @@ import {
   ReminderCard,
   ScaleCheck,
   SuggestionCarousel,
-  TodayHabitsCard,
   UploadCard,
   type NamedReason,
   type PhoneValue,
@@ -295,19 +292,13 @@ export function WidgetPatterns() {
         </Specimen>
         <Specimen name="HealingPlanCard" path="patterns/widgets/HealingPlanCard" note="My Healing Plan on Home (locked + unlocked).">
           <Variant label="locked"><HealingPlanCard locked /></Variant>
-          <Variant label="unlocked"><HealingPlanCard day={18} focus="Steady sleep" onPress={noop} /></Variant>
+          <Variant label="unlocked"><HealingPlanCard concern="Steady sleep" done={2} total={5} onPress={noop} /></Variant>
         </Specimen>
         <Specimen name="IntakeSectionHeader" path="patterns/widgets/IntakeSectionHeader" note="Section chrome for Complete Intake (M-2.14).">
           <IntakeSectionHeader title="Family history" lede="Placeholder until Dropbox questionnaires arrive." />
         </Specimen>
-        <Specimen name="HealingPlanSection" path="patterns/widgets/HealingPlanSection" note="Detail blocks on My Healing Plan (M-7.3).">
-          <HealingPlanSection title="Immediate priorities"><p>Wind down 30 minutes earlier.</p></HealingPlanSection>
-        </Specimen>
         <Specimen name="PolicyUpdateConsent" path="patterns/widgets/PolicyUpdateConsent" note="Returning-user re-consent when legal version bumps.">
           <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={noop} />
-        </Specimen>
-        <Specimen name="TodayHabitsCard" path="patterns/widgets/TodayHabitsCard" note="Established Home — today’s habits.">
-          <TodayHabitsCard day={18} habits={[{ id: '1', text: 'Cool bedroom', done: true }, { id: '2', text: 'Magnesium', done: false }]} onToggle={noop} />
         </Specimen>
         <Specimen name="RecommendationCard" path="patterns/widgets/RecommendationCard" note="Personalised product rail on Home.">
           {findProduct('genesis-gold') && (
@@ -319,9 +310,6 @@ export function WidgetPatterns() {
         </Specimen>
         <Specimen name="SuggestionCarousel" path="patterns/widgets/SuggestionCarousel" note="Next-step cards — icon · title · arrow · floral PNG.">
           <SuggestionCarousel items={[{ key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: noop }, { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps Deborah tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: noop }]} />
-        </Specimen>
-        <Specimen name="PhotoDestinationPair" path="patterns/widgets/PhotoDestinationPair" note="My Health · Family — art + circular chevron/plus.">
-          <PhotoDestinationPair tiles={[{ title: 'My Health', meta: 'Profile 80%', tone: 'mint', artifact: 'dest-health-art', action: 'chevron', onPress: noop }, { title: 'Family', meta: '2 profiles', tone: 'rose', artifact: 'dest-family-art', action: 'plus', onPress: noop }]} />
         </Specimen>
       </Grid>
     </Section>

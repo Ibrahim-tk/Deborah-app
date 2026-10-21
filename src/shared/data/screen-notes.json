@@ -2,7 +2,7 @@
   "M-2.0": {
     "title": "Home",
     "flow": "F02 Core consultation",
-    "note": "The landing screen after onboarding. Ask Deborah is the hero path; My Health, Records, Family and My info sit as cards, with Deborah's formulations below. On a first visit a sheet greets the user with the chat bar; tapping elsewhere dismisses it. Design direction 2026-10-08; not in the spec yet."
+    "note": "The three suggestion chips under “How are you feeling today?” are different demo stories — tap them one by one to walk a real chat, then follow into Visit Notes after an answer. Typing free text works too. From here you can also open My Health, My Notes, labs, or the Healing Plan card when one exists."
   },
   "M-1.1": {
     "title": "Splash",
@@ -22,7 +22,7 @@
   "M-2.1": {
     "title": "Conversation",
     "flow": "F02 Core consultation",
-    "note": "This is the heart of the product. Maria describes how she feels and Deborah asks up to three light intake questions. When Maria asks, Deborah answers in her 7-section framework. It should feel like a consultation, not a chatbot. The same screen also holds the safety, check-in, family-profile and escalation states. Miro Step 4 (docs/ux/F02e-guidance.md): Ask Deborah / Tell me what you think > enough details? yes > covers concern? yes > stream 7 sections > product if allowed > disclaimer / closing > Guidance given > ~14-day follow-up > What’s next OptionRows. Not enough details > early first look > finish questions > ask again. Out of coverage > team handoff toast + Book (uncounted). What’s next: Ask a follow-up > Discuss with provider > Save summary > Book > Upload labs > Buy product > View 90-day plan."
+    "note": "This is the consultation. Suggestions and replies drive a scripted flow: light intake, then Deborah’s answer, then What’s next. From What’s next you can open the Healing Plan, upload labs, or move into Visit Notes. Try one Home suggestion all the way through to see the full path."
   },
   "M-2.7": {
     "title": "Shop (in-app browser)",
@@ -67,7 +67,7 @@
   "M-5.3": {
     "title": "Add lab results",
     "flow": "F05 Follow-up & return with labs",
-    "note": "Maria has labs to share, either from a check-in, from Records or from the hub. She can take a photo, upload a PDF or type the values in, and a trust line reassures her that the results are encrypted. The app 'reads' the report, then shows her the values to confirm."
+    "note": "Upload or enter labs here (photo, PDF, or typed values). You’ll confirm the numbers on the next screen; Deborah can then use them in chat. This is simulated reading — not real OCR."
   },
   "M-5.4": {
     "title": "Confirm lab results",
@@ -107,12 +107,12 @@
   "M-7.2": {
     "title": "My Health hub",
     "flow": "F07 My Health hub",
-    "note": "This is the personal home for the active profile. It shows the current focus, 90-day plan progress, the next check-in, quick links to records and content Deborah picked for her. It helps Maria keep momentum between consultations. Every card leads somewhere. The habit plan is still a proposal waiting for Deborah's approval."
+    "note": "This person’s health home between chats. The Healing Plan card opens the living plan. Check-in and health profile sit underneath. Tap the plan card to see concerns, actions, and Deborah’s letter."
   },
   "M-7.3": {
-    "title": "90-day plan",
+    "title": "My Healing Plan",
     "flow": "F07 My Health hub",
-    "note": "Maria's goal is shown in Deborah's words, with this week's habits taken from the answer's 'What You Can Do Now' section. Ticking off habits should feel gentle: no streaks and no guilt. There is a Reorder link for the product. Tell Deborah how it's going opens a check-in."
+    "note": "This is the living Healing Plan. Newest concern stays open at the top; earlier ones stay collapsed underneath. Check off actions in the wells — that only tracks progress, it does not close the concern. Tap “This concern is resolved” and confirm when that topic is done; the name stays under Resolved. The clinical letter below is Deborah’s standing reference."
   },
   "M-7.4": {
     "title": "Content detail",
@@ -145,9 +145,9 @@
     "note": "'Booked with Deborah', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
   },
   "M-9.1": {
-    "title": "Records",
+    "title": "My Notes",
     "flow": "F09 My Health records",
-    "note": "Everything saved for the active profile, ready to bring to a provider. It has three segments: Consultations, Visit Notes and Labs, with the newest first. Each empty segment has its own next action. Rows open a consultation, a note or a lab report, and she can add notes or labs from here."
+    "note": "Saved consultations, Visit Notes, and labs for this person. Open an old visit note to reread it, or start logging what changed after a provider visit. Labs here can be opened or asked about in chat."
   },
   "M-9.2": {
     "title": "Consultation detail",
@@ -162,7 +162,7 @@
   "M-9.5": {
     "title": "Lab report",
     "flow": "F09 My Health records",
-    "note": "This is a read-only view of a saved lab report: its details and values, reusing the layout of the confirm screen. Maria can edit or delete it from the menu. Ask Deborah about these labs starts a lab-review consultation. It isn't in the wireframes."
+    "note": "A saved lab report. Ask Deborah about these labs to pull them into a conversation so she has the numbers as context. You can also edit or delete from the menu."
   },
   "M-9.6": {
     "title": "PDF preview",
@@ -172,12 +172,12 @@
   "M-9.7": {
     "title": "My Visit Notes",
     "flow": "F09b Visit brief (Miro Step 5)",
-    "note": "A structured note for Maria’s provider: chief complaint she can edit, clinical context, tests, questions, meds, red flags and disclaimer. She can save a copy to Visit Notes or download a PDF, then set a day-after or 7-day check-in depending on whether she has an appointment date."
+    "note": "A note to take to a clinician. Save a copy into Visit Notes, or download the PDF preview. After a real appointment, come back here or log what changed on the after-visit form."
   },
   "M-9.8": {
     "title": "Log your visit",
     "flow": "F09c Log your visit (Miro Step 6)",
-    "note": "What happened at Maria’s provider visit: date, kind of provider, what they said, tests and their status, medication changes, next steps and her own notes. Usually filled from her chat with Deborah, editable here. Ticked medication changes update her health profile only when she saves."
+    "note": "Log what the provider said, tests ordered, and medication changes. Kind of provider is required before Save — leave it blank to see the gate. Open an older visit note from My Notes to reread what was already logged."
   },
   "M-10.1": {
     "title": "Account",
@@ -203,5 +203,15 @@
     "title": "Terms & disclaimer",
     "flow": "F10 Account, privacy & data",
     "note": "This is a read-only view of the Terms & Disclaimer, the privacy notice and the AI disclosure, showing which version Maria accepted and when. It opens from Welcome, from the (i) menu and from Account. All the copy is placeholder until the attorney drafts it."
+  },
+  "M-11.1": {
+    "title": "Documents and reports",
+    "flow": "F11 Documents and reports",
+    "note": "Upload documents and reports here, or open one you already saved. You can bring a document into chat later so Deborah has that context when she answers."
+  },
+  "M-11.3": {
+    "title": "Upload a document",
+    "flow": "F11 Documents and reports",
+    "note": "Add a document now. It lands in Documents; from there you can ask Deborah about it in chat so she answers with that file in mind. Upload is simulated in the prototype."
   }
 }

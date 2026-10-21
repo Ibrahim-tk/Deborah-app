@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { productList } from '@shared/data';
 import { selectPlan90, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
-import { daysBetween, dayKey, formatShortDate, nowFrom } from '@shared/utils';
+import { daysBetween, formatShortDate, nowFrom } from '@shared/utils';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import type { Recommendation } from './HomeKit';
 import { useHomeData } from './useHomeData';
@@ -29,7 +29,6 @@ export function useHomeView() {
   const plan = useAppStore(selectPlan90);
   const clock = useAppStore(useShallow((s) => ({ simulatedNow: s.simulatedNow, clockAnchor: s.clockAnchor })));
   const now = nowFrom(clock);
-  const today = dayKey(now);
 
   const last = d.midIntake ? d.active : d.history[0];
   const when = last ? relative(daysBetween(last.startedAt, now)) : undefined;
@@ -38,9 +37,6 @@ export function useHomeView() {
   // Sign-up keeps one Home (the sign-up one); its cards come and go as she acts (design 2026-10-20).
   const signup = useAppStore((s) => s.authFlow === 'signup');
   const state: HomeState = d.isNew || signup ? 'new' : 'returning';
-
-  const habits = (plan?.habits ?? []).map((h) => ({ id: h.id, text: h.text, done: h.doneDates.includes(today) }));
-  const nextHabit = habits.find((h) => !h.done)?.text;
 
   const n = d.reports.length;
   const latest = [...d.reports].sort((a, b) => (b.collectedAt ?? '').localeCompare(a.collectedAt ?? ''))[0];
@@ -63,12 +59,9 @@ export function useHomeView() {
     when,
     topic,
     pendingQuestion: d.midIntake && d.active ? lastQuestion(d.active.messages) : undefined,
-    planDay: hub.plan?.day,
+    planCard: hub.plan,
     checkInDue: hub.checkIn.kind === 'due',
-    habits,
-    nextHabit: nextHabit ? lowerFirst(nextHabit) : undefined,
     reportsMeta,
     recommendations,
-    today,
   };
 }

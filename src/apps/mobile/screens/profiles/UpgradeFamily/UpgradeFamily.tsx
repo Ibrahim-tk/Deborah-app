@@ -30,7 +30,7 @@ export default function UpgradeFamily() {
           </>
         }
       >
-        <p className={styles.text}>Up to 5 people, each with their own private history.</p>
+        <p className={styles.text}>1 primary plus 3 family profiles, each with their own private history.</p>
       </Sheet>
     </div>
   );

@@ -1,23 +1,21 @@
 /** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
 import { useNav } from '@mobile/navigation';
-import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList, scripts } from '@shared/data';
-import { ANSWER_REQUEST_LABEL, isMinor } from '@shared/engine';
+import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList } from '@shared/data';
+import { ANSWER_REQUEST_LABEL, isMinor, pendingFacts } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { nowFrom } from '@shared/utils';
-import { formatShortDate } from '@shared/utils';
+import { nowFrom, formatShortDate } from '@shared/utils';
 import type { Conversation, Message } from '@shared/types/domain';
 import { DeborahBlob } from '@mobile/ui';
 import { ProductCard, ShopTiles } from '@mobile/patterns/commerce';
 import {
+  AfterGuidanceTrail,
   AnswerActions,
   AnswerCTA,
   AnswerSections,
   CareDisclaimer,
   ClosingLine,
   ErrorBubble,
-  GuidanceNextSteps,
-  type GuidanceNextId,
   IntakeQuestion,
   MessageBubble,
   QuickReplies,
@@ -34,7 +32,6 @@ import type { useMessageActions } from './useMessageActions';
 import { SafetyMessage } from './SafetyMessage';
 import { DocumentMessage } from './DocumentMessage';
 import { useDebriefReplies } from './useDebriefReplies';
-import { SaveToProfile } from './SaveToProfile';
 import { SAFETY_KINDS } from './safetyKinds';
 import styles from '../Conversation.module.css';
 
@@ -70,7 +67,7 @@ export function MessageList({
   onUploadLabs,
   onRestartPlan,
   onVisitNotes,
-  onOpenPlan,
+  onOpenPlan: _onOpenPlan,
   onTeamBook,
   onLongPress,
   onFocusComposer,
@@ -80,12 +77,10 @@ export function MessageList({
   const { messages, status } = conversation;
   const { push } = useNav();
   const reports = useAppStore((s) => s.labs.reportsById);
-  const hasPlan = useAppStore((s) => Boolean(s.plan90[conversation.profileId]));
   // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
   const keepAnswered = useAppStore((s) => s.authFlow === 'login');
   // DN-12: no products for anyone under 18, the shop tiles included.
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
-  const profileName = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
 
   // Check-in quick replies: the engine answers; some options also act in the UI.
   const debriefReply = useDebriefReplies(chat, conversation.id, onFocusComposer);
@@ -168,16 +163,7 @@ export function MessageList({
       const lab = m.answer.labsReferenced?.map((id) => reports[id]).find(Boolean);
       const latestAnswer = [...messages].reverse().find((x) => x.kind === 'answer' && !x.meta?.streaming);
       const showNext = Boolean(done && conversation.guidanceGivenAt && latestAnswer?.id === m.id && status === 'answered' && !conversation.redFlag);
-      const onNext = (id: GuidanceNextId) => {
-        if (id === 'followUp') onFocusComposer();
-        else if (id === 'provider' || id === 'save') {
-          // Miro Step 5: open structured brief (or “Let’s talk first” gate) — not empty M-9.4.
-          actions.saveAnswer(m, conversation.topic ?? 'your question');
-        } else if (id === 'book') onTeamBook();
-        else if (id === 'labs') onUploadLabs();
-        else if (id === 'product' && product) onShop(product.id);
-        else if (id === 'plan') onOpenPlan();
-      };
+      const pending = pendingFacts(conversation).map((f) => ({ label: f.label, value: f.value }));
       return (
         <MessageBubble key={m.id} role="deborah" turnStart={turnStart}>
           <AnswerSections
@@ -209,15 +195,18 @@ export function MessageList({
                 title="Deborah’s formulations"
                 onShop={onShop}
               />}
+              {/* F02g: save-facts → bridge → consult ad → Genesis Gold + visit notes. */}
               {showNext && (
-                <GuidanceNextSteps
-                  disabled={busy}
-                  showProduct={Boolean(product && !minor && !conversation.noProduct)}
-                  showPlan={hasPlan}
-                  onSelect={onNext}
+                <AfterGuidanceTrail
+                  facts={pending}
+                  showVisitNotes
+                  onEditFacts={onEditFacts}
+                  onBook={onTeamBook}
+                  onLearnGold={() => onShop(product?.id ?? 'genesis-gold')}
+                  onVisitNotes={onVisitNotes}
+                  onFollowUp={onFocusComposer}
                 />
               )}
-              {showNext && scripts[conversation.scriptId ?? '']?.ownIntake && profileName && <SaveToProfile name={profileName} />}
             </>
           )}
           {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}

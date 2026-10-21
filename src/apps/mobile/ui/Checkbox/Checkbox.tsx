@@ -10,7 +10,7 @@ export interface CheckboxProps {
   description?: ReactNode;
   /** Medium-weight label, for choices that must stand out from the copy around them (e.g. consent). */
   emphasis?: boolean;
-  /** Compact rows (e.g. in-chat review card): 18 pt box, subhead label. */
+  /** Compact rows (e.g. in-chat review card): 14 pt box, subhead label. */
   size?: 'md' | 'sm';
 }
 
@@ -21,7 +21,7 @@ export function Checkbox({ checked, onChange, label, description, emphasis, size
       <input id={id} type="checkbox" className={styles.input} checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <label htmlFor={id} className={styles.row}>
         <span className={styles.box} data-checked={checked} aria-hidden="true">
-          {checked && <Icon name="check" size={size === 'sm' ? 12 : 15} strokeWidth={2.25} />}
+          {checked && <Icon name="check" size={size === 'sm' ? 10 : 15} strokeWidth={2.25} />}
         </span>
         <span className={styles.text}>
           <span className={styles.label} data-emphasis={emphasis || undefined}>{label}</span>

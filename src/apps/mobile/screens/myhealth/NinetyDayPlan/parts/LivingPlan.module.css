@@ -1,0 +1,127 @@
+.root {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.quiet {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.concern {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.when,
+.mismatch {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.resolve {
+  justify-self: start;
+  margin: 0;
+  padding: var(--space-2) 0;
+  border: 0;
+  background: none;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.resolve:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.earlier {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.earlierTitle {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  color: var(--color-ink);
+}
+
+.fold {
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift, var(--color-surface));
+  overflow: hidden;
+}
+
+.foldHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-min);
+  padding: var(--space-4);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.foldHead:hover {
+  background: var(--color-accent-tint);
+}
+
+.foldHead:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+}
+
+.foldText {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.foldName {
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  color: var(--color-ink);
+}
+
+.foldMeta {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.chevron {
+  flex: none;
+  color: var(--color-ink-tertiary);
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+
+.fold[data-open] .chevron {
+  transform: rotate(180deg);
+}
+
+.fold .concern {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.resolved {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-4);
+  list-style: none;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+}

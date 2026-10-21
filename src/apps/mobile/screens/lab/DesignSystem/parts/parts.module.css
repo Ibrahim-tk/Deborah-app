@@ -1,4 +1,4 @@
-/* Design system page building blocks. Everything reads the app's live tokens (DESIGN.md + Deborah skin). */
+/* Design system page building blocks. Everything reads live .phone-root tokens (mobile.tokens + deborah skin). */
 
 /* Sections */
 .section { display: grid; gap: var(--space-6); padding-block: var(--space-12) var(--space-4); scroll-margin-top: var(--space-6); }

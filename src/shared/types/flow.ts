@@ -21,12 +21,16 @@ export interface FlowWidget {
     | 'copy_block'
     /** Emergency: opens a bottom sheet with Call 911 (`title`, `text`); `options[0]` continues the script. */
     | 'emergency_sheet'
+    /** Small Call 911 sheet: title, Call 911, and `options[0]` as the secondary button. */
+    | 'call_sheet'
     /** One button that opens the visit notes screen (M-9.7); `label` is its text. */
     | 'visit_notes_button'
     /** Generative: provider name + date form after "Yes, I have an appointment" (design 2026-10-21). */
     | 'appointment_form'
     /** Generative: receipt-style visit-notes card (provider · date · notes · small buttons). */
-    | 'visit_notes_card';
+    | 'visit_notes_card'
+    /** In-chat shop card (ProductCard) after “Learn about Genesis Gold®”. */
+    | 'product_card';
   options?: FlowOption[];
   actions?: FlowOption[];
   multi?: boolean;
@@ -36,6 +40,12 @@ export interface FlowWidget {
   text?: string;
   title?: string;
   label?: string;
+  /** product_card: catalogue id (default genesis-gold). */
+  productId?: string;
+  /** product_card: one-line why under the name. */
+  why?: string;
+  /** product_card: personal note under the card. */
+  frame90?: string;
   /** free_text: hint inside the field. */
   placeholder?: string;
   itemsFrom?: string[];

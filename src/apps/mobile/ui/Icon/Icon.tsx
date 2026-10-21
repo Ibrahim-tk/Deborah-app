@@ -20,6 +20,7 @@ import {
   ArrowUp02Icon,
   Book02Icon,
   BubbleChatIcon,
+  ChatAddIcon,
   Calendar03Icon,
   CallIcon,
   Camera01Icon,
@@ -90,6 +91,8 @@ const map = {
   download: Download04Icon,
   camera: Camera01Icon,
   file: File01Icon,
+  /** New chat — speech bubble with a plus. */
+  newChat: ChatAddIcon,
   flash: FlashIcon,
   flashOff: FlashOffIcon,
   image: Image01Icon,

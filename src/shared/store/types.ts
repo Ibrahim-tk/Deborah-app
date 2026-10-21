@@ -159,9 +159,13 @@ export interface LabsSlice {
 
 export interface Plan90Slice {
   plan90: Record<ID, Plan90 | undefined>;
-  createPlanFromAnswer: (profileId: ID, goal: string, habits: string[], productId?: ID, status?: ContentStatus) => void;
+  createPlanFromAnswer: (profileId: ID, goal: string, habits: string[], productId?: ID, status?: ContentStatus, topic?: string) => void;
   toggleHabit: (profileId: ID, habitId: ID, date: string) => void;
   removeHabit: (profileId: ID, habitId: ID) => void;
+  /** Check or uncheck one action. Reversible. Does not resolve the concern. */
+  togglePlanAction: (profileId: ID, concernId: ID, actionId: ID) => void;
+  /** Confirmed resolve: the concern leaves the active list and stays on the plan as history. */
+  resolvePlanConcern: (profileId: ID, concernId: ID) => void;
 }
 
 export interface NotesSlice {

@@ -1,7 +1,7 @@
 /**
  * @pattern PlanCard — one plan as a radio card: name, price per period (crossfades on billing
- *          change), 2–3 feature lines, profile count. Selected = 2 pt Deborah Purple border +
- *          check. Recommended = Linen fill + "Most chosen" in Gold Ink. No badges.
+ *          change), 2–3 feature lines, profile count. All cards share a white surface; selected =
+ *          lilac fill + 2 pt purple border + check. No badges.
  * @usedBy  M-4.2
  * @spec    docs/ux/F04-plans-account.md#m-42--choose-your-plan · DESIGN.md › Cards
  * @xref    web: apps/web/patterns/commerce/PlanCard — not built
@@ -30,7 +30,6 @@ export function PlanCard({ plan, billing, selected, current, onSelect }: PlanCar
       aria-checked={selected}
       className={styles.root}
       data-selected={selected || undefined}
-      data-recommended={plan.recommended || undefined}
       onClick={onSelect}
     >
       <span className={styles.head}>

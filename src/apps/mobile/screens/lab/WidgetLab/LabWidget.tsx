@@ -374,7 +374,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
     case 'healingPlanLocked':
       return <HealingPlanCard locked />;
     case 'healingPlan':
-      return <HealingPlanCard day={18} focus="Steady sleep and calmer evenings" todayHabit="Cool bedroom" onPress={() => reply(undefined, 'Opening My Healing Plan (M-7.3).')} />;
+      return <HealingPlanCard concern="Steady sleep and calmer evenings" done={2} total={5} onPress={() => reply(undefined, 'Opening My Healing Plan (M-7.3).')} />;
     case 'intakeSection':
       return <IntakeSectionHeader title="Family history" lede="Placeholder until Dropbox questionnaires arrive." />;
     case 'healingSection':

@@ -1,5 +1,5 @@
 /** Chat patterns: conversation surface + Composer with every V2 product state. */
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import {
   CareDisclaimer, ChatHeader, ChatLauncher, Composer, ConversationHeader, ErrorBubble, Greeting, MessageBubble,
   QuickReplies, ScrollToLatest, SuggestedQuestions, SuggestionList, ThinkingIndicator, TrialCounter,
@@ -25,35 +25,61 @@ const composerBase = {
   voiceSample: VOICE,
 };
 
-/** Auto-focus the field so the focused / peach-aura state is visible. */
-function FocusedComposer() {
-  const ref = useRef<HTMLTextAreaElement>(null);
+/**
+ * Design System mounts every section at once. Auto-demos must wait until the specimen is
+ * visible in `[data-ds-scroll]` — otherwise focus()/menu clicks scroll to Chat and portal
+ * Camera · Upload over Overview on reload.
+ */
+function useDemoWhenVisible(host: RefObject<HTMLElement | null>, run: () => void) {
+  const runRef = useRef(run);
+  runRef.current = run;
   useEffect(() => {
-    const id = window.setTimeout(() => ref.current?.focus(), 80);
-    return () => window.clearTimeout(id);
-  }, []);
+    const el = host.current;
+    if (!el) return;
+    const root = el.closest('[data-ds-scroll]');
+    let done = false;
+    let timer = 0;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting || done) return;
+        done = true;
+        timer = window.setTimeout(() => runRef.current(), 80);
+      },
+      { root, threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, [host]);
+}
+
+/** Auto-focus the field so the focused / peach-aura state is visible (only when scrolled into view). */
+function FocusedComposer() {
+  const host = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useDemoWhenVisible(host, () => ref.current?.focus({ preventScroll: true }));
   return (
-    <Composer
-      {...composerBase}
-      value=""
-      onChange={noop}
-      generating={false}
-      onSymptoms={noop}
-      inputRef={ref}
-    />
+    <div ref={host}>
+      <Composer
+        {...composerBase}
+        value=""
+        onChange={noop}
+        generating={false}
+        onSymptoms={noop}
+        inputRef={ref}
+      />
+    </div>
   );
 }
 
-/** Click Dictate after mount to show the recording chrome (silent ↔ talking cycles). */
+/** Click Dictate when visible to show the recording chrome (silent ↔ talking cycles). */
 function RecordingComposer() {
   const host = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const id = window.setTimeout(() => {
-      const btn = host.current?.querySelector<HTMLButtonElement>('button[aria-label="Dictate"]');
-      btn?.click();
-    }, 120);
-    return () => window.clearTimeout(id);
-  }, []);
+  useDemoWhenVisible(host, () => {
+    host.current?.querySelector<HTMLButtonElement>('button[aria-label="Dictate"]')?.click();
+  });
   return (
     <div ref={host}>
       <Composer {...composerBase} value="" onChange={noop} generating={false} onSymptoms={noop} />
@@ -95,6 +121,19 @@ function TokensComposer() {
       onRemoveToken={(t) => setTokens((list) => list.filter((x) => x !== t))}
       symptomsActive
     />
+  );
+}
+
+/** Opens the + attach menu (Camera · Upload) when this specimen scrolls into view — not on page load. */
+function AttachMenuComposer() {
+  const host = useRef<HTMLDivElement>(null);
+  useDemoWhenVisible(host, () => {
+    host.current?.querySelector<HTMLButtonElement>('button[aria-label="Add attachment"]')?.click();
+  });
+  return (
+    <div ref={host}>
+      <Composer {...composerBase} value="" onChange={noop} generating={false} onSymptoms={noop} />
+    </div>
   );
 }
 
@@ -194,7 +233,7 @@ export function ChatPatterns() {
             <Composer {...composerBase} value="" onChange={noop} generating={false} lockedNote="Messaging is paused while you get help." />
           </Specimen>
 
-          <Specimen name="Composer · recording" path="patterns/chat/Composer" note="Mic path: wave (silent ↔ talking), Cancel · Stop · Send. Starts automatically.">
+          <Specimen name="Composer · recording" path="patterns/chat/Composer" note="Mic path: wave (silent ↔ talking), Cancel · Stop · Send. Starts when scrolled into view.">
             <RecordingComposer />
           </Specimen>
 
@@ -213,8 +252,23 @@ export function ChatPatterns() {
             <AttachmentsComposer />
           </Specimen>
 
-          <Specimen name="Composer · symptom tokens" path="patterns/chat/Composer" note="Accent pills + Symptoms control active (sheet path via onSymptoms).">
+          <Specimen name="Composer · symptoms control" path="patterns/chat/Composer" note="Product path: onSymptoms opens SymptomPicker sheet. Default vs active.">
+            <ComposerBlock>
+              <Variant label="default">
+                <Composer {...composerBase} value="" onChange={noop} generating={false} onSymptoms={noop} />
+              </Variant>
+              <Variant label="symptomsActive">
+                <Composer {...composerBase} value="" onChange={noop} generating={false} onSymptoms={noop} symptomsActive />
+              </Variant>
+            </ComposerBlock>
+          </Specimen>
+
+          <Specimen name="Composer · symptom tokens" path="patterns/chat/Composer" note="Accent pills + remove; Symptoms control stays active.">
             <TokensComposer />
+          </Specimen>
+
+          <Specimen name="Composer · attach menu" path="patterns/chat/Composer" note="Tap + → Camera · Upload. Opens when this specimen scrolls into view.">
+            <AttachMenuComposer />
           </Specimen>
 
           <Specimen name="Composer · trial banner" path="patterns/chat/Composer" note="banner slot with TrialCounter (wired in Conversation; may be gated).">

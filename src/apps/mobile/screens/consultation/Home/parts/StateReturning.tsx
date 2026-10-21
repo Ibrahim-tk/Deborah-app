@@ -14,7 +14,7 @@ export interface StateReturningProps {
   pendingQuestion?: string;
   onContinue: () => void;
   steps: NextStep[];
-  journey?: { day: number; today?: string; focus?: string; onPress: () => void };
+  journey?: { concern?: string; done: number; total: number; onPress: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
   reports?: { meta: string; onPress: () => void };
   /** F11 Documents and reports (M-11.1). */
@@ -38,7 +38,7 @@ export function StateReturning(p: StateReturningProps) {
       {p.intakeCard && !p.intakeCard.complete ? (
         <IntakeCompletionCard progress={p.intakeCard.progress} onAction={p.intakeCard.onAction} />
       ) : (
-        p.journey && <HealingPlanCard day={p.journey.day} focus={p.journey.focus} todayHabit={p.journey.today} onPress={p.journey.onPress} />
+        p.journey && <HealingPlanCard concern={p.journey.concern} done={p.journey.done} total={p.journey.total} onPress={p.journey.onPress} />
       )}
       <HomeSections {...p} />
     </>

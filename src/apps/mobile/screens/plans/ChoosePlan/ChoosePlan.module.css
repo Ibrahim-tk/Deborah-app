@@ -7,4 +7,18 @@
 .save { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
 .cards { display: grid; gap: var(--space-3); }
 .note { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
-.links { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--space-2); }
+.links { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--space-3); }
+.links button {
+  min-height: auto;
+  padding: 0;
+  font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  letter-spacing: 0.01em;
+  color: var(--color-ink-tertiary);
+  text-decoration: none;
+}
+.links button:hover:not(:disabled),
+.links button:active:not(:disabled) {
+  background: transparent;
+  color: var(--color-ink-secondary);
+  text-decoration: none;
+}

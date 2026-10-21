@@ -42,6 +42,13 @@ const filled = (o: VisitOutcome, p: VisitProbeId) =>
 /** Spec "enough context": provider specialty and what they said. */
 export const hasEnoughVisitContext = (o: VisitOutcome) => filled(o, 'specialty') && filled(o, 'said');
 
+/** A visit note cannot be saved until the provider's specialty is known. "Other" needs the written kind. */
+export function hasProviderSpecialty(o: VisitOutcome): boolean {
+  if (!o.provider.specialty) return false;
+  if (o.provider.specialty === 'other') return Boolean(o.provider.specialtyOther?.trim());
+  return true;
+}
+
 /** The next gap to ask about, or undefined when done (all filled, or three asked). */
 export function nextVisitProbe(o: VisitOutcome, asked: VisitProbeId[]): VisitProbeId | undefined {
   if (asked.length >= MAX_VISIT_PROBES) return undefined;

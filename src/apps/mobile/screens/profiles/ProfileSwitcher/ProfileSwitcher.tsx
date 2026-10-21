@@ -12,7 +12,7 @@ import { Button, Sheet } from '@mobile/ui';
 import { ProfileSwitcherList } from '@mobile/patterns/profile';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
-import { MAX_PROFILES, useAddMember } from '../useAddMember';
+import { maxProfilesFor, useAddMember } from '../useAddMember';
 import styles from './ProfileSwitcher.module.css';
 
 export default function ProfileSwitcher() {
@@ -20,6 +20,7 @@ export default function ProfileSwitcher() {
   const toast = useToast();
   const { addState, add } = useAddMember();
   const activeId = useAppStore((s) => s.activeProfileId);
+  const plan = useAppStore((s) => s.plan);
   const profiles = useAppStore(useShallow((s) => s.profiles.order.map((id) => s.profiles.byId[id]).filter(Boolean)));
   const many = profiles.length > 3;
 
@@ -48,7 +49,7 @@ export default function ProfileSwitcher() {
           profiles={profiles}
           activeId={activeId}
           addState={addState}
-          maxProfiles={MAX_PROFILES}
+          maxProfiles={maxProfilesFor(plan)}
           onSelect={select}
           onAdd={() => add(true)}
         />

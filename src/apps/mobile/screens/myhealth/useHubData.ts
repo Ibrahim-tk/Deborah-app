@@ -4,14 +4,13 @@ import {
   selectFocus,
   selectNextCheckIn,
   selectPlan90,
-  selectPlanDay,
   selectProfileConversations,
   selectProfileLabs,
   selectProfileNotes,
   selectUpcomingBooking,
-  selectWeekProgress,
   useAppStore,
 } from '@shared/store';
+import { activePlanSummary } from '@shared/engine/planConcerns';
 import { daysBetween, formatDayDate, formatTime, nowFrom } from '@shared/utils';
 import type { CheckInCardState } from '@mobile/patterns/health';
 
@@ -19,9 +18,9 @@ export function useHubData() {
   const profileId = useAppStore((s) => s.activeProfileId);
   const focus = useAppStore(selectFocus);
   const hasPlan = useAppStore((s) => Boolean(selectPlan90(s)));
-  const planDay = useAppStore(selectPlanDay);
-  const weekDone = useAppStore((s) => selectWeekProgress(s).done);
-  const weekTotal = useAppStore((s) => selectWeekProgress(s).total);
+  const concern = useAppStore((s) => activePlanSummary(selectPlan90(s)).concern);
+  const done = useAppStore((s) => activePlanSummary(selectPlan90(s)).done);
+  const total = useAppStore((s) => activePlanSummary(selectPlan90(s)).total);
   const due = useAppStore(selectCheckInDue);
   const next = useAppStore(selectNextCheckIn);
   const daysUntil = useAppStore((s) => (next ? daysBetween(nowFrom(s), next.deliverAt) : 0));
@@ -45,7 +44,7 @@ export function useHubData() {
   return {
     profileId,
     focus,
-    plan: hasPlan && planDay !== undefined ? { day: planDay, done: weekDone, total: weekTotal } : undefined,
+    plan: hasPlan ? { concern, done, total } : undefined,
     checkIn,
     upcoming: booking ? `${formatDayDate(booking.slot)}, ${formatTime(booking.slot)}` : undefined,
     counts,

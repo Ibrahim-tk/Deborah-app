@@ -1,6 +1,6 @@
 /**
  * Shared by M-6.1 and M-6.6: what the "Add a family member" row shows and where it leads.
- * Family plan with room → M-6.2; any other plan → M-6.3 (F06 flow).
+ * Family/Premium with room → M-6.2; any other plan → M-6.3 (F06 flow).
  */
 import { useCallback } from 'react';
 import { selectCanAddProfile, useAppStore } from '@shared/store';
@@ -8,16 +8,23 @@ import type { AddMemberState } from '@mobile/patterns/profile';
 import { useNav } from '@mobile/navigation';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
-export const MAX_PROFILES = 5;
+/** Cap for the active plan: Family 4 (1+3), Premium 6 (extra slots). */
+export function maxProfilesFor(plan: string): number {
+  if (plan === 'premium') return 6;
+  if (plan === 'family') return 4;
+  return 1;
+}
+
+export const MAX_PROFILES = 4;
 
 export function useAddMember() {
   const { presentModal, presentSheet, dismissSheet } = useNav();
   const gate = useAccountGate();
   const canAdd = useAppStore(selectCanAddProfile);
-  const family = useAppStore((s) => s.plan === 'family');
-  // ASSUMPTION: a Family subscriber at 5 profiles sees the row disabled with "5 of 5" rather than the
-  // upgrade sheet, whose copy would be wrong for them. The spec only covers "< 5" vs "other plans".
-  const addState: AddMemberState = canAdd ? 'available' : family ? 'full' : 'locked';
+  const plan = useAppStore((s) => s.plan);
+  const familySlots = plan === 'family' || plan === 'premium';
+  // At the plan cap: show "n of n" rather than the upgrade sheet.
+  const addState: AddMemberState = canAdd ? 'available' : familySlots ? 'full' : 'locked';
 
   const add = useCallback(
     (fromSheet: boolean) => {

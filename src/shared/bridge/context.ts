@@ -2,6 +2,7 @@
  * Engine context for the bridge (docs/07-ai-simulation.md §1): the active profile's conversation
  * and the store snapshot the pure engine needs. Shared by the mobile and web conversation hooks.
  */
+import { healingPlanContext } from '../engine/planConcerns';
 import { createConversationEngine } from '../engine';
 import { FLAGS } from '../flags';
 import {
@@ -10,6 +11,8 @@ import {
   selectAnsweredCount,
   selectLastTopic,
   selectLatestLabs,
+  selectPlan90,
+  selectProfileNotes,
   useAppStore,
   type AppState,
 } from '../store';
@@ -45,6 +48,7 @@ export function contextFor(s: AppState, conversation: Conversation): EngineConte
     flags: { failNext: s.dev.failNext },
     now: nowFrom(s).toISOString(),
     lastTopic: selectLastTopic(s, profile.id),
+    healingPlan: healingPlanContext(selectPlan90(s, profile.id), profile, selectProfileNotes(s, profile.id)),
     labs: selectLatestLabs(s, profile.id),
     profileGates: true,
     // Prototype: skipHealthConsent treats consent as already granted so intake never plans it.

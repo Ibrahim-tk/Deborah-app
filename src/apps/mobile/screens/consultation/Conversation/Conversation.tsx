@@ -39,6 +39,7 @@ const SHOW_TRIAL_COUNTER = false;
 export default function Conversation() {
   const chat = useConversation();
   const { conversation, profile, freeLeft, busy } = chat;
+  const profilePct = profile ? healthProfileCompletion(profile) : 1;
   const { open, push, pop, switchTab, presentSheet } = useNav();
   const gate = useAccountGate();
   const toast = useToast();
@@ -233,7 +234,7 @@ export default function Conversation() {
                 return (
                   <MotionDiv key="greeting" className={styles.greetingWrap} exit={{ opacity: 0, y: -40, scale: 0.97, transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } }}>
                     <Greeting
-                      line={other && name ? `How is ${name} feeling today?` : undefined}
+                      line={other && name ? `What are ${name}’s concerns for today?` : undefined}
                     />
                   </MotionDiv>
                 );
@@ -283,8 +284,8 @@ export default function Conversation() {
         {isEmpty && !intakeMode && (
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
         )}
-        {profile && healthProfileCompletion(profile) < 1 && conversation?.status === 'answered' && (
-          <IntakeTile onOpen={() => push('M-2.14')} />
+        {profile && profilePct < 1 && conversation?.status === 'answered' && (
+          <IntakeTile progress={profilePct} onOpen={() => push('M-2.14')} />
         )}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
         {/* The composer never leaves the chat (design 2026-10-20): during intake and choice questions it stays,

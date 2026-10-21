@@ -44,6 +44,8 @@ interface ShellState {
   lastWebPath: string;
   toggles: DevToggles;
   screen: ScreenInfo | null;
+  /** Client sticky: Records tab (notes / labs / attachments). Cleared when leaving Records. */
+  clientGuide: string | null;
   toast: { id: number; message: string } | null;
 
   setScenario: (id: string) => void;
@@ -57,6 +59,7 @@ interface ShellState {
   setLastWebPath: (path: string) => void;
   setToggle: <K extends keyof DevToggles>(key: K, value: DevToggles[K]) => void;
   setScreen: (screen: ScreenInfo | null) => void;
+  setClientGuide: (guide: string | null) => void;
   showToast: (message: string) => void;
   clearToast: () => void;
 }
@@ -108,6 +111,7 @@ export const useShellStore = create<ShellState>()((set) => ({
     showJourney: false,
   },
   screen: null,
+  clientGuide: null,
   toast: null,
 
   setScenario: (scenarioId) => set({ scenarioId }),
@@ -137,6 +141,7 @@ export const useShellStore = create<ShellState>()((set) => ({
   setLastWebPath: (lastWebPath) => set({ lastWebPath }),
   setToggle: (key, value) => set((s) => ({ toggles: { ...s.toggles, [key]: value } })),
   setScreen: (screen) => set({ screen }),
+  setClientGuide: (clientGuide) => set({ clientGuide }),
   showToast: (message) => set({ toast: { id: Date.now(), message } }),
   clearToast: () => set({ toast: null }),
 }));

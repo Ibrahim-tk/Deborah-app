@@ -35,8 +35,8 @@
 .label[data-emphasis] { font-weight: var(--weight-medium); letter-spacing: -0.01em; }
 .description { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 /* Box always sits on the label's first line (design 2026-10-21), centred on that line via .box margin-top. */
-/* Small: 18 pt box, subhead label / footnote description; tighter row. */
-.root[data-size='sm'] .row { gap: var(--space-2); min-height: 36px; padding: 6px 0; }
-.root[data-size='sm'] .box { width: 18px; height: 18px; border-radius: 5px; margin-top: calc((var(--lh-subhead) - 18px) / 2); }
+/* Small (in-chat ReviewFacts): 14 pt box, subhead label / footnote description; tighter row. */
+.root[data-size='sm'] .row { gap: var(--space-2); min-height: 32px; padding: 4px 0; }
+.root[data-size='sm'] .box { width: 14px; height: 14px; border-radius: 4px; margin-top: calc((var(--lh-subhead) - 14px) / 2); }
 .root[data-size='sm'] .label { font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
 .root[data-size='sm'] .text { gap: 0; }

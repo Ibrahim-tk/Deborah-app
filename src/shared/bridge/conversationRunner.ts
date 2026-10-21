@@ -4,7 +4,7 @@
  * navigates away; Stop cancels the remaining steps.
  */
 import { create } from 'zustand';
-import { chunkText, forFamilyMember, streamInto, visitProfileUpdates } from '../engine';
+import { chunkText, forFamilyMember, hasProviderSpecialty, streamInto, visitProfileUpdates } from '../engine';
 import { SELF_PROFILE_ID, useAppStore } from '../store';
 import type { EnginePlan, Step, StoreAction } from '../types/engine';
 import { sleep } from '../utils';
@@ -57,7 +57,7 @@ function applyAction(action: StoreAction, cid: string): string {
       s.setConversation(action.conversationId, { summary: action.summary, topic: action.topic });
       break;
     case 'createPlanFromAnswer':
-      s.createPlanFromAnswer(action.profileId, action.goal, action.habits, action.productId, action.status);
+      s.createPlanFromAnswer(action.profileId, action.goal, action.habits, action.productId, action.status, action.topic);
       break;
     case 'scheduleGuidanceFollowUp':
       s.scheduleGuidanceFollowUp(action.profileId, action.days);
@@ -70,7 +70,7 @@ function applyAction(action: StoreAction, cid: string): string {
       break;
     case 'saveDebriefOutcome': {
       const c = s.conversations.byId[action.conversationId];
-      if (!c?.debrief) break;
+      if (!c?.debrief || !hasProviderSpecialty(c.debrief.outcome)) break;
       const noteId = s.saveVisitOutcome(c.profileId, c.debrief.outcome, c.debrief.noteId);
       const profile = s.profiles.byId[c.profileId];
       if (profile) s.applyVisitUpdates(c.profileId, visitProfileUpdates(c.debrief.outcome, profile));

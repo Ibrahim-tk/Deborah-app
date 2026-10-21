@@ -1,18 +1,23 @@
 /**
- * F02f closing: "Save this to {name}'s profile?" under the answer of a scripted family chat.
+ * After guidance: save-to-profile prompt (self or family/advocate).
  * Prototype: saving is local (the answer is already in the conversation history).
  */
 import { useState } from 'react';
 import { SaveProfileCard } from '@mobile/patterns/chat';
 
-export function SaveToProfile({ name }: { name: string }) {
+export function SaveToProfile({ name, self = false }: { name: string; self?: boolean }) {
   const [state, setState] = useState<'open' | 'saved' | 'dismissed'>('open');
+  const who = name.trim() || 'your';
   return (
     <SaveProfileCard
-      title={`Save this to ${name}’s profile?`}
-      body={`It’ll be ready for ${name}’s next visit, along with what was shared today.`}
+      title={self ? 'Save this to your profile?' : `Save this to ${who}’s profile?`}
+      body={
+        self
+          ? 'It’ll be ready for your next visit, along with what was shared today.'
+          : `It’ll be ready for ${who}’s next visit, along with what was shared today.`
+      }
       saved={state === 'saved'}
-      savedNote={`Saved to ${name}’s profile`}
+      savedNote={self ? 'Saved to your profile' : `Saved to ${who}’s profile`}
       dismissed={state === 'dismissed'}
       onSave={() => setState('saved')}
       onNotNow={() => setState('dismissed')}

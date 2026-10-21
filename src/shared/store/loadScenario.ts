@@ -3,6 +3,7 @@
  * set the navigator start → set simulatedNow (docs/05-state-and-scenarios.md §4).
  * Invalid or not-yet-built scenarios return an error instead of breaking the app.
  */
+import { withConcerns } from '../engine/planConcerns';
 import { replayScript } from '../engine/replay';
 import { scripts } from '../data';
 import { SEEDS } from '../scenarios';
@@ -83,6 +84,9 @@ function derivePlans(data: AppData): AppData['plan90'] {
       status: scripts[c.scriptId ?? '']?.status,
     };
     plan90[c.profileId] = plan;
+  }
+  for (const [id, plan] of Object.entries(plan90)) {
+    if (plan) plan90[id] = withConcerns(plan);
   }
   return plan90;
 }

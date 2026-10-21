@@ -416,6 +416,31 @@ export interface Habit {
   doneDates: ISODate[];
 }
 
+/** Medicine-box well. Labels are words, never capsules. */
+export type PlanWell = 'now' | 'provider' | 'daily' | 'labs';
+
+export interface PlanAction {
+  id: ID;
+  text: string;
+  well: PlanWell;
+  done: boolean;
+  /** Placeholder: herb or supplement — show the drug–herb note when the profile has medicines. */
+  safety?: boolean;
+  /** Dosing or timing sentence already in the plan. Not a new recommendation. */
+  note?: string;
+}
+
+/** One concern on the single healing plan. Newest is first. */
+export interface PlanConcern {
+  id: ID;
+  title: string;
+  addedAt: ISODate;
+  status: 'active' | 'resolved';
+  actions: PlanAction[];
+  /** Placeholder until Deborah approves a mismatch rule. Shown only when a visit specialty is on file. */
+  mismatch?: string;
+}
+
 export interface Plan90 {
   profileId: ID;
   /** Status of the script the goal and habits came from; absent = treat as placeholder. */
@@ -423,6 +448,8 @@ export interface Plan90 {
   startDate: ISODate;
   goal: string;
   habits: Habit[];
+  /** Living list. Absent on older seeds; `withConcerns` fills it from the clinical document. */
+  concerns?: PlanConcern[];
   productId?: ID;
   productStartDate?: ISODate;
 }

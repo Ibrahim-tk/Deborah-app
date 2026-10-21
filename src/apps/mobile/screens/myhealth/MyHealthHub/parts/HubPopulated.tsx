@@ -17,9 +17,10 @@ export function HubPopulated() {
       {/* Focus card removed from My Health (designer, 2026-10-21); the last conversation lives on Home. */}
       {plan && (
         <HealingPlanCard
-          day={Math.min(plan.day, 90)}
-          focus={`${plan.done} of ${plan.total} habits this week`}
-          onPress={() => (plan.day > 90 ? openAsk({ mode: 'checkin' }) : gate('journey', () => push('M-7.3')))}
+          concern={plan.concern}
+          done={plan.done}
+          total={plan.total}
+          onPress={() => gate('journey', () => push('M-7.3'))}
         />
       )}
       <CheckInCard state={checkIn} upcoming={upcoming} onCheckIn={() => openAsk({ mode: 'checkin' })} onReminders={() => push('M-10.4')} />

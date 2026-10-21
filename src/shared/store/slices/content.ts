@@ -4,6 +4,7 @@ import { uid } from '../../utils/ids';
 import { addDays, nowFrom } from '../../utils/dates';
 import { createDefaults } from '../defaults';
 import { BOOKING_DAY_AFTER_BODY, BOOKING_REMINDER_BODY, FOLLOW_UP_TITLE } from './notifications';
+import { concernFromAnswer, withConcerns } from '../../engine/planConcerns';
 import type { Note } from '../../types/domain';
 import type { AppState, BookingSlice, LabsSlice, NotesSlice, Plan90Slice, SettingsSlice } from '../types';
 
@@ -17,7 +18,7 @@ const SPECIALTY_TITLE: Record<string, string> = {
 };
 
 type Actions = Pick<LabsSlice, 'addReport' | 'updateValue' | 'confirmReport' | 'replaceReport' | 'deleteReport'> &
-  Pick<Plan90Slice, 'createPlanFromAnswer' | 'toggleHabit' | 'removeHabit'> &
+  Pick<Plan90Slice, 'createPlanFromAnswer' | 'toggleHabit' | 'removeHabit' | 'togglePlanAction' | 'resolvePlanConcern'> &
   Pick<NotesSlice, 'addNote' | 'updateNote' | 'deleteNote' | 'appendToNote' | 'saveVisitOutcome' | 'applyVisitUpdates'> &
   Pick<BookingSlice, 'book' | 'cancelBooking'> &
   Pick<SettingsSlice, 'setTextSize' | 'requestExport' | 'signOut' | 'deleteAccount'>;
@@ -50,24 +51,54 @@ export const contentActions: StateCreator<AppState, [], [], Actions> = (set, get
       return { labs: { reportsById } };
     }),
 
-  // Only the first answer creates the plan; later answers keep the existing one.
-  createPlanFromAnswer: (profileId, goal, habits, productId, status) =>
+  // The first answer opens the plan. Later answers prepend a concern; they do not start another plan.
+  createPlanFromAnswer: (profileId, goal, habits, productId, status, topic) =>
     set((s) => {
-      if (s.plan90[profileId]) return {};
       const now = nowFrom(s).toISOString();
+      const concern = concernFromAnswer(topic || goal, habits, now);
+      const existing = s.plan90[profileId];
+      const habitsNext = habits.map((text) => ({ id: uid('h'), text, doneDates: [] as string[] }));
+      if (!existing) {
+        return {
+          plan90: {
+            ...s.plan90,
+            [profileId]: {
+              profileId,
+              startDate: now,
+              goal,
+              habits: habitsNext,
+              concerns: [concern],
+              productId,
+              status,
+            },
+          },
+        };
+      }
+      const plan = withConcerns(existing);
       return {
         plan90: {
           ...s.plan90,
-          [profileId]: {
-            profileId,
-            startDate: now,
-            goal,
-            habits: habits.map((text) => ({ id: uid('h'), text, doneDates: [] })),
-            productId,
-            status,
-          },
+          [profileId]: { ...plan, concerns: [concern, ...(plan.concerns ?? [])], productId: plan.productId ?? productId },
         },
       };
+    }),
+  togglePlanAction: (profileId, concernId, actionId) =>
+    set((s) => {
+      const raw = s.plan90[profileId];
+      if (!raw) return {};
+      const plan = withConcerns(raw);
+      const concerns = (plan.concerns ?? []).map((c) =>
+        c.id !== concernId ? c : { ...c, actions: c.actions.map((a) => (a.id === actionId ? { ...a, done: !a.done } : a)) },
+      );
+      return { plan90: { ...s.plan90, [profileId]: { ...plan, concerns } } };
+    }),
+  resolvePlanConcern: (profileId, concernId) =>
+    set((s) => {
+      const raw = s.plan90[profileId];
+      if (!raw) return {};
+      const plan = withConcerns(raw);
+      const concerns = (plan.concerns ?? []).map((c) => (c.id === concernId ? { ...c, status: 'resolved' as const } : c));
+      return { plan90: { ...s.plan90, [profileId]: { ...plan, concerns } } };
     }),
   toggleHabit: (profileId, habitId, date) =>
     set((s) => {

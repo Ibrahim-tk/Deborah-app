@@ -10,7 +10,7 @@
  * Profile updates (phase 4) apply only the ticked rows, on Save, with source 'visit'. Opened from a debrief (`conversationId`), saving hands back to the chat.
  */
 import { useState } from 'react';
-import { emptyVisitOutcome, isVisitOutcomeEmpty, visitOutcomeToText, visitProfileUpdates } from '@shared/engine';
+import { emptyVisitOutcome, hasProviderSpecialty, isVisitOutcomeEmpty, visitOutcomeToText, visitProfileUpdates } from '@shared/engine';
 import { useAppStore } from '@shared/store';
 import type { VisitOutcome } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
@@ -60,6 +60,14 @@ export default function LogVisit() {
 
   const save = () => {
     const outcome = cleaned();
+    if (!hasProviderSpecialty(outcome)) {
+      void alert({
+        title: 'Add the kind of provider',
+        message: 'A visit note needs the provider’s specialty before it can be saved.',
+        buttons: [{ label: 'OK' }],
+      });
+      return;
+    }
     const st = useAppStore.getState();
     const id = st.saveVisitOutcome(profileId, outcome, noteId);
     const applied = st.applyVisitUpdates(profileId, updates.filter((u) => !off.includes(u.key)));
@@ -129,7 +137,7 @@ export default function LogVisit() {
       </div>
     ) : (
       <div className={styles.footer}>
-        <Button fullWidth disabled={isVisitOutcomeEmpty(draft)} onClick={save}>Save</Button>
+        <Button fullWidth disabled={isVisitOutcomeEmpty(draft) || !hasProviderSpecialty(draft)} onClick={save}>Save</Button>
         <Button variant="link" onClick={close}>Not now</Button>
       </div>
     );
@@ -138,7 +146,7 @@ export default function LogVisit() {
     <div data-xref="M-9.8 · Log your visit">
       <Sheet title={mode === 'read' ? saved?.title ?? 'After my visit' : 'Log your visit'} titleEnd={titleEnd} detent="large" footer={footer}>
         <div className={styles.body}>
-          {mode === 'edit' && <p className={styles.intro}>Fill in what you remember. Every part is optional — you can come back to it.</p>}
+          {mode === 'edit' && <p className={styles.intro}>Kind of provider is required. Everything else you can fill in as you remember it.</p>}
           {mode === 'read' ? <ReadView visit={draft} /> : (
             <>
               <EditSections draft={draft} update={update} confidence={debrief?.confidence} today={today} />

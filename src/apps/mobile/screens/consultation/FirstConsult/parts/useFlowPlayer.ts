@@ -67,8 +67,9 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
           push({ id: uid(), kind: 'answer', nodeId: id, node });
           const held = heldSafety.current;
           if (held) later(() => push({ id: uid(), kind: 'bot', nodeId: held.id, text: say(held.node.bot), node: held.node }), typingMs);
-          // No follow-up suggestions: the script carries on once the seven cards have revealed.
-          if (node.next && !node.suggestedReplies?.length) later(() => go(node.next), 3200);
+          // F02g: AfterGuidanceTrail owns the follow-up ask + two pills. Do not auto-advance
+          // into a scripted handoff (handoff / *_whats_next / m_after) that would duplicate them.
+          // Follow-up suggestedReplies still render on the answer entry itself (EntryView).
           return;
         }
         // The opening greeting is already on screen in spirit: no "writing…", it reveals in place (EntryView).

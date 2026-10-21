@@ -1,4 +1,4 @@
-/** Motion: durations and easings, each playable. Calm iOS motion, no overshoot (DESIGN.md › Motion). */
+/** Motion: durations and easings, each playable. Calm iOS motion, no overshoot (V2 CSS bans). */
 import { useState, type CSSProperties } from 'react';
 import { Button } from '@mobile/ui';
 import { Section, Group } from '../Section';

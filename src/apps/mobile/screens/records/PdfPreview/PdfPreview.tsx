@@ -9,7 +9,8 @@
 import { useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { assembleVisitBrief, hasEnoughDetailForVisitBrief, latestCompletedAnswer } from '@shared/engine';
-import { useAppStore } from '@shared/store';
+import { healingPlanContext } from '@shared/engine/planConcerns';
+import { selectPlan90, selectProfileNotes, useAppStore } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
 import { Button, Modal } from '@mobile/ui';
@@ -39,7 +40,8 @@ export default function PdfPreview() {
     const profile = s.profiles.byId[source.conversation.profileId];
     const msg = source.message ?? latestCompletedAnswer(source.conversation);
     if (!profile || !msg?.answer) return undefined;
-    return assembleVisitBrief(source.conversation, profile, msg.answer);
+    const planNote = healingPlanContext(selectPlan90(s, profile.id), profile, selectProfileNotes(s, profile.id));
+    return assembleVisitBrief(source.conversation, profile, msg.answer, planNote);
   }, [savedBrief, source]);
 
   const hasContent = Boolean(brief || source);

@@ -8,10 +8,16 @@
   box-shadow: inset 0 0 0 1px var(--color-border-hairline);
   color: var(--color-ink);
   text-align: left;
-  transition: box-shadow var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+  transition:
+    background var(--dur-quick) var(--ease-out),
+    box-shadow var(--dur-quick) var(--ease-out),
+    transform var(--dur-quick) var(--ease-out);
 }
-.root[data-recommended] { background: var(--color-surface-tonal); }
-.root[data-selected] { box-shadow: inset 0 0 0 2px var(--color-border-selected); }
+/* Default = white surface for every card; only the selected plan gets the active fill. */
+.root[data-selected] {
+  background: var(--color-surface-lilac);
+  box-shadow: inset 0 0 0 2px var(--color-border-selected);
+}
 .root:active { transform: scale(0.98); }
 .root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 

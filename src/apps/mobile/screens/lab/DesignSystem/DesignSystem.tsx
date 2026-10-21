@@ -19,17 +19,32 @@ export default function DesignSystem() {
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
   const [active, setActive] = useState(SECTIONS[0].id);
 
-  // Highlight the section nearest the top of the scroll area.
+  // Stay at Overview on mount (hash/deep-link not used); demos must not steal scroll.
   useEffect(() => {
     if (!scroller) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        const top = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        if (top) setActive(top.target.id);
-      },
-      { root: scroller, rootMargin: '0px 0px -70% 0px' },
-    );
-    scroller.querySelectorAll('section[id]').forEach((s) => io.observe(s));
+    scroller.scrollTop = 0;
+    setActive(SECTIONS[0].id);
+  }, [scroller]);
+
+  // Highlight the section nearest the top of the scroll area (document order, not callback batch).
+  useEffect(() => {
+    if (!scroller) return;
+    const sections = Array.from(scroller.querySelectorAll<HTMLElement>('section[id]'));
+    const pick = () => {
+      const rootTop = scroller.getBoundingClientRect().top;
+      let best: HTMLElement | null = null;
+      let bestDist = Infinity;
+      for (const s of sections) {
+        const dist = Math.abs(s.getBoundingClientRect().top - rootTop);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = s;
+        }
+      }
+      if (best?.id) setActive(best.id);
+    };
+    const io = new IntersectionObserver(pick, { root: scroller, rootMargin: '0px 0px -70% 0px' });
+    sections.forEach((s) => io.observe(s));
     return () => io.disconnect();
   }, [scroller]);
 
@@ -58,7 +73,8 @@ export default function DesignSystem() {
           ))}
         </nav>
       </aside>
-      <div ref={setScroller} className={styles.scroll}>
+      {/* data-ds-scroll: ChatPatterns demos wait until visible in this scroller (no preload jump). */}
+      <div ref={setScroller} className={styles.scroll} data-ds-scroll>
         <main className={styles.content}>
           <LiveRoot.Provider value={root}>
             {root && SECTIONS.map(({ id, Component }) => <Component key={id} />)}

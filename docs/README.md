@@ -32,6 +32,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | [ux/F02b-profile-aware-chat-intake.md](ux/F02b-profile-aware-chat-intake.md) | Profile-aware chat intake: female & male question journeys (THEORY, draft) |
 | [ux/F02d-session-intake-answer-modes.md](ux/F02d-session-intake-answer-modes.md) | Session intake: choice vs free-text vs hybrid (composer vs pills) |
 | [ux/F02e-guidance.md](ux/F02e-guidance.md) | Miro Step 4: early first look, coverage gate, What’s next, follow-ups |
+| [ux/F02g-after-guidance-trail.md](ux/F02g-after-guidance-trail.md) | After the seven frameworks: save-facts card → bridge → consult ad → two pills |
 | [ux/F03-safety.md](ux/F03-safety.md) | Safety & guardrails |
 | [ux/F04-plans-account.md](ux/F04-plans-account.md) | Free limit, plans, account creation, payment |
 | [ux/F05-followup-labs.md](ux/F05-followup-labs.md) | Follow-up notification, check-in, lab upload |

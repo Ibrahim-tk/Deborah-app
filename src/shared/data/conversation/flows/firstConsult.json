@@ -64,7 +64,8 @@
           {
             "label": "My mood is all over the place",
             "value": "mood",
-            "next": "starter_ack"
+            "reply": "I've had my bloods done twice and my doctor says everything is normal. But I'm exhausted, I'm cold all the time, I've gained weight, I can't think straight, and I cry at things that never used to bother me. Something is clearly wrong and no one is listening to me.",
+            "next": "m_heard"
           }
         ]
       }
@@ -404,7 +405,7 @@
           "body": "Linda, so many women are told this is 'just hormones' and to wait it out. You don't have to. Understanding the why is the first step to sleeping through the night again."
         }
       ],
-      "footer": "This is educational guidance from the Oracle, an AI that speaks in Deborah's voice, not a diagnosis or prescription. Bring this to your provider — your provider makes clinical decisions.",
+      "footer": "This is educational guidance from the Oracle — not a diagnosis or prescription. Please talk with your healthcare provider.",
       "suggestedReplies": [
         {
           "label": "Is Genesis Gold safe with {medMine}?",
@@ -443,7 +444,7 @@
       "sideEffect": {
         "appendToVisitPrep": "Is Genesis Gold safe with {medMine}, and how far apart should I take them?"
       },
-      "footer": "This is educational guidance from the Oracle, an AI that speaks in Deborah's voice, not a diagnosis or prescription. Bring this to your provider — your provider makes clinical decisions.",
+      "footer": "This is educational guidance from the Oracle — not a diagnosis or prescription. Please talk with your healthcare provider.",
       "next": "talk_direct"
     },
     "talk_direct": {
@@ -634,6 +635,596 @@
       "type": "message",
       "bot": "Thank you for sharing that with me. I'll keep it in mind as we look at this together.",
       "next": "thinking"
+    },
+    "m_heard": {
+      "type": "question",
+      "bot": "You're being heard right now, Linda, and you're right to push. \"Normal\" on a standard blood test and feeling well are two very different things, especially at {age}. Let me ask a few questions so we can find out what's going on.\n\nAre you still having periods? And if so, have they changed?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes, no real change",
+            "value": "same",
+            "reply": "Yes, no real change.",
+            "next": "m_bleed_plain"
+          },
+          {
+            "label": "Yes, but they've changed",
+            "value": "changed",
+            "reply": "Yes, but they're closer together now, heavier, and the week before is awful. I'm so irritable and teary.",
+            "next": "m_bleed"
+          },
+          {
+            "label": "No, they've stopped",
+            "value": "stopped",
+            "reply": "No, they've stopped.",
+            "next": "m_bleed_plain"
+          },
+          {
+            "label": "Not sure",
+            "value": "unsure",
+            "reply": "Not sure.",
+            "next": "m_bleed_plain"
+          }
+        ]
+      },
+      "saveAs": "periods"
+    },
+    "m_bleed": {
+      "type": "question",
+      "bot": "That's a really important clue. At {age}, progesterone, the calming hormone, drops sharply. That can bring shorter, heavier cycles and much harder PMS: the anxiety, tears and irritability you're describing. Are you ever soaking through a pad or tampon every hour, for several hours?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "next": "m_bleed_yes"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No.",
+            "next": "m_tests"
+          }
+        ]
+      },
+      "saveAs": "heavyBleed"
+    },
+    "m_bleed_plain": {
+      "type": "question",
+      "bot": "Thank you. Are you ever soaking through a pad or tampon every hour, for several hours?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "next": "m_bleed_yes"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No.",
+            "next": "m_tests"
+          }
+        ]
+      },
+      "saveAs": "heavyBleed"
+    },
+    "m_bleed_yes": {
+      "type": "message",
+      "bot": "Soaking through a pad or tampon every hour, for several hours, needs care the same day. Please contact your provider or urgent care today, and go to the emergency room if you feel faint.",
+      "next": "m_tests_ask"
+    },
+    "m_tests": {
+      "type": "question",
+      "bot": "Good. Do you know which tests your doctor checked?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Only thyroid (TSH)",
+            "value": "tsh",
+            "reply": "Only thyroid (TSH).",
+            "next": "m_t3"
+          },
+          {
+            "label": "Thyroid and a few others",
+            "value": "some",
+            "reply": "I have the results here. TSH 3.2, T4 1.0, and the blood count was fine.",
+            "next": "m_t3"
+          },
+          {
+            "label": "Full blood count",
+            "value": "cbc",
+            "reply": "The blood count was fine.",
+            "next": "m_t3"
+          },
+          {
+            "label": "Not sure",
+            "value": "unsure",
+            "reply": "Not sure.",
+            "next": "m_t3"
+          }
+        ]
+      },
+      "saveAs": "tests"
+    },
+    "m_tests_ask": {
+      "type": "question",
+      "bot": "Do you know which tests your doctor checked?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Only thyroid (TSH)",
+            "value": "tsh",
+            "reply": "Only thyroid (TSH).",
+            "next": "m_t3"
+          },
+          {
+            "label": "Thyroid and a few others",
+            "value": "some",
+            "reply": "I have the results here. TSH 3.2, T4 1.0, and the blood count was fine.",
+            "next": "m_t3"
+          },
+          {
+            "label": "Full blood count",
+            "value": "cbc",
+            "reply": "The blood count was fine.",
+            "next": "m_t3"
+          },
+          {
+            "label": "Not sure",
+            "value": "unsure",
+            "reply": "Not sure.",
+            "next": "m_t3"
+          }
+        ]
+      },
+      "saveAs": "tests"
+    },
+    "m_t3": {
+      "type": "question",
+      "bot": "Thank you for sharing those. A TSH of 3.2 is within the standard range, but it doesn't show how well your cells are actually using thyroid hormone. For that, you'd need Free T3. Has anyone ever checked your Free T3, or thyroid antibodies?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "next": "m_t3_yes"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No, just those two.",
+            "next": "m_meds"
+          },
+          {
+            "label": "Not sure",
+            "value": "unsure",
+            "reply": "Not sure.",
+            "next": "m_meds"
+          }
+        ]
+      },
+      "saveAs": "freeT3"
+    },
+    "m_t3_yes": {
+      "type": "message",
+      "bot": "Thank you. That's a fuller picture than TSH alone.",
+      "next": "m_meds_open"
+    },
+    "m_meds": {
+      "type": "question",
+      "bot": "That's an incomplete picture for someone with your symptoms. Are you taking any medications at the moment?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "reply": "Yes, sertraline 50 mg. My doctor started it six months ago because I was crying so much.",
+            "next": "m_supplements"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No.",
+            "next": "m_supplements_plain"
+          }
+        ]
+      },
+      "saveAs": "meds"
+    },
+    "m_meds_open": {
+      "type": "question",
+      "bot": "Are you taking any medications at the moment?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "reply": "Yes, sertraline 50 mg. My doctor started it six months ago because I was crying so much.",
+            "next": "m_supplements"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No.",
+            "next": "m_supplements_plain"
+          }
+        ]
+      },
+      "saveAs": "meds"
+    },
+    "m_supplements": {
+      "type": "question",
+      "bot": "Thank you for telling me. Any supplements or vitamins? And what do you take them for?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "reply": "Yes.",
+            "next": "m_save"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No, nothing.",
+            "next": "m_save"
+          }
+        ]
+      },
+      "saveAs": "supplements"
+    },
+    "m_supplements_plain": {
+      "type": "question",
+      "bot": "Any supplements or vitamins? And what do you take them for?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "reply": "Yes.",
+            "next": "m_crisis"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No, nothing.",
+            "next": "m_crisis"
+          }
+        ]
+      },
+      "saveAs": "supplements"
+    },
+    "m_save": {
+      "type": "question",
+      "bot": "Would you like me to add your sertraline to your health profile, so you don't have to tell me again?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes, add it",
+            "value": "yes",
+            "reply": "Yes.",
+            "next": "m_saved"
+          },
+          {
+            "label": "Not now",
+            "value": "no",
+            "next": "m_crisis"
+          }
+        ]
+      },
+      "saveAs": "saveMed"
+    },
+    "m_saved": {
+      "type": "message",
+      "bot": "Done.",
+      "next": "m_crisis"
+    },
+    "m_crisis": {
+      "type": "question",
+      "bot": "Linda, you mentioned crying a lot. I want to check in with you: are you having any thoughts of harming yourself, or feeling that life isn't worth living?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Yes",
+            "value": "yes",
+            "next": "m_crisis_yes"
+          },
+          {
+            "label": "No",
+            "value": "no",
+            "reply": "No, nothing like that. I just feel so worn down.",
+            "next": "m_safe"
+          },
+          {
+            "label": "I'm not sure",
+            "value": "unsure",
+            "next": "m_crisis_unsure"
+          }
+        ]
+      },
+      "saveAs": "crisis"
+    },
+    "m_crisis_yes": {
+      "type": "message",
+      "bot": "You're not alone. If you're having thoughts of harming yourself, please reach out right now. Call or text 988 any time, day or night. You can also text HOME to 741741.",
+      "widget": {
+        "type": "call_sheet",
+        "title": "Call 911",
+        "text": "If you're in danger right now, please call 911.",
+        "options": [
+          {
+            "label": "I'm safe, we can keep going",
+            "value": "safe",
+            "next": "m_sleep"
+          }
+        ]
+      }
+    },
+    "m_crisis_unsure": {
+      "type": "message",
+      "bot": "Thank you for telling me. If you're not sure, please call or text 988 any time, day or night. You don't have to be certain to reach out. You can also text HOME to 741741.",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "I'm safe, we can keep going",
+            "value": "safe",
+            "next": "m_sleep"
+          }
+        ]
+      }
+    },
+    "m_safe": {
+      "type": "message",
+      "bot": "I'm glad you're safe, and I'm sorry you've been feeling so worn down. If that ever changes, please call or text 988 any time, day or night.",
+      "next": "m_sleep"
+    },
+    "m_sleep": {
+      "type": "question",
+      "bot": "How many hours are you sleeping on an average night?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Less than 6",
+            "value": "under6",
+            "reply": "Less than 6."
+          },
+          {
+            "label": "6–7",
+            "value": "6to7",
+            "reply": "About 6 or 7."
+          },
+          {
+            "label": "7–8",
+            "value": "7to8",
+            "reply": "About 7, but I wake up feeling like I haven't slept."
+          },
+          {
+            "label": "More than 8",
+            "value": "over8",
+            "reply": "More than 8."
+          }
+        ]
+      },
+      "saveAs": "sleep",
+      "next": "m_family"
+    },
+    "m_family": {
+      "type": "question",
+      "bot": "Has anyone in your family had thyroid problems or an early menopause?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Thyroid problems",
+            "value": "thyroid",
+            "reply": "My mum has an underactive thyroid.",
+            "next": "m_family_ack"
+          },
+          {
+            "label": "Early menopause",
+            "value": "menopause",
+            "reply": "Early menopause.",
+            "next": "m_hashimoto"
+          },
+          {
+            "label": "Both",
+            "value": "both",
+            "reply": "Both.",
+            "next": "m_family_ack"
+          },
+          {
+            "label": "Neither",
+            "value": "neither",
+            "reply": "Neither.",
+            "next": "m_hashimoto"
+          },
+          {
+            "label": "Not sure",
+            "value": "unsure",
+            "reply": "Not sure.",
+            "next": "m_hashimoto"
+          }
+        ]
+      },
+      "saveAs": "family"
+    },
+    "m_family_ack": {
+      "type": "message",
+      "bot": "That's helpful to know. Thyroid issues often run in families.",
+      "next": "m_hashimoto"
+    },
+    "m_hashimoto": {
+      "type": "user_message",
+      "user": "So do I have Hashimoto's? And should I just come off the sertraline if this is all hormones?",
+      "next": "m_hashimoto_reply"
+    },
+    "m_hashimoto_reply": {
+      "type": "message",
+      "bot": "Those are such good questions, and I understand wanting answers. I can't diagnose Hashimoto's, but a simple antibody test can show whether it might be part of the picture, and I'll make sure it's in your notes.\n\nAnd please don't stop your sertraline on your own. Stopping suddenly can make you feel much worse. If hormones turn out to be a big part of this, your provider can help you decide together whether to change it, and how.\n\nIf your provider won't order the tests you need, you're entitled to a second opinion.",
+      "next": "m_share"
+    },
+    "m_share": {
+      "type": "question",
+      "bot": "Would you like me to share what I'm seeing?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Show me what you're thinking",
+            "value": "show",
+            "reply": "Yes, please.",
+            "next": "m_thinking"
+          }
+        ]
+      }
+    },
+    "m_thinking": {
+      "type": "loading",
+      "widget": {
+        "type": "thinking_steps",
+        "steps": [
+          "Your exhaustion, cold, weight and tears",
+          "Closer, heavier cycles at {age}",
+          "TSH 3.2, and no Free T3",
+          "Sertraline 50 mg, and your mum's thyroid"
+        ],
+        "durationMs": 2500
+      },
+      "next": "m_root"
+    },
+    "m_root": {
+      "type": "message",
+      "bot": "Here’s what I think is happening at the root.\n\nYour symptoms point to your hypothalamus under strain at {age} — the conductor of your hormones. Feeling cold, tired, foggy and heavier together fits that pattern, even when TSH looks “normal.”",
+      "next": "m_answer"
+    },
+    "m_exit_product": {
+      "type": "message",
+      "bot": "Genesis Gold® is whole-food nutrition I formulated for the hypothalamus — the gland that conducts your hormones, sleep, stress response and metabolism.\n\nIt isn’t a hormone or a pharmaceutical. Many women give it 60 to 90 days alongside clearer labs and everyday habits.\n\nLet your provider know if you start it, especially if you already take thyroid medicine or other supplements.",
+      "widget": {
+        "type": "product_card",
+        "productId": "genesis-gold",
+        "why": "Plant-based nutrition designed to support the hypothalamus.",
+        "frame90": "Most women give it at least 60–90 days. Optional — you don’t need it to use the app."
+      },
+      "next": "m_notes_close"
+    },
+    "m_exit_notes": {
+      "type": "message",
+      "bot": "Done. Here are your visit notes, ready to take with you.",
+      "widget": {
+        "type": "visit_notes_card",
+        "title": "Mood, cycles and thyroid"
+      },
+      "next": "m_notes_close"
+    },
+    "m_notes_close": {
+      "type": "end",
+      "route": "/chat"
+    },
+    "m_answer": {
+      "type": "answer",
+      "layout": "progressive",
+      "notesTitle": "Mood, cycles and thyroid",
+      "sections": [
+        {
+          "id": 1,
+          "title": "What I'm Hearing",
+          "defaultOpen": true,
+          "body": [
+            "You're exhausted, cold, gaining weight, foggy and tearful, and you've been told your labs are normal (TSH 3.2, T4 1.0).",
+            "Your periods are closer together and heavier, with hard PMS.",
+            "You take sertraline 50 mg for low mood.",
+            "You sleep about 7 hours and wake unrefreshed.",
+            "Your mum has an underactive thyroid."
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Hypothalamic Connection",
+          "defaultOpen": true,
+          "body": "Your hypothalamus conducts your thyroid, hormones, mood, sleep and metabolism. At {age}, as progesterone falls, it's under strain. That can throw your thyroid and mood out of rhythm, even when standard tests read \"normal\"."
+        },
+        {
+          "id": 3,
+          "title": "What This May Mean",
+          "body": [
+            "Your symptoms fit the pattern of perimenopause, with falling progesterone.",
+            "Your thyroid may need a closer look. TSH alone doesn't show how your body uses thyroid hormone, and your family history makes it worth checking further."
+          ]
+        },
+        {
+          "id": 4,
+          "title": "Questions for Your Provider",
+          "body": [
+            "\"Can we check Free T3, reverse T3 and thyroid antibodies, not just TSH?\"",
+            "\"Could perimenopause be behind my mood, cycles and fatigue?\"",
+            "\"If hormones are part of this, should we review my sertraline together?\""
+          ]
+        },
+        {
+          "id": 5,
+          "title": "Tests Worth Discussing",
+          "body": [
+            "Free T3, Free T4, reverse T3, TPO and thyroglobulin antibodies.",
+            "Morning cortisol, DHEA-S, and fasting insulin.",
+            "FSH on cycle days 3 to 5, and estradiol.",
+            "These are for discussion with your provider, not orders."
+          ]
+        },
+        {
+          "id": 6,
+          "title": "What You Can Do Now",
+          "body": [
+            "Support your hypothalamus with Genesis Gold® for 60–90 days.",
+            "Protect an 8-hour sleep window.",
+            "Eat breakfast with protein, and cut back on refined carbs after 2 pm.",
+            "Take five minutes of CALM each day.",
+            "Track your cycle and mood to take to your appointment.",
+            "Book a visit to ask for the fuller panel, and seek a second opinion if needed. Reassess in 60–90 days. I'll check in with you in about two weeks."
+          ]
+        },
+        {
+          "id": 7,
+          "title": "A Word from Deborah",
+          "body": "Linda, you knew something wasn't right, and you were right. Being told you're \"fine\" when you feel this way is so hard. Keep trusting yourself. Your body is asking for support, and we can give it that together."
+        }
+      ],
+      "footer": "This is educational guidance from the Oracle — not a diagnosis or prescription. Please talk with your healthcare provider.",
+      "next": "m_after"
+    },
+    "m_after": {
+      "type": "question",
+      "bot": "Would you like to create notes for your provider, or learn about Genesis Gold®?",
+      "widget": {
+        "type": "quick_replies",
+        "options": [
+          {
+            "label": "Create notes for my provider",
+            "value": "notes",
+            "next": "m_exit_notes"
+          },
+          {
+            "label": "Learn about Genesis Gold®",
+            "value": "product",
+            "next": "m_exit_product"
+          }
+        ]
+      }
     }
   },
   "freeLimit": {

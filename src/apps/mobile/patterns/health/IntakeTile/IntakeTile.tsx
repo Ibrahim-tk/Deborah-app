@@ -1,14 +1,21 @@
 /**
  * @pattern IntakeTile — the in-chat Health intake tile: ActionTile with a percentage progress ring (as on Home, design 2026-10-21).
  * @usedBy  M-2.12 First consultation · M-2.1 Conversation
+ *
+ * Callers pass the same healthProfileCompletion fraction Home and My Health use.
  */
-import { intakeProgress } from '@shared/engine/intake';
-import { useAppStore } from '@shared/store';
 import { ActionTile } from '@mobile/ui';
 
-export function IntakeTile({ onOpen, className }: { onOpen: () => void; className?: string }) {
-  const profile = useAppStore((s) => s.profiles.byId[s.activeProfileId]);
-  const progress = profile ? intakeProgress(profile) : 0;
+export function IntakeTile({
+  progress,
+  onOpen,
+  className,
+}: {
+  /** 0–1, same score as Home’s Complete your intake card. */
+  progress: number;
+  onOpen: () => void;
+  className?: string;
+}) {
   return (
     <ActionTile
       className={className}

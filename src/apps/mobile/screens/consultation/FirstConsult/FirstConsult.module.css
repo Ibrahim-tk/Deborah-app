@@ -1,5 +1,13 @@
 .root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); } /* Aura + GradientShift paint the backdrop, as on Home */
-.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* Messages dissolve into the backdrop above the composer (same as M-2.1). */
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent);
+}
 .column { display: grid; gap: var(--space-6); padding: calc(var(--safe-top) + 64px) var(--margin-screen) var(--space-6); } /* the composer below handles the safe area */
 /* Not started: orb + greeting in the optical middle. Started: small orb top left, messages from the top. */
 .column:not([data-started]) { min-height: 100%; align-content: center; }

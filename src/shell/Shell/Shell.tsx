@@ -1,10 +1,12 @@
 /**
  * @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: BrowserFrame or full-bleed.
- * Widgets: the widget lab (/internal/wid) in the IPhoneFrame. Design system: (/internal/design-system), full-bleed.
+ * Widgets: (/internal/wid) in the IPhoneFrame. Design system: (/internal/design-system), full-bleed.
+ * Simple Home lab: (/internal/home) in the IPhoneFrame.
  */
 import MobileApp from '@mobile/MobileApp';
 import WidgetLabApp from '@mobile/WidgetLabApp';
 import DesignSystemApp from '@mobile/DesignSystemApp';
+import SimpleHomeApp from '@mobile/SimpleHomeApp';
 import WebApp from '@web/WebApp';
 import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
@@ -19,8 +21,8 @@ import './dev-overlays.css';
 import styles from './Shell.module.css';
 
 export interface ShellProps {
-  /** `widgets`: the widget lab (/wid), shown in the phone frame. `design-system`: the component library (/design-system). */
-  platform: 'mobile' | 'web' | 'widgets' | 'design-system';
+  /** `widgets`: /wid. `design-system`: /design-system. `home-lab`: /home simple layout lab. */
+  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'home-lab';
 }
 
 export function Shell({ platform }: ShellProps) {
@@ -42,6 +44,10 @@ export function Shell({ platform }: ShellProps) {
         ) : platform === 'widgets' ? (
           <IPhoneFrame>
             <WidgetLabApp />
+          </IPhoneFrame>
+        ) : platform === 'home-lab' ? (
+          <IPhoneFrame>
+            <SimpleHomeApp />
           </IPhoneFrame>
         ) : platform === 'mobile' ? (
           <>

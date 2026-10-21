@@ -60,13 +60,10 @@ export default function Home() {
     setSheet(false);
   };
   const docCount = useAppStore((s) => selectDocuments(s).length);
-  // Home composer opens the same chat as the "Continue your chat" card (design 2026-10-21);
-  // only with nothing to continue does it start a new one.
+  // Home composer always starts a new chat. Resume lives on the "Continue your chat" card.
   const chat = () => {
     closeSheet();
-    if (hasFlowSession('proxy') && profileId !== SELF_PROFILE_ID) return push('M-2.12', { flow: 'proxy' });
-    if (hasFlowSession('sandra')) return push('M-2.12', { flow: 'sandra' });
-    if (d.midIntake || focus || history.length) return resume();
+    useAppStore.getState().archiveActive(profileId);
     openAsk({ focus: true });
   };
   // Continue with Deborah: a half-answered intake question resumes exactly where it stopped.
@@ -93,7 +90,6 @@ export default function Home() {
     complete: d.completion >= 1,
     onAction: () => { closeSheet(); completeIntake(); },
   };
-  const planFocus = useAppStore((s) => s.plan90[s.activeProfileId]?.goal);
   const visitToLog = useAppStore((s) => selectVisitToLog(s));
   const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
     { title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', onPress: go('M-7.2') },
@@ -160,7 +156,7 @@ export default function Home() {
             onContinue={resume}
             steps={steps.slice(0, 3)}
             intakeCard={intakeCard}
-            journey={d.planDay ? { day: d.planDay, today: d.nextHabit, focus: planFocus, onPress: journey } : undefined}
+            journey={d.planCard ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
             onNotes={go('M-9.1')}
             reports={reports}
             documents={documents}

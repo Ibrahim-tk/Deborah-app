@@ -12,13 +12,14 @@ import { Avatar, Header, Icon, ListRow } from '@mobile/ui';
 import { relationshipLabel } from '@mobile/patterns/profile';
 import { healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import { useNav, useRoute } from '@mobile/navigation';
-import { MAX_PROFILES, useAddMember } from '../useAddMember';
+import { maxProfilesFor, useAddMember } from '../useAddMember';
 import styles from './ManageProfiles.module.css';
 
 export default function ManageProfiles() {
   const { pop, push } = useNav();
   const { previousTitle, canGoBack } = useRoute();
   const { addState, add } = useAddMember();
+  const plan = useAppStore((s) => s.plan);
   const profiles = useAppStore(useShallow((s) => s.profiles.order.map((id) => s.profiles.byId[id]).filter(Boolean)));
 
   return (
@@ -26,7 +27,7 @@ export default function ManageProfiles() {
       <Header title="Family profiles" onBack={canGoBack ? pop : undefined} backLabel={previousTitle} />
       <div className={styles.body}>
         <p className={styles.count}>
-          {profiles.length} of {MAX_PROFILES} profiles
+          {profiles.length} of {maxProfilesFor(plan)} profiles
         </p>
         <ul className={styles.rows}>
           {profiles.map((p) => (

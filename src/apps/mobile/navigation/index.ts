@@ -8,3 +8,5 @@ export type { Params, Route, TabId } from './types';
 export const WidgetLabScreen = lazy(() => import('@mobile/screens/lab/WidgetLab'));
 /** The design system (/design-system): every token and component, rendered live from this app's own code. */
 export const DesignSystemScreen = lazy(() => import('@mobile/screens/lab/DesignSystem'));
+/** Simple Home layout lab (/internal/home). */
+export const SimpleHomeScreen = lazy(() => import('@mobile/screens/lab/SimpleHome'));

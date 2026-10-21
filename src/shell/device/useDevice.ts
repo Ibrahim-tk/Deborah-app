@@ -37,6 +37,8 @@ export interface DeviceApi {
    * shell caption and status bar colour can follow it without the shell importing app internals.
    */
   setScreen: (screen: ScreenInfo | null) => void;
+  /** Client sticky: Records tab key (notes / labs / attachments), or null when leaving. */
+  setClientGuide: (guide: string | null) => void;
 }
 
 export const DeviceContext = createContext<DeviceApi | null>(null);

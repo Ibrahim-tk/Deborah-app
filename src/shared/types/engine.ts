@@ -16,6 +16,8 @@ export interface EngineContext {
   now: string;
   /** Topic of the profile's most recent answered consultation (check-in memory line). */
   lastTopic?: string;
+  /** Active concerns, open actions, resolved names, medicines, and visit specialties. */
+  healingPlan?: string;
   /** Latest confirmed lab report for the profile; answers use a script's withLabs variant. */
   labs?: LabReport;
   /**
@@ -61,7 +63,7 @@ export type StoreAction =
   | { type: 'setConversation'; conversationId: ID; patch: Partial<Conversation> }
   | { type: 'completeConsultation'; conversationId: ID }
   | { type: 'setSummary'; conversationId: ID; summary: string; topic: string }
-  | { type: 'createPlanFromAnswer'; profileId: ID; goal: string; habits: string[]; productId?: ID; status?: ContentStatus }
+  | { type: 'createPlanFromAnswer'; profileId: ID; goal: string; habits: string[]; productId?: ID; status?: ContentStatus; /** Concern title. The conversation topic, not a diagnosis. */ topic?: string }
   | { type: 'clearFailNext' }
   | { type: 'updateProfile'; profileId: ID; patch: Partial<Profile> }
   | { type: 'acceptHealthConsent' }

@@ -137,7 +137,7 @@ function recommendationFrom(answer: Answer): string {
   return parts.join('\n') || answer.closingLine;
 }
 
-export function assembleVisitBrief(conv: Conversation, profile: Profile, answer: Answer): VisitBriefContent {
+export function assembleVisitBrief(conv: Conversation, profile: Profile, answer: Answer, planNote?: string): VisitBriefContent {
   return {
     header: {
       name: profile.name,
@@ -147,7 +147,11 @@ export function assembleVisitBrief(conv: Conversation, profile: Profile, answer:
     },
     chiefComplaint: chiefComplaintFrom(conv, answer, profile),
     // F09c: what she reported from a recent provider visit, in her words (never interpreted).
-    clinicalContext: [clinicalContextFrom(answer), conv.afterVisit && `Recent provider visit (as reported by the client): ${conv.afterVisit.summary}.`].filter(Boolean).join('\n\n'),
+    clinicalContext: [
+      clinicalContextFrom(answer),
+      conv.afterVisit && `Recent provider visit (as reported by the client): ${conv.afterVisit.summary}.`,
+      planNote && `Healing plan: ${planNote}`,
+    ].filter(Boolean).join('\n\n'),
     labs: labsFrom(answer),
     questions: questionsFrom(answer),
     medications: medicationsFrom(profile),

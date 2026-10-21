@@ -30,7 +30,11 @@ export const selectAnsweredCount = (s: AppState, profileId = s.activeProfileId):
 
 export const selectNow = (s: AppState): Date => nowFrom(s);
 
-export const selectCanAddProfile = (s: AppState): boolean => s.plan === 'family' && s.profiles.order.length < 5;
+/** Family = 4 profiles (1 primary + 3); Premium = 6 (extra family slots). */
+export const selectCanAddProfile = (s: AppState): boolean => {
+  const max = s.plan === 'premium' ? 6 : s.plan === 'family' ? 4 : 1;
+  return max > 1 && s.profiles.order.length < max;
+};
 
 /** Topic of the profile's most recent answered consultation (check-in memory line). */
 export const selectLastTopic = (s: AppState, profileId = s.activeProfileId): string | undefined =>

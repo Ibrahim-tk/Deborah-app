@@ -1,5 +1,6 @@
 /**
- * @pattern Greeting — Deborah orb centred with one question ("How are you feeling today?").
+ * @pattern Greeting — Deborah orb centred with one question (self: "How are you feeling today?";
+ *          family/advocate: "What are {name}'s concerns for today?").
  *          No continue-conversation row, suggestions or disclaimer (empty chat only).
  * @usedBy  M-2.1 (empty state)
  * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › empty)

@@ -70,11 +70,6 @@ export default function ChoosePlan() {
             <Button fullWidth onClick={onContinue}>
               {subscriber ? 'Switch plan' : 'Continue'} — {price}
             </Button>
-            <div className={styles.links}>
-              <Button variant="link" size="sm" onClick={() => toast('No purchases to restore (demo)')}>Restore purchase</Button>
-              <Button variant="link" size="sm" onClick={() => open('M-10.5', { section: 'terms' })}>Terms</Button>
-              <Button variant="link" size="sm" onClick={() => open('M-10.5', { section: 'privacy' })}>Privacy</Button>
-            </div>
           </>
         }
       >
@@ -99,6 +94,11 @@ export default function ChoosePlan() {
                 onSelect={() => choose({ plan: p.id })}
               />
             ))}
+          </div>
+          <div className={styles.links}>
+            <Button variant="link" size="sm" onClick={() => toast('No purchases to restore (demo)')}>Restore purchase</Button>
+            <Button variant="link" size="sm" onClick={() => open('M-10.5', { section: 'terms' })}>Terms</Button>
+            <Button variant="link" size="sm" onClick={() => open('M-10.5', { section: 'privacy' })}>Privacy</Button>
           </div>
         </div>
       </Modal>

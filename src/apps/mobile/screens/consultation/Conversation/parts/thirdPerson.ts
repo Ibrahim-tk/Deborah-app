@@ -7,14 +7,16 @@ const FORMS = {
   they: { they: 'they', them: 'them', their: 'their', are: 'are', feel: 'feel' },
 };
 
-const formsFor = (pronouns = '') =>
-  pronouns.startsWith('she') ? FORMS.she : pronouns.startsWith('he') ? FORMS.he : FORMS.they;
+/** Tokens for advocate/family copy: {they} {them} {their} {are} {feel}. */
+export function pronounTokens(pronouns = ''): Record<string, string> {
+  return pronouns.startsWith('she') ? FORMS.she : pronouns.startsWith('he') ? FORMS.he : FORMS.they;
+}
 
 const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
 
 /** Fills {name} {they} {them} {their} {are} {feel} (capitalised token → capitalised word). */
 export function thirdPerson(list: Suggestion[], name: string, pronouns?: string): Suggestion[] {
-  const f: Record<string, string> = { ...formsFor(pronouns), name: name || 'them' };
+  const f: Record<string, string> = { ...pronounTokens(pronouns), name: name || 'them' };
   return list.map((s) => ({
     ...s,
     text: s.text.replace(/\{(\w+)\}/g, (m, key: string) => {

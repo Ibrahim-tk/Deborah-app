@@ -3,7 +3,7 @@ import { findProduct } from '@shared/data';
 import { formatShortDate } from '@shared/utils';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, Panel, TextReveal } from '@mobile/ui';
-import { AnswerSections, ClosingLine, MessageBubble, SuggestionList } from '@mobile/patterns/chat';
+import { AfterGuidanceTrail, AnswerSections, ClosingLine, MessageBubble, SuggestionList } from '@mobile/patterns/chat';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
 import { buildAnswer } from './buildAnswer';
@@ -11,9 +11,7 @@ import { FlowWidget } from './FlowWidget';
 import { IntakeBanner } from './IntakeBanner';
 import { CopyBlock, SessionBanner } from './ProxyBits';
 import { EmergencySheet } from './EmergencySheet';
-import { ProfileFacts } from './ProfileFacts';
 import { FlowChoice } from './FlowChoice';
-import { BookTile } from './BookTile';
 import { FlowText } from './FlowText';
 import { ThinkingSteps } from './ThinkingSteps';
 import { AppointmentForm, type Appointment } from './AppointmentForm';
@@ -49,26 +47,29 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
     const answer = buildAnswer(node, say);
     const product = findProduct(answer.product?.productId);
     const replies = node.suggestedReplies ?? [];
+    const facts = node.profileFacts?.map((f) => ({ label: f.label, value: say(f.value) }));
     return (
       <MessageBubble role="deborah" turnStart>
         <AnswerSections
           answer={answer}
           wordSlot={<Button variant="secondary" leadingIcon="note" fullWidth onClick={() => onAction('visit_notes')}>Save to Visit notes</Button>}
+          productSlot={
+            product && answer.product
+              ? <ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} />
+              : undefined
+          }
         />
-        {/* Closing line and suggestions arrive once the seven cards have revealed. */}
+        {/* F02g: note → save-facts → bridge → consult ad → two choices (Genesis Gold always). */}
         <div className={styles.afterReveal}>
           <ClosingLine text={answer.closingLine} />
-          {/* After the framework (design direction 2026-10-14): the product, then Deborah herself, then her times. */}
-          {product && answer.product && <div className={styles.after}><ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} /></div>}
-          {/* Premade chat: "Save to my profile" sits right under the seven cards, instead of the booking times. */}
-          {node.profileFacts ? (
-            <ProfileFacts facts={node.profileFacts.map((f) => ({ label: f.label, value: say(f.value) }))} onEdit={() => onAction('edit_profile')} />
-          ) : node.next ? null : (
-            <>
-              <p className={styles.afterLine}>If you’d like to go through this with me in person, I have time this week.</p>
-              <BookTile onBook={() => onAction('book_request')} />
-            </>
-          )}
+          <AfterGuidanceTrail
+            facts={facts}
+            showVisitNotes
+            onEditFacts={() => onAction('edit_profile')}
+            onBook={() => onAction('book_request')}
+            onLearnGold={() => onAction('exit_product')}
+            onVisitNotes={() => onAction('visit_notes')}
+          />
           {active && replies.length > 0 && (
             <div className={styles.after}>
               <SuggestionList suggestions={replies.map((r) => ({ id: r.label, text: say(r.label), scriptId: '' }))} onSelect={(x) => onPick(node, replies.filter((r) => r.label === x.id))} />
@@ -126,7 +127,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
   // The opening line: large serif greeting, no bubble; its starters dock above the composer (FirstConsult).
   if (node.display === 'greeting' && active) return <TextReveal className={styles.greetingLine} text={entry.text} delay={250} />;
 
-  const choices = custom ? undefined : w?.options;
+  const choices = custom || w?.type === 'call_sheet' ? undefined : w?.options;
   return (
     <MessageBubble role="deborah" text={entry.text} turnStart>
       {/* What Deborah already knows from intake, as plain text (no tags). */}
@@ -157,6 +158,15 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
       {w?.type === 'emergency_sheet' && (
         <EmergencySheet title={w.title ?? 'Call 911 now'} text={say(w.text)} active={active} onDone={() => w.options?.[0] && onPick(node, [w.options[0]])} />
       )}
+      {w?.type === 'call_sheet' && (
+        <EmergencySheet
+          title={w.title ?? 'Call 911'}
+          text={say(w.text)}
+          secondary={say(w.options?.[0]?.label) || "I'm safe, we can keep going"}
+          active={active}
+          onDone={() => w.options?.[0] && onPick(node, [w.options[0]])}
+        />
+      )}
       {w?.type === 'visit_notes_button' && (
         <div className={styles.widget}><Button leadingIcon="note" onClick={() => onAction('visit_notes')}>{w.label ?? 'Visit Notes'}</Button></div>
       )}
@@ -170,6 +180,19 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
         />
       )}
       {w?.type === 'visit_notes_card' && renderNotesCard?.(w.title ?? 'Your visit notes')}
+      {w?.type === 'product_card' && (() => {
+        const p = findProduct(w.productId ?? 'genesis-gold');
+        if (!p) return null;
+        return (
+          <div className={styles.after}>
+            <ProductCard
+              product={p}
+              productRef={{ productId: p.id, why: say(w.why) || p.tagline, frame90: say(w.frame90) || '' }}
+              onShop={() => onAction('exit_product')}
+            />
+          </div>
+        );
+      })()}
       {w?.type === 'reminder_chip' && <Panel tone="linen" icon="calendar">{w.label}</Panel>}
       {node.footer && <ClosingLine text={node.footer} />}
     </MessageBubble>

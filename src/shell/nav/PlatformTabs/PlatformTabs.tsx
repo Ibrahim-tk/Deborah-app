@@ -1,9 +1,10 @@
-/** @shell PlatformTabs — Mobile | Web | Design system | Components. Keyboard: 1–4. */
+/** @shell PlatformTabs — Mobile | Web | Design system | Components | Home. Keyboard: 1–5. */
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShellStore } from '../../shell.store';
 import {
   INTERNAL_DESIGN_SYSTEM,
+  INTERNAL_HOME,
   INTERNAL_MOBILE,
   INTERNAL_WID,
 } from '@shared/utils/internalPaths';
@@ -19,11 +20,13 @@ export function PlatformTabs() {
   const isWeb = pathname.startsWith('/internal/web');
   const isSystem = pathname.startsWith(INTERNAL_DESIGN_SYSTEM);
   const isWidgets = pathname.startsWith(INTERNAL_WID);
+  const isHome = pathname.startsWith(INTERNAL_HOME);
 
   const goProfile = () => navigate(INTERNAL_MOBILE);
   const goWeb = () => navigate(lastWebPath);
   const goSystem = () => navigate(INTERNAL_DESIGN_SYSTEM);
   const goWidgets = () => navigate(INTERNAL_WID);
+  const goHome = () => navigate(INTERNAL_HOME);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -32,6 +35,7 @@ export function PlatformTabs() {
       if (e.key === '2') navigate(lastWebPath);
       if (e.key === '3') navigate(INTERNAL_DESIGN_SYSTEM);
       if (e.key === '4') navigate(INTERNAL_WID);
+      if (e.key === '5') navigate(INTERNAL_HOME);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -39,7 +43,7 @@ export function PlatformTabs() {
 
   return (
     <div className={styles.root} role="tablist" aria-label="Platform">
-      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets} className={styles.tab} onClick={goProfile} title="Mobile (1)">
+      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets && !isHome} className={styles.tab} onClick={goProfile} title="Mobile (1)">
         Mobile
       </button>
       <button type="button" role="tab" aria-selected={isWeb} className={styles.tab} onClick={goWeb} title="Web (2)">
@@ -50,6 +54,9 @@ export function PlatformTabs() {
       </button>
       <button type="button" role="tab" aria-selected={isWidgets} className={styles.tab} onClick={goWidgets} title="Components (4)">
         Components
+      </button>
+      <button type="button" role="tab" aria-selected={isHome} className={styles.tab} onClick={goHome} title="Home lab (5)">
+        Home
       </button>
     </div>
   );

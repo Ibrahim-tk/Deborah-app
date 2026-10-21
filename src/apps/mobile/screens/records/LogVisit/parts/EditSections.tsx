@@ -41,9 +41,13 @@ export function EditSections({ draft, update, confidence = {}, today }: EditSect
       <section className={styles.section}>
         <IntakeSectionHeader title="Provider seen" />
         <Select label="Kind of provider" options={SPECIALTY_OPTIONS} value={draft.provider.specialty} onChange={(v) => set((d) => { d.provider.specialty = v; })} />
+        {!draft.provider.specialty && <p className={styles.check}>Required</p>}
         <CheckThis c={confidence['provider.specialty']} />
         {draft.provider.specialty === 'other' && (
-          <Input label="What kind of provider?" value={draft.provider.specialtyOther ?? ''} onChange={(e) => set((d) => { d.provider.specialtyOther = e.target.value; })} />
+          <>
+            <Input label="What kind of provider?" value={draft.provider.specialtyOther ?? ''} onChange={(e) => set((d) => { d.provider.specialtyOther = e.target.value; })} />
+            {!draft.provider.specialtyOther?.trim() && <p className={styles.check}>Required</p>}
+          </>
         )}
         <Input label="Provider name (optional)" placeholder="Dr. / NP / PA name" value={draft.provider.name ?? ''} onChange={(e) => set((d) => { d.provider.name = e.target.value; })} />
         <Input label="Practice or clinic (optional)" value={draft.provider.practice ?? ''} onChange={(e) => set((d) => { d.provider.practice = e.target.value; })} />

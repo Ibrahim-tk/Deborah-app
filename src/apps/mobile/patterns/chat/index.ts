@@ -21,6 +21,8 @@ export * from './CareDisclaimer';
 export * from './ComposerOptions';
 export * from './SymptomPicker';
 export * from './SaveProfileCard';
+export * from './SaveHealthProfile';
+export * from './AfterGuidanceTrail';
 export * from './ReviewFactsCard';
 export * from './GuidanceNextSteps';
 export * from './VisitSummaryCard';
