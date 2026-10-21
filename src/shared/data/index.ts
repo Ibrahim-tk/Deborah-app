@@ -56,7 +56,7 @@ import documentTypes from './documents/types.json';
 import extractionsByType from './documents/extractions.json';
 import documentReviewJson from './documents/review.json';
 import healingPlanDocumentJson from './health/healing-plan-document.json';
-import type { Flow } from '../types/flow';
+import type { Flow, FlowNode } from '../types/flow';
 import type { DocumentExtraction, DocumentFormat, DocumentType } from '../types/domain';
 
 export const persona = deborah as Persona;
@@ -127,14 +127,53 @@ export const healthBasicsData = healthBasics as HealthBasicsData;
 export const symptomGroups: { id?: string; title: string; items: string[] }[] = symptoms.groups;
 /** Composer one-tap symptom shortcuts (placeholder). */
 export const quickSymptoms: string[] = symptoms.quick;
+/**
+ * Create visit notes in chat: appointment yes/no, then the small provider form, then the notes card.
+ * Sandra already defines these nodes; other scripts get the same path so the pill can start it.
+ */
+const visitNotesAsk: Record<string, FlowNode> = {
+  appointment: {
+    type: 'question',
+    bot: 'Do you have an appointment?',
+    widget: {
+      type: 'quick_replies',
+      options: [
+        { label: 'Yes', value: 'yes', reply: 'Yes.', next: 'appointment_form' },
+        { label: 'No', value: 'no', reply: 'No.', next: 'visit_notes' },
+      ],
+    },
+    saveAs: 'appointment',
+    next: 'visit_notes',
+  },
+  appointment_form: {
+    type: 'question',
+    bot: 'Add who you’re seeing and when, and I’ll put it on your notes.',
+    widget: { type: 'appointment_form' },
+    next: 'visit_notes',
+  },
+  visit_notes: {
+    type: 'message',
+    bot: 'Done. Here are your visit notes, ready to take with you.',
+    widget: { type: 'visit_notes_card', title: 'Your visit notes' },
+  },
+};
+
+function withVisitNotesAsk(flow: Flow): Flow {
+  const nodes = { ...flow.nodes };
+  for (const [id, node] of Object.entries(visitNotesAsk)) {
+    if (!nodes[id]) nodes[id] = node;
+  }
+  return { ...flow, nodes };
+}
+
 /** Scripted first consultation after onboarding (OPEN: all copy is DRAFT, needs Deborah's sign-off). */
-export const firstConsultFlow = firstConsult as unknown as Flow;
+export const firstConsultFlow = withVisitNotesAsk(firstConsult as unknown as Flow);
 /** Demo consultation for a signed-in returning user (seed R01). OPEN: DRAFT copy, needs Deborah's sign-off. */
-export const returningConsultFlow = returningConsult as unknown as Flow;
+export const returningConsultFlow = withVisitNotesAsk(returningConsult as unknown as Flow);
 /** Premade first chat for a new sign-up (Sandra, 46, perimenopause happy path). Placeholder copy. */
-export const sandraConsultFlow = sandraConsult as unknown as Flow;
+export const sandraConsultFlow = withVisitNotesAsk(sandraConsult as unknown as Flow);
 /** Premade proxy chat (Pathway C, elderly): a daughter asking about her mother. Placeholder copy. */
-export const proxyConsultFlow = proxyConsult as unknown as Flow;
+export const proxyConsultFlow = withVisitNotesAsk(proxyConsult as unknown as Flow);
 
 /** F11 Deborah's replies to a shared document and the one-time upload offer (placeholder copy). */
 export interface DocumentReviewCopy {

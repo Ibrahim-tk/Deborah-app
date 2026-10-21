@@ -11,7 +11,7 @@ export type Entry =
   | { id: string; kind: 'bot'; nodeId: string; text: string; node: FlowNode; answered?: boolean }
   | { id: string; kind: 'user'; text: string }
   | { id: string; kind: 'thinking'; steps: string[]; durationMs: number }
-  | { id: string; kind: 'answer'; nodeId: string; node: FlowNode; answered?: boolean }
+  | { id: string; kind: 'answer'; nodeId: string; node: FlowNode; answered?: boolean; safetyText?: string }
   | { id: string; kind: 'end'; route?: string };
 
 let seq = 0;
@@ -64,9 +64,11 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
         }
         // The full 7-section answer renders at once; conversational answers are a short Deborah reply.
         if (node.type === 'answer' && node.layout === 'progressive') {
-          push({ id: uid(), kind: 'answer', nodeId: id, node });
           const held = heldSafety.current;
-          if (held) later(() => push({ id: uid(), kind: 'bot', nodeId: held.id, text: say(held.node.bot), node: held.node }), typingMs);
+          heldSafety.current = null;
+          // The trail already shows one Talk with Deborah card. Keep the safety words on the
+          // answer; a second bot entry would paint that card again under the pills.
+          push({ id: uid(), kind: 'answer', nodeId: id, node, ...(held ? { safetyText: say(held.node.bot) } : {}) });
           // F02g: AfterGuidanceTrail owns the follow-up ask + two pills. Do not auto-advance
           // into a scripted handoff (handoff / *_whats_next / m_after) that would duplicate them.
           // Follow-up suggestedReplies still render on the answer entry itself (EntryView).

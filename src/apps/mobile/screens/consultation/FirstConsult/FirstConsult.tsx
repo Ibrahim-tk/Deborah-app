@@ -14,8 +14,8 @@
  * OPEN: "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off."
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
-import { VisitNotesCard } from './parts/VisitNotesCard';
 import type { Appointment } from './parts/AppointmentForm';
+import { VisitNoteCard } from '@mobile/patterns/health';
 import { useComposerAttachments } from '@mobile/patterns/chat';
 import { meta } from '@mobile/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -125,7 +125,12 @@ export default function FirstConsult() {
     const node = answerNode();
     const answer = buildAnswer(node, say);
     const title = node.notesTitle ? say(node.notesTitle) : undefined;
-    const brief = { ...briefFromAnswer(profile, answer, title ?? 'First consultation'), ...(title && { title }) };
+    const brief = {
+      ...briefFromAnswer(profile, answer, title ?? 'First consultation'),
+      ...(title && { title }),
+      ...(appointment?.provider && { providerName: appointment.provider }),
+      ...(appointment?.date && { appointmentDate: new Date(`${appointment.date}T12:00:00`).toISOString() }),
+    };
     const id = uid('n');
     s.addNote({
       id,
@@ -182,6 +187,17 @@ export default function FirstConsult() {
   const starters = opener?.node.widget?.options ?? [];
 
   const [appointment, setAppointment] = useState<Appointment>();
+  const notesStarted = useRef(false);
+  // Create visit notes stays in the thread: appointment yes/no, then the form, then the notes card.
+  const startVisitNotes = () => {
+    if (notesStarted.current || !flow.nodes.appointment) return;
+    notesStarted.current = true;
+    player.go('appointment');
+  };
+  const noteDate = (isoDay?: string) => {
+    const d = isoDay ? new Date(`${isoDay}T12:00:00`) : nowFrom(useAppStore.getState());
+    return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  };
   const attachments = useComposerAttachments('M-2.12', meta('M-2.12')?.title ?? 'First consultation');
   return (
     <div className={styles.root} data-xref="M-2.12 · First consultation">
@@ -210,18 +226,25 @@ export default function FirstConsult() {
               onSelect={(node, picked) => setHeld({ entryId: e.id, node, picked })}
               onAction={action}
               onAppointment={setAppointment}
-              renderNotesCard={(title) => (
-                <VisitNotesCard
-                  title={title}
-                  appointment={appointment}
-                  summary={[
-                    `${prep.questions.length + player.extraPrep.length} questions`,
-                    prep.tests.length ? `${prep.tests.length} tests to ask about` : '',
-                  ].filter(Boolean).join(' · ')}
-                  onOpen={() => action('visit_notes')}
-                  onPdf={() => action('pdf')}
-                />
-              )}
+              onCreateVisitNotes={startVisitNotes}
+              renderNotesCard={(title) => {
+                const heading = answerNode().notesTitle ? say(answerNode().notesTitle) : title;
+                const summary = [
+                  appointment?.provider,
+                  `${prep.questions.length + player.extraPrep.length} questions`,
+                  prep.tests.length ? `${prep.tests.length} tests to ask about` : '',
+                ].filter(Boolean).join(' · ');
+                return (
+                  <VisitNoteCard
+                    date={noteDate(appointment?.date)}
+                    title={heading}
+                    detail={summary}
+                    actionLabel="Open"
+                    onOpen={() => action('visit_notes')}
+                    onLog={() => action('visit_notes')}
+                  />
+                );
+              }}
               renderPrep={() => (
                 <VisitPrepCard
                   title={(e.kind === 'bot' && e.node.widget?.title) || 'For my next appointment'}

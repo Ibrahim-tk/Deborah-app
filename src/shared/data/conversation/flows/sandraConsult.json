@@ -339,20 +339,20 @@
     },
     "appointment": {
       "type": "question",
-      "bot": "Of course. Do you already have an appointment?",
+      "bot": "Do you have an appointment?",
       "widget": {
         "type": "quick_replies",
         "options": [
           {
             "label": "Yes",
             "value": "yes",
-            "reply": "Yes, I do.",
+            "reply": "Yes.",
             "next": "appointment_form"
           },
           {
-            "label": "Not yet",
+            "label": "No",
             "value": "no",
-            "reply": "Not yet.",
+            "reply": "No.",
             "next": "visit_notes"
           }
         ]

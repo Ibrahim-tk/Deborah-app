@@ -26,16 +26,18 @@ export interface EntryViewProps {
   onPick: (node: FlowNode, picked: FlowOption[]) => void;
   onAction: (value: string) => void;
   renderPrep: () => React.ReactNode;
-  /** Generative visit-notes card (receipt style) for `visit_notes_card`. */
+  /** Visit-notes card for `visit_notes_card` — same card as Records, with Open in chat. */
   renderNotesCard?: (title: string) => React.ReactNode;
   /** `appointment_form` saved: provider + date. */
   onAppointment?: (a: Appointment) => void;
+  /** "Create visit notes" pill: ask about an appointment instead of opening the notes screen. */
+  onCreateVisitNotes?: () => void;
   /** Multi-choice picks held in the composer until she sends. */
   selection?: FlowOption[];
   onSelect?: (node: FlowNode, picked: FlowOption[]) => void;
 }
 
-export function EntryView({ entry, active, say, onPick, onAction, renderPrep, renderNotesCard, onAppointment, selection, onSelect }: EntryViewProps) {
+export function EntryView({ entry, active, say, onPick, onAction, renderPrep, renderNotesCard, onAppointment, onCreateVisitNotes, selection, onSelect }: EntryViewProps) {
   if (entry.kind === 'user') return <MessageBubble role="user" text={entry.text} />;
   if (entry.kind === 'thinking') return <ThinkingSteps steps={entry.steps} durationMs={entry.durationMs} />;
   if (entry.kind === 'end') return null;
@@ -64,11 +66,12 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
           <ClosingLine text={answer.closingLine} />
           <AfterGuidanceTrail
             facts={facts}
+            notice={entry.safetyText}
             showVisitNotes
             onEditFacts={() => onAction('edit_profile')}
             onBook={() => onAction('book_request')}
             onLearnGold={() => onAction('exit_product')}
-            onVisitNotes={() => onAction('visit_notes')}
+            onVisitNotes={() => (onCreateVisitNotes ? onCreateVisitNotes() : onAction('visit_notes'))}
           />
           {active && replies.length > 0 && (
             <div className={styles.after}>

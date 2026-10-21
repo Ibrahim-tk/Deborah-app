@@ -17,6 +17,8 @@ export interface AfterGuidanceTrailProps {
   ask?: string;
   /** Second pill — visit notes when applicable. */
   showVisitNotes?: boolean;
+  /** Safety line held until after the answer. Sits once, above the single consult card. */
+  notice?: string;
   onEditFacts?: () => void;
   onBook?: () => void;
   onLearnGold?: () => void;
@@ -42,6 +44,7 @@ export function AfterGuidanceTrail({
   bridgeLines = DEFAULT_BRIDGE,
   ask = DEFAULT_ASK,
   showVisitNotes = true,
+  notice,
   onEditFacts,
   onBook,
   onLearnGold,
@@ -66,6 +69,7 @@ export function AfterGuidanceTrail({
           ))}
         </div>
       )}
+      {notice && <p className={styles.line}>{notice}</p>}
       <div className={styles.block}>
         <EscalationCard
           sheet={false}

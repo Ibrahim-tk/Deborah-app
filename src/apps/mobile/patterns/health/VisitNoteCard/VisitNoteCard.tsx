@@ -1,7 +1,7 @@
 /**
  * @pattern VisitNoteCard — a Visit Note as a card (design 2026-10-20, Rodeo-style): one shared line-doodle
  *          illustration (the "who is this for" style), then date · what it's about · one relevant line.
- *          Footer: not logged → "Log visit"; logged → "Ask Deborah about it" (starts a chat with the note as context)
+ *          Footer: not logged → "Log visit" on Records, "Open" in chat (`actionLabel`); logged → "Ask Deborah"
  *          and an Edit link to reopen the log.
  * @usedBy  M-9.1 (Visit Notes)
  */
@@ -18,12 +18,17 @@ export interface VisitNoteCardProps {
   doodle?: IconName;
   /** Visit notes only: without these the card is a compact tile with no footer (lab reports). */
   logged?: boolean;
+  /**
+   * Footer button when the visit is not logged yet.
+   * Records keeps the default "Log visit". Chat passes "Open".
+   */
+  actionLabel?: string;
   onOpen: () => void;
   onLog?: () => void;
   onAsk?: () => void;
 }
 
-export function VisitNoteCard({ date, title, detail, doodle = 'note', logged = false, onOpen, onLog, onAsk }: VisitNoteCardProps) {
+export function VisitNoteCard({ date, title, detail, doodle = 'note', logged = false, actionLabel = 'Log visit', onOpen, onLog, onAsk }: VisitNoteCardProps) {
   return (
     <article className={styles.root} data-compact={!onLog || undefined}>
       <button type="button" className={styles.main} onClick={onOpen}>
@@ -44,7 +49,7 @@ export function VisitNoteCard({ date, title, detail, doodle = 'note', logged = f
         ) : (
           <>
             <span className={styles.state}><Icon name="calendar" size={18} /> Not logged yet</span>
-            <Button variant="secondary" size="sm" onClick={onLog}>Log visit</Button>
+            <Button variant="secondary" size="sm" onClick={onLog}>{actionLabel}</Button>
           </>
         )}
       </div>}
