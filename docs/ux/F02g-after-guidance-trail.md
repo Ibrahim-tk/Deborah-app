@@ -57,6 +57,10 @@ Keep to three lines max. No third CTA here.
 
 ## Follow-up ask + two pills
 
+**Owner:** `AfterGuidanceTrail` — this is the only place the Gold / visit-notes ask appears after guidance.
+
+**Control:** existing chat `InlineChoicePills` (same frosted lavender pills as `FlowChoice` / quick replies). Do **not** invent `Button` CTAs here.
+
 **Ask (default):**  
 “Would you like to learn more about Genesis Gold®, or would visit notes be more useful right now?”
 
@@ -67,6 +71,14 @@ Keep to three lines max. No third CTA here.
 
 If visit notes do not apply (e.g. red-flag / no answer to save), the second pill is a soft follow-up (e.g. “Ask a follow-up”) instead — still only two pills.
 
+### Suppress scripted handoff
+
+Progressive answer nodes must **not** auto-advance into a second “what’s next” question (`handoff`, `s_whats_next`, `m_after`, `p_whats_next`, etc.). `useFlowPlayer` stops after the answer entry; the trail pills call `onAction` / shop / visit-notes directly.
+
+Those handoff nodes may remain in JSON marked superseded for reference, but they are not reached after guidance.
+
+Composer starters / `suggestedReplies` that are **different** follow-up questions (not Gold / notes) may still render on the answer entry — they are not part of this trail.
+
 ---
 
 ## What this replaces
@@ -74,6 +86,7 @@ If visit notes do not apply (e.g. red-flag / no answer to save), the second pill
 - `SaveProfileCard` / `SaveToProfile` in the post-answer stack
 - `BookTile` / GuidanceNextSteps “Book a consult…” row as the primary consult CTA
 - Long “What’s next?” OptionRow lists crowding the trail (booking and Genesis Gold live in the ad + pills)
+- Scripted post-answer handoff questions that duplicated the trail ask + choices
 
 ---
 
@@ -82,5 +95,6 @@ If visit notes do not apply (e.g. red-flag / no answer to save), the second pill
 - [ ] After guidance, order matches the table above on First Consult and free Conversation
 - [ ] Save card is the checkbox widget; checkboxes are compact `sm`
 - [ ] EscalationCard appears below the bridge lines
-- [ ] Exactly two pills; one is always Learn more about Genesis Gold® in this prototype pass
+- [ ] Exactly two `InlineChoicePills`; one is always Learn more about Genesis Gold® in this prototype pass
+- [ ] No second ask / invented Button after the trail (no scripted handoff overlap)
 - [ ] No duplicate “Save this to your profile?” account card in the same trail

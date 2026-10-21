@@ -1205,10 +1205,11 @@
         }
       ],
       "footer": "This is educational guidance from the Oracle — not a diagnosis or prescription. Please talk with your healthcare provider.",
-      "next": "m_after"
+      "uiNote": "F02g: AfterGuidanceTrail owns Gold + visit-notes pills; do not next into m_after."
     },
     "m_after": {
       "type": "question",
+      "uiNote": "Superseded by F02g AfterGuidanceTrail on the answer entry. Kept for reference only.",
       "bot": "Would you like to create notes for your provider, or learn about Genesis Gold®?",
       "widget": {
         "type": "quick_replies",

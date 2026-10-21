@@ -242,11 +242,12 @@
         }
       ],
       "footer": "This is educational guidance from the Oracle for a caregiver — not a diagnosis. In an emergency, call 911.",
-      "next": "p_whats_next",
+      "uiNote": "F02g: AfterGuidanceTrail owns Gold + visit-notes pills; do not next into p_whats_next.",
       "notesTitle": "Sudden confusion — possible UTI"
     },
     "p_whats_next": {
       "type": "question",
+      "uiNote": "Superseded by F02g AfterGuidanceTrail on the answer entry. Kept for reference only.",
       "bot": "Would you like to create notes for the care team, or learn about Genesis Gold®?",
       "widget": {
         "type": "quick_replies",
