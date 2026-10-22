@@ -203,7 +203,7 @@ export default function Conversation() {
 
   const name = profile?.name ?? '';
   // F06: family/advocate chat — third-person suggestions + advocate greeting.
-  const other = Boolean(profile) && (profile.id !== SELF_PROFILE_ID || profile.relationship !== 'self');
+  const other = !!profile && (profile.id !== SELF_PROFILE_ID || profile.relationship !== 'self');
   const minor = profile ? isMinor(profile) : false;
   const suggestions = !other
     ? isLogin
