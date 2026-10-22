@@ -1,0 +1,9 @@
+.root { gap: var(--space-3); }
+.head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.title { /* Serif card title, 19 px (design 2026-10-20). */ font: var(--weight-regular) calc(19px * var(--type-scale)) / calc(24px * var(--type-scale)) var(--font-display); letter-spacing: -0.01em; }
+.chevron { flex: none; color: var(--color-ink-secondary); }
+.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.complete { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+
+/* Tighter card (design 2026-10-20). */
+.root { --card-pad: var(--space-4); }

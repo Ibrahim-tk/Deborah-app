@@ -1,0 +1,26 @@
+/* PhoneField is ui/Input (label, field chrome, neutral focus, error and hint come from there). The country picker
+   sits on the left as its own segment, split from the number by a hairline (design direction 2026-10-20). */
+.phone { --picker-w: 104px; }
+/* Make room on the left for the picker; the right no longer holds a control. */
+.phone input[type='tel'] { padding-left: calc(var(--picker-w) + var(--space-3)); padding-right: var(--space-4); }
+
+/* The picker segment fills the field's left edge, full height. */
+.trailing { position: absolute; top: 0; bottom: 0; left: 0; display: flex; }
+.flagBtn {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  width: var(--picker-w); height: 100%; margin: 0; padding: 0 var(--space-2) 0 var(--space-4);
+  border: 0; border-right: 1px solid var(--surface-border); border-radius: var(--radius-full) 0 0 var(--radius-full);
+  background: transparent; color: var(--color-ink); cursor: pointer;
+  transition: background var(--dur-quick) var(--ease-out);
+}
+/* Open (or pressed): the segment takes the pressed surface, like the reference's grey block. */
+.flagBtn:active, .flagBtn[aria-expanded='true'], .flagBtn[data-popup-open] { background: var(--surface-1-pressed); }
+.flagBtn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+.flag { font-size: 20px; line-height: 1; }
+.dial { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); font-variant-numeric: tabular-nums; }
+.chevron { margin-left: auto; color: var(--color-ink-secondary); }
+
+/* Country rows inside ui/Combobox. */
+.rowFlag { flex: none; font-size: 22px; line-height: 1; }
+.rowLabel { flex: 1; min-width: 0; color: var(--color-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rowCode { flex: none; font-variant-numeric: tabular-nums; color: var(--color-ink-secondary); }

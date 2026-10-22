@@ -1,0 +1,97 @@
+
+/* Bottom sheet */
+.sheet { /* Content of the shared ui/BottomSheet (frame, surface, motion live there). */ display: grid; gap: var(--space-3); }
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; }
+.reasons { display: grid; gap: var(--space-1); padding-left: var(--space-5); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); list-style: disc; }
+/* What booking means, as light lilac info pills (design direction 2026-10-14; OPEN: DESIGN.md bans tags). */
+.details { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.detail { display: inline-flex; align-items: center; min-height: 28px; padding: 0 var(--space-3); border-radius: var(--radius-full); background: var(--color-accent-tint); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink); }
+.actions { display: grid; gap: var(--space-3); margin-top: var(--space-2); }
+.actions > * { white-space: nowrap; }
+.notNow { background: rgb(48 35 53 / 0.04); }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }
+
+/* Branded hero: white card, heading + CTA left, Deborah cut-out bottom-right
+   (Gaussian blur + opacity dissolve into white). */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 148px;
+  margin-top: var(--space-2);
+  border-radius: 32px;
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgb(48 35 53 / 0.08);
+}
+/* Stack: sharp cut-out on top, blurred clone underneath — masks reveal blur only at the bottom. */
+.portraitStack {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: auto;
+  max-width: 48%;
+  height: 140px;
+  pointer-events: none;
+}
+.portrait,
+.portraitBlur {
+  display: block;
+  width: auto;
+  height: 140px;
+  max-width: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+.portrait {
+  position: relative;
+  z-index: 1;
+  /* Face + most of torso stay sharp; only the foot of the cut-out hands off to blur. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 96%);
+}
+.portraitBlur {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  /* Light Gaussian soften — enough to dissolve, not a muddy smear. */
+  filter: blur(4px);
+  /* Cap pink bleed so the blur never reads as a purplish smudge on white. */
+  opacity: 0.7;
+  /* Narrow band at the bottom only; fade out hard into the card. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 70%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 70%, #000 88%, transparent 100%);
+}
+.heroCopy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+  align-content: center;
+  width: 55%;
+  min-height: 148px;
+  padding: var(--space-4) var(--space-5);
+}
+.heroTitle {
+  margin: 0;
+  font: var(--weight-regular) calc(22px * var(--type-scale, 1)) / calc(26px * var(--type-scale, 1)) var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+.cta {
+  position: relative;
+  z-index: 3;
+  justify-self: start;
+}
+
+/* Request-sent confirmation (2026-10-21). */
+.sheet { justify-items: center; text-align: center; }
+.check { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-full); background: var(--color-accent-tint); color: var(--color-accent); }
+.sent { margin: 0; max-width: 32ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
+.actions { width: 100%; }

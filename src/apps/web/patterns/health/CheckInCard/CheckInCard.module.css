@@ -1,0 +1,24 @@
+.root { grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: var(--space-3); }
+.icon { display: grid; place-items: center; width: var(--icon-well-size); height: var(--icon-well-size); border-radius: var(--radius-full); background: var(--icon-well-bg); color: var(--icon-well-fg); }
+.text { display: grid; gap: 2px; }
+.due { color: var(--color-accent); font-weight: var(--weight-medium); }
+.eyebrow, .meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.title { /* Serif card title, 19 px (design 2026-10-20). */ font: var(--weight-regular) calc(19px * var(--type-scale)) / calc(24px * var(--type-scale)) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.chevron { color: var(--color-ink-secondary); }
+.action, .upcoming { grid-column: 1 / -1; }
+.action { margin-top: var(--space-4); }
+.upcoming {
+  padding-top: var(--space-3);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
+
+/* Tighter card (design 2026-10-20). */
+.root { --card-pad: var(--space-4); }
+
+/* Home card language (designer, 2026-10-21): white 32px card, sans title, 16/20 padding, ringed icon. */
+.root { --card-pad: var(--space-4); padding: var(--space-4) var(--space-5); border-radius: 32px; background: var(--white); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 6%, transparent); }
+.title { font: var(--weight-regular) var(--fs-headline) / var(--lh-headline) var(--font-body); letter-spacing: -0.01em; }
+.icon { width: 44px; height: 44px; background: none; color: var(--color-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 14%, transparent); }
+.meta, .eyebrow { color: #5a4f55; }

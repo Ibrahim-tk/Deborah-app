@@ -1,0 +1,13 @@
+.hello {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+  width: min(100%, 480px);
+  margin-inline: auto;
+  padding: var(--space-2) 0;
+  text-align: center;
+}
+.copy { display: grid; gap: var(--space-3); justify-items: center; }
+.text { margin: 0; max-width: 100%; font: var(--weight-regular) calc(34px * var(--type-scale)) / calc(38px * var(--type-scale)) var(--font-artistic, var(--font-display)); /* Deborah's own words stay serif */ color: var(--color-ink); text-wrap: pretty; /* natural lines, only avoids a lone last word */ }
+
+.body { margin: 0; max-width: 34ch; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); text-wrap: pretty; }

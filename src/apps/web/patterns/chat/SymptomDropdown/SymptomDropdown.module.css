@@ -1,0 +1,33 @@
+/* Floating menu above the composer (same surface as ui/Menu): glass card, soft float shadow (floating = allowed). */
+.root {
+  position: absolute; left: 0; right: 0; bottom: calc(100% + var(--space-2)); z-index: 5;
+  display: grid; grid-template-rows: auto 1fr; max-height: min(360px, 52vh); overflow: hidden;
+  border-radius: var(--radius-xl); background: rgb(255 255 255 / 0.86);
+  -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7), 0 12px 32px rgb(61 16 86 / 0.14), 0 2px 6px rgb(61 16 86 / 0.06);
+  transform-origin: 20% 100%; animation: drop-in 200ms var(--ease-out) both;
+}
+@keyframes drop-in { from { opacity: 0; transform: translateY(6px) scale(0.98); } }
+
+.search { display: flex; align-items: center; gap: var(--space-2); margin: var(--space-2); padding: 0 var(--space-3); min-height: 40px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-ink) 5%, transparent); color: var(--color-ink-secondary); }
+.input { flex: 1; min-width: 0; border: 0; background: none; outline: none; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.input::placeholder { color: var(--color-ink-placeholder); }
+
+.list { overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--space-2) var(--space-2); }
+.group + .group { margin-top: var(--space-1); padding-top: var(--space-1); border-top: 1px solid var(--color-border-hairline); }
+.groupTitle { margin: 0; padding: var(--space-2) var(--space-3) var(--space-1); font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body); color: var(--color-ink-secondary); }
+
+.row { display: flex; align-items: center; gap: var(--space-2); width: 100%; min-height: 40px; padding: 0 var(--space-3); border: 0; border-radius: var(--radius-md); background: none; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); text-align: left; cursor: pointer; }
+.row:hover, .row:focus-visible { background: color-mix(in srgb, var(--color-accent) 6%, transparent); outline: none; }
+.row[data-on] { color: var(--color-accent); }
+.label { flex: 1; min-width: 0; }
+.tick { flex: none; display: grid; place-items: center; width: 18px; height: 18px; border-radius: var(--radius-full); box-shadow: inset 0 0 0 1.5px var(--color-border-control); color: var(--color-ink-on-accent); transition: background-color var(--dur-quick) var(--ease-out); }
+.row[data-on] .tick { background: var(--color-accent); box-shadow: none; }
+.add { display: grid; place-items: center; width: 18px; height: 18px; color: var(--color-accent); }
+.empty { padding: var(--space-3); color: var(--color-ink-secondary); }
+@media (prefers-reduced-motion: reduce) { .root { animation: none; } }
+
+/* In a BottomSheet: same search + rows, laid flat on the sheet (the sheet scrolls). */
+.sheet { display: grid; gap: var(--space-1); }
+.sheet .search { margin: 0 0 var(--space-2); }
+.sheet .list { overflow: visible; padding: 0; }

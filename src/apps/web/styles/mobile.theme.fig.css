@@ -1,0 +1,145 @@
+/* apps/mobile/styles/mobile.theme.fig.css — TEMPORARY EXPERIMENT (2026-10-20): "Fig" colour theme.
+ * Deep fig · muted plum · dusty mauve · fig coral · champagne gold · vanilla cream · ivory.
+ * Recolour only: no layout, spacing, type or component changes. Active only when
+ * <html data-color-theme="fig"> (internal State menu › Device › Color theme). Original tokens are untouched.
+ * To remove the experiment: delete this file and its imports in MobileApp / DesignSystemApp / WidgetLabApp.
+ * Contrast: reading text ≥7:1 on cream (DESIGN.md); the supplied #756B70 (4.5:1) is used for placeholders,
+ * and a darker #554A50 (7.5:1) for secondary text. Coral and gold are fills/accents, never body text. */
+:root[data-color-theme='fig'] .phone-root {
+  /* Primitives re-pointed so every component that reads a ramp follows. */
+  /* Fig ramp (replaces purple): 300 Dusty Mauve · 400 Muted Plum · 500 Deep Fig · 900 Dark Aubergine. */
+  --purple-50: #f4ecef;
+  --purple-100: #e7d8df;
+  --purple-200: #cdb4c2;
+  --purple-300: #a47c93;
+  --purple-400: #79506a;
+  --purple-500: #432439;
+  --purple-600: #381e30;
+  --purple-700: #2f1928;
+  --purple-800: #2a1623;
+  --purple-900: #251923;
+  /* Champagne gold ramp (500 = #BE9862). */
+  --gold-50: #fbf6ee;
+  --gold-100: #f3e8d6;
+  --gold-200: #e8d6b8;
+  --gold-300: #d9be93;
+  --gold-400: #cbaa79;
+  --gold-500: #be9862;
+  --gold-600: #a8834f;
+  --gold-700: #8a6b40;
+  --gold-800: #6b5232;
+  --gold-900: #5c4528;
+  /* Fig coral ramp (replaces pink; 500 = #C96560). */
+  --pink-50: #fbedeb;
+  --pink-100: #f3d2cf;
+  --pink-200: #e8b0ab;
+  --pink-300: #db8c86;
+  --pink-400: #d17770;
+  --pink-500: #c96560;
+  --pink-600: #b0534e;
+  --pink-700: #8e423e;
+  --pink-800: #6e3330;
+  --pink-900: #522624;
+  /* Deep fig darks (replaces midnight). */
+  --midnight-50: #efe8ec;
+  --midnight-100: #cdbdc6;
+  --midnight-200: #a98f9e;
+  --midnight-300: #7d5e70;
+  --midnight-400: #5a3b4f;
+  --midnight-500: #432439;
+  --midnight-600: #3a1f32;
+  --midnight-700: #2f1828;
+  --midnight-800: #25131f;
+  --midnight-900: #1c0e18;
+
+  /* Backgrounds (≈70%): vanilla cream canvas, ivory surfaces; warm, barely-there mesh. */
+  --color-canvas: #f6f0e8;
+  --bg-mesh:
+    radial-gradient(60% 45% at 0% 0%, rgb(201 101 96 / 0.07), transparent 70%),
+    radial-gradient(55% 45% at 100% 100%, rgb(190 152 98 / 0.08), transparent 70%),
+    radial-gradient(ellipse at 87% -10%, rgb(121 80 106 / 0.12), transparent 45%);
+  --color-surface: #fffcf8;
+  --color-surface-tonal: #f1e8dc;
+  --color-surface-lilac: #efe3e8;             /* user bubble: fig mist */
+  --color-surface-signature: #432439;
+  --color-scrim: rgb(37 25 35 / 0.38);
+  --glass-warm-fill: linear-gradient(120deg, rgb(255 252 248 / 0.93), rgb(250 244 238 / 0.9));
+  --glass-warm-rim: #fffcf8;
+  --surface-1: rgb(255 252 248 / 0.74);
+  --surface-1-pressed: #f1e6ea;
+  --surface-border: rgb(67 36 57 / 0.10);
+  --shadow-soft: 0 8px 32px rgb(37 25 35 / 0.07);
+  --surface-field-lift: #fffaf4;
+  --surface-field-press: #f3e9ed;
+
+  /* Text */
+  --color-ink: #251923;                       /* 14.9:1 */
+  --color-ink-body: #3a2c36;                  /* 11.6:1 */
+  --color-ink-secondary: #554a50;             /* 7.5:1 */
+  --color-ink-tertiary: #554a50;
+  --color-ink-placeholder: #756b70;           /* supplied Muted Brown, 4.5:1 */
+  --color-ink-on-accent: #fffcf8;
+  --color-ink-on-signature: #f6efe4;
+
+  /* Action (≈20%): deep fig primary, muted plum states. */
+  --color-accent: #432439;
+  --color-accent-pressed: #2f1928;
+  --color-accent-tint: #f1e6ea;
+  --color-accent-tint-pressed: #e5d3db;
+  --color-focus: #79506a;
+  --selected-tint: rgb(121 80 106 / 0.12);
+
+  /* Accents (≈10%): champagne gold + fig coral. */
+  --color-gold: #be9862;
+  --color-gold-ink: #5c4528;                  /* gold as text: 7.9:1 */
+  --color-deborah-rose: #8e423e;              /* coral as text: 6.2:1 (sign-off, large) */
+
+  /* Borders */
+  --color-border-hairline: #e9dfe0;
+  --color-border-control: #e2d4d9;
+  --color-border-selected: #79506a;
+
+  /* Fields */
+  --field-fill: rgb(255 252 248 / 0.82);
+  --field-border: rgb(67 36 57 / 0.14);
+  --field-focus-ring: 0 0 0 4px rgb(121 80 106 / 0.16);
+
+  /* Buttons: fig gradient from muted plum to deep fig. */
+  --button-primary-fill: linear-gradient(180deg, #5a3550, #432439);
+  --button-primary-shadow: 0 6px 20px rgb(67 36 57 / 0.24);
+
+  /* Cards: warm, low-chroma tones. */
+  --card-tone-lilac: #f2e9ec;
+  --card-tone-linen: #f5ece0;
+  --card-tone-rose: #f8e8e4;
+  --card-tone-paper: rgb(255 252 248 / 0.75);
+  --card-action-bg: rgb(255 252 248 / 0.7);
+  --card-action-ink: #432439;
+  --icon-well-bg: rgb(255 252 248 / 0.9);
+
+  /* Home tones (blue / mint / lilac reworked into the warm family; mint stays green as "success"). */
+  --home-tone-sky: #efe6e1;
+  --home-tone-sky-icon: #a47c93;
+  --home-tone-rose: #f8e6e2;
+  --home-tone-rose-icon: #c96560;
+  --home-tone-lilac: #eadde3;
+  --home-tone-linen: #f5ecdf;
+  --home-tone-gold: #f3e6cf;
+  --home-tone-hero: linear-gradient(165deg, #f1e6ea 0%, #e6d4dc 38%, #d9c1cc 68%, #cbaebe 100%);
+  --home-artifact-ink: rgb(37 25 35 / 0.26);
+  --home-artifact-ink-on-hero: rgb(251 246 238 / 0.35);
+
+  /* GradientShift (top-of-screen glow): plum → fig, lilac → muted plum, rose → mauve/coral blush. */
+  --theme-gs-violet: #79506a;
+  --theme-gs-lilac: #a47c93;
+  --theme-gs-cream: #ece2d6;
+  --theme-gs-rose: #dcb8b4;
+  --theme-gs-plum: #432439;
+  --theme-gs-parchment: #f6f0e8;
+
+  /* Floating elevation */
+  --shadow-float-sm: 0 3px 12px rgb(37 25 35 / 0.06);
+  --shadow-float-md: 0 9px 35px rgb(67 36 57 / 0.09);
+  --shadow-float-lg: 0 35px 100px rgb(37 25 35 / 0.22);
+}
+:root[data-color-theme='fig'] .phone-root ::selection { background: #e7d8df; color: #251923; }

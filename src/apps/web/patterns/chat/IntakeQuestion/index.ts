@@ -1,0 +1,1 @@
+export { IntakeQuestion } from './IntakeQuestion';

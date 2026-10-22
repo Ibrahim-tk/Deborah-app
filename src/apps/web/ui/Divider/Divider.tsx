@@ -1,7 +1,6 @@
-/** @ui Divider — 1 px hairline; optional 16 px inset (list separators). @xref mobile: apps/mobile/ui/Divider */
-import { cx } from '@shared/utils';
+/** @ui Divider — 1 px hairline; inset ~20 pt on both ends by default (list separators). */
 import styles from './Divider.module.css';
 
-export function Divider({ inset = false, className }: { inset?: boolean; className?: string }) {
-  return <hr className={cx(styles.root, inset && styles.inset, className)} />;
+export function Divider({ inset = true }: { inset?: boolean }) {
+  return <hr className={styles.root} data-inset={inset} />;
 }

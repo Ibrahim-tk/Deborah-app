@@ -1,0 +1,21 @@
+/* M-9.8 Log your visit — same field and row styling as M-9.4 Note editor and M-2.13 Review. */
+.body { display: grid; gap: var(--space-6); padding-bottom: var(--space-2); }
+.intro { margin: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.section { display: grid; gap: var(--space-3); }
+.meta, .check { margin: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+
+.area { display: grid; gap: var(--space-2); }
+.fieldLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
+.area > textarea { padding: var(--space-3) var(--space-4); border: 1px solid var(--color-border-control); border-radius: var(--radius-md); background: var(--color-surface); }
+.area:focus-within > textarea { padding: calc(var(--space-3) - 1px) calc(var(--space-4) - 1px); border: 1px solid var(--field-border-focus); }
+
+.row { display: flex; align-items: flex-start; gap: var(--space-2); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-border-control); }
+.rowFields { flex: 1; min-width: 0; display: grid; gap: var(--space-3); }
+.row > button { margin-top: var(--space-6); }
+
+.line { margin: 0; display: grid; gap: var(--space-1); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.lineLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.notes { margin: 0; white-space: pre-wrap; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+
+.footer { display: grid; gap: var(--space-2); justify-items: center; padding-bottom: calc(var(--safe-bottom) + var(--space-2)); }
+.footer > :not(:last-child) { width: 100%; }

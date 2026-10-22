@@ -1,0 +1,98 @@
+/* My Health · Family — centered art, title/meta bottom-left, circular action bottom-right. */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.tile {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 168px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 28px;
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  isolation: isolate;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+
+.tile[data-tone='mint'] { background: var(--home-tone-mint); }
+.tile[data-tone='sky'] { background: var(--home-tone-sky); }
+.tile[data-tone='rose'] { background: var(--home-tone-rose); }
+.tile[data-tone='lilac'] { background: var(--home-tone-lilac); }
+.tile[data-tone='linen'] { background: var(--home-tone-linen); }
+.tile[data-tone='gold'] { background: var(--home-tone-gold); }
+.tile[data-tone='hero'] { background: var(--home-tone-lilac); }
+
+.tile:active { transform: scale(0.98); }
+.tile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.art {
+  position: relative;
+  z-index: 0;
+  justify-self: center;
+  align-self: center;
+  width: 78%;
+  max-width: 140px;
+  height: auto;
+  margin-top: var(--space-3);
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink);
+}
+
+.meta {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.action {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--home-chevron-bg);
+  color: var(--purple-700);
+  -webkit-backdrop-filter: var(--home-chevron-blur);
+  backdrop-filter: var(--home-chevron-blur);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--white) 55%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile:active { transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .action {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--white) 88%, transparent);
+  }
+}

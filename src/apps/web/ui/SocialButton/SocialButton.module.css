@@ -1,0 +1,26 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-2) 28px;
+  border-radius: var(--radius-full);
+  font: var(--weight-medium) var(--fs-button) / var(--lh-button) var(--font-body);
+  letter-spacing: -0.015em;
+  transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.root:active { transform: scale(0.98); }
+.mark { width: 20px; height: 20px; flex: none; }
+
+/* Apple HIG: black button, white mark and label. */
+.apple { background: #000; color: #fff; }
+.apple:active { background: #1f1f1f; }
+.apple .mark { margin-top: -3px; }
+
+/* Google identity: white button, #747775 hairline, #1f1f1f label. */
+.google { background: #fff; color: #1f1f1f; border: 1px solid #747775; }
+.google:active { background: #f2f2f2; }

@@ -1,0 +1,43 @@
+.root {
+  display: grid;
+  gap: var(--space-4);
+  padding: 20px;
+  border-radius: var(--radius-xl);
+  color: var(--color-ink);
+}
+
+.lilac { background: var(--surface-field-lilac); }
+.linen { background: var(--surface-field-linen); }
+.lift { background: var(--surface-field-lift); }
+
+.head { display: flex; align-items: center; gap: var(--space-3); }
+.text { flex: 1; min-width: 0; display: grid; gap: 6px; }
+
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--weight-medium) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-accent);
+}
+
+.title {
+  font: var(--weight-medium) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+
+.body {
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  color: var(--color-ink-secondary);
+}
+
+.pending {
+  padding: 12px var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface-field-paper);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}

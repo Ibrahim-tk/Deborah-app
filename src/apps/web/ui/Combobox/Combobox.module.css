@@ -1,0 +1,62 @@
+/* Floating element: soft shadow allowed (DESIGN.md). */
+.positioner { z-index: 50; outline: none; }
+.popup {
+  width: min(320px, calc(var(--available-width) - 16px));
+  max-height: min(360px, var(--available-height));
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: 0 8px 24px rgb(97 57 119 / 0.14), 0 1px 3px rgb(97 57 119 / 0.08);
+  overflow: hidden;
+  transform-origin: var(--transform-origin);
+  transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+  outline: none;
+}
+.popup[data-starting-style], .popup[data-ending-style] { opacity: 0; transform: scale(0.96); }
+@media (prefers-reduced-motion: reduce) { .popup[data-starting-style], .popup[data-ending-style] { transform: none; } }
+
+.search {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-2);
+  padding: 0 var(--space-3);
+  min-height: 44px;
+  border-radius: var(--radius-full); /* search pill, same as ui/Input variant="search" */
+  background: var(--field-fill);
+  box-shadow: inset 0 0 0 1px var(--field-border);
+  color: var(--color-ink-secondary);
+}
+.search:focus-within { box-shadow: inset 0 0 0 1px var(--field-border-focus); } /* neutral, like ui/Input */
+.input:focus, .input:focus-visible { outline: none; }
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+}
+.input::placeholder { color: var(--color-ink-placeholder); }
+
+.list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--space-1) var(--space-1); outline: none; }
+.list:empty { display: none; }
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+.item[data-highlighted] { background: var(--color-accent-tint); }
+.check { margin-left: auto; color: var(--color-accent); display: grid; place-items: center; }
+.empty:not(:empty) { padding: var(--space-4); text-align: center; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

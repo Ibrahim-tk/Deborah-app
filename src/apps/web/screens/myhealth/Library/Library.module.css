@@ -1,0 +1,18 @@
+.root { display: flex; flex-direction: column; height: 100%; }
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.body {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 960px);
+  margin-inline: auto;
+  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+}
+.filters { display: grid; gap: var(--space-4); }
+.list { display: grid; gap: var(--space-3); }
+@media (min-width: 900px) {
+  .list { grid-template-columns: 1fr 1fr; }
+}
+
+.group { overflow: hidden; border-radius: var(--radius-lg); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
+.group > * + * { border-top: 1px solid var(--color-border-hairline); }
+.external { flex: none; color: var(--color-ink-secondary); }

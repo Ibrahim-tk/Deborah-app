@@ -1,0 +1,21 @@
+.row { display: flex; justify-content: flex-end; }
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 300px;
+  padding: var(--space-3);
+  border: 0;
+  border-radius: var(--radius-xl) var(--radius-xl) var(--radius-sm) var(--radius-xl);
+  background: var(--surface-field-lilac);
+  color: var(--color-ink);
+  text-align: left;
+  transition: transform var(--dur-quick) var(--ease-out), background-color var(--dur-quick) var(--ease-out);
+}
+button.card:active { transform: scale(0.98); background: var(--surface-field-press); }
+.card:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.card[data-removed] { color: var(--color-ink-secondary); }
+.icon { flex: none; display: grid; place-items: center; width: var(--icon-well-size); height: var(--icon-well-size); border-radius: var(--radius-full); background: var(--icon-well-bg); color: var(--icon-well-fg); }
+.text { display: grid; min-width: 0; }
+.title { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); overflow-wrap: anywhere; }
+.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

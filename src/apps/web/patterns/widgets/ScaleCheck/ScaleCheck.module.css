@@ -1,0 +1,56 @@
+/* Bare slider: thick track, big thumb, end labels. No card, number or button (design direction 2026-10-20). */
+.root { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
+
+/* Track = filled part (accent) + rest (surface). The thumb rides on --pos (0–1). */
+.track {
+  --thumb: 32px;
+  position: relative;
+  height: var(--thumb);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  outline: 1px solid var(--color-border-hairline);
+  outline-offset: -1px;
+}
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--thumb) + (100% - var(--thumb)) * var(--pos));
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+}
+.thumb {
+  position: absolute;
+  top: 0;
+  left: calc((100% - var(--thumb)) * var(--pos));
+  width: var(--thumb);
+  height: var(--thumb);
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 2px var(--color-accent), 0 2px 6px rgb(58 3 83 / 0.18);
+}
+/* Magnetic stops: free while dragging, a quick ease into the nearest stop on release. */
+.track:not([data-dragging]) .fill { transition: width 180ms ease-out; }
+.track:not([data-dragging]) .thumb { transition: left 180ms ease-out; }
+
+/* Five quiet stop marks along the track's centre line. */
+.tick {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--thumb) / 2 + (100% - var(--thumb)) * var(--at));
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--color-ink-secondary);
+  opacity: 0.35;
+}
+
+/* The native input sits on top, invisible, for pointer, touch and keyboard. */
+.range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: grab; touch-action: none; }
+.range:active { cursor: grabbing; }
+.track:has(.range:focus-visible) { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+.ends { display: flex; justify-content: space-between; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body); color: var(--color-ink-secondary); }
+
+/* Answered: stays where she left it, read-only. */
+.root[data-done] .range { cursor: default; }

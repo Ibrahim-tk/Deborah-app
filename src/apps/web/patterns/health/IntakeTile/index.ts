@@ -1,0 +1,1 @@
+export { IntakeTile } from './IntakeTile';

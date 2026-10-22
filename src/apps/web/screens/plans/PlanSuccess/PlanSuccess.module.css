@@ -1,0 +1,49 @@
+.root {
+  width: min(100%, 560px);
+  margin-inline: auto;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: calc(var(--safe-top) + var(--space-8)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+.content {
+  flex: 1;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  animation: stage-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Same green check as M-1.4 OTP success: disc scales in, then the tick draws. */
+.check {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, #1f8a4c 12%, transparent);
+  color: #146c3a;
+  animation: check-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.tick {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tick-draw 0.4s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+.title {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display);
+  letter-spacing: -0.01em;
+}
+.actions { display: grid; gap: var(--space-3); }
+
+@keyframes stage-in { from { opacity: 0; transform: translateY(8px); } }
+@keyframes check-in { from { opacity: 0; transform: scale(0.6); } }
+@keyframes tick-draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .content, .check, .tick { animation: none; stroke-dashoffset: 0; }
+}

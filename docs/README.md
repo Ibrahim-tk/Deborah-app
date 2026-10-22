@@ -45,7 +45,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | [ux/F09c-log-visit.md](ux/F09c-log-visit.md) | Miro Step 6: Log your visit / After my visit (debrief, review, profile update) |
 | [ux/F10-account-privacy.md](ux/F10-account-privacy.md) | Account, settings, privacy & data |
 | [ux/F11-documents.md](ux/F11-documents.md) | Documents and reports: uploads library, saved reports, upload, delete, Deborah handoff |
-| [web/README.md](web/README.md) | Web app — reserved, not specified yet |
+| [web/README.md](web/README.md) | Web twin — layouts + [ux/acceptance.md](web/ux/acceptance.md) |
 
 ## External references
 

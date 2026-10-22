@@ -1,0 +1,37 @@
+.root { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+
+/* Row 1 — icon-only tools, quiet, left-aligned under the answer (like a message toolbar). */
+.tools { display: flex; align-items: center; gap: 2px; margin-left: calc(var(--space-2) * -1); }
+.tool {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--color-ink-secondary);
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+.tool::after { content: ''; position: absolute; inset: -6px -2px; }
+.tool:hover { background: rgb(239 235 241 / 0.6); }
+.tool:active { background: var(--color-accent-tint); }
+.tool:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
+
+/* Row 2 — labelled "take it with you" actions: compact tinted buttons in one row. */
+.actions { display: flex; gap: var(--space-1); }
+.action {
+  position: relative;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-tint);
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+.action::after { content: ''; position: absolute; inset: -8px 0; }
+.action:active { background: var(--color-accent-tint-pressed); }
+.action:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }

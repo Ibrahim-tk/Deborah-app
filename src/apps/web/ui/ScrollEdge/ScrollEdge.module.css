@@ -1,0 +1,67 @@
+/* Covers the status bar + nav bar + a longer feather so purple melts into content. */
+.root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 4;
+  height: calc(var(--safe-top) + var(--header-h) + 72px);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transition: opacity 320ms var(--ease-out);
+}
+/* Whisper at rest — nav never sits on a hard seam against the sky. */
+.root[data-soft] { opacity: 0.55; }
+.root[data-active] { opacity: 1; }
+.root > span { position: absolute; inset: 0; }
+
+/* Progressive blur — soft masks, no hard seam through glass controls. */
+.blurStrong {
+  -webkit-backdrop-filter: var(--blur-edge-strong);
+  backdrop-filter: var(--blur-edge-strong);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 18%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 18%, transparent 92%);
+}
+.blurSoft {
+  -webkit-backdrop-filter: var(--blur-edge-soft);
+  backdrop-filter: var(--blur-edge-soft);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+/*
+ * Same sky paint as Aura (top + lift), feathered longer so the edge never fights content.
+ */
+.fade {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 12%,
+    rgb(0 0 0 / 0.7) 35%,
+    rgb(0 0 0 / 0.35) 60%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 12%,
+    rgb(0 0 0 / 0.7) 35%,
+    rgb(0 0 0 / 0.35) 60%,
+    transparent 100%
+  );
+}
+.fade::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -100%;
+  background: var(--backdrop-image) top center / 100% auto no-repeat;
+  transform: translate3d(0, calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)), 0);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .blurStrong, .blurSoft { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .fade::before { content: none; }
+  .fade { background: linear-gradient(to bottom, var(--color-canvas) 35%, transparent); }
+}

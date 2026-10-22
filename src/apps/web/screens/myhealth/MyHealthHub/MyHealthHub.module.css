@@ -1,0 +1,26 @@
+.root { display: flex; flex-direction: column; height: 100%; }
+.profile { display: inline-flex; align-items: center; gap: 2px; min-height: var(--tap-min); padding: 0 var(--space-2); border-radius: var(--radius-full); color: var(--color-ink-secondary); }
+.profile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+/* L-hub: centered stage; two-column card grid on wide desktops. */
+.column {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+}
+@media (min-width: 960px) {
+  .column {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+  .column > :first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Pull-to-refresh: visual only. Height follows the drag; settles while "refreshing". */
+.refresh { display: grid; place-items: center; height: var(--pull, 0); overflow: hidden; color: var(--color-accent); transition: height var(--dur-base) var(--ease-out); }
+.refresh[data-active] { transition: none; }

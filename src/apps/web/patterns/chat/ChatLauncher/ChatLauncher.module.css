@@ -1,0 +1,13 @@
+/* The real Composer, visually; one transparent button on top opens chat. */
+.wrap { position: relative; width: 100%; }
+.composer { pointer-events: none; }
+.hit {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: transparent;
+  cursor: text;
+  -webkit-tap-highlight-color: transparent;
+}
+.hit:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }

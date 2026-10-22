@@ -1,0 +1,335 @@
+/*
+ * Healing plan — consulting-room reading surface.
+ * Flat tonal fields, Cormorant hierarchy, gold only for Deborah moments.
+ * No eyebrows, no rainbow side stripes, no nested bordered cards.
+ */
+
+.doc {
+  display: grid;
+  gap: var(--space-8);
+  padding-bottom: var(--space-2);
+}
+
+/* —— Hero —— */
+.hero {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-2) var(--space-5);
+  text-align: center;
+  border-bottom: 2px solid var(--color-gold);
+}
+
+.heroCopy {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.title {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.forWhom {
+  font: italic var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  color: var(--color-gold-ink);
+}
+
+.advocate,
+.reference {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.meta {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+/* —— Shared headings (no kickers) —— */
+.h2 {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
+}
+
+.h2Wide {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+/* —— Clinical summary —— */
+.clinical {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-linen, var(--color-surface-tonal));
+}
+
+.clinicalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4) var(--space-5);
+  margin: 0;
+}
+
+.clinicalItem {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.clinicalLabel {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.clinicalValue {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+}
+
+.calloutTitle {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  color: var(--color-ink);
+}
+
+.calloutBody {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-body, var(--color-ink-secondary));
+}
+
+/* —— Conditions —— */
+.conditions {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.condition {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.conditionHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.conditionIcon {
+  flex: none;
+  color: var(--color-accent);
+}
+
+.recList {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recItem {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.recMark {
+  width: 5px;
+  height: 5px;
+  margin-top: 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-ink-tertiary);
+  flex: none;
+}
+
+.recText {
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+}
+
+.recNote {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-lilac);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+/* —— Pillars —— */
+.pillarsBlock {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.pillarsLede {
+  margin: 0 0 var(--space-2);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.pillars {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.pillar {
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift, var(--color-surface));
+  overflow: hidden;
+}
+
+.pillarHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--row-min);
+  padding: var(--space-4);
+  text-align: left;
+  transition: background-color var(--dur-quick) var(--ease-out);
+}
+
+.pillarHead:hover {
+  background: var(--color-accent-tint);
+}
+
+.pillarHead:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: -3px;
+}
+
+.pillarRoman {
+  min-width: 1.75rem;
+  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display);
+  color: var(--color-gold-ink);
+}
+
+.pillarText {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pillarName {
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  color: var(--color-ink);
+}
+
+.pillarTag {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.pillarChevron {
+  color: var(--color-ink-tertiary);
+  transition: transform var(--dur-quick) var(--ease-out);
+  flex: none;
+}
+
+.pillar[data-open] .pillarChevron {
+  transform: rotate(180deg);
+}
+
+.pillar[data-open] .pillarHead {
+  background: var(--color-accent-tint);
+}
+
+.pillarBody {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.pillarIntro {
+  margin: 0;
+  font: italic var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.productRow {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.productImg {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+}
+
+.productMark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+}
+
+/* —— Resources —— */
+.resources {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.resourceList {
+  display: grid;
+  border-radius: var(--radius-xl);
+  background: var(--surface-field-lift, var(--color-surface));
+  overflow: hidden;
+}
+
+/* —— Signature —— */
+.signature {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-6) var(--space-2) var(--space-2);
+  text-align: center;
+}
+
+.signatureMark {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  color: var(--color-deborah-rose);
+}
+
+.signatureName {
+  margin: 0;
+  font: italic var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  color: var(--color-deborah-rose);
+}
+
+.signatureTitle {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-tertiary);
+}
+
+@media (max-width: 360px) {
+  .clinicalGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Pillar numbers as 1 2 3 in the sans face (2026-10-21). */
+.pillarRoman { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); font-variant-numeric: lining-nums tabular-nums; }

@@ -1,0 +1,49 @@
+/* One muted line in the labsNote slot; opens to a hairline-indented list. No tag, no shadow. */
+.root { margin-bottom: var(--space-2); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.row:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+.chevron { display: grid; place-items: center; color: var(--color-ink-tertiary); transition: transform var(--dur-base) var(--ease-out); }
+.root[data-open] .chevron { transform: rotate(90deg); }
+.kind { display: grid; place-items: center; color: var(--color-accent); }
+.title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.date { color: var(--color-ink-tertiary); }
+
+/* Green tick draws in once when the line appears (same treatment as "Account created"). */
+.tick { flex: none; margin-left: auto; color: #146c3a; }
+.tick path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: tick-draw 0.4s 0.15s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+@keyframes tick-draw { to { stroke-dashoffset: 0; } }
+
+/* Height reveal via grid rows; `hidden` is lifted so the transition can run. */
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur-base) var(--ease-out); }
+.panel[hidden] { display: grid; visibility: hidden; }
+.root[data-open] .panel { grid-template-rows: 1fr; }
+.inner { min-height: 0; overflow: hidden; }
+
+.items { display: grid; gap: var(--space-1); margin: var(--space-1) 0 0 7px; padding: var(--space-1) 0 var(--space-1) var(--space-4); border-left: 1px solid var(--color-border-hairline); list-style: none; }
+.item { display: flex; justify-content: space-between; gap: var(--space-3); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.value { color: var(--color-ink); font-variant-numeric: tabular-nums; }
+
+.open { margin: var(--space-2) 0 0 calc(7px + var(--space-4) + 1px); min-height: 32px; padding: 0; border: 0; background: none; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-accent); cursor: pointer; }
+.open:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron, .panel { transition: none; }
+  .tick path { animation: none; stroke-dashoffset: 0; }
+}

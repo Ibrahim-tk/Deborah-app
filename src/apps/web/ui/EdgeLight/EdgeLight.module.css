@@ -1,0 +1,12 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+/* Behind the card's fill — only outward light shows; host may clip the top. */
+.bloom { z-index: 0; }
+
+/* Motion runs through the Web Animations API (see EdgeLight.tsx): uneven pace + breathing length. */

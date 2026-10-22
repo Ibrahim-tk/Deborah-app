@@ -1,0 +1,26 @@
+.quiet {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--glass-warm-fill);
+  border: 1px solid var(--glass-warm-rim);
+  -webkit-backdrop-filter: var(--glass-warm-blur);
+  backdrop-filter: var(--glass-warm-blur);
+  color: var(--color-accent);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+}
+.quiet:active { transform: scale(0.99); background: var(--color-surface-lilac); }
+.quiet:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.quiet:disabled { color: var(--color-ink-tertiary); cursor: default; }
+
+.label { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body); letter-spacing: -0.015em; }
+
+/* Small lilac disc carries the arrow, echoing the card action style. */
+.arrow { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--color-surface-lilac); }

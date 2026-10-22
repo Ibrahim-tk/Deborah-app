@@ -1,0 +1,21 @@
+/* Content of the shared ui/BottomSheet (frame, scrim, motion and title live there). */
+.content { display: grid; align-content: start; gap: var(--space-3); padding-bottom: var(--space-3); }
+
+.body {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-body);
+  text-wrap: pretty;
+}
+
+/* Medium weight only — DESIGN.md ceiling is 500 (override <strong> UA bold). */
+.name {
+  font-weight: var(--weight-medium);
+}
+
+.checks {
+  display: grid;
+  gap: var(--space-2);
+}
+

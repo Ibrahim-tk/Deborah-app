@@ -1,4 +1,4 @@
-/** @ui Panel — quiet tonal panel; no border, no side stripe. Semantic tones always carry an icon + words. @xref mobile: apps/mobile/ui/Panel */
+/** @ui Panel — quiet tonal panel; no border, no side stripe. Every semantic tone carries an icon + words. */
 import type { ReactNode } from 'react';
 import { cx } from '@shared/utils';
 import { Icon, type IconName } from '../Icon';
@@ -10,14 +10,12 @@ export interface PanelProps {
   icon?: IconName;
   /** 2 px Signature Gold rule on top (A Word from Deborah). */
   goldRule?: boolean;
-  /** ARIA role, e.g. "status" or "alert" for messages that appear dynamically. */
-  role?: string;
   className?: string;
 }
 
-export function Panel({ children, tone = 'linen', icon, goldRule, role, className }: PanelProps) {
+export function Panel({ children, tone = 'linen', icon, goldRule, className }: PanelProps) {
   return (
-    <div role={role} className={cx(styles.root, styles[tone], goldRule && styles.goldRule, className)}>
+    <div className={cx(styles.root, styles[tone], goldRule && styles.goldRule, className)}>
       {icon && <Icon name={icon} size={22} className={styles.icon} />}
       <div className={styles.body}>{children}</div>
     </div>

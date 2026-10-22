@@ -1,0 +1,48 @@
+/* apps/mobile/styles/mobile.refresh.css — EXPLORATION (2026-10-13): Lovi-style soft refresh.
+ * Deliberately outside DESIGN.md (pills, soft shadows, low-opacity glows). To discard: delete this
+ * file, its import in MobileApp.tsx, and revert Button/Card/Input/OptionRow module CSS. */
+.phone-root {
+  /* 1. Background: soft mesh over Wispr Flow (cream, not yellow). */
+  --bg-mesh:
+    radial-gradient(60% 45% at 0% 0%, rgb(205 73 127 / 0.10), transparent 70%),
+    radial-gradient(55% 45% at 100% 100%, rgb(123 92 255 / 0.08), transparent 70%);
+  --surface-canvas:
+    var(--bg-mesh),
+    var(--backdrop-image) center calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)) / 100% auto no-repeat,
+    var(--color-canvas);
+
+  /* 2. Surfaces: translucent, near-invisible rim, diffuse lift. */
+  --surface-1: rgb(255 255 255 / 0.72);
+  --surface-1-pressed: rgb(255 255 255 / 0.9);
+  --surface-border: rgb(97 57 119 / 0.10);
+  --surface-highlight: inset 0 1px 0 rgb(255 255 255 / 0.9);
+  --surface-blur: blur(20px) saturate(140%);
+  --shadow-soft: 0 8px 32px rgb(43 16 78 / 0.08);
+  --radius-card-sm: 16px;
+  --radius-pill: var(--radius-full);
+  --card-pad: var(--space-6);
+
+  /* 4. Inputs */
+  --field-fill: rgb(255 255 255 / 0.78);
+  --field-border: rgb(97 57 119 / 0.14);
+  --field-focus-ring: 0 0 0 4px rgb(97 57 119 / 0.12);
+
+  /* 5. Buttons */
+  --button-h: 52px;
+  --button-primary-fill: linear-gradient(180deg, var(--purple-400), var(--purple-500));
+  --button-primary-shadow: 0 6px 20px rgb(97 57 119 / 0.28);
+  --selected-tint: rgb(205 73 127 / 0.10);
+
+  /* 7. Motion */
+  --rise-distance: 8px;
+}
+
+@keyframes refresh-rise {
+  from { opacity: 0; transform: translateY(var(--rise-distance)); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-root { --rise-distance: 0px; }
+}
+html.reduced-motion .phone-root { --rise-distance: 0px; }

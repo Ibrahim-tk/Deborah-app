@@ -1,0 +1,1 @@
+export { LabPreview } from './LabPreview';

@@ -11,5 +11,4 @@
 }
 .ring { box-shadow: 0 0 0 2px var(--color-gold); }
 .image { width: 100%; height: 100%; object-fit: cover; }
-/* Profile initials are the one Cormorant use allowed below 26 px (DESIGN.md › Display Serif Rule). */
 .initial { font: var(--weight-regular) calc(var(--avatar-size) * 0.55) / 1 var(--font-display); }

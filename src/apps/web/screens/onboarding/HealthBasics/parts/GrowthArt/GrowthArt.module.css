@@ -1,0 +1,31 @@
+/* Illustration palette (local to this drawing): earth, leaf greens, and the brand purples for the blossom. */
+.root {
+  --soil: #5b4636; --seed: #c9ae8c; --seed-line: #8a6f52; --root: #9b7b5c;
+  --stem: #6f9a52; --leaf: #7fae5a; --leaf-vein: #5f8a43;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1); --t: 0.9s;
+  display: block; width: auto; height: 100%; max-width: 100%; overflow: visible;
+}
+.shadow { fill: rgb(60 40 30 / 0.08); }
+.soil { fill: var(--soil); }
+.crumb { fill: var(--soil); opacity: 0.6; }
+
+.roots path { fill: none; stroke: var(--root); stroke-width: 1.1; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--g)); transition: stroke-dashoffset var(--t) var(--ease); }
+
+.seed { transform-origin: 100px 164px; transform: scale(calc(0.6 + var(--g) * 0.4)); opacity: var(--g); transition: transform var(--t) var(--ease), opacity var(--t) var(--ease); }
+.seed ellipse { fill: var(--seed); }
+.seedLine { fill: none; stroke: var(--seed-line); stroke-width: 0.9; stroke-linecap: round; }
+
+.stem { fill: none; stroke: var(--stem); stroke-width: 2.6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--g)); transition: stroke-dashoffset var(--t) var(--ease); }
+
+/* Leaves unfold from their base on the stem. */
+.leaf { fill: var(--leaf); stroke: var(--leaf-vein); stroke-width: 0.6; transform: rotate(calc(var(--side) * (-14deg + var(--g) * 14deg))) scale(calc(var(--g) * var(--size))); opacity: min(1, calc(var(--g) * 3)); transition: transform var(--t) var(--ease), opacity var(--t) var(--ease); }
+
+.bud { transform-origin: 100px 62px; transform: scale(var(--g)); opacity: var(--g); transition: transform var(--t) var(--ease), opacity var(--t) var(--ease); }
+.bud path { fill: var(--purple-500); }
+
+/* Petals swing open around the flower's heart. */
+.petal { fill: var(--purple-300); stroke: var(--purple-500); stroke-width: 0.6; transform-origin: 100px 58px; transform: rotate(var(--r)) scale(calc(0.2 + var(--g) * 0.8)); opacity: var(--g); transition: transform 1.1s var(--ease), opacity 1.1s var(--ease); }
+.petal:nth-child(odd) { fill: var(--purple-400); }
+.heart { fill: var(--gold-300, #e6c36a); transform-origin: 100px 58px; transform: scale(var(--g)); opacity: var(--g); transition: transform var(--t) var(--ease), opacity var(--t) var(--ease); }
+
+@media (prefers-reduced-motion: reduce) { .root * { transition: none !important; } }

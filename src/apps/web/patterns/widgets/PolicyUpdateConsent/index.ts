@@ -1,0 +1,1 @@
+export { PolicyUpdateConsent, type PolicyUpdateConsentProps } from './PolicyUpdateConsent';

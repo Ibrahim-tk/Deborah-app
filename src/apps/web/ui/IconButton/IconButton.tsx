@@ -1,4 +1,4 @@
-/** @ui IconButton — icon-only control with a required accessible label (also the tooltip). 44 px; sm 36 px visual. @xref mobile: apps/mobile/ui/IconButton */
+/** @ui IconButton — icon-only control with a required accessible label; 48 pt hit area. */
 import { forwardRef, type ButtonHTMLAttributes } from 'react';
 import { cx } from '@shared/utils';
 import { Icon, type IconName } from '../Icon';
@@ -8,18 +8,19 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   icon: IconName;
   /** Required: icon-only controls need an accessible name. */
   label: string;
+  /** Visual icon size only; the 48 pt hit area is the same for all. */
   size?: 'sm' | 'md' | 'lg';
-  /** plain (hover Lilac) · accent (send) · tint (Lilac fill) · surface (floating, float-sm). */
   tone?: 'plain' | 'accent' | 'tint' | 'surface';
 }
 
+/** Forwards its ref so it can anchor floating UI (e.g. Menu's trigger). */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
   { icon, label, size = 'md', tone = 'plain', className, type = 'button', ...rest },
   ref,
 ) {
   return (
-    <button ref={ref} type={type} aria-label={label} title={label} className={cx(styles.root, styles[size], styles[tone], className)} {...rest}>
-      <Icon name={icon} size={size === 'lg' ? 24 : size === 'sm' ? 18 : 22} />
+    <button ref={ref} type={type} aria-label={label} title={label} data-icon-button="" className={cx(styles.root, styles[size], styles[tone], className)} {...rest}>
+      <Icon name={icon} size={size === 'lg' ? 26 : size === 'sm' ? 20 : 24} />
     </button>
   );
 });

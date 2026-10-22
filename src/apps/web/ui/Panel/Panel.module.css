@@ -1,6 +1,6 @@
-.root { display: flex; gap: var(--space-3); padding: var(--space-4) var(--space-5); border-radius: var(--radius-lg); color: var(--color-ink); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.root { display: flex; gap: var(--space-3); padding: var(--space-4) var(--space-5); border-radius: var(--radius-lg); color: var(--color-ink); }
 .body { flex: 1; min-width: 0; display: grid; gap: var(--space-2); }
-.icon { flex: none; margin-top: 1px; }
+.icon { flex: none; margin-top: 3px; }
 .linen { background: var(--color-surface-tonal); }
 .lilac { background: var(--color-surface-lilac); }
 .danger { background: var(--color-danger-tint); }

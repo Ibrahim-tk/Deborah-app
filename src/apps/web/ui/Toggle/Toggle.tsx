@@ -1,6 +1,5 @@
-/** @ui Toggle — switch; on = Deborah Purple, off = purple-100 track. Label + optional description on the left. @xref mobile: apps/mobile/ui/Toggle */
+/** @ui Toggle — iOS switch geometry; on = Deborah Purple, off = purple-100 track. */
 import { useId } from 'react';
-import { cx } from '@shared/utils';
 import styles from './Toggle.module.css';
 
 export interface ToggleProps {
@@ -8,29 +7,19 @@ export interface ToggleProps {
   onChange: (checked: boolean) => void;
   label: string;
   description?: string;
+  /** Locked (e.g. required notifications that can't be turned off). */
   disabled?: boolean;
-  className?: string;
 }
 
-export function Toggle({ checked, onChange, label, description, disabled, className }: ToggleProps) {
+export function Toggle({ checked, onChange, label, description, disabled }: ToggleProps) {
   const id = useId();
-  const descId = `${id}-desc`;
   return (
-    <div className={cx(styles.root, className)}>
+    <div className={styles.root}>
       <span className={styles.text}>
         <label htmlFor={id} className={styles.label}>{label}</label>
-        {description && <span id={descId} className={styles.description}>{description}</span>}
+        {description && <span className={styles.description}>{description}</span>}
       </span>
-      <button
-        id={id}
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        aria-describedby={description ? descId : undefined}
-        disabled={disabled}
-        className={styles.switch}
-        onClick={() => onChange(!checked)}
-      >
+      <button id={id} type="button" role="switch" aria-checked={checked} className={styles.switch} disabled={disabled} onClick={() => onChange(!checked)}>
         <span className={styles.thumb} />
       </button>
     </div>

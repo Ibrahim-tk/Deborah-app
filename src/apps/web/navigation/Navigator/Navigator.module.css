@@ -1,0 +1,90 @@
+.root { position: absolute; inset: 0; overflow: clip; background: var(--midnight-900); --web-rail-w: 0px; }
+.root[data-main] { --web-rail-w: 260px; }
+
+.base { position: absolute; inset: 0; overflow: clip; background: var(--surface-canvas); transform-origin: 50% 0; }
+.rootView { position: absolute; inset: 0; }
+
+/* Main stage sits beside the persistent rail (L-shell). Pre-auth keeps full width. */
+.rootView[data-rail] {
+  left: var(--web-rail-w);
+  width: auto;
+}
+
+/* Screens leave room for the floating tab bar via this variable (unused on web; toast math). */
+.rootView { --tabbar-space: var(--safe-bottom); }
+.rootView[data-tabbar] { --tabbar-space: calc(var(--tabbar-h) + 26px + var(--space-3)); }
+
+.stack { position: absolute; inset: 0; }
+.stack[data-active='false'] { display: none; }
+
+.screen { position: absolute; inset: 0; overflow: clip; background: var(--surface-canvas); }
+.screen[data-hidden] { visibility: hidden; }
+
+.edge { position: absolute; top: 0; bottom: 0; left: 0; z-index: 5; width: 12px; touch-action: none; }
+
+/* Sheets: ui/BottomSheet. Modals: centered dialog (L-modal), same z band. */
+.modalLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  pointer-events: none;
+}
+.modalScrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+  pointer-events: auto;
+}
+.modal {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 800px);
+  height: min(90vh, calc(100% - 48px));
+  max-height: min(90vh, calc(100% - 48px));
+  overflow: clip;
+  border-radius: var(--radius-lg, 16px);
+  background: var(--surface-canvas);
+  box-shadow: var(--shadow-float-lg, 0 16px 48px rgb(0 0 0 / 0.24));
+  pointer-events: auto;
+  outline: none;
+}
+
+.modal:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modalLayer,
+  .modal,
+  .modalScrim {
+    transition: none !important;
+  }
+}
+
+.toastHost {
+  position: absolute;
+  right: var(--margin-screen);
+  bottom: calc(var(--safe-bottom) + var(--space-4));
+  /* Clear the persistent web rail when present. */
+  left: calc(var(--margin-screen) + var(--web-rail-w, 0px));
+  z-index: 90;
+  display: grid;
+  justify-items: center;
+  pointer-events: none;
+}
+.toastHost[data-lifted] { bottom: calc(var(--tabbar-h) + 26px + var(--space-3)); }
+/* Over a composer (M-2.1), sit above it rather than on it. */
+.toastHost[data-over-composer] { bottom: calc(var(--tabbar-h) + 26px + 132px); }
+
+.overlayHost { position: absolute; inset: 0; z-index: 100; pointer-events: none; }
+.overlayHost > * { pointer-events: auto; }
+
+/* Plain screens (everything outside GRADIENT_SCREENS in StackView): flat canvas colour, and the screen's own
+   Aura / GradientShift layers are hidden. */
+.screen[data-bg='plain'] { background: var(--color-canvas); }
+.screen[data-bg='plain'] [data-bg-layer] { display: none; }

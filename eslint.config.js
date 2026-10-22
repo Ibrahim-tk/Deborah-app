@@ -40,7 +40,7 @@ const deviceApi = { to: { element: { type: 'shell' }, file: { categories: 'devic
 const appPolicies = APPS.flatMap((app) => {
   const own = (...layers) => layers.map((l) => `${app}-${l}`);
   return [
-    allow(`${app}-entry`, 'shared', 'styles', ...own('entry', 'styles', 'nav', 'hooks')),
+    allow(`${app}-entry`, 'shared', 'styles', ...own('entry', 'styles', 'nav', 'hooks', 'ui')),
     // Nav may pull patterns for chrome that embeds product widgets (e.g. Sidebar shop card).
     allow(`${app}-nav`, 'shared', 'styles', ...own('nav', 'screens', 'patterns', 'ui', 'hooks')),
     allow(`${app}-screens`, 'shared', 'styles', ...own('screens', 'patterns', 'ui', 'hooks', 'nav')),
@@ -58,8 +58,9 @@ const policies = [
   allow('shared', 'shared'),
   allow('styles', 'styles'),
   ...appPolicies,
-  // Mobile only (not web) may reach the shell, and only through the device API.
+  // Apps may reach the shell only through the device API (useDevice).
   { from: { element: { type: 'mobile-*' } }, allow: deviceApi },
+  { from: { element: { type: 'web-*' } }, allow: deviceApi },
 ];
 
 export default tseslint.config(

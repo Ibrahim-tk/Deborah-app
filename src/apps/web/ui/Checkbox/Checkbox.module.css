@@ -1,27 +1,42 @@
 .root { position: relative; }
-.input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
 
-.row { display: flex; align-items: flex-start; gap: var(--space-3); min-height: var(--control-h); padding: var(--space-2) 0; }
+.input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+
+.row {
+  display: flex;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  align-items: flex-start;
+  padding: var(--space-2) 0;
+  cursor: pointer;
+}
 
 .box {
   display: grid;
   place-items: center;
   flex: none;
+  /* 22 pt box centred on the label's first line (design 2026-10-21). */
   width: 22px;
   height: 22px;
-  margin-top: 1px;
+  margin-top: calc((var(--lh-callout) - 22px) / 2);
   border-radius: 6px;
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 2px var(--color-border-control);
+  box-shadow: inset 0 0 0 1.5px var(--color-border-control);
   color: var(--color-ink-on-accent);
-  transition: background-color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out);
+  transition: background-color var(--dur-quick) var(--ease-out);
 }
-.row:hover .box[data-checked='false'] { box-shadow: inset 0 0 0 2px var(--color-accent); }
+
 .box[data-checked='true'] { background: var(--color-accent); box-shadow: none; }
+
 .input:focus-visible + .row .box { outline: 2px solid var(--color-focus); outline-offset: 3px; }
 
-[data-disabled] .row { cursor: not-allowed; opacity: 0.7; }
-
-.text { display: grid; gap: 2px; }
+.text { display: grid; gap: var(--space-1); }
 .label { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
+.label[data-emphasis] { font-weight: var(--weight-medium); letter-spacing: -0.01em; }
 .description { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+/* Box always sits on the label's first line (design 2026-10-21), centred on that line via .box margin-top. */
+/* Small (in-chat ReviewFacts): 14 pt box, subhead label / footnote description; tighter row. */
+.root[data-size='sm'] .row { gap: var(--space-2); min-height: 32px; padding: 4px 0; }
+.root[data-size='sm'] .box { width: 14px; height: 14px; border-radius: 4px; margin-top: calc((var(--lh-subhead) - 14px) / 2); }
+.root[data-size='sm'] .label { font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.root[data-size='sm'] .text { gap: 0; }

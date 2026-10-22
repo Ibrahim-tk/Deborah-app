@@ -1,0 +1,9 @@
+.root { position: relative; display: grid; grid-template-columns: 1.6fr 0.8fr 1fr; height: calc(40px * 5); overflow: hidden; mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent); }
+.band { position: absolute; left: var(--space-2); right: var(--space-2); top: calc(40px * 2); height: 40px; border-radius: var(--radius-sm); background: var(--color-surface-lilac); pointer-events: none; }
+.column { position: relative; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent); }
+.column::-webkit-scrollbar { display: none; }
+.column:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+.pad { height: calc(40px * 2); }
+.item { display: block; width: 100%; height: 40px; border: 0; background: transparent; scroll-snap-align: center; color: var(--color-ink-secondary); font: var(--weight-regular) var(--fs-body) / 40px var(--font-body); font-variant-numeric: tabular-nums; }
+.item[data-on] { color: var(--color-ink); font-weight: var(--weight-medium); }
+.month .item { text-align: left; padding-left: var(--space-4); }

@@ -12,6 +12,7 @@ import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
 import { IPhoneFrame } from '../device/IPhoneFrame';
 import { BrowserFrame } from '../browser/BrowserFrame';
+import { WebDeviceHost } from '../browser/WebDeviceHost';
 import { ScreenCaption } from './parts/ScreenCaption';
 import { ShellToast } from './parts/ShellToast';
 import { ScreenNote } from '../notes/ScreenNote';
@@ -60,11 +61,15 @@ export function Shell({ platform }: ShellProps) {
           </>
         ) : webFullBleed ? (
           <div className={styles.fullBleed}>
-            <WebApp />
+            <WebDeviceHost>
+              <WebApp />
+            </WebDeviceHost>
           </div>
         ) : (
           <BrowserFrame>
-            <WebApp />
+            <WebDeviceHost>
+              <WebApp />
+            </WebDeviceHost>
           </BrowserFrame>
         )}
       </main>

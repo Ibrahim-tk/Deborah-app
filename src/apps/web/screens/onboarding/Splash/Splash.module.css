@@ -1,0 +1,41 @@
+.root {
+  height: 100%;
+  position: relative;
+  isolation: isolate;
+  color: var(--color-ink);
+  text-align: center;
+}
+
+/* Absolute placement from Figma 161:386, expressed against the 844 pt frame height. */
+.tree { position: absolute; top: calc(351 / 844 * 100%); left: 50%; width: 141px; height: 141px; margin-left: -70.5px; }
+.wordmark {
+  position: absolute;
+  top: calc(524 / 844 * 100%);
+  right: 0;
+  left: 0;
+  font: var(--weight-regular) 32px / 42px var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--purple-900);
+  text-align: center;
+}
+.byline {
+  position: absolute;
+  top: calc(780 / 844 * 100%);
+  right: 0;
+  left: 0;
+  font: var(--weight-regular) 13px / 18px var(--font-body);
+  color: var(--purple-600);
+  text-align: center;
+}
+
+/* Wispr Flow backdrop — same image as Aura / chat; unshifted on Splash. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    var(--backdrop-image) top center / cover no-repeat,
+    var(--color-canvas);
+}

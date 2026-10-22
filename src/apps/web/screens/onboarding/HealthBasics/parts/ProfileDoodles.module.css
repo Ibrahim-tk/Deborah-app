@@ -1,0 +1,5 @@
+/* Ink line doodles: one ink colour for lines and solid hair, plum for the heart accent. */
+.root { --ink: var(--color-ink); display: block; }
+.line { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.hair { fill: var(--ink); }
+.fill { fill: var(--color-accent); }

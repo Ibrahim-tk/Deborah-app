@@ -1,22 +1,18 @@
-/** @ui ProgressBar — 8 px, purple-100 track, Deborah Purple fill, value written beside it. @xref mobile: apps/mobile/ui/ProgressBar */
+/** @ui ProgressBar — 8 pt, purple-100 track, Deborah Purple fill, value written beside it. */
 import type { CSSProperties } from 'react';
-import { cx } from '@shared/utils';
 import styles from './ProgressBar.module.css';
 
 export interface ProgressBarProps {
   /** 0–1. */
   value: number;
-  /** Accessible name. */
   label: string;
-  /** Visible text beside the bar, e.g. "Day 18 of 90". */
   valueText?: string;
-  className?: string;
 }
 
-export function ProgressBar({ value, label, valueText, className }: ProgressBarProps) {
+export function ProgressBar({ value, label, valueText }: ProgressBarProps) {
   const pct = Math.round(Math.min(1, Math.max(0, value)) * 100);
   return (
-    <div className={cx(styles.root, className)}>
+    <div className={styles.root}>
       <span className={styles.track} role="progressbar" aria-label={label} aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-valuetext={valueText}>
         <span className={styles.fill} style={{ '--progress': `${pct}%` } as CSSProperties} />
       </span>

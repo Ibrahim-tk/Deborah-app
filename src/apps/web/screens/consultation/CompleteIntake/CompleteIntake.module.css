@@ -1,0 +1,3 @@
+/* Layout comes from the onboarding template (HealthBasics.module.css); this only lifts the glass nav bar above the bloom. */
+.bar { position: relative; z-index: 2; flex: none; }
+

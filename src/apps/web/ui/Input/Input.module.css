@@ -1,27 +1,70 @@
 .root { display: grid; gap: var(--space-2); }
 
-.label { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.label {
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
 
 .field {
   width: 100%;
+  min-height: var(--field-h);
   padding: 0 var(--space-4);
   border: 0;
   border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  background: var(--field-fill);
+  box-shadow: inset 0 0 0 1px var(--field-border);
   color: var(--color-ink);
-  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   transition: box-shadow var(--dur-quick) var(--ease-out);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  outline: none;
 }
-.md { min-height: var(--control-h); }
-.lg { min-height: var(--control-h-lg); }
 
 .field::placeholder { color: var(--color-ink-placeholder); }
-.field:hover:not(:disabled):not(:focus) { box-shadow: inset 0 0 0 1px var(--color-accent); }
-.field.field:focus, .field.field:focus-visible { box-shadow: inset 0 0 0 2px var(--color-border-selected); outline: none; }
-.field:disabled { background: var(--color-surface-tonal); color: var(--color-ink-secondary); box-shadow: none; cursor: not-allowed; }
-.invalid, .invalid:hover:not(:disabled):not(:focus), .invalid.invalid:focus { box-shadow: inset 0 0 0 2px var(--color-danger-border); }
+/* Focus: darker neutral border, no ring, no purple (design 2026-10-20). */
+.root .field:focus, .root .field:focus-visible { box-shadow: inset 0 0 0 1px var(--field-border-focus); outline: none; }
+.root .invalid, .root .invalid:focus { box-shadow: inset 0 0 0 2px var(--color-danger-border); }
 
-.error, .hint { display: flex; align-items: center; gap: var(--space-1); margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); }
+.error, .hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+}
 .error { color: var(--color-danger-ink); }
 .hint { color: var(--color-ink-secondary); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.control { position: relative; }
+/* Room for the prefix sized to the prefix itself (e.g. "+1" vs "+880"), plus a small gap — not a fixed 64 px. */
+.withLeading { padding-left: calc(var(--space-4) + var(--leading-w, 3.2em) + 0.3em); }
+.withToggle { padding-right: 56px; }
+.leading {
+  position: absolute;
+  top: 50%;
+  left: var(--space-4);
+  transform: translateY(-50%);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+  pointer-events: none;
+  user-select: none;
+}
+.toggle { position: absolute; top: 50%; right: var(--space-1); transform: translateY(-50%); display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--color-ink-secondary); cursor: pointer; }
+.toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: -2px; }
+
+/* variant="search": pill with a leading search icon (symptom search, country search). */
+.search .field { border-radius: var(--radius-full); padding-left: 44px; }
+.searchIcon { position: absolute; top: 50%; left: var(--space-4); transform: translateY(-50%); display: grid; color: var(--color-ink-secondary); pointer-events: none; }
+
+/* variant="inline": borderless field that sits inside a pill, chip or chat answer (the host draws the shape). */
+.inline .field, .root.inline .field:focus, .root.inline .field:focus-visible {
+  min-height: 0;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  letter-spacing: inherit;
+}
+/* The host class lands on the root; the root and control just fill it. */
+.inline { display: flex; align-items: center; }
+.inline .control { flex: 1; min-width: 0; align-self: stretch; display: flex; }

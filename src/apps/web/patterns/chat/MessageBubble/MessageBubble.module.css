@@ -1,0 +1,24 @@
+.userRow { display: flex; justify-content: flex-end; }
+.user {
+  max-width: 300px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-xl) var(--radius-xl) var(--radius-sm) var(--radius-xl);
+  background: var(--color-accent);
+  color: var(--color-ink-on-accent);
+  /* Same size as Deborah's replies (design 2026-10-20). */
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  letter-spacing: -0.015em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.deborah { display: grid; gap: var(--space-2); } /* 8px (design 2026-10-21) */
+.text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); letter-spacing: -0.015em; white-space: pre-wrap; overflow-wrap: anywhere; user-select: text; color: var(--color-ink-body); }
+
+.word { display: inline-block; white-space: nowrap; }
+/* Blur + fade per character (matches TextReveal). */
+.char { display: inline-block; animation: charIn 600ms var(--ease-out) var(--d) both; }
+@keyframes charIn { from { opacity: 0; filter: blur(8px); transform: translateY(2px); } to { opacity: 1; filter: blur(0); transform: none; } }
+:global(html.reduced-motion) .char { animation: none; }
+@media (prefers-reduced-motion: reduce) { .char { animation: none; } }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

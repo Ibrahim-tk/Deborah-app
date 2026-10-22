@@ -1,0 +1,127 @@
+/* Transparent so the shared photo backdrop (--surface-canvas) runs behind the bar. */
+.root { position: relative; z-index: 3; flex: none; background: transparent; }
+/* iOS scroll-edge feather: content scrolling up dissolves into the bar (progressive blur + fade)
+   instead of being cut at a hard line. Invisible at rest over empty canvas. */
+.root:not(.transparent)::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  height: 20px;
+  pointer-events: none;
+  /* Blur only, no colour: a canvas-coloured fill painted a pale band over the violet photo. */
+  background: transparent;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent);
+  mask-image: linear-gradient(to bottom, #000, transparent);
+}
+/* Plain-background screens: native iOS bar. Content scrolls underneath (Header.tsx › useUnderlay); the bar is
+   transparent with only a light canvas fade, plus frosted glass (blur 20px, saturate 180%) that is strongest
+   at the top and gone by the bar's bottom edge, so there is no visible line. */
+:global([data-bg='plain']) .root:not(.transparent)::after { display: none; }
+:global([data-bg='plain']) .root:not(.transparent)::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -12px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-canvas) 72%, transparent) 0%,
+    color-mix(in srgb, var(--color-canvas) 40%, transparent) 60%,
+    transparent 100%
+  );
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 45%, transparent 100%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  :global([data-bg='plain']) .root:not(.transparent)::before {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--color-canvas);
+  }
+}
+.safeTop { padding-top: var(--safe-top); }
+.transparent { background: transparent; }
+
+.bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  min-height: var(--header-h);
+  padding: 0 var(--margin-screen);
+}
+.side { display: flex; align-items: center; min-width: 0; container-type: inline-size; }
+.right { grid-column: 3; justify-content: flex-end; }
+
+.title {
+  max-width: 220px;
+  /* iOS-native nav title size (17 pt, design 2026-10-21). */
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  text-align: center;
+  overflow-wrap: break-word;
+}
+/* The inline twin of a large title fades in as the large title folds away. */
+.title[data-inline-large] { opacity: 0; transition: opacity var(--dur-quick) var(--ease-out); }
+.title[data-inline-large][data-shown] { opacity: 1; }
+
+.largeWrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--dur-base) var(--ease-ios), opacity var(--dur-base) var(--ease-out);
+}
+.largeWrap[data-collapsed] { grid-template-rows: 0fr; opacity: 0; }
+.largeWrap > .large { overflow: hidden; min-height: 0; }
+
+.large {
+  padding: 0 var(--margin-screen) var(--space-2);
+  font: var(--weight-regular) var(--fs-display) / var(--lh-display) var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+
+/* Every action in the bar is iOS liquid glass (same as GlassButton; filter in ui/GlassButton/GlassFilters). */
+.side > [data-icon-button] {
+  position: relative;
+  z-index: 0;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  color: var(--color-ink);
+  background: transparent;
+  box-shadow: none;
+  transition: transform 220ms cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+.side > [data-icon-button]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
+  background-color: rgb(255 255 255 / 55%);
+  pointer-events: none;
+}
+.side > [data-icon-button]::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 9999px;
+  /* Steady frosted lens. The SVG displacement (url(#btn-glass)) re-rendered with seams over the moving
+     backdrop in Chromium (band across the lower half that flickered), so it is off. */
+  -webkit-backdrop-filter: blur(6px) saturate(160%);
+  backdrop-filter: blur(6px) saturate(160%);
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+}
+.side > [data-icon-button] > * { position: relative; z-index: 1; }
+.side > [data-icon-button]:active { transform: scale(1.06); }
+.right { gap: var(--space-2); }

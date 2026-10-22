@@ -1,0 +1,36 @@
+.root { position: relative; display: flex; flex-direction: column; height: 100%; background: transparent; }
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  width: min(100%, 800px);
+  margin-inline: auto;
+  padding: var(--space-2) var(--margin-screen) var(--space-8);
+}
+.footer { flex: none; position: relative; z-index: 1; padding: var(--space-3) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
+/* Fade behind the button: content melts into the page instead of meeting a hard edge (design 2026-10-20). */
+.footer::before {
+  content: ''; position: absolute; inset: calc(-1 * var(--space-10, 40px)) 0 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--color-canvas) var(--space-10, 40px));
+}
+
+.metrics {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.muted {
+  margin: var(--space-2) 0 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
+.titleBlock { display: grid; gap: var(--space-1); justify-items: center; text-align: center; padding: var(--space-2) 0; }
+.title { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); color: var(--color-ink); text-wrap: balance; }
+.sub { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

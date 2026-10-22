@@ -1,0 +1,19 @@
+.root { position: relative; display: flex; flex-direction: column; height: 100%; background: transparent; }
+.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-5); padding: var(--space-2) var(--margin-screen) var(--space-8); }
+.footer { flex: none; display: grid; gap: var(--space-2); padding: var(--space-3) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
+
+.surface { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-6) var(--space-4); border-radius: var(--radius-xl); background: var(--surface-field-lilac); text-align: center; }
+.surfaceIcon { display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: var(--space-2); border-radius: var(--radius-full); background: var(--icon-well-bg); color: var(--icon-well-fg); }
+.fileName { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); overflow-wrap: anywhere; }
+.fileKind { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); overflow-wrap: anywhere; }
+.description { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); overflow-wrap: break-word; }
+
+.section { display: grid; gap: var(--space-2); }
+.sectionTitle { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.rows { display: grid; margin: 0; }
+.row { display: flex; justify-content: space-between; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-hairline); }
+.row dt { flex: none; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.row dd { margin: 0; min-width: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); text-align: right; overflow-wrap: anywhere; }
+.footnote { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

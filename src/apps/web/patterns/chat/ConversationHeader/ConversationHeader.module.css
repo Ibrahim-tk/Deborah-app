@@ -1,0 +1,58 @@
+.right { display: inline-flex; align-items: center; gap: var(--space-2); }
+.avatar {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 9999px;
+  /* iOS liquid glass, same as GlassButton (filter in ui/GlassButton/GlassFilters). */
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms var(--ease-out);
+}
+.avatar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
+  background-color: rgb(255 255 255 / 55%);
+  pointer-events: none;
+}
+.avatar::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 9999px;
+  /* Steady frosted lens. The SVG displacement (url(#btn-glass)) re-rendered with seams over the moving
+     backdrop in Chromium (band across the lower half that flickered), so it is off. */
+  -webkit-backdrop-filter: blur(6px) saturate(160%);
+  backdrop-filter: blur(6px) saturate(160%);
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+}
+.avatar > * { position: relative; z-index: 1; }
+.avatar:active { transform: scale(0.94); }
+.avatar:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+/* Quiet "something to do here" marker: static, no pulse (DESIGN.md bans). */
+.dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-gold);
+  box-shadow: 0 0 0 2px var(--color-surface);
+}
+/* The initial sits straight on the glass: no fill of its own. */
+.avatar .avatarGlass { background: transparent; color: var(--color-ink); }
+/* Sans initial in the header (the serif is reserved for the Home greeting). */
+.avatar .avatarGlass > span { font: var(--weight-medium) 17px / 1 var(--font-body); letter-spacing: -0.01em; }

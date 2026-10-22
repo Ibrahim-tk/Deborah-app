@@ -45,6 +45,6 @@ export const DeviceContext = createContext<DeviceApi | null>(null);
 
 export function useDevice(): DeviceApi {
   const api = useContext(DeviceContext);
-  if (!api) throw new Error('useDevice() must be used inside IPhoneFrame');
+  if (!api) throw new Error('useDevice() must be used inside IPhoneFrame or WebDeviceHost');
   return api;
 }

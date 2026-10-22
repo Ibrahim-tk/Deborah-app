@@ -1,66 +1,48 @@
 /**
- * @ui   Select — a styled native <select> (label above, 44 px field, chevron). Native keeps full keyboard
- *       and screen-reader support for free. ASSUMPTION: native list styling is acceptable on desktop.
- * @xref mobile: apps/mobile/ui/Select (inline option-row picker)
+ * @ui Select — field-styled trigger that opens a floating list (design 2026-10-20).
+ * Adapter: built on MUI Base UI `Select` (unstyled; our CSS Modules + tokens). Base UI is imported only here
+ * (CLAUDE.md rule 7). Portals into the phone's overlay host so it is never clipped by the screen.
  */
 import { useId } from 'react';
-import { cx } from '@shared/utils';
+import { Select as Base } from '@base-ui/react/select';
 import { Icon } from '../Icon';
+import { OVERLAY_HOST_ID } from '../Overlay';
 import styles from './Select.module.css';
-
-export interface SelectOption<T extends string> {
-  value: T;
-  label: string;
-  disabled?: boolean;
-}
 
 export interface SelectProps<T extends string> {
   label: string;
-  hideLabel?: boolean;
-  options: SelectOption<T>[];
+  options: { value: T; label: string }[];
   value?: T;
-  /** Shown as a disabled first option while nothing is chosen. */
   placeholder?: string;
   onChange: (value: T) => void;
-  error?: string;
-  disabled?: boolean;
-  className?: string;
 }
 
-export function Select<T extends string>({ label, hideLabel, options, value, placeholder = 'Choose…', onChange, error, disabled, className }: SelectProps<T>) {
+export function Select<T extends string>({ label, options, value, placeholder = 'Choose…', onChange }: SelectProps<T>) {
   const id = useId();
-  const msgId = `${id}-msg`;
+  const current = options.find((o) => o.value === value);
   return (
-    <div className={cx(styles.root, className)}>
-      <label htmlFor={id} className={cx(styles.label, hideLabel && 'sr-only')}>{label}</label>
-      <span className={styles.wrap}>
-        <select
-          id={id}
-          className={cx(styles.field, !value && styles.empty, error && styles.invalid)}
-          value={value ?? ''}
-          disabled={disabled}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? msgId : undefined}
-          onChange={(e) => onChange(e.target.value as T)}
-        >
-          {!value && (
-            <option value="" disabled>
-              {placeholder}
-            </option>
-          )}
-          {options.map((o) => (
-            <option key={o.value} value={o.value} disabled={o.disabled}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-        <Icon name="chevronDown" size={18} className={styles.chevron} />
-      </span>
-      {error && (
-        <p id={msgId} className={styles.error} role="alert">
-          <Icon name="alert" size={16} /> {error}
-        </p>
-      )}
+    <div className={styles.root}>
+      <span id={id} className={styles.label}>{label}</span>
+      <Base.Root value={value ?? null} onValueChange={(v) => v != null && onChange(v as T)} items={options}>
+        <Base.Trigger className={styles.trigger} aria-labelledby={id}>
+          <span className={current ? undefined : styles.placeholder}>{current?.label ?? placeholder}</span>
+          <Base.Icon className={styles.icon}><Icon name="chevronDown" size={20} /></Base.Icon>
+        </Base.Trigger>
+        <Base.Portal container={document.getElementById(OVERLAY_HOST_ID)}>
+          <Base.Positioner className={styles.positioner} sideOffset={6} alignItemWithTrigger={false}>
+            <Base.Popup className={styles.popup}>
+              <Base.List>
+                {options.map((o) => (
+                  <Base.Item key={o.value} value={o.value} className={styles.item}>
+                    <Base.ItemText>{o.label}</Base.ItemText>
+                    <Base.ItemIndicator className={styles.check}><Icon name="check" size={18} /></Base.ItemIndicator>
+                  </Base.Item>
+                ))}
+              </Base.List>
+            </Base.Popup>
+          </Base.Positioner>
+        </Base.Portal>
+      </Base.Root>
     </div>
   );
 }

@@ -1,0 +1,67 @@
+/* Quiet tile in the thread — same frosted row language as EscalationCard’s inline record. */
+.tile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 64px;
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-card-sm, 20px);
+  background: var(--surface-1, var(--color-surface));
+  box-shadow: inset 0 0 0 1px var(--surface-border, var(--color-border-hairline));
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-base) var(--ease-out);
+  animation: widget-in var(--dur-base) var(--ease-out) both;
+}
+.tile:active { background: var(--color-accent-tint); }
+.tile:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+.icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+}
+.text { display: grid; flex: 1; min-width: 0; }
+.title { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.meta { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.chevron { flex: none; color: var(--color-ink-secondary); }
+
+/* Small confirmation sheet */
+.sheet { /* Content of the shared ui/BottomSheet (frame, surface, motion live there). */ display: grid; gap: var(--space-3); justify-items: start; }
+.sheetIcon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+}
+.sheetTitle {
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+.sheetBody {
+  margin: 0 0 var(--space-2);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  color: var(--color-ink-body);
+  text-wrap: pretty;
+}
+.sheet > :last-child { width: 100%; }
+
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(100%); } }
+@keyframes widget-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .scrim, .sheet, .tile { animation: none; }
+}

@@ -1,0 +1,58 @@
+.root {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(var(--safe-top) + var(--space-1)) var(--margin-screen) var(--space-2);
+  /* No bar fill: ScrollEdge provides the iOS blur/fade only when content is underneath. */
+  pointer-events: none;
+}
+.root > *, .right > * { pointer-events: auto; }
+.right { display: flex; align-items: center; gap: var(--space-2); }
+.avatar {
+  position: relative;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms var(--ease-out);
+}
+.avatar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 9999px;
+  box-shadow: inset 2px 2px 0px -2px rgba(255, 255, 255, 0.7), inset 0 0 3px 1px rgba(255, 255, 255, 0.7);
+  background-color: rgb(255 255 255 / 55%);
+  pointer-events: none;
+}
+.avatar::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: 9999px;
+  /* Steady frosted lens. The SVG displacement (url(#btn-glass)) re-rendered with seams over the moving
+     backdrop in Chromium (band across the lower half that flickered), so it is off. */
+  -webkit-backdrop-filter: blur(6px) saturate(160%);
+  backdrop-filter: blur(6px) saturate(160%);
+  overflow: hidden;
+  isolation: isolate;
+  pointer-events: none;
+}
+.avatar > * { position: relative; z-index: 1; }
+.avatar:active { transform: scale(0.94); }
+.avatar:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.avatar .avatarGlass { background: transparent; color: var(--color-ink); }
+.avatar .avatarGlass > span { font: var(--weight-medium) 17px / 1 var(--font-body); letter-spacing: -0.01em; }

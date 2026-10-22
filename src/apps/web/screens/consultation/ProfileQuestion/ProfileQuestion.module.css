@@ -1,0 +1,24 @@
+/* Fill a medium-sheet height so the Sheet footer (Skip / Save) stays pinned to the bottom. */
+.sheet { min-height: min(520px, 62vh); }
+
+.body { display: grid; gap: var(--space-4); align-content: start; }
+
+.step {
+  flex: none;
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  white-space: nowrap;
+}
+
+/* Question is body/sans — sheet title stays display/serif via Sheet. */
+.prompt {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
+  color: var(--color-ink);
+}
+
+/* ChoicePills carries chat-form margin-top; reset inside this grid. */
+.pills > * { margin-top: 0; }
+
+.skip { display: grid; justify-items: center; }

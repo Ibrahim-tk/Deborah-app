@@ -1,0 +1,108 @@
+/* apps/mobile/styles/mobile.skin.deborah.css — EXPLORATION (2026-10-14): "Deborah" design-system skin.
+ * Source: deborah-design-system.md (repo root). A UI skin only: it remaps existing tokens, so no copy,
+ * screen, flow or behaviour changes. Loaded last in MobileApp.tsx. To discard: delete this file and its
+ * import (and the two @fontsource imports there).
+ *
+ * Deliberately kept from DESIGN.md so nothing degrades: the type scale and the in-app text-size control,
+ * tap targets, the 500 weight ceiling, and readable-text contrast (the export's 9–12px, low-contrast
+ * labels are NOT copied; secondary text uses the darkest exported muted tones instead).
+ * OPEN: DESIGN.md is still the authority; adopting this skin for real means updating DESIGN.md first. */
+.phone-root {
+  /* Primitives (export §1): purple ramp re-pointed at plum/mauve so components that read primitives follow. */
+  --purple-50: #efe1f2;   /* chip hover / selected tint */
+  --purple-100: #e0d2e6;  /* lavender border */
+  --purple-200: #c6abcf;
+  --purple-300: #a394aa;  /* placeholder */
+  --purple-400: #804a8a;  /* mauve */
+  --purple-500: #3a0353;  /* plum — primary action */
+  --purple-600: #2e0242;
+  --purple-700: #4d3d54;  /* assistant / body text */
+  --purple-900: #302335;  /* ink */
+
+  /* Type families (export §1). SF Pro → DM Sans; display stays Cormorant; Georgia italic for emphasis. */
+  /* Headings and titles keep the original Cormorant serif (design call 2026-10-14); body/UI move to DM Sans. */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', Arial, sans-serif;
+  --font-ui: 'DM Sans', Arial, sans-serif;
+  --font-editorial: Georgia, serif;
+  /* The big artistic headings keep the original Cormorant Garamond: health questions, Welcome, Home greeting,
+     Deborah's own words. Components opt in with var(--font-artistic, var(--font-display)). */
+  --font-artistic: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+  /* Surfaces: cream canvas + Wispr Flow photo (same as chat / /wid). Soft lilac mesh only. */
+  --color-canvas: #f9f7f0;
+  --bg-mesh:
+    radial-gradient(ellipse at 87% -10%, #e9dbee77, transparent 45%);
+  --surface-canvas:
+    var(--bg-mesh),
+    var(--backdrop-image) center calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)) / 100% auto no-repeat,
+    var(--color-canvas);
+  --color-surface: #fbf8fa;                   /* sheet */
+  --color-surface-tonal: #f0ebe6;             /* cream tonal (was peach) */
+  --color-surface-lilac: #eadeef;             /* user bubble */
+  --color-surface-signature: #2e193c;         /* quiet-moment card */
+  --color-scrim: #321e4044;
+  --glass-warm-fill: linear-gradient(120deg, #ffffffed, #faf6fbe8);
+  --glass-warm-rim: #ffffff;
+  --glass-warm-blur: blur(25px);
+  --surface-1: #ffffffb0;
+  --surface-1-pressed: #eee2f3;
+  --surface-border: #e5d8eb;
+  --surface-blur: blur(20px);
+  --shadow-soft: 0 5px 20px #522d5905;
+
+  /* Text (contrast kept ≥7:1 on paper for reading text). */
+  --color-ink: #302335;
+  --color-ink-body: #4d3d54;
+  --color-ink-secondary: #54455a;             /* darker than the export's #766B78 so it stays ≥7:1 */
+  --color-ink-tertiary: #54455a;
+  --color-ink-placeholder: #a394aa;
+  --color-ink-on-signature: #efdfed;
+
+  /* Action */
+  --color-accent: #3a0353;
+  --color-accent-pressed: #2e0242;
+  --color-accent-tint: #eee2f3;
+  --color-accent-tint-pressed: #e3c9eb;
+  --color-focus: #b579c4;
+  --selected-tint: #eee2f3;
+
+  /* Borders */
+  --color-border-hairline: #e8e1e6;
+  --color-border-control: #e0d2e5;
+  --color-border-selected: #804a8a;
+
+  /* Fields (§6): 48px, matching the buttons (designer, 2026-10-14: fields and buttons felt tall). */
+  --field-h: 48px;
+  --field-fill: #ffffffaf;
+  --field-border: #e0d2e5;
+  --field-focus-ring: 0 0 0 3px #b579c433;
+  /* Focused field (design 2026-10-20): a darker neutral border, no ring, no purple. */
+  --field-border-focus: color-mix(in srgb, var(--color-ink) 28%, transparent);
+
+  /* Buttons (§6): flat plum, full round, 48px (was 57px; designer, 2026-10-14). */
+  --button-h: 48px;
+  --button-primary-fill: #3a0353;
+  --button-primary-shadow: 0 3px 9px #3a035322;
+
+  /* Cards (§5): soft brand tiles, larger radius. */
+  --radius-card: 30px;
+  --radius-card-sm: 19px;
+  --card-tone-lilac: #eae3ef;
+  --card-tone-linen: #f0ebe6;
+  --card-tone-rose: #f4e3e6;
+  --card-tone-paper: #ffffffb8;
+  --card-action-bg: #ffffff99;
+  --card-action-ink: #3a0353;
+
+  /* Floating elevation (§5, §7) */
+  --shadow-float-sm: 0 3px 12px #3a035308;
+  --shadow-float-md: 0 9px 35px #76548016;
+  --shadow-float-lg: 0 35px 100px #24112844;
+
+  /* Motion (§9) */
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+}
+.phone-root :focus-visible:not(input, textarea) { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+/* Text fields show focus with their own neutral border (ui/Input, ui/TextArea). */
+.phone-root :is(input, textarea):focus-visible { outline: none; }

@@ -1,12 +1,10 @@
-/* src/apps/web/WebApp.module.css — placeholder until a web spec exists (docs/web/README.md). */
-.placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: var(--space-8);
-  color: var(--color-ink-secondary);
-  font-family: var(--font-ui);
-  font-size: var(--fs-body);
-  text-align: center;
+/* Desktop stage: fill BrowserFrame; chat/pages use full width (Phase 2 polishes layout). */
+.root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* Wider than phone: drop fixed phone gutters where safe vars assume a handset. */
+  --safe-top: 0px;
+  --safe-bottom: 0px;
+  --margin-screen: 24px;
 }

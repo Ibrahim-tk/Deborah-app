@@ -1,0 +1,24 @@
+.root { display: block; overflow: visible; }
+
+/* Growth eases in and settles, like something alive (no overshoot). */
+.stroke {
+  /* Gap longer than the path, so no round cap shows at the tip before the stroke arrives. */
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+  animation: grow var(--grow-dur) cubic-bezier(0.45, 0, 0.25, 1) var(--grow-delay) forwards;
+}
+.bloom {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  animation: bloom var(--grow-dur) var(--ease-out) var(--grow-delay) forwards;
+}
+@keyframes grow { to { stroke-dashoffset: 0; } }
+@keyframes bloom { to { transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .stroke { animation: none; stroke-dashoffset: 0; }
+  .bloom { animation: none; transform: none; }
+}
+:global(html.reduced-motion) .stroke { animation: none; stroke-dashoffset: 0; }
+:global(html.reduced-motion) .bloom { animation: none; transform: none; }

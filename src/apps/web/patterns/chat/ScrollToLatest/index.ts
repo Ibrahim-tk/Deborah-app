@@ -1,0 +1,1 @@
+export { ScrollToLatest } from './ScrollToLatest';

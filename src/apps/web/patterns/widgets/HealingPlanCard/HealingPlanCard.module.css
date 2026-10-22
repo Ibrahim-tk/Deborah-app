@@ -1,0 +1,114 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: min-content;
+  padding: var(--space-4);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-xl);
+  /* Warm wash — sits with mint/rose destination tiles instead of flat linen. */
+  background: linear-gradient(165deg, #fff9f2 0%, #f8ede3 42%, #f3e4d6 72%, #efe0d0 100%);
+  color: var(--color-ink);
+  isolation: isolate;
+}
+
+.root::after {
+  content: '';
+  position: absolute;
+  right: -18%;
+  bottom: -36%;
+  z-index: 0;
+  width: 70%;
+  max-width: 220px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--gold-200) 55%, transparent), transparent 68%);
+  pointer-events: none;
+}
+
+.root > * {
+  position: relative;
+  z-index: 1;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Same well language as SuggestionCarousel — white glyph on a warm gold disc. */
+.icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--home-tone-icon-radius, var(--radius-full));
+  background: color-mix(in srgb, var(--gold-900) 38%, var(--gold-200));
+  color: var(--white);
+}
+
+.title {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+}
+
+.meta {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+/* Unlocked: full-width white dot-track card (design 2026-10-21). Count left, week dots right, one-line context. */
+.plan {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-5);
+  border-radius: 32px;
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 6%, transparent);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.plan::after { display: none; }
+button.plan:active { transform: scale(0.99); }
+button.plan:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.top { display: flex; align-items: center; justify-content: space-between; }
+.plan .icon { width: 44px; height: 44px; background: none; color: var(--color-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 14%, transparent); }
+.arrow { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-ink) 5%, var(--white)); color: var(--color-ink); }
+.copy { display: grid; gap: 2px; }
+.plan .title { font: var(--weight-regular) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.plan .meta { color: var(--color-ink); }
+.bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); }
+.count {
+  display: flex;
+  align-items: baseline;
+  font: var(--weight-regular) calc(48px * var(--type-scale, 1)) / 1 var(--font-body);
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--color-ink);
+}
+.of { font-size: 0.42em; letter-spacing: 0; color: var(--color-ink-secondary); }
+/* 2×4 base (2 rows × 4 cols); extra actions add columns. Pack column-by-column. */
+.dots {
+  display: grid;
+  grid-template-rows: repeat(2, 10px);
+  grid-auto-columns: 10px;
+  grid-auto-flow: column;
+  gap: 8px;
+  padding-bottom: 6px;
+}
+.dots > i { border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 22%, transparent); }
+.dots > i[data-on] { background: var(--color-ink); box-shadow: none; }
+@media (prefers-reduced-motion: reduce) { button.plan:active { transform: none; } }
+
+/* Standard card spacing (2026-10-21): matches SuggestionCarousel cards. */
+.plan { padding: var(--space-4); gap: var(--space-3); }
+.plan .copy { margin-top: var(--space-1); }
+.plan { padding-inline: var(--space-5); }

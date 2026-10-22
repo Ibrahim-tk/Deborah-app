@@ -1,0 +1,26 @@
+.root { height: 100%; }
+.body { display: grid; gap: var(--space-5); }
+.section { display: grid; gap: var(--space-4); padding-top: var(--space-5); border-top: 1px solid var(--color-border-hairline); }
+.sectionTitle { display: flex; align-items: baseline; gap: var(--space-2); font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.num { font: var(--weight-medium) var(--fs-footnote) / 1 var(--font-body); color: var(--color-accent); }
+.fields { display: grid; gap: var(--space-4); }
+.area { display: grid; gap: var(--space-2); }
+.areaLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.areaBox { /* Descriptive box: 3× a text field (design 2026-10-20). */ min-height: calc(var(--field-h, 48px) * 3); width: 100%; padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-lg); background: var(--field-fill); box-shadow: inset 0 0 0 1px var(--field-border); color: var(--color-ink); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); resize: none; }
+.areaBox::placeholder { color: var(--color-ink-placeholder); }
+.areaBox:focus { outline: none; box-shadow: inset 0 0 0 1px var(--field-border-focus); }
+.headRow { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin: calc(-1 * var(--space-2)) 0; }
+/* Same as the medicine list: one white card, hairline between rows, grey delete. */
+.tiles { display: grid; margin: 0; padding: 0 var(--space-4); list-style: none; border-radius: var(--radius-card-sm, 20px); background: var(--white); box-shadow: inset 0 0 0 1px var(--surface-border, var(--color-border-hairline)); }
+.tile { display: flex; align-items: center; gap: var(--space-3); min-height: 52px; }
+.tile + .tile { border-top: 1px solid var(--color-border-hairline); }
+.tileMain { display: grid; gap: 2px; flex: 1; min-width: 0; padding: var(--space-3) 0; text-align: left; }
+.tileTitle { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.tileDetail { font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body); color: var(--color-ink-secondary); }
+.remove { flex: none; margin-right: calc(-1 * var(--space-2)); color: var(--color-ink-secondary); }
+.remove svg { width: 17px; height: 17px; }
+.sheetFields { display: grid; gap: var(--space-4); }
+.seg { display: grid; gap: var(--space-2); margin: 0; padding: 0; border: 0; }
+.segLabel { padding: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.dashed { display: flex; align-items: center; justify-content: center; gap: var(--space-2); width: 100%; min-height: 56px; border: 1.5px dashed var(--color-border-strong, var(--field-border)); border-radius: var(--radius-card-sm, 20px); font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.dashed:active { background: var(--color-accent-tint); }

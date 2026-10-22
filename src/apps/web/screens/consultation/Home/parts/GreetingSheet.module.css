@@ -1,0 +1,3 @@
+/* Content of the shared ui/BottomSheet (frame, scrim and motion live there). */
+.body { display: grid; justify-items: center; gap: var(--space-4); }
+.hello { max-width: 340px; /* wide enough for three balanced lines (design 2026-10-21) */ font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); /* Deborah's own words stay serif */ text-align: center; text-wrap: balance; }
