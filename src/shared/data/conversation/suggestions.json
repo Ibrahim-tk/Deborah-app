@@ -1,34 +1,58 @@
 {
+  "newSignup": [
+    {
+      "id": "n1",
+      "text": "I can't sleep through the night",
+      "scriptId": "sleep-night"
+    },
+    {
+      "id": "n2",
+      "text": "Gas and bloating after meals",
+      "scriptId": "gas-bloating"
+    },
+    {
+      "id": "n3",
+      "text": "PMS is getting worse — would Gen-Pro help?",
+      "scriptId": "pms-gen-pro"
+    }
+  ],
+  "returning": [
+    {
+      "id": "r1",
+      "text": "Still bloated after my provider visit",
+      "scriptId": "after-provider"
+    },
+    {
+      "id": "r2",
+      "text": "Frustrated getting help for my child",
+      "scriptId": "anxious-parent"
+    },
+    {
+      "id": "r3",
+      "text": "My daughter's doctor only offers hysterectomy",
+      "scriptId": "endo-daughter"
+    },
+    {
+      "id": "r4",
+      "text": "I twisted my ankle hiking",
+      "scriptId": "out-of-scope-ankle"
+    }
+  ],
   "default": [
     {
-      "id": "s1",
-      "text": "Why am I so exhausted all the time?",
-      "scriptId": "thyroid-fatigue"
+      "id": "n1",
+      "text": "I can't sleep through the night",
+      "scriptId": "sleep-night"
     },
     {
-      "id": "s2",
-      "text": "I can't sleep — what's going on?",
-      "scriptId": "sleep-3am"
+      "id": "n2",
+      "text": "Gas and bloating after meals",
+      "scriptId": "gas-bloating"
     },
     {
-      "id": "s3",
-      "text": "Are my hormones out of balance?",
-      "scriptId": "hot-flashes-sleep"
-    },
-    {
-      "id": "s4",
-      "text": "Hot flashes, night sweats — is this menopause?",
-      "scriptId": "hot-flashes-sleep"
-    },
-    {
-      "id": "s5",
-      "text": "I'm gaining weight and nothing is working",
-      "scriptId": "generic"
-    },
-    {
-      "id": "s6",
-      "text": "My labs look normal but I feel terrible",
-      "scriptId": "lab-review"
+      "id": "n3",
+      "text": "PMS is getting worse — would Gen-Pro help?",
+      "scriptId": "pms-gen-pro"
     }
   ],
   "family": [
@@ -86,5 +110,5 @@
     }
   ],
   "status": "placeholder",
-  "note": "Common concerns from Ask Deborah startup list. Icons stay as aiSearch (DESIGN.md bans emoji as icons). family/teen use {name} {they} {them} {their} {are} {feel} tokens, filled from the profile's pronouns."
+  "note": "Tone Guide dummy chats (2026-10-22): newSignup = 3 chips when authFlow is signup; returning = 4 chips when authFlow is login. default mirrors newSignup for lab/specimen imports. family/teen use {name} {they} {them} {their} {are} {feel} tokens."
 }

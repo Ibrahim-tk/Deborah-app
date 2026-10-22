@@ -1,0 +1,94 @@
+{
+  "id": "pms-gen-pro",
+  "topic": "PMS and Gen-Pro",
+  "match": ["PMS", "Gen-Pro", "progesterone", "perimenopause", "luteal"],
+  "ownIntake": true,
+  "intake": [
+    "tg-pms-symptoms",
+    "tg-pms-intensity",
+    "tg-pms-cycle",
+    "tg-pms-mom-meno"
+  ],
+  "voiceSample": "My PMS seems to be getting worse. I'm thinking about trying progesterone, maybe Gen-Pro.",
+  "openingMessage": "PMS is getting worse — would Gen-Pro help?",
+  "readyLine": "Thank you, {name}. I have a clear picture of your cycles. My guidance is ready when you are.",
+  "suggestedQuestions": [
+    "What dose would I start with?",
+    "Where do I apply Gen-Pro?",
+    "Should I get an FSH test?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name}, your PMS symptoms are more intense — breast tenderness, anxiety, irritability, bowel changes, bloating, sleep — starting about 10 days before your period and not easing as well once bleeding starts. Your cycles are a few days shorter, and your mother's menopause came before 50."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "Irregular or shorter cycles, changing bleeding, and especially more intense PMS can be classic signs of perimenopause, which can last 5 to 10 years before the last period. During perimenopause, progesterone is often lower because you're not ovulating as regularly, so estrogen can be out of balance with progesterone. It's not that you're making more estrogen; you're not making enough progesterone. That's one reason cycles shorten and PMS feels louder."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "I think you might be in perimenopause. There isn't a very good single test: an FSH on day 3 to 5 of your cycle (day one is the first day of bleeding) that's elevated can suggest you're beginning, but it only reflects estrogen from the last month, and levels swing in perimenopause — so we go more by symptoms."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for Your Provider",
+        "body": "",
+        "bullets": [
+          "Could my stronger PMS and shorter cycles be perimenopause?",
+          "Is luteal-phase progesterone (like Gen-Pro) appropriate for me?",
+          "Would a day-3-to-5 FSH add anything, knowing it's imperfect?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "",
+        "bullets": [
+          "FSH on day 3–5 of the cycle — may support a perimenopause picture, but symptoms lead."
+        ],
+        "bulletTiers": ["also"]
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "Adding progesterone in the luteal phase — from about ovulation until your period, for 10 to 14 days — can help. Because your cycle has shortened toward 24 days, you would start Gen-Pro around day 10 and use it twice a day for 14 days.",
+        "bullets": [
+          "Start low: 50 mg twice a day (two pumps twice a day — each pump delivers 25 mg), applied to the inner thigh for absorption, from day 10 to day 24.",
+          "Your period should start within 24 to 48 hours after you stop. If it starts earlier, you may need a higher dose — come back after a cycle or so and we'll discuss it.",
+          "Confirm this plan with your healthcare provider before you start."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "I hope this has helped, {name}. I look forward to hearing about your journey with Gen-Pro and whether it eases your PMS. See you soon."
+      }
+    ],
+    "product": {
+      "productId": "genesis-gold",
+      "why": "Gen-Pro is Deborah's progesterone cream (each pump 25 mg). Discuss luteal dosing with your provider; Genesis Gold can sit alongside whole-body support while hormones settle.",
+      "frame90": "Try one cycle at the low dose, then check back."
+    },
+    "closingLine": "Confirm dosing with your provider. Download visit notes, and check back after a cycle — I'll be here.",
+    "habitsForPlan": ["Gen-Pro 50 mg twice daily day 10–24", "Inner thigh application", "Track when your period starts after stopping"],
+    "goal": "Easier luteal-phase PMS",
+    "summary": "Intensifying PMS and shorter cycles; discuss Gen-Pro with provider."
+  },
+  "followUps": [
+    {
+      "match": ["dose", "pump", "50", "start"],
+      "reply": "I always like to start lower since you're probably still making some progesterone: 50 mg twice a day — two pumps twice a day — inner thigh, day 10 to day 24. Confirm with your provider first."
+    },
+    {
+      "match": ["FSH", "test"],
+      "reply": "FSH on day 3 to 5 can be elevated in early perimenopause, but it's imperfect because estrogen swings. We lean on your symptoms more than one lab number."
+    }
+  ],
+  "fallbackReply": "That's a good question, {name}. We'll sort it after you've tried a cycle — or ask your provider now.",
+  "status": "placeholder"
+}

@@ -23,7 +23,7 @@
     "opener": {
       "type": "question",
       "display": "greeting",
-      "bot": "What are {name}’s concerns for today, {you}?",
+      "bot": "Tell me how’s {name} feeling today, {you}?",
       "widget": {
         "type": "suggested_replies",
         "options": [

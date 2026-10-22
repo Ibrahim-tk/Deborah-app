@@ -22,14 +22,14 @@ import { useEffect, useRef, useState } from 'react';
 import { firstConsultFlow, proxyConsultFlow, returningConsultFlow, sandraConsultFlow } from '@shared/data';
 import { briefFromAnswer, visitBriefPreview } from '@shared/engine';
 import { nowFrom, uid } from '@shared/utils';
-import { selectActiveProfile, useAppStore } from '@shared/store';
+import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { DeborahBlob } from '@mobile/ui';
 import { Aura, GradientShift } from '@mobile/ui';
 import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
-import { useNav, useScreenParams } from '@mobile/navigation';
+import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
 import { useHealthConsent } from '@mobile/screens/consultation/Conversation/parts/useHealthConsent';
 import { EntryView } from './parts/EntryView';
 import { VisitPrepCard } from './parts/VisitPrepCard';
@@ -47,17 +47,32 @@ export default function FirstConsult() {
   // `flow: 'sandra'`: the premade first chat a new sign-up lands in (Sandra, 46, perimenopause happy path).
   // `flow: 'proxy'`: the premade caregiver chat (a daughter about her mother, Pathway C) for a female family profile.
   const { flow: which } = useScreenParams<{ flow: 'returning' | 'sandra' | 'proxy' }>();
-  const flow = which === 'returning' ? returningConsultFlow : which === 'sandra' ? sandraConsultFlow : which === 'proxy' ? proxyConsultFlow : firstConsultFlow;
-  const premade = which === 'sandra' || which === 'proxy';
+  const profile = useAppStore(selectActiveProfile);
+  const name = profile?.name ?? '';
+  // Family/advocate must never run Sandra's first-person script (personalise → "How are you feeling today, {name}?").
+  const advocate = Boolean(profile && profile.id !== SELF_PROFILE_ID);
+  const resolved = which === 'sandra' && advocate ? 'proxy' : which;
+  const flow = resolved === 'returning' ? returningConsultFlow : resolved === 'sandra' ? sandraConsultFlow : resolved === 'proxy' ? proxyConsultFlow : firstConsultFlow;
+  const premade = resolved === 'sandra' || resolved === 'proxy';
   const { pop, open, push, openAsk } = useNav();
   const toast = useToast();
   const consent = useHealthConsent();
-  const name = useAppStore((s) => selectActiveProfile(s)?.name ?? '');
+  const askConsent = consent.ask;
+  const needsReconsent = useAppStore((s) => Boolean(s.healthConsentRevoked && !s.healthConsentAt));
+  const chatVisible = useNavStore((s) => {
+    if (s.root !== 'main' || s.activeTab !== 'ask' || s.layers.length > 0) return false;
+    const id = s.tabs.ask.at(-1)?.id;
+    return id === 'M-2.1' || id === 'M-2.12';
+  });
+  // After revoke, the next time this chat is in front, ask again before she can continue.
+  useEffect(() => {
+    if (chatVisible && needsReconsent) void askConsent();
+  }, [chatVisible, needsReconsent, askConsent]);
   const openSwitcher = useProfileSwitcher();
   // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
   const profileCtx = useProfileContext();
   const proxyCtx = useProxyContext();
-  const player = useFlowPlayer(flow, name, !which ? profileCtx : which === 'proxy' ? proxyCtx : undefined, premade ? which : undefined);
+  const player = useFlowPlayer(flow, name, !resolved ? profileCtx : resolved === 'proxy' ? proxyCtx : undefined, premade ? resolved : undefined);
   const { entries, typing } = player;
   const asked = useRef(false);
   const [draft, setDraft] = useState('');

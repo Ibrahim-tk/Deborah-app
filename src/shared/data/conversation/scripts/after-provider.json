@@ -1,0 +1,89 @@
+{
+  "id": "after-provider",
+  "topic": "after a provider visit for gas and bloating",
+  "match": ["still bloated", "Pepcid", "SIBO results", "after my visit", "provider"],
+  "ownIntake": true,
+  "intake": [
+    "tg-after-visit",
+    "tg-after-tips",
+    "tg-after-gold"
+  ],
+  "voiceSample": "I'm still having the gas and bloating. My provider ordered a SIBO breath test and I'm waiting for results. They suggested Pepcid.",
+  "openingMessage": "Still bloated after my provider visit",
+  "readyLine": "Thank you for the update, {name}. I can help you think this through while you wait. My guidance is ready when you are.",
+  "suggestedQuestions": [
+    "Should I stop Pepcid?",
+    "Sacred Seven instead of Genesis Gold?",
+    "What do I do when results come back?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name}, you're still bloated after your visit. Your provider ordered a SIBO breath test — you've taken it and you're waiting — and they suggested Pepcid in the meantime. You're wondering about Genesis Gold."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "Pepcid (famotidine) reduces stomach acid and is sometimes used for stomach distress. I don't want to contradict your healthcare provider, but I don't usually start with H2 blockers for possible SIBO. We want to protect your ability to digest and absorb nutrients, and stomach acid is part of that. What we need is to learn what's going on in the small intestine. Pepcid may ease symptoms until results return, but it isn't necessarily a treatment for overgrowth."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "Waiting is hard, and you did the right thing by completing the test. Until we know the result, treat Pepcid as symptom support your provider chose — and bring any questions to them before you change it. You can read more about Pepcid (famotidine) on drugs.com."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for Your Provider",
+        "body": "",
+        "bullets": [
+          "Is Pepcid meant only until my SIBO results, or longer?",
+          "If SIBO is positive, what's the next step for treatment?",
+          "Should I pause Genesis Gold or switch to amino acids while we sort fermentation?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "You're already waiting on the SIBO breath test — that's the key result. Bring it back here when it lands."
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "",
+        "bullets": [
+          "Don't stop a provider-recommended medicine on your own — ask them first if you have doubts about Pepcid.",
+          "Genesis Gold has vital nutrients, but it may also feed bacterial overgrowth. You might switch to Sacred Seven amino acids (no plant foods that increase fermentation) until SIBO is treated, then return to Genesis Gold if that was the issue.",
+          "Keep meal spacing and your symptom notes for the follow-up visit."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "Take care, {name}. Check back when you get your results — I'll be here."
+      }
+    ],
+    "product": {
+      "productId": "genesis-gold",
+      "why": "If fermentation is the issue, Sacred Seven amino acids may be gentler than Genesis Gold until SIBO is treated — then you can return to Genesis Gold. Confirm any switch with your provider.",
+      "frame90": "Results first; product choice follows the finding."
+    },
+    "closingLine": "I never tell you to stop a prescribed or recommended medicine — ask your provider before any change. I'll be here when results arrive.",
+    "habitsForPlan": ["Ask before changing Pepcid", "Consider Sacred Seven while awaiting SIBO results", "Bring results back to Deborah"],
+    "goal": "Clear next step after SIBO results",
+    "summary": "Post-visit bloating; waiting on SIBO; Pepcid and Genesis Gold questions."
+  },
+  "followUps": [
+    {
+      "match": ["Pepcid", "famotidine", "stop"],
+      "reply": "I don't want to contradict your provider. Pepcid may help symptoms until results return, but it isn't a SIBO treatment. If you have questions, bring them to your provider before making changes. More on drugs.com under Pepcid (famotidine)."
+    },
+    {
+      "match": ["Sacred Seven", "Genesis Gold", "switch"],
+      "reply": "Genesis Gold may feed overgrowth; Sacred Seven amino acids avoid plant foods that increase fermentation. After SIBO treatment, many people return to Genesis Gold. Confirm the switch with your provider."
+    }
+  ],
+  "fallbackReply": "Hold that thought for your provider visit, {name} — and come back when you have the results.",
+  "status": "placeholder"
+}

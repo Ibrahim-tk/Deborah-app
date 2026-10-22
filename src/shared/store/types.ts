@@ -39,6 +39,8 @@ export interface SessionSlice {
   consentVersion?: string;
   /** Consent to process health data, asked in chat the first time it asks about health (F01). */
   healthConsentAt?: string;
+  /** Set by M-10.2 revoke. Cleared when the user agrees again. The next chat start asks before Deborah answers. */
+  healthConsentRevoked?: boolean;
   /** "Not a substitute for professional care" line above the first chat; shown once. */
   disclaimerSeenAt?: string;
   /** Deep-link attribution captured silently at launch (genesis-gold | newsletter | social | direct). */
@@ -56,7 +58,7 @@ export interface SessionSlice {
   setName: (name: string) => void;
   acceptConsent: (version: string) => void;
   acceptHealthConsent: () => void;
-  /** M-10.2: clears health-data consent; the chat asks again the next time it needs health details. */
+  /** M-10.2: clears health-data consent. The next chat start asks again. */
   revokeHealthConsent: () => void;
   /** M-10.1: edit account name / email (email already verified by the sheet's code step). */
   updateAccount: (patch: { firstName?: string; lastName?: string; email?: string }) => void;

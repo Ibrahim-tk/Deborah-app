@@ -13,14 +13,14 @@
 @keyframes rise { from { transform: translateY(100%); } }
 @media (prefers-reduced-motion: reduce) { .scrim, .sheet { animation: none; } }
 
-/* Branded hero (designer, 2026-10-21): white card, Deborah cut-out bottom-left
-   (Gaussian blur + opacity dissolve into white), heading + CTA sharing one left edge. */
+/* Branded hero: white card, heading + CTA left, Deborah cut-out bottom-right
+   (Gaussian blur + opacity dissolve into white). */
 .hero {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   width: 100%;
-  min-height: 160px;
+  min-height: 148px;
   margin-top: var(--space-2);
   border-radius: 32px;
   background: #fff;
@@ -29,19 +29,19 @@
 /* Stack: sharp cut-out on top, blurred clone underneath — masks reveal blur only at the bottom. */
 .portraitStack {
   position: absolute;
-  left: 0;
+  right: 0;
   bottom: 0;
   z-index: 1;
   width: auto;
   max-width: 48%;
-  height: 152px;
+  height: 140px;
   pointer-events: none;
 }
 .portrait,
 .portraitBlur {
   display: block;
   width: auto;
-  height: 152px;
+  height: 140px;
   max-width: 100%;
   object-fit: cover;
   object-position: top center;
@@ -55,7 +55,7 @@
 }
 .portraitBlur {
   position: absolute;
-  left: 0;
+  right: 0;
   bottom: 0;
   z-index: 0;
   /* Light Gaussian soften — enough to dissolve, not a muddy smear. */
@@ -73,9 +73,8 @@
   gap: var(--space-2);
   justify-items: start;
   align-content: center;
-  width: 50%;
-  min-height: 160px;
-  margin-left: auto;
+  width: 55%;
+  min-height: 148px;
   padding: var(--space-4) var(--space-5);
 }
 .heroTitle {

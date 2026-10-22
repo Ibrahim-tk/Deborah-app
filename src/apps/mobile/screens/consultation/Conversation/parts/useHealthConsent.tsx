@@ -5,6 +5,7 @@
  * OPEN: "Not now" keeps the answers held; Deborah then asks for consent in chat as before.
  *
  * Prototype: FLAGS.skipHealthConsent auto-accepts and never renders InlineConsent.
+ * After revoke, the next chat start asks again in the same sheet, even while that flag is on.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FLAGS } from '@shared/flags';
@@ -19,31 +20,40 @@ export function useHealthConsent() {
 
   const [sheet, setSheet] = useState(false);
 
+  const flight = useRef<Promise<void> | null>(null);
+
   const ask = useCallback(async () => {
-    const s = useAppStore.getState();
-    // Sign-up only, once (design 2026-10-20): medical consent in a bottom sheet before Deborah's first answer.
-    if (s.authFlow === 'signup' && !s.healthConsentAt) {
-      setSheet(true);
-      await new Promise<boolean>((r) => { resolve.current = r; });
-      setSheet(false);
-      s.acceptHealthConsent();
-      if (hasPendingHealthBasics()) saveHealthBasics();
-      return;
-    }
-    if (!hasPendingHealthBasics()) return;
-    if (FLAGS.skipHealthConsent) {
-      if (!s.healthConsentAt) s.acceptHealthConsent();
+    if (flight.current) return flight.current;
+    const run = (async () => {
+      const s = useAppStore.getState();
+      const reconsent = Boolean(s.healthConsentRevoked && !s.healthConsentAt);
+      // Sign-up once, and again after revoke (design 2026-10-20): medical consent in a bottom sheet before Deborah's first answer.
+      if ((s.authFlow === 'signup' && !s.healthConsentAt) || reconsent) {
+        setSheet(true);
+        await new Promise<boolean>((r) => { resolve.current = r; });
+        setSheet(false);
+        useAppStore.getState().acceptHealthConsent();
+        if (hasPendingHealthBasics()) saveHealthBasics();
+        return;
+      }
+      if (!hasPendingHealthBasics()) return;
+      if (FLAGS.skipHealthConsent) {
+        if (!s.healthConsentAt) s.acceptHealthConsent();
+        saveHealthBasics();
+        return;
+      }
+      if (!s.healthConsentAt) {
+        setOpen(true);
+        const agreed = await new Promise<boolean>((r) => { resolve.current = r; });
+        setOpen(false);
+        if (!agreed) return;
+        s.acceptHealthConsent();
+      }
       saveHealthBasics();
-      return;
-    }
-    if (!s.healthConsentAt) {
-      setOpen(true);
-      const agreed = await new Promise<boolean>((r) => { resolve.current = r; });
-      setOpen(false);
-      if (!agreed) return;
-      s.acceptHealthConsent();
-    }
-    saveHealthBasics();
+    })();
+    const tracked = run.finally(() => { flight.current = null; });
+    flight.current = tracked;
+    return tracked;
   }, []);
 
   // Bring the card into view when it appears at the end of the thread.
@@ -74,6 +84,7 @@ export function useHealthConsent() {
   const needed = useCallback(
     () => {
       const s = useAppStore.getState();
+      if (s.healthConsentRevoked && !s.healthConsentAt) return true;
       if (s.authFlow === 'signup') return !s.healthConsentAt;
       return !FLAGS.skipHealthConsent && hasPendingHealthBasics() && !s.healthConsentAt;
     },

@@ -20,9 +20,9 @@ export const registry: Record<string, ScreenMeta> = {
 
   // F02 Consultation
   'M-2.0': { title: 'Home', component: lazy(() => import('@mobile/screens/consultation/Home')), presentation: 'tabRoot', tab: 'ask', stack: 'main', figma: '', spec: 'docs/ux/F02-consultation.md#m-20-home' },
-  // Every chat routes to the first-consultation chat (design 2026-10-21): M-2.1 renders FirstConsult.
-  // Old engine chat kept on disk (screens/consultation/Conversation) but no longer routed.
-  'M-2.1': { title: 'Conversation', component: lazy(() => import('@mobile/screens/consultation/FirstConsult')), presentation: 'push', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-21-conversation' },
+  // Ask Deborah (Tone Guide dummy scripts via suggestions.json → Conversation).
+  // Premade JSON flows stay on M-2.12 (FirstConsult) for lab/State menu only.
+  'M-2.1': { title: 'Conversation', component: lazy(() => import('@mobile/screens/consultation/Conversation')), presentation: 'push', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-21-conversation' },
   'M-2.7': { title: 'Shop', component: lazy(() => import('@mobile/screens/consultation/InAppShop')), presentation: 'modal', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-27--shop-in-app-browser' },
   'M-2.8': { title: 'Follow-up opt-in', component: lazy(() => import('@mobile/screens/consultation/FollowUpOptIn')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-28--follow-up-opt-in' },
   'M-2.9': { title: 'Scan a label', component: lazy(() => import('@mobile/screens/consultation/ScanLabel')), presentation: 'sheet', closeButton: true, detent: 'large', dismissible: true, figma: '', spec: 'intake V2 brief §3 Step E (OPEN: add to ux/F02)' },
@@ -90,6 +90,7 @@ export const registry: Record<string, ScreenMeta> = {
   // Modal everywhere (opened read-only from M-1.3 too); same component per the spec.
   'M-10.6': { title: 'Notifications', component: lazy(() => import('@mobile/screens/account/NotificationInbox')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md' },
   'M-10.5': { title: 'Terms & disclaimer', component: lazy(() => import('@mobile/screens/account/Legal')), presentation: 'modal', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-105--terms--disclaimer-not-in-wireframes' },
+  'M-10.7': { title: 'Change password', component: lazy(() => import('@mobile/screens/account/ChangePassword')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md (OPEN: add M-10.7)' },
 };
 
 export const TAB_ROOTS = { ask: 'M-2.0', health: 'M-7.2', account: 'M-10.1' } as const;

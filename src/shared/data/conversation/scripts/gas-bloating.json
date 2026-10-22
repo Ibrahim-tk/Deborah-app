@@ -1,0 +1,96 @@
+{
+  "id": "gas-bloating",
+  "topic": "gas and bloating after meals",
+  "match": ["gas", "bloat", "bloating", "belch", "SIBO", "heartburn"],
+  "ownIntake": true,
+  "intake": [
+    "tg-gas-foods",
+    "tg-gas-timing",
+    "tg-gas-other",
+    "tg-gas-type",
+    "tg-gas-bowels",
+    "tg-gas-sibo"
+  ],
+  "voiceSample": "I've been having gas and bloating after meals.",
+  "openingMessage": "Gas and bloating after meals",
+  "readyLine": "OK {name} — I have what I need about your digestion. My guidance is ready when you are.",
+  "suggestedQuestions": [
+    "What is SIBO again?",
+    "Can I still take Genesis Gold?",
+    "Which enzyme should I look for?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name}, you're getting gas and bloating soon after meals — belching first, then passing gas later, with a little heartburn — and your bowels are soft and daily. You haven't had a SIBO breath test yet."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "After you eat, food lands in your stomach and is broken down by stomach acid, then passes into the small intestine where bile and pancreatic enzymes break down fats, proteins and carbohydrates. Food travels through about 20 feet of small intestine so nutrients can be absorbed. At the end is the ileocecal valve, which should open in sync with the lower stomach. If it opens early, bacteria from the colon can move up into the small intestine and ferment your last meal — producing gas, bloating, belching and passing gas. Those are common signs of SIBO, small intestinal bacterial overgrowth."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "This pattern fits what we often see with SIBO, but only a breath test with your provider can show whether overgrowth is there and what type. I'm recommending you bring these concerns to your healthcare provider and ask about a SIBO breath test."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for Your Provider",
+        "body": "",
+        "bullets": [
+          "Could we do a SIBO breath test for my gas and bloating after meals?",
+          "Should I keep a symptom record to share at the visit?",
+          "Is a digestive enzyme safe for me with meals while we wait?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "",
+        "bullets": [
+          "SIBO breath test — shows what type of bacterial overgrowth, if any, may be contributing."
+        ],
+        "bulletTiers": ["primary"]
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "Here's what you can do for yourself before you see your healthcare provider:",
+        "bullets": [
+          "Space your meals at least four hours apart so the ileocecal valve has time to function properly.",
+          "Take a broad-spectrum digestive enzyme with meals — the one I normally recommend is Digestion HCl, in my Fullscript store.",
+          "Keep a symptom record for a few days to a week to share with your provider."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "You can download your visit notes here so you remember what to ask. Check back after your appointment and we'll go over what your provider said. I hope you feel better — I'll be here when you're ready to talk again."
+      }
+    ],
+    "product": {
+      "productId": "genesis-gold",
+      "why": "While you sort digestion, whole-food support still matters — and Digestion HCl with meals is the enzyme I usually point people to in Fullscript.",
+      "frame90": "Test first; enzymes and meal spacing can ease symptoms while you wait."
+    },
+    "closingLine": "Bring this to your provider. Download visit notes so you remember what to ask — I'll be here when you're ready.",
+    "habitsForPlan": ["Meals at least four hours apart", "Digestive enzyme with meals", "Symptom record for the visit"],
+    "goal": "Calmer digestion after meals",
+    "summary": "Post-meal gas and bloating; ask about SIBO breath test."
+  },
+  "followUps": [
+    {
+      "match": ["SIBO", "breath", "test"],
+      "reply": "A SIBO breath test shows whether bacteria from the colon have moved into the small intestine and what type of overgrowth, if any, is there. Ask your provider to order it."
+    },
+    {
+      "match": ["enzyme", "Fullscript", "HCl"],
+      "reply": "A broad-spectrum digestive enzyme with meals helps break food down so bacteria produce less gas. Digestion HCl is the one I normally recommend in my Fullscript store — confirm it fits your history with your provider."
+    }
+  ],
+  "fallbackReply": "Good question, {name}. Bring that to your provider too — I can help you phrase it.",
+  "status": "placeholder"
+}

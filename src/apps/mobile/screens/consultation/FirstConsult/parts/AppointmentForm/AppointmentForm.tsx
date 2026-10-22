@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { useAppStore } from '@shared/store';
 import { dayKey, nowFrom } from '@shared/utils';
-import { Button, CalendarGrid, Icon, Input } from '@mobile/ui';
+import { BottomSheet, Button, CalendarGrid, Icon, Input } from '@mobile/ui';
 import styles from './AppointmentForm.module.css';
 
 export interface Appointment {
@@ -28,19 +28,25 @@ export function AppointmentForm({ active, onSave }: { active: boolean; onSave: (
       onSubmit={(e) => { e.preventDefault(); if (active && date) onSave({ provider: provider.trim(), date }); }}
     >
       <Input label="Provider name" placeholder="e.g. Dr. Patel" value={provider} autoCapitalize="words" disabled={!active} onChange={(e) => setProvider(e.target.value)} />
-      {/* Custom calendar (designer, 2026-10-21): field opens an inline month grid; picking a day closes it. */}
+      {/* Date field opens CalendarGrid in BottomSheet (overlay), not inline. */}
       <div className={styles.dateField}>
         <span className={styles.dateLabel} id="appt-date-label">Appointment date</span>
-        <button type="button" className={styles.dateButton} aria-labelledby="appt-date-label" aria-expanded={picking} disabled={!active} onClick={() => setPicking((p) => !p)}>
+        <button type="button" className={styles.dateButton} aria-labelledby="appt-date-label" aria-expanded={picking} disabled={!active} onClick={() => setPicking(true)}>
           <span data-empty={!date || undefined}>{shown || 'Pick a date'}</span>
           <Icon name="calendar" size={18} />
         </button>
-        {picking && active && (
-          <div className={styles.calendar}>
-            <CalendarGrid value={date || undefined} today={today} min={today} onChange={(v) => { setDate(v); setPicking(false); }} />
-          </div>
-        )}
       </div>
+      <BottomSheet
+        open={picking && active}
+        onClose={() => setPicking(false)}
+        showClose
+        title="Appointment date"
+        footer={<Button fullWidth onClick={() => setPicking(false)}>Done</Button>}
+      >
+        <div className={styles.calendar}>
+          <CalendarGrid value={date || undefined} today={today} min={today} onChange={(v) => { setDate(v); setPicking(false); }} />
+        </div>
+      </BottomSheet>
       {active && <Button type="submit" size="sm" className={styles.save} disabled={!date}>Save</Button>}
     </form>
   );

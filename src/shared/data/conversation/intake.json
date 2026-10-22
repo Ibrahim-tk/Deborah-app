@@ -882,6 +882,386 @@
       "skipIfKnown": false,
       "hideStep": true,
       "widget": "inlineMulti"
+    },
+    {
+      "id": "tg-sleep-pattern",
+      "prompt": "Oh, I'm sorry to hear that. Not sleeping through the night is really hard. Let's talk about what might be keeping you up. Were you able to fall asleep, or did you wake up in the middle of the night and have trouble falling back to sleep?",
+      "options": [
+        { "id": "fall-asleep-hard", "label": "Hard to fall asleep" },
+        { "id": "wake-middle", "label": "I woke up in the middle of the night" },
+        { "id": "both", "label": "Both" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-sleep-pattern",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-sleep-feel",
+      "prompt": "OK, so you woke up in the middle of the night. When you woke, did you feel overheated? Were you anxious, with your heart racing? Or did you need to urinate?",
+      "options": [
+        { "id": "hot-sweaty", "label": "Hot and a little sweaty" },
+        { "id": "anxious", "label": "Anxious, heart racing" },
+        { "id": "bathroom", "label": "Needed the bathroom" },
+        { "id": "hot-and-bathroom", "label": "Hot/sweaty, then bathroom" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-sleep-feel",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline",
+      "showIf": { "tg-sleep-pattern": { "has": ["wake-middle", "both"] } }
+    },
+    {
+      "id": "tg-sleep-how-long",
+      "prompt": "Got it. Has this been happening every night, and if so, for how long?",
+      "options": [
+        { "id": "couple-nights", "label": "Just the last couple of nights" },
+        { "id": "weeks", "label": "A few weeks" },
+        { "id": "months", "label": "Months" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-sleep-how-long",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-sleep-hrt",
+      "prompt": "OK, only the last couple of nights. That's good to know. May I ask, are you still taking your hormone replacement therapy as directed?",
+      "options": [
+        { "id": "yes", "label": "Yes" },
+        { "id": "no", "label": "No" },
+        { "id": "na", "label": "I don't take HRT" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-sleep-hrt",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-sleep-gold",
+      "prompt": "That's great. And are you still taking Genesis Gold every morning?",
+      "options": [
+        { "id": "yes", "label": "Yes, every morning" },
+        { "id": "sometimes", "label": "Sometimes" },
+        { "id": "no", "label": "No" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-sleep-gold",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-sleep-alcohol",
+      "prompt": "That's fantastic. May I ask, did you have an alcoholic beverage after dinner, like some wine?",
+      "options": [
+        { "id": "yes", "label": "I did have a glass of wine" },
+        { "id": "no", "label": "No" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-sleep-alcohol",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-gas-foods",
+      "prompt": "Oh, I'm sorry to hear that. Can you connect the abdominal distress with any particular foods, like carbohydrates, fats, protein or spicy foods?",
+      "options": [
+        { "id": "any-meal", "label": "Any meal" },
+        { "id": "carbs", "label": "Carbohydrates" },
+        { "id": "fats", "label": "Fats" },
+        { "id": "protein", "label": "Protein" },
+        { "id": "spicy", "label": "Spicy foods" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-gas-foods",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-gas-timing",
+      "prompt": "OK. Is it happening within 20 minutes to an hour after you eat, or much later?",
+      "options": [
+        { "id": "soon", "label": "Pretty soon after I eat" },
+        { "id": "later", "label": "Much later" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-gas-timing",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-gas-other",
+      "prompt": "And are you having any heartburn, abdominal pain, chills or fever?",
+      "options": [
+        { "id": "heartburn", "label": "A little heartburn" },
+        { "id": "pain", "label": "Abdominal pain" },
+        { "id": "chills-fever", "label": "Chills or fever" },
+        { "id": "none", "label": "None of those" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-gas-other",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-gas-type",
+      "prompt": "By gas, do you mean passing gas, belching, or both?",
+      "options": [
+        { "id": "passing", "label": "Passing gas" },
+        { "id": "belching", "label": "Belching" },
+        { "id": "both", "label": "Both — belch first, then pass gas later" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-gas-type",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-gas-bowels",
+      "prompt": "Got it. Are your bowel movements regular? Do you have one every day, and is it formed, watery or hard to pass?",
+      "options": [
+        { "id": "daily-soft", "label": "Every day, soft and normal" },
+        { "id": "diarrhea", "label": "Diarrhea" },
+        { "id": "hard", "label": "Hard to pass" },
+        { "id": "irregular", "label": "Not every day" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-gas-bowels",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-gas-sibo",
+      "prompt": "Great. Have you ever been evaluated for SIBO, small intestinal bacterial overgrowth? It's usually checked with a breath test.",
+      "options": [
+        { "id": "no", "label": "No, I haven't" },
+        { "id": "yes", "label": "Yes" },
+        { "id": "waiting", "label": "Waiting on results" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-gas-sibo",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-pms-symptoms",
+      "prompt": "I'm sorry to hear your PMS is getting worse. Can you tell me a little more about it? How long does it last, and what symptoms are you having: breast tenderness, anxiety, irritability, changes in bowel movements, bloating, trouble sleeping?",
+      "options": [
+        { "id": "all", "label": "All of the above" },
+        { "id": "mood", "label": "Mostly mood — anxiety or irritability" },
+        { "id": "body", "label": "Mostly body — bloating, breasts, sleep" },
+        { "id": "mixed", "label": "A mix of a few" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-pms-symptoms",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-pms-intensity",
+      "prompt": "Oh, I'm so sorry. That's hard. When did you start noticing your PMS getting worse, meaning the symptoms are more intense?",
+      "options": [
+        { "id": "stronger-10d", "label": "Stronger, starting about 10 days before my period" },
+        { "id": "recent", "label": "Just in the last few cycles" },
+        { "id": "years", "label": "It's been building for years" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-pms-intensity",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-pms-cycle",
+      "prompt": "OK. Has your cycle length changed?",
+      "options": [
+        { "id": "shorter", "label": "Yes, a few days shorter" },
+        { "id": "longer", "label": "Yes, longer" },
+        { "id": "same", "label": "About the same" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-pms-cycle",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-pms-mom-meno",
+      "prompt": "Many women follow in their mother's footsteps in the timing of menopause. Do you know when your mother went through menopause?",
+      "options": [
+        { "id": "before-50", "label": "Before she was 50" },
+        { "id": "after-50", "label": "After 50" },
+        { "id": "unknown", "label": "I don't know" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-pms-mom-meno",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-after-visit",
+      "prompt": "Oh, I'm sorry you're still dealing with that. How did your provider visit go?",
+      "options": [
+        { "id": "sibo-waiting", "label": "Ordered a SIBO breath test — waiting on results" },
+        { "id": "other-plan", "label": "They gave me a plan, still symptoms" },
+        { "id": "no-help", "label": "Didn't feel heard" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-after-visit",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-after-tips",
+      "prompt": "I'm very glad your provider ordered the test and that you've taken it. Waiting for results is hard. Did your provider give you any tips in the meantime?",
+      "options": [
+        { "id": "pepcid", "label": "They suggested Pepcid" },
+        { "id": "other", "label": "Something else" },
+        { "id": "none", "label": "No tips yet" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-after-tips",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-after-gold",
+      "prompt": "Can I still take my Genesis Gold? — yes, ask me that if you're wondering. Are you still on Genesis Gold right now?",
+      "options": [
+        { "id": "yes", "label": "Yes, still taking it" },
+        { "id": "no", "label": "No" },
+        { "id": "paused", "label": "Paused for now" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-after-gold",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-parent-eval",
+      "prompt": "I'm so sorry to hear that. You've been trying to get help and he's struggling. Has your child been evaluated by his pediatrician?",
+      "options": [
+        { "id": "no", "label": "Not since the last physical" },
+        { "id": "waiting", "label": "Can't get an appointment" },
+        { "id": "yes", "label": "Yes, recently" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-parent-eval",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-parent-sleep",
+      "prompt": "Let me ask you a few questions, because when your child isn't doing well, it can affect your health too. Have you been able to sleep?",
+      "options": [
+        { "id": "poor", "label": "Not very well" },
+        { "id": "ok", "label": "OK" },
+        { "id": "fine", "label": "Fine" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-parent-sleep",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-parent-appetite",
+      "prompt": "What about your appetite? Are you eating?",
+      "options": [
+        { "id": "stress-eating", "label": "I've been stress eating" },
+        { "id": "low", "label": "Not much appetite" },
+        { "id": "normal", "label": "Eating normally" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-parent-appetite",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-parent-calm",
+      "prompt": "Have you been practicing the CALM meditation?",
+      "options": [
+        { "id": "no", "label": "No" },
+        { "id": "sometimes", "label": "Sometimes" },
+        { "id": "yes", "label": "Yes" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-parent-calm",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-endo-confirm",
+      "prompt": "OK, let me make sure I understand. Your daughter has endometriosis, and her doctor says her only option is a full hysterectomy. Is that right?",
+      "options": [
+        { "id": "yes", "label": "Yes" },
+        { "id": "similar", "label": "Something close to that" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-endo-confirm",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-ankle-ice",
+      "prompt": "Oh my goodness, you really did injure yourself. Have you put ice on your ankle?",
+      "options": [
+        { "id": "yes", "label": "I have" },
+        { "id": "no", "label": "Not yet" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-ankle-ice",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-ankle-when",
+      "prompt": "How long ago did you injure it?",
+      "options": [
+        { "id": "today", "label": "Today" },
+        { "id": "few-days", "label": "A few days ago — still swollen" },
+        { "id": "week-plus", "label": "More than a week" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-ankle-when",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
+    },
+    {
+      "id": "tg-ankle-bruise",
+      "prompt": "Do you have any bruising?",
+      "options": [
+        { "id": "yes", "label": "Yes" },
+        { "id": "no", "label": "No" }
+      ],
+      "multi": false,
+      "profileField": "conversation.tg-ankle-bruise",
+      "skipIfKnown": false,
+      "hideStep": true,
+      "widget": "inline"
     }
   ],
   "maxQuestions": 3,

@@ -1,0 +1,96 @@
+{
+  "id": "sleep-night",
+  "topic": "not sleeping through the night",
+  "match": ["can't sleep", "cannot sleep", "wake up at night", "middle of the night", "wine", "not sleeping"],
+  "ownIntake": true,
+  "intake": [
+    "tg-sleep-pattern",
+    "tg-sleep-feel",
+    "tg-sleep-how-long",
+    "tg-sleep-hrt",
+    "tg-sleep-gold",
+    "tg-sleep-alcohol"
+  ],
+  "voiceSample": "Not great. I haven't been able to sleep through the night.",
+  "openingMessage": "I can't sleep through the night",
+  "readyLine": "OK — I have a clear picture of your nights. My guidance is ready when you are, or add anything else first.",
+  "suggestedQuestions": [
+    "What if I want to have a glass of wine sometimes?",
+    "Does late eating matter too?",
+    "Should I change my HRT?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name}, you're waking in the middle of the night — often hot and a little sweaty — and it's been only a couple of nights so far. You're staying with your hormone therapy and Genesis Gold, and alcohol after dinner may be part of the story."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "Alcohol can often wake you up in the middle of the night. At first it promotes neurochemicals that help you fall asleep, but once they run out, you're wide awake. The same thing can happen if you eat late: your digestive system and liver are busy, so you don't go into the deep sleep you need, and you may not make enough melatonin to stay there. You wake in light sleep and can feel hot and sweaty, especially during the menopausal transition, because your hypothalamus is dysregulated. Your hypothalamus is being supported by taking your hormone replacement therapy regularly and by nutraceutical support with Genesis Gold, but alcohol at night can disrupt your circadian rhythm."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "A short run of mid-night waking after wine is often a circadian and metabolic jolt, not a reason to panic. If it keeps happening without alcohol, we'll look more closely at hormones, blood sugar, and sleep depth with your provider."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for Your Provider",
+        "body": "",
+        "bullets": [
+          "Could alcohol or late meals be waking me even when my HRT is steady?",
+          "Should we review my melatonin and sleep depth?",
+          "Is my current HRT dose still the right fit if night heat continues?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "",
+        "bullets": [
+          "Only if nights stay broken without alcohol — ask about hormones and overnight blood sugar with your provider."
+        ],
+        "bulletTiers": ["also"]
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "I'm so glad you asked about wine sometimes. It's important to have a plan when you do drink alcohol.",
+        "bullets": [
+          "Before bed after alcohol: take 100 to 200 mg of DIM (diindolylmethane), or ask about I3C (indole-3-carbinol). They help you metabolize estrogen a little more safely and seem to help block alcohol's effect on estrogen and neuropeptide metabolism. You can find DIM in my Fullscript store.",
+          "Keep Genesis Gold in the morning as directed.",
+          "Avoid late heavy meals when you want deep sleep."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "{name}, I'll be here when you're ready to talk again. One rough night after wine doesn't undo the care you're already giving your body."
+      }
+    ],
+    "product": {
+      "productId": "genesis-gold",
+      "why": "You're already on Genesis Gold — keep that morning support while you plan around alcohol with DIM from Fullscript.",
+      "frame90": "Steady morning support plus a clear plan for the nights you drink."
+    },
+    "closingLine": "Download your visit notes so you remember what to ask. Check back anytime — I'll be here when you're ready.",
+    "habitsForPlan": ["DIM 100–200 mg before bed if you drink", "Genesis Gold every morning", "No late heavy meals on nights you need deep sleep"],
+    "goal": "Sleeping through the night",
+    "summary": "Mid-night waking after wine; HRT and Genesis Gold on board."
+  },
+  "followUps": [
+    {
+      "match": ["wine", "alcohol", "drink", "DIM"],
+      "reply": "I'm so glad you asked. When you do drink, have a plan: 100 to 200 mg of DIM before bed. You can find it in my Fullscript store. It doesn't replace talking with your provider if nights keep breaking without alcohol."
+    },
+    {
+      "match": ["eat", "dinner", "late"],
+      "reply": "Late eating can keep your liver and gut working when you need deep sleep and melatonin. A lighter, earlier dinner often helps on nights that matter."
+    }
+  ],
+  "fallbackReply": "Thank you for telling me, {name}. I'll fold that into my thinking.",
+  "status": "placeholder"
+}

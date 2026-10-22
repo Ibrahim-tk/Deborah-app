@@ -85,6 +85,7 @@ export default function Account() {
         { title: 'Name', value: [name, lastName].filter(Boolean).join(' ') || 'Not added', icon: 'account', onPress: () => openSheet('name') },
         { title: 'Email', value: email || 'Not added', icon: 'mail', onPress: () => openSheet('email') },
         { title: 'Phone number', value: phoneDisplay ?? 'Not added', icon: 'phone', onPress: openPhone },
+        { title: 'Change password', icon: 'lock', onPress: () => nav.push('M-10.7') },
         { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') },
         { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
       ],

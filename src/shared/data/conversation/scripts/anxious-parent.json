@@ -1,0 +1,86 @@
+{
+  "id": "anxious-parent",
+  "topic": "anxious parent advocating for a child",
+  "match": ["frustrated", "pediatrician", "school", "ADHD", "my child", "appointment"],
+  "ownIntake": true,
+  "intake": [
+    "tg-parent-eval",
+    "tg-parent-sleep",
+    "tg-parent-appetite",
+    "tg-parent-calm"
+  ],
+  "voiceSample": "Really frustrated. I can't get an appointment with the pediatrician or the education specialist, and he's having such a hard time in school.",
+  "openingMessage": "Frustrated getting help for my child",
+  "readyLine": "Thank you for trusting me with this, {name}. I want to support you as well as your child. My guidance is ready when you are.",
+  "suggestedQuestions": [
+    "What is the CALM meditation again?",
+    "Does ADHD always mean medication?",
+    "What should I ask the school?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name}, you've been trying to get a pediatrician visit and an education evaluation while your child struggles in school. You're not even sure of the diagnosis yet, and meanwhile you're sad for him and frustrated you can't get help. You're sleeping poorly and stress eating — and you haven't been practicing CALM."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "When you're tired and eating foods that aren't the best for your body, you can feel even more anxious and frustrated. Your biochemistry gets a little off: exhausted, blood sugar all over the place. A deep breath stimulates the parasympathetic nervous system — the part that calms things down. It doesn't change the school waitlist, but it calms your body and mind so you can keep advocating."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "Children develop at different rates. Some need a school evaluation and an educational specialist; some need the pediatrician involved early. ADHD, if it turns out to be that, does not automatically mean medication — there are many approaches, and we don't know the diagnosis yet."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for the Pediatrician & School",
+        "body": "",
+        "bullets": [
+          "Can we start with a teacher evaluation and educational specialist while we wait for the pediatrician?",
+          "What options exist before or beside medication if attention challenges are confirmed?",
+          "How do I keep regular meal and bedtime structure at home to help regulation?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "Evaluation often starts at school as much as in clinic — follow their process, and keep the pediatrician in the loop."
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "First, take a deep breath. I commend you for advocating — your child is lucky to have you. What's needed right now includes helping you feel a little better.",
+        "bullets": [
+          "CALM for five minutes daily: music you can hum, a scent (candle or oil), breathe in 4 / hold 4 / out 8. Let your body link calm to that scent and sound.",
+          "Keep regular schedules for meals and bedtime, and a place where things belong — that helps children regulate.",
+          "Read to your child; let him pick the book. Sharing stories captures attention; talk about what you both learned afterward.",
+          "Put your own oxygen mask on first — the best thing for him is you healthy, calm and as steady as you can be."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "I'm here for you, {name}. Check back anytime you have other questions — about his evaluation or about you."
+      }
+    ],
+    "closingLine": "Come back after he's evaluated, or anytime. Take care — I'm thinking about you.",
+    "habitsForPlan": ["CALM meditation 5 minutes daily", "Regular meals and bedtime", "Read together and talk about the story"],
+    "goal": "Steady parent, clearer path to evaluation",
+    "summary": "Frustrated parent; sleep and stress eating; CALM and advocacy next steps."
+  },
+  "followUps": [
+    {
+      "match": ["CALM", "meditat", "breathe", "hum"],
+      "reply": "Music you can hum, a scent you can carry, breathe in for four, hold four, out for eight. Repeat. Over time the scent or hum alone can help you calm when you're frustrated — and humming a lullaby around your child may help him too."
+    },
+    {
+      "match": ["ADHD", "medication", "meds"],
+      "reply": "No, not necessarily. Many options exist if attention challenges are confirmed — and we don't know that yet. Start with school evaluation and the pediatrician."
+    }
+  ],
+  "fallbackReply": "You're doing hard work advocating, {name}. Come back whenever you need.",
+  "status": "placeholder"
+}

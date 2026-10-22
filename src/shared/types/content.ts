@@ -73,7 +73,12 @@ export interface Suggestion {
 }
 
 export interface SuggestionsData {
+  /** Alias of newSignup — labs / specimens that still import `default`. */
   default: Suggestion[];
+  /** Empty self-chat after signup (Tone Guide — 3 chips). */
+  newSignup: Suggestion[];
+  /** Empty self-chat after login (Tone Guide — 4 chips). */
+  returning: Suggestion[];
   /** Another adult's profile: third person, tokens filled from their pronouns. */
   family: Suggestion[];
   teen: Suggestion[];

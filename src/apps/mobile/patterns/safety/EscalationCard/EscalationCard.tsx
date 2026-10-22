@@ -45,16 +45,15 @@ export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: E
 
   return (
     <>
-      {/* Branded hero card (designer, 2026-10-21): Deborah cut-out on white, heading + CTA left-aligned.
-          Portrait uses a sharp layer + blurred clone so the bottom dissolves into the card (not opacity alone). */}
+      {/* Branded hero card: heading + CTA left, Deborah cut-out right (bottom dissolves into the card). */}
       <div className={styles.hero}>
+        <div className={styles.heroCopy}>
+          <p className={styles.heroTitle}>Talk with Deborah directly</p>
+          <Button size="sm" className={styles.cta} onClick={request}>Book Consultation</Button>
+        </div>
         <div className={styles.portraitStack} aria-hidden>
           <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" />
           <img className={styles.portraitBlur} src="/images/deborah/cutout.png" alt="" />
-        </div>
-        <div className={styles.heroCopy}>
-          <p className={styles.heroTitle}>Talk with Deborah directly</p>
-          <Button size="sm" className={styles.cta} onClick={request}>Talk with Deborah</Button>
         </div>
       </div>
       <BottomSheet open={Boolean(open)} onClose={done}>

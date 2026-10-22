@@ -1,0 +1,87 @@
+{
+  "id": "out-of-scope-ankle",
+  "topic": "orthopedic ankle injury — out of scope",
+  "match": ["ankle", "twisted", "sprain", "can't walk", "hiking"],
+  "ownIntake": true,
+  "intake": [
+    "tg-ankle-ice",
+    "tg-ankle-when",
+    "tg-ankle-bruise"
+  ],
+  "voiceSample": "I twisted my ankle on a hike, and I can't walk on it.",
+  "openingMessage": "I twisted my ankle hiking",
+  "readyLine": "I've heard enough to guide you safely. My reply is ready when you are.",
+  "suggestedQuestions": [
+    "How long should I ice?",
+    "Do I need an x-ray?",
+    "When can I walk on it?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "{name}, on a hike you twisted your ankle so badly you can't walk on it. You've iced it; it's been a few days and it's still swollen, with bruising. Is that correct — yes, that's the picture I'm working from."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "This isn't a hormonal or whole-body pattern I guide day to day — it's an orthopedic injury. Your body needs structural evaluation, not hypothalamus coaching."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "I'm here to provide educational information and support, but this is an orthopedic injury, and you need to see your healthcare provider to be evaluated. You may need imaging to see if there's damage to the ankle."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for Your Provider",
+        "body": "",
+        "bullets": [
+          "Do I need imaging for this sprain?",
+          "Should I be non-weight-bearing until I'm seen?",
+          "When is it safe to walk on it again?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "",
+        "bullets": [
+          "Imaging if your provider is concerned about fracture or ligament damage."
+        ],
+        "bulletTiers": ["primary"]
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "In the meantime, simple safe self-care until the visit:",
+        "bullets": [
+          "Don't put weight on that ankle.",
+          "When you ice it, apply ice for only 10 minutes at a time; you can repeat every couple of hours."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "Please check back with me after your visit. Take care, {name}."
+      }
+    ],
+    "closingLine": "This is outside hormonal guidance — see your provider for evaluation. I'll be here after your visit.",
+    "habitsForPlan": ["Non-weight-bearing until evaluated", "Ice 10 minutes at a time", "Follow up after the visit"],
+    "goal": "Safe handoff to orthopedic care",
+    "summary": "Twisted ankle; out-of-scope orthopedic referral with brief self-care."
+  },
+  "followUps": [
+    {
+      "match": ["ice", "icing"],
+      "reply": "Ice only 10 minutes at a time, every couple of hours. Don't walk on it until your provider says so."
+    },
+    {
+      "match": ["x-ray", "imaging", "walk"],
+      "reply": "Whether you need imaging and when you can walk on it is for your healthcare provider — please get evaluated."
+    }
+  ],
+  "fallbackReply": "That's a question for your provider's exam, {name}. Check back after you're seen.",
+  "status": "placeholder"
+}

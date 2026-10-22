@@ -21,7 +21,7 @@ import styles from './Welcome.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 /** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
-const SKIP_AUTH_VALIDATION = false;
+const SKIP_AUTH_VALIDATION = true;
 
 export default function Welcome() {
   const { presentSheet } = useNav();

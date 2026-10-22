@@ -1,0 +1,82 @@
+{
+  "id": "endo-daughter",
+  "topic": "advocating for a daughter with endometriosis",
+  "match": ["endometriosis", "hysterectomy", "daughter", "adhesions", "GnRH"],
+  "ownIntake": true,
+  "intake": [
+    "tg-endo-confirm"
+  ],
+  "voiceSample": "My daughter has endometriosis, and her doctor says her only option is a full hysterectomy.",
+  "openingMessage": "My daughter's doctor only offers hysterectomy",
+  "readyLine": "I hear how serious this feels. I have options to walk through with you — my guidance is ready when you are.",
+  "suggestedQuestions": [
+    "What is GnRH medication?",
+    "Will hysterectomy cure endometriosis?",
+    "What should I tell my daughter?"
+  ],
+  "answer": {
+    "sections": [
+      {
+        "key": "hearing",
+        "title": "What I'm Hearing",
+        "body": "Your daughter has endometriosis, and her doctor has framed a full hysterectomy as the only option. I can understand why you're so concerned — that is a drastic recommendation for a young woman. I'm sorry she's in so much pain."
+      },
+      {
+        "key": "hypothalamic",
+        "title": "The Hypothalamic Connection",
+        "body": "Endometriosis is very painful, but it isn't actually cured by hysterectomy. Endometrial cells can end up outside the uterus — possibly as early as fetal development — on tubes, ovaries, pelvic cavity, and rarely elsewhere. Estrogen and progesterone stimulate that tissue wherever it is. The body treats rogue cells as foreign; the immune attack creates scar tissue (adhesions), which often drives much of the pain. Medications that quiet the hypothalamus's GnRH signals for a few months can calm those pulses and help healing of that immune attack — her gynecologist can say whether a GnRH-based medication is right for her. You can read about these medications on drugs.com."
+      },
+      {
+        "key": "mayMean",
+        "title": "What This May Mean",
+        "body": "There are options beyond hysterectomy. Laparoscopic surgery can clean up adhesions and endometrial cysts (blood-filled); not every microscopic cell can be found that way. Medical suppression and surgery are both conversations for her gynecologist — hysterectomy is not the only path."
+      },
+      {
+        "key": "providerQuestions",
+        "title": "Questions for Her Gynecologist",
+        "body": "",
+        "bullets": [
+          "Is laparoscopic cleanup of adhesions and cysts an option before hysterectomy?",
+          "Would a GnRH-based medication for a few months be appropriate?",
+          "What are the risks of hysterectomy at her age versus other approaches?"
+        ]
+      },
+      {
+        "key": "tests",
+        "title": "Tests Worth Discussing",
+        "body": "Imaging and surgical planning belong with her specialist — bring the questions above to that visit."
+      },
+      {
+        "key": "doNow",
+        "title": "What You Can Do Now",
+        "body": "",
+        "bullets": [
+          "Share this information with your daughter so she can advocate with you.",
+          "Ask the gynecologist specifically about laparoscopy and GnRH options — framed as discussion, not a demand to start a prescription without them.",
+          "Come back here when you're ready with more questions."
+        ]
+      },
+      {
+        "key": "word",
+        "title": "A Word from Deborah",
+        "body": "Why don't you share this with your daughter and come back when you're ready? I'll be here for you and your daughter."
+      }
+    ],
+    "closingLine": "Prescription options are suggestions to discuss with her provider, always with a drugs.com reference. I'll be here for you both.",
+    "habitsForPlan": ["Share options with your daughter", "Ask about laparoscopy and GnRH", "Return after the specialist visit"],
+    "goal": "Informed options beyond hysterectomy",
+    "summary": "Daughter with endometriosis; hysterectomy framed as only option — other paths to discuss."
+  },
+  "followUps": [
+    {
+      "match": ["GnRH", "medication", "drugs.com"],
+      "reply": "GnRH-based medicines quiet hypothalamic pulses for a time and can help the immune attack on rogue endometrial tissue settle. Her gynecologist decides if that's right for her — read the medication pages on drugs.com together."
+    },
+    {
+      "match": ["hysterectomy", "cure"],
+      "reply": "Hysterectomy does not cure endometriosis, because tissue can live outside the uterus. That's why other options deserve a full conversation."
+    }
+  ],
+  "fallbackReply": "Bring that to her gynecologist, and come back anytime — I'm here for you both.",
+  "status": "placeholder"
+}

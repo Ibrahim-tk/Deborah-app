@@ -36,8 +36,9 @@ export function HealingPlanCard({ locked = false, concern, done = 0, total = 0, 
   }
 
   const line = concern ?? 'Your plan';
-  const progress = total > 0 ? `${done} of ${total} actions` : undefined;
-  const label = progress ? `${HEALING_PLAN_VIEW_CTA}, ${line}, ${progress}` : `${HEALING_PLAN_VIEW_CTA}, ${line}`;
+  const label = total > 0
+    ? `${HEALING_PLAN_VIEW_CTA}, ${line}, ${done} of ${total} actions`
+    : `${HEALING_PLAN_VIEW_CTA}, ${line}`;
   const body = (
     <>
       <span className={styles.top}>
@@ -53,8 +54,24 @@ export function HealingPlanCard({ locked = false, concern, done = 0, total = 0, 
       <span className={styles.copy}>
         <span id="healing-plan-title" className={styles.title}>{HEALING_PLAN_TITLE}</span>
         <span className={styles.meta}>{line}</span>
-        {progress && <span className={styles.progress}>{progress}</span>}
       </span>
+      {total > 0 && (
+        <span className={styles.bottom}>
+          <span className={styles.count} aria-hidden>
+            {done}<span className={styles.of}>/{total}</span>
+          </span>
+          {/* Grid packs column-by-column (2 rows); fill order is row-wise. */}
+          <span className={styles.dots} aria-hidden>
+            {Array.from({ length: total }, (_, i) => {
+              const row = i % 2;
+              const col = Math.floor(i / 2);
+              const cols = Math.ceil(total / 2);
+              const rank = row * cols + col;
+              return <i key={i} data-on={rank < done || undefined} />;
+            })}
+          </span>
+        </span>
+      )}
     </>
   );
   return onPress ? (

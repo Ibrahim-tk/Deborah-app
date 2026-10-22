@@ -70,7 +70,7 @@ export default function PrivacyData() {
           <ListRow title="Delete a profile" subtitle="In Family profiles" onPress={() => nav.push('M-6.6')} />
         </div>
 
-        {/* Consent (design 2026-10-21): health-data consent can be revoked here; the chat asks again when needed. */}
+        {/* Consent (design 2026-10-21): health-data consent can be revoked here; the next chat start asks again. */}
         <div className={styles.group}>
           <ListRow
             title="Health data consent"

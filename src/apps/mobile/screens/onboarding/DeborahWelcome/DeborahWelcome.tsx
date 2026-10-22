@@ -29,17 +29,11 @@ export default function DeborahWelcome() {
     : 'I’m so glad you’re here. Tell me what’s on your mind, and I’ll ask what I need as we go.';
 
   const ask = () => {
-    // The first conversation opens on top of Home, so Back lands there.
-    // Every new profile goes to the live chat. Stage does not pick a scripted consult.
+    // Empty Ask Deborah only. Chips = Tone Guide scripted samples (signup 3 / login 4). No separate “first consultation”.
     dismissSheet();
     resetTo('main', 'M-2.0');
     if (member) switchProfile(member.id);
-    // Design request 2026-10-20: a new sign-up (for herself) lands in the premade first chat (Sandra's script).
-    // A female family member gets the premade caregiver chat (Pathway C, design request 2026-10-20); any other
-    // family member keeps the live chat. OPEN: confirm this replaces the live first chat for every new user.
-    if (!member) push('M-2.12', { flow: 'sandra' });
-    else if (member.sexAtBirth === 'female') push('M-2.12', { flow: 'proxy' });
-    else push('M-2.1', { focus: true });
+    push('M-2.1', { focus: true });
   };
 
   return (

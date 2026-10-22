@@ -27,7 +27,7 @@ type Step = 'choose' | 'email' | 'code' | 'password' | 'merge';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
-const SKIP_AUTH_VALIDATION = false;
+const SKIP_AUTH_VALIDATION = true;
 
 export default function CreateAccount() {
   const { mode: initialMode = 'create', plan, billing, returnTo, sheet, provider: startWith, reason } = useScreenParams<{

@@ -28,6 +28,13 @@ import products from './commerce/products.json';
 import guardrails from './conversation/guardrails.json';
 import hotFlashesSleep from './conversation/scripts/hot-flashes-sleep.json';
 import sleep3am from './conversation/scripts/sleep-3am.json';
+import sleepNight from './conversation/scripts/sleep-night.json';
+import gasBloating from './conversation/scripts/gas-bloating.json';
+import pmsGenPro from './conversation/scripts/pms-gen-pro.json';
+import afterProvider from './conversation/scripts/after-provider.json';
+import anxiousParent from './conversation/scripts/anxious-parent.json';
+import endoDaughter from './conversation/scripts/endo-daughter.json';
+import outOfScopeAnkle from './conversation/scripts/out-of-scope-ankle.json';
 import thyroidFatigue from './conversation/scripts/thyroid-fatigue.json';
 import generic from './conversation/scripts/generic.json';
 import labReview from './conversation/scripts/lab-review.json';
@@ -91,7 +98,22 @@ export const documentConfig = documentTypes as DocumentConfig;
 export const documentExtractions = extractionsByType as Record<DocumentType, DocumentExtraction>;
 
 export const scripts: Record<string, Script> = Object.fromEntries(
-  ([hotFlashesSleep, sleep3am, thyroidFatigue, generic, labReview, teenIrregularPeriods, familyFatigue] as Script[]).map((s) => [s.id, s]),
+  ([
+    hotFlashesSleep,
+    sleep3am,
+    sleepNight,
+    gasBloating,
+    pmsGenPro,
+    afterProvider,
+    anxiousParent,
+    endoDaughter,
+    outOfScopeAnkle,
+    thyroidFatigue,
+    generic,
+    labReview,
+    teenIrregularPeriods,
+    familyFatigue,
+  ] as Script[]).map((s) => [s.id, s]),
 );
 
 export const FALLBACK_SCRIPT_ID = 'generic';

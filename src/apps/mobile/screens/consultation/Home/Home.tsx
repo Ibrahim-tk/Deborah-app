@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { SELF_PROFILE_ID, selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
+import { selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
 import { Aura, GradientShift, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
@@ -21,7 +21,6 @@ import { StateReturning, type NextStep } from './parts/StateReturning';
 import { useHomeView } from './parts/useHomeView';
 
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
-import { hasFlowSession } from '@mobile/screens/consultation/FirstConsult/parts/flowSessions';
 import styles from './Home.module.css';
 
 /** Profiles that have already seen the first-visit greeting this session (in memory only). */
@@ -132,10 +131,9 @@ export default function Home() {
           <StateNew
             onStart={() => { closeSheet(); openAsk({ focus: true }); }}
             chat={
-              // A new sign-up's premade first chat (Sandra) resumes exactly where she stopped.
-              hasFlowSession('proxy') && profileId !== SELF_PROFILE_ID ? { title: 'Your conversation with Deborah', onContinue: () => { closeSheet(); push('M-2.12', { flow: 'proxy' }); } }
-              : hasFlowSession('sandra') ? { title: 'Your first conversation with Deborah', onContinue: () => { closeSheet(); push('M-2.12', { flow: 'sandra' }); } }
-              : history.length || d.midIntake ? { title: d.summary ?? d.topic, when: d.when, onContinue: () => { closeSheet(); resume(); } } : undefined
+              // Live Ask Deborah history only. Sandra/proxy premade flows stay off Home so suggestion
+              // pills always mean Tone Guide dummy scripts on M-2.1, not a parallel first-consult story.
+              history.length || d.midIntake ? { title: d.summary ?? d.topic, when: d.when, onContinue: () => { closeSheet(); resume(); } } : undefined
             }
             intakeCard={intakeCard}
             destinations={destinations}

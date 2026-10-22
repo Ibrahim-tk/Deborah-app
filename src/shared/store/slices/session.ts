@@ -55,8 +55,11 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
       };
     }),
   acceptConsent: (version) => set((s) => ({ consentAcceptedAt: nowFrom(s).toISOString(), consentVersion: version })),
-  acceptHealthConsent: () => set((s) => ({ healthConsentAt: s.healthConsentAt ?? nowFrom(s).toISOString() })),
-  revokeHealthConsent: () => set({ healthConsentAt: undefined }),
+  acceptHealthConsent: () => set((s) => ({
+    healthConsentAt: s.healthConsentAt ?? nowFrom(s).toISOString(),
+    healthConsentRevoked: undefined,
+  })),
+  revokeHealthConsent: () => set({ healthConsentAt: undefined, healthConsentRevoked: true }),
   updateAccount: ({ firstName, lastName, email }) => {
     if (firstName !== undefined && firstName.trim()) get().setName(properName(firstName.trim()));
     set({

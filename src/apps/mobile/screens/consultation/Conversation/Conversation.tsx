@@ -64,6 +64,8 @@ export default function Conversation() {
   /** F02d: while expand/gate pills are active, hide the bottom composer until Other. */
   const [, setIntakeSurface] = useState<'choices' | 'composer'>('composer');
   const safetyBench = useAppStore((s) => s.qa.safetyBench);
+  // Tone Guide: signup → 3 chips; login → 4. Same gate as Home new vs returning.
+  const isLogin = useAppStore((s) => s.authFlow === 'login');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   // Miro Step 5 “No” branch: back to Ask Deborah with the composer ready.
   const actions = useMessageActions(profile?.id, () => inputRef.current?.focus());
@@ -139,6 +141,15 @@ export default function Conversation() {
   const chatSend = chat.send;
   const consent = useHealthConsent();
   const askConsent = consent.ask;
+  const needsReconsent = useAppStore((s) => Boolean(s.healthConsentRevoked && !s.healthConsentAt));
+  const chatVisible = useNavStore((s) => {
+    if (s.root !== 'main' || s.activeTab !== 'ask' || s.layers.length > 0) return false;
+    return s.tabs.ask.at(-1)?.id === 'M-2.1';
+  });
+  // After revoke, ask when this chat is the screen in front. A send waits on the same sheet.
+  useEffect(() => {
+    if (chatVisible && needsReconsent) void askConsent();
+  }, [chatVisible, needsReconsent, askConsent]);
   const send = useCallback(
     async (text: string, scriptId?: string) => {
       const t = text.trim();
@@ -191,12 +202,13 @@ export default function Conversation() {
   };
 
   const name = profile?.name ?? '';
-  // F06: another profile's chat greets "Let's talk about {name}." and minors get the teen suggestion set.
-  const other = Boolean(profile) && profile?.id !== SELF_PROFILE_ID;
+  // F06: family/advocate chat — third-person suggestions + advocate greeting.
+  const other = Boolean(profile) && (profile.id !== SELF_PROFILE_ID || profile.relationship !== 'self');
   const minor = profile ? isMinor(profile) : false;
-  // Starter suggestions are back on the empty chat (design 2026-10-21); third person for someone else's chat.
   const suggestions = !other
-    ? suggestionsData.default
+    ? isLogin
+      ? suggestionsData.returning
+      : suggestionsData.newSignup
     : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile?.intake?.pronouns);
   // Someone else's chat: quick start questions in third person, using their pronouns.
 
@@ -234,7 +246,7 @@ export default function Conversation() {
                 return (
                   <MotionDiv key="greeting" className={styles.greetingWrap} exit={{ opacity: 0, y: -40, scale: 0.97, transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] } }}>
                     <Greeting
-                      line={other && name ? `What are ${name}’s concerns for today?` : undefined}
+                      line={other && name ? `Tell me how’s ${name} feeling today?` : undefined}
                     />
                   </MotionDiv>
                 );

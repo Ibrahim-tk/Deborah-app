@@ -24,7 +24,7 @@
       "Looking through my Handbook",
       "Writing to you"
     ],
-    "greetingOther": "A conversation about {name}.",
+    "greetingOther": "Tell me how’s {name} feeling today?",
     "welcomeBackOther": "Last time we talked about {topic}."
   },
   "status": "placeholder",
