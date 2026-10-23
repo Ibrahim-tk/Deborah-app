@@ -6,9 +6,11 @@ import { useEffect, useRef } from 'react';
 import { consentDoc } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { useDevice } from '@shell/device';
-import { AnimatePresence, DURATION, MotionDiv, OVERLAY_HOST_ID, useReducedMotionPref } from '@web/ui';
+import { AnimatePresence, MotionDiv, OVERLAY_HOST_ID, useReducedMotionPref } from '@web/ui';
+import { pageTransition } from '../transitions';
 import { useNavStore } from '../nav.store';
 import { meta } from '../registry';
+import { BrandNav } from '@web/patterns/shell';
 import { Sidebar } from '../Sidebar';
 import type { Route, TabId } from '../types';
 import { ModalLayer, SheetLayer } from './Layers';
@@ -25,6 +27,7 @@ export function Navigator() {
   const scenario = useAppStore((s) => s.scenario);
   const consented = useAppStore((s) => Boolean(s.consentAcceptedAt));
   const consentVersion = useAppStore((s) => s.consentVersion);
+  const accountId = useAppStore((s) => s.accountId);
   const deepLink = useAppStore((s) => s.deepLink);
   const reconsentShown = useRef(false);
 
@@ -32,17 +35,18 @@ export function Navigator() {
     if (scenario.loadNonce !== nav.appliedNonce) nav.applyStart(scenario.start, scenario.loadNonce);
   }, [scenario, nav]);
 
+  // Guests may stay on main (guest chat). Only kick signed-in accounts missing consent.
   useEffect(() => {
-    if (nav.root === 'main' && !consented) nav.resetTo('preauth', 'M-1.1');
-  }, [nav, consented]);
+    if (nav.root === 'main' && accountId && !consented) nav.resetTo('preauth', 'M-1.0');
+  }, [nav, accountId, consented]);
 
   useEffect(() => {
-    if (nav.root !== 'main' || !consented || reconsentShown.current) return;
+    if (nav.root !== 'main' || !accountId || !consented || reconsentShown.current) return;
     if (consentVersion && consentVersion !== consentDoc.version) {
       reconsentShown.current = true;
       nav.presentModal('M-2.15');
     }
-  }, [nav, consented, consentVersion]);
+  }, [nav, accountId, consented, consentVersion]);
 
   useEffect(() => {
     if (!deepLink) return;
@@ -66,6 +70,10 @@ export function Navigator() {
 
   const tabBarVisible = false;
   const overlayOpen = nav.layers.length > 0;
+  const preauthTop = nav.root === 'preauth' ? nav.preauth.at(-1)?.id : undefined;
+  /** Logo fade bar on preauth (skip Splash brand beat). */
+  /** Logo-only bar after Hero; Hero owns full nav. Splash has its own brand beat. */
+  const showBrandNav = Boolean(preauthTop && preauthTop !== 'M-1.0' && preauthTop !== 'M-1.1');
   const baseRef = useRef<HTMLDivElement>(null);
   // Desktop: keep the stage still under a dialog (no iOS card shrink).
   // `inert` not in React 18 typings — set the DOM attribute directly.
@@ -77,7 +85,11 @@ export function Navigator() {
   }, [overlayOpen]);
 
   return (
-    <div className={styles.root} data-main={nav.root === 'main' || undefined}>
+    <div
+      className={styles.root}
+      data-main={nav.root === 'main' || undefined}
+      data-rail-collapsed={(nav.root === 'main' && nav.railCollapsed) || undefined}
+    >
       <div ref={baseRef} className={styles.base}>
         {nav.root === 'main' && <Sidebar />}
         <AnimatePresence initial={false}>
@@ -86,13 +98,14 @@ export function Navigator() {
             className={styles.rootView}
             data-tabbar={tabBarVisible || undefined}
             data-rail={nav.root === 'main' || undefined}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduced ? DURATION.reduced : DURATION.fade }}
+            // Standard web page change: old page leaves at once, new one fades in (no overlap, no slide).
+            {...pageTransition(reduced)}
           >
             {nav.root === 'preauth' ? (
-              <StackView routes={nav.preauth} action={nav.lastAction} container="stack" onBack={nav.pop} />
+              <>
+                {showBrandNav && <BrandNav />}
+                <StackView routes={nav.preauth} action={nav.lastAction} container="stack" onBack={nav.pop} />
+              </>
             ) : (
               TAB_IDS.map((tab) => (
                 <StackView

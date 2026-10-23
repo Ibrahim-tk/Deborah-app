@@ -25,10 +25,8 @@ import { nowFrom, uid } from '@shared/utils';
 import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { DeborahBlob } from '@web/ui';
-import { Aura, GradientShift } from '@web/ui';
 import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@web/patterns/chat';
 import { useToast } from '@web/hooks/toast.store';
-import { useProfileSwitcher } from '@web/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@web/navigation';
 import { useHealthConsent } from '@web/screens/consultation/Conversation/parts/useHealthConsent';
 import { EntryView } from './parts/EntryView';
@@ -54,11 +52,12 @@ export default function FirstConsult() {
   const resolved = which === 'sandra' && advocate ? 'proxy' : which;
   const flow = resolved === 'returning' ? returningConsultFlow : resolved === 'sandra' ? sandraConsultFlow : resolved === 'proxy' ? proxyConsultFlow : firstConsultFlow;
   const premade = resolved === 'sandra' || resolved === 'proxy';
-  const { pop, open, push, openAsk } = useNav();
+  const { open, push, openAsk } = useNav();
   const toast = useToast();
   const consent = useHealthConsent();
   const askConsent = consent.ask;
   const needsReconsent = useAppStore((s) => Boolean(s.healthConsentRevoked && !s.healthConsentAt));
+  const guest = useAppStore((s) => !s.accountId);
   const chatVisible = useNavStore((s) => {
     if (s.root !== 'main' || s.activeTab !== 'ask' || s.layers.length > 0) return false;
     const id = s.tabs.ask.at(-1)?.id;
@@ -68,7 +67,6 @@ export default function FirstConsult() {
   useEffect(() => {
     if (chatVisible && needsReconsent) void askConsent();
   }, [chatVisible, needsReconsent, askConsent]);
-  const openSwitcher = useProfileSwitcher();
   // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
   const profileCtx = useProfileContext();
   const proxyCtx = useProxyContext();
@@ -144,6 +142,7 @@ export default function FirstConsult() {
       ...briefFromAnswer(profile, answer, title ?? 'First consultation'),
       ...(title && { title }),
       ...(appointment?.provider && { providerName: appointment.provider }),
+      ...(appointment?.specialty && { providerSpecialty: appointment.specialty }),
       ...(appointment?.date && { appointmentDate: new Date(`${appointment.date}T12:00:00`).toISOString() }),
     };
     const id = uid('n');
@@ -216,14 +215,12 @@ export default function FirstConsult() {
   const attachments = useComposerAttachments('M-2.12', meta('M-2.12')?.title ?? 'First consultation');
   return (
     <div className={styles.root} data-xref="M-2.12 · First consultation">
-      {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
-      <Aura />
-      <GradientShift />
       <ChatHeader
-        onBack={pop}
         onNewChat={() => openAsk()}
         canStartNew={started}
-        profile={{ name, onPress: openSwitcher }}
+        guest={guest}
+        onSignIn={() => open('M-4.3', { mode: 'signin' })}
+        onSignUp={() => open('M-4.3')}
       />
       <div ref={scrollRef} className={styles.scroll} onScroll={onScroll}>
         <div className={styles.column} data-started={started || undefined} data-placeholder>

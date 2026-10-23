@@ -1,6 +1,7 @@
 /**
  * @screen  M-11.3 · Upload a document (M-11.4 result is its last step)
  * @flow    F11 Documents and reports
+ * @presentation push (DerivedPage)
  * @states  method · rejected file (format / size / empty) · camera · type · details (future-date error)
  *          · uploading · reading · result (Ask Deborah? Yes / Not now) · stop confirm
  * @figma   — (NOT IN WIREFRAMES; Miro "Documents and Reports" 2026-10-19)
@@ -14,7 +15,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '@shared/store';
 import type { DocumentType } from '@shared/types/domain';
 import { dayKey, isFutureDocumentDate, nowFrom, validateDocument } from '@shared/utils';
-import { Button, Sheet, useAlert } from '@web/ui';
+import { Button, useAlert } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { CaptureCamera } from '@web/patterns/widgets';
 import { useToast } from '@web/hooks/toast.store';
 import { meta, useNav, useScreenParams } from '@web/navigation';
@@ -39,7 +41,7 @@ export default function UploadDocument() {
   const profileId = params.profileId ?? activeProfileId;
   // Another profile's upload (Profile details) can't be discussed in the active profile's chat.
   const canAsk = profileId === activeProfileId;
-  const { dismissSheet, setSheetDismissible, openAsk } = useNav();
+  const { pop, openAsk } = useNav();
   const alert = useAlert();
   const toast = useToast();
   const input = useRef<HTMLInputElement>(null);
@@ -67,11 +69,6 @@ export default function UploadDocument() {
   }, [step]);
 
   const processing = step === 'uploading' || step === 'reading';
-  // No swipe-away mid-upload; Stop asks first (spec: "Stop uploading?").
-  useEffect(() => {
-    setSheetDismissible(!processing);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- nav helpers are new refs each render
-  }, [processing]);
 
   const progress = useSimulatedUpload(processing && !paused ? step : null, (phase) => {
     if (phase === 'uploading') return setStep('reading');
@@ -110,14 +107,14 @@ export default function UploadDocument() {
       message: 'This document won’t be saved.',
       buttons: [{ label: 'Keep uploading', style: 'cancel' }, { label: 'Stop', style: 'destructive' }],
     });
-    if (choice === 1) return dismissSheet();
+    if (choice === 1) return pop();
     // OPEN: Keep uploading restarts the current phase from 0 (simulated; no partial upload to resume).
     setPaused(false);
   };
 
   const finish = (ask: boolean) => {
     if (!savedId) return;
-    dismissSheet();
+    pop();
     if (ask) {
       useAppStore.getState().setDocumentChatPrompt(undefined);
       // OPEN: Phase 4 consumes `documentId` to attach the document in M-2.1.
@@ -126,6 +123,11 @@ export default function UploadDocument() {
   };
 
   const back = step === 'type' ? () => setStep('method') : step === 'details' ? () => setStep('type') : undefined;
+  const onPageBack = () => {
+    if (processing) void stop();
+    else if (back) back();
+    else pop();
+  };
   const footer =
     step === 'details' ? (
       <div className={styles.actions}>
@@ -148,7 +150,7 @@ export default function UploadDocument() {
 
   return (
     <div className={styles.root} data-xref="M-11.3 · Upload a document">
-      <Sheet title={TITLES[step]} detent="large" footer={footer}>
+      <DerivedPage title={TITLES[step]} composerPlaceholder="Ask Deborah about this document…" onBack={onPageBack}>
         <div ref={stepRef} tabIndex={-1} aria-label={TITLES[step]} className={styles.step}>
         {step === 'method' && <MethodStep rejected={rejected} onCamera={() => setCamera(true)} onPick={() => input.current?.click()} />}
         {step === 'type' && file && <TypeStep file={file} value={type} onSelect={setType} />}
@@ -163,8 +165,9 @@ export default function UploadDocument() {
         )}
         {processing && file && <ProcessingStep file={file} phase={step} progress={progress} onStop={stop} />}
         {step === 'result' && saved && <ResultStep title={saved.title} extraction={saved.extraction} askDeborah={canAsk} />}
+        {footer}
         </div>
-      </Sheet>
+      </DerivedPage>
 
       <input
         ref={input}

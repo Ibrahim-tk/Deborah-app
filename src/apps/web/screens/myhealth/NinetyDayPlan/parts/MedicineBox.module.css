@@ -30,3 +30,10 @@
   font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
   color: var(--color-ink-secondary);
 }
+
+/* Web uplift: no tonal box — progress, groups and checkboxes sit straight on the page. */
+.box { padding: 0; border-radius: 0; background: none; gap: var(--space-5); }
+.wellLabel { font-weight: var(--weight-medium); color: var(--color-ink); }
+
+/* Depth (designer, 2026-10-23): the active checklist is the one raised surface — white, hairline, roomy. */
+.box { padding: var(--space-6); border-radius: var(--radius-card); background: var(--white); box-shadow: inset 0 0 0 1px var(--surface-border); }

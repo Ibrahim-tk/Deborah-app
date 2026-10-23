@@ -1,6 +1,6 @@
 /**
  * HomeMediaHero — main continue card (compact hero) or tonal artifact hero.
- * Compact: orb + arrow on top · title + one line at the bottom, on the vibrant aurora field (white copy).
+ * Compact: one banner row — large orb · eyebrow + serif title · arrow — on a violet gradient (white copy).
  */
 import type { ReactNode } from 'react';
 import { DeborahBlob } from '@web/ui/DeborahBlob';
@@ -49,16 +49,9 @@ export function HomeMediaHero({
   if (compactHero) {
     return (
       <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>
-        {/* Same hierarchy as the health-detail cards (2026-10-21): orb + arrow on top, title + one line at the bottom. */}
+        {/* Banner row (designer, 2026-10-23): large orb · eyebrow + serif title · arrow, on a violet gradient. */}
         <div className={styles.bodyCompact}>
-          <div className={styles.top}>
-            <DeborahBlob size={40} label="Deborah" className={styles.orb} />
-            {onCta && (
-              <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
-                <Icon name="chevron" size={18} />
-              </button>
-            )}
-          </div>
+          <DeborahBlob size={88} label="Deborah" className={styles.orb} />
           <div className={styles.copy}>
             {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
             <h2 id={titleId} className={styles.titleCompact}>{title}</h2>
@@ -70,6 +63,11 @@ export function HomeMediaHero({
               </ul>
             ) : (meta || when) && <p className={styles.when}>{meta ?? when}</p>}
           </div>
+          {onCta && (
+            <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
+              <Icon name="chevron" size={18} />
+            </button>
+          )}
           {children}
         </div>
       </section>

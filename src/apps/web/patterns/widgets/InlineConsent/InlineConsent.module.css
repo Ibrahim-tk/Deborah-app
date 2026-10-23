@@ -42,7 +42,7 @@
 .textLink:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
 
 /* Dark: midnight glass like the confirm card; white Agree, translucent Not now. All text ≥7:1. */
-.root[data-variant='dark'] { color: #fff; background: radial-gradient(120% 90% at 85% 110%, rgb(128 74 138 / 0.45), transparent 60%), linear-gradient(160deg, #2e1d3a, #1d1424); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 12px 32px rgb(29 20 36 / 0.22); }
+.root[data-variant='dark'] { color: #fff; background: #1d1424; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 12px 32px rgb(29 20 36 / 0.22); }
 .root[data-variant='dark'] .title { color: #fff; }
 .root[data-variant='dark'] .body { color: #e2d8e8; }
 .root[data-variant='dark'] .link { color: #fff; }

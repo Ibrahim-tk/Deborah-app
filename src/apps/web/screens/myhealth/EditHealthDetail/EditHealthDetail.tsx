@@ -1,7 +1,7 @@
 /**
  * @screen  M-7.7 · Edit health detail
  * @flow    F07 My Health hub — health profile card, edit mode
- * @presentation sheet
+ * @presentation push (DerivedPage)
  * @states  choice (tap saves) · text / list / date (Save) · not applicable
  * @spec    Design request 2026-10-20: edit one detail in a bottom sheet, no tree (OPEN: add to docs/ux/F07)
  * @xref    web: not built
@@ -11,7 +11,8 @@
  */
 import { useRef, useState } from 'react';
 import { useAppStore } from '@shared/store';
-import { Button, Sheet } from '@web/ui';
+import { Button } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useNav, useScreenParams } from '@web/navigation';
 import { useToast } from '@web/hooks/toast.store';
 import { StepBody } from '@web/screens/onboarding/HealthBasics/parts/StepBody';
@@ -23,7 +24,7 @@ import styles from './EditHealthDetail.module.css';
 
 export default function EditHealthDetail() {
   const { profileId = '', key = '' } = useScreenParams<{ profileId: string; key: string }>();
-  const { dismissSheet } = useNav();
+  const { pop } = useNav();
   const toast = useToast();
   const profile = useAppStore((s) => s.profiles.byId[profileId]);
   const [answers, setAnswers] = useState<Answers>(() => (profile ? answersFromProfile(profile) : {}));
@@ -34,7 +35,7 @@ export default function EditHealthDetail() {
     if (!profile) return;
     saveHealthProfile(profile.id, final);
     toast('Health profile updated');
-    dismissSheet();
+    pop();
   };
   const set = (k: string, v: string) => {
     const next = { ...ref.current, [k]: v };
@@ -49,18 +50,14 @@ export default function EditHealthDetail() {
     window.setTimeout(() => save(next), 250);
   };
   const tap = step?.kind === 'choice' || step?.kind === 'profileFor';
+  const title = step ? titleFor(step, answers) : 'Not applicable';
 
   return (
-    <div data-xref="M-7.7 · Edit health detail">
-      <Sheet
-        title={step ? titleFor(step, answers) : 'Not applicable'}
-        detent="large"
-        footer={step && !tap ? <Button fullWidth onClick={() => save(ref.current)}>Save</Button> : undefined}
-      >
-        <div className={styles.body}>
-          {step ? <StepBody step={step} answers={answers} set={set} advance={advance} /> : <p className={styles.note}>This question doesn’t apply to this profile right now.</p>}
-        </div>
-      </Sheet>
-    </div>
+    <DerivedPage title={title} composerPlaceholder="Ask Deborah about your health profile…">
+      <div className={styles.body} data-xref="M-7.7 · Edit health detail">
+        {step ? <StepBody step={step} answers={answers} set={set} advance={advance} /> : <p className={styles.note}>This question doesn’t apply to this profile right now.</p>}
+        {step && !tap && <Button fullWidth onClick={() => save(ref.current)}>Save</Button>}
+      </div>
+    </DerivedPage>
   );
 }

@@ -9,9 +9,10 @@
  * Full push page (not a sheet). Current + new + confirm. No backend — simulated (CLAUDE.md).
  */
 import { useEffect, useState, type FormEvent } from 'react';
-import { Button, Header, Icon, Input } from '@web/ui';
+import { Button, Icon, Input } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
-import { useNav, useRoute } from '@web/navigation';
+import { useNav } from '@web/navigation';
 import styles from './ChangePassword.module.css';
 
 const MIN_LENGTH = 8;
@@ -21,7 +22,6 @@ const SKIP_AUTH_VALIDATION = true;
 
 export default function ChangePassword() {
   const { pop } = useNav();
-  const { previousTitle } = useRoute();
   const toast = useToast();
   const [current, setCurrent] = useState('');
   const [password, setPassword] = useState('');
@@ -55,9 +55,8 @@ export default function ChangePassword() {
   }, [done, pop, toast]);
 
   return (
-    <div className={styles.root} data-xref="M-10.7 · Change password">
-      <Header title="Change password" onBack={pop} backLabel={previousTitle} />
-      <div className={styles.body}>
+    <DerivedPage title="Change password" composerPlaceholder="Ask Deborah about your account…">
+      <div className={styles.stack} data-xref="M-10.7 · Change password">
         {done ? (
           <div className={styles.done} role="status">
             <span className={styles.check}><Icon name="check" size={32} /></span>
@@ -105,6 +104,6 @@ export default function ChangePassword() {
           </form>
         )}
       </div>
-    </div>
+    </DerivedPage>
   );
 }

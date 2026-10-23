@@ -53,11 +53,7 @@
   );
 }
 .fade::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 -100%;
-  background: var(--backdrop-image) top center / 100% auto no-repeat;
-  transform: translate3d(0, calc(var(--backdrop-lift) + var(--backdrop-drift, 0px)), 0);
+  content: none;
 }
 
 @media (prefers-reduced-transparency: reduce) {

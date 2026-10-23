@@ -54,14 +54,14 @@
 }
 
 .md {
-  min-height: 40px;
+  min-height: 36px;
   padding-inline: var(--space-4);
   font-size: var(--fs-subhead);
   line-height: var(--lh-subhead);
 }
 
 .sm {
-  min-height: 32px;
+  min-height: 28px;
   padding-inline: var(--space-3);
   font-size: var(--fs-subhead);
   line-height: var(--lh-subhead);

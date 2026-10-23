@@ -1,22 +1,9 @@
-.root {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: transparent;
-}
-
-.body {
-  width: min(100%, 640px);
-  margin-inline: auto;
-
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+.stack {
   display: grid;
   align-content: start;
   grid-auto-rows: max-content;
   gap: var(--space-5);
-  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+  padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
 }
 
 .text {
@@ -64,3 +51,7 @@
 .group label + span { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: 0; color: #5a4f55; }
 .legend { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: 0; color: #5a4f55; }
 .text { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }
+
+/* Align cards with the page title (DerivedPage already insets the body); room under the frequency label. */
+.stack { padding-inline: 0; }
+.legend { margin-bottom: var(--space-3); }

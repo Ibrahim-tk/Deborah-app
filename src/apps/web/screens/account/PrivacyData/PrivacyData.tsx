@@ -9,8 +9,9 @@
 import { useCallback, useState } from 'react';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Divider, Icon, Header, ListRow, useAlert } from '@web/ui';
-import { useNav, useRoute } from '@web/navigation';
+import { Divider, Icon, ListRow, useAlert } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
+import { useNav } from '@web/navigation';
 import { DeleteConfirmSheet } from './parts/DeleteConfirmSheet';
 import { RevokeConsentSheet } from './parts/RevokeConsentSheet';
 import { useToast } from '@web/hooks/toast.store';
@@ -18,7 +19,6 @@ import styles from './PrivacyData.module.css';
 
 export default function PrivacyData() {
   const nav = useNav();
-  const { previousTitle } = useRoute();
   const alert = useAlert();
   const requestedAt = useAppStore((s) => s.settings.dataExportRequestedAt);
   const [confirming, setConfirming] = useState(false);
@@ -57,45 +57,46 @@ export default function PrivacyData() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-10.2 · Privacy & data">
-      <Header title="Privacy & data" onBack={nav.pop} backLabel={previousTitle} />
-      <div className={styles.body}>
-        <div className={styles.group}>
-          <ListRow
-            title="Download my data"
-            subtitle={requestedAt ? `Requested on ${formatShortDate(requestedAt)}` : 'A copy of everything you’ve shared'}
-            onPress={download}
-          />
-          <Divider />
-          <ListRow title="Delete a profile" subtitle="In Family profiles" onPress={() => nav.push('M-6.6')} />
-        </div>
-
-        {/* Consent (design 2026-10-21): health-data consent can be revoked here; the next chat start asks again. */}
-        <div className={styles.group}>
-          <ListRow
-            title="Health data consent"
-            subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — Deborah will ask in chat'}
-            onPress={consentAt ? () => setRevoking(true) : undefined}
-            trailing={consentAt ? undefined : null}
-          />
-        </div>
-
-        {/* Open note on the canvas, no tinted panel (design 2026-10-21). */}
-        <div className={styles.info}>
-          <span className={styles.infoIcon} aria-hidden><Icon name="lock" size={18} /></span>
-          <div>
-            <p className={styles.infoTitle}>How your data is used</p>
-            <p className={styles.infoText}>Your health information is never used for training without your consent.</p>
+    <>
+      <DerivedPage title="Privacy & data" composerPlaceholder="Ask Deborah about your privacy…">
+        <div className={styles.stack} data-xref="M-10.2 · Privacy & data">
+          <div className={styles.group}>
+            <ListRow
+              title="Download my data"
+              subtitle={requestedAt ? `Requested on ${formatShortDate(requestedAt)}` : 'A copy of everything you’ve shared'}
+              onPress={download}
+            />
+            <Divider />
+            <ListRow title="Delete a profile" subtitle="In Family profiles" onPress={() => nav.push('M-6.6')} />
           </div>
-        </div>
 
-        <div className={styles.group}>
-          <ListRow title="Delete my account and all data" destructive trailing={null} onPress={startDelete} />
+          {/* Consent (design 2026-10-21): health-data consent can be revoked here; the next chat start asks again. */}
+          <div className={styles.group}>
+            <ListRow
+              title="Health data consent"
+              subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — Deborah will ask in chat'}
+              onPress={consentAt ? () => setRevoking(true) : undefined}
+              trailing={consentAt ? undefined : null}
+            />
+          </div>
+
+          {/* Open note on the canvas, no tinted panel (design 2026-10-21). */}
+          <div className={styles.info}>
+            <span className={styles.infoIcon} aria-hidden><Icon name="lock" size={18} /></span>
+            <div>
+              <p className={styles.infoTitle}>How your data is used</p>
+              <p className={styles.infoText}>Your health information is never used for training without your consent.</p>
+            </div>
+          </div>
+
+          <div className={styles.group}>
+            <ListRow title="Delete my account and all data" destructive trailing={null} onPress={startDelete} />
+          </div>
+          <p className={styles.note}>Deletion is certified within 30 days.</p>
         </div>
-        <p className={styles.note}>Deletion is certified within 30 days.</p>
-      </div>
+      </DerivedPage>
       <DeleteConfirmSheet open={confirming} onClose={closeConfirm} onConfirm={deleteAll} />
       <RevokeConsentSheet open={revoking} onClose={() => setRevoking(false)} onRevoke={revoke} />
-    </div>
+    </>
   );
 }

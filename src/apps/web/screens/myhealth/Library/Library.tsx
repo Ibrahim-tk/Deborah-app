@@ -7,10 +7,11 @@
  * @xref    web: W-7.5 (apps/web/screens/myhealth/Library) — not built
  */
 import { useState } from 'react';
-import { Header, Icon, Input, ListRow, Segmented, useAlert, type IconName } from '@web/ui';
+import { Icon, ListRow, Segmented, useAlert, type IconName } from '@web/ui';
 import { ContentCard, EmptyState } from '@web/patterns/health';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
-import { useNav, useRoute } from '@web/navigation';
+import { useNav } from '@web/navigation';
 import { TopicSelect } from './parts/TopicSelect';
 import { TOPIC_ALL, useLibraryResults, type LibraryTab } from './parts/useLibraryResults';
 import styles from './Library.module.css';
@@ -22,8 +23,7 @@ const TABS: { value: LibraryTab; label: string; icon: IconName }[] = [
 ];
 
 export default function Library() {
-  const { pop, push, openAsk } = useNav();
-  const { previousTitle } = useRoute();
+  const { push, openAsk } = useNav();
   const alert = useAlert();
   const toast = useToast();
   const [query, setQuery] = useState('');
@@ -41,40 +41,41 @@ export default function Library() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-7.5 · Deborah’s library">
-      <Header title="Deborah’s library" onBack={pop} backLabel={previousTitle} />
-      <div className={styles.scroll}>
-        <div className={styles.body}>
-          <div className={styles.filters}>
-            <Input label="Search Deborah’s library" type="search" placeholder="Sleep, hot flashes, cycles…" value={query} onChange={(e) => setQuery(e.target.value)} />
-            <Segmented label="Show" options={TABS} value={tab} onChange={setTab} />
-            <TopicSelect value={topic} onChange={setTopic} />
-          </div>
+    <DerivedPage
+      title="Deborah’s library"
+      tabs={<Segmented label="Show" options={TABS} value={tab} onChange={setTab} />}
+      query={query}
+      onQueryChange={setQuery}
+      searchLabel="Search Deborah’s library"
+      searchPlaceholder="Sleep, hot flashes, cycles…"
+      composerPlaceholder="Ask Deborah about a topic…"
+    >
+      <div className={styles.stack} data-xref="M-7.5 · Deborah’s library">
+        <TopicSelect value={topic} onChange={setTopic} />
 
-          <section className={styles.list} aria-live="polite" aria-label="Library items">
-            {results.length === 0 ? (
-              <EmptyState
-                icon="search"
-                title="Nothing found."
-                text="Try ‘sleep’ or ask Deborah directly."
-                actionLabel="Ask Deborah"
-                actionIcon="deborah"
-                onAction={() => openAsk({ focus: true })}
-              />
-            ) : (
-              results.map(({ item, reason }) => (
-                <ContentCard key={item.id} item={item} reason={reason} onPress={() => push('M-7.4', { itemId: item.id })} />
-              ))
-            )}
-          </section>
+        <section className={styles.list} aria-live="polite" aria-label="Library items">
+          {results.length === 0 ? (
+            <EmptyState
+              icon="search"
+              title="Nothing found."
+              text="Try ‘sleep’ or ask Deborah directly."
+              actionLabel="Ask Deborah"
+              actionIcon="deborah"
+              onAction={() => openAsk({ focus: true })}
+            />
+          ) : (
+            results.map(({ item, reason }) => (
+              <ContentCard key={item.id} item={item} reason={reason} onPress={() => push('M-7.4', { itemId: item.id })} />
+            ))
+          )}
+        </section>
 
-          <div className={styles.group}>
-            {/* OPEN: real community URL / platform — the prototype never leaves the app. */}
-            <ListRow title="Join the community (Facebook group)" trailing={<Icon name="external" size={20} className={styles.external} />} onPress={openCommunity} />
-            <ListRow title="About Deborah" onPress={() => push('M-7.6')} />
-          </div>
+        <div className={styles.group}>
+          {/* OPEN: real community URL / platform — the prototype never leaves the app. */}
+          <ListRow title="Join the community (Facebook group)" trailing={<Icon name="external" size={20} className={styles.external} />} onPress={openCommunity} />
+          <ListRow title="About Deborah" onPress={() => push('M-7.6')} />
         </div>
       </div>
-    </div>
+    </DerivedPage>
   );
 }

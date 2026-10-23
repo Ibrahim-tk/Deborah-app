@@ -1,10 +1,15 @@
+/*
+ * My Visit Notes document — hybrid like Healing Plan (designer): display headings,
+ * soft lilac fields for key blocks, hairline section rhythm. Not a flat wall of text.
+ */
+
 .page {
   width: 100%;
   min-width: 0;
   overflow-wrap: break-word;
   display: grid;
   align-content: start;
-  gap: var(--space-5);
+  gap: var(--space-6);
   padding: var(--space-5) var(--space-4);
   border: 0;
   border-radius: var(--radius-xl);
@@ -14,10 +19,9 @@
 
 .pageHeader {
   display: grid;
-  gap: var(--space-2);
-  padding-bottom: var(--space-4);
+  gap: var(--space-3);
+  padding-bottom: 0;
   border-bottom: 0;
-  box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent);
 }
 
 .brand {
@@ -28,7 +32,8 @@
 }
 
 .h2 {
-  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body);
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  letter-spacing: -0.005em;
   margin: 0;
 }
 
@@ -36,54 +41,75 @@
   margin: 0;
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--surface-field-linen);
-  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  background: color-mix(in srgb, var(--color-surface-lilac, var(--purple-50)) 45%, var(--white));
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   color: var(--color-ink);
 }
 
 .meta {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
-  margin: var(--space-2) 0 0;
+  gap: var(--space-4) var(--space-6);
+  margin: 0;
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--color-surface-lilac, var(--purple-50)) 45%, var(--white));
 }
 
 .meta dt {
-  font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .meta dd {
-  margin: var(--space-1) 0 0;
-  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  margin: 2px 0 0;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  color: var(--color-ink);
 }
 
 .block {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border-hairline);
+}
+
+.block:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* Chief complaint + clinical context: soft field (plan clinical hybrid). */
+.fieldBlock {
+  padding: var(--space-5) var(--space-6);
+  border-top: 0;
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--color-surface-lilac, var(--purple-50)) 40%, var(--white));
 }
 
 .h3 {
   margin: 0;
-  font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display);
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
 }
 
 .body {
   margin: 0;
   white-space: pre-wrap;
-  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  color: var(--color-ink-body);
 }
 
 .muted {
   margin: 0;
-  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   color: var(--color-ink-secondary);
 }
 
 .edit {
-  /* ui/TextArea is chromeless: draw the same field box as ui/Input, with its neutral focus border. */
   width: 100%;
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-lg);
@@ -111,6 +137,10 @@
 .numbered li {
   display: grid;
   gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--surface-border);
 }
 
 .tier {
@@ -121,23 +151,21 @@
 }
 
 .itemTitle {
-  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
 }
 
 .why {
-  font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
+  font: italic var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
 }
 
 .gold {
-  padding: var(--space-3);
-  border: 1px solid var(--color-border-hairline);
-  border-radius: var(--radius-sm);
-  background: var(--surface-field-linen);
+  background: color-mix(in srgb, var(--color-surface-lilac, var(--purple-50)) 35%, var(--white));
 }
 
 .disclaimer {
-  padding-top: var(--space-3);
+  padding-top: var(--space-5);
   border-top: 1px solid var(--color-border-hairline);
   font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
   color: var(--color-ink-secondary);
@@ -157,7 +185,6 @@
   border-bottom: 1px solid var(--color-border-hairline);
 }
 
-/* List fields are ui/Input and ui/Select (chrome and focus live there). */
 .field { min-width: 0; }
 
 .remove {
@@ -212,5 +239,10 @@
   }
 }
 
-/* M-9.7: the notes sit straight on the page — no card fill, no inset. */
-.page[data-flat] { padding: 0; border-radius: 0; background: transparent; }
+/* M-9.7: notes sit on the page — no outer card fill. */
+.page[data-flat] {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  gap: var(--space-5);
+}

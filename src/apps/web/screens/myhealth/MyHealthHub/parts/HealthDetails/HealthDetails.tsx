@@ -10,12 +10,12 @@ import { LOCKED_KEYS, healthDetailSections } from '@web/screens/onboarding/Healt
 import styles from './HealthDetails.module.css';
 
 export function HealthDetails() {
-  const { presentModal } = useNav();
+  const { open } = useNav();
   const profile = useAppStore(selectActiveProfile);
   if (!profile) return null;
   const sections = healthDetailSections(answersFromProfile(profile));
   const pct = Math.round(healthProfileCompletion(profile) * 100);
-  const edit = (section: string) => presentModal('M-7.8', { profileId: profile.id, section });
+  const edit = (section: string) => open('M-7.8', { profileId: profile.id, section });
 
   return (
     <div className={styles.stack}>

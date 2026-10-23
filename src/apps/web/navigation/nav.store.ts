@@ -11,9 +11,12 @@ import type { Layer, NavAction, Params, Route, TabId } from './types';
 
 const route = (id: string, params?: Params): Route => ({ key: uid('r'), id, params });
 
-/** Chat lives one level above Home (M-2.0) so Back returns to the landing screen. */
+/** Ask tab root is Home (M-2.0). Chat (M-2.1) pushes on top. */
+const HOME = 'M-2.0';
 const CHAT = 'M-2.1';
-const askChat = (params?: Params): Route[] => [route(TAB_ROOTS.ask), route(CHAT, params)];
+const askHome = (): Route[] => [route(HOME)];
+/** Home under chat so Back returns to the dashboard. */
+const askChat = (params?: Params): Route[] => [route(HOME), route(CHAT, params)];
 
 const freshTabs = (): Record<TabId, Route[]> => ({
   ask: [route(TAB_ROOTS.ask)],
@@ -34,6 +37,8 @@ interface NavState {
   chromeHidden: boolean;
   /** Transient: the side drawer that replaced the tab bar (design direction 2026-10-08). */
   sidebarOpen: boolean;
+  /** Desktop rail: narrow icon strip when true. */
+  railCollapsed: boolean;
 
   push: (id: string, params?: Params) => void;
   pop: () => void;
@@ -56,6 +61,7 @@ interface NavState {
   setRouteParams: (key: string, params: Params | undefined) => void;
   setChromeHidden: (hidden: boolean) => void;
   setSidebarOpen: (open: boolean) => void;
+  setRailCollapsed: (collapsed: boolean) => void;
   /**
    * Switch the active profile: Ask resets to that profile's Conversation and My Health to its
    * root; the current tab stays (docs/04-navigation.md §2). Layers close.
@@ -66,7 +72,7 @@ interface NavState {
    * (`prefill`, `focus`, `mode: 'checkin'`) — M-7.1, M-7.3, M-7.4, M-9.2.
    */
   openAsk: (params?: Params) => void;
-  /** Back to Home (M-2.0) from any section root: Ask tab, popped to its root, layers closed. */
+  /** Back to Ask landing (new chat) from any section: Ask tab root, layers closed. */
   goHome: () => void;
 }
 
@@ -94,7 +100,7 @@ export const useNavStore = create<NavState>()((set, get) => {
 
   return {
     root: 'preauth',
-    preauth: [route('M-1.1')],
+    preauth: [route('M-1.0')],
     tabs: freshTabs(),
     activeTab: 'ask',
     layers: [],
@@ -102,6 +108,7 @@ export const useNavStore = create<NavState>()((set, get) => {
     appliedNonce: 0,
     chromeHidden: false,
     sidebarOpen: false,
+    railCollapsed: false,
 
     push: (id, params) => updateFront((r) => [...r, route(id, params)], 'push'),
     pop: () => {
@@ -156,17 +163,26 @@ export const useNavStore = create<NavState>()((set, get) => {
         return i < 0 ? {} : { layers: s.layers.slice(0, i) };
       }),
     resetTo: (root, id, params) =>
-      set(() =>
-        root === 'preauth'
-          ? { root, preauth: [route(id, params)], layers: [], lastAction: 'fade' }
+      set(() => {
+        const screen = id;
+        return root === 'preauth'
+          ? { root, preauth: [route(screen, params)], layers: [], lastAction: 'fade' as const }
           : {
               root,
-              tabs: { ...freshTabs(), ask: id === CHAT ? askChat(params) : [route(id, params)] },
-              activeTab: 'ask',
+              tabs: {
+                ...freshTabs(),
+                ask:
+                  screen === CHAT
+                    ? askChat(params)
+                    : screen === HOME
+                      ? askHome()
+                      : [route(screen, params)],
+              },
+              activeTab: 'ask' as const,
               layers: [],
-              lastAction: 'fade',
-            },
-      ),
+              lastAction: 'fade' as const,
+            };
+      }),
     applyStart: (start, nonce) => {
       if (start.kind === 'lockScreen') {
         // The shell draws the lock screen from session.isLocked; the app waits behind it.
@@ -181,10 +197,14 @@ export const useNavStore = create<NavState>()((set, get) => {
         return;
       }
       const p = (id: string) => start.params?.[id];
-      let stack = start.stack.map((id) => route(id, p(id)));
-      // Scenarios that start in a chat still get Home underneath it.
-      if (start.root !== 'preauth' && (start.tab ?? 'ask') === 'ask' && stack[0]?.id === CHAT)
-        stack = [route(TAB_ROOTS.ask), ...stack];
+      // Web cold start: Hero (M-1.0) replaces Splash (M-1.1); Splash→Welcome stays for mobile / lab.
+      let stack = start.stack.map((id) => {
+        const screen = id === 'M-1.1' ? 'M-1.0' : id;
+        return route(screen, p(id));
+      });
+      // Chat-only starts keep Home underneath for Back.
+      if (stack.length === 1 && stack[0]?.id === CHAT) stack = [route(HOME), stack[0]];
+      if (stack.length > 1 && stack[0]?.id === CHAT && stack[1]?.id === CHAT) stack = [route(HOME), stack[1]];
       const layers: Layer[] = [];
       if (start.modal) layers.push({ kind: 'modal', key: uid('l'), routes: [route(start.modal, p(start.modal))] });
       if (start.sheet) {
@@ -262,12 +282,15 @@ export const useNavStore = create<NavState>()((set, get) => {
       }
     },
     returnToConversation: () =>
-      set((s) => ({
-        layers: [],
-        activeTab: 'ask',
-        tabs: { ...s.tabs, ask: s.tabs.ask[1]?.id === CHAT ? s.tabs.ask.slice(0, 2) : askChat() },
-        lastAction: s.activeTab === 'ask' && s.tabs.ask.length > 2 ? 'pop' : 'tab',
-      })),
+      set((s) => {
+        const chatRoute = s.tabs.ask.find((r) => r.id === CHAT);
+        return {
+          layers: [],
+          activeTab: 'ask' as const,
+          tabs: { ...s.tabs, ask: chatRoute ? [route(HOME), chatRoute] : askChat() },
+          lastAction: 'tab' as const,
+        };
+      }),
     setRouteParams: (key, params) =>
       set((s) => {
         const fix = (routes: Route[]) => routes.map((r) => (r.key === key ? { ...r, params } : r));
@@ -283,6 +306,7 @@ export const useNavStore = create<NavState>()((set, get) => {
       }),
     setChromeHidden: (chromeHidden) => set({ chromeHidden }),
     setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+    setRailCollapsed: (railCollapsed) => set({ railCollapsed }),
     switchProfile: (profileId) => {
       useAppStore.getState().switchProfile(profileId);
       set((s) => ({
@@ -291,26 +315,26 @@ export const useNavStore = create<NavState>()((set, get) => {
         lastAction: 'reset',
       }));
     },
-    goHome: () =>
+    goHome: () => {
+      const app = useAppStore.getState();
+      app.archiveActive(app.activeProfileId);
       set((s) => ({
-        root: 'main',
-        activeTab: 'ask',
-        tabs: { ...s.tabs, ask: [s.tabs.ask[0] ?? route(TAB_ROOTS.ask)] },
+        root: 'main' as const,
+        activeTab: 'ask' as const,
+        tabs: { ...s.tabs, ask: askHome() },
         layers: [],
-        lastAction: 'pop',
-      })),
-    openAsk: (params) =>
-      set((s) => {
-        // From Home itself: keep the mounted Home and push the chat on top of it.
-        const fromHome = s.root === 'main' && s.activeTab === 'ask' && s.layers.length === 0 && s.tabs.ask.length === 1;
-        return {
-          root: 'main',
-          activeTab: 'ask',
-          tabs: { ...s.tabs, ask: fromHome ? [s.tabs.ask[0], route(CHAT, params)] : askChat(params) },
-          layers: [],
-          lastAction: fromHome ? 'push' : 'tab',
-        };
-      }),
+        lastAction: 'tab' as const,
+      }));
+    },
+    openAsk: (params) => {
+      set((s) => ({
+        root: 'main' as const,
+        activeTab: 'ask' as const,
+        tabs: { ...s.tabs, ask: askChat(params) },
+        layers: [],
+        lastAction: 'push' as const,
+      }));
+    },
   };
 });
 

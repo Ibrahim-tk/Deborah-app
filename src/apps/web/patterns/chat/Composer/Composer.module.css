@@ -6,23 +6,6 @@
    aura + EdgeLight bloom (both sit behind the card's fill). */
 .bar { position: relative; isolation: isolate; }
 
-/* Soft peach aura — right side only, half strength. */
-.bar::before {
-  content: '';
-  position: absolute;
-  left: 42%;
-  right: -28%;
-  top: -20%;
-  bottom: -70%;
-  z-index: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 70% 75% at 78% 78%,
-    rgb(255 214 168 / 0.35) 0%,
-    rgb(245 190 140 / 0.18) 40%,
-    transparent 72%
-  );
-}
 
 /* EdgeLight lives in .bar behind the white card — never on the rim. */
 .edgeLight { z-index: 0; }

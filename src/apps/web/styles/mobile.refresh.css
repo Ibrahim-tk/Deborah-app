@@ -29,7 +29,7 @@
 
   /* 5. Buttons */
   --button-h: 52px;
-  --button-primary-fill: linear-gradient(180deg, var(--purple-400), var(--purple-500));
+  --button-primary-fill: var(--purple-500);
   --button-primary-shadow: 0 6px 20px rgb(97 57 119 / 0.28);
   --selected-tint: rgb(205 73 127 / 0.10);
 

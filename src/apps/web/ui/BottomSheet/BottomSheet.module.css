@@ -18,6 +18,8 @@
   max-height: var(--sheet-max);
   border-radius: var(--radius-lg, 16px);
   overflow: clip;
+  /* Deborah mobile sheet paper (#fbf8fa) — web.tokens Paper is pure white. */
+  background: #fbf8fa;
   box-shadow: var(--shadow-float-lg, 0 16px 48px rgb(0 0 0 / 0.24));
   outline: none;
 }

@@ -5,13 +5,13 @@
   background: var(--color-canvas);
 }
 .scroll {
-  width: min(100%, 560px);
+  /* Same rail as BottomSheet auto dialog (520px). */
+  width: min(100%, 520px);
   margin-inline: auto;
-
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-10);
+  justify-content: center;
+  gap: var(--space-12);
   height: 100%;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -23,9 +23,10 @@
 .scroll > :nth-child(2) { animation-delay: 0.8s; }
 @keyframes content-in { from { opacity: 0; filter: blur(12px); transform: translateY(8px); } }
 @media (prefers-reduced-motion: reduce) { .scroll > * { animation: none; } }
-.intro { flex: 1; display: grid; align-content: center; justify-items: start; gap: var(--space-6); }
-.bottom { display: grid; gap: var(--space-3); }
-.note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: start; color: var(--color-ink-body); }
+/* Intro + form hug as one centered block — no space-between stretch. */
+.intro { flex: none; display: grid; justify-items: center; gap: var(--space-6); }
+.bottom { flex: none; display: grid; gap: var(--space-3); }
+.note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: center; color: var(--color-ink-body); }
 .hello { margin: 0; font: var(--weight-regular) calc(34px * var(--type-scale)) / calc(38px * var(--type-scale)) var(--font-artistic, var(--font-display)); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
 .lede { margin: 0; text-wrap: pretty; max-width: 34ch; }
 .legal { position: relative; }

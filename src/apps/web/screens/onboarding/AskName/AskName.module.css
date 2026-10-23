@@ -1,0 +1,5 @@
+.body {
+  display: grid;
+  gap: var(--space-6);
+  padding-bottom: calc(var(--safe-bottom) + var(--space-2));
+}

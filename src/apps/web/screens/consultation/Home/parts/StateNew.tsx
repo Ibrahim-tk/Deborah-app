@@ -2,9 +2,8 @@
  * Home · State 1 — new user. After her first chat (design 2026-10-20), in order: Continue your chat ·
  * Complete your intake · My health and Family · shop. Before any chat, the hero starts one instead.
  */
-import { HomeMediaHero, IntakeCompletionCard, type Recommendation } from '@web/patterns/widgets';
+import { HomeMediaHero, type Recommendation } from '@web/patterns/widgets';
 import { HomeSections } from './HomeSections';
-import layout from './HomeStates.module.css';
 
 export interface StateNewProps {
   /** Opens chat with Deborah (no chat yet). */
@@ -21,7 +20,7 @@ export interface StateNewProps {
   onNotes: () => void;
 }
 
-export function StateNew({ onStart, chat, intakeCard, destinations, recommendations, onShop, reports, documents, onLabs, onNotes }: StateNewProps) {
+export function StateNew({ onStart, chat, destinations, recommendations, onShop, reports, documents, onLabs, onNotes }: StateNewProps) {
   return (
     <>
       {chat ? (
@@ -49,13 +48,7 @@ export function StateNew({ onStart, chat, intakeCard, destinations, recommendati
         />
       )}
 
-      {intakeCard && !intakeCard.complete && (
-        <IntakeCompletionCard progress={intakeCard.progress} complete={intakeCard.complete} onAction={intakeCard.onAction} />
-      )}
-
-      <div className={layout.lower}>
-        <HomeSections reports={reports} documents={documents} onLabs={onLabs} onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} />
-      </div>
+      <HomeSections reports={reports} documents={documents} onLabs={onLabs} onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} hideShop />
     </>
   );
 }

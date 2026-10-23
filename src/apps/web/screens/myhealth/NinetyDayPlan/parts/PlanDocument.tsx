@@ -5,7 +5,7 @@
 import { useState } from 'react';
 import { findProduct, healingPlanDocument } from '@shared/data';
 import type { PlanConcern } from '@shared/types/domain';
-import { DeborahBlob, Icon, ListRow, Panel } from '@web/ui';
+import { Icon, ListRow, Panel } from '@web/ui';
 import { LivingPlan } from './LivingPlan';
 import styles from './PlanDocument.module.css';
 
@@ -45,22 +45,7 @@ export function PlanDocument({
 
   return (
     <article className={styles.doc} data-placeholder={doc.status === 'placeholder' || undefined} aria-label={`Healing Plan for ${patientName}`}>
-      <header className={styles.hero}>
-        <DeborahBlob size={72} label="Oracle" />
-        <div className={styles.heroCopy}>
-          <h1 className={styles.title}>
-            Healing Plan
-            <span className={styles.forWhom}>for {patientName}</span>
-          </h1>
-          {advocate && <p className={styles.advocate}>You’re looking after {patientName}.</p>}
-          <p className={styles.meta}>
-            {doc.preparedBy}
-            <span aria-hidden> · </span>
-            {doc.dateLabel}
-          </p>
-          <p className={styles.reference}>Deborah answers from this plan and your history.</p>
-        </div>
-      </header>
+      {advocate && <p className={styles.advocate}>You’re looking after {patientName}.</p>}
 
       <LivingPlan
         concerns={concerns}
@@ -108,7 +93,6 @@ export function PlanDocument({
                   <span className={styles.pillarRoman}>{i + 1}</span>
                   <span className={styles.pillarText}>
                     <span className={styles.pillarName}>{p.name}</span>
-                    <span className={styles.pillarTag}>{p.tag}</span>
                   </span>
                   <Icon name="chevronDown" size={18} className={styles.pillarChevron} />
                 </button>
@@ -156,14 +140,13 @@ export function PlanDocument({
 
       <section className={styles.resources} aria-labelledby="resources-title">
         <h2 id="resources-title" className={styles.h2}>Your resources</h2>
-        <div className={styles.resourceList}>
-          {doc.resources.map((r) => (
-            <ListRow
-              key={r.href}
-              title={r.label}
-              trailing={<Icon name="external" size={18} />}
-              onPress={() => onOpenExternal(r.href, r.label)}
-            />
+        {/* Four tiles in a grid (designer, 2026-10-23). */}
+        <div className={styles.resourceTiles}>
+          {doc.resources.slice(0, 4).map((r) => (
+            <button key={r.href} type="button" className={styles.resourceTile} onClick={() => onOpenExternal(r.href, r.label)}>
+              <span className={styles.resourceLabel}>{r.label}</span>
+              <Icon name="external" size={16} />
+            </button>
           ))}
         </div>
       </section>

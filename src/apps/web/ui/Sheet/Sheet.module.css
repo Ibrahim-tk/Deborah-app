@@ -1,10 +1,12 @@
 .root {
+  /* Deborah mobile sheet paper — web.tokens Paper is pure white. */
+  --color-surface: #fbf8fa;
   display: flex;
   flex-direction: column;
   max-height: 100%;
-  /* Top: edge → header row, in step with the sheet's side padding (design 2026-10-20). */
-  padding: var(--space-6) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  /* Web dialog: even padding; phone-style safe-bottom left empty air under OTP. */
+  padding: var(--space-6) var(--margin-screen) var(--space-6);
+  border-radius: var(--radius-lg, 16px);
   background: var(--color-surface);
   box-shadow: var(--shadow-float-lg);
 }
@@ -34,7 +36,9 @@
 /* Subtitle sits right under the heading (4 px), then the usual gap before the content. */
 .header:has(+ .subtitle) { margin-bottom: var(--space-1); }
 .subtitle { flex: none; margin: 0 0 var(--space-5); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
-.content { flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+/* Hug content on auto sheets; only large detents fill the panel. */
+.content { flex: none; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+.root[data-detent='large'] .content { flex: 1; }
 .footer { flex: none; display: grid; gap: var(--space-2); padding-top: var(--space-5); }
 
 /* Close: a quiet 36 pt circle in a slightly darker shade of the sheet, no shadow; 44 pt invisible hit area. */

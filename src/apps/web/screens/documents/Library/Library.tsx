@@ -7,10 +7,11 @@
  */
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { selectDocuments, useAppStore } from '@shared/store';
-import { Button, Header, Segmented, Skeleton, type IconName } from '@web/ui';
+import { Button, Segmented, Skeleton, type IconName } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { simBetween } from '@web/hooks/simTiming';
 import { useWideSplit } from '@web/hooks/useWideSplit';
-import { useNav, useRoute, useScreenParams } from '@web/navigation';
+import { useNav, useScreenParams } from '@web/navigation';
 import { DetailHostProvider } from '../../DetailHost';
 import { ProfileLine } from './parts/ProfileLine';
 import { UploadsList } from './parts/UploadsList';
@@ -28,8 +29,7 @@ const DocumentPreview = lazy(() => import('../DocumentPreview'));
 
 export default function Library() {
   const params = useScreenParams<{ tab: Tab; profileId: string }>();
-  const { pop, open, push } = useNav();
-  const { previousTitle, canGoBack } = useRoute();
+  const { open, push } = useNav();
   const activeProfileId = useAppStore((s) => s.activeProfileId);
   const profileId = params.profileId ?? activeProfileId;
   const hasDocs = useAppStore((s) => selectDocuments(s, profileId).length > 0);
@@ -52,70 +52,60 @@ export default function Library() {
     else push('M-11.2', { documentId });
   };
 
-  const list = (
-    <>
-      <div className={styles.top}>
-        <ProfileLine profileId={profileId} switchable={!params.profileId} />
-        <Segmented label="Library" options={TABS} value={tab} onChange={setTab} />
-      </div>
-      {loading ? (
-        <div className={styles.skeleton} aria-busy="true" aria-label="Loading documents">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className={styles.skeletonRow}>
-              <Skeleton height={40} width={40} />
-              <div className={styles.skeletonText}>
-                <Skeleton height={20} width="70%" />
-                <Skeleton height={16} width="45%" />
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : tab === 'uploads' ? (
-        <UploadsList
-          profileId={profileId}
-          onUpload={upload}
-          selectedId={paneId}
-          onSelect={wide ? onSelectUpload : undefined}
-        />
-      ) : (
-        <ReportsList profileId={profileId} />
-      )}
-    </>
-  );
+  const splitUploads = wide && tab === 'uploads' && Boolean(paneId);
 
-  const splitUploads = wide && tab === 'uploads';
+  const detail =
+    splitUploads && paneId ? (
+      <DetailHostProvider
+        screenId="M-11.2"
+        params={{ documentId: paneId }}
+        previousTitle="Documents"
+        onClear={() => setSelected((s) => (s?.scope === scope ? null : s))}
+      >
+        <Suspense fallback={<div className={styles.paneLoading}>Loading…</div>}>
+          <DocumentPreview />
+        </Suspense>
+      </DetailHostProvider>
+    ) : undefined;
 
   return (
-    <div className={styles.root} data-xref="M-11.1 · Documents and reports" data-split={splitUploads || undefined}>
-      <Header title="Documents and reports" onBack={canGoBack ? pop : undefined} backLabel={previousTitle} />
-      <div className={styles.body}>
-        <div className={styles.listPane}>{list}</div>
-        {splitUploads && (
-          <div className={styles.detailPane} aria-live="polite">
-            {paneId ? (
-              <DetailHostProvider
-                screenId="M-11.2"
-                params={{ documentId: paneId }}
-                previousTitle="Documents"
-                onClear={() => setSelected((s) => (s?.scope === scope ? null : s))}
-              >
-                <Suspense fallback={<div className={styles.paneLoading}>Loading…</div>}>
-                  <DocumentPreview />
-                </Suspense>
-              </DetailHostProvider>
-            ) : (
-              <p className={styles.paneEmpty}>Select a document to preview it here.</p>
-            )}
+    <DerivedPage
+      title="Documents and reports"
+      tabs={<Segmented label="Library" options={TABS} value={tab} onChange={setTab} />}
+      split={splitUploads}
+      detail={detail}
+      composerPlaceholder="Ask Deborah about a document…"
+    >
+      <div className={styles.stack} data-xref="M-11.1 · Documents and reports">
+        <ProfileLine profileId={profileId} switchable={!params.profileId} />
+        {loading ? (
+          <div className={styles.skeleton} aria-busy="true" aria-label="Loading documents">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className={styles.skeletonRow}>
+                <Skeleton height={40} width={40} />
+                <div className={styles.skeletonText}>
+                  <Skeleton height={20} width="70%" />
+                  <Skeleton height={16} width="45%" />
+                </div>
+              </div>
+            ))}
           </div>
+        ) : tab === 'uploads' ? (
+          <UploadsList
+            profileId={profileId}
+            onUpload={upload}
+            selectedId={paneId}
+            onSelect={wide ? onSelectUpload : undefined}
+          />
+        ) : (
+          <ReportsList profileId={profileId} />
         )}
-      </div>
-      {tab === 'uploads' && !loading && hasDocs && (
-        <div className={styles.footer}>
+        {tab === 'uploads' && !loading && hasDocs && (
           <Button fullWidth leadingIcon="upload" onClick={upload}>
             Upload a document
           </Button>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </DerivedPage>
   );
 }

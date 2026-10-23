@@ -26,7 +26,7 @@
   justify-items: center;
   padding: var(--space-8) var(--space-6);
   /* Lab demo stage — lilac → canvas from live tokens (not product screen chrome). */
-  background: linear-gradient(165deg, var(--color-surface-lilac) 0%, var(--color-canvas) 72%);
+  background: var(--color-canvas);
   overflow: hidden;
 }
 .stage[data-stage='paper'] { background: var(--color-surface); }

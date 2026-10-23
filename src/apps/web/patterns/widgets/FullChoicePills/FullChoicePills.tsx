@@ -9,6 +9,7 @@
  */
 import { type CSSProperties, type ReactNode } from 'react';
 import { PillDescribeField } from '../PillDescribeField';
+import { Icon } from '@web/ui';
 import styles from './FullChoicePills.module.css';
 
 export interface FullChoiceOption {
@@ -101,6 +102,7 @@ export function FullChoicePills({
                 }}
               >
                 <span className={styles.label}>{o.label}</span>
+                <span className={styles.check} aria-hidden>{selected === o.id && <Icon name="check" size={14} strokeWidth={2.5} />}</span>
               </button>
             )}
           </div>

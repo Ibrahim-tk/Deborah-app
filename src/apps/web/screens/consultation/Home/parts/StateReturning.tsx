@@ -1,10 +1,8 @@
 /**
- * Home · State 2 — returning. Order (design 2026-10-20): last conversation · intake if unfinished, else
- * the healing plan · Manage your health details · shop.
+ * Home · State 2 — returning. Order: Continue hero · intake if unfinished · essentials · more for you.
  */
-import { HealingPlanCard, HomeMediaHero, IntakeCompletionCard, type NextIntent, type Recommendation } from '@web/patterns/widgets';
+import { HomeMediaHero, type NextIntent, type Recommendation } from '@web/patterns/widgets';
 import { HomeSections } from './HomeSections';
-import layout from './HomeStates.module.css';
 
 export type NextStep = NextIntent;
 
@@ -34,16 +32,9 @@ export function StateReturning(p: StateReturningProps) {
 
   return (
     <>
-      <HomeMediaHero titleId="continue-deborah" title={heroTitle} when={p.when} eyebrow="Continue with Deborah"
-        stats={[{ icon: 'chat', label: p.topic.replace(/^Your /i, '').replace(/^./, (c) => c.toUpperCase()) }, ...(p.when ? [{ icon: 'calendar' as const, label: p.when }] : [])]} tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
-      {p.intakeCard && !p.intakeCard.complete ? (
-        <IntakeCompletionCard progress={p.intakeCard.progress} onAction={p.intakeCard.onAction} />
-      ) : (
-        p.journey && <HealingPlanCard concern={p.journey.concern} done={p.journey.done} total={p.journey.total} onPress={p.journey.onPress} />
-      )}
-      <div className={layout.lower}>
-        <HomeSections {...p} />
-      </div>
+      <HomeMediaHero titleId="continue-deborah" title={heroTitle} eyebrow="Continue with Deborah"
+        tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
+      <HomeSections {...p} journey={p.intakeCard && !p.intakeCard.complete ? undefined : p.journey} />
     </>
   );
 }

@@ -21,8 +21,6 @@ export function DevToggles() {
   const setTheme = useShellStore((s) => s.setTheme);
   const showNotes = useShellStore((s) => s.showNotes);
   const setShowNotes = useShellStore((s) => s.setShowNotes);
-  const webFullBleed = useShellStore((s) => s.webFullBleed);
-  const setWebFullBleed = useShellStore((s) => s.setWebFullBleed);
 
   return (
     <Popover trigger={<><span aria-hidden="true">⚙</span> Toggles</>}>
@@ -39,7 +37,6 @@ export function DevToggles() {
           </MenuSection>
           <MenuSection title="Stage">
             <MenuChoice label="Theme" value={theme} options={THEMES} onChange={setTheme} />
-            <MenuCheck label="Web: full-bleed (no browser frame)" checked={webFullBleed} onChange={setWebFullBleed} />
           </MenuSection>
         </>
       )}

@@ -1,13 +1,76 @@
 .root { position: absolute; inset: 0; overflow: clip; background: var(--midnight-900); --web-rail-w: 0px; }
 .root[data-main] { --web-rail-w: 260px; }
+.root[data-main][data-rail-collapsed] { --web-rail-w: 64px; }
 
-.base { position: absolute; inset: 0; overflow: clip; background: var(--surface-canvas); transform-origin: 50% 0; }
+/* Outer shell: mist sits behind sidebar + stage (dashboard only). */
+.base {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  background: var(--color-canvas);
+  transform-origin: 50% 0;
+}
+.root[data-main] .base {
+  background: var(--color-canvas);
+}
+/*
+ * Purple mist blooms upward from below (soft glow — not a slide wipe).
+ * Do not set position on children: Sidebar + stage stay `absolute`.
+ */
+.root[data-main] .base::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url('/images/home/dashboard-bg.webp') center / cover no-repeat;
+  transform-origin: 50% 100%;
+  animation: dash-mist-bloom 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  pointer-events: none;
+}
+.root[data-main] .base > * {
+  z-index: 1;
+}
 .rootView { position: absolute; inset: 0; }
 
-/* Main stage sits beside the persistent rail (L-shell). Pre-auth keeps full width. */
+/* Floating stage: flat fill only (no gradient). Mist stays on `.base` behind / beside it. */
 .rootView[data-rail] {
-  left: var(--web-rail-w);
+  top: var(--space-3);
+  right: var(--space-3);
+  bottom: var(--space-3);
+  left: calc(var(--web-rail-w) + var(--space-2));
   width: auto;
+  overflow: clip;
+  border-radius: var(--radius-xl, 24px);
+  background: var(--color-canvas);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 10%, var(--white));
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.06);
+  transition: left 320ms var(--ease-out);
+}
+@keyframes dash-mist-bloom {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10%, 0) scale(0.96);
+    filter: blur(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rootView[data-rail] { transition: none; }
+  .root[data-main] .base::before { animation: none; filter: none; }
+}
+/*
+ * Stack screens must be opaque. Transparent top screens let the previous
+ * route bleed through on push (looks like overlapping broken layouts).
+ * Mist stays on `.base` outside the floating stage.
+ */
+.rootView[data-rail] .screen,
+.rootView[data-rail] .screen[data-bg='plain'],
+.rootView[data-rail] .screen[data-bg='gradient'] {
+  background: var(--color-canvas);
 }
 
 /* Screens leave room for the floating tab bar via this variable (unused on web; toast math). */
@@ -68,10 +131,10 @@
 
 .toastHost {
   position: absolute;
-  right: var(--margin-screen);
-  bottom: calc(var(--safe-bottom) + var(--space-4));
-  /* Clear the persistent web rail when present. */
-  left: calc(var(--margin-screen) + var(--web-rail-w, 0px));
+  right: calc(var(--margin-screen) + var(--space-3));
+  bottom: calc(var(--safe-bottom) + var(--space-4) + var(--space-3));
+  /* Clear the persistent web rail + stage inset when present. */
+  left: calc(var(--margin-screen) + var(--web-rail-w, 0px) + var(--space-2));
   z-index: 90;
   display: grid;
   justify-items: center;
@@ -84,7 +147,7 @@
 .overlayHost { position: absolute; inset: 0; z-index: 100; pointer-events: none; }
 .overlayHost > * { pointer-events: auto; }
 
-/* Plain screens (everything outside GRADIENT_SCREENS in StackView): flat canvas colour, and the screen's own
-   Aura / GradientShift layers are hidden. */
+/* Preauth / non-rail: flat canvas. Main rail stage paints its own fill above. */
 .screen[data-bg='plain'] { background: var(--color-canvas); }
 .screen[data-bg='plain'] [data-bg-layer] { display: none; }
+.rootView[data-rail] .screen[data-bg='plain'] { background: transparent; }

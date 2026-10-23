@@ -1,3 +1,8 @@
-/* Layout comes from the onboarding template (HealthBasics.module.css); this only lifts the glass nav bar above the bloom. */
-.bar { position: relative; z-index: 2; flex: none; }
-
+/* Web: full window over the app; layout comes from the onboarding template (HealthBasics.module.css). */
+.page.page { position: absolute; inset: 0; z-index: 1; }
+/* Text Back (left) · Done (right), above the bloom. */
+.bar {
+  position: absolute; z-index: 3; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+}

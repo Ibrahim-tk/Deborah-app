@@ -4,7 +4,7 @@
  * @states  new (empty) · editing · questions checklist · saved answer (source line) · delete confirm
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F09-records.md#m-94--note-editor-not-in-wireframes
- * @xref    web: W-9.4 (apps/web/screens/records/NoteEditor) — not built
+ * @xref    web: W-9.4 (apps/web/screens/records/NoteEditor)
  *
  * OPEN: "may Deborah read these notes in later consultations (consent)?" — not wired to chat.
  */
@@ -12,7 +12,8 @@ import { useState } from 'react';
 import { selectMessage, useAppStore } from '@shared/store';
 import type { NoteKind } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { ActionSheet, IconButton, Input, Modal, Segmented, TextArea, useAlert, type IconName } from '@web/ui';
+import { ActionSheet, IconButton, Input, Segmented, TextArea, useAlert, type IconName } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useScreenParams } from '@web/navigation';
 import { ChecklistPreview } from './parts/ChecklistPreview';
@@ -28,7 +29,7 @@ const KINDS: { value: EditableKind; label: string; icon: IconName }[] = [
 
 export default function NoteEditor() {
   const params = useScreenParams<{ noteId: string; kind: NoteKind; profileId: string }>();
-  const { dismissModal } = useNav();
+  const { pop } = useNav();
   const toast = useToast();
   const alert = useAlert();
   // Read once: the editor owns the draft while open.
@@ -43,8 +44,8 @@ export default function NoteEditor() {
 
   const close = () => {
     autosave.flush();
-    dismissModal();
-    // × on an untouched new note discards silently.
+    pop();
+    // Back on an untouched new note discards silently.
     if (autosave.didSave) toast('Saved');
   };
 
@@ -59,18 +60,20 @@ export default function NoteEditor() {
     autosave.cancel();
     const id = autosave.noteId;
     if (id) useAppStore.getState().deleteNote(id);
-    dismissModal();
+    pop();
     if (id) toast('Note deleted');
   };
 
   return (
-    <div className={styles.root} data-xref="M-9.4 · Note editor">
-      <Modal
+    <>
+      <DerivedPage
         title={note ? 'Note' : 'New note'}
-        left={<IconButton icon="more" label="More options" onClick={() => setMenu(true)} />}
-        right={<IconButton icon="close" label="Close" onClick={close} />}
+        composerPlaceholder="Ask Deborah about this note…"
+        onBack={close}
+        showBack
+        trailing={note ? <IconButton icon="more" label="More options" onClick={() => setMenu(true)} /> : undefined}
       >
-        <div className={styles.body}>
+        <div className={styles.body} data-xref="M-9.4 · Note editor">
           <Input label="Title" placeholder={DEFAULT_TITLE[kind]} value={title} onChange={(e) => setTitle(e.target.value)} />
 
           {kind === 'saved-answer' ? (
@@ -97,8 +100,8 @@ export default function NoteEditor() {
 
           {kind === 'questions' && <ChecklistPreview body={body} />}
         </div>
-      </Modal>
+      </DerivedPage>
       <ActionSheet open={menu} actions={[{ label: 'Delete note', destructive: true, onSelect: remove }]} onClose={() => setMenu(false)} />
-    </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 /**
  * @screen  M-6.2 · Add family member
  * @flow    F06 Family profiles
+ * @presentation push (DerivedPage)
  * @states  empty · filling · minor (guardian consent) · adult (agreement consent) · DOB in future · under 13 (blocked) · valid · discard confirm
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-203
  * @spec    docs/ux/F06-family-profiles.md#m-62--add-family-member
@@ -17,7 +18,8 @@ import { useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom, uid } from '@shared/utils';
 import { RELATIONSHIP_OPTIONS } from '@web/patterns/profile';
-import { Button, Checkbox, Input, Modal, Panel, Select, useAlert } from '@web/ui';
+import { Button, Checkbox, Input, Panel, Select, useAlert } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav } from '@web/navigation';
 import { useMemberForm } from './useMemberForm';
@@ -46,7 +48,7 @@ const SEXES: { value: Sex; label: string }[] = [
 ];
 
 export default function AddMember() {
-  const { dismissModal, switchProfile, openAsk } = useNav();
+  const { pop, switchProfile, openAsk } = useNav();
   const alert = useAlert();
   const toast = useToast();
   const form = useMemberForm();
@@ -56,13 +58,13 @@ export default function AddMember() {
   const consentName = values.name.trim() || 'them';
 
   const close = async () => {
-    if (!dirty) return dismissModal();
+    if (!dirty) return pop();
     const choice = await alert({
       title: 'Discard this profile?',
       message: 'What you’ve entered won’t be saved.',
       buttons: [{ label: 'Keep editing', style: 'cancel' }, { label: 'Discard', style: 'destructive' }],
     });
-    if (choice === 1) dismissModal();
+    if (choice === 1) pop();
   };
 
   const create = () => {
@@ -93,62 +95,60 @@ export default function AddMember() {
       guardianConsentAt: minor ? now : undefined,
       consent: { path, attestedAt: now, attestedBy: s.accountId ?? s.profiles.order[0] },
     });
-    // switchProfile closes the modal and resets Ask + My Health; openAsk lands on a fresh
-    // Conversation, which is empty for the new profile ("Let's talk about {name}." + teen suggestions).
+    // switchProfile resets Ask + My Health; openAsk lands on a fresh Conversation for the new profile.
     switchProfile(id);
     openAsk();
     toast(`Now asking for ${name}`);
   };
 
   return (
-    <div className={styles.root} data-xref="M-6.2 · Add family member">
-      <Modal
-        title="Add family member"
-        onClose={close}
-        footer={<Button fullWidth disabled={!valid} loading={creating} onClick={create}>Create profile</Button>}
-      >
-        <form className={styles.body} noValidate onSubmit={(e) => { e.preventDefault(); create(); }}>
-          <Input
-            label="First name"
-            autoComplete="off"
-            autoCapitalize="words"
-            value={values.name}
-            onChange={(e) => set({ name: e.target.value })}
-          />
-          <Select label="Relationship" options={RELATIONSHIPS} value={values.relationship} onChange={(relationship) => set({ relationship })} />
-          <Input
-            label="Date of birth"
-            type="date"
-            max={today}
-            value={values.dob}
-            error={dobError}
-            onChange={(e) => set({ dob: e.target.value })}
-          />
-          {underThirteen && (
-            // OPEN: "COPPA rules — prototype blocks under 13" (F06 M-6.2 validation).
-            <Panel tone="warning" icon="alert">
-              <p className={styles.notice}>Profiles for children under 13 need extra consent steps.</p>
-            </Panel>
-          )}
-          <Select label="Sex at birth" options={SEXES} value={values.sex} onChange={(sex) => set({ sex })} />
-          {!underThirteen && (
-            <div className={styles.consent} data-placeholder>
-              <p className={styles.consentBody}>{withName(body, consentName)}</p>
-              <div className={styles.consentChecks} role="group" aria-label="Confirm your authority">
-                {options.map((o) => (
-                  <Checkbox
-                    key={o.value}
-                    checked={consentValue === o.value}
-                    onChange={(on) => (on ? setConsent(o.value) : setConsent(''))}
-                    label={withName(o.label, consentName)}
-                  />
-                ))}
-              </div>
+    <DerivedPage contentWidth={560}
+      title="Add family member"
+      composerPlaceholder="Ask Deborah about family profiles…"
+      onBack={close}
+    >
+      <form className={styles.body} data-xref="M-6.2 · Add family member" noValidate onSubmit={(e) => { e.preventDefault(); create(); }}>
+        <Input
+          label="First name"
+          autoComplete="off"
+          autoCapitalize="words"
+          value={values.name}
+          onChange={(e) => set({ name: e.target.value })}
+        />
+        <Select label="Relationship" options={RELATIONSHIPS} value={values.relationship} onChange={(relationship) => set({ relationship })} />
+        <Input
+          label="Date of birth"
+          type="date"
+          max={today}
+          value={values.dob}
+          error={dobError}
+          onChange={(e) => set({ dob: e.target.value })}
+        />
+        {underThirteen && (
+          // OPEN: "COPPA rules — prototype blocks under 13" (F06 M-6.2 validation).
+          <Panel tone="warning" icon="alert">
+            <p className={styles.notice}>Profiles for children under 13 need extra consent steps.</p>
+          </Panel>
+        )}
+        <Select label="Sex at birth" options={SEXES} value={values.sex} onChange={(sex) => set({ sex })} />
+        {!underThirteen && (
+          <div className={styles.consent} data-placeholder>
+            <p className={styles.consentBody}>{withName(body, consentName)}</p>
+            <div className={styles.consentChecks} role="group" aria-label="Confirm your authority">
+              {options.map((o) => (
+                <Checkbox
+                  key={o.value}
+                  checked={consentValue === o.value}
+                  onChange={(on) => (on ? setConsent(o.value) : setConsent(''))}
+                  label={withName(o.label, consentName)}
+                />
+              ))}
             </div>
-          )}
-          <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>
-        </form>
-      </Modal>
-    </div>
+          </div>
+        )}
+        <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>
+        <Button fullWidth disabled={!valid} loading={creating} onClick={create}>Create profile</Button>
+      </form>
+    </DerivedPage>
   );
 }

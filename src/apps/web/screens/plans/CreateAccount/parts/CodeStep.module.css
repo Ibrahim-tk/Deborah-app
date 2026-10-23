@@ -1,10 +1,10 @@
-.root { display: grid; gap: var(--space-5); }
-.text { display: grid; gap: 2px; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
-.emailRow { display: flex; align-items: center; gap: 0; min-width: 0; }
+.root { display: grid; gap: var(--space-5); justify-items: center; width: 100%; }
+.text { display: grid; gap: 2px; justify-items: center; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-body); text-align: center; }
+.emailRow { display: flex; align-items: center; justify-content: center; gap: 0; min-width: 0; }
 /* Edit icon right after the email; its 48 pt hit area overlaps the line so the text rhythm stays the same. */
 .change { flex: none; margin: -12px 0 -12px -8px; color: var(--color-ink-body); } /* same colour as the sentence */
 .change svg { width: 16px; height: 16px; } /* text-height icon; hit area stays 48 pt */
 .email { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--weight-medium); color: var(--color-ink); }
 
-.foot { display: flex; justify-content: center; min-height: var(--tap-min); align-items: center; }
+.foot { display: flex; justify-content: center; align-items: center; min-height: 0; padding-top: var(--space-1); }
 .resend { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }

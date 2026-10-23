@@ -6,10 +6,12 @@
  * @spec    docs/ux/F09-records.md#m-92--consultation-detail
  * @xref    web: W-9.2 (apps/web/screens/records/ConsultationDetail) — not built
  */
+import type { ReactNode } from 'react';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Header } from '@web/ui';
+import { Button } from '@web/ui';
 import { EmptyState } from '@web/patterns/health';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@web/navigation';
 import { useDetailHost } from '../../DetailHost';
@@ -28,21 +30,26 @@ async function copy(text: string) {
 export default function ConsultationDetail() {
   const { conversationId = '' } = useScreenParams<{ conversationId: string }>();
   const { pop, open, returnToConversation } = useNav();
-  const { previousTitle, canGoBack } = useRoute();
+  const { canGoBack } = useRoute();
   const detailHost = useDetailHost();
   const toast = useToast();
   const conversation = useAppStore((s) => s.conversations.byId[conversationId]);
   const activeProfileId = useAppStore((s) => s.activeProfileId);
   const back = detailHost ? detailHost.clear : canGoBack ? pop : undefined;
 
+  const wrap = (title: string, body: ReactNode) =>
+    detailHost ? (
+      <div className={styles.embed} data-xref="M-9.2 · Consultation detail">{body}</div>
+    ) : (
+      <DerivedPage title={title} composerPlaceholder="Ask Deborah about this visit…">
+        <div className={styles.stack} data-xref="M-9.2 · Consultation detail">{body}</div>
+      </DerivedPage>
+    );
+
   if (!conversation) {
-    return (
-      <div className={styles.root} data-xref="M-9.2 · Consultation detail">
-        <Header title="Consultation" onBack={back} backLabel={previousTitle} />
-        <div className={styles.body}>
-          <EmptyState icon="chat" text="This consultation is no longer available." actionLabel="Back to records" onAction={back ?? pop} />
-        </div>
-      </div>
+    return wrap(
+      'Consultation',
+      <EmptyState icon="chat" text="This consultation is no longer available." actionLabel="Back to records" onAction={back ?? pop} />,
     );
   }
 
@@ -65,13 +72,11 @@ export default function ConsultationDetail() {
     returnToConversation();
   };
 
-  return (
-    <div className={styles.root} data-xref="M-9.2 · Consultation detail">
-      <Header title={topic} onBack={back} backLabel={previousTitle} />
-      <div className={styles.body}>
-        <p className={styles.date}>{date}</p>
-        <Transcript messages={conversation.messages} onShop={(productId) => open('M-2.7', { productId })} />
-      </div>
+  return wrap(
+    topic,
+    <>
+      <p className={styles.date}>{date}</p>
+      <Transcript messages={conversation.messages} onShop={(productId) => open('M-2.7', { productId })} />
       <div className={styles.actions}>
         <Button variant="secondary" size="sm" leadingIcon="pdf" onClick={() => open('M-9.6', { conversationId })}>Download PDF</Button>
         <Button variant="secondary" size="sm" leadingIcon="share" onClick={share}>Share</Button>
@@ -79,6 +84,6 @@ export default function ConsultationDetail() {
           <Button size="sm" leadingIcon="deborah" onClick={continueChat}>Continue conversation</Button>
         )}
       </div>
-    </div>
+    </>,
   );
 }

@@ -10,9 +10,9 @@
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
 import { selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
-import { Aura, GradientShift, ScrollEdge } from '@web/ui';
 
 import { ChatLauncher, ConversationHeader } from '@web/patterns/chat';
+import { IntakeCompletionCard } from '@web/patterns/widgets';
 import { useNav, useNavStore } from '@web/navigation';
 import { useAccountGate } from '@web/hooks/useAccountGate';
 import { GreetingSheet } from './parts/GreetingSheet';
@@ -28,7 +28,7 @@ const greeted = new Set<string>();
 const GREETING_DELAY_MS = 1500;
 
 export default function Home() {
-  const { open, push, presentSheet, switchTab } = useNav();
+  const { open, push, presentSheet } = useNav();
   const openAsk = useNavStore((s) => s.openAsk);
   const gate = useAccountGate();
   const d = useHomeView();
@@ -37,7 +37,6 @@ export default function Home() {
   // Not after sign-up's health basics (M-1.8): that form already hands over to the chat.
   const eligible = isNew && !!profile && !greeted.has(profile.id) && !d.intakeDone && !profile.intake.profileFor;
   const [sheet, setSheet] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   // First visit: Deborah's greeting sheet slides up ~1.5 s after landing.
   useEffect(() => {
@@ -53,6 +52,7 @@ export default function Home() {
   const hour = new Date().getHours();
   const part = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
   const heading = `Good ${part}${name ? `, ${name}` : ''}.`;
+  const support = 'How can I support you today?';
 
   const closeSheet = () => {
     if (profile) greeted.add(profile.id);
@@ -92,7 +92,7 @@ export default function Home() {
   const visitToLog = useAppStore((s) => selectVisitToLog(s));
   const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
     { title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', onPress: go('M-7.2') },
-    { title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
+    { title: 'Add Family Member', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
   ];
 
 
@@ -112,19 +112,16 @@ export default function Home() {
 
   return (
     <div className={styles.root} data-xref="M-2.0 · Home">
-      <Aura />
-      <GradientShift />
-      <ScrollEdge active={scrolled} />
       <div className={styles.top}>
-        <ConversationHeader title="" transparent onNotifications={() => push('M-10.6')}
-          profile={{ name, guest: false, onPress: () => switchTab('account') }} />
+        <ConversationHeader title="" transparent onNotifications={() => push('M-10.6')} />
       </div>
 
-      <div className={styles.scroll} onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 4)}>
+      <div className={styles.scroll}>
         <div className={styles.stage}>
           <div className={styles.intro}>
             <p className={styles.date}>{today}</p>
             <h1 className={styles.hello}>{heading}</h1>
+            <p className={styles.support}>{support}</p>
           </div>
 
           {d.state === 'new' && (
@@ -167,6 +164,12 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Intake nudge floats bottom-right over the dashboard (not inline in the card stack). */}
+      {!intakeCard.complete && (
+        <div className={styles.intakeFloat}>
+          <IntakeCompletionCard layout="stack" progress={intakeCard.progress} onAction={intakeCard.onAction} />
+        </div>
+      )}
       <div className={styles.dock}>
         <div className={styles.dockInner}>
           <ChatLauncher glow placeholder="Tell the Oracle how you’re feeling…" onOpen={chat} />

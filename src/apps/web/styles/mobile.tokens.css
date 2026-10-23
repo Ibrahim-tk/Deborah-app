@@ -126,8 +126,8 @@
   --home-tone-lilac: color-mix(in srgb, var(--purple-100) 55%, #d4c4e4);
   --home-tone-linen: color-mix(in srgb, var(--gold-100) 55%, var(--white));
   --home-tone-gold: color-mix(in srgb, var(--amber-tint) 60%, var(--gold-100));
-  /* Main continue / CD card — soft mauve gradient (Half Marathon ref) */
-  --home-tone-hero: linear-gradient(165deg, #ebe4f7 0%, #ddd2f0 38%, #d0c2e8 68%, #c4b3e0 100%);
+  /* Main continue / CD card — flat lilac (Web: no purple gradient) */
+  --home-tone-hero: var(--home-tone-lilac);
   --home-artifact-ink: color-mix(in srgb, var(--purple-900) 28%, transparent);
   --home-artifact-ink-on-hero: color-mix(in srgb, var(--gold-50) 35%, transparent);
   --home-radius: 32px;

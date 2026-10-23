@@ -84,7 +84,8 @@ export default function ProfileDetails() {
     <div className={styles.root} data-xref="M-6.5 · Profile details">
       <Header
         title={profile.name}
-        onBack={editing ? undefined : back}
+        // Web master–detail: no second Back inside the pane (the page has its own way out).
+        onBack={editing || detailHost ? undefined : back}
         backLabel={previousTitle}
         left={editing ? <Button variant="ghost" size="md" onClick={() => setDraft(null)}>Cancel</Button> : undefined}
         right={<Button variant="ghost" size="md" onClick={toggleEdit}>{editing ? 'Done' : 'Edit'}</Button>}

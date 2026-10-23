@@ -34,7 +34,7 @@ export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
           {brief.providerName?.trim() && (
             <div>
               <dt>Provider</dt>
-              <dd>{brief.providerName.trim()}</dd>
+              <dd>{[brief.providerName.trim(), brief.providerSpecialty].filter(Boolean).join(' · ')}</dd>
             </div>
           )}
           {header.dob && (
@@ -52,7 +52,7 @@ export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
         </dl>
       </header>
 
-      <section className={styles.block}>
+      <section className={`${styles.block} ${styles.fieldBlock}`}>
         <h3 className={styles.h3}>1. Chief Complaint</h3>
         {editable ? (
           <TextArea
@@ -68,7 +68,7 @@ export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
         )}
       </section>
 
-      <section className={styles.block}>
+      <section className={`${styles.block} ${styles.fieldBlock}`}>
         <h3 className={styles.h3}>2. Clinical Context — What the Oracle Identified</h3>
         <p className={styles.body}>{brief.clinicalContext}</p>
       </section>

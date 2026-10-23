@@ -1,13 +1,94 @@
-.root { position: relative; display: flex; flex-direction: column; height: 100%; background: transparent; }
+/* Artifact pane (same as chat M-2.1): list shifts left, note floats on the right. */
+.shell {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  transition: padding-right 320ms var(--ease-out);
+}
+.shell[data-preview] {
+  padding-right: max(60%, 480px);
+}
+.shell > :first-child {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+.preview {
+  position: absolute;
+  z-index: 6;
+  top: var(--space-3);
+  right: var(--space-3);
+  bottom: var(--space-3);
+  width: calc(max(60%, 480px) - var(--space-3));
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: var(--radius-card);
+  background: var(--color-canvas);
+  box-shadow: inset 0 0 0 1px var(--surface-border), var(--shadow-float-md);
+  animation: preview-in 320ms var(--ease-out) both;
+  overflow: hidden;
+}
+.previewBody {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+@keyframes preview-in {
+  from { opacity: 0; transform: translateX(24px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell { transition: none; }
+  .preview { animation: none; }
+}
 
-.body { composes: body from '../../../styles/masterDetail.module.css'; }
-.listPane { composes: listPane from '../../../styles/masterDetail.module.css'; }
-.detailPane { composes: detailPane from '../../../styles/masterDetail.module.css'; }
-.paneEmpty { composes: paneEmpty from '../../../styles/masterDetail.module.css'; }
-.paneLoading { composes: paneLoading from '../../../styles/masterDetail.module.css'; }
+.stack {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  position: relative;
+}
 
-.top { display: grid; gap: var(--space-3); padding-inline: var(--margin-screen); }
-.context { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-secondary); }
-.skeleton { display: grid; gap: var(--space-4); padding: var(--space-2) var(--margin-screen); }
-.skeletonRow { display: flex; align-items: center; gap: var(--space-3); }
-.skeletonText { flex: 1; display: grid; gap: var(--space-2); }
+.context {
+  margin: 0 var(--space-4);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cards {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.empty,
+.loading {
+  padding: var(--space-4);
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.choices {
+  display: grid;
+  gap: var(--space-3);
+}
+
+/* Empty: no tinted container, vertically centred in the page; the header's New is the only action. */
+.empty { display: grid; place-items: center; min-height: 60vh; }
+.empty > * { background: none; box-shadow: none; }

@@ -1,0 +1,174 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  /* Opaque: stack underlay must not bleed through push pages on the rail stage. */
+  background: var(--color-canvas);
+}
+
+/* Single centered content column (header + body). Split mode widens via masterDetail. */
+.column {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* --page-w: content width a screen asks for (e.g. a 560px form) so title, Back and fields share one edge. */
+  max-width: calc(var(--page-w, 688px) + 2 * var(--space-4));
+  margin-inline: auto;
+}
+
+.root[data-split='true'] .column {
+  max-width: 1280px;
+}
+
+/* Detail pane embed: fill the host column — no reading-column max-width. */
+.root[data-embedded] .column {
+  max-width: none;
+  margin-inline: 0;
+}
+
+/* Split columns live here (not only via composed masterDetail) so the grid always wins. */
+.root[data-split='true'] .body {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+  gap: 0;
+  align-content: stretch;
+}
+
+.header {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4) var(--space-3);
+  flex: none;
+}
+
+/* Back alone on first row; breadcrumbs (if any) on the next. */
+.chrome {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-1);
+  min-height: 0;
+}
+
+.back {
+  margin-inline-start: calc(-1 * var(--space-2));
+}
+
+.crumbNav {
+  min-width: 0;
+}
+
+/* Title + trailing (e.g. New); search is a full-width row under the title. */
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font: var(--weight-regular) 36px / 42px var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.search {
+  width: 100%;
+  display: flex;
+  align-items: stretch;
+  --field-h: var(--button-h);
+  min-height: var(--button-h);
+}
+
+.search > * {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+}
+
+.trailing {
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  gap: var(--space-2);
+  --field-h: var(--button-h);
+  min-height: var(--button-h);
+}
+
+.trailing > * {
+  align-self: stretch;
+  min-height: var(--button-h);
+  height: auto;
+}
+
+.rise {
+  display: grid;
+  gap: var(--space-4);
+  animation: derived-rise 480ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+}
+
+.tabs {
+  min-width: 0;
+}
+
+@keyframes derived-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}
+
+.body {
+  composes: body from '../../../styles/masterDetail.module.css';
+  flex: 1;
+  min-height: 0;
+  padding-bottom: var(--space-6);
+  max-width: none;
+  margin-inline: 0;
+  width: 100%;
+}
+
+.listPane {
+  composes: listPane from '../../../styles/masterDetail.module.css';
+  overflow-y: auto;
+  padding-bottom: var(--space-8);
+}
+
+.detailPane {
+  composes: detailPane from '../../../styles/masterDetail.module.css';
+  overflow-y: auto;
+  padding-bottom: var(--space-8);
+}
+
+.paneEmpty {
+  composes: paneEmpty from '../../../styles/masterDetail.module.css';
+}
+
+/* Settings breadcrumbs: Settings › Page. Plain text links; current page in ink. */
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; padding: 0; list-style: none; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-ui); color: var(--color-ink); }
+.crumbs li { display: inline-flex; align-items: center; gap: var(--space-2); }
+.crumbs li + li::before { content: '›'; color: var(--color-ink-secondary); }
+.crumbLink { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink-secondary); cursor: pointer; }
+.crumbLink:hover { color: var(--color-ink); text-decoration: underline; text-underline-offset: 4px; }
+.crumbLink:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+/* Body shares the header's side inset so title, Back and content start on one edge. */
+.root:not([data-split='true']) .listPane { padding-inline: var(--space-4); }

@@ -1,10 +1,10 @@
 /* Compact white cards — titles one step under the question (title-3), so the page reads question → option → detail.
    Was: tall tonal cards (design 2026-10-21, collections / goal-category moodboard). Flat: no shadow (DESIGN.md). */
-.tiles { display: grid; gap: var(--space-3); }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); align-items: stretch; }
 .tile {
   position: relative; overflow: hidden; isolation: isolate;
-  display: grid; grid-template-columns: 1fr; align-items: start; gap: var(--space-3);
-  width: 100%; min-width: 0; min-height: 0;
+  display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-3);
+  width: 100%; min-width: 0; aspect-ratio: 1;
   padding: var(--space-4) var(--space-5); border: 0; border-radius: var(--radius-card);
   background: var(--color-surface);
   box-shadow: inset 0 0 0 1px var(--surface-border);
@@ -17,7 +17,9 @@
 .tile[data-on] { background: var(--selected-tint); box-shadow: inset 0 0 0 1.5px var(--color-border-selected); }
 
 /* Words sit top-left; the card's height gives them air. */
-.text { align-self: start; display: grid; gap: var(--space-1); min-width: 0; padding-right: var(--space-6); }
+.top { display: flex; align-items: flex-start; justify-content: space-between; }
+.icon { display: grid; color: var(--color-ink); --icon-cut: var(--selected-tint); }
+.text { display: grid; gap: var(--space-1); min-width: 0; }
 .tileTitle { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
 .tileSub { max-width: 22ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
 
@@ -31,9 +33,8 @@
 
 /* Round check, top-right: empty ring → filled accent with a tick. */
 .check {
-  position: absolute; top: var(--space-4); right: var(--space-4);
-  display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-full);
-  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--color-ink) 25%, transparent);
+  flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-full);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 15%, transparent);
   color: var(--color-ink-on-accent); transition: background var(--dur-quick) var(--ease-out);
 }
 .tile[data-on] .check { background: var(--color-accent); box-shadow: none; }

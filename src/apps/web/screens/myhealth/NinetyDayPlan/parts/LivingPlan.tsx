@@ -1,7 +1,6 @@
 /** Newest concern stays open. Earlier ones stay on the plan, collapsed. Resolved names stay as history. */
 import { useState } from 'react';
 import type { PlanConcern } from '@shared/types/domain';
-import { formatShortDate } from '@shared/utils';
 import { Icon } from '@web/ui';
 import { MedicineBox } from './MedicineBox';
 import styles from './LivingPlan.module.css';
@@ -55,7 +54,6 @@ export function LivingPlan({ concerns, careTeam, hasMedicines, onToggle, onResol
                 >
                   <span className={styles.foldText}>
                     <span className={styles.foldName}>{concern.title}</span>
-                    <span className={styles.foldMeta}>{openCount(concern)}</span>
                   </span>
                   <Icon name="chevronDown" size={18} className={styles.chevron} />
                 </button>
@@ -80,7 +78,6 @@ export function LivingPlan({ concerns, careTeam, hasMedicines, onToggle, onResol
           <button type="button" className={styles.foldHead} aria-expanded={showResolved} onClick={() => setShowResolved((v) => !v)}>
             <span className={styles.foldText}>
               <span className={styles.foldName}>Resolved</span>
-              <span className={styles.foldMeta}>{resolved.length === 1 ? '1 concern' : `${resolved.length} concerns`}</span>
             </span>
             <Icon name="chevronDown" size={18} className={styles.chevron} />
           </button>
@@ -97,12 +94,6 @@ export function LivingPlan({ concerns, careTeam, hasMedicines, onToggle, onResol
   );
 }
 
-function openCount(concern: PlanConcern): string {
-  const left = concern.actions.filter((a) => !a.done).length;
-  if (!concern.actions.length) return 'No actions yet';
-  if (!left) return 'All actions checked';
-  return left === 1 ? '1 still open' : `${left} still open`;
-}
 
 function Concern({
   concern,
@@ -110,7 +101,7 @@ function Concern({
   careTeam,
   hasMedicines,
   onToggle,
-  onResolve,
+  onResolve: _onResolve,
   onCheckInteractions,
 }: {
   concern: PlanConcern;
@@ -126,7 +117,6 @@ function Concern({
       {newest && (
         <>
           <h2 id={`concern-${concern.id}`} className={styles.title}>{concern.title}</h2>
-          <p className={styles.when}>Newest · {formatShortDate(concern.addedAt)}</p>
         </>
       )}
       {concern.mismatch && careTeam && <p className={styles.mismatch}>{concern.mismatch}</p>}
@@ -136,9 +126,6 @@ function Concern({
         onToggle={(actionId) => onToggle(concern.id, actionId)}
         onCheckInteractions={onCheckInteractions}
       />
-      <button type="button" className={styles.resolve} onClick={() => onResolve(concern.id)}>
-        This concern is resolved
-      </button>
     </section>
   );
 }

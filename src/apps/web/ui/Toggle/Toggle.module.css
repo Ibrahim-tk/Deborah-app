@@ -31,3 +31,9 @@
 
 /* Locked: readable state, no interaction. */
 .switch:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Web: compact switch (designer, 2026-10-23) — 40×24, 20px thumb. Hit area stays ≥ 44px via ::after. */
+.switch { width: 40px; height: 24px; }
+.switch::after { inset: -10px -4px; }
+.thumb { width: 20px; height: 20px; }
+.switch[aria-checked='true'] .thumb { transform: translateX(16px); }

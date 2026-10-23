@@ -9,15 +9,15 @@
 import { findPlan } from '@shared/data';
 import { selectFreeLeft, useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Card, Divider, Header, ListRow, useAlert } from '@web/ui';
+import { Button, Card, Divider, ListRow, useAlert } from '@web/ui';
 import { planPrice } from '@web/patterns/commerce';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
-import { useNav, useRoute } from '@web/navigation';
+import { useNav } from '@web/navigation';
 import styles from './Subscription.module.css';
 
 export default function Subscription() {
   const nav = useNav();
-  const { previousTitle } = useRoute();
   const alert = useAlert();
   const toast = useToast();
   const planId = useAppStore((s) => s.plan);
@@ -40,9 +40,8 @@ export default function Subscription() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-10.3 · Subscription">
-      <Header title="Subscription" onBack={nav.pop} backLabel={previousTitle} />
-      <div className={styles.body}>
+    <DerivedPage title="Subscription" composerPlaceholder="Ask Deborah about your plan…">
+      <div className={styles.stack} data-xref="M-10.3 · Subscription">
         <Card>
           {trial ? (
             <>
@@ -63,19 +62,19 @@ export default function Subscription() {
 
         {!trial && (
           <div className={styles.group}>
-            <ListRow title="Change plan" onPress={() => nav.open('M-4.2')} />
+            <ListRow density="compact" title="Change plan" onPress={() => nav.open('M-4.2')} />
             <Divider />
-            <ListRow title="Manage in App Store" trailing={null} onPress={() => toast('Opens App Store subscriptions (demo)')} />
+            <ListRow density="compact" title="Manage in App Store" trailing={null} onPress={() => toast('Opens App Store subscriptions (demo)')} />
             {!cancelled && (
               <>
                 <Divider />
-                <ListRow title="Cancel subscription" destructive trailing={null} onPress={cancel} />
+                <ListRow density="compact" title="Cancel subscription" destructive trailing={null} onPress={cancel} />
               </>
             )}
           </div>
         )}
         {cancelled && !trial && <p className={styles.note}>You can keep using every feature until your plan ends.</p>}
       </div>
-    </div>
+    </DerivedPage>
   );
 }

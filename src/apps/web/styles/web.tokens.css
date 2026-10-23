@@ -48,12 +48,12 @@
   --fs-title-3: 20px;  --lh-title-3: 26px;
   --fs-headline: 17px; --lh-headline: 24px;
   --fs-body: 17px;     --lh-body: 26px;
-  --fs-callout: 16px;  --lh-callout: 24px;
-  --fs-button: 16px;   --lh-button: 22px;
-  --fs-subhead: 15px;  --lh-subhead: 22px;
-  --fs-footnote: 13px; --lh-footnote: 18px;
-  --fs-caption: 13px;  --lh-caption: 18px;
-  --fs-data: 15px;     --lh-data: 20px;
+  --fs-callout: 15px;  --lh-callout: 22px;
+  --fs-button: 15px;   --lh-button: 20px;
+  --fs-subhead: 14px;  --lh-subhead: 20px;
+  --fs-footnote: 12px; --lh-footnote: 16px;
+  --fs-caption: 12px;  --lh-caption: 16px;
+  --fs-data: 14px;     --lh-data: 18px;
   --weight-regular: 400;
   --weight-medium: 500;          /* ceiling — never exceed */
 
@@ -66,10 +66,13 @@
   --page-pad: 32px;
   --section-gap: 48px;
   --grid-gutter: 24px;
-  --control-h: 44px;
-  --control-h-lg: 48px;
-  --row-min: 48px;
-  --nav-row-h: 44px;
+  /* Slimmer controls on desktop (buttons / rail rows feel tall at phone sizes). */
+  --button-h: 40px;
+  --control-h: 40px;
+  --control-h-lg: 44px;
+  --row-min: 40px;
+  --nav-row-h: 36px;
+  --tap-min: 40px;
 
   /* Elevation (floating elements only) */
   --shadow-float-sm: 0 2px 8px rgba(43, 16, 78, 0.08);

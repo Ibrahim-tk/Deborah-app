@@ -1,7 +1,7 @@
 /**
  * @screen  M-9.8 · Log your visit
  * @flow    F09c Log your visit (Miro Step 6)
- * @presentation sheet, large — not drag-dismissible so unsaved edits can be guarded
+ * @presentation push (DerivedPage) — unsaved edits guarded on Back
  * @states  empty (manual) · prefilled (from debrief, log-visit phase 3) · read (saved) · unsaved changes on close · delete confirm
  * @figma   — not in wireframes
  * @spec    docs/ux/F09c-log-visit.md#m-98--log-your-visit
@@ -14,7 +14,8 @@ import { emptyVisitOutcome, hasProviderSpecialty, isVisitOutcomeEmpty, visitOutc
 import { useAppStore } from '@shared/store';
 import type { VisitOutcome } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
-import { ActionSheet, Button, IconButton, ListRow, Sheet, useAlert } from '@web/ui';
+import { ActionSheet, Button, IconButton, ListRow, useAlert } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useConversation } from '@web/hooks/useConversation';
 import { useNav, useScreenParams } from '@web/navigation';
@@ -35,12 +36,12 @@ type Params = {
 
 export default function LogVisit() {
   const params = useScreenParams<Params>();
-  const { dismissSheet, open } = useNav();
+  const { pop, open } = useNav();
   const toast = useToast();
   const alert = useAlert();
   const s = useAppStore.getState();
   const today = nowFrom(s).toISOString();
-  // Read once: the sheet owns the draft while open.
+  // Read once: the page owns the draft while open.
   const [noteId, setNoteId] = useState(params.noteId);
   const saved = noteId ? s.notes.byId[noteId] : undefined;
   const profileId = saved?.profileId ?? params.profileId ?? s.activeProfileId;
@@ -76,7 +77,7 @@ export default function LogVisit() {
     // Opened from a debrief: Deborah confirms and asks "Discuss this with Deborah?".
     if (params.conversationId && !noteId) void chat.debriefSaved(id, outcome, applied);
     toast(applied ? 'Saved — health profile updated' : 'Saved to My Visit Notes');
-    dismissSheet();
+    pop();
   };
 
   const close = async () => {
@@ -94,7 +95,7 @@ export default function LogVisit() {
       setMode('read');
       return;
     }
-    dismissSheet();
+    pop();
   };
 
   const share = async () => {
@@ -116,12 +117,12 @@ export default function LogVisit() {
     });
     if (choice !== 1 || !noteId) return;
     useAppStore.getState().deleteNote(noteId);
-    dismissSheet();
+    pop();
     toast('Deleted');
   };
 
   const openBrief = () => {
-    dismissSheet();
+    pop();
     open('M-9.7', { noteId: briefId });
   };
 
@@ -133,7 +134,7 @@ export default function LogVisit() {
       <div className={styles.footer}>
         {/* Miro Step 6: supporting documents from the visit (after-visit summary, lab order, results). */}
         <Button variant="secondary" fullWidth leadingIcon="upload" onClick={() => open('M-11.3')}>Add documents from this visit</Button>
-        <Button fullWidth onClick={dismissSheet}>Done</Button>
+        <Button fullWidth onClick={pop}>Done</Button>
       </div>
     ) : (
       <div className={styles.footer}>
@@ -143,9 +144,14 @@ export default function LogVisit() {
     );
 
   return (
-    <div data-xref="M-9.8 · Log your visit">
-      <Sheet title={mode === 'read' ? saved?.title ?? 'After my visit' : 'Log your visit'} titleEnd={titleEnd} detent="large" footer={footer}>
-        <div className={styles.body}>
+    <>
+      <DerivedPage
+        title={mode === 'read' ? saved?.title ?? 'After my visit' : 'Log your visit'}
+        composerPlaceholder="Ask Deborah about this visit…"
+        onBack={close}
+        trailing={titleEnd}
+      >
+        <div className={styles.body} data-xref="M-9.8 · Log your visit">
           {mode === 'edit' && <p className={styles.intro}>Kind of provider is required. Everything else you can fill in as you remember it.</p>}
           {mode === 'read' ? <ReadView visit={draft} /> : (
             <>
@@ -154,8 +160,9 @@ export default function LogVisit() {
             </>
           )}
           {briefId && <ListRow title="Your notes before the visit" subtitle="My Visit Notes for your provider" onPress={openBrief} />}
+          {footer}
         </div>
-      </Sheet>
+      </DerivedPage>
       <ActionSheet
         open={menu}
         onClose={() => setMenu(false)}
@@ -165,6 +172,6 @@ export default function LogVisit() {
           { label: 'Delete', onSelect: remove, destructive: true },
         ]}
       />
-    </div>
+    </>
   );
 }

@@ -54,7 +54,7 @@ export function ReviewFactsCard({ facts, onConfirm, onDiscard }: ReviewFactsCard
       </ul>
       <div className={styles.actions}>
         {/* Nothing ticked: saving saves nothing, the same as Don't save (no disabled state, DESIGN.md › Buttons). */}
-        <Button className={styles.save} fullWidth onClick={() => onConfirm(keep, off)}>Save to my profile</Button>
+        <Button size="sm" className={styles.save} onClick={() => onConfirm(keep, off)}>Save to my profile</Button>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 /**
  * @screen  M-5.3 · Add your lab results
  * @flow    F05 Follow-up & return with labs
+ * @presentation push (DerivedPage)
  * @states  choose · camera (viewfinder → captured) · processing (full-screen ReportProcessing) → saved, opens M-9.5
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=49-547
  * @spec    docs/ux/F05-followup-labs.md#m-53--add-your-lab-results
@@ -13,7 +14,8 @@ import { labSampleReports } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { LabReport } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { OptionList, OptionRow, Sheet } from '@web/ui';
+import { OptionList, OptionRow } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { simBetween } from '@web/hooks/simTiming';
 import { CaptureCamera, ReportProcessing } from '@web/patterns/widgets';
 import { meta, useNav, useScreenParams } from '@web/navigation';
@@ -42,7 +44,7 @@ function saveDetectedReport(source: Source): string {
 }
 
 export default function AddLabs() {
-  const { dismissSheet, push } = useNav();
+  const { pop, push } = useNav();
   const fileInput = useRef<HTMLInputElement>(null);
   // Composer + menu: Camera opens the viewfinder straight away; Upload opens the file picker.
   const { source: start0 } = useScreenParams<{ source?: 'camera' | 'upload' }>();
@@ -64,7 +66,7 @@ export default function AddLabs() {
       // Design 2026-10-20: no "Check your results" step — the report is saved and its page opens
       // (big image, the panel name read from the report, the date). Values can still be edited there.
       const id = saveDetectedReport(source);
-      dismissSheet();
+      pop();
       push('M-9.5', { reportId: id });
     }, total);
     return () => {
@@ -85,10 +87,11 @@ export default function AddLabs() {
 
   return (
     <div data-xref="M-5.3 · Add lab results">
-      <Sheet title="Add your lab results">
+      <DerivedPage contentWidth={560} title="Add your lab results" composerPlaceholder="Ask Deborah about your labs…">
         {processing ? (
-          // Full-screen reading step (design 2026-10-20); the sheet stays behind it.
-          <ReportProcessing progress={progress} />        ) : (
+          // Full-screen reading step (design 2026-10-20); the page stays behind it.
+          <ReportProcessing progress={progress} />
+        ) : (
           <div className={styles.body}>
             <OptionList label="How would you like to add them?">
               <OptionRow leadingIcon="camera" chevron onSelect={() => setCamera(true)}>
@@ -100,7 +103,7 @@ export default function AddLabs() {
             </OptionList>
           </div>
         )}
-      </Sheet>
+      </DerivedPage>
 
       {/* Real picker; the file is never read — only its name is shown (prototype, no upload). */}
       <input

@@ -1,15 +1,15 @@
-/** Prototype tools live under `/internal`. Legacy bare paths redirect here. */
+/** Prototype tools live under `/internal`. Legacy bare paths redirect here.
+ * `/web` is the client desktop app (not a legacy redirect). */
 
 const INTERNAL_PREFIX = '/internal';
 
 const LEGACY_EXACT = new Set(['/mobile', '/wid', '/design-system']);
 
 export function isLegacyPrototypePath(pathname: string): boolean {
-  if (LEGACY_EXACT.has(pathname)) return true;
-  return pathname === '/web' || pathname.startsWith('/web/');
+  return LEGACY_EXACT.has(pathname);
 }
 
-/** Map `/mobile` → `/internal/mobile`, `/web/foo` → `/internal/web/foo`. */
+/** Map `/mobile` → `/internal/mobile`. `/web` stays client-facing. */
 export function toInternalPath(pathname: string): string {
   if (pathname.startsWith(`${INTERNAL_PREFIX}/`) || pathname === INTERNAL_PREFIX) return pathname;
   if (isLegacyPrototypePath(pathname)) return `${INTERNAL_PREFIX}${pathname}`;

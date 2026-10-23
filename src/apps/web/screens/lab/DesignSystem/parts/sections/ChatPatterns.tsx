@@ -171,7 +171,7 @@ export function ChatPatterns() {
             <div className={styles.headerStage}><ConversationHeader onMenu={noop} title="Ask Deborah" profile={{ name: 'Maria', guest: false, onPress: noop }} onNotifications={noop} /></div>
           </Variant>
           <Variant label="ChatHeader">
-            <div className={styles.headerStage}><ChatHeader onBack={noop} onNewChat={noop} canStartNew /></div>
+            <div className={styles.headerStage}><ChatHeader guest onSignIn={noop} onSignUp={noop} /></div>
           </Variant>
         </Specimen>
 

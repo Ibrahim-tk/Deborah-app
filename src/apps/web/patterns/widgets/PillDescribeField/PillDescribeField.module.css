@@ -1,11 +1,11 @@
-/* Pill text field + circular check — matches ChipPicker `.adder` / `.add` (expanded). */
+/* Pill text field — matches ChipPicker `.adder` (expanded); no check button on web. */
 .root {
   display: flex;
   align-items: center;
   box-sizing: border-box;
   width: 100%;
   min-height: 56px;
-  padding-left: var(--space-6);
+  padding-inline: var(--space-6);
   border-radius: var(--radius-pill);
   background: var(--selected-tint);
   box-shadow: inset 0 0 0 1.5px var(--color-border-selected);
@@ -31,30 +31,5 @@
 .field::placeholder { color: var(--color-ink-placeholder); }
 .field:disabled { opacity: 0.45; }
 
-/* ChipPicker `.add`: 44×44 accent circle flush to the trailing end. */
-.confirm {
-  display: grid;
-  flex: 0 0 44px;
-  place-items: center;
-  align-self: center;
-  width: 44px;
-  height: 44px;
-  margin-right: 6px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-pill);
-  background: var(--color-accent);
-  color: var(--color-ink-on-accent);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: opacity var(--dur-quick) var(--ease-out), transform 160ms var(--ease-out);
-}
-.confirm:active { transform: scale(0.94); }
-.confirm:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.confirm:disabled { opacity: 0.35; cursor: default; }
-
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-@media (prefers-reduced-motion: reduce) {
-  .confirm { transition: none; }
-}

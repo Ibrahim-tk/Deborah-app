@@ -29,6 +29,19 @@
   scroll-snap-align: start;
 }
 
+/* Home dashboard: three equal essentials cards. */
+.essentials {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.essentialsItem { min-width: 0; }
+@media (min-width: 900px) {
+  .essentials { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 .card {
   position: relative;
   display: grid;
@@ -48,15 +61,9 @@
 }
 
 .card[data-tone='mint'] { background: var(--home-tone-mint); }
-.card[data-tone='sky'] {
-  background: linear-gradient(165deg, #eef1fc 0%, var(--home-tone-sky) 55%, #d8def8 100%);
-}
-.card[data-tone='rose'] {
-  background: linear-gradient(165deg, #fff0ee 0%, var(--home-tone-rose) 50%, #f9d4d0 100%);
-}
-.card[data-tone='lilac'] {
-  background: linear-gradient(165deg, #f4f0fa 0%, #ebe4f6 45%, #e0d6f0 100%);
-}
+.card[data-tone='sky'] { background: var(--home-tone-sky); }
+.card[data-tone='rose'] { background: var(--home-tone-rose); }
+.card[data-tone='lilac'] { background: var(--home-tone-lilac); }
 .card[data-tone='linen'] { background: var(--home-tone-linen); }
 .card[data-tone='gold'] { background: var(--home-tone-rose); }
 .card[data-tone='hero'] { background: var(--home-tone-lilac); }
@@ -153,43 +160,18 @@
    Tones stay light enough that ink text holds ≥ 7:1 everywhere on the card. */
 .card { isolation: isolate; }
 .card > *:not(.artifact) { position: relative; z-index: 3; }
-/* Aurora photo gradient (designer, 2026-10-21): one blurred purple image, hue-shifted per tone on the ::before layer.
-   lilac = original · mint → olive green · rose → warm rose · sky → blue. Base colour shows while the image loads. */
-.card[data-tone] { background: #3b2a4f; --tone-hue: 0deg; --tone-sat: 1; }
-.card[data-tone='mint'] { background: #2d3502; --tone-hue: 160deg; --tone-sat: 0.9; }
+/* Web: solid tone fills — no aurora / purple photo gradient. */
+.card[data-tone] { background: var(--home-tone-lilac); }
+.card[data-tone='mint'] { background: var(--home-tone-mint); }
 .card[data-tone='rose'],
-.card[data-tone='gold'] { background: #6e4a45; --tone-hue: 75deg; --tone-sat: 0.75; }
-.card[data-tone='sky'] { background: #17263f; --tone-hue: -70deg; --tone-sat: 1; }
-/* White type and marks on the deep fields, as in the reference.
-   OPEN: DESIGN.md requires ≥ 7:1 — white on the lit lower half of these exact colours is ~3–5:1. Kept per designer request. */
-.card[data-tone] .title, .card[data-tone] .sub { color: var(--white); }
-.card[data-tone] .icon { color: var(--white); background: rgb(255 255 255 / 0.14); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.55); }
-.card[data-tone] .arrow { background: #111; color: var(--white); }
-/* Image layer (the photo already carries its own grain). */
-.card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: url('/images/cards/aurora.webp') center / cover no-repeat;
-  filter: hue-rotate(var(--tone-hue)) saturate(var(--tone-sat));
-}
-/* Sheen: curved highlight across the top half plus a lit rim. Static. */
-.card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: inherit;
-  background:
-    radial-gradient(140% 70% at 30% -10%, rgb(255 255 255 / 0.22), transparent 55%),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.08), transparent 40%);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), inset 0 0 0 1px rgb(255 255 255 / 0.12);
-}
-
-.artifact { display: none; } /* the aurora photo replaces the floral art */
+.card[data-tone='gold'] { background: var(--home-tone-rose); }
+.card[data-tone='sky'] { background: var(--home-tone-sky); }
+.card[data-tone] .title, .card[data-tone] .sub { color: var(--color-ink); }
+.card[data-tone] .icon { color: var(--color-ink); background: rgb(255 255 255 / 0.45); box-shadow: none; }
+.card[data-tone] .arrow { background: var(--color-ink); color: var(--white); }
+.card::before { content: none; }
+.card::after { content: none; }
+.artifact { display: none; }
 
 /* Glass icon well size + blur (colours set with the tones above). */
 .card[data-tone] .icon {
@@ -251,43 +233,23 @@
 /* Icon in a thin white ring (designer, 2026-10-21), matching the arrow's 44px size. */
 .card[data-tone] .icon { width: 44px; height: 44px; place-items: center; border-radius: var(--radius-full); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4); }
 
-/* Vibrant tones (designer, 2026-10-21): the aurora photo unwashed, saturated and slightly deepened so white copy sits on it.
-   lilac = vivid orchid · mint = warm amber gold · rose = fig coral. */
-.card[data-tone] { background: #6b3f86; --tone-hue: 0deg; --tone-sat: 1.35; --tone-dim: 0.92; }
-.card[data-tone='mint'] { background: #8a5a1f; --tone-hue: 100deg; --tone-sat: 1.5; --tone-dim: 0.82; }
-.card[data-tone='rose'],
-.card[data-tone='gold'] { background: #9b3f4a; --tone-hue: 62deg; --tone-sat: 1.45; --tone-dim: 0.88; }
-.card::before {
-  background: url('/images/cards/aurora.webp') center / cover no-repeat;
-  filter: hue-rotate(var(--tone-hue)) saturate(var(--tone-sat)) brightness(var(--tone-dim));
-}
-.card[data-tone] .title, .card[data-tone] .sub { color: var(--white); }
-.card[data-tone] .icon { color: var(--white); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4); }
-.card[data-tone] .arrow { background: #111; color: var(--white); }
-
-/* Standard card spacing (designer, 2026-10-21): 16px padding, top row pinned 16px from the edges, 12px between rows.
-   Shared with HomeMediaHero (compact) and HealingPlanCard. */
-.card { padding: var(--space-4); gap: var(--space-3); }
-.card .arrow { top: var(--space-4); right: var(--space-4); }
+/* Standard card spacing (designer, 2026-10-21). Solid pastels — no aurora / purple photo. */
+.card { padding: var(--space-4); gap: var(--space-3); padding-inline: var(--space-5); }
+.card .arrow { top: var(--space-4); right: var(--space-5); }
 .middle { gap: 2px; }
-/* More side room around the copy (2026-10-21). */
-.card { padding-inline: var(--space-5); }
-.card .arrow { right: var(--space-5); }
-
-/* Light frosted pastel glass (designer, 2026-10-21): the aurora photo kept saturated, then frosted with a white wash
-   so the tone stays fresh (not grey). Ink copy. lilac → orchid mist · mint → honey · rose → coral blush. */
-.card[data-tone] { background: #f1e4f6; --tone-hue: 0deg; --tone-sat: 1.4; --tone-dim: 1.05; }
-.card[data-tone='mint'] { background: #f7ead2; --tone-hue: 100deg; --tone-sat: 1.5; --tone-dim: 1.08; }
+.card[data-tone] { background: #f1e4f6; }
+.card[data-tone='mint'] { background: #f7ead2; }
 .card[data-tone='rose'],
-.card[data-tone='gold'] { background: #f8e0dc; --tone-hue: 62deg; --tone-sat: 1.45; --tone-dim: 1.06; }
-.card::after {
-  background:
-    linear-gradient(160deg, rgb(255 255 255 / 0.68) 0%, rgb(255 255 255 / 0.5) 55%, rgb(255 255 255 / 0.6) 100%),
-    radial-gradient(140% 70% at 30% -10%, rgb(255 255 255 / 0.5), transparent 55%);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), inset 0 0 0 1px rgb(255 255 255 / 0.45);
-}
+.card[data-tone='gold'] { background: #f8e0dc; }
+.card[data-tone='sky'] { background: var(--home-tone-sky); }
+.card::before, .card::after { content: none; }
 .card[data-tone] .title, .card[data-tone] .sub { color: var(--color-ink); }
 .card[data-tone] .icon { color: var(--color-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 18%, transparent); }
 .card[data-tone] .arrow { background: var(--color-ink); color: var(--white); }
+.statLabel, .card .sub, .foot { color: var(--color-ink-secondary); }
+.statValue { color: var(--color-ink); }
+
+/* Home essentials (designer, 2026-10-23): soft gradient images per tone — lilac · peach · periwinkle — at ~60% (40% white veil). */
+.essentials .card[data-tone] { background: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)), url('/images/home/essential-lilac.png') center / cover no-repeat, #e4d4fb; }
+.essentials .card[data-tone='mint'] { background: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)), url('/images/home/essential-peach.png') center / cover no-repeat, #f8dfe0; }
+.essentials .card[data-tone='rose'] { background: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)), url('/images/home/essential-blue.png') center / cover no-repeat, #dfe0fa; }

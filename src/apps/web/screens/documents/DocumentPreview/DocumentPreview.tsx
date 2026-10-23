@@ -9,13 +9,14 @@
  *
  * Prototype: the file itself was never read, so the surface shows its kind, not its pages.
  */
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { documentConfig } from '@shared/data';
 import { selectDocument, useAppStore } from '@shared/store';
 import type { HealthDocument } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { ActionSheet, Button, Header, IconButton } from '@web/ui';
+import { ActionSheet, Button, IconButton } from '@web/ui';
 import { EmptyState } from '@web/patterns/health';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@web/navigation';
 import { useDetailHost } from '../../DetailHost';
@@ -27,7 +28,7 @@ import styles from './DocumentPreview.module.css';
 export default function DocumentPreview() {
   const { documentId } = useScreenParams<{ documentId: string }>();
   const { pop, openAsk } = useNav();
-  const { previousTitle, canGoBack } = useRoute();
+  const { canGoBack } = useRoute();
   const detailHost = useDetailHost();
   const toast = useToast();
   const live = useAppStore((s) => (documentId ? selectDocument(s, documentId) : undefined));
@@ -39,14 +40,18 @@ export default function DocumentPreview() {
   const [menu, setMenu] = useState(false);
   const remove = useDeleteDocument();
 
+  const wrap = (body: ReactNode) =>
+    detailHost ? (
+      <div className={styles.embed} data-xref="M-11.2 · Document preview">{body}</div>
+    ) : (
+      <DerivedPage title="Document" composerPlaceholder="Ask Deborah about this document…">
+        <div className={styles.stack} data-xref="M-11.2 · Document preview">{body}</div>
+      </DerivedPage>
+    );
+
   if (!doc) {
-    return (
-      <div className={styles.root} data-xref="M-11.2 · Document preview">
-        <Header title="Document" onBack={back} backLabel={previousTitle} />
-        <div className={styles.body}>
-          <EmptyState icon="file" text="This document is no longer available." actionLabel="Back to documents" onAction={back ?? pop} />
-        </div>
-      </div>
+    return wrap(
+      <EmptyState icon="file" text="This document is no longer available." actionLabel="Back to documents" onAction={back ?? pop} />,
     );
   }
 
@@ -60,40 +65,37 @@ export default function DocumentPreview() {
   ];
 
   return (
-    <div className={styles.root} data-xref="M-11.2 · Document preview">
-      <Header
-        title="Document"
-        onBack={back}
-        backLabel={previousTitle}
-        right={<IconButton icon="more" label="More options" onClick={() => setMenu(true)} />}
-      />
-      <div className={styles.body}>
-        <FileSurface type={doc.type} format={doc.format} source={doc.source} fileName={doc.fileName} />
-        <h1 className={styles.title}>{doc.title}</h1>
-        {doc.description && <p className={styles.description}>{doc.description}</p>}
-        <DetailRows label="About this document" rows={rows} />
-        {doc.extraction && doc.extraction.fields.length > 0 && (
-          <DetailRows
-            label="What Deborah can see"
-            rows={doc.extraction.fields.map((f) => [f.label, f.value])}
-            footnote={doc.extraction.status !== 'approved' ? 'Example details for the prototype.' : undefined}
-          />
-        )}
-      </div>
-      <div className={styles.footer}>
-        {/* ASSUMPTION: like M-9.5, another profile's document can't be discussed in the active chat. */}
-        {isActiveProfile && (
-          <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ documentId: doc.id })}>Discuss with Deborah</Button>
-        )}
-        {/* Prototype: no real file is written. */}
-        <Button fullWidth variant="secondary" leadingIcon="download" onClick={() => toast('Downloaded')}>Download</Button>
-      </div>
+    <>
+      {wrap(
+        <>
+          <div className={styles.toolbar}>
+            <IconButton icon="more" label="More options" onClick={() => setMenu(true)} />
+          </div>
+          <FileSurface type={doc.type} format={doc.format} source={doc.source} fileName={doc.fileName} />
+          <h2 className={styles.title}>{doc.title}</h2>
+          {doc.description && <p className={styles.description}>{doc.description}</p>}
+          <DetailRows label="About this document" rows={rows} />
+          {doc.extraction && doc.extraction.fields.length > 0 && (
+            <DetailRows
+              label="What Deborah can see"
+              rows={doc.extraction.fields.map((f) => [f.label, f.value])}
+              footnote={doc.extraction.status !== 'approved' ? 'Example details for the prototype.' : undefined}
+            />
+          )}
+          {/* ASSUMPTION: like M-9.5, another profile's document can't be discussed in the active chat. */}
+          {isActiveProfile && (
+            <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ documentId: doc.id })}>Discuss with Deborah</Button>
+          )}
+          {/* Prototype: no real file is written. */}
+          <Button fullWidth variant="secondary" leadingIcon="download" onClick={() => toast('Downloaded')}>Download</Button>
+        </>,
+      )}
       <ActionSheet
         open={menu}
         actions={[{ label: 'Delete document', destructive: true, onSelect: () => { setMenu(false); remove(doc, () => { setLeaving(doc); (back ?? pop)(); }); } }]}
         onClose={() => setMenu(false)}
       />
-    </div>
+    </>
   );
 }
 

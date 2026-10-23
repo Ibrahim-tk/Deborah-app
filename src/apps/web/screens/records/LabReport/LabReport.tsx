@@ -6,11 +6,12 @@
  * @spec    docs/ux/F09-records.md#m-95--lab-report-not-in-wireframes
  * @xref    web: W-9.5 (apps/web/screens/records/LabReport) — not built
  */
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Header, IconButton, Menu, useAlert } from '@web/ui';
+import { Button, IconButton, Menu, useAlert } from '@web/ui';
 import { EmptyState } from '@web/patterns/health';
+import { DerivedPage } from '@web/patterns/shell';
 import { useConversation } from '@web/hooks/useConversation';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@web/navigation';
@@ -22,7 +23,7 @@ import styles from './LabReport.module.css';
 export default function LabReport() {
   const { reportId = '' } = useScreenParams<{ reportId: string }>();
   const { pop, returnToConversation, open } = useNav();
-  const { previousTitle, canGoBack } = useRoute();
+  const { canGoBack } = useRoute();
   const detailHost = useDetailHost();
   const chat = useConversation();
   const alert = useAlert();
@@ -35,14 +36,19 @@ export default function LabReport() {
   const isActiveProfile = useAppStore((s) => s.activeProfileId === report?.profileId);
   const back = detailHost ? detailHost.clear : canGoBack ? pop : undefined;
 
+  const wrap = (title: string, body: ReactNode) =>
+    detailHost ? (
+      <div className={styles.embed} data-xref="M-9.5 · Lab report">{body}</div>
+    ) : (
+      <DerivedPage title={title} composerPlaceholder="Ask Deborah about these labs…">
+        <div className={styles.stack} data-xref="M-9.5 · Lab report">{body}</div>
+      </DerivedPage>
+    );
+
   if (!report) {
-    return (
-      <div className={styles.root} data-xref="M-9.5 · Lab report">
-        <Header title="Lab report" onBack={back} backLabel={previousTitle} />
-        <div className={styles.body}>
-          <EmptyState icon="labs" text="This lab report is no longer available." actionLabel="Back to records" onAction={back ?? pop} />
-        </div>
-      </div>
+    return wrap(
+      'Lab report',
+      <EmptyState icon="labs" text="This lab report is no longer available." actionLabel="Back to records" onAction={back ?? pop} />,
     );
   }
 
@@ -65,43 +71,32 @@ export default function LabReport() {
 
   const title = report.panelTitle || report.labName || 'Lab report';
 
-  return (
-    <div className={styles.root} data-xref="M-9.5 · Lab report">
-      <Header
-        onBack={back}
-        backLabel={previousTitle}
-        right={
-          <>
-            <IconButton icon="info" label="About these results" onClick={() => toast('Educational results only — not a diagnosis.')} />
-            {/* Overflow: an inline dropdown under the button (Base UI Menu), not an action sheet (design 2026-10-20). */}
-            <Menu
-              side="bottom"
-              align="end"
-              trigger={<IconButton icon="more" label="More options" />}
-              items={[{ id: 'edit', label: 'Edit', icon: 'edit' }, { id: 'delete', label: 'Delete', icon: 'delete', destructive: true }]}
-              onSelect={(id) => (id === 'edit' ? open('M-9.11', { reportId: report.id }) : remove())}
-            />
-          </>
-        }
-      />
-      <div className={styles.body}>
-        {/* Preview in the middle, then the panel's name, then the values (design direction 2026-10-20). */}
-        <LabPreview report={report} />
-        <div className={styles.titleBlock}>
-          <h1 className={styles.title}>{title}</h1>
-          <p className={styles.sub}>
-            {/* Placeholder lab names ("Sample Lab") are left out; the date stands alone. */}
-            {[report.labName && !/^sample\b/i.test(report.labName) ? report.labName : undefined, report.collectedAt ? formatShortDate(report.collectedAt) : undefined].filter(Boolean).join(' · ') || 'Your lab report'}
-          </p>
-        </div>
-        <LabValueGrid title="Your results" values={report.values} />
-
+  return wrap(
+    title,
+    <>
+      <div className={styles.toolbar}>
+        <IconButton icon="info" label="About these results" onClick={() => toast('Educational results only — not a diagnosis.')} />
+        <Menu
+          side="bottom"
+          align="end"
+          trigger={<IconButton icon="more" label="More options" />}
+          items={[{ id: 'edit', label: 'Edit', icon: 'edit' }, { id: 'delete', label: 'Delete', icon: 'delete', destructive: true }]}
+          onSelect={(id) => (id === 'edit' ? open('M-9.11', { reportId: report.id }) : remove())}
+        />
       </div>
+      {/* Preview in the middle, then the panel's name, then the values (design direction 2026-10-20). */}
+      <LabPreview report={report} />
+      <div className={styles.titleBlock}>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.sub}>
+          {/* Placeholder lab names ("Sample Lab") are left out; the date stands alone. */}
+          {[report.labName && !/^sample\b/i.test(report.labName) ? report.labName : undefined, report.collectedAt ? formatShortDate(report.collectedAt) : undefined].filter(Boolean).join(' · ') || 'Your lab report'}
+        </p>
+      </div>
+      <LabValueGrid title="Your results" values={report.values} />
       {isActiveProfile && (
-        <div className={styles.footer}>
-          <Button fullWidth leadingIcon="deborah" onClick={ask}>Ask Deborah about these labs</Button>
-        </div>
+        <Button fullWidth leadingIcon="deborah" onClick={ask}>Ask Deborah about these labs</Button>
       )}
-    </div>
+    </>,
   );
 }

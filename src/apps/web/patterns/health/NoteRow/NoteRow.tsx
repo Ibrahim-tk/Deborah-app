@@ -16,6 +16,8 @@ export interface NoteRowProps {
   updated: string;
   body: string;
   onPress: () => void;
+  /** Desktop master–detail: row is the open pane. */
+  selected?: boolean;
 }
 
 const KIND: Record<NoteKind, { icon: IconName; label: string }> = {
@@ -26,7 +28,7 @@ const KIND: Record<NoteKind, { icon: IconName; label: string }> = {
   'provider-brief': { icon: 'pdf', label: 'For my provider' },
 };
 
-export function NoteRow({ title, kind, updated, body, onPress }: NoteRowProps) {
+export function NoteRow({ title, kind, updated, body, onPress, selected = false }: NoteRowProps) {
   const firstLine = body.split('\n').find((l) => l.trim())?.trim();
   const k = KIND[kind];
   return (
@@ -44,6 +46,7 @@ export function NoteRow({ title, kind, updated, body, onPress }: NoteRowProps) {
         </span>
       }
       onPress={onPress}
+      selected={selected}
     />
   );
 }

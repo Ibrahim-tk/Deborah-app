@@ -10,21 +10,22 @@
  * Privacy Notice), Get Started, and Sign in. Must be checked before Get Started enables.
  * Health-data consent is a separate required step, but legal/consent.json › healthConsent has no
  * attorney body yet. Do not render that checkbox until `healthConsent.body` is supplied.
- * Sign-up sheet (M-1.4) still follows. Version 1 keeps the single legal line instead.
+ * Sign-up (M-1.4) fades in full-screen after Get Started. Version 1 keeps the single legal line instead.
  * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
  */
 import { useId, useState, type FormEvent, type MouseEvent } from 'react';
 import { persona } from '@shared/data';
-import { Aura, Button, DeborahBlob, GradientShift, Icon, Input, TextReveal } from '@web/ui';
+import { Button, DeborahBlob, Icon, Input, TextReveal } from '@web/ui';
 import { useNav } from '@web/navigation';
+import { PageFooter } from '@web/patterns/shell';
 import styles from './Welcome.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 /** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
-const SKIP_AUTH_VALIDATION = false;
+const SKIP_AUTH_VALIDATION = true;
 
 export default function Welcome() {
-  const { presentSheet } = useNav();
+  const { presentSheet, replace } = useNav();
   const legalId = useId();
   const [name, setName] = useState('');
   const [error, setError] = useState<string>();
@@ -35,12 +36,12 @@ export default function Welcome() {
     const first = name.trim();
     if (SKIP_AUTH_VALIDATION) {
       setError(undefined);
-      presentSheet('M-1.4', { first: first || 'Tester' });
+      replace('M-1.4', { first: first || 'Tester' }, 'fade');
       return;
     }
     if (!first || !agreed) return;
     if (!NAME_PATTERN.test(first)) return setError('Letters only, please.');
-    presentSheet('M-1.4', { first });
+    replace('M-1.4', { first }, 'fade');
   };
 
   const ready = SKIP_AUTH_VALIDATION || Boolean(name.trim() && agreed);
@@ -52,8 +53,6 @@ export default function Welcome() {
 
   return (
     <div className={styles.root} data-xref="M-1.2 · Welcome">
-      <Aura rise />
-      <GradientShift />
       <form className={styles.scroll} onSubmit={start} noValidate>
         <div className={styles.intro}>
           <DeborahBlob size={112} label={persona.name} />
@@ -97,10 +96,11 @@ export default function Welcome() {
           <Button type="submit" fullWidth disabled={!ready}>Get Started</Button>
           <p className={styles.signIn}>
             Already have an account?{' '}
-            <button type="button" className={styles.signInLink} onClick={() => presentSheet('M-1.4', { mode: 'signin' })}>Sign in</button>
+            <button type="button" className={styles.signInLink} onClick={() => replace('M-1.4', { mode: 'signin' }, 'fade')}>Sign in</button>
           </p>
         </div>
       </form>
+      <PageFooter />
     </div>
   );
 }

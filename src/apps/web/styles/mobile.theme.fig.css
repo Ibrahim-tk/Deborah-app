@@ -125,7 +125,7 @@
   --home-tone-lilac: #eadde3;
   --home-tone-linen: #f5ecdf;
   --home-tone-gold: #f3e6cf;
-  --home-tone-hero: linear-gradient(165deg, #f1e6ea 0%, #e6d4dc 38%, #d9c1cc 68%, #cbaebe 100%);
+  --home-tone-hero: #e6d4dc;
   --home-artifact-ink: rgb(37 25 35 / 0.26);
   --home-artifact-ink-on-hero: rgb(251 246 238 / 0.35);
 

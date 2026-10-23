@@ -12,7 +12,7 @@ The internal page is password-gated (prototype password `1234`, in-memory only �
 
 ## Production / client — only on command
 
-The client page is `/` (`ClientApp` → `ClientShell` → `ClientTopNav`). It shows Version 2 in the phone frame with Home / Chat / Reset only.
+The client pages are `/` (phone: `ClientApp` → `ClientShell`) and `/web` (desktop: `ClientWebApp` → `ClientWebShell`). Both use `ClientTopNav` (Home / Chat / Reset). Internal tooling stays under `/internal` (password gate); `/internal/web` still shows the web twin with prototype TopNav.
 
 Do **not** change these unless the user explicitly asks for production/client/main-page work:
 

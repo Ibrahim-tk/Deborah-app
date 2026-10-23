@@ -8,20 +8,22 @@
  *
  * Same template as the onboarding intake (M-1.8, design request 2026-10-20): living backdrop, the
  * flowering tree as progress (paced to this profile's step count), one question at a time.
- * Nav bar: glass back (previous question, or leave) · "Health profile" · glass check (save and close).
+ * Web: full window over the app (no sidebar). Text Back top-left (previous question, or leave) · Done top-right
+ * (save and close). Picks wait for Next, as in onboarding.
  */
-import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { selectActiveProfile, useAppStore } from '@shared/store';
-import { Aura, Button, GlassButton, GradientShift, Header } from '@web/ui';
+import { Button, OVERLAY_HOST_ID, TextReveal } from '@web/ui';
+import { PageFooter } from '@web/patterns/shell';
 import { namedReasonsComplete } from '@web/patterns/widgets';
 import { StepBody } from '@web/screens/onboarding/HealthBasics/parts/StepBody';
 import { BloomReveal } from '@web/screens/onboarding/HealthBasics/parts/BloomReveal';
-import { useTitleFade } from '@web/screens/onboarding/HealthBasics/parts/useTitleFade';
 import { answersFromProfile } from '@web/screens/onboarding/HealthBasics/healthProfile';
 import { saveHealthProfile } from '@web/screens/onboarding/HealthBasics/saveOnboarding';
 import { bloomProgress, profileVisibleSteps, titleFor, type Answers } from '@web/screens/onboarding/HealthBasics/steps';
 import template from '@web/screens/onboarding/HealthBasics/HealthBasics.module.css';
-import { useNav } from '@web/navigation';
+import { useNav, useNavStore } from '@web/navigation';
 import styles from './CompleteIntake.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
@@ -29,6 +31,8 @@ const CONFIRM_MS = 280;
 
 export default function CompleteIntake() {
   const { pop } = useNav();
+  // Paint the full-window page only while this route is on top.
+  const onTop = useNavStore((st) => st.layers.length === 0 && st.tabs[st.activeTab].at(-1)?.id === 'M-2.14');
   const profile = useAppStore(selectActiveProfile);
   const [answers, setAnswers] = useState<Answers>(() => (profile ? answersFromProfile(profile) : {}));
   const answersRef = useRef(answers);
@@ -44,7 +48,6 @@ export default function CompleteIntake() {
   });
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];
-  const fade = useTitleFade(step?.key ?? 'none');
   const value = step ? (answers[step.key] ?? '') : '';
   const last = steps.length > 0 && at === steps.length - 1;
 
@@ -95,8 +98,8 @@ export default function CompleteIntake() {
     (step.optional === true ||
       step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
       textOk ||
-      (step.kind === 'name' && NAME_PATTERN.test(value.trim())));
-  const tapToAnswer = step?.kind === 'choice';
+      (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||
+      (step.kind === 'choice' && Boolean(value)));
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (canContinue) next(answersRef.current);
@@ -104,38 +107,43 @@ export default function CompleteIntake() {
 
   if (!profile) return null;
 
-  return (
-    <form className={template.root} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
-      <Aura />
-      <GradientShift />
+  const page = (
+    <form className={`${template.root} ${styles.page}`} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
       <div className={styles.bar}>
-        <Header
-          large={false}
-          transparent
-          left={<GlassButton icon="back" aria-label={at > 0 ? 'Previous question' : 'Back'} onClick={goBack} />}
-          // Plain tick, no progress ring (design 2026-10-21); the count moved under the title.
-          right={<GlassButton icon="check" aria-label="Save and close" onClick={close} />}
-        />
+        <Button type="button" variant="ghost" size="sm" leadingIcon="back" onClick={goBack}>Back</Button>
+        <Button type="button" variant="ghost" size="sm" onClick={close}>Done</Button>
       </div>
-      {/* Progress: the flowering tree grows across this profile's own number of questions. */}
-      <div className={template.art} role="progressbar" aria-label="Health profile" aria-valuemin={1} aria-valuemax={Math.max(1, steps.length)} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-        <BloomReveal className={template.bloom} progress={bloomProgress(at, Math.max(1, steps.length))} />
-      </div>
-      <div className={template.fade} style={{ height: fade.height, '--feather': `${fade.feather}px` } as CSSProperties} aria-hidden="true"><i /><i /><i /></div>
-      <div className={template.body}>
-        <div key={step?.key ?? 'none'} className={template.step}>
-          <h1 ref={fade.titleRef} className={`${template.title} ${template.heading}`}>
-            {step ? titleFor(step, answers) : 'Nothing else applies to this profile right now.'}
-          </h1>
-          {step && <StepBody step={step} answers={answers} set={set} advance={advance} />}
+      <div className={template.layout}>
+        <div className={template.main}>
+          <div className={template.stage}>
+            <div className={template.body}>
+              <div key={step?.key ?? 'none'} className={template.step}>
+                <h1 className={`${template.title} ${template.heading}`}>
+                  <TextReveal as="span" text={step ? titleFor(step, answers) : 'Nothing else applies to this profile right now.'} delay={180} stagger={22} />
+                </h1>
+                {step && <StepBody step={step} answers={answers} set={set} advance={advance} />}
+              </div>
+            </div>
+            <div className={template.footer}>
+              {step && (
+                <div className={template.navRow}>
+                  <Button type="submit" disabled={!canContinue}>{last ? 'Save profile' : 'Next'}</Button>
+                </div>
+              )}
+              {step?.presentation === 'namedReasons' && !value.trim() && (
+                <Button type="button" variant="ghost" fullWidth onClick={() => advance(step.none ?? 'None')}>Skip</Button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className={template.art} role="progressbar" aria-label="Health profile" aria-valuemin={1} aria-valuemax={Math.max(1, steps.length)} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
+          <BloomReveal className={template.bloom} progress={bloomProgress(at, Math.max(1, steps.length))} />
         </div>
       </div>
-      <div className={template.footer}>
-        {step && !tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>{last ? 'Save profile' : 'Continue'}</Button>}
-        {step?.presentation === 'namedReasons' && !value.trim() && (
-          <Button type="button" variant="ghost" fullWidth onClick={() => advance(step.none ?? 'None')}>Skip</Button>
-        )}
-      </div>
+      <PageFooter />
     </form>
   );
+
+  const host = document.getElementById(OVERLAY_HOST_ID);
+  return onTop && host ? createPortal(page, host) : null;
 }

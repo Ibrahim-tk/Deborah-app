@@ -8,10 +8,9 @@
  */
 import { useEffect, useState, type CSSProperties } from 'react';
 import { selectHubState, useAppStore } from '@shared/store';
-import { Header, Spinner } from '@web/ui';
-import { useNav, useNavStore, useRoute } from '@web/navigation';
+import { Spinner } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { simMs } from '@web/hooks/simTiming';
-import { useCollapsingTitle } from '@web/hooks/useCollapsingTitle';
 import { HubEmpty } from './parts/HubEmpty';
 import { HubPopulated } from './parts/HubPopulated';
 import { HubSkeleton } from './parts/HubSkeleton';
@@ -20,8 +19,6 @@ import styles from './MyHealthHub.module.css';
 
 export default function MyHealthHub() {
   const hubState = useAppStore(selectHubState);
-  const { pop } = useNav();
-  const goHome = useNavStore((s) => s.goHome);
   const { bind, pull, refreshing } = usePullToRefresh();
   // ASSUMPTION: "first open" = each mount of the tab root (the tab keeps its stack, so this is rare).
   const [loading, setLoading] = useState(true);
@@ -31,25 +28,18 @@ export default function MyHealthHub() {
     return () => window.clearTimeout(t);
   }, []);
 
-  const { collapsed, onScroll } = useCollapsingTitle();
-  // Opened from Home it sits on the Ask stack: show Back; as the section root, show the menu.
-  const { canGoBack, previousTitle } = useRoute();
   return (
-    <div className={styles.root} data-xref={hubState === 'empty' ? 'M-7.1 · My Health — first time' : 'M-7.2 · My Health hub'}>
-      <Header
-        large
-        collapsed={collapsed}
-        title="My Health"
-        // Section screens always lead back to Home, never to the side menu.
-        onBack={canGoBack ? pop : goHome}
-        backLabel={canGoBack ? previousTitle : 'Home'}
-      />
-      <div className={styles.scroll} {...bind} onScroll={onScroll}>
+    <DerivedPage title="My Health" composerPlaceholder="Ask Deborah about your health…">
+      <div
+        className={styles.stack}
+        data-xref={hubState === 'empty' ? 'M-7.1 · My Health — first time' : 'M-7.2 · My Health hub'}
+        {...bind}
+      >
         <div className={styles.refresh} data-active={refreshing || pull > 0 || undefined} style={{ '--pull': `${refreshing ? 48 : pull}px` } as CSSProperties}>
           {(refreshing || pull > 0) && <Spinner size={20} label={refreshing ? 'Refreshing' : undefined} />}
         </div>
-        <div className={styles.column}>{loading ? <HubSkeleton /> : hubState === 'empty' ? <HubEmpty /> : <HubPopulated />}</div>
+        {loading ? <HubSkeleton /> : hubState === 'empty' ? <HubEmpty /> : <HubPopulated />}
       </div>
-    </div>
+    </DerivedPage>
   );
 }

@@ -1,8 +1,9 @@
-.root { display: flex; flex-direction: column; height: 100%; background: transparent; }
-.body {
-  width: min(100%, 640px);
-  margin-inline: auto;
- flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-6); padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8)); }
+.stack {
+  display: grid;
+  align-content: start;
+  gap: var(--space-6);
+  padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
+}
 /* Same list card as Settings (M-10.1), design 2026-10-21. */
 .group { overflow: hidden; border-radius: var(--radius-xl); background: var(--surface-field-lift); }
 .group > button { padding-inline: var(--space-4); }

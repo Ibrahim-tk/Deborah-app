@@ -333,3 +333,59 @@
 
 /* Pillar numbers as 1 2 3 in the sans face (2026-10-21). */
 .pillarRoman { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); font-variant-numeric: lining-nums tabular-nums; }
+
+/* —— Web uplift (designer, 2026-10-23): naked, editorial — sections separated by hairlines, not boxes. —— */
+.doc { gap: var(--space-7, var(--space-8)); }
+.hero { justify-items: start; gap: var(--space-1); padding: 0; text-align: left; border-bottom: 0; }
+.meta { font-size: var(--fs-subhead); line-height: var(--lh-subhead); color: var(--color-ink-secondary); }
+.reference, .advocate { color: var(--color-ink-secondary); }
+.clinical { padding: var(--space-6) 0 0; border-radius: 0; background: none; border-top: 1px solid var(--color-border-hairline); }
+.pillarsBlock, .resources { padding-top: var(--space-6); border-top: 1px solid var(--color-border-hairline); }
+.pillars { gap: 0; }
+.pillar { border-radius: 0; background: none; border-bottom: 1px solid var(--color-border-hairline); }
+.pillar:first-child { border-top: 1px solid var(--color-border-hairline); }
+.pillarHead { padding: var(--space-4) 0; background: none; border: 0; cursor: pointer; }
+.pillarHead:hover, .pillar[data-open] .pillarHead { background: none; }
+.pillarHead:hover .pillarName { text-decoration: underline; text-underline-offset: 4px; }
+.pillarBody { padding: 0 0 var(--space-5) calc(1.75rem + var(--space-3)); }
+.productRow { background: none; border-radius: 0; }
+.resourceList { border-radius: 0; background: none; }
+.signature { justify-items: start; text-align: left; padding: var(--space-6) 0 0; border-top: 1px solid var(--color-border-hairline); }
+
+/* Depth: clinical summary on a soft lilac field; pillars + resources stay as divided rows. */
+.clinical { padding: var(--space-6); border-top: 0; border-radius: var(--radius-card); background: var(--color-surface-lilac, var(--purple-50)); }
+.clinicalLabel { font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.pillarName { font-size: var(--fs-title-3); line-height: var(--lh-title-3); font-weight: var(--weight-regular); }
+
+/* Clinical summary: lighter field, clear label → value hierarchy (designer, 2026-10-23). */
+.clinical { background: color-mix(in srgb, var(--color-surface-lilac, var(--purple-50)) 45%, var(--white)); }
+.clinicalGrid { gap: var(--space-5) var(--space-6); align-items: start; }
+.clinicalItem { align-content: start; gap: 2px; }
+.clinicalLabel { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.clinicalValue { font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink); }
+/* No divider above the pillars block. */
+.pillarsBlock { padding-top: 0; border-top: 0; }
+
+/* Product tiles inside a pillar: white container, hairline, rounded (designer, 2026-10-23). */
+.productRow { background: var(--white); border-radius: var(--radius-lg); box-shadow: inset 0 0 0 1px var(--surface-border); overflow: hidden; }
+
+/* Pillars: no hover effect; smaller, quieter names (designer, 2026-10-23). */
+.pillarHead:hover .pillarName { text-decoration: none; }
+.pillarName { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); }
+.pillarRoman { font-size: var(--fs-callout); line-height: var(--lh-callout); }
+
+/* Resources: four white tiles. */
+.resourceTiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+@media (min-width: 900px) { .resourceTiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.resourceTile {
+  display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; gap: var(--space-4);
+  min-height: 112px; padding: var(--space-4); border: 0; border-radius: var(--radius-lg);
+  background: var(--white); box-shadow: inset 0 0 0 1px var(--surface-border);
+  text-align: left; color: var(--color-ink-secondary); cursor: pointer;
+}
+.resourceTile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.resourceLabel { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+
+/* No divider above Your resources. */
+.resources { padding-top: 0; border-top: 0; }
+.pillar:last-child { border-bottom: 0; }

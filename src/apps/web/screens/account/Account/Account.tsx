@@ -9,10 +9,10 @@
 import { Fragment, useState, type ReactNode } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { BottomSheet, Button, Divider, Header, Icon, ListRow, useAlert, type IconName } from '@web/ui';
-import { useCollapsingTitle } from '@web/hooks/useCollapsingTitle';
+import { BottomSheet, Button, Divider, Icon, ListRow, useAlert, type IconName } from '@web/ui';
 import { PhoneField, formatPhone, type PhoneValue } from '@web/patterns/widgets';
-import { useNav, useNavStore, useRoute } from '@web/navigation';
+import { DerivedPage } from '@web/patterns/shell';
+import { useNav } from '@web/navigation';
 import { NameSheet } from './parts/NameSheet';
 import { EmailSheet } from './parts/EmailSheet';
 import styles from './Account.module.css';
@@ -46,7 +46,6 @@ export default function Account() {
   const plan = useAppStore((s) => s.plan);
   const trial = plan === 'trial';
   const planName = findPlan(plan)?.name;
-  const { collapsed, onScroll } = useCollapsingTitle();
   const [phoneOpen, setPhoneOpen] = useState(false);
   const [sheet, setSheet] = useState<'name' | 'email' | null>(null);
   const [sheetKey, setSheetKey] = useState(0);
@@ -69,7 +68,6 @@ export default function Account() {
     useAppStore.getState().signOut();
     nav.resetTo('preauth', 'M-1.2');
   };
-
 
   const openPhone = () => {
     setPhoneDraft({ countryCode: phoneCountry || '+1', number: phoneNumber || '' });
@@ -110,72 +108,64 @@ export default function Account() {
     },
   ];
 
-  const { canGoBack, previousTitle } = useRoute();
-  const goHome = useNavStore((s) => s.goHome);
   const initial = (name || 'Y').trim().charAt(0).toUpperCase() || 'Y';
 
   return (
-    <div className={styles.root} data-xref="M-10.1 · Account">
-      <Header
-        title="Settings"
-        large
-        collapsed={collapsed}
-        onBack={canGoBack ? nav.pop : goHome}
-        backLabel={canGoBack ? previousTitle : 'Home'}
-      />
-      <div className={styles.body} onScroll={onScroll}>
+    <>
+      <DerivedPage title="Settings" composerPlaceholder="Ask Deborah about your account…">
+        <div className={styles.stack} data-xref="M-10.1 · Account">
+          <div className={styles.profile}>
+            <span className={styles.avatar} aria-hidden>{initial}</span>
+            <p className={styles.name}>{name || 'You'}</p>
+            <p className={styles.meta}>{email || 'Free trial'}</p>
+          </div>
 
-        <div className={styles.profile}>
-          <span className={styles.avatar} aria-hidden>{initial}</span>
-          <p className={styles.name}>{name || 'You'}</p>
-          <p className={styles.meta}>{email || 'Free trial'}</p>
+          {/* Choose a plan sits under the profile, right above the Account section (design 2026-10-21). */}
+          {trial && (
+            <button type="button" className={styles.plan} onClick={() => nav.open('M-4.2')}>
+              <span className={styles.planMark} aria-hidden>
+                <Icon name="shop" size={18} />
+              </span>
+              <span className={styles.planCopy}>
+                <h2 className={styles.planTitle}>Choose a plan</h2>
+                <p className={styles.planBody}>Unlimited consultations for you and your family.</p>
+              </span>
+              <span className={styles.planChevron} aria-hidden>
+                <Icon name="chevron" size={18} />
+              </span>
+            </button>
+          )}
+
+          {sections.map((sec) => (
+            <section key={sec.title} className={styles.section} aria-labelledby={`settings-${sec.title}`}>
+              <h2 id={`settings-${sec.title}`} className={styles.sectionTitle}>{sec.title}</h2>
+              <div className={styles.group}>
+                {sec.rows.map((r, j) => (
+                  <Fragment key={r.title}>
+                    {j > 0 && <Divider />}
+                    <ListRow
+                      title={r.title}
+                      subtitle={r.subtitle}
+                      value={r.value}
+                      leading={r.icon ? leadIcon(r.icon) : undefined}
+                      onPress={r.onPress}
+                      density="compact"
+                    />
+                  </Fragment>
+                ))}
+              </div>
+            </section>
+          ))}
+
+          <div className={styles.group}>
+            <ListRow title="Sign out" trailing={null} destructive density="compact" onPress={signOut} />
+          </div>
+
+          <footer className={styles.footer}>
+            <p>Version {VERSION} · Prototype</p>
+          </footer>
         </div>
-
-        {/* Choose a plan sits under the profile, right above the Account section (design 2026-10-21). */}
-        {trial && (
-          <button type="button" className={styles.plan} onClick={() => nav.open('M-4.2')}>
-            <span className={styles.planMark} aria-hidden>
-              <Icon name="shop" size={18} />
-            </span>
-            <span className={styles.planCopy}>
-              <h2 className={styles.planTitle}>Choose a plan</h2>
-              <p className={styles.planBody}>Unlimited consultations for you and your family.</p>
-            </span>
-            <span className={styles.planChevron} aria-hidden>
-              <Icon name="chevron" size={18} />
-            </span>
-          </button>
-        )}
-
-        {sections.map((sec) => (
-          <section key={sec.title} className={styles.section} aria-labelledby={`settings-${sec.title}`}>
-            <h2 id={`settings-${sec.title}`} className={styles.sectionTitle}>{sec.title}</h2>
-            <div className={styles.group}>
-              {sec.rows.map((r, j) => (
-                <Fragment key={r.title}>
-                  {j > 0 && <Divider />}
-                  <ListRow
-                    title={r.title}
-                    subtitle={r.subtitle}
-                    value={r.value}
-                    leading={r.icon ? leadIcon(r.icon) : undefined}
-                    onPress={r.onPress}
-                    density="compact"
-                  />
-                </Fragment>
-              ))}
-            </div>
-          </section>
-        ))}
-
-        <div className={styles.group}>
-          <ListRow title="Sign out" trailing={null} destructive density="compact" onPress={signOut} />
-        </div>
-
-        <footer className={styles.footer}>
-          <p>Version {VERSION} · Prototype</p>
-        </footer>
-      </div>
+      </DerivedPage>
       <BottomSheet
         showClose
         open={phoneOpen}
@@ -198,6 +188,6 @@ export default function Account() {
       </BottomSheet>
       <NameSheet key={`name-${sheetKey}`} open={sheet === 'name'} onClose={() => setSheet(null)} />
       <EmailSheet key={`email-${sheetKey}`} open={sheet === 'email'} onClose={() => setSheet(null)} />
-    </div>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 /**
  * @screen  M-2.13 · Review what Deborah noted
  * @flow    Core experience · Review and Confirm (meeting 2026-10-12 · B, plan C-12, node DN-13)
- * @presentation sheet, large — from Edit on the ReviewFactsCard
+ * @presentation push (DerivedPage) — from Edit on the ReviewFactsCard
  * @states  list · editing one fact (options, or text for facts picked up from a message) · empty (all handled)
  * @figma   — not in wireframes
  * @spec    docs/ux/F02b-profile-aware-chat-intake.md › Review and Confirm
@@ -15,7 +15,8 @@ import { answerPatch, optionLabels, pendingFacts, question } from '@shared/engin
 import { useAppStore } from '@shared/store';
 import type { PendingFact } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
-import { Button, Input, ListRow, OptionList, OptionRow, Sheet } from '@web/ui';
+import { Button, Input, ListRow, OptionList, OptionRow } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useScreenParams } from '@web/navigation';
 import styles from './ReviewFacts.module.css';
@@ -29,7 +30,7 @@ const typedPatch = (f: PendingFact, text: string): PendingFact['patch'] => {
 
 export default function ReviewFacts() {
   const { conversationId = '' } = useScreenParams<{ conversationId: string }>();
-  const { dismissSheet } = useNav();
+  const { pop } = useNav();
   const toast = useToast();
   const conversation = useAppStore((s) => s.conversations.byId[conversationId]);
   const profile = useAppStore((s) => (conversation ? s.profiles.byId[conversation.profileId] : undefined));
@@ -64,7 +65,7 @@ export default function ReviewFacts() {
     const ids = facts.map((f) => f.id);
     if (save) s.confirmFacts(conversation.id, ids);
     else s.discardFacts(conversation.id, ids);
-    dismissSheet();
+    pop();
     toast(save ? 'Saved to your health profile' : 'Nothing was saved');
   };
 
@@ -73,35 +74,40 @@ export default function ReviewFacts() {
     const toggle = (id: string) =>
       setPicked((xs) => (!q?.multi ? [id] : id === 'none' ? ['none'] : xs.includes(id) ? xs.filter((x) => x !== id) : [...xs.filter((x) => x !== 'none'), id]));
     return (
-      <div data-xref="M-2.13 · Review what Deborah noted">
-        <Sheet title={editing.label} detent="large" footer={
+      <DerivedPage title={editing.label} composerPlaceholder="Ask Deborah about your profile…" onBack={() => setEditing(undefined)}>
+        <div className={styles.body} data-xref="M-2.13 · Review what Deborah noted">
+          {q ? (
+            <>
+              <p className={styles.prompt}>{q.prompt}</p>
+              <OptionList label={q.prompt} multi={q.multi}>
+                {q.options.map((o) => (
+                  <OptionRow key={o.id} multi={q.multi} selected={picked.includes(o.id)} onSelect={() => toggle(o.id)}>{o.label}</OptionRow>
+                ))}
+              </OptionList>
+            </>
+          ) : (
+            <Input label={editing.label} value={text} placeholder="Separate several with commas" onChange={(e) => setText(e.target.value)} />
+          )}
           <div className={styles.footer}>
             <Button fullWidth disabled={q ? !picked.length : false} onClick={saveEdit}>Use this</Button>
             <Button variant="link" onClick={() => setEditing(undefined)}>Cancel</Button>
           </div>
-        }>
-          <div className={styles.body}>
-            {q ? (
-              <>
-                <p className={styles.prompt}>{q.prompt}</p>
-                <OptionList label={q.prompt} multi={q.multi}>
-                  {q.options.map((o) => (
-                    <OptionRow key={o.id} multi={q.multi} selected={picked.includes(o.id)} onSelect={() => toggle(o.id)}>{o.label}</OptionRow>
-                  ))}
-                </OptionList>
-              </>
-            ) : (
-              <Input label={editing.label} value={text} placeholder="Separate several with commas" onChange={(e) => setText(e.target.value)} />
-            )}
-          </div>
-        </Sheet>
-      </div>
+        </div>
+      </DerivedPage>
     );
   }
 
   return (
-    <div data-xref="M-2.13 · Review what Deborah noted">
-      <Sheet title="What Deborah noted" detent="large" footer={
+    <DerivedPage title="What Deborah noted" composerPlaceholder="Ask Deborah about your profile…">
+      <div className={styles.body} data-xref="M-2.13 · Review what Deborah noted">
+        <p className={styles.intro}>{facts.length ? 'Tap anything that isn’t quite right. Nothing is saved until you confirm.' : 'Everything from this conversation has been handled.'}</p>
+        <ul className={styles.list}>
+          {facts.map((f) => (
+            <li key={f.id}>
+              <ListRow title={f.label} subtitle={f.value} onPress={() => startEdit(f)} />
+            </li>
+          ))}
+        </ul>
         <div className={styles.footer}>
           {facts.length ? (
             <>
@@ -109,21 +115,10 @@ export default function ReviewFacts() {
               <Button variant="link" onClick={() => finish(false)}>Don’t save</Button>
             </>
           ) : (
-            <Button fullWidth onClick={dismissSheet}>Done</Button>
+            <Button fullWidth onClick={pop}>Done</Button>
           )}
         </div>
-      }>
-        <div className={styles.body}>
-          <p className={styles.intro}>{facts.length ? 'Tap anything that isn’t quite right. Nothing is saved until you confirm.' : 'Everything from this conversation has been handled.'}</p>
-          <ul className={styles.list}>
-            {facts.map((f) => (
-              <li key={f.id}>
-                <ListRow title={f.label} subtitle={f.value} onPress={() => startEdit(f)} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Sheet>
-    </div>
+      </div>
+    </DerivedPage>
   );
 }

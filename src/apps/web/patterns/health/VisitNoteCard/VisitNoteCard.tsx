@@ -1,8 +1,6 @@
 /**
- * @pattern VisitNoteCard — a Visit Note as a card (design 2026-10-20, Rodeo-style): one shared line-doodle
- *          illustration (the "who is this for" style), then date · what it's about · one relevant line.
- *          Footer: not logged → "Log visit" on Records, "Open" in chat (`actionLabel`); logged → "Ask Deborah"
- *          and an Edit link to reopen the log.
+ * @pattern VisitNoteCard — Visit Note as a list tile: doodle · date · title · detail; Log visit stays in-tile.
+ *          Selected = quiet tint (no thick stroke). Footer: not logged → Log visit; logged → Ask Deborah + Edit.
  * @usedBy  M-9.1 (Visit Notes)
  */
 import { Button, Icon, IconButton, type IconName } from '@web/ui';

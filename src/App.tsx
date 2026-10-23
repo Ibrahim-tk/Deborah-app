@@ -4,6 +4,7 @@ import { InternalGate } from '@shell/InternalGate';
 import { flowVersionFrom, flowVersionHref } from '@shared/utils/flowVersion';
 import { legacyRedirectTarget } from '@shared/utils/internalPaths';
 import ClientApp from './ClientApp';
+import ClientWebApp from './ClientWebApp';
 
 const InternalApp = lazy(() => import('./InternalApp'));
 const InternalV1App = lazy(() => import('./InternalV1App'));
@@ -45,6 +46,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<ClientApp />} />
+      {/* Client desktop web — no internal password gate. Internal tooling remains at /internal/web. */}
+      <Route path="/web/*" element={<ClientWebApp />} />
       <Route
         path="/internal/*"
         element={
@@ -54,7 +57,6 @@ export default function App() {
         }
       />
       <Route path="/mobile" element={<LegacyRedirect />} />
-      <Route path="/web/*" element={<LegacyRedirect />} />
       <Route path="/wid" element={<LegacyRedirect />} />
       <Route path="/design-system" element={<LegacyRedirect />} />
       <Route path="*" element={<Navigate to="/" replace />} />

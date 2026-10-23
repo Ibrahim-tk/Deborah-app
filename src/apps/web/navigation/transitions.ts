@@ -1,27 +1,28 @@
-/** Push / sheet / modal / fade variants (docs/04-navigation.md §5). Reduced motion → 120 ms fades. */
+/** Web transitions: one standard page fade for all route changes; dialog + sheet for overlays. */
 import { DURATION, EASE_IOS, REDUCED_FADE, SHEET_SPRING } from '@web/ui';
 import type { NavAction } from './types';
 
-export function stackTransition(reduced: boolean, action: NavAction, isTop: boolean) {
-  // Non-top + exiting screens must not capture taps (AnimatePresence keeps the outgoing
-  // screen mounted above Home during the pop slide — without this, Home freezes).
-  const pe = { pointerEvents: isTop ? ('auto' as const) : ('none' as const) };
-  if (reduced) return { ...REDUCED_FADE, animate: { opacity: isTop ? 1 : 0, ...pe }, exit: { ...REDUCED_FADE.exit, pointerEvents: 'none' as const } };
-  const t = { duration: DURATION.screen, ease: EASE_IOS };
-  const initial = action === 'push' ? { x: '100%' } : action === 'fade' || action === 'replace' ? { opacity: 0 } : false;
+/**
+ * Standard web page change for every route swap (push / pop / replace / tab / root): the outgoing page
+ * is removed at once and the incoming page fades in. No slides, no overlap — not the iOS stack.
+ */
+export function pageTransition(reduced: boolean) {
   return {
-    initial,
-    animate: isTop
-      ? { x: 0, opacity: 1, filter: 'brightness(1)', ...pe }
-      : { x: '-30%', opacity: 1, filter: 'brightness(0.94)', ...pe },
-    // Fades: the outgoing screen stays opaque while the new one fades in on top, then drops out —
-    // so two half-transparent screens never let the backdrop behind them bleed through.
-    // `pointerEvents: 'none'` applies as soon as exit starts so the sliding chat can't block Home.
-    exit:
-      action === 'pop'
-        ? { x: '100%', pointerEvents: 'none' as const, transition: t }
-        : { opacity: 0, pointerEvents: 'none' as const, transition: { delay: DURATION.fade, duration: 0 } },
-    transition: action === 'fade' ? { duration: DURATION.fade } : t,
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0, transition: { duration: 0 } },
+    transition: { duration: reduced ? DURATION.reduced : 0.18, ease: 'easeOut' as const },
+  };
+}
+
+export function stackTransition(reduced: boolean, _action: NavAction, isTop: boolean) {
+  // Only the top screen paints and takes taps; screens under it stay mounted but hidden.
+  const pe = { pointerEvents: isTop ? ('auto' as const) : ('none' as const) };
+  const page = pageTransition(reduced);
+  return {
+    ...page,
+    animate: { opacity: isTop ? 1 : 0, ...pe, transition: isTop ? page.transition : { duration: 0 } },
+    exit: { opacity: 0, pointerEvents: 'none' as const, transition: { duration: 0 } },
   };
 }
 

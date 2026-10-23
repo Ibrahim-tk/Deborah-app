@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { persona } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { GradientShift, GrowReveal, TextReveal } from '@web/ui';
+import { GrowReveal, TextReveal } from '@web/ui';
 import { useNav, useNavStore } from '@web/navigation';
 import styles from './Splash.module.css';
 
@@ -45,7 +45,7 @@ export default function Splash() {
       // questions) replaces it, and this timer must not then override that start.
       if (useNavStore.getState().preauth.at(-1)?.id !== 'M-1.1' || useNavStore.getState().root !== 'preauth') return;
       // Returning users who already consented go straight to Main.
-      if (consented) resetTo('main', 'M-2.0');
+      if (consented) resetTo('main', 'M-2.1');
       else replace('M-1.2', undefined, 'fade');
     }, splashMs());
     return () => window.clearTimeout(id);
@@ -53,9 +53,8 @@ export default function Splash() {
 
   return (
     <div className={styles.root} data-xref="M-1.1 · Splash">
-      {/* Wispr Flow: grainy violet → cream (same backdrop as Aura / chat). */}
       <span className={styles.backdrop} aria-hidden />
-      <GradientShift />      {/* Tree of life and positions are taken 1:1 from Figma 161:386 (390×844 frame). */}
+      {/* Tree of life and positions are taken 1:1 from Figma 161:386 (390×844 frame). */}
       <div className={styles.tree}>
         <GrowReveal src="/images/splash/tree-of-life.svg" width={141} height={141} delay={100} duration={2000} />
       </div>

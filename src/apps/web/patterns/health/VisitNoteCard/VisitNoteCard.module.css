@@ -1,20 +1,117 @@
-.root { border-radius: var(--radius-card-sm, 20px); background: var(--white); box-shadow: inset 0 0 0 1px var(--color-border-hairline); overflow: hidden; }
-.root[data-selected] { box-shadow: inset 0 0 0 2px var(--color-border-selected, var(--purple-500)); }
-.main { display: flex; align-items: center; gap: var(--space-4); width: 100%; padding: var(--space-4); text-align: left; }
-.main:active { background: var(--color-accent-tint); }
-.main:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
-.tile { display: grid; flex: none; place-items: center; width: 72px; height: 72px; border-radius: 18px; background: var(--card-tone-lilac); }
-.text { display: grid; gap: 2px; min-width: 0; }
-.status { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-accent); }
-.title { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
-.meta { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-.footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-top: 1px solid var(--color-border-hairline); }
-.state { display: inline-flex; min-height: 44px; align-items: center; gap: var(--space-2); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-.done { color: var(--color-accent); }
-.state { white-space: nowrap; }
-.edit { color: var(--color-ink-secondary); }
-/* Heading strictly one line (design 2026-10-20). */
-.title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* List tile (not a floating card): full-width row, quiet border, Log visit stays in-tile. */
+.root {
+  border-radius: var(--radius-md, 12px);
+  background: color-mix(in srgb, var(--white) 72%, transparent);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+  overflow: hidden;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+}
+
+.root[data-selected] {
+  background: color-mix(in srgb, var(--color-accent-tint, var(--purple-50)) 55%, var(--white));
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  flex: 1;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  text-align: left;
+  min-height: 72px;
+}
+
+.main:active {
+  background: var(--color-accent-tint);
+}
+
+.main:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.tile {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--card-tone-lilac);
+}
+
+.text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.status {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-accent);
+}
+
+.title {
+  font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4) var(--space-3);
+  border-top: 1px solid var(--color-border-hairline);
+}
+
+.state {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  white-space: nowrap;
+}
+
+.done {
+  color: var(--color-accent);
+}
+
+.edit {
+  color: var(--color-ink-secondary);
+}
+
 /* Compact tile (lab reports): smaller illustration and padding. */
-.root[data-compact] .tile { width: 52px; height: 52px; border-radius: 14px; }
-.root[data-compact] .main { padding: var(--space-3) var(--space-4); }
+.root[data-compact] {
+  min-height: 0;
+}
+
+.root[data-compact] .tile {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.root[data-compact] .main {
+  padding: var(--space-3) var(--space-4);
+  min-height: 0;
+}

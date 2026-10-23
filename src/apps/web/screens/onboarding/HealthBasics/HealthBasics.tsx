@@ -11,11 +11,11 @@
  * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex assigned at birth,
  * gender identity, and pronouns. Clinical questions live on the Health Profile (M-2.14).
  */
-import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
-import { Aura, Button, GlassButton, GradientShift } from '@web/ui';
-import { useNav } from '@web/navigation';
+import { Button, TextReveal } from '@web/ui';
+import { useNav, useScreenParams } from '@web/navigation';
 import { useStartAtDetails } from './useStartAtDetails';
 import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, type Answers } from './steps';
 import { saveOnboarding } from './saveOnboarding';
@@ -25,6 +25,7 @@ import { BloomReveal } from './parts/BloomReveal';
 import { useTitleFade } from './parts/useTitleFade';
 import { useStepTransition } from './parts/useStepTransition';
 import { namedReasonsComplete } from '@web/patterns/widgets';
+import { PageFooter } from '@web/patterns/shell';
 import styles from './HealthBasics.module.css';
 
 const THIS_YEAR = new Date().getFullYear();
@@ -35,7 +36,8 @@ const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 const CONFIRM_MS = 280;
 
 export default function HealthBasics() {
-  const { presentSheet, pop } = useNav();
+  const { presentSheet, pop, resetTo, replace } = useNav();
+  const { returnTo } = useScreenParams<{ returnTo: string }>();
   const atDetails = useStartAtDetails();
   // `start: 'details'` (internal Screens menu): skip "who is this for" as Myself, open on basic details.
   const [answers, setAnswers] = useState<Answers>(atDetails ? { profileFor: 'self', birthDate: DEFAULT_DOB } : { birthDate: DEFAULT_DOB });
@@ -60,8 +62,13 @@ export default function HealthBasics() {
 
   const finish = (final: Answers) => {
     const profileId = saveOnboarding(final);
-    // Deborah's sheet opens over the full bloom; its CTA starts the chat as (or about) this profile.
-    presentSheet('M-1.9', { profileId });
+    if (returnTo === 'chat') {
+      // Guest-chat path: back to the same thread with a closing line + held send.
+      resetTo('main', 'M-2.1', { onboardClosing: true });
+      return;
+    }
+    // Deborah's welcome fades in full-screen; its CTA starts the chat as (or about) this profile.
+    replace('M-1.9', { profileId }, 'fade');
   };
 
   const set = (key: string, v: string) => {
@@ -107,9 +114,8 @@ export default function HealthBasics() {
     under.optional === true ||
     under.kind === 'date' || under.kind === 'year' || under.kind === 'measure' ||
     textOk ||
-    (under.kind === 'name' && NAME_PATTERN.test(underValue.trim()));
-  // Choice (incl. describe morph check / expand type pills): no footer Continue — in-field confirm or pill tap advances.
-  const tapToAnswer = under.kind === 'choice' || under.kind === 'profileFor';
+    (under.kind === 'name' && NAME_PATTERN.test(underValue.trim())) ||
+    ((under.kind === 'choice' || under.kind === 'profileFor') && Boolean(underValue));
 
   const goBack = () => {
     if (consentOpen) return setI(at - 1);
@@ -119,40 +125,40 @@ export default function HealthBasics() {
 
   return (
     <form className={styles.root} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
-      {/* Same living backdrop as Welcome (M-1.2), so the questions feel like one continuous space. */}
-      <Aura />
-      <GradientShift />
-      {/* Header · bloom (flexes to the space left) · question (natural height) · footer. */}
-      <header className={styles.header}>
-        <span className={styles.backSlot}>
-          {/* On the first question, back leaves the form for the screen that opened it. */}
-          <GlassButton icon="back" aria-label={at > 0 || consentOpen ? 'Previous question' : 'Back'} onClick={goBack} />
-        </span>
-      </header>
-      {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
-      <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-        <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
-      </div>
-      {/* Progressive blur: from the bottom of the screen up to just above the title (height is measured). */}
-      <div className={styles.fade} style={{ height: fade.height, '--feather': `${fade.feather}px` } as CSSProperties} aria-hidden="true"><i /><i /><i /></div>
-      {/* While the consent sheet is open, hide the DOB step so it doesn’t sit half-visible under a seam. */}
-      {!consentOpen && (
-        <>
-          <div className={styles.body}>
-            <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''}`}>
-              <h1 ref={fade.titleRef} className={`${styles.title} ${styles.heading}`}>{titleFor(shown, answers)}</h1>
-              <StepBody step={shown} answers={answers} set={set} advance={advance} />
-            </div>
-          </div>
-          <div className={styles.footer}>
-            {!tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>}
-            {/* Medicines / supplements: nothing to add → quiet Skip under Continue (was "I don't take any"). */}
-            {under.presentation === 'namedReasons' && !underValue.trim() && (
-              <Button type="button" variant="ghost" fullWidth onClick={() => advance(under.none ?? 'None')}>Skip</Button>
+      <div className={styles.layout}>
+        {/* Left: questions vertically centered. Brand logo lives in shell BrandNav. */}
+        <div className={styles.main}>
+          <div className={styles.brandSpace} aria-hidden />
+          <div className={styles.stage}>
+            {/* While the consent sheet is open, hide the DOB step so it doesn’t sit half-visible under a seam. */}
+            {!consentOpen && (
+              <>
+                <div className={styles.body}>
+                  <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''}`}>
+                    <h1 ref={fade.titleRef} className={`${styles.title} ${styles.heading}`}><TextReveal as="span" text={titleFor(shown, answers)} delay={180} stagger={22} /></h1>
+                    <StepBody step={shown} answers={answers} set={set} advance={advance} />
+                  </div>
+                </div>
+                <div className={styles.footer}>
+                  {/* Back + Next; Back is shown but disabled on the first question (balance). */}
+                  <div className={styles.navRow}>
+                    <Button type="button" variant="ghost" onClick={goBack} disabled={at === 0}>Back</Button>
+                    <Button type="submit" disabled={!canContinue}>Next</Button>
+                  </div>
+                  {/* Medicines / supplements: nothing to add → quiet Skip under Continue (was "I don't take any"). */}
+                  {under.presentation === 'namedReasons' && !underValue.trim() && (
+                    <Button type="button" variant="ghost" fullWidth onClick={() => advance(under.none ?? 'None')}>Skip</Button>
+                  )}
+                </div>
+              </>
             )}
           </div>
-        </>
-      )}
+        </div>
+        {/* Right: tree from the bottom edge up the full column height. */}
+        <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
+          <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
+        </div>
+      </div>
 
       <ConsentSheet
         open={consentOpen}
@@ -162,6 +168,7 @@ export default function HealthBasics() {
         onBack={() => setI(at - 1)}
         onContinue={() => next(answersRef.current)}
       />
+      <PageFooter />
     </form>
   );
 }

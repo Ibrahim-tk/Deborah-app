@@ -1,6 +1,16 @@
-.root { position: relative; display: flex; flex-direction: column; height: 100%; background: transparent; }
-.body { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--space-5); padding: var(--space-2) var(--margin-screen) var(--space-8); }
-.footer { flex: none; display: grid; gap: var(--space-2); padding: var(--space-3) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
+.stack,
+.embed {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: var(--space-5);
+  padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
 
 .surface { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-6) var(--space-4); border-radius: var(--radius-xl); background: var(--surface-field-lilac); text-align: center; }
 .surfaceIcon { display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: var(--space-2); border-radius: var(--radius-full); background: var(--icon-well-bg); color: var(--icon-well-fg); }

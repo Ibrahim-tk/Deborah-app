@@ -1,15 +1,157 @@
-.stage { display: grid; gap: var(--space-5); padding-bottom: var(--space-2); animation: stage-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.title { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; color: var(--color-ink); }
-.done { display: grid; justify-items: center; gap: var(--space-3); padding: var(--space-6) 0 var(--space-8); text-align: center; animation: stage-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.root {
+  position: relative;
+  height: 100%;
+  isolation: isolate;
+  background: var(--color-canvas);
+}
+
+.stage {
+  width: min(100%, 420px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-8);
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(var(--safe-top) + var(--space-6)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-6));
+  text-align: center;
+  animation: stage-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Outgoing question: soft fade + lift before the next fades in. */
+.stageLeaving {
+  animation: stage-out 0.24s cubic-bezier(0.4, 0, 1, 1) both;
+  pointer-events: none;
+}
+
+.header {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.prompt {
+  margin: 0;
+  font: var(--weight-regular) calc(40px * var(--type-scale)) / calc(44px * var(--type-scale)) var(--font-artistic, var(--font-display));
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+  max-width: 18ch;
+}
+
+.lede {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-body);
+  text-wrap: pretty;
+  max-width: 28ch;
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-5);
+  width: 100%;
+  text-align: start;
+}
+
+.code {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+  width: 100%;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font: var(--weight-regular) calc(40px * var(--type-scale)) / calc(44px * var(--type-scale)) var(--font-artistic, var(--font-display));
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
+}
+
+.done {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  text-align: center;
+}
+
 /* Check draws in once: a scale-in of the badge, nothing looping. */
-.check { display: grid; place-items: center; width: 72px; height: 72px; border-radius: var(--radius-full); background: color-mix(in srgb, #1f8a4c 12%, transparent); color: #146c3a; /* green check on a soft green disc */ animation: check-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.sub { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
-@keyframes stage-in { from { opacity: 0; transform: translateX(12px); } }
+.check {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, #1f8a4c 12%, transparent);
+  color: #146c3a; /* green check on a soft green disc */
+  animation: check-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sub {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+@keyframes stage-in {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
+@keyframes stage-out {
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
 /* Tick strokes in after the disc lands. */
-.tick { stroke-dasharray: 1; stroke-dashoffset: 1; animation: tick-draw 0.4s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards; }
+.tick {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: tick-draw 0.4s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
 @keyframes tick-draw { to { stroke-dashoffset: 0; } }
 @keyframes check-in { from { opacity: 0; transform: scale(0.6); } }
-@media (prefers-reduced-motion: reduce) { .stage, .done, .check, .tick { animation: none; stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .stage, .stageLeaving, .check, .tick { animation: none; stroke-dashoffset: 0; }
+}
+
 /* Quiet text link under the password: callout size, accent colour, no underline (designer, 2026-10-14). */
-.forgot { justify-self: start; min-height: 32px; margin-top: calc(var(--space-3) * -1); padding: 0; border: 0; background: none; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-accent); text-decoration: none; cursor: pointer; }
-.forgot:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+.forgot {
+  justify-self: start;
+  min-height: 32px;
+  margin-top: calc(var(--space-3) * -1);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-accent);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.forgot:focus-visible,
+.skip:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.skip {
+  justify-self: center;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

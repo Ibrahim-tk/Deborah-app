@@ -28,14 +28,11 @@
   text-align: center;
 }
 
-/* Wispr Flow backdrop — same image as Aura / chat; unshifted on Splash. */
 .backdrop {
   position: absolute;
   inset: 0;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background:
-    var(--backdrop-image) top center / cover no-repeat,
-    var(--color-canvas);
+  background: var(--color-canvas);
 }

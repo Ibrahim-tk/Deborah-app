@@ -1,18 +1,81 @@
-/* Home state leftovers — family row + compact suggestion section label. */
-
-/* Desktop: carousel + recommendations side by side under the hero. */
+/* Home lower stack: essentials · more for you (matches dashboard reference). */
 .lower {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-6);
   min-width: 0;
 }
 
-@media (min-width: 960px) {
-  .lower {
-    grid-column: 1 / -1;
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
+.more {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.moreLabel {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.moreGrid {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* Store-style product cards: 4-up track (two products leave room for four). Flat (no shadow). */
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  min-width: 0;
+}
+.product {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-radius: var(--radius-md, 12px);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--surface-border);
+  min-width: 0;
+}
+.productWell {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--card-tone-lilac, var(--color-accent-tint));
+  cursor: pointer;
+  overflow: hidden;
+}
+.productWell:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.productImage { width: 72%; height: 72%; object-fit: contain; }
+.productCopy { display: grid; gap: 2px; padding-inline: var(--space-1); min-width: 0; }
+.productName {
+  margin: 0;
+  font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.productTag {
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+.product > button:last-child { margin-inline: var(--space-1); margin-bottom: var(--space-1); }
+
+@media (max-width: 900px) {
+  .productGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .suggestSection {
@@ -46,3 +109,7 @@
   font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
   letter-spacing: -0.01em;
 }
+
+/* Smaller Shop button on product cards (designer, 2026-10-23). */
+.product > button:last-child { min-height: 28px; height: 28px; padding-inline: var(--space-3); font-size: var(--fs-footnote); }
+.product > button:last-child :global(svg) { width: 14px; height: 14px; }

@@ -1,6 +1,7 @@
 /**
  * @screen  M-5.4 · Check your results
  * @flow    F05 Follow-up & return with labs
+ * @presentation push (DerivedPage)
  * @states  detected (sample-a values) · manual (empty) · editing a row · nothing to send
  *          · edit mode (from M-9.5: prefilled from the stored report, "Save changes", no chat send)
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=49-547
@@ -12,8 +13,9 @@ import { labSampleReports } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { LabReport, LabValue } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Card, Input, Modal } from '@web/ui';
+import { Button, Card, Input } from '@web/ui';
 import { LabValueRow } from '@web/patterns/health';
+import { DerivedPage } from '@web/patterns/shell';
 import { useConversation } from '@web/hooks/useConversation';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useScreenParams } from '@web/navigation';
@@ -42,7 +44,7 @@ function initialDraft(source: Source, report?: LabReport) {
 
 export default function ConfirmLabs() {
   const params = useScreenParams<{ source: Source; fileName: string; mode: 'edit'; reportId: string }>();
-  const { dismissModal, returnToConversation } = useNav();
+  const { pop, returnToConversation } = useNav();
   const chat = useConversation();
   const toast = useToast();
   // Edit mode (M-9.5 → Edit): same layout, prefilled from the stored report.
@@ -65,7 +67,7 @@ export default function ConfirmLabs() {
     const collectedAt = new Date(`${date}T12:00:00`).toISOString();
     if (stored) {
       s.replaceReport({ ...stored, labName: labName.trim() || undefined, collectedAt, values: complete, confirmed: true });
-      dismissModal();
+      pop();
       return toast('Saved');
     }
     const sample = labSampleReports['sample-a'];
@@ -89,42 +91,34 @@ export default function ConfirmLabs() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-5.4 · Check your results">
-      <Modal
-        title="Check your results"
-        onClose={dismissModal}
-        footer={
-          <>
-            {error && <p className={styles.error} role="alert">{error}</p>}
-            <Button fullWidth onClick={send}>{stored ? 'Save changes' : 'Add Report'}</Button>
-          </>
-        }
-      >
-        <div className={styles.body}>
-          <Card className={styles.meta}>
-            <Input label="Lab" placeholder="e.g. Quest Diagnostics" value={labName} onChange={(e) => setLabName(e.target.value)} />
-            <Input label="Collection date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-          </Card>
+    <DerivedPage contentWidth={640} title="Check your results" composerPlaceholder="Ask Deborah about these labs…">
+      <div className={styles.body} data-xref="M-5.4 · Check your results">
+        <Card className={styles.meta}>
+          <Input label="Lab" placeholder="e.g. Quest Diagnostics" value={labName} onChange={(e) => setLabName(e.target.value)} />
+          <Input label="Collection date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        </Card>
 
-          <div className={styles.values}>
-            {values.length === 0 && <p className={styles.empty}>No values on this report.</p>}
-            {values.map((v) => (
-              <LabValueRow
-                key={v.id}
-                value={v}
-                editing={editing === v.id}
-                onEdit={() => setEditing(v.id)}
-                onChange={(p) => patch(v.id, p)}
-                onDone={() => setEditing(null)}
-                onDelete={() => {
-                  setValues((vs) => vs.filter((x) => x.id !== v.id));
-                  setEditing(null);
-                }}
-              />
-            ))}
-          </div>
+        <div className={styles.values}>
+          {values.length === 0 && <p className={styles.empty}>No values on this report.</p>}
+          {values.map((v) => (
+            <LabValueRow
+              key={v.id}
+              value={v}
+              editing={editing === v.id}
+              onEdit={() => setEditing(v.id)}
+              onChange={(p) => patch(v.id, p)}
+              onDone={() => setEditing(null)}
+              onDelete={() => {
+                setValues((vs) => vs.filter((x) => x.id !== v.id));
+                setEditing(null);
+              }}
+            />
+          ))}
         </div>
-      </Modal>
-    </div>
+
+        {error && <p className={styles.error} role="alert">{error}</p>}
+        <Button fullWidth onClick={send}>{stored ? 'Save changes' : 'Add Report'}</Button>
+      </div>
+    </DerivedPage>
   );
 }

@@ -6,7 +6,7 @@
   --gs-rose: var(--theme-gs-rose, #d4b8c4);
   --gs-plum: var(--theme-gs-plum, #3a0353);
   --gs-parchment: var(--theme-gs-parchment, #f9f7f0);
-  display: none;
+  display: none !important;
   position: absolute;
   /* Honor --backdrop-drift so Home purple sits higher; preauth leaves drift at 0. */
   top: var(--backdrop-drift, 0px);

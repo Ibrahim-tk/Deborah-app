@@ -1,11 +1,12 @@
-.root { display: flex; flex-direction: column; height: 100%; }
-.scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
-.body {
+.stack {
   display: grid;
   gap: var(--space-6);
-  width: min(100%, 800px);
-  margin-inline: auto;
-  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+  padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
+}
+
+.share {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .titles { display: grid; gap: var(--space-2); }

@@ -208,36 +208,21 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55);
 }
 
-/* Vibrant aurora, matching the health-detail cards (designer, 2026-10-21): orchid photo field, white copy, black arrow. */
+/* Web: flat lilac hero — no aurora / purple photo gradient. */
 .root[data-tone='hero'] {
-  background: #6b3f86;
-  color: var(--white);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), inset 0 0 0 1px rgb(255 255 255 / 0.12);
-}
-.root[data-tone='hero']::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: url('/images/cards/aurora.webp') center / cover no-repeat;
-  filter: saturate(1.35) brightness(0.92);
-}
-.root[data-tone='hero']::after {
-  background: radial-gradient(140% 70% at 30% -10%, rgb(255 255 255 / 0.22), transparent 55%);
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  -webkit-mask-image: none;
-  mask-image: none;
+  background: var(--home-tone-hero);
+  color: var(--color-ink);
   box-shadow: none;
 }
+.root[data-tone='hero']::before { content: none; }
+.root[data-tone='hero']::after { content: none; }
 .root[data-tone='hero'] .artifact { display: none; }
 .root[data-tone='hero'] .bodyCompact { display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr; gap: var(--space-4); padding: var(--space-5); min-height: 176px; }
 .top { display: flex; align-items: center; justify-content: space-between; }
 .copy { display: grid; gap: 2px; align-self: end; }
-.root[data-tone='hero'] .titleCompact { margin: 0; max-width: 30ch; font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--white); }
-.root[data-tone='hero'] .when { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--white); white-space: normal; text-align: left; }
-.root[data-tone='hero'] .arrow { width: 44px; height: 44px; background: #111; color: var(--white); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.root[data-tone='hero'] .titleCompact { margin: 0; max-width: 30ch; font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); color: var(--color-ink); }
+.root[data-tone='hero'] .when { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); white-space: normal; text-align: left; }
+.root[data-tone='hero'] .arrow { width: 44px; height: 44px; background: var(--color-ink); color: var(--white); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 
 /* Standard card spacing (2026-10-21): matches SuggestionCarousel cards. */
 .root[data-tone='hero'] .bodyCompact { padding: var(--space-4); gap: var(--space-3); }
@@ -247,13 +232,33 @@
 .root[data-tone='hero'] .bodyCompact { min-height: 0; gap: var(--space-4); }
 
 /* File-card layout (designer, 2026-10-21): bigger orb top-left, eyebrow · title · icon stats row. */
-.eyebrow { margin: 0 0 2px; font: var(--weight-medium) 11px / 14px var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); }
+.eyebrow { margin: 0 0 2px; font: var(--weight-medium) 11px / 14px var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-secondary); }
 .root[data-tone='hero'] .titleCompact { font: var(--weight-medium) calc(20px * var(--type-scale, 1)) / calc(25px * var(--type-scale, 1)) var(--font-body); letter-spacing: -0.015em; }
 .stats { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
-.stats li { display: inline-flex; align-items: center; gap: 6px; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--white); }
+.stats li { display: inline-flex; align-items: center; gap: 6px; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .root[data-tone='hero'] .bodyCompact { gap: var(--space-5); }
 /* Compact pass (2026-10-21): smaller orb/arrow, tighter rhythm, title one step down. */
 .root[data-tone='hero'] .bodyCompact { gap: var(--space-3); padding-block: var(--space-3); }
 .root[data-tone='hero'] .arrow { width: 36px; height: 36px; }
 .root[data-tone='hero'] .titleCompact { font-size: var(--fs-headline); line-height: var(--lh-headline); }
 .stats { margin-top: var(--space-1); }
+
+/* Banner (designer, 2026-10-23): violet → orchid → blush gradient, soft light bloom right; white serif copy. */
+.root[data-tone='hero'] {
+  /* Designer's gradient image (2026-10-23), shown as-is — cover, no stretching. */
+  background: #7a48b8 url('/images/home/continue-gradient.webp') center / cover no-repeat;
+}
+.root[data-tone='hero'] .bodyCompact {
+  grid-template-columns: auto 1fr auto; grid-template-rows: auto;
+  align-items: center; gap: var(--space-5); padding: var(--space-4) var(--space-5);
+}
+.root[data-tone='hero'] .copy { align-self: center; gap: var(--space-1); }
+.root[data-tone='hero'] .eyebrow { color: rgb(255 255 255 / 0.92); font-weight: var(--weight-regular); }
+.root[data-tone='hero'] .titleCompact {
+  max-width: 34ch; color: var(--white);
+  font: var(--weight-regular) calc(26px * var(--type-scale, 1)) / calc(32px * var(--type-scale, 1)) var(--font-display);
+  letter-spacing: -0.01em;
+}
+.root[data-tone='hero'] .stats li,
+.root[data-tone='hero'] .when { color: rgb(255 255 255 / 0.9); }
+.root[data-tone='hero'] .arrow { width: 48px; height: 48px; background: var(--purple-900, var(--color-ink)); color: var(--white); }

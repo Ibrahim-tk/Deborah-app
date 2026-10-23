@@ -20,7 +20,6 @@ import {
   MessageBubble,
   QuickReplies,
   ReviewFactsCard,
-  SuggestedQuestions,
   ThinkingIndicator,
   VisitSummaryCard,
   SourceTrace,
@@ -102,9 +101,6 @@ export function MessageList({
     const turnStart = m.role === 'deborah' && messages[i - 1]?.role !== 'deborah';
     const isLatestDeborah = i === lastDeborahIndex;
     const placeholder = m.meta?.status === 'placeholder';
-    // F11: Deborah's reply to a shared document offers its own questions even in an empty chat.
-    const docReply = m.role === 'deborah' && Boolean(m.meta?.documentId) && m.kind === 'text';
-    const showSuggestions = isLatestDeborah && !busy && (status === 'ready' || status === 'answered' || docReply) && (m.suggestions?.length ?? 0) > 0;
 
     if (m.role === 'user' && m.meta?.documentId) return <DocumentMessage key={m.id} documentId={m.meta.documentId} />;
     // Composer photos: the images themselves, then any text in its usual bubble (design 2026-10-21).
@@ -209,7 +205,7 @@ export function MessageList({
               )}
             </>
           )}
-          {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}
+          {/* Web: no "You could ask" list after answers (designer, 2026-10-23). */}
         </MessageBubble>
       );
     }
@@ -268,7 +264,7 @@ export function MessageList({
             answered={quickActive ? undefined : quick.answered}
           />
         )}
-        {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}
+        {/* Web: no "You could ask" list after answers (designer, 2026-10-23). */}
       </MessageBubble>
     );
   };

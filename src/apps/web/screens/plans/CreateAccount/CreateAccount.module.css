@@ -1,6 +1,6 @@
 .root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; background: transparent; }
 .body {
-  width: min(100%, 560px);
+  width: 100%;
   margin-inline: auto;
  flex: 1; min-height: 0; overflow-y: auto; display: grid; align-content: start; gap: var(--space-8); padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-8)); }
 .intro { display: grid; gap: var(--space-3); }
@@ -14,3 +14,30 @@
 .switch .inlineLink { font: inherit; min-width: 0; padding-inline: 0; text-decoration: underline; text-underline-offset: 3px; }
 /* Matches the 48pt SocialButtons above it. */
 .group .compact { min-height: 48px; padding-block: var(--space-2); }
+.legal { position: relative; }
+.legalInput { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.legalRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+.legalBox {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  border-radius: 3px;
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1.5px var(--color-border-control);
+  color: var(--color-ink-on-accent);
+}
+.legalBox[data-checked='true'] { background: var(--color-accent); box-shadow: none; }
+.legalInput:focus-visible + .legalRow .legalBox { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.legalText {
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+}

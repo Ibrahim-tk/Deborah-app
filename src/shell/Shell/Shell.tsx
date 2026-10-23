@@ -1,5 +1,5 @@
 /**
- * @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: BrowserFrame or full-bleed.
+ * @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: full-bleed (no browser chrome).
  * Widgets: (/internal/wid) in the IPhoneFrame. Design system: (/internal/design-system), full-bleed.
  * Simple Home lab: (/internal/home) in the IPhoneFrame.
  */
@@ -11,7 +11,6 @@ import WebApp from '@web/WebApp';
 import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
 import { IPhoneFrame } from '../device/IPhoneFrame';
-import { BrowserFrame } from '../browser/BrowserFrame';
 import { WebDeviceHost } from '../browser/WebDeviceHost';
 import { ScreenCaption } from './parts/ScreenCaption';
 import { ShellToast } from './parts/ShellToast';
@@ -32,7 +31,6 @@ export function Shell({ platform }: ShellProps) {
   const showCaption = useShellStore((s) => s.showCaption);
   const showNotes = useShellStore((s) => s.showNotes);
   const showJourney = useShellStore((s) => s.toggles.showJourney);
-  const webFullBleed = useShellStore((s) => s.webFullBleed);
 
   return (
     <div className={styles.root} data-theme={theme}>
@@ -59,18 +57,12 @@ export function Shell({ platform }: ShellProps) {
             {showNotes && <ScreenNote />}
             {showJourney && <JourneyReadout />}
           </>
-        ) : webFullBleed ? (
+        ) : (
           <div className={styles.fullBleed}>
             <WebDeviceHost>
               <WebApp />
             </WebDeviceHost>
           </div>
-        ) : (
-          <BrowserFrame>
-            <WebDeviceHost>
-              <WebApp />
-            </WebDeviceHost>
-          </BrowserFrame>
         )}
       </main>
       <ShellToast />

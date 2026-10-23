@@ -9,11 +9,12 @@
 import { lazy, Suspense, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '@shared/store';
-import { Avatar, Header, Icon, ListRow } from '@web/ui';
+import { Avatar, Icon, ListRow } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { relationshipLabel } from '@web/patterns/profile';
 import { healthProfileCompletion } from '@web/screens/onboarding/HealthBasics/healthProfile';
 import { useWideSplit } from '@web/hooks/useWideSplit';
-import { useNav, useRoute } from '@web/navigation';
+import { useNav } from '@web/navigation';
 import { DetailHostProvider } from '../../DetailHost';
 import { maxProfilesFor, useAddMember } from '../useAddMember';
 import styles from './ManageProfiles.module.css';
@@ -21,12 +22,14 @@ import styles from './ManageProfiles.module.css';
 const ProfileDetails = lazy(() => import('../ProfileDetails'));
 
 export default function ManageProfiles() {
-  const { pop, push } = useNav();
-  const { previousTitle, canGoBack } = useRoute();
+  const { push } = useNav();
   const { addState, add } = useAddMember();
   const plan = useAppStore((s) => s.plan);
   const profiles = useAppStore(useShallow((s) => s.profiles.order.map((id) => s.profiles.byId[id]).filter(Boolean)));
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Wide: the active profile (usually you) is open by default, so details are always in view.
+  const activeId = useAppStore((s) => s.activeProfileId);
+  const [picked, setSelectedId] = useState<string | null>(null);
+  const selectedId = picked && profiles.some((p) => p.id === picked) ? picked : activeId;
   const wide = useWideSplit();
 
   const onSelect = (id: string) => {
@@ -68,29 +71,18 @@ export default function ManageProfiles() {
   );
 
   return (
-    <div className={styles.root} data-xref="M-6.6 · Manage profiles" data-split={wide || undefined}>
-      <Header title="Family profiles" onBack={canGoBack ? pop : undefined} backLabel={previousTitle} />
-      <div className={styles.body}>
-        <div className={styles.listPane}>{list}</div>
-        {wide && (
-          <div className={styles.detailPane} aria-live="polite">
-            {selectedId ? (
-              <DetailHostProvider
-                screenId="M-6.5"
-                params={{ profileId: selectedId }}
-                previousTitle="Family profiles"
-                onClear={() => setSelectedId(null)}
-              >
-                <Suspense fallback={<div className={styles.paneLoading}>Loading…</div>}>
-                  <ProfileDetails />
-                </Suspense>
-              </DetailHostProvider>
-            ) : (
-              <p className={styles.paneEmpty}>Select a profile to view or edit it here.</p>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
+    <DerivedPage
+      title="Family profiles"
+      split={wide}
+      detail={
+        <DetailHostProvider screenId="M-6.5" params={{ profileId: selectedId }} previousTitle="Family profiles" onClear={() => setSelectedId(null)}>
+          <Suspense fallback={<div className={styles.paneLoading}>Loading…</div>}>
+            <ProfileDetails key={selectedId} />
+          </Suspense>
+        </DetailHostProvider>
+      }
+    >
+      <div data-xref="M-6.6 · Manage profiles">{list}</div>
+    </DerivedPage>
   );
 }

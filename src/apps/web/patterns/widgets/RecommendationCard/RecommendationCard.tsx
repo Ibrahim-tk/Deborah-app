@@ -11,11 +11,24 @@ export interface Recommendation {
   reason: string;
 }
 
-export function RecommendationCard({ items, onShop }: { items: Recommendation[]; onShop: (productId: string) => void }) {
+export function RecommendationCard({
+  items,
+  onShop,
+  bare = false,
+}: {
+  items: Recommendation[];
+  onShop: (productId: string) => void;
+  /** Skip section label (e.g. Home “More for you” pair). */
+  bare?: boolean;
+}) {
   if (!items.length) return null;
   return (
-    <section className={styles.section} aria-labelledby="home-recs">
-      <h2 id="home-recs" className={field.label}>Recommended for you</h2>
+    <section className={styles.section} aria-labelledby={bare ? undefined : 'home-recs'}>
+      {!bare && (
+        <h2 id="home-recs" className={field.label}>
+          Recommended for you
+        </h2>
+      )}
       <ul className={styles.list}>
         {items.map(({ product, reason }) => (
           <li key={product.id}>

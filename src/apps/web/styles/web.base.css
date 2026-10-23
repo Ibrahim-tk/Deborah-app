@@ -1,5 +1,4 @@
-/* src/apps/web/styles/web.base.css — app-level base inside the browser viewport (DESIGN.web.md).
- * The root fills the BrowserFrame viewport (not 100vh) and owns its scroll areas. */
+/* src/apps/web/styles/web.base.css — app-level base for full-bleed Web stage. */
 .web-root {
   position: absolute;
   inset: 0;
@@ -10,6 +9,13 @@
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Soft lavender mist (cream top → purple foot) for Aura on chat / main stage. */
+  --backdrop-image: url('/images/backdrops/dashboard-mist.png');
+  --bg-mesh: none;
+  --surface-canvas: var(--color-canvas);
+  --home-tone-hero: var(--home-tone-lilac);
+  --button-primary-fill: var(--purple-500);
 }
 
 .web-root *,

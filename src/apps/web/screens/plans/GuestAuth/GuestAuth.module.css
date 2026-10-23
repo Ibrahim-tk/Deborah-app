@@ -1,0 +1,64 @@
+/* Compact Untitled-UI style card: orb, title, email, Continue — Oracle tokens. */
+.root {
+  position: relative;
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-6) calc(var(--safe-bottom) + var(--space-6));
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+  text-align: center;
+  /* Panel frame has no fill — surface must live on the screen or chat bleeds through. */
+  background: var(--color-surface);
+  border-radius: var(--radius-lg, 16px);
+}
+
+.close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+}
+
+.hero {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+}
+
+.title {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+}
+
+.body {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+  text-wrap: pretty;
+  max-width: 28ch;
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+  text-align: start;
+}
+
+.switch {
+  margin: 0;
+  text-align: center;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+
+.link {
+  font: inherit;
+  min-width: 0;
+  padding-inline: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

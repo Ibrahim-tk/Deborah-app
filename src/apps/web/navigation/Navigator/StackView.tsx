@@ -26,7 +26,7 @@ export function StackView({ routes, action, container, onBack, active = true, ho
   const top = routes.length - 1;
 
   return (
-    <div className={styles.stack} data-active={active} aria-hidden={!active || undefined}>
+    <div className={styles.stack} data-active={active ? 'true' : 'false'} aria-hidden={!active || undefined}>
       <AnimatePresence initial={false}>
         {routes.map((r, i) => {
           // `initial` only applies when a screen mounts, so existing screens never re-enter.
@@ -40,6 +40,7 @@ export function StackView({ routes, action, container, onBack, active = true, ho
               container={container}
               hidden={i < top - 1}
               isTop={isTop}
+              zIndex={i + 1}
               transition={t}
               homeBackdrop={homeBackdrop}
             />
@@ -65,11 +66,8 @@ export function StackView({ routes, action, container, onBack, active = true, ho
   );
 }
 
-/**
- * Screens that keep the gradient / photo backdrop (design direction 2026-10-20): Home, chat, Splash, Welcome and the
- * intake forms. Every other screen sits on the plain canvas colour.
- */
-const GRADIENT_SCREENS = new Set(['M-1.1', 'M-1.2', 'M-1.8', 'M-2.0', 'M-2.1', 'M-2.12', 'M-2.14']);
+/* Web dashboard mist lives on Navigator `.base` — screens stay plain / transparent. */
+const GRADIENT_SCREENS = new Set<string>();
 
 /** One stack layer — keeps a stable node ref so exit can flip `inert` immediately. */
 function StackScreen({
@@ -78,6 +76,7 @@ function StackScreen({
   container,
   hidden,
   isTop,
+  zIndex,
   transition: t,
   homeBackdrop,
 }: {
@@ -86,6 +85,7 @@ function StackScreen({
   container: 'stack' | 'modal';
   hidden: boolean;
   isTop: boolean;
+  zIndex: number;
   transition: ReturnType<typeof stackTransition>;
   homeBackdrop: boolean;
 }) {
@@ -101,12 +101,14 @@ function StackScreen({
     <MotionDiv
       className={styles.screen}
       data-hidden={hidden || undefined}
+      data-top={isTop || undefined}
       data-bg={GRADIENT_SCREENS.has(route.id) ? 'gradient' : 'plain'}
       // Non-top screens never intercept taps (AnimatePresence exit keeps the outgoing
       // chat mounted above Home; without this, Home freezes until the slide finishes —
       // and if anything goes wrong with exit cleanup, forever).
       style={
         {
+          zIndex,
           pointerEvents: isTop ? 'auto' : 'none',
           ...(homeBackdrop
             ? ({

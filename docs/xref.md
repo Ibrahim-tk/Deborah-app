@@ -4,7 +4,9 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 
 | ID | Concept | Flow | Mobile file | Web ID / file | Figma | Spec | Status |
 |---|---|---|---|---|---|---|---|
+| M-1.0 | Hero (Get Started → guest chat) | F01 | — (web only) | W-1.0 · `onboarding/Hero` | — | web guest-chat onboarding | built (web) |
 | M-1.1 | Splash | F01 | `onboarding/Splash` | W-1.1 · `onboarding/Splash` (web twin) | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
+| M-1.11 | Ask name (after guest signup) | F01 | — (web only) | W-1.11 · `onboarding/AskName` | — | web guest-chat onboarding | built (web) |
 | M-1.2 | Welcome | F01 | `onboarding/Welcome` | W-1.2 · `onboarding/Welcome` (web twin) | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
 | M-1.3 | Consent | F01 | `onboarding/Consent` | W-1.3 · `onboarding/Consent` (web twin) | [F01](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=47-184) | [ux/F01-onboarding.md](ux/F01-onboarding.md) | built (phase 3) |
 | M-1.4 | Create your profile (sheet: email + password, code, you're in) | F01 | `onboarding/CreateProfile` | W-1.4 · `onboarding/CreateProfile` (web twin) | — | [ux/F01-onboarding.md](ux/F01-onboarding.md) (OPEN: add) | built |
@@ -45,7 +47,9 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-8.2 | Booking info | F08 | `booking/BookingInfo` | W-8.2 · `booking/BookingInfo` (web twin) | [F08](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470) | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | built (phase 6) |
 | M-8.3 | Scheduler | F08 | `booking/Scheduler` | W-8.3 · `booking/Scheduler` (web twin) | [F08](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470) | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | built (phase 6) |
 | M-8.4 | Booking confirmed | F08 | `booking/BookingConfirmed` | W-8.4 · `booking/BookingConfirmed` (web twin) | [F08](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470) | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | built (phase 6) |
-| M-9.1 | Records | F09 | `records/Records` | W-9.1 · `records/Records` (web twin) | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |
+| M-4.0 | Guest auth gate (Sign in or sign up) | F04 | — (web only) | W-4.0 · `plans/GuestAuth` | — | web guest-chat onboarding | built (web) |
+| M-9.1 | My Visit Notes | F09 | `records/Records` | W-9.1 · `records/Records` (web twin) | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6; web derived shell) |
+| M-9.12 | Attachments (Labs · Reports · Images) | F09 | — (web only) | W-9.12 · `records/Attachments` | — | web derived-pages shell | built (web) |
 | M-9.2 | Consultation detail | F09 | `records/ConsultationDetail` | W-9.2 · `records/ConsultationDetail` (web twin) | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |
 | M-9.4 | Note editor | F09 | `records/NoteEditor` | W-9.4 · `records/NoteEditor` (web twin) | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |
 | M-9.5 | Lab report | F09 | `records/LabReport` | W-9.5 · `records/LabReport` (web twin) | [F09](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598) | [ux/F09-records.md](ux/F09-records.md) | built (phase 6) |

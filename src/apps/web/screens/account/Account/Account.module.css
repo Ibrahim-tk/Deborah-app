@@ -1,22 +1,9 @@
-.root {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: transparent;
-}
-
-.body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
+.stack {
   display: grid;
   align-content: start;
-  /* Same as Home: overflow:hidden groups collapse without max-content rows. */
   grid-auto-rows: max-content;
   gap: var(--space-5);
-  width: min(100%, 640px);
-  margin-inline: auto;
-  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-6));
+  padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
 }
 
 /* Plan CTA — lilac wash, sans title, circular accent mark + frosted chevron. */
@@ -29,11 +16,7 @@
   padding: var(--space-4);
   border: 0;
   border-radius: var(--radius-xl);
-  background: linear-gradient(
-    105deg,
-    color-mix(in srgb, var(--purple-50) 70%, var(--white)) 0%,
-    color-mix(in srgb, var(--purple-100) 45%, var(--gold-50)) 100%
-  );
+  background: color-mix(in srgb, var(--purple-50) 55%, var(--white));
   color: var(--color-ink);
   text-align: left;
   cursor: pointer;

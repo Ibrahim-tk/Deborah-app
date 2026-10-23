@@ -9,9 +9,9 @@
  */
 import { FOLLOW_UP_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Header, Panel, Segmented, Toggle, useAlert } from '@web/ui';
+import { Button, Panel, Segmented, Toggle, useAlert } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
-import { useNav, useRoute } from '@web/navigation';
 import styles from './Notifications.module.css';
 import { useAccountGate } from '@web/hooks/useAccountGate';
 
@@ -29,9 +29,7 @@ function resolveInterval(days: number): number {
 }
 
 export default function Notifications() {
-  const { pop } = useNav();
   const gate = useAccountGate();
-  const { previousTitle } = useRoute();
   const alert = useAlert();
   const toast = useToast();
   const permission = useAppStore((s) => s.notificationPermission);
@@ -115,9 +113,8 @@ export default function Notifications() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-10.4 · Notifications">
-      <Header title="Notification settings" onBack={pop} backLabel={previousTitle} />
-      <div className={styles.body}>
+    <DerivedPage title="Notification settings" composerPlaceholder="Ask Deborah about reminders…">
+      <div className={styles.stack} data-xref="M-10.4 · Notifications">
         {denied && (
           <Panel tone="warning" icon="alert">
             <p className={styles.text}>Notifications are off in Settings</p>
@@ -159,6 +156,6 @@ export default function Notifications() {
           <Toggle checked disabled onChange={() => {}} label="Re-consent on policy update" description="Always on: we ask again when our privacy policy changes." />
         </section>
       </div>
-    </div>
+    </DerivedPage>
   );
 }

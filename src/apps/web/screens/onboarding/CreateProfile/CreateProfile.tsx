@@ -1,24 +1,23 @@
 /**
  * @screen  M-1.4 · Create your profile
  * @flow    F01 First launch & onboarding (design direction 2026-10-13 rev 5)
- * @presentation sheet over Welcome (M-1.2), which already asked for the first name
- * @states  form (email + password) · field error · code · you're in · sign-in mode (email + password · code · welcome back)
+ * @presentation full-screen fade from Welcome (M-1.2) — naked, no sheet/container
+ * @states  email · password · phone (optional) · code · you're in · sign-in (email · password · code · welcome back)
  *          · forgot password (email · code · new password · password set)
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md (OPEN: add M-1.4 to the spec)
  * @xref    web: W-1.4 — not built
  *
- * One sheet, three stages: email and password → 6-digit code (any digits verify, simulated) → a short
- * "You're in" that moves on by itself to the full-screen health questions (M-1.8).
- * `mode: 'signin'` (Welcome's "Sign in"): the same sheet, without confirm password, ending on
- * "Welcome back" and Home (M-2.0). Any email and password sign in (simulated).
- * Sign-in has "Forgot password?" under the password: email → code → new password → "Your password is set"
- * → signed in automatically ("Welcome back" → Home). See parts/ForgotPassword.
+ * Sign-up (2026-10-23): one screen — "Welcome, {name}" with email, password, confirm password and optional
+ * phone → 6-digit code → "Account created", then health questions (M-1.8). `mode: 'signin'`: email + password,
+ * ending on Home (M-2.0). Any email and password sign in (simulated). Sign-in has "Forgot password?"
+ * under the password. See parts/ForgotPassword.
  */
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { consentDoc } from '@shared/data';
 import { loadScenario, useAppStore } from '@shared/store';
-import { Button, Input, Sheet } from '@web/ui';
+import { cx } from '@shared/utils';
+import { Button, Input, TextReveal } from '@web/ui';
 import { PhoneField, type PhoneValue } from '@web/patterns/widgets';
 import { useNav, useScreenParams } from '@web/navigation';
 import { CodeStep } from '@web/screens/plans/CreateAccount/parts/CodeStep';
@@ -28,12 +27,14 @@ import styles from './CreateProfile.module.css';
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_LENGTH = 8;
 const DONE_MS = 1600;
+/** Keep outgoing step on screen while it fades up (matches `.stageLeaving`). */
+const EXIT_MS = 240;
 /** TEMP: skip signup/signin field checks for manual journey testing. Set `true` only while testing. */
-const SKIP_AUTH_VALIDATION = false;
+const SKIP_AUTH_VALIDATION = true;
 /** PDF persona auto-run: shorter “You’re in” hold (still readable at ~0.5× normal step pace). */
 const fastDoneMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 700 : DONE_MS);
 
-type Stage = 'form' | 'code' | 'forgot' | 'done';
+type Stage = 'email' | 'password' | 'phone' | 'code' | 'forgot' | 'done';
 
 /** "maria.lopez@…" → "Maria". */
 const nameFromEmail = (email: string) => {
@@ -56,18 +57,33 @@ function restoreReturning(email: string) {
 
 export default function CreateProfile() {
   // `stage` lets the internal Screens menu open straight on 2FA or forgot password.
-  const { first = '', mode, stage: initialStage = 'form' } = useScreenParams<{ first: string; mode: 'signin'; stage: Stage }>();
+  const { first = '', mode, stage: initialStage = 'email' } = useScreenParams<{
+    first: string;
+    mode: 'signin';
+    /** Legacy Screens-menu value `form` maps to email. */
+    stage: Stage | 'form';
+  }>();
   const signin = mode === 'signin';
-  const { dismissSheet, push } = useNav();
-  const [stage, setStage] = useState<Stage>(initialStage);
-  const [forgotHeader, setForgotHeader] = useState<{ title?: string; subtitle?: string }>({});
+  const { replace } = useNav();
+  const [stage, setStage] = useState<Stage>(initialStage === 'form' || initialStage === 'password' || initialStage === 'phone' ? 'email' : initialStage);
+  const [view, setView] = useState(stage);
+  const leaving = view !== stage;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string }>({});
 
-  const submit = (e: FormEvent) => {
+  // Outgoing question fades up, then the next fades in.
+  useEffect(() => {
+    if (!leaving) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const id = window.setTimeout(() => setView(stage), reduced ? 0 : EXIT_MS);
+    return () => window.clearTimeout(id);
+  }, [leaving, stage]);
+
+  // One screen: email + password (+ confirm + optional phone on sign-up), then the code.
+  const submitDetails = (e: FormEvent) => {
     e.preventDefault();
     if (SKIP_AUTH_VALIDATION) {
       setErrors({});
@@ -105,46 +121,137 @@ export default function CreateProfile() {
 
   // "You're in" holds briefly, then the health questions take over the full screen.
   useEffect(() => {
-    if (stage !== 'done') return;
+    if (view !== 'done') return;
     const id = window.setTimeout(() => {
-      dismissSheet();
       if (signin) restoreReturning(email.trim());
-      else push('M-1.8');
+      else replace('M-1.8', undefined, 'fade');
     }, fastDoneMs());
     return () => window.clearTimeout(id);
-  }, [stage, signin, email, dismissSheet, push]);
+  }, [view, signin, email, replace]);
+
+  const prompt =
+    view === 'email'
+      ? signin
+        ? 'Welcome back'
+        : first
+          ? `Welcome, ${first}`
+          : 'Welcome'
+      : view === 'code'
+        ? 'Check your email'
+        : undefined;
+
+  const lede =
+    view === 'email'
+      ? signin
+        ? 'Sign in to pick up where you left off.'
+        : 'Create your account so Deborah can remember your story.'
+      : undefined;
 
   return (
-    <div data-xref="M-1.4 · Create your profile">
-      <Sheet
-        title={stage === 'form' ? (signin ? 'Welcome back' : `Welcome${first ? `, ${first}` : ''}`) : stage === 'code' ? 'Check your email' : stage === 'forgot' ? forgotHeader.title : undefined}
-        subtitle={stage === 'form' ? (signin ? 'Sign in to pick up where you left off.' : 'Create your account so Deborah remembers your story.') : stage === 'forgot' ? forgotHeader.subtitle : undefined}
-      >
-        {stage === 'form' && (
-          <form key="form" className={styles.stage} onSubmit={submit} noValidate>
-            {/* OPEN: placeholder UX copy until reviewed. Heading + subtitle live in the sheet header. */}
-            <Input label="Email" type="email" placeholder="Your email" value={email} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors((x) => ({ ...x, email: undefined })); }} />
-            <Input label="Password" type="password" placeholder="Enter your password" value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
-            {signin && <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>Forgot password?</button>}
-            {!signin && <Input label="Confirm password" type="password" placeholder="Confirm your password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />}
-            {!signin && <PhoneField value={phone} onChange={setPhone} />}
-            <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>{signin ? 'Sign in' : 'Create account'}</Button>
-          </form>
+    <div className={styles.root} data-xref="M-1.4 · Create your profile">
+      <div key={view} className={cx(styles.stage, leaving && styles.stageLeaving)}>
+        {view === 'forgot' ? (
+          <ForgotPassword initialEmail={email} onCancel={() => setStage('email')} onComplete={signIn} />
+        ) : (
+          <>
+            {prompt && (
+              <header className={styles.header}>
+                <TextReveal as="h1" className={styles.prompt} text={prompt} delay={200} />
+                {lede && <TextReveal className={styles.lede} text={lede} delay={500} />}
+              </header>
+            )}
+            {view === 'email' && (
+              <form className={styles.fields} onSubmit={submitDetails} noValidate>
+                <Input
+                  label="Email"
+                  type="email"
+                  placeholder="Your email"
+                  value={email}
+                  autoComplete="email"
+                  inputMode="email"
+                  autoFocus
+                  error={errors.email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setErrors((x) => ({ ...x, email: undefined }));
+                  }}
+                />
+                <Input
+                  label="Password"
+                  type="password"
+                  placeholder={signin ? 'Your password' : `At least ${MIN_LENGTH} characters`}
+                  value={password}
+                  autoComplete={signin ? 'current-password' : 'new-password'}
+                  error={errors.password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setErrors((x) => ({ ...x, password: undefined }));
+                  }}
+                />
+                {signin && (
+                  <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>
+                    Forgot password?
+                  </button>
+                )}
+                {!signin && (
+                  <>
+                    <Input
+                      label="Confirm password"
+                      type="password"
+                      placeholder="Confirm your password"
+                      value={confirm}
+                      autoComplete="new-password"
+                      error={errors.confirm}
+                      onChange={(e) => {
+                        setConfirm(e.target.value);
+                        setErrors((x) => ({ ...x, confirm: undefined }));
+                      }}
+                    />
+                    {/* Optional — leave blank to skip. */}
+                    <PhoneField value={phone} onChange={setPhone} />
+                  </>
+                )}
+                <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>
+                  Continue
+                </Button>
+              </form>
+            )}
+            {view === 'code' && (
+              <div className={styles.code}>
+                <CodeStep email={email.trim()} onChangeEmail={() => setStage('email')} onVerified={verified} />
+              </div>
+            )}
+            {view === 'done' && (
+              <div className={styles.done} role="status">
+                <span className={styles.check}>
+                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      className={styles.tick}
+                      d="M5 12.5l4.5 4.5L19 7.5"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      pathLength={1}
+                    />
+                  </svg>
+                </span>
+                <TextReveal
+                  as="h2"
+                  className={styles.title}
+                  text={signin ? `Welcome back, ${nameFromEmail(email)}.` : `Account created${first ? `, ${first}` : ''}.`}
+                  delay={200}
+                />
+                <TextReveal
+                  className={styles.sub}
+                  text={signin ? 'Taking you home…' : 'A few quick questions so I know who I’m talking to.'}
+                  delay={500}
+                />
+              </div>
+            )}
+          </>
         )}
-        {stage === 'code' && (
-          <div key="code" className={styles.stage}>
-            <CodeStep email={email.trim()} onChangeEmail={() => setStage('form')} onVerified={verified} />
-          </div>
-        )}
-        {stage === 'forgot' && <ForgotPassword initialEmail={email} onCancel={() => setStage('form')} onComplete={signIn} onHeader={setForgotHeader} />}
-        {stage === 'done' && (
-          <div key="done" className={styles.done} role="status">
-            <span className={styles.check}><svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path className={styles.tick} d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" pathLength={1} /></svg></span>
-            <h2 className={styles.title}>{signin ? `Welcome back, ${nameFromEmail(email)}.` : `Account created${first ? `, ${first}` : ''}.`}</h2>
-            <p className={styles.sub}>{signin ? 'Taking you home…' : 'A few quick questions so I know who I’m talking to.'}</p>
-          </div>
-        )}
-      </Sheet>
+      </div>
     </div>
   );
 }

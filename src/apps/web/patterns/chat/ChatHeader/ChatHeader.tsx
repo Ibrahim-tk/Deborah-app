@@ -1,48 +1,68 @@
 /**
- * @pattern ChatHeader — floating glass controls over the chat: Back (to Home) on the left;
- *          new-chat + active-profile avatar on the right (Ask Dibora per-profile switch).
- *          No bar background; content scrolls beneath.
+ * @pattern ChatHeader — flat desktop controls over the chat (no iOS glass).
+ *          Left: optional Back to Home. Right: Sign in / Sign up when guest; new-chat once the thread has messages.
  * @usedBy  M-2.1
- * @spec    docs/ux/F02-consultation.md#m-21-conversation (Layout 1) — design direction 2026-10-08
- * @xref    web: apps/web/patterns/chat/ChatHeader — not built
+ * @spec    docs/ux/F02-consultation.md#m-21-conversation (Layout 1)
+ * @xref    web: apps/web/patterns/chat/ChatHeader
  */
-import { Avatar, GlassButton, ScrollEdge } from '@web/ui';
+import { Button, ScrollEdge } from '@web/ui';
 import styles from './ChatHeader.module.css';
 
 export interface ChatHeaderProps {
-  onBack: () => void;
-  onNewChat: () => void;
-  /** Show new-chat only once the thread has messages (welcome shows profile alone). */
-  canStartNew: boolean;
-  /** Content has scrolled under the bar: show the iOS scroll-edge blur. */
+  onNewChat?: () => void;
+  /** Show new-chat only once the thread has messages. */
+  canStartNew?: boolean;
+  /** Content has scrolled under the bar: show the edge fade. */
   scrolled?: boolean;
-  /** Active profile avatar → M-6.1 switcher. */
-  profile?: { name: string; onPress: () => void };
+  /** No account yet — show Sign in / Sign up on the right. */
+  guest?: boolean;
+  onSignIn?: () => void;
+  onSignUp?: () => void;
+  /** Back to Home dashboard (M-2.0). */
+  onBack?: () => void;
 }
 
 export function ChatHeader({
-  onBack,
   onNewChat,
-  canStartNew,
+  canStartNew = false,
   scrolled = false,
-  profile,
+  guest = false,
+  onSignIn,
+  onSignUp,
+  onBack,
 }: ChatHeaderProps) {
   return (
     <>
       <ScrollEdge active={scrolled} />
       <header className={styles.root}>
-        <GlassButton icon="back" aria-label="Back to Home" onClick={onBack} />
+        {onBack ? (
+          <Button variant="ghost" size="sm" className={styles.action} leadingIcon="back" onClick={onBack} aria-label="Back to Home">
+            Back
+          </Button>
+        ) : (
+          <div className={styles.spacer} aria-hidden="true" />
+        )}
         <div className={styles.right}>
-          {canStartNew && <GlassButton icon="newChat" aria-label="New conversation" onClick={onNewChat} />}
-          {profile && (
-            <button
-              type="button"
-              className={styles.avatar}
-              onClick={profile.onPress}
-              aria-label={`Profile: ${profile.name || 'You'}`}
-            >
-              <Avatar initial={profile.name || 'You'} size={36} className={styles.avatarGlass} />
-            </button>
+          {guest ? (
+            <>
+              {onSignIn && (
+                <Button variant="ghost" size="sm" className={styles.action} onClick={onSignIn}>
+                  Sign in
+                </Button>
+              )}
+              {onSignUp && (
+                <Button variant="secondary" size="sm" className={styles.action} onClick={onSignUp}>
+                  Sign up
+                </Button>
+              )}
+            </>
+          ) : (
+            canStartNew &&
+            onNewChat && (
+              <Button variant="ghost" size="sm" className={styles.action} leadingIcon="newChat" onClick={onNewChat}>
+                New chat
+              </Button>
+            )
           )}
         </div>
       </header>

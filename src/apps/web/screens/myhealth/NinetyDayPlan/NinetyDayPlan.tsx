@@ -12,9 +12,10 @@ import { HEALING_PLAN_TITLE } from '@shared/copy/healingPlan';
 import { guardrailsData } from '@shared/data';
 import { careTeamFromNotes, profileHasMedicines, withConcerns } from '@shared/engine/planConcerns';
 import { selectActiveProfile, selectPlan90, selectProfileNotes, useAppStore, type AppState } from '@shared/store';
-import { Button, Header, useAlert } from '@web/ui';
+import { Button, useAlert } from '@web/ui';
 import { EmptyState } from '@web/patterns/health';
-import { useNav, useRoute } from '@web/navigation';
+import { DerivedPage } from '@web/patterns/shell';
+import { useNav } from '@web/navigation';
 import { PlanDocument } from './parts/PlanDocument';
 import styles from './NinetyDayPlan.module.css';
 
@@ -30,8 +31,7 @@ function selectCareTeam(s: AppState): string {
 }
 
 export default function NinetyDayPlan() {
-  const { pop, open, openAsk } = useNav();
-  const { previousTitle } = useRoute();
+  const { open, openAsk } = useNav();
   const alert = useAlert();
   const planKey = useAppStore(selectPlanKey);
   const profile = useAppStore(selectActiveProfile);
@@ -62,21 +62,18 @@ export default function NinetyDayPlan() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-7.3 · My Healing Plan">
-      <Header title={HEALING_PLAN_TITLE} onBack={pop} backLabel={previousTitle} />
-      <div className={styles.scroll}>
+    <DerivedPage title={HEALING_PLAN_TITLE} composerPlaceholder="Ask Deborah about your plan…">
+      <div className={styles.stack} data-xref="M-7.3 · My Healing Plan">
         {!plan ? (
-          <div className={styles.body}>
-            <EmptyState
-              icon="calendar"
-              text={advocate ? `What are your concerns for ${patientName}?` : 'Your healing plan appears after your first consultation with Deborah.'}
-              actionLabel="Ask Oracle"
-              actionIcon="deborah"
-              onAction={() => openAsk({ focus: true })}
-            />
-          </div>
+          <EmptyState
+            icon="calendar"
+            text={advocate ? `What are your concerns for ${patientName}?` : 'Your healing plan appears after your first consultation with Deborah.'}
+            actionLabel="Ask Oracle"
+            actionIcon="deborah"
+            onAction={() => openAsk({ focus: true })}
+          />
         ) : (
-          <div className={styles.body}>
+          <>
             <PlanDocument
               patientName={patientName}
               advocate={advocate}
@@ -90,11 +87,11 @@ export default function NinetyDayPlan() {
               onOpenExternal={(url, title) => open('M-2.7', { url, title })}
             />
             <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ mode: 'checkin' })}>
-              {advocate ? `Tell Deborah how ${patientName} is doing` : 'Tell Deborah how it’s going'}
+              {advocate ? `Tell Oracle how ${patientName} is doing` : 'Tell Oracle how it’s going'}
             </Button>
-          </div>
+          </>
         )}
       </div>
-    </div>
+    </DerivedPage>
   );
 }

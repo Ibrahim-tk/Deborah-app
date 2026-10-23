@@ -1,17 +1,13 @@
-.root { display: flex; flex-direction: column; height: 100%; background: transparent; }
-
-.body {
-  composes: body from '../../../styles/masterDetail.module.css';
-  padding-bottom: var(--space-4);
+.stack {
+  display: grid;
+  gap: var(--space-4);
+  padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
 }
-.listPane { composes: listPane from '../../../styles/masterDetail.module.css'; }
-.detailPane { composes: detailPane from '../../../styles/masterDetail.module.css'; }
-.paneEmpty { composes: paneEmpty from '../../../styles/masterDetail.module.css'; }
-.paneLoading { composes: paneLoading from '../../../styles/masterDetail.module.css'; }
 
-.top { display: grid; gap: var(--space-3); padding-inline: var(--margin-screen); }
-.skeleton { display: grid; gap: var(--space-4); padding: var(--space-2) var(--margin-screen); }
+.paneLoading {
+  composes: paneLoading from '../../../styles/masterDetail.module.css';
+}
+
+.skeleton { display: grid; gap: var(--space-4); }
 .skeletonRow { display: flex; align-items: center; gap: var(--space-3); }
 .skeletonText { flex: 1; display: grid; gap: var(--space-2); }
-/* Pinned primary action above the tab bar (My Uploads only). */
-.footer { flex: none; padding: var(--space-3) var(--margin-screen) calc(var(--tabbar-space) + var(--space-2)); }

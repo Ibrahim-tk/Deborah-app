@@ -34,8 +34,10 @@ Web mounts the copied Navigator inside `WebApp` (BrowserFrame or full-bleed), wr
 | `L-document` | ~720–800px | Plan, content, About, details |
 | `L-settings` | ~560–640px | Account tree, profiles |
 | `L-onboarding` | ~560px | Welcome, Consent, HealthBasics steps |
-| `L-form-flow` | ~560–720px; plan cards 2-col inside modal | Plans, booking, labs |
-| `L-modal` | Centered dialog (~800px) over scrim — sheets **and** modal layers | Former sheets + Choose plan / Create account / Confirm labs / Policy |
+| `L-form-flow` | ~560–720px; plan cards 2-col | Plans, booking, labs |
+| `L-derived` | Push + `DerivedPage` (serif title, Back, docked composer) | Former L-modal module screens (notes, visit log/brief, labs confirm/add, create account, add member, edit health, upload, review facts, Choose plan, Legal, PDF preview, …) |
+| `L-modal` | Centered dialog (~800px) over scrim | Shop **M-2.7**, PolicyUpdate **M-2.15** only |
+| `L-sheet` | Centered dialog (short gates) | Free limit, profile switcher, follow-up opt-in, GuestAuth, payment, and other short gates — not full module screens |
 | `L-master-detail` | List ~400px + detail pane ≥960px (`useWideSplit`) | Records (labs), Documents (uploads), Family profiles |
 
 ## Parity rule

@@ -1,4 +1,24 @@
-.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); } /* Aura + GradientShift paint the backdrop, as on Home */
+.root { position: relative; isolation: isolate; display: flex; flex-direction: column; height: 100%; background: transparent; } /* Shell mist shows through */
+
+/* Dashboard enter: chat chrome + empty start rise in after mist. */
+.root > *:nth-child(1) { animation: chat-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.28s both; }
+.root[data-start] .greetingWrap { animation: chat-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both; }
+.root[data-start] .emptyCluster > :nth-child(2) { animation: chat-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; }
+.root[data-start] .emptyCluster > :nth-child(3) { animation: chat-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.68s both; }
+.root:not([data-start]) .bottom { animation: chat-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both; }
+@keyframes chat-rise {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .root > *:nth-child(1),
+  .root[data-start] .greetingWrap,
+  .root[data-start] .emptyCluster > :nth-child(2),
+  .root[data-start] .emptyCluster > :nth-child(3),
+  .root:not([data-start]) .bottom {
+    animation: none;
+  }
+}
 
 .scroll {
   flex: 1;
@@ -20,8 +40,45 @@
   padding: calc(var(--safe-top) + 64px) var(--margin-screen) var(--space-6);
 }
 .cta { display: grid; }
-/* Empty chat: the greeting (orb + question) sits in the optical middle of the screen. */
+/* Empty chat: composer on the true vertical center; orb/heading above, suggestions below. */
 .column[data-empty] { min-height: 100%; align-content: center; }
+.column[data-empty][data-start] { align-content: stretch; }
+.stack { display: contents; }
+.emptyCluster {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  gap: var(--space-6);
+  width: 100%;
+  min-height: 100%;
+}
+/* Greeting sits on the bottom of the upper free space; suggestions on the top of the lower. */
+.column[data-start] .greetingWrap {
+  align-self: end;
+  margin-top: calc(var(--space-8) * -1);
+  margin-bottom: calc(var(--space-6) * -1);
+}
+.column[data-start] .emptyCluster > :last-child { align-self: start; }
+/* Incomplete intake: fixed bottom-right message over the chat stage. */
+.intakeOverlay {
+  position: absolute;
+  right: var(--margin-screen);
+  bottom: calc(var(--tabbar-space) + var(--space-4));
+  z-index: 5;
+  width: min(320px, calc(100% - (var(--margin-screen) * 2)));
+  pointer-events: none;
+}
+.intakeOverlayCard {
+  pointer-events: auto;
+  min-height: 52px;
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in srgb, var(--purple-50) 45%, var(--white));
+  box-shadow: var(--shadow-float-sm);
+}
+.root[data-start] .scroll {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.root[data-start] .bottom:empty { display: none; }
 
 .bottom {
   position: relative;
@@ -30,7 +87,7 @@
   gap: var(--space-3);
   width: min(100%, 720px);
   margin-inline: auto;
-  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) - var(--space-2));
+  padding: var(--space-2) var(--margin-screen) calc(var(--tabbar-space) + var(--space-4));
   /* No tint: the backdrop runs unbroken behind the composer (a canvas wash read as a band). */
 }
 .bench { display: grid; gap: var(--space-2); padding: var(--space-3); border: 1px dashed var(--color-border-control); border-radius: var(--radius-lg); }
@@ -51,3 +108,19 @@
 
 /* Sent photos + optional text, stacked on the right (design 2026-10-21). */
 .sentGroup { display: grid; gap: var(--space-1); justify-items: end; }
+
+/* Side preview (artifact-style, 2026-10-23): chat column shifts left, note pane on the right. */
+.root { transition: padding-right 320ms var(--ease-out); }
+.root[data-preview] { padding-right: max(60%, 480px); }
+.preview {
+  position: absolute; z-index: 6; top: var(--space-3); right: var(--space-3); bottom: var(--space-3);
+  width: calc(max(60%, 480px) - var(--space-3));
+  display: flex; flex-direction: column; min-height: 0;
+  border-radius: var(--radius-card); background: var(--color-canvas);
+  box-shadow: inset 0 0 0 1px var(--surface-border), var(--shadow-float-md);
+  animation: preview-in 320ms var(--ease-out) both;
+}
+.previewBar { flex: none; display: flex; justify-content: flex-end; padding: var(--space-2) var(--space-2) 0; }
+.previewBody { flex: 1; min-height: 0; overflow-y: auto; }
+@keyframes preview-in { from { opacity: 0; transform: translateX(24px); } }
+@media (prefers-reduced-motion: reduce) { .root { transition: none; } .preview { animation: none; } }

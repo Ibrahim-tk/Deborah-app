@@ -34,4 +34,6 @@
 }
 .note > svg { flex: none; margin-top: 2px; }
 /* A little thinner than the default 48–52 pt primary (design 2026-10-21); still a 44 pt tap target. */
-.save { min-height: 44px; padding-top: var(--space-2); padding-bottom: var(--space-2); }
+/* Small CTA, bottom-right (same size as Book Consultation). */
+.save { justify-self: end; align-self: end; }
+.actions { display: flex; justify-content: flex-end; }

@@ -489,6 +489,8 @@ export interface VisitBriefContent {
   title?: string;
   /** Who she is seeing; typed on M-9.7 (design 2026-10-20) and printed in the header. */
   providerName?: string;
+  /** Provider's specialty label (e.g. "Gynecology"), chosen next to the name. */
+  providerSpecialty?: string;
   chiefComplaint: string;
   clinicalContext: string;
   labs: VisitBriefLab[];

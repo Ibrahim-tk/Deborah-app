@@ -1,0 +1,141 @@
+@font-face {
+  font-family: 'Deborah Cormorant';
+  src: url('./assets/CormorantGaramond-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Scoped to these components; no reset or styling of the host application's body. */
+:where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer) {
+  --deborah-ink: #35233f;
+  --deborah-plum: #694080;
+  --deborah-deep: #50305f;
+  --deborah-muted: #76617f;
+  --deborah-surface: #fcf8fc;
+  --deborah-serif: 'Deborah Cormorant', Georgia, serif;
+  --deborah-gutter: clamp(24px, 8.37vw, 160px);
+  color: var(--deborah-ink);
+  font-family: var(--deborah-serif);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+:where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer),
+:where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer) * { box-sizing: border-box; }
+:where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer) a { color: inherit; text-decoration: none; }
+:where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer) ::selection { background: #ddc4e5; color: #35233f; }
+:where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer) :focus-visible { outline: 2px solid #704587; outline-offset: 6px; }
+.deborah-page { background: var(--deborah-surface); }
+.deborah-page main { margin: 0; }
+.deborah-header { position: relative; z-index: 10; background: #fcf8fc; }
+.deborah-header__inner { min-height: 90px; padding-inline: var(--deborah-gutter); display: flex; align-items: center; gap: 48px; max-width: 2000px; margin-inline: auto; }
+.deborah-brand { display: inline-flex; align-items: center; flex-shrink: 0; gap: 16px; font-size: 38px; line-height: 1; letter-spacing: -0.035em; }
+.deborah-brand__mark { width: 49px; height: 54px; flex-shrink: 0; display: block; background-repeat: no-repeat; background-size: 1672px 941px; background-position: -138px -21px; }
+.deborah-brand__custom { width: 49px; height: 54px; object-fit: contain; }
+.deborah-navigation { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.deborah-navigation__links { display: flex; align-items: center; justify-content: center; flex: 1; gap: clamp(22px, 2.4vw, 42px); list-style: none; margin: 0; padding: 0; }
+.deborah-navigation a { font-size: 21px; white-space: nowrap; }
+.deborah-navigation__links a { display: inline-block; padding-block: 15px; position: relative; }
+.deborah-navigation__links a::after { content: ''; position: absolute; height: 1px; background: currentColor; inset: auto 0 3px; opacity: 0; }
+.deborah-navigation__links a[aria-current='page']::after, .deborah-navigation__links a:hover::after { opacity: 1; }
+.deborah-navigation__actions { display: flex; align-items: center; gap: 40px; }
+.deborah-login:hover { text-decoration: underline; text-underline-offset: 6px; }
+.deborah-button { display: inline-flex; justify-content: center; align-items: center; gap: 18px; min-height: 57px; padding: 12px 34px; border-radius: 999px; color: #fff !important; background: var(--deborah-plum); font-size: 21px; line-height: 1.25; transition: background-color 180ms ease, box-shadow 180ms ease; }
+.deborah-button:hover { background: var(--deborah-deep); box-shadow: 0 5px 18px #35233f1c; }
+.deborah-button svg { width: 24px; height: 24px; flex-shrink: 0; }
+.deborah-menu-toggle { display: none; }
+.deborah-hero { position: relative; isolation: isolate; overflow: hidden; background: #f8eff8; min-height: min(900px, calc(100svh - 90px)); }
+.deborah-hero__landscape { position: absolute; z-index: -2; top: -90px; left: 0; width: 100%; height: calc(100% + 90px); object-fit: cover; object-position: center center; }
+.deborah-hero__wash { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, #fcf8fc22, transparent 64%); }
+.deborah-hero__inner { max-width: 2000px; margin-inline: auto; padding: clamp(72px, 6.76vw, 130px) var(--deborah-gutter) 150px; }
+.deborah-hero__content { max-width: 650px; }
+.deborah-portrait { display: block; width: 96px; height: 96px; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 20px #50305f17; }
+.deborah-portrait--reference { background-repeat: no-repeat; background-size: 1672px 941px; background-position: -140px -203px; }
+.deborah-eyebrow { margin: 23px 0 22px; font-family: Arial, sans-serif; font-size: 14px; letter-spacing: 0.17em; line-height: 1.6; text-transform: uppercase; color: var(--deborah-muted); }
+.deborah-hero h1 { margin: 0 0 10px; font-size: clamp(58px, 5.05vw, 88px); line-height: 1.08; font-weight: 400; letter-spacing: -0.035em; text-wrap: balance; }
+.deborah-hero__description { max-width: 620px; margin: 0; font-size: clamp(32px, 2.57vw, 44px); line-height: 1.18; letter-spacing: -0.018em; }
+.deborah-hero__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 42px; margin-top: 32px; }
+.deborah-button--hero { min-height: 63px; padding-inline: 42px; }
+.deborah-text-link { font-size: 21px; padding: 12px 0 9px; border-bottom: 1px solid currentColor; transition: color 180ms ease; }
+.deborah-text-link:hover { color: var(--deborah-plum); }
+.deborah-footer { background: var(--deborah-surface); border-top: 1px solid #69408014; }
+.deborah-footer__inner { max-width: 2000px; margin-inline: auto; min-height: 128px; padding: 28px var(--deborah-gutter); display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.deborah-brand--small { font-size: 29px; gap: 10px; }
+.deborah-brand--small .deborah-brand__mark { width: 36px; height: 40px; background-size: 1238.52px 697.04px; background-position: -102.22px -15.56px; }
+.deborah-brand--small .deborah-brand__custom { width: 36px; height: 40px; }
+.deborah-footer__copyright { color: var(--deborah-muted); font: 12px/1.7 Arial, sans-serif; margin: 0; }
+.deborah-footer ul { list-style: none; display: flex; flex-wrap: wrap; gap: 24px; margin: 0; padding: 0; }
+.deborah-footer nav a { display: inline-block; padding-block: 12px; font-size: 18px; }
+.deborah-footer nav a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.deborah-skip-link { position: absolute; z-index: 30; left: 20px; top: 12px; padding: 12px 20px; background: white; border: 1px solid currentColor; transform: translateY(-200%); }
+.deborah-skip-link:focus { transform: translateY(0); }
+
+@media (min-width: 1100px) and (max-width: 1399px) {
+  .deborah-header__inner { gap: 28px; padding-inline: 5vw; }
+  .deborah-navigation { gap: 24px; }
+  .deborah-navigation__links { gap: 23px; }
+  .deborah-navigation__actions { gap: 25px; }
+  .deborah-brand { font-size: 34px; gap: 10px; }
+  .deborah-navigation a { font-size: 19px; }
+  .deborah-navigation .deborah-button { padding-inline: 26px; }
+  .deborah-hero__content { max-width: 560px; }
+  .deborah-hero__description { max-width: 540px; }
+}
+@media (max-width: 1099px) {
+  .deborah-header__inner { min-height: 80px; justify-content: space-between; gap: 20px; }
+  .deborah-brand { font-size: 34px; gap: 10px; }
+  .deborah-menu-toggle { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 0 8px 12px; border: 0; background: transparent; color: var(--deborah-ink); font: 20px var(--deborah-serif); cursor: pointer; }
+  .deborah-menu-toggle svg { width: 24px; height: 24px; }
+  .deborah-navigation { display: none; position: absolute; left: 0; right: 0; top: 100%; max-height: calc(100svh - 80px); overflow-y: auto; padding: 22px var(--deborah-gutter) 30px; background: var(--deborah-surface); box-shadow: 0 16px 24px #35233f12; }
+  .deborah-navigation[data-open='true'] { display: block; }
+  .deborah-navigation__links { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .deborah-navigation__links a { display: block; padding-block: 13px; font-size: 24px; }
+  .deborah-navigation__links a::after { display: none; }
+  .deborah-navigation__links a[aria-current='page'] { text-decoration: underline; text-underline-offset: 6px; }
+  .deborah-navigation__actions { margin-top: 22px; justify-content: space-between; gap: 20px; }
+  .deborah-hero { min-height: 820px; }
+  .deborah-hero__landscape { top: -80px; height: calc(100% + 80px); object-position: 60% center; }
+  .deborah-hero__wash { background: linear-gradient(90deg, #fcf8fcf2 0%, #fcf8fcd9 45%, #fcf8fc00 100%); }
+  .deborah-hero__inner { padding-block: 75px 140px; }
+  .deborah-hero__content { max-width: 570px; }
+  .deborah-hero h1 { font-size: 70px; }
+  .deborah-hero__description { font-size: 38px; max-width: 550px; }
+  .deborah-footer__inner { flex-wrap: wrap; }
+}
+@media (max-width: 599px) {
+  :where(.deborah-page, .deborah-header, .deborah-hero, .deborah-footer) { --deborah-gutter: 24px; }
+  .deborah-header__inner { min-height: 76px; }
+  .deborah-brand { font-size: 32px; }
+  .deborah-brand__mark { width: 36px; height: 40px; background-size: 1238.52px 697.04px; background-position: -102.22px -15.56px; }
+  .deborah-brand__custom { width: 36px; height: 40px; }
+  .deborah-navigation { max-height: calc(100svh - 76px); }
+  .deborah-hero { min-height: 830px; }
+  .deborah-hero__landscape { top: auto; bottom: 0; height: 540px; object-position: 76% bottom; }
+  .deborah-hero__wash { background: linear-gradient(180deg, #fcf8fc 0%, #fcf8fc 37%, #fcf8fcf0 48%, #fcf8fc8c 62%, #fcf8fc00 78%); }
+  .deborah-hero__inner { padding-block: 40px 290px; }
+  .deborah-portrait { width: 72px; height: 72px; }
+  .deborah-portrait--reference { background-size: 1254px 705.75px; background-position: -105px -152.25px; }
+  .deborah-eyebrow { margin-block: 20px 18px; font-size: 11px; letter-spacing: 0.14em; }
+  .deborah-hero h1 { max-width: 380px; font-size: clamp(42px, 10.8vw, 62px); line-height: 1.05; margin-bottom: 16px; }
+  .deborah-hero__description { font-size: clamp(28px, 7.1vw, 34px); line-height: 1.2; max-width: 430px; }
+  .deborah-hero__actions { gap: 26px; margin-top: 27px; }
+  .deborah-button--hero { min-height: 55px; padding-inline: 26px; font-size: 20px; gap: 15px; }
+  .deborah-text-link { font-size: 20px; }
+  .deborah-footer__inner { flex-direction: column; align-items: flex-start; gap: 12px; padding-block: 30px; }
+  .deborah-footer__copyright { order: 3; }
+  .deborah-footer ul { gap: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .deborah-button, .deborah-text-link { transition: none; }
+}
+
+/* Preserve the reference’s desktop rhythm while allowing normal mobile wrapping. */
+@media (min-width: 1100px) {
+  .deborah-eyebrow { margin-top: 19px; margin-bottom: 14px; }
+  .deborah-hero h1 { margin-bottom: 4px; }
+  .deborah-hero__actions { margin-top: 28px; }
+  .deborah-button--hero { padding-inline: 38px; }
+}
+@media (min-width: 1400px) {
+  .deborah-reference-line { display: block; }
+}

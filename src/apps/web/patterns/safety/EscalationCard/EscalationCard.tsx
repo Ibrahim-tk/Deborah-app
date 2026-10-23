@@ -45,16 +45,14 @@ export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: E
 
   return (
     <>
-      {/* Branded hero card: heading + CTA left, Deborah cut-out right (bottom dissolves into the card). */}
+      {/* Booking banner (designer, 2026-10-23): soft gradient, serif heading + line + CTA left, Deborah right. */}
       <div className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.heroTitle}>Talk with Deborah directly</p>
-          <Button size="sm" className={styles.cta} onClick={request}>Book Consultation</Button>
+          <p className={styles.heroBody}>Get personalized support, ask questions, or discuss your health goals.</p>
+          <Button className={styles.cta} onClick={request}>Book Consultation</Button>
         </div>
-        <div className={styles.portraitStack} aria-hidden>
-          <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" />
-          <img className={styles.portraitBlur} src="/images/deborah/cutout.png" alt="" />
-        </div>
+        <img className={styles.portrait} src="/images/home/deborah-book.webp" alt="" aria-hidden />
       </div>
       <BottomSheet open={Boolean(open)} onClose={done}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>

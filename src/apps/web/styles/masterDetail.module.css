@@ -31,7 +31,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid var(--color-border-hairline, var(--purple-100));
+  border-left: 1px solid color-mix(in srgb, var(--color-border-hairline, var(--purple-100)) 45%, transparent);
   background: var(--color-canvas);
 }
 

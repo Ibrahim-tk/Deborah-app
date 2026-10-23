@@ -7,6 +7,7 @@ import { DeborahBlob } from '../DeborahBlob';
 import {
   StethoscopeIcon,
   Menu01Icon,
+  SidebarLeftIcon,
   Notification03Icon,
   Settings01Icon,
   AiSearch02Icon,
@@ -70,6 +71,7 @@ const map = {
   chat: BubbleChatIcon,
   health: FavouriteIcon,
   account: UserIcon,
+  sidebar: SidebarLeftIcon,
   mic: Mic01Icon,
   bell: Notification03Icon,
   settings: Settings01Icon,

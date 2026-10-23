@@ -10,6 +10,7 @@
 import { type CSSProperties } from 'react';
 import { PillDescribeField } from '../PillDescribeField';
 import type { FullChoiceOption, FullChoicePillsProps } from '../FullChoicePills/FullChoicePills';
+import { Icon } from '@web/ui';
 import styles from './FullChoicePillsGrid.module.css';
 
 export type { FullChoiceOption };
@@ -78,6 +79,7 @@ export function FullChoicePillsGrid({
                   }}
                 >
                   <span className={styles.label}>{o.label}</span>
+                <span className={styles.check} aria-hidden>{selected === o.id && <Icon name="check" size={14} strokeWidth={2.5} />}</span>
                 </button>
               )}
             </div>

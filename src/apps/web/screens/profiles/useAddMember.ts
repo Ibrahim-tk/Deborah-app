@@ -18,7 +18,7 @@ export function maxProfilesFor(plan: string): number {
 export const MAX_PROFILES = 4;
 
 export function useAddMember() {
-  const { presentModal, presentSheet, dismissSheet } = useNav();
+  const { open, presentSheet, dismissSheet } = useNav();
   const gate = useAccountGate();
   const canAdd = useAppStore(selectCanAddProfile);
   const plan = useAppStore((s) => s.plan);
@@ -31,11 +31,11 @@ export function useAddMember() {
       if (addState === 'full') return;
       if (fromSheet) dismissSheet();
       gate('family', () => {
-        if (addState === 'available') presentModal('M-6.2');
+        if (addState === 'available') open('M-6.2');
         else presentSheet('M-6.3');
       });
     },
-    [addState, dismissSheet, gate, presentModal, presentSheet],
+    [addState, dismissSheet, gate, open, presentSheet],
   );
 
   return { addState, add };

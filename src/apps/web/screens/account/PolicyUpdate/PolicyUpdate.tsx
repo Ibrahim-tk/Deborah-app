@@ -6,7 +6,6 @@
  */
 import { consentDoc } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Aura } from '@web/ui';
 import { PolicyUpdateConsent } from '@web/patterns/widgets';
 import { useNav } from '@web/navigation';
 import styles from './PolicyUpdate.module.css';
@@ -15,7 +14,6 @@ export default function PolicyUpdate() {
   const { open, dismissModal } = useNav();
   return (
     <div className={styles.root} data-xref="M-2.15 · Terms updated">
-      <Aura />
       <PolicyUpdateConsent
         version={consentDoc.version}
         onReviewTerms={() => open('M-10.5', { section: 'terms' })}

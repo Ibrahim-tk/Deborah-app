@@ -5,9 +5,9 @@
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* Bottom melt into PurpleDockBloom only — top mask was washing the greeting. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 56px), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 56px), transparent);
+  /* Clean fade (no blur) under the header band; greeting sits below it at rest. Bottom melts into the dock. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(var(--safe-top) + 8px), #000 calc(var(--safe-top) + var(--header-h)), #000 calc(100% - 56px), transparent);
+  mask-image: linear-gradient(to bottom, transparent calc(var(--safe-top) + 8px), #000 calc(var(--safe-top) + var(--header-h)), #000 calc(100% - 56px), transparent);
   padding: calc(var(--safe-top) + var(--header-h) + var(--space-2)) var(--margin-screen) calc(var(--space-8) + 64px);
 }
 
@@ -40,6 +40,12 @@
   text-wrap: balance;
   color: var(--color-ink);
 }
+.support {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}
 
 .shop button { outline: 1px solid rgb(255 255 255 / 0.95); outline-offset: -1px; }
 .shop button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
@@ -53,10 +59,23 @@
   position: relative;
   z-index: 4;
   flex: none;
-  padding: var(--space-4) var(--margin-screen) calc(var(--safe-bottom) + var(--space-1));
+  padding: var(--space-4) var(--margin-screen) calc(var(--safe-bottom) + var(--space-4));
   margin-top: calc(var(--space-6) * -1);
 }
 .dockInner {
   width: min(100%, 720px);
   margin-inline: auto;
 }
+
+
+/* Floating intake nudge, bottom-right of the stage (above the dock). */
+.intakeFloat {
+  position: absolute;
+  z-index: 6;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  width: min(300px, calc(100% - 2 * var(--space-5)));
+}
+
+/* Bell: more room from the stage's top edge (profile lives in the sidebar). */
+.top { padding-top: var(--space-3); }

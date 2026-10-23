@@ -36,15 +36,18 @@ function iconForKey(key: string): IconName {
 export function SuggestionCarousel({
   items,
   label = 'Start with Deborah',
+  layout = 'rail',
 }: {
   items: SuggestionCard[];
   label?: string;
+  /** `essentials` = 3-up grid on desktop (home dashboard). */
+  layout?: 'rail' | 'essentials';
 }) {
   if (!items.length) return null;
   return (
     <section className={styles.section} aria-labelledby="home-suggest-rail">
       <h2 id="home-suggest-rail" className={styles.label}>{label}</h2>
-      <ul className={styles.rail}>
+      <ul className={layout === 'essentials' ? styles.essentials : styles.rail}>
         {items.map((item, index) => {
           let spec = item.tone && item.artifact
             ? { tone: item.tone, artifact: item.artifact }
@@ -56,10 +59,9 @@ export function SuggestionCarousel({
           const icon: IconName =
             rawIcon === 'upload' || rawIcon === 'labs' ? 'file'
               : rawIcon === 'note' && /sleep|food|stress|habit/i.test(item.key + item.title) ? 'moon'
-                : rawIcon === 'calendar' ? 'moon'
-                  : rawIcon;
+                : rawIcon;
           return (
-            <li key={item.key} className={styles.item}>
+            <li key={item.key} className={layout === 'essentials' ? styles.essentialsItem : styles.item}>
               <button
                 type="button"
                 className={styles.card}

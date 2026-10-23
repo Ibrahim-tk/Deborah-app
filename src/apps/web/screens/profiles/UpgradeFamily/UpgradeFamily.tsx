@@ -11,12 +11,12 @@ import { useNav } from '@web/navigation';
 import styles from './UpgradeFamily.module.css';
 
 export default function UpgradeFamily() {
-  const { dismissSheet, presentModal } = useNav();
+  const { dismissSheet, open } = useNav();
 
   const upgrade = () => {
     dismissSheet();
     // M-4.2 preselects Family; returnTo makes M-4.5 lead back into M-6.2 on success.
-    presentModal('M-4.2', { preselect: 'family', returnTo: 'M-6.2' });
+    open('M-4.2', { preselect: 'family', returnTo: 'M-6.2' });
   };
 
   return (

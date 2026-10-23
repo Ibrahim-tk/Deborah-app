@@ -16,11 +16,11 @@ export interface StepBodyProps {
   step: Step;
   answers: Answers;
   set: (key: string, value: string) => void;
-  /** Answer and move on (choice rows, "None", profile tiles). Extra merges other keys in the same tick (e.g. expand type). */
+  /** Answer and move on. Unused by taps on web — every pick waits for Next. */
   advance: (value: string, extra?: Answers) => void;
 }
 
-export function StepBody({ step, answers, set, advance }: StepBodyProps) {
+export function StepBody({ step, answers, set }: StepBodyProps) {
   const value = answers[step.key] ?? '';
   // Chips add or remove a name in the comma list, so typing and tapping mix freely.
   const picked = list(value, step.none);
@@ -48,7 +48,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
         </>
       );
     case 'profileFor':
-      return <ProfileForStep value={value} onPick={advance} />;
+      return <ProfileForStep value={value} onPick={(v) => set(step.key, v)} />;
     case 'choice': {
       const options = (step.choices ?? []).map((c) => ({ id: c.value, label: c.label }));
       const describeValue = step.describeValue;
@@ -84,7 +84,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
               onDescribeChange={describeKey ? (text) => set(describeKey, text) : undefined}
               onDescribeConfirm={
                 describeValue
-                  ? () => advance(describeValue)
+                  ? () => set(step.key, describeValue)
                   : undefined
               }
               onPick={(id) => {
@@ -101,7 +101,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
                 }
                 if (describeKey) set(describeKey, '');
                 if (expandKey) set(expandKey, '');
-                advance(id);
+                set(step.key, id);
               }}
             />
             {expanding && (
@@ -115,7 +115,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
                   selected={expandSelectedLabel ? [expandSelectedLabel] : undefined}
                   onPick={(_label, index) => {
                     const typeId = expandOpts[index]?.value;
-                    if (typeId) advance(value, { [expandKey!]: typeId });
+                    if (typeId) set(expandKey!, typeId);
                   }}
                 />
               </div>
@@ -134,7 +134,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
             onSubmit={(ids) => {
               const id = ids[0];
               if (!id) return;
-              advance(id);
+              set(step.key, id);
             }}
           />
         </div>
@@ -159,7 +159,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
             reasonPlaceholder={step.reasonPlaceholder ?? 'Reason'}
             showNone={false}
             onChange={(entries) => set(step.key, encodeNamedReasons(entries))}
-            onNone={() => advance(step.none ?? 'None')}
+            onNone={() => set(step.key, step.none ?? 'None')}
           />
         );
       }
@@ -217,7 +217,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
           noneSelected={value === step.none}
           onToggle={toggle}
           onAdd={(name) => set(step.key, step.single ? name : [...picked, name].join(', '))}
-          onNone={() => advance(step.none ?? '')}
+          onNone={() => set(step.key, step.none ?? '')}
         />
       );
   }

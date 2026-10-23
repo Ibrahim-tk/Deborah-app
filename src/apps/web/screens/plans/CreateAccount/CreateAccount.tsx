@@ -1,7 +1,7 @@
 /**
  * @screen  M-4.3 · Save your health history (create account / sign in)
  * @flow    F04 Free limit, plans & account (sign-in mode also from F01 M-1.2)
- * @presentation  modal (default) · bottom sheet when opened with `{ sheet: true }` (sign-in from Welcome)
+ * @presentation  push (DerivedPage) · bottom sheet when opened with `{ sheet: true }` (legacy)
  * @states  choose · Apple/Google system sheet · email · verification code · set password (creating only) · verifying
  *          · merge (signing in over a guest who already chatted: keep or discard this phone's conversations)
  * @entry   also from M-2.1's save-your-profile card (`returnTo: 'chat'`, optional `provider`), F01 step 4;
@@ -11,12 +11,14 @@
  * @spec    docs/ux/F04-plans-account.md#m-43--save-your-health-history-create-account--sign-in
  * @xref    web: W-4.3 (apps/web/screens/plans/CreateAccount) — not built
  */
-import { useState } from 'react';
+import { useId, useState } from 'react';
+import { consentDoc } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { Aura, Button, GradientShift, Header, IconButton, Input, Panel, Sheet, SocialButton } from '@web/ui';
+import { Button, Icon, Input, Panel, Sheet, SocialButton } from '@web/ui';
+import { DerivedPage } from '@web/patterns/shell';
 import { PhoneField, type PhoneValue } from '@web/patterns/widgets';
 import { useToast } from '@web/hooks/toast.store';
-import { useNav, useRoute, useScreenParams } from '@web/navigation';
+import { useNav, useScreenParams } from '@web/navigation';
 import { GATE_COPY, resumeGate, type GateReason } from '@web/hooks/useAccountGate';
 import { CodeStep } from './parts/CodeStep';
 import { MergeStep } from './parts/MergeStep';
@@ -39,10 +41,10 @@ export default function CreateAccount() {
     provider: Provider | 'email';
     reason: GateReason;
   }>();
-  const { canGoBack, previousTitle } = useRoute();
-  const { pop, dismissModal, dismissSheet, presentSheet, resetTo } = useNav();
+  const { pop, dismissSheet, presentSheet, resetTo } = useNav();
   const toast = useToast();
   const userName = useAppStore((s) => s.userName);
+  const consentId = useId();
   // The chat's save-your-profile card names the method up front (F01 step 4).
   const [step, setStep] = useState<Step>(startWith === 'email' ? 'email' : 'choose');
   const [provider, setProvider] = useState<Provider | null>(startWith && startWith !== 'email' ? startWith : null);
@@ -51,14 +53,26 @@ export default function CreateAccount() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState<string>();
   const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
+  const [agreed, setAgreed] = useState(false);
   const [whyOpen, setWhyOpen] = useState(false);
   const [mode, setMode] = useState(initialMode);
   const [switchedToCreate, setSwitchedToCreate] = useState(false);
   const [pendingAddress, setPendingAddress] = useState('');
   const signin = mode === 'signin';
+  const fromChat = returnTo === 'chat';
   // A guest who already chatted has history on this phone that an existing account doesn't know about.
   const guestHistory = useAppStore((s) => !s.accountId && Object.values(s.conversations.byId).some((c) => c.messages.length > 0));
   const handle = (userName || 'maria').toLowerCase().replace(/\s+/g, '.');
+
+  const closeAuth = () => {
+    if (sheet) dismissSheet();
+    else pop();
+  };
+
+  const stepBack = () => {
+    if (step === 'choose') return closeAuth();
+    setStep(step === 'password' ? 'code' : step === 'code' ? 'email' : 'choose');
+  };
 
   // No real auth: success only writes the store (docs/ux/F04 M-4.3 acceptance).
   const succeed = (address: string) => {
@@ -71,8 +85,20 @@ export default function CreateAccount() {
     if (signin) {
       s.restoreAccount(address);
       if (reason) resumeGate();
-      resetTo('main', 'M-2.0');
+      closeAuth();
+      resetTo('main', 'M-2.1');
+      // Flush a message held by the guest send gate (or free-limit hold).
+      if (useAppStore.getState().heldMessage) useAppStore.getState().releaseHeld();
       toast(`Welcome back, ${useAppStore.getState().userName}`);
+    } else if (fromChat) {
+      // Guest-chat onboarding: account + consent, then name → HealthBasics → resume chat.
+      s.createAccount(address);
+      if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
+      s.acceptConsent(consentDoc.version);
+      s.acceptTerms();
+      closeAuth();
+      toast('Your profile is saved');
+      presentSheet('M-1.11');
     } else if (sheet) {
       // Guest save from Home (avatar, save card) or a hard gate: stay where she was.
       s.createAccount(address);
@@ -80,14 +106,6 @@ export default function CreateAccount() {
       dismissSheet();
       toast('Your profile is saved');
       if (reason) resumeGate();
-    } else if (returnTo === 'chat') {
-      s.createAccount(address);
-      if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
-      if (sheet) dismissSheet();
-      else dismissModal();
-      toast('Your profile is saved');
-      // The notification ask follows saving, never at launch.
-      if (s.notificationPermission === 'unknown') presentSheet('M-2.8');
     } else {
       s.createAccount(address);
       if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
@@ -106,7 +124,6 @@ export default function CreateAccount() {
     setStep('code');
   };
 
-  const fromChat = returnTo === 'chat';
   const title = step === 'merge' ? 'Keep this phone’s conversations?' : signin ? 'Welcome back' : switchedToCreate ? 'Create your account' : fromChat || sheet ? 'Save your profile' : 'Save your health history';
   const subtitle = step === 'merge'
     ? `You chatted with Deborah before signing in. Add those conversations to ${pendingAddress}?`
@@ -169,12 +186,32 @@ export default function CreateAccount() {
         <form className={styles.group} onSubmit={(e) => {
           e.preventDefault();
           if (!SKIP_AUTH_VALIDATION && password.length < 8) return setPasswordError('Use at least 8 characters.');
+          if (fromChat && !SKIP_AUTH_VALIDATION && !agreed) return;
           setPasswordError(undefined);
           succeed(email.trim());
         }} noValidate>
           <Input label="Set a password" type="password" autoComplete="new-password" hint="At least 8 characters" autoFocus value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} />
           <PhoneField value={phone} onChange={setPhone} />
-          <Button type="submit" fullWidth>Done</Button>
+          {fromChat && (
+            <div className={styles.legal}>
+              <input
+                id={consentId}
+                type="checkbox"
+                className={styles.legalInput}
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+              />
+              <label htmlFor={consentId} className={styles.legalRow}>
+                <span className={styles.legalBox} data-checked={agreed || undefined} aria-hidden="true">
+                  {agreed && <Icon name="check" size={12} strokeWidth={2.5} />}
+                </span>
+                <span className={styles.legalText}>
+                  I agree to the terms of use and Privacy Notice, and to Deborah’s care disclaimer.
+                </span>
+              </label>
+            </div>
+          )}
+          <Button type="submit" fullWidth disabled={fromChat && !SKIP_AUTH_VALIDATION && !agreed}>Done</Button>
         </form>
       )}
 
@@ -221,26 +258,12 @@ export default function CreateAccount() {
 
   return (
     <div className={styles.root} data-xref="M-4.3 · Create account">
-      <Aura />
-      <GradientShift />
-      <Header
-        transparent
-        onBack={canGoBack ? (step === 'choose' ? pop : () => setStep(step === 'password' ? 'code' : step === 'code' ? 'email' : 'choose')) : undefined}
-        backLabel={step === 'choose' ? previousTitle : 'Back'}
-        left={!canGoBack && step !== 'choose' ? <Button variant="link" onClick={() => setStep('choose')}>Back</Button> : undefined}
-        right={!canGoBack && <IconButton icon="close" label="Close" onClick={dismissModal} />}
-      />
-      <div className={styles.body}>
-        <div className={styles.intro}>
-          <h1 className={styles.title}>{title}</h1>
-          <p className={styles.why}>
-            {subtitle}
-          </p>
+      <DerivedPage contentWidth={560} title={title} composerPlaceholder="Ask Deborah about your account…" onBack={stepBack} showBack>
+        <div className={styles.body}>
+          <p className={styles.why}>{subtitle}</p>
+          {steps}
         </div>
-
-        {steps}
-      </div>
-
+      </DerivedPage>
       {providerSheet}
     </div>
   );

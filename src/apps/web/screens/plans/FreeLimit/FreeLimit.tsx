@@ -13,7 +13,7 @@ import { useNav } from '@web/navigation';
 import styles from './FreeLimit.module.css';
 
 export default function FreeLimit() {
-  const { dismissSheet, presentModal } = useNav();
+  const { dismissSheet, open } = useNav();
 
   // Once shown, the post-answer prompt is no longer pending.
   useEffect(() => useAppStore.getState().dismissLimit(), []);
@@ -27,7 +27,7 @@ export default function FreeLimit() {
               fullWidth
               onClick={() => {
                 dismissSheet();
-                presentModal('M-4.2');
+                open('M-4.2');
               }}
             >
               See plans
