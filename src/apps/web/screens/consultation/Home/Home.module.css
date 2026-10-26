@@ -17,7 +17,7 @@
   align-content: start;
   grid-auto-rows: max-content;
   gap: var(--space-5);
-  width: min(100%, 1120px);
+  width: min(100%, 720px); /* matches the composer (.dockInner) */
   margin-inline: auto;
 }
 
@@ -40,13 +40,6 @@
   text-wrap: balance;
   color: var(--color-ink);
 }
-.support {
-  margin: 0;
-  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
-  letter-spacing: -0.015em;
-  color: var(--color-ink-secondary);
-}
-
 .shop button { outline: 1px solid rgb(255 255 255 / 0.95); outline-offset: -1px; }
 .shop button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 

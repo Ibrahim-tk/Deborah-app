@@ -20,11 +20,13 @@ export interface ComboboxProps<T> {
   /** The control that opens the popup (rendered as the Base UI trigger). */
   trigger: ReactElement;
   searchPlaceholder?: string;
+  /** Show the search input at the top of the popup. */
+  searchable?: boolean;
   emptyText?: string;
   label: string;
 }
 
-export function Combobox<T>({ items, value, onValueChange, itemToString, itemKey, renderItem, trigger, searchPlaceholder = 'Search', emptyText = 'No results', label }: ComboboxProps<T>) {
+export function Combobox<T>({ items, value, onValueChange, itemToString, itemKey, renderItem, trigger, searchPlaceholder = 'Search', searchable = true, emptyText = 'No results', label }: ComboboxProps<T>) {
   return (
     <Base.Root
       items={items}
@@ -37,10 +39,12 @@ export function Combobox<T>({ items, value, onValueChange, itemToString, itemKey
       <Base.Portal container={document.getElementById(OVERLAY_HOST_ID)}>
         <Base.Positioner side="bottom" align="end" sideOffset={8} className={styles.positioner}>
           <Base.Popup className={styles.popup} aria-label={label}>
-            <label className={styles.search}>
-              <Icon name="search" size={18} />
-              <Base.Input className={styles.input} placeholder={searchPlaceholder} aria-label={searchPlaceholder} />
-            </label>
+            {searchable && (
+              <label className={styles.search}>
+                <Icon name="search" size={18} />
+                <Base.Input className={styles.input} placeholder={searchPlaceholder} aria-label={searchPlaceholder} />
+              </label>
+            )}
             <Base.Empty className={styles.empty}>{emptyText}</Base.Empty>
             <Base.List className={styles.list}>
               {(item: T) => (

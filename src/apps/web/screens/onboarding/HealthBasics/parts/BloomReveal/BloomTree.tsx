@@ -168,14 +168,18 @@ function pixels(image: HTMLImageElement) {
 export interface BloomTreeProps {
   /** 0..1; also supports reversing and interrupted step changes. */
   progress?: number;
+  /** Easing rate toward `progress` (per second); lower = slower growth / un-growth. */
+  rate?: number;
   className?: string;
   style?: CSSProperties;
 }
 
 /** Map: R = branch distance, G = blossom timing, B = wood mask, A = subject. */
-export default function BloomTree({ progress = 0, className, style }: BloomTreeProps) {
+export default function BloomTree({ progress = 0, rate = 7, className, style }: BloomTreeProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const target = useRef(0);
+  const speed = useRef(rate);
+  speed.current = rate;
   const wake = useRef<() => void>(() => {});
   const [failed, setFailed] = useState(false);
   const safeProgress = clamp(progress);
@@ -208,7 +212,7 @@ export default function BloomTree({ progress = 0, className, style }: BloomTreeP
       last = now;
       current = reduced.matches
         ? target.current
-        : current + (target.current - current) * (1 - Math.exp(-7 * dt));
+        : current + (target.current - current) * (1 - Math.exp(-speed.current * dt));
       if (Math.abs(current - target.current) < 0.0005) current = target.current;
       // A finite breeze follows each answer; roots stay fixed and the image settles exactly.
       const age = Math.min(1, Math.max(0, (now - breezeStart) / breezeDuration));

@@ -8,8 +8,8 @@
  *
  * Same template as the onboarding intake (M-1.8, design request 2026-10-20): living backdrop, the
  * flowering tree as progress (paced to this profile's step count), one question at a time.
- * Web: full window over the app (no sidebar). Text Back top-left (previous question, or leave) · Done top-right
- * (save and close). Picks wait for Next, as in onboarding.
+ * Web: full window over the app (no sidebar). Text Back top-left · Done (filled) top-right (save and close).
+ * Footer: Back left · Next/Save right. Picks wait for Next, as in onboarding.
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
@@ -111,7 +111,7 @@ export default function CompleteIntake() {
     <form className={`${template.root} ${styles.page}`} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
       <div className={styles.bar}>
         <Button type="button" variant="ghost" size="sm" leadingIcon="back" onClick={goBack}>Back</Button>
-        <Button type="button" variant="ghost" size="sm" onClick={close}>Done</Button>
+        <Button type="button" size="sm" onClick={close}>Done</Button>
       </div>
       <div className={template.layout}>
         <div className={template.main}>
@@ -127,6 +127,7 @@ export default function CompleteIntake() {
             <div className={template.footer}>
               {step && (
                 <div className={template.navRow}>
+                  <Button type="button" variant="ghost" onClick={goBack}>Back</Button>
                   <Button type="submit" disabled={!canContinue}>{last ? 'Save profile' : 'Next'}</Button>
                 </div>
               )}

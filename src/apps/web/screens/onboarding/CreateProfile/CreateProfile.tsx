@@ -19,6 +19,7 @@ import { loadScenario, useAppStore } from '@shared/store';
 import { cx } from '@shared/utils';
 import { Button, Input, TextReveal } from '@web/ui';
 import { PhoneField, type PhoneValue } from '@web/patterns/widgets';
+import { countryFor, isValidPhone, type CountryCode } from '@shared/utils/phone';
 import { useNav, useScreenParams } from '@web/navigation';
 import { CodeStep } from '@web/screens/plans/CreateAccount/parts/CodeStep';
 import { ForgotPassword } from './parts/ForgotPassword';
@@ -72,7 +73,7 @@ export default function CreateProfile() {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
-  const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string; phone?: string }>({});
 
   // Outgoing question fades up, then the next fades in.
   useEffect(() => {
@@ -94,9 +95,10 @@ export default function CreateProfile() {
       email: EMAIL_PATTERN.test(email.trim()) ? undefined : 'That email doesn’t look quite right.',
       password: signin || password.length >= MIN_LENGTH ? undefined : `Use at least ${MIN_LENGTH} characters.`,
       confirm: signin || password === confirm ? undefined : 'Those passwords don’t match.',
+      phone: signin || !phone.number.trim() || isValidPhone(countryFor(phone.country, phone.countryCode).iso as CountryCode, phone.number) ? undefined : 'Enter a valid phone number for that country.',
     };
     setErrors(next);
-    if (!next.email && !next.password && !next.confirm) setStage('code');
+    if (!next.email && !next.password && !next.confirm && !next.phone) setStage('code');
   };
 
   // Returning: restore the account; onboarding and the in-chat intake are already behind her.
@@ -144,7 +146,7 @@ export default function CreateProfile() {
     view === 'email'
       ? signin
         ? 'Sign in to pick up where you left off.'
-        : 'Create your account so Deborah can remember your story.'
+        : 'It’s lovely to have you here. Create your account to keep your conversations in one place.'
       : undefined;
 
   return (
@@ -208,7 +210,7 @@ export default function CreateProfile() {
                       }}
                     />
                     {/* Optional — leave blank to skip. */}
-                    <PhoneField value={phone} onChange={setPhone} />
+                    <PhoneField value={phone} error={errors.phone} onChange={(v) => { setPhone(v); setErrors((x) => ({ ...x, phone: undefined })); }} />
                   </>
                 )}
                 <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>
@@ -244,7 +246,7 @@ export default function CreateProfile() {
                 />
                 <TextReveal
                   className={styles.sub}
-                  text={signin ? 'Taking you home…' : 'A few quick questions so I know who I’m talking to.'}
+                  text={signin ? 'Taking you back to where you left off…' : 'Your account is ready. Next, a few short questions so I can tailor my guidance to you.'}
                   delay={500}
                 />
               </div>

@@ -21,6 +21,7 @@ import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, 
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
 import { ConsentSheet } from './parts/ConsentSheet';
+import { PetalScatter } from './parts/PetalScatter';
 import { BloomReveal } from './parts/BloomReveal';
 import { useTitleFade } from './parts/useTitleFade';
 import { useStepTransition } from './parts/useStepTransition';
@@ -60,6 +61,10 @@ export default function HealthBasics() {
   const underValue = answers[under.key] ?? '';
   const last = at === steps.length - 1;
 
+  // Cinematic hand-off to Deborah's welcome: questions fade, the tree un-grows (its growth in reverse) while its blossoms go on the breeze.
+  const [exiting, setExiting] = useState(false);
+  const EXIT_MS = 2600;
+
   const finish = (final: Answers) => {
     const profileId = saveOnboarding(final);
     if (returnTo === 'chat') {
@@ -68,7 +73,9 @@ export default function HealthBasics() {
       return;
     }
     // Deborah's welcome fades in full-screen; its CTA starts the chat as (or about) this profile.
-    replace('M-1.9', { profileId }, 'fade');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setExiting(true);
+    window.setTimeout(() => replace('M-1.9', { profileId }, 'fade'), reduced ? 0 : EXIT_MS);
   };
 
   const set = (key: string, v: string) => {
@@ -124,7 +131,7 @@ export default function HealthBasics() {
   };
 
   return (
-    <form className={styles.root} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
+    <form className={styles.root} data-exiting={exiting || undefined} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
       <div className={styles.layout}>
         {/* Left: questions vertically centered. Brand logo lives in shell BrandNav. */}
         <div className={styles.main}>
@@ -156,7 +163,7 @@ export default function HealthBasics() {
         </div>
         {/* Right: tree from the bottom edge up the full column height. */}
         <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-          <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
+          <BloomReveal className={styles.bloom} progress={exiting ? 0 : bloomProgress(at, steps.length)} rate={exiting ? 2.4 : 7} />
         </div>
       </div>
 
@@ -169,6 +176,8 @@ export default function HealthBasics() {
         onContinue={() => next(answersRef.current)}
       />
       <PageFooter />
+      {exiting && <PetalScatter />}
+      {exiting && <div className={styles.glory} aria-hidden data-overlay />}
     </form>
   );
 }

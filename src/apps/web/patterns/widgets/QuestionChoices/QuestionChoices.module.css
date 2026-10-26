@@ -44,3 +44,37 @@
 .tickRegular:active { transform: scale(0.94); }
 .tickRegular:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .tickRegular:disabled { opacity: 0.45; cursor: default; }
+
+/* Chat checklist (4+ options): naked rows, round check (same as the intake option tiles), small Submit underneath. */
+.checklist { display: grid; gap: 0; }
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
+  color: var(--color-ink);
+  text-align: start;
+  cursor: pointer;
+}
+.checkRow:disabled { cursor: default; }
+.checkRow:disabled:not([aria-checked='true']) { color: var(--color-ink-tertiary); }
+.checkRow:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+.checkBox {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 15%, transparent);
+  color: var(--color-ink-on-accent);
+  transition: background var(--dur-quick) var(--ease-out);
+}
+.checkBox[data-on] { background: var(--color-accent); box-shadow: none; }
+/* Design-system Button (md); only placement lives here. */
+.submit { justify-self: start; }

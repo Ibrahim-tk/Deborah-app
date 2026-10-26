@@ -94,9 +94,19 @@
 .numeral { display: grid; flex: none; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-full); background: color-mix(in srgb, #fff 55%, transparent); font: var(--weight-medium) var(--fs-subhead) / 1 var(--font-body); color: var(--color-accent); font-variant-numeric: tabular-nums; }
 .signature .numeral { background: color-mix(in srgb, var(--color-gold) 16%, transparent); color: var(--color-gold); }
 
-/* Reveal (design direction 2026-10-14): the seven cards arrive one after another, fading only — no
-   movement, so it holds under reduced motion too; with reduce, they appear at once. */
-.section { animation: section-reveal 420ms ease-out both; animation-delay: calc(var(--i, 0) * 160ms); }
-.tools { animation: section-reveal 420ms ease-out both; animation-delay: 1150ms; }
-@keyframes section-reveal { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .section, .tools { animation: none; } }
+/* Arrival (design 2026-10-26): each card mounts as the stream reaches it, so it fades and rises in once —
+   no stagger delay needed. Reduced motion: fade only. */
+.section { animation: section-arrive 520ms var(--ease-out) both; }
+.tools { animation: section-arrive 420ms var(--ease-out) both; }
+@keyframes section-arrive { from { opacity: 0; transform: translateY(10px); } }
+
+/* Smooth open/close: the body's row animates 0fr ↔ 1fr, with a soft fade, instead of popping in. */
+.reveal { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 420ms var(--ease-out), opacity 320ms var(--ease-out); }
+.reveal[data-open] { grid-template-rows: 1fr; opacity: 1; }
+.revealInner { min-height: 0; overflow: hidden; }
+/* Closed bodies leave the tab order once collapsed (visibility flips after the close transition). */
+.reveal:not([data-open]) .revealInner { visibility: hidden; transition: visibility 0s 420ms; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: opacity 200ms linear; }
+  @keyframes section-arrive { from { opacity: 0; } }
+}

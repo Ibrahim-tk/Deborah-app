@@ -1,0 +1,70 @@
+/* Scatter sits over the tree column (same box as HealthBasics .art); petals fly out over the whole page. */
+.root { position: absolute; top: 0; right: 0; bottom: 0; width: min(52%, 640px); z-index: 2; pointer-events: none; perspective: 600px; }
+.root[data-mode='settle'] { inset: 0; width: auto; z-index: 0; }
+
+/* Carrier = the path through the air (drift + sway); the petal inside tumbles on its own. */
+.carrier {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  opacity: 0;
+  animation: drift var(--dur) cubic-bezier(0.3, 0, 0.45, 1) var(--delay) both;
+}
+.root[data-mode='settle'] .carrier { animation-name: settle; animation-timing-function: cubic-bezier(0.25, 0.1, 0.4, 1); }
+
+.petal {
+  display: block;
+  width: var(--size);
+  height: calc(var(--size) * 0.66);
+  border-radius: 80% 0 80% 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 30%, white), color-mix(in srgb, var(--color-accent) 60%, white));
+  filter: blur(var(--blur));
+  transform-style: preserve-3d;
+  animation: tumble var(--dur) linear var(--delay) both;
+}
+.petal[data-tone='1'] { background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 18%, white), color-mix(in srgb, var(--color-accent) 42%, white)); }
+.petal[data-tone='2'] { background: linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 45%, white), color-mix(in srgb, var(--color-accent) 78%, white)); }
+.petal[data-tone='3'] { background: linear-gradient(135deg, white, color-mix(in srgb, var(--color-accent) 25%, white)); }
+/* Glowing petals: they catch the light as they fly (floating elements, so a glow is allowed). */
+.root[data-mode='scatter'] .petal { box-shadow: 0 0 calc(var(--size) * 0.8) color-mix(in srgb, var(--color-accent) 35%, white); }
+/* Sparks: tiny points of light carried in the swarm. */
+.petal[data-shape='spark'] {
+  width: calc(var(--size) * 0.3);
+  height: calc(var(--size) * 0.3);
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 6px 2px color-mix(in srgb, var(--color-accent) 30%, white);
+}
+/* Small whole blossoms among the loose petals. */
+.petal[data-shape='bloom'] {
+  width: calc(var(--size) * 0.8);
+  height: calc(var(--size) * 0.8);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 70%, white) 0 22%, color-mix(in srgb, var(--color-accent) 28%, white) 24% 100%);
+}
+
+/* Let go with a small drop, catch the gust, sway up and down on the way, thin out into the air. */
+@keyframes drift {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.5); }
+  8% { opacity: var(--alpha); transform: translate(-1vw, 1.5vh) scale(1); }
+  30% { transform: translate(calc(var(--dx) * 0.25), calc(var(--dy) * 0.2 + var(--sway))); }
+  55% { opacity: var(--alpha); transform: translate(calc(var(--dx) * 0.55), calc(var(--dy) * 0.5 - var(--sway))); }
+  80% { transform: translate(calc(var(--dx) * 0.8), calc(var(--dy) * 0.8 + var(--sway) * 0.6)); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.85); }
+}
+/* Stragglers fall slowly, swinging side to side like a leaf. */
+@keyframes settle {
+  0% { opacity: 0; transform: translate(0, 0); }
+  12% { opacity: var(--alpha); }
+  35% { transform: translate(calc(var(--dx) * 0.3 + 3vw), calc(var(--dy) * 0.35)); }
+  65% { transform: translate(calc(var(--dx) * 0.65 - 3vw), calc(var(--dy) * 0.65)); }
+  85% { opacity: var(--alpha); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)); }
+}
+/* 3D tumble: spins while flipping over, so the petal catches the light and goes edge-on. */
+@keyframes tumble {
+  from { transform: rotateZ(0deg) rotateX(0deg) rotateY(0deg); }
+  to { transform: rotateZ(var(--rot)) rotateX(calc(var(--flip) * 360deg)) rotateY(calc(var(--flip) * 180deg)); }
+}
+
+@media (prefers-reduced-motion: reduce) { .root { display: none; } }

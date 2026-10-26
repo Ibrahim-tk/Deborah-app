@@ -52,7 +52,6 @@ export default function Home() {
   const hour = new Date().getHours();
   const part = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
   const heading = `Good ${part}${name ? `, ${name}` : ''}.`;
-  const support = 'How can I support you today?';
 
   const closeSheet = () => {
     if (profile) greeted.add(profile.id);
@@ -84,6 +83,8 @@ export default function Home() {
   const shop = (productId: string) => open('M-2.7', { productId });
   const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
   const documents = { meta: docCount === 0 ? 'Upload and keep' : `${docCount} saved`, onPress: go('M-11.1') };
+  // Dismissed for this visit only; the card returns on the next Home mount.
+  const [intakeHidden, setIntakeHidden] = useState(false);
   const intakeCard = {
     progress: d.completion,
     complete: d.completion >= 1,
@@ -121,7 +122,6 @@ export default function Home() {
           <div className={styles.intro}>
             <p className={styles.date}>{today}</p>
             <h1 className={styles.hello}>{heading}</h1>
-            <p className={styles.support}>{support}</p>
           </div>
 
           {d.state === 'new' && (
@@ -165,9 +165,9 @@ export default function Home() {
       </div>
 
       {/* Intake nudge floats bottom-right over the dashboard (not inline in the card stack). */}
-      {!intakeCard.complete && (
+      {!intakeCard.complete && !intakeHidden && (
         <div className={styles.intakeFloat}>
-          <IntakeCompletionCard layout="stack" progress={intakeCard.progress} onAction={intakeCard.onAction} />
+          <IntakeCompletionCard layout="stack" progress={intakeCard.progress} onAction={intakeCard.onAction} onDismiss={() => setIntakeHidden(true)} />
         </div>
       )}
       <div className={styles.dock}>

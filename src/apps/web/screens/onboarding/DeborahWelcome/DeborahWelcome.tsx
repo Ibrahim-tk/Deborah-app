@@ -25,8 +25,8 @@ export default function DeborahWelcome() {
   // Heading (serif) then body text, same hierarchy as Welcome (M-1.2).
   const title = `Thank you${you ? `, ${you}` : ''}.`;
   const body = member
-    ? `I’m glad you’re here for ${member.name}. Tell me what’s been going on, and I’ll ask what I need as we go.`
-    : 'I’m so glad you’re here. Tell me what’s on your mind, and I’ll ask what I need as we go.';
+    ? `I’m glad you’re here for ${member.name}. Let’s talk about their health. Tell me what’s been going on.`
+    : 'I’m so glad you’re here. Let’s talk about your health. Tell me what’s on your mind today.';
 
   const ask = () => {
     // Empty Ask Deborah only. Chips = Tone Guide scripted samples (signup 3 / login 4).
@@ -38,11 +38,13 @@ export default function DeborahWelcome() {
 
   return (
     <div className={styles.root} data-xref="M-1.9 · Deborah's welcome">
+      {/* Arrives inside the same glow the onboarding exit ended on, which clears to reveal the welcome. */}
+      <div className={styles.glory} aria-hidden />
       <div className={styles.stage} data-placeholder>
         <DeborahBlob size={112} label="Deborah" />
         <div className={styles.copy}>
-          <TextReveal as="h1" className={styles.text} text={title} delay={350} />
-          <TextReveal className={styles.body} text={body} delay={650} />
+          <TextReveal as="h1" className={styles.text} text={title} delay={500} />
+          <TextReveal className={styles.body} text={body} delay={850} />
         </div>
         <Button fullWidth className={styles.cta} onClick={ask}>
           {member ? `Start a conversation about ${member.name}` : 'Start a conversation'}

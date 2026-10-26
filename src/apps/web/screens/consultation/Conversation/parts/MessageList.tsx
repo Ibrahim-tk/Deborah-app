@@ -1,7 +1,8 @@
-/** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
-import { useNav } from '@web/navigation';
+/** Renders the conversation's messages by kind, plus the thinking line; ready → guidance (no CTA). */
+import { useEffect } from 'react';
+import { useNav, useNavStore } from '@web/navigation';
 import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList } from '@shared/data';
-import { ANSWER_REQUEST_LABEL, isMinor, pendingFacts } from '@shared/engine';
+import { isMinor, pendingFacts } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom, formatShortDate } from '@shared/utils';
@@ -10,8 +11,8 @@ import { DeborahBlob } from '@web/ui';
 import { ProductCard, ShopTiles } from '@web/patterns/commerce';
 import {
   AfterGuidanceTrail,
+  GuidanceEnd,
   AnswerActions,
-  AnswerCTA,
   AnswerSections,
   CareDisclaimer,
   ClosingLine,
@@ -75,11 +76,19 @@ export function MessageList({
 }: MessageListProps) {
   const { messages, status } = conversation;
   const { push } = useNav();
+  const goHome = useNavStore((s) => s.goHome);
   const reports = useAppStore((s) => s.labs.reportsById);
   // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
   const keepAnswered = useAppStore((s) => s.authFlow === 'login');
   // DN-12: no products for anyone under 18, the shop tiles included.
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
+
+  // Ready for guidance: run it — no "Tell me what you think" tap.
+  const requestAnswer = chat.requestAnswer;
+  useEffect(() => {
+    if (busy || status !== 'ready') return;
+    void requestAnswer();
+  }, [busy, status, requestAnswer]);
 
   // Check-in quick replies: the engine answers; some options also act in the UI.
   const debriefReply = useDebriefReplies(chat, conversation.id, onFocusComposer);
@@ -203,6 +212,7 @@ export function MessageList({
                   onFollowUp={onFocusComposer}
                 />
               )}
+              {showNext && <GuidanceEnd onHome={goHome} onContinue={onFocusComposer} />}
             </>
           )}
           {/* Web: no "You could ask" list after answers (designer, 2026-10-23). */}
@@ -282,13 +292,6 @@ export function MessageList({
       ])}
 
       {conversation.thinking && <ThinkingIndicator label={conversation.thinking} />}
-
-      {/* "Tell me what you think" only once Deborah has enough context to answer (intake done). */}
-      {!busy && status === 'ready' && (
-        <div className={styles.cta}>
-          <AnswerCTA label={ANSWER_REQUEST_LABEL} emphasis="primary" onPress={chat.requestAnswer} />
-        </div>
-      )}
     </>
   );
 }

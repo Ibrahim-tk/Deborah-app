@@ -40,6 +40,9 @@
   padding: calc(var(--safe-top) + 64px) var(--margin-screen) var(--space-6);
 }
 .cta { display: grid; }
+/* Room under the latest turn so new replies land around mid-screen, not pressed against the composer
+   (design 2026-10-26). Empty chat keeps its own centring below. */
+.column:not([data-empty]) { padding-bottom: 40dvh; }
 /* Empty chat: composer on the true vertical center; orb/heading above, suggestions below. */
 .column[data-empty] { min-height: 100%; align-content: center; }
 .column[data-empty][data-start] { align-content: stretch; }
@@ -124,3 +127,12 @@
 .previewBody { flex: 1; min-height: 0; overflow-y: auto; }
 @keyframes preview-in { from { opacity: 0; transform: translateX(24px); } }
 @media (prefers-reduced-motion: reduce) { .root { transition: none; } .preview { animation: none; } }
+
+/* Intake nudge on the empty chat (same placement as Home's). */
+.intakeFloat {
+  position: absolute;
+  z-index: 6;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  width: min(300px, calc(100% - 2 * var(--space-5)));
+}

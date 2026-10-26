@@ -24,9 +24,7 @@
   position: relative;
   z-index: 1;
   height: 72px;
-  max-width: 2000px;
-  margin-inline: auto;
-  padding-inline: clamp(24px, 8.37vw, 160px);
+  padding-inline: 40px;
   display: flex;
   align-items: center;
 }

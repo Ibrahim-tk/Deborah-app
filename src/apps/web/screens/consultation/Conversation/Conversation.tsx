@@ -15,7 +15,7 @@ import { thirdPerson } from './parts/thirdPerson';
 import { selectActiveConversation, SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { nowFrom, uid } from '@shared/utils';
-import { ActionSheet, ActionTile, AnimatePresence, MotionDiv } from '@web/ui';
+import { ActionSheet, AnimatePresence, MotionDiv } from '@web/ui';
 import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@web/patterns/chat';
 import { useConversation } from '@web/hooks/useConversation';
 import { useNav, useNavStore, useScreenParams } from '@web/navigation';
@@ -27,10 +27,10 @@ import { useReturnFlows } from './parts/useReturnFlows';
 import { useDocumentHandoff } from './parts/useDocumentHandoff';
 import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
-import { IntakeTile } from '@web/patterns/health';
-import { healthProfileCompletion } from '@web/screens/onboarding/HealthBasics/healthProfile';
 import { VisitNotesThread } from './parts/VisitNotesThread';
 import { NotePreview } from '@web/screens/records/Records/parts/NotePreview';
+import { IntakeCompletionCard } from '@web/patterns/widgets';
+import { useHomeView } from '@web/screens/consultation/Home/parts/useHomeView';
 import styles from './Conversation.module.css';
 import { useAccountGate } from '@web/hooks/useAccountGate';
 import { useToast } from '@web/hooks/toast.store';
@@ -49,8 +49,9 @@ export default function Conversation() {
   const previewNoteId = preview && preview.conv === activeConversationId ? preview.noteId : undefined;
   const chat = useConversation();
   const { conversation, profile, freeLeft, busy } = chat;
-  const profilePct = profile ? healthProfileCompletion(profile) : 1;
   const { open, push, pop, switchTab, presentSheet } = useNav();
+  // Same intake nudge as Home: floats bottom-right on the empty chat until the profile is complete.
+  const intakeCompletion = useHomeView().completion;
   const gate = useAccountGate();
   const toast = useToast();
   const intake = useIntakeFlow();
@@ -397,6 +398,11 @@ export default function Conversation() {
             )}
           </AnimatePresence>
           {emptyStart && composer}
+          {emptyStart && intakeCompletion < 1 && (
+            <div className={styles.intakeFloat}>
+              <IntakeCompletionCard layout="stack" progress={intakeCompletion} onAction={() => push('M-2.14')} />
+            </div>
+          )}
           {emptyStart && (
             <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
           )}
@@ -416,31 +422,12 @@ export default function Conversation() {
 
       <div className={styles.bottom}>
         {showLatest && !isEmpty && <ScrollToLatest onPress={() => toBottom(true)} />}
-        {profile && profilePct < 1 && conversation?.status === 'answered' && (
-          <IntakeTile progress={profilePct} onOpen={() => push('M-2.14')} />
-        )}
         {safetyBench && !emergencyOpen && <SafetyBench onInsert={(phrase) => { setDraft(phrase); inputRef.current?.focus(); }} />}
         {/* The composer never leaves the chat (design 2026-10-20): during intake and choice questions it stays,
             and typing there answers "Other". Empty chat lifts it into the centered group. */}
         <SymptomPicker open={symptomSheet} onClose={() => setSymptomSheet(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
         {!emptyStart && composer}
       </div>
-
-      {/* Only after guidance — on empty chat this card sat over the starter chips and ate their taps. */}
-      {profilePct < 1 && conversation?.status === 'answered' && (
-        <div className={styles.intakeOverlay}>
-          <ActionTile
-            className={styles.intakeOverlayCard}
-            icon="health"
-            title="Complete your intake"
-            meta="A few quiet details so guidance fits you."
-            progress={profilePct}
-            progressLabel="Health intake progress"
-            showPercent
-            onClick={() => push('M-2.14')}
-          />
-        </div>
-      )}
 
       {attachments.overlay}
       <ActionSheet

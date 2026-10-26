@@ -44,6 +44,9 @@ export function PhoneField({ value, onChange, label = 'Phone number', hint, opti
     let digits = digitsOf(raw);
     // Deleting a formatting character (")", "-", " ") removes the digit before it instead.
     if (raw.length < last.current.length && digits === digitsOf(last.current)) digits = digits.slice(0, -1);
+    // Cap at this country's number length (taken from its example number).
+    const max = digitsOf(current.sample).length;
+    if (max && digits.length > max) digits = digits.slice(0, max);
     const formatted = digits ? formatAsYouType(current.iso as CountryCode, digits) : '';
     last.current = formatted;
     setInvalid(false);
@@ -51,7 +54,7 @@ export function PhoneField({ value, onChange, label = 'Phone number', hint, opti
   };
 
   const pickCountry = (c: Country) => {
-    const digits = digitsOf(value.number);
+    const digits = digitsOf(value.number).slice(0, digitsOf(c.sample).length || undefined);
     const formatted = digits ? formatAsYouType(c.iso, digits) : '';
     last.current = formatted;
     setInvalid(false);
@@ -81,7 +84,7 @@ export function PhoneField({ value, onChange, label = 'Phone number', hint, opti
               onValueChange={pickCountry}
               itemKey={(c) => c.iso}
               itemToString={(c) => `${c.name} ${c.dial}`}
-              searchPlaceholder="Search country or code"
+              searchable={false}
               emptyText="No matching countries."
               renderItem={(c) => (
                 <>

@@ -140,7 +140,7 @@ export function Sidebar() {
               title={collapsed ? 'New conversation' : undefined}
               onClick={newChat}
             >
-              <Icon name="newChat" size={20} />
+              <Icon name="newChat" size={18} />
               {!collapsed && <span className={styles.rowLabel}>New conversation</span>}
             </button>
             <div className={styles.divider} role="separator" />

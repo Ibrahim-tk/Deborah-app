@@ -62,9 +62,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
       // (describe/Other/Someone else stays in-cell — or always spans — then morphs).
       // Other rows (incl. otherPuberty): stacked FullChoicePills + describe morph + expand follow-up.
       if (step.presentation === 'yesNo' || step.presentation === 'rows' || describeValue || expandValues) {
-        const useGrid =
-          step.key === 'pronouns' ||
-          step.key === 'gender';
+        const useGrid = step.key === 'gender';
         const Pills = useGrid ? FullChoicePillsGrid : FullChoicePills;
         const expandPrompt = step.expandTitle ?? (expandStep ? titleFor(expandStep, answers) : 'Please specify');
         const expandOpts = expandChoices ?? [];

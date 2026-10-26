@@ -52,7 +52,8 @@ export function AnswerSections({ answer, streaming, activeSection, productSlot, 
           </Button>
         </div>
       )}
-      {answer.sections.map((section, i) => (
+      {/* While streaming, only sections the stream has reached are shown; each one arrives as it starts (design 2026-10-26). */}
+      {answer.sections.map((section, i) => (Boolean(streaming) && activeIndex >= 0 && i > activeIndex) ? null : (
         <Section
           key={section.key}
           number={i + 1}

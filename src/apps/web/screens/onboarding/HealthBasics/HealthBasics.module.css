@@ -6,7 +6,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--color-canvas);
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    var(--color-canvas) url("/images/health-basics-bg.webp") center / cover no-repeat;
   container-type: size;
 }
 /*
@@ -107,26 +109,20 @@
   z-index: 0;
 }
 
-/* Fade + soft blur where the trunk meets the floor. */
+/* Soft blur at the trunk base, masked so it dissolves upward with no hard edge. */
 .art::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 28%;
+  inset: auto 0 0 0;
+  height: 30%;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(
-    to top,
-    var(--color-canvas) 0%,
-    color-mix(in srgb, var(--color-canvas) 70%, transparent) 35%,
-    transparent 100%
-  );
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 40%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 0%, #000 40%, transparent 100%);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 100%), linear-gradient(to right, transparent 0%, #000 40%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to top, #000 0%, #000 30%, transparent 100%), linear-gradient(to right, transparent 0%, #000 40%);
+  mask-composite: intersect;
 }
 
 .bloom {
@@ -187,4 +183,70 @@
 
 /* Footer: Back left, Next right. */
 .navRow { display: flex; justify-content: flex-end; gap: var(--space-3); }
-.navRow > :first-child:not(:last-child) { margin-right: auto; }
+
+/* Morphing backdrop: a softened copy of the same image slowly turns, swells and fades over the still one,
+   so the colours appear to flow while the overall picture stays the same. */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    url("/images/health-basics-bg.webp") center / cover no-repeat;
+  filter: blur(24px);
+  opacity: 0;
+  animation: bg-morph 28s ease-in-out infinite alternate;
+}
+@keyframes bg-morph {
+  0% { opacity: 0; transform: rotate(0deg) scale(1); }
+  50% { opacity: 0.7; transform: rotate(6deg) scale(1.12) translate(3%, -2%); }
+  100% { opacity: 0.45; transform: rotate(-4deg) scale(1.06) translate(-3%, 2%); }
+}
+@media (prefers-reduced-motion: reduce) { .root::before { animation: none; } }
+
+/* Cinematic exit (to Deborah's welcome), Kung Fu Panda peach-tree moment:
+   1. questions are carried off; 2. the tree shrinks back in reverse as its blossoms let go (PetalScatter);
+   3. the faint ghost clears from the canopy down and the glow takes over. */
+.root[data-exiting] { pointer-events: none; }
+.root[data-exiting] .main { animation: exit-content 1300ms cubic-bezier(0.45, 0, 0.35, 1) 500ms both; }
+.root[data-exiting] .art {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 33%, #000 66%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 33%, #000 66%, #000 100%);
+  -webkit-mask-size: 100% 300%;
+  mask-size: 100% 300%;
+  transform-origin: 85% 100%;
+  /* The tree shrinks back in reverse (BloomTree progress → 0); this only clears the faint ghost at the end. */
+  animation:
+    tree-gust 900ms cubic-bezier(0.3, 0, 0.3, 1) both,
+    tree-dissolve 1300ms cubic-bezier(0.45, 0, 0.35, 1) 1300ms both;
+}
+/* The gust hits: the tree leans with it and settles back once, as the first petals tear loose. */
+@keyframes tree-gust {
+  0% { transform: rotate(0deg); }
+  35% { transform: rotate(-1.6deg) skewX(1deg); }
+  70% { transform: rotate(0.5deg); }
+  100% { transform: rotate(0deg); }
+}
+/* Content is carried off with the swarm: drifts left, blurs, dissolves. */
+@keyframes exit-content { to { opacity: 0; filter: blur(24px); transform: translateX(-6vw) scale(0.98); } }
+/* The glory: petals melt into a soft bloom of light that fills the screen (Deborah's welcome resolves out of it). */
+.glory {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 45% 50%, color-mix(in srgb, var(--color-accent) 14%, white) 0%, transparent 70%),
+    color-mix(in srgb, var(--color-canvas) 85%, white);
+  opacity: 0;
+  animation: glory-in 1500ms cubic-bezier(0.45, 0, 0.35, 1) 1100ms both;
+}
+/* Peaks translucent, not white: the background stays visible through the hand-off. */
+@keyframes glory-in { from { opacity: 0; filter: blur(30px); } to { opacity: 0.7; filter: blur(0); } }
+@keyframes tree-dissolve {
+  from { -webkit-mask-position: 0 100%; mask-position: 0 100%; }
+  to { -webkit-mask-position: 0 0%; mask-position: 0 0%; filter: blur(6px); }
+}
+@media (prefers-reduced-motion: reduce) { .root[data-exiting] .main, .root[data-exiting] .art, .glory { animation: none; } }

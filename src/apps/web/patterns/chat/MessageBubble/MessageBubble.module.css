@@ -17,8 +17,10 @@
 
 .word { display: inline-block; white-space: nowrap; }
 /* Blur + fade per character (matches TextReveal). */
-.char { display: inline-block; animation: charIn 600ms var(--ease-out) var(--d) both; }
+.char { display: inline-block; animation: charIn 280ms var(--ease-out) var(--d) both; }
 @keyframes charIn { from { opacity: 0; filter: blur(8px); transform: translateY(2px); } to { opacity: 1; filter: blur(0); transform: none; } }
 :global(html.reduced-motion) .char { animation: none; }
 @media (prefers-reduced-motion: reduce) { .char { animation: none; } }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Emphasis inside chat text: medium weight, never bold (DESIGN.md caps weight at 500). */
+.emph { font-weight: var(--weight-medium); color: inherit; }

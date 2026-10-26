@@ -49,7 +49,7 @@ export function CodeStep({ email, onVerified, onChangeEmail }: { email: string; 
   return (
     <div className={styles.root}>
       <p className={styles.text}>
-        Enter the 6-digit code we sent to
+        We’ve sent a 6-digit verification code to
         <span className={styles.emailRow}>
           <span className={styles.email}>{email || TEST_EMAIL}</span>
           {onChangeEmail && !verifying && (
@@ -60,7 +60,7 @@ export function CodeStep({ email, onVerified, onChangeEmail }: { email: string; 
       <CodeInput value={code} onChange={update} length={LENGTH} disabled={verifying} verifying={verifying} autoFocus />
       <div className={styles.foot}>
         {verifying ? (
-          <ProgressStatus label="Checking your code" />
+          <ProgressStatus label="Verifying" />
         ) : wait > 0 ? (
           <p className={styles.resend}>Didn’t get it? Resend in 0:{String(wait).padStart(2, '0')}</p>
         ) : (

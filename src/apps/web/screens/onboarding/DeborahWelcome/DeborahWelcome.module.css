@@ -2,10 +2,15 @@
   position: relative;
   height: 100%;
   isolation: isolate;
-  background: var(--color-canvas);
+  overflow: hidden;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    var(--color-canvas) url("/images/health-basics-bg.webp") center / cover no-repeat;
 }
 
 .stage {
+  position: relative;
+  z-index: 1;
   width: min(100%, 420px);
   margin-inline: auto;
   display: flex;
@@ -18,7 +23,6 @@
   overscroll-behavior: contain;
   padding: calc(var(--safe-top) + var(--space-6)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-6));
   text-align: center;
-  animation: stage-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .copy {
@@ -50,10 +54,30 @@
   width: 100%;
 }
 
-@keyframes stage-in {
-  from { opacity: 0; transform: translateY(10px); }
+/* Staged entrance: orb, then words (TextReveal), then the button last — each resolving out of a blur. */
+.stage > :first-child { animation: orb-in 1.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+.copy { animation: copy-in 1.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+.cta { animation: cta-in 1.7s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both; }
+
+/* Same glow the Health Basics exit ends on (keep in sync with HealthBasics .glory); it clears to reveal the page. */
+.glory {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 45% 50%, color-mix(in srgb, var(--color-accent) 14%, white) 0%, transparent 70%),
+    color-mix(in srgb, var(--color-canvas) 85%, white);
+  opacity: 0.7; /* matches the exit's peak */
+  animation: glory-out 1.6s cubic-bezier(0.45, 0, 0.35, 1) both;
 }
+@keyframes glory-out { to { opacity: 0; filter: blur(30px); visibility: hidden; } }
+
+@keyframes orb-in { from { opacity: 0; filter: blur(24px); transform: scale(0.8) translateY(16px); } }
+@keyframes copy-in { from { opacity: 0; filter: blur(16px); transform: scale(0.96) translateY(18px); letter-spacing: 0.04em; } }
+@keyframes cta-in { from { opacity: 0; filter: blur(14px); transform: translateY(24px) scale(0.97); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .stage { animation: none; }
+  .stage > :first-child, .copy, .cta { animation: none; }
+  .glory { display: none; }
 }

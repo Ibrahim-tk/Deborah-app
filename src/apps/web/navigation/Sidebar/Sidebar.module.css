@@ -27,7 +27,7 @@
   align-items: center;
   gap: var(--space-2);
   min-height: var(--header-h);
-  padding: var(--space-3) var(--space-3) var(--space-2);
+  padding: var(--space-3) var(--space-3);
 }
 
 .brand {
@@ -111,7 +111,7 @@
 
 .links {
   display: grid;
-  gap: var(--space-1);
+  gap: 0; /* even rhythm: logo row → button → divider all space-3 */
   padding: 0 var(--space-3) var(--space-2);
 }
 
@@ -151,10 +151,10 @@
 .newChat {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
   min-height: var(--nav-row-h);
-  padding: 0 var(--space-3);
+  padding: 0 var(--space-4);
   border: 0;
   border-radius: var(--radius-full);
   background: var(--button-primary-fill);
@@ -225,10 +225,9 @@
 
 .heading {
   margin: var(--space-2) var(--space-3) var(--space-2);
-  color: var(--color-ink-secondary);
+  /* Light section label (design 2026-10-26): ~5.5:1, same exception as the profile-for tiles. */
+  color: color-mix(in srgb, var(--color-ink-tertiary) 82%, var(--white));
   font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .empty {

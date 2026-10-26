@@ -2,11 +2,14 @@
   position: relative;
   height: 100%;
   isolation: isolate;
-  background: var(--color-canvas);
+  overflow: hidden;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    var(--color-canvas) url("/images/health-basics-bg.webp") center / cover no-repeat;
 }
 
 .stage {
-  width: min(100%, 420px);
+  width: min(100%, var(--form-width));
   margin-inline: auto;
   display: flex;
   flex-direction: column;
@@ -54,7 +57,7 @@
 
 .fields {
   display: grid;
-  gap: var(--space-5);
+  gap: var(--space-4);
   width: 100%;
   text-align: start;
 }
@@ -155,3 +158,25 @@
   text-underline-offset: 3px;
   cursor: pointer;
 }
+
+/* Morphing backdrop: a softened copy of the same image slowly turns, swells and fades over the still one,
+   so the colours appear to flow while the overall picture stays the same. */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    url("/images/health-basics-bg.webp") center / cover no-repeat;
+  filter: blur(24px);
+  opacity: 0;
+  animation: bg-morph 28s ease-in-out infinite alternate;
+}
+@keyframes bg-morph {
+  0% { opacity: 0; transform: rotate(0deg) scale(1); }
+  50% { opacity: 0.7; transform: rotate(6deg) scale(1.12) translate(3%, -2%); }
+  100% { opacity: 0.45; transform: rotate(-4deg) scale(1.06) translate(-3%, 2%); }
+}
+@media (prefers-reduced-motion: reduce) { .root::before { animation: none; } }

@@ -12,12 +12,14 @@ export interface CheckboxProps {
   emphasis?: boolean;
   /** Compact rows (e.g. in-chat review card): 14 pt box, subhead label. */
   size?: 'md' | 'sm';
+  /** Circular check, matching the option tiles and chat checklist (design 2026-10-26). */
+  round?: boolean;
 }
 
-export function Checkbox({ checked, onChange, label, description, emphasis, size = 'md' }: CheckboxProps) {
+export function Checkbox({ checked, onChange, label, description, emphasis, size = 'md', round }: CheckboxProps) {
   const id = useId();
   return (
-    <div className={styles.root} data-size={size}>
+    <div className={styles.root} data-size={size} data-round={round || undefined}>
       <input id={id} type="checkbox" className={styles.input} checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <label htmlFor={id} className={styles.row}>
         <span className={styles.box} data-checked={checked} aria-hidden="true">

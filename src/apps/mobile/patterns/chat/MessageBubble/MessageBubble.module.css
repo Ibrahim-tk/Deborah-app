@@ -22,3 +22,5 @@
 :global(html.reduced-motion) .char { animation: none; }
 @media (prefers-reduced-motion: reduce) { .char { animation: none; } }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* Emphasis inside chat text: medium weight, never bold (DESIGN.md caps weight at 500). */
+.emph { font-weight: var(--weight-medium); color: inherit; }

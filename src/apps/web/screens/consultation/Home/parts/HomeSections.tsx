@@ -45,7 +45,7 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
           {
             key: 'health',
             title: 'My Health',
-            sub: destinations[0].meta || 'Your health profile',
+            sub: 'I’m here to talk about my own health.', // copy shared with the profile-for step (2026-10-26)
             tone: 'mint',
             artifact: 'leaf-flower',
             icon: 'health',
@@ -54,7 +54,7 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
           {
             key: 'family',
             title: 'Add Family Member',
-            sub: destinations[1].meta || 'Family profiles',
+            sub: 'I’d like to help a family member or loved one.',
             tone: 'rose',
             artifact: 'pink-bloom',
             icon: 'family',

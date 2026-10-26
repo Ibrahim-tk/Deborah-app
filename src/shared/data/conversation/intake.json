@@ -23,7 +23,7 @@
     {
       "id": "health-consent",
       "presentation": "pills",
-      "prompt": "Can I use your health details to personalise things, {name}? They stay private to you and are never sold.",
+      "prompt": "Can I use the health details you share to personalise my answers, {name}? My guidance is education, not a diagnosis.",
       "options": [
         {
           "id": "agree",

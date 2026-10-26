@@ -39,12 +39,13 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
           {member ? (
             <>To answer your questions about {name}, the Oracle uses what you share about {their} health: </>
           ) : (
-            <>To answer you, the Oracle uses what you share about your health: </>
+            <>To answer your questions, the Oracle uses what you share about your health: </>
           )}
-          symptoms, medications and history. It stays private to your account and is never sold. The Oracle is an AI
-          that speaks in Deborah’s voice. Its guidance is education, not a diagnosis or prescription.
+          {/* OPEN: privacy promise removed per docs/copy/voice-tone-ux-copy.md §6 — add a storage/sale line only once legal verifies it. */}
+          such as symptoms, medications and history. The Oracle is an AI informed by Deborah Maragopoulos’ experience,
+          not Deborah herself. Its guidance is education, not a diagnosis or prescription.
         </p>
-        <Checkbox checked={checked} onChange={setChecked} label="I accept the Health Consent" />
+        <Checkbox checked={checked} onChange={setChecked} label="I’ve read and agree to the Health Consent" />
       </div>
     </BottomSheet>
   );

@@ -103,6 +103,49 @@ export function QuestionChoices({
     endSlot: tick,
   };
 
+  // Chat only. More than three options: naked checkbox rows + a small Submit; the widget stays in the
+  // thread (locked, showing what was picked) once sent.
+  if (!regular && options.length > 3) {
+    const pick = (id: string) => {
+      if (locked) return;
+      if (id === 'other' && onOther) return onOther();
+      setSelected(multi ? toggleSelection(selected, id, exclusive) : [id]);
+    };
+    return (
+      <div className={styles.root} role="group" aria-label={label} data-question-choices data-checklist>
+        <div className={styles.checklist}>
+          {options.map((o) => {
+            const on = values.includes(o.id);
+            return (
+              <button
+                key={o.id}
+                type="button"
+                role={multi ? 'checkbox' : 'radio'}
+                aria-checked={on}
+                className={styles.checkRow}
+                disabled={locked}
+                onClick={() => pick(o.id)}
+              >
+                <span className={styles.checkBox} data-on={on || undefined} aria-hidden>
+                  {on && <Icon name="check" size={12} strokeWidth={2.5} />}
+                </span>
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
+        {!locked && (
+          <Button size="md" className={styles.submit} disabled={!selected.length} onClick={() => submit(selected)}>
+            Submit
+          </Button>
+        )}
+      </div>
+    );
+  }
+
+  // Chat chips (three or fewer): gone once answered — the user's own bubble carries the answer.
+  if (!regular && (sent || answered)) return null;
+
   return (
     <div
       className={styles.root}

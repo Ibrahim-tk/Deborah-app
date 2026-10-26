@@ -23,6 +23,7 @@ export * from './SymptomPicker';
 export * from './SaveProfileCard';
 export * from './SaveHealthProfile';
 export * from './AfterGuidanceTrail';
+export * from './GuidanceEnd';
 export * from './ReviewFactsCard';
 export * from './GuidanceNextSteps';
 export * from './VisitSummaryCard';

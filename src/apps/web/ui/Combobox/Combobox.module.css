@@ -42,7 +42,7 @@
 }
 .input::placeholder { color: var(--color-ink-placeholder); }
 
-.list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--space-1) var(--space-1); outline: none; }
+.list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-2); outline: none; }
 .list:empty { display: none; }
 .item {
   display: flex;

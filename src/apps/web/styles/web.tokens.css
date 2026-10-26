@@ -10,6 +10,9 @@
   --color-surface-signature: var(--midnight-500);
   --color-scrim: rgba(18, 7, 33, 0.40);
 
+  /* Layout: single-column auth / onboarding form rail (fields + buttons). */
+  --form-width: 420px;
+
   /* Text */
   --color-ink: var(--purple-900);              /* 15.7:1 */
   --color-ink-secondary: var(--purple-600);    /* 9.4:1 */

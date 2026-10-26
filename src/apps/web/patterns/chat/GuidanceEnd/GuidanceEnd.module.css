@@ -1,0 +1,4 @@
+.root { display: grid; gap: var(--space-6); margin-block: var(--space-8) var(--space-16); } /* generous breathing room around the end of a conversation */
+/* Plain hairline marking the end of the guidance. */
+.rule { width: 100%; height: 1px; margin: 0; border: 0; background: var(--color-border-hairline); }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }

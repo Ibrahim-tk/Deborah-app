@@ -2,11 +2,14 @@
   position: relative;
   height: 100%;
   isolation: isolate;
-  background: var(--color-canvas);
+  overflow: hidden;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    var(--color-canvas) url("/images/health-basics-bg.webp") center / cover no-repeat;
 }
 .scroll {
-  /* Same rail as BottomSheet auto dialog (520px). */
-  width: min(100%, 520px);
+  /* Standard form rail. */
+  width: min(100%, var(--form-width));
   margin-inline: auto;
   display: flex;
   flex-direction: column;
@@ -29,11 +32,11 @@
 .note { display: grid; gap: var(--space-3); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; text-align: center; color: var(--color-ink-body); }
 .hello { margin: 0; font: var(--weight-regular) calc(34px * var(--type-scale)) / calc(38px * var(--type-scale)) var(--font-artistic, var(--font-display)); letter-spacing: -0.005em; color: var(--color-ink); text-wrap: pretty; max-width: 30ch; }
 .lede { margin: 0; text-wrap: pretty; max-width: 34ch; }
-.legal { position: relative; }
+.legal { position: relative; margin-bottom: var(--space-2); }
 .legalInput { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .legalRow {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-2);
   cursor: pointer;
 }
@@ -41,9 +44,8 @@
   display: grid;
   place-items: center;
   flex: none;
-  width: 14px;
-  height: 14px;
-  margin-top: 2px;
+  width: 16px;
+  height: 16px;
   border-radius: 3px;
   background: var(--color-surface);
   box-shadow: inset 0 0 0 1.5px var(--color-border-control);
@@ -53,10 +55,32 @@
 .legalInput:focus-visible + .legalRow .legalBox { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .legalText {
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
-  color: var(--color-ink-secondary);
+  color: var(--color-ink-placeholder);
   text-wrap: pretty;
 }
-.link { padding: 0; border: 0; background: none; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
-.signIn { margin-top: var(--space-3); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
-.signInLink { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink-tertiary); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.signIn { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-placeholder); text-align: center; }
+.signInLink { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink-tertiary); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .link:focus-visible, .signInLink:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+
+/* Morphing backdrop: a softened copy of the same image slowly turns, swells and fades over the still one,
+   so the colours appear to flow while the overall picture stays the same. */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    url("/images/health-basics-bg.webp") center / cover no-repeat;
+  filter: blur(24px);
+  opacity: 0;
+  animation: bg-morph 28s ease-in-out infinite alternate;
+}
+@keyframes bg-morph {
+  0% { opacity: 0; transform: rotate(0deg) scale(1); }
+  50% { opacity: 0.7; transform: rotate(6deg) scale(1.12) translate(3%, -2%); }
+  100% { opacity: 0.45; transform: rotate(-4deg) scale(1.06) translate(-3%, 2%); }
+}
+@media (prefers-reduced-motion: reduce) { .root::before { animation: none; } }

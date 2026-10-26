@@ -30,6 +30,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 | [ux/F01-onboarding.md](ux/F01-onboarding.md) | First launch & onboarding |
 | [ux/F02-consultation.md](ux/F02-consultation.md) | Core consultation (the Conversation screen and all its states) |
 | [ux/chat-ending-guide.md](ux/chat-ending-guide.md) | How Tone Guide dummy chats end (7 sections → product → closing → What’s next) |
+| [copy/voice-tone-ux-copy.md](copy/voice-tone-ux-copy.md) | Voice, tone & UX copy guidelines — authority for all microcopy |
 | [ux/F02b-profile-aware-chat-intake.md](ux/F02b-profile-aware-chat-intake.md) | Profile-aware chat intake: female & male question journeys (THEORY, draft) |
 | [ux/F02d-session-intake-answer-modes.md](ux/F02d-session-intake-answer-modes.md) | Session intake: choice vs free-text vs hybrid (composer vs pills) |
 | [ux/F02e-guidance.md](ux/F02e-guidance.md) | Miro Step 4: early first look, coverage gate, What’s next, follow-ups |

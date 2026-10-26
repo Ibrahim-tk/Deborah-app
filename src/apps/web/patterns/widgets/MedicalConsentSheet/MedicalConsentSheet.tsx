@@ -25,7 +25,7 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
   });
   const name = member ? properName(member.name.trim().split(/\s+/)[0]) : '';
   const their = member ? pronounForms(member.intake?.pronouns).their : '';
-  const title = member ? `Can the Oracle use ${name}’s health information?` : 'Can the Oracle use your health information?';
+  const title = member ? `May I have your consent to use ${name}’s health information?` : 'May I have your consent to use your health information?';
   return (
     <BottomSheet
       open={open}
@@ -37,14 +37,15 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
       <div className={styles.body} data-placeholder>
         <p className={styles.copy}>
           {member ? (
-            <>To answer your questions about {name}, the Oracle uses what you share about {their} health: </>
+            <>To answer your questions about {name}, the Oracle uses what you share about {their} health, </>
           ) : (
-            <>To answer you, the Oracle uses what you share about your health: </>
+            <>To answer your questions, the Oracle uses what you share about your health, </>
           )}
-          symptoms, medications and history. It stays private to your account and is never sold. The Oracle is an AI
-          that speaks in Deborah’s voice. Its guidance is education, not a diagnosis or prescription.
+          {/* OPEN: privacy promise removed per docs/copy/voice-tone-ux-copy.md §6 — add a storage/sale line only once legal verifies it. */}
+          such as symptoms, medications and history. The Oracle is an AI informed by Deborah Maragopoulos’ experience,
+          not Deborah herself. Its guidance is education, not a diagnosis or prescription.
         </p>
-        <Checkbox checked={checked} onChange={setChecked} label="I accept the Health Consent" />
+        <Checkbox checked={checked} onChange={setChecked} label="I’ve read and agree to the Health Consent" />
       </div>
     </BottomSheet>
   );
