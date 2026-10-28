@@ -5,7 +5,7 @@
     { "id": "doc-discuss", "label": "Yes, let’s talk about it" },
     { "id": "doc-later", "label": "Not now" }
   ],
-  "later": "No problem. It’s in Documents and reports whenever you want to come back to it.",
+  "later": "No problem. We can come back to it whenever you like.",
   "bubble": "Shared {title}",
   "replies": {
     "imaging": "Thanks for sharing your imaging report. I can help you understand the terms it uses and what questions to bring to your provider. What would you like to start with?",

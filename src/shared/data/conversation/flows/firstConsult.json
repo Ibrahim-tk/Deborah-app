@@ -579,8 +579,8 @@
     },
     "exit_labs": {
       "type": "end",
-      "route": "/labs/upload",
-      "note": "F05 Labs flow."
+      "route": "/chat",
+      "note": "Lab reports removed (2026-10-28): lab values are typed into the chat as text."
     },
     "exit_booking": {
       "type": "end",

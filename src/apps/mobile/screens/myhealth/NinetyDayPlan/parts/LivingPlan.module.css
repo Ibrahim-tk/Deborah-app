@@ -125,3 +125,23 @@
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   color: var(--color-ink);
 }
+
+/* —— Web uplift: naked concerns; earlier / resolved as hairline-divided rows, not cards. —— */
+.title { font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); }
+.earlier { padding-top: var(--space-6); border-top: 1px solid var(--color-border-hairline); gap: 0; }
+.earlierTitle { margin-bottom: var(--space-3); }
+.fold { border-radius: 0; background: none; border-bottom: 1px solid var(--color-border-hairline); }
+.earlier .fold:first-of-type, .root > .fold { border-top: 1px solid var(--color-border-hairline); }
+.foldHead { padding: var(--space-4) 0; }
+.foldHead:hover { background: none; }
+.foldHead:hover .foldName { text-decoration: underline; text-underline-offset: 4px; }
+.fold .concern { padding: 0 0 var(--space-5); }
+.resolved { padding: 0 0 var(--space-4); }
+
+/* No divider above Earlier concerns; no underline on hover (designer, 2026-10-23). */
+.earlier { padding-top: 0; border-top: 0; }
+.foldHead:hover .foldName { text-decoration: none; }
+
+/* Same row title as the pillars (designer, 2026-10-28). */
+.foldName { font: var(--weight-regular) var(--fs-headline) / var(--lh-headline) var(--font-body); }
+.title { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); }

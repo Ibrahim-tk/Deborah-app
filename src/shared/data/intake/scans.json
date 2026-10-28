@@ -3,7 +3,6 @@
   "note": "Simulated OCR text from the camera; the mock extractor turns it into entries.",
   "samples": [
     { "id": "bottle", "label": "Pill bottle", "field": "medications", "ocr": "LEVOTHYROXINE SODIUM 50 MCG TABLETS. TAKE ONE TABLET BY MOUTH DAILY ON AN EMPTY STOMACH." },
-    { "id": "supplement", "label": "Supplement label", "field": "medications", "ocr": "MAGNESIUM GLYCINATE 200 MG — Supplement Facts. Also contains VITAMIN D3 1000 IU. Take 2 capsules daily." },
-    { "id": "lab", "label": "Lab report", "field": "conditions", "ocr": "TSH 6.2 mIU/L (H). Free T4 0.8 ng/dL. Impression: findings consistent with hypothyroidism." }
+    { "id": "supplement", "label": "Supplement label", "field": "medications", "ocr": "MAGNESIUM GLYCINATE 200 MG — Supplement Facts. Also contains VITAMIN D3 1000 IU. Take 2 capsules daily." }
   ]
 }

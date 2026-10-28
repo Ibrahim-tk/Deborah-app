@@ -442,8 +442,8 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return (
         <HomeMediaHero
           titleId="lab-media-hero"
-          title="Ongoing tiredness and a question about thyroid function"
-          when="4 days ago"
+          eyebrow="Continue your conversation"
+          title="Thyroid and tiredness"
           tone="hero"
           artifact="violet-bloom"
           ctaLabel="Continue"

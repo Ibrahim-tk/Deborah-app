@@ -26,7 +26,6 @@ export function ChatLauncher({ placeholder = 'Describe how you’re feeling…',
           onChange={noop}
           onSend={noop}
           onStop={noop}
-          onAttach={noop}
           onFocusChange={noop}
           generating={false}
           placeholder={placeholder}

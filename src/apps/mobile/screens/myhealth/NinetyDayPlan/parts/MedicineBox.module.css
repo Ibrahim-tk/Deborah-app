@@ -30,3 +30,36 @@
   font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
   color: var(--color-ink-secondary);
 }
+
+/* Web uplift: no tonal box — progress, groups and checkboxes sit straight on the page. */
+.box { padding: 0; border-radius: 0; background: none; gap: var(--space-5); }
+.wellLabel { font-weight: var(--weight-medium); color: var(--color-ink); }
+
+/* Depth (designer, 2026-10-23): the active checklist is the one raised surface — white, hairline, roomy. */
+.box { padding: var(--space-6); border-radius: var(--radius-card); background: var(--white); box-shadow: inset 0 0 0 1px var(--surface-border); }
+
+/* Balance (designer, 2026-10-28): slim progress, quieter action labels, round checks. */
+.progress [role='progressbar'] { height: 4px; }
+.progress [role='progressbar'] + span { font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+.actionText { font-size: var(--fs-subhead); line-height: var(--lh-subhead); color: var(--color-ink-secondary); }
+.rows { gap: var(--space-1); }
+
+/* Group labels as quiet captions aligned to the action text (designer, 2026-10-28). */
+.wellLabel {
+  padding-left: calc(22px + var(--space-3));
+  font: var(--weight-medium) var(--fs-caption-1, var(--fs-footnote)) / var(--lh-caption-1, var(--lh-footnote)) var(--font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5a4f55;
+}
+.well { gap: 0; }
+.well + .well { padding-top: var(--space-4); border-top: 1px solid var(--color-border-hairline); }
+
+/* No uppercase; lighter caption (designer, 2026-10-28). */
+.wellLabel { text-transform: none; letter-spacing: 0; font-weight: var(--weight-regular); font-size: var(--fs-footnote); line-height: var(--lh-footnote); color: #5a4f55; }
+
+/* Mobile fit (2026-10-28): roomy but phone-sized checklist surface. */
+.box { padding: var(--space-5); }
+
+/* One flat checklist (2026-10-28): no group labels or dividers; rows breathe on spacing alone. */
+.rows { gap: var(--space-3); }

@@ -11,10 +11,6 @@ export const CLIENT_GUIDE: Record<string, string> = {
     'These are visit notes. You can save a copy or download them to share with a clinician.',
   'records-notes':
     'Your visit notes are here. Open an old one, or log what happened after a provider visit.',
-  'records-labs':
-    'Upload or open lab results here.',
-  'records-attachments':
-    'Photos and files you’ve attached are here.',
   'healing-plan':
     'This is the Wellness Plan. Newest concern stays on top — check off actions as you go. Confirm when a concern is resolved. The letter below is the Oracle’s reference.',
 };

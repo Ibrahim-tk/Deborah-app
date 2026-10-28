@@ -18,6 +18,7 @@ import { FlowText } from './FlowText';
 import { ThinkingSteps } from './ThinkingSteps';
 import { AppointmentForm, type Appointment } from './AppointmentForm';
 import type { Entry } from './useFlowPlayer';
+import { useToast } from '@mobile/hooks/toast.store';
 import styles from '../FirstConsult.module.css';
 
 export interface EntryViewProps {
@@ -40,6 +41,7 @@ export interface EntryViewProps {
 }
 
 export function EntryView({ entry, active, say, onPick, onAction, renderPrep, renderNotesCard, onAppointment, onCreateVisitNotes, selection, onSelect }: EntryViewProps) {
+  const toast = useToast();
   // Oct 27: no product cards or mentions for minors (13–17 and children).
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
   if (entry.kind === 'user') return <MessageBubble role="user" text={entry.text} />;
@@ -73,6 +75,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
             notice={entry.safetyText}
             showVisitNotes
             onEditFacts={() => onAction('edit_profile')}
+            onFactsResult={(n) => toast(n ? 'Saved to your health profile' : 'Nothing was saved', n ? { icon: 'check' } : undefined)}
             onBook={() => onAction('book_request')}
             onLearnGold={() => onAction('exit_product')}
             onVisitNotes={() => (onCreateVisitNotes ? onCreateVisitNotes() : onAction('visit_notes'))}

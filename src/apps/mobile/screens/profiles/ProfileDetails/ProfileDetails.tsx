@@ -9,7 +9,7 @@
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ageOn, isMinor } from '@shared/engine';
-import { SELF_PROFILE_ID, selectProfileConversations, selectProfileLabs, selectProfileNotes, useAppStore } from '@shared/store';
+import { SELF_PROFILE_ID, selectProfileConversations, selectProfileNotes, useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
 import { Button, Header, ListRow, useAlert } from '@mobile/ui';
@@ -32,7 +32,6 @@ export default function ProfileDetails() {
     useShallow((s) => ({
       consultations: stored ? selectProfileConversations(s, stored.id).length : 0,
       notes: stored ? selectProfileNotes(s, stored.id).length : 0,
-      labs: stored ? selectProfileLabs(s, stored.id).length : 0,
     })),
   );
   // Keep the last known profile so the screen doesn't blank while it pops away after a delete.
@@ -60,7 +59,7 @@ export default function ProfileDetails() {
     toast('Profile updated');
   };
 
-  const records = (segment: 'consultations' | 'notes' | 'labs') => push('M-9.1', { segment, profileId: profile.id });
+  const records = (segment: 'consultations' | 'notes') => push('M-9.1', { segment, profileId: profile.id });
 
   const remove = async () => {
     const choice = await alert({
@@ -97,7 +96,6 @@ export default function ProfileDetails() {
               {/* OPEN: M-9.1 shows the active profile; these pass profileId so it can filter (see report). */}
               <ListRow title="Consultations" value={String(counts.consultations)} onPress={() => records('consultations')} />
               <ListRow title="Visit Notes" value={String(counts.notes)} onPress={() => records('notes')} />
-              <ListRow title="Lab results" value={String(counts.labs)} onPress={() => records('labs')} />
             </div>
           </section>
         )}

@@ -1,1 +1,0 @@
-export { LabValueGrid } from './LabValueGrid';

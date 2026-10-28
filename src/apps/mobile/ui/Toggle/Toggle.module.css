@@ -31,3 +31,9 @@
 
 /* Locked: readable state, no interaction. */
 .switch:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Compact switch (designer, 2026-10-28): 42 × 26 sits with the 15 pt settings rows; tap area stays 48 pt. */
+.switch { width: 42px; height: 26px; }
+.switch::after { inset: -11px -3px; }
+.thumb { width: 22px; height: 22px; box-shadow: 0 1px 3px rgba(18, 7, 33, 0.2); }
+.switch[aria-checked='true'] .thumb { transform: translateX(16px); }

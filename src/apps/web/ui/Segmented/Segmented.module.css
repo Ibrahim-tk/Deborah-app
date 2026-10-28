@@ -17,10 +17,12 @@
   border-radius: var(--radius-full);
   color: var(--color-ink-secondary);
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; overflow: hidden;
   transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out);
 }
 .icon { flex: none; }
+/* Label truncates on its own so the icon never clips (ellipsis needs a block box, not a flex text run). */
+.text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 /* Selected: the selected-tint fill with the selected border, same tokens as picked pills (design 2026-10-20). */
 .segment[aria-selected='true'] {
   background: var(--selected-tint);
@@ -33,3 +35,22 @@
 @media (prefers-reduced-transparency: reduce) {
   .root { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--color-surface-tonal); }
 }
+
+/* One segmented look app-wide (designer, 2026-10-28), same as ui/ToggleGroup: white outlined track, fully rounded,
+   pill-shaped inner options with no dividers; the picked one is a soft accent tint with accent text, no border. */
+.root {
+  padding: 3px; gap: 2px;
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.segment { min-height: 38px; }
+.segment:active { background: color-mix(in srgb, var(--color-accent) 6%, transparent); }
+.segment[aria-selected='true'] {
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--white));
+  box-shadow: none;
+  color: var(--color-accent);
+}
+.segment:focus-visible { outline-offset: -2px; }
+@media (prefers-reduced-transparency: reduce) { .root { background: var(--white); } }

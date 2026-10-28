@@ -16,8 +16,6 @@
  */
 import type { Appointment } from './parts/AppointmentForm';
 import { VisitNoteCard } from '@mobile/patterns/health';
-import { useComposerAttachments } from '@mobile/patterns/chat';
-import { meta } from '@mobile/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { firstConsultFlow, proxyConsultFlow, returningConsultFlow, sandraConsultFlow } from '@shared/data';
 import { briefFromAnswer, visitBriefPreview } from '@shared/engine';
@@ -26,7 +24,7 @@ import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { DeborahBlob } from '@mobile/ui';
 import { Aura, GradientShift } from '@mobile/ui';
-import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
+import { AiDisclosure, ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@mobile/patterns/chat';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -40,7 +38,7 @@ import { useProfileContext } from './parts/profileContext';
 import { useProxyContext } from './parts/proxyContext';
 import styles from './FirstConsult.module.css';
 
-const EXITS: Record<string, string> = { '/labs/upload': 'M-5.3', '/book': 'M-8.2', '/shop/genesis-gold': 'M-2.7' };
+const EXITS: Record<string, string> = { '/book': 'M-8.2', '/shop/genesis-gold': 'M-2.7' };
 
 export default function FirstConsult() {
   // `flow: 'returning'`: the signed-in demo (Maria, seed R01) instead of the first consultation.
@@ -97,7 +95,7 @@ export default function FirstConsult() {
   const prep = visitPrepItems(flow.nodes.answer_1);
 
 
-  // Leaving the script: free chat opens the normal conversation; labs, booking and shop open their screens.
+  // Leaving the script: free chat opens the normal conversation; booking and shop open their screens.
   const last = entries.at(-1);
   useEffect(() => {
     if (last?.kind !== 'end' || !last.route || last.route === '/chat') return;
@@ -213,14 +211,12 @@ export default function FirstConsult() {
     const d = isoDay ? new Date(`${isoDay}T12:00:00`) : nowFrom(useAppStore.getState());
     return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
   };
-  const attachments = useComposerAttachments('M-2.12', meta('M-2.12')?.title ?? 'First consultation');
   return (
     <div className={styles.root} data-xref="M-2.12 · First consultation">
       {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
       <Aura />
       <GradientShift />
       <ChatHeader
-        disclosure={started}
         onBack={pop}
         onNewChat={() => openAsk()}
         canStartNew={started}
@@ -291,17 +287,8 @@ export default function FirstConsult() {
         <Composer
           value={draft}
           onChange={setDraft}
-          onSend={(text) => {
-            const n = attachments.items.length;
-            const typed = text ?? draft;
-            attachments.clear();
-            send(typed.trim() || (n ? (n > 1 ? `I’ve attached ${n} files.` : 'I’ve attached a file.') : typed));
-          }}
+          onSend={(text) => send(text ?? draft)}
           onStop={() => {}}
-          // Camera / Upload drop straight into the composer — no lab processing (design 2026-10-21).
-          onAttach={attachments.attach}
-          attachments={attachments.items}
-          onRemoveAttachment={attachments.remove}
           // Symptoms open the SymptomPicker sheet (search + close, area tabs, pills).
           onSymptoms={() => setSymptomSheet(true)}
           symptomsActive={symptoms.length > 0}
@@ -315,8 +302,8 @@ export default function FirstConsult() {
           placeholder="Or tell me in your own words…"
           voiceSample=""
         />
+        <AiDisclosure />
       </div>
-      {attachments.overlay}
     </div>
   );
 }

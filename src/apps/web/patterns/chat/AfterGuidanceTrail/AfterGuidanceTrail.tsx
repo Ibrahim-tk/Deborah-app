@@ -20,6 +20,8 @@ export interface AfterGuidanceTrailProps {
   /** Safety line held until after the answer. Sits once, above the single consult card. */
   notice?: string;
   onEditFacts?: () => void;
+  /** Save-facts answered: how many were saved (screen shows the toast). */
+  onFactsResult?: (saved: number) => void;
   onBook?: () => void;
   onLearnGold?: () => void;
   onVisitNotes?: () => void;
@@ -46,6 +48,7 @@ export function AfterGuidanceTrail({
   showVisitNotes = true,
   notice,
   onEditFacts,
+  onFactsResult,
   onBook,
   onLearnGold,
   onVisitNotes,
@@ -59,7 +62,7 @@ export function AfterGuidanceTrail({
     <div className={styles.root}>
       {!hideSave && (
         <div className={styles.block}>
-          <SaveHealthProfile facts={list} onEdit={onEditFacts} />
+          <SaveHealthProfile facts={list} onEdit={onEditFacts} onResult={onFactsResult} />
         </div>
       )}
       {lines.length > 0 && (

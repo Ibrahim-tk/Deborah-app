@@ -48,3 +48,9 @@
 .features { display: grid; gap: var(--space-1); }
 .feature { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
 .profiles { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+
+/* Settings type scale (designer, 2026-10-28): 17 pt price, 15 pt feature lines, 13 pt meta — same as Settings rows. */
+.price { font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body); }
+.feature { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: #5a4f55; }
+.current, .profiles { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: #5a4f55; }
+.features { gap: 2px; }

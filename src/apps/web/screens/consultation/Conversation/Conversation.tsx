@@ -375,7 +375,6 @@ export default function Conversation() {
                   actions={actions}
                   onShop={(id) => open('M-2.7', { productId: id })}
                   onBook={() => push('M-8.2')}
-                  onUploadLabs={() => gate('documents', () => open('M-5.3'))}
                   onRestartPlan={() => gate('journey', () => {
                     switchTab('health');
                     push('M-7.3');

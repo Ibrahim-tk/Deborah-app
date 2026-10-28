@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tree Growth Sandbox</title>
+<style>
+  :root {
+    --ink: #22102e; --muted: #5b4a66; --panel: #ffffff; --line: #e4dcea;
+    --plum: #37074f; --page: #f1f0f4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.4 -apple-system, "DM Sans", system-ui, sans-serif; }
+  main { display: flex; gap: 32px; padding: 24px 16px; justify-content: center; flex-wrap: wrap; }
+  .phone { position: relative; width: 390px; height: 844px; border-radius: 48px; overflow: hidden;
+    border: 10px solid #151515; box-shadow: 0 20px 50px rgb(0 0 0 / .18);
+    background: linear-gradient(180deg, #7b5cc7 0%, #b9a2e0 28%, #ecdcea 52%, #f8f1e9 72%, #f7f3ec 100%); }
+  canvas { position: absolute; right: 0; bottom: 0; height: 100%; }
+  .fade { position: absolute; inset: auto 0 0 0; height: 46%;
+    background: linear-gradient(90deg, rgb(248 243 236 / .78) 0%, rgb(248 243 236 / .6) 45%, rgb(248 243 236 / .12) 80%, rgb(248 243 236 / 0));
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 35%);
+    mask-image: linear-gradient(180deg, transparent, #000 35%); }
+  .grain { position: absolute; inset: 0; pointer-events: none; opacity: .14; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.6 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .content { position: absolute; inset: auto 24px 32px 24px; }
+  h1 { font: 400 32px/1.15 "Cormorant Garamond", Georgia, serif; margin: 0 0 120px; }
+  .cta { height: 52px; border-radius: 26px; background: var(--plum); color: #fff;
+    display: grid; place-items: center; font-weight: 500; }
+  .panel { width: 320px; max-width: 100%; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px; align-self: flex-start; display: grid; gap: 16px; }
+  .panel h2 { margin: 0; font-size: 17px; font-weight: 500; }
+  label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+  input[type=range] { width: 100%; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  button { font: inherit; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line);
+    background: #fff; color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--plum); color: #fff; border-color: var(--plum); }
+  .readout { font-variant-numeric: tabular-nums; color: var(--ink); }
+  #stage { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="phone">
+    <canvas id="tree"></canvas>
+    <div class="fade"></div>
+    <div class="grain"></div>
+    <div class="content"><h1>When were you born?</h1><div class="cta">Continue</div></div>
+  </div>
+  <section class="panel">
+    <h2>Tree growth</h2>
+    <label>Progress <span class="readout" id="pv">0.0 s</span>
+      <input id="progress" type="range" min="0" max="1" step="0.001" value="0"></label>
+    <div class="row">
+      <button class="primary" id="play">Play</button>
+      <button id="reset">Reset</button>
+    </div>
+    <label>Duration (seconds) <span class="readout" id="dv">12</span>
+      <input id="duration" type="range" min="4" max="30" step="1" value="12"></label>
+    <label class="row"><input id="reduced" type="checkbox"> Reduced motion (jump to end)</label>
+    <label class="row"><input id="breath" type="checkbox" checked> Breathing light in the veins</label>
+    <label class="row"><input id="painted" type="checkbox"> Leaves in their painted colour</label>
+    <div id="stage">Loading…</div>
+    <div class="readout" id="fps">Frame rate: press Play</div>
+  </section>
+</main>
+<script>
+const ASSETS = /*ASSETS*/;
+
+// The World Tree, grown as geometry (WebGL2). Times below are story seconds
+// (the 12 s cut); the Duration slider plays the same story faster or slower.
+//
+// Light leads, growth follows: a thread of gold runs ahead of every growing
+// tip and the wood grows along it. The skeleton is split at every fork with a
+// Strahler order; the leader grows first and side limbs break bud behind it.
+// Girth follows the pipe model: a limb thickens with the foliage it carries.
+// Each step of a limb is a tapered tube drawn by a shader; depth keeps the most
+// central tube at every pixel, so overlapping tubes merge without seams.
+const STORY = 12;              // s
+const ROOTS = [1, 2.6];        // s: the roots wake
+const GROW = [2.5, 9];         // s: shoot → trunk → branches → crown
+const IGNITE = [9, 11.5];      // s: the ignition wave runs out through the tree
+const IGNITE_END = 1.25;       // ignition clock at the end of IGNITE (runs past the last twig)
+const SETTLE = [11.45, 12];    // s: one last breath that stays
+// Breathing veins and the ignition wave are a designer-approved exception
+// (2026-10-28) to the DESIGN.md ban on wave/pulse motion: they end in a held
+// state and never loop.
+const BREATH_PERIOD = 2.5;     // s per slow wave of light, root to tips
+const BREATH_ON = [6, 7, 11, 11.5];  // s: fades in, holds, fades out
+const PIPE = 0.6;              // radius ∝ (grown foliage above / final foliage above)^PIPE
+const WOOD_LOAD = 0.12;        // how much a length of bare limb counts vs a length of leafy twig
+const TAPER = 36;              // px behind a growing tip over which it narrows
+const BLEND = 70;              // px over which a continuing limb eases from its parent's girth
+const MIN_R = 0.35;            // px, the finest tip: a point, not a round cap
+const CORE = 0.72;             // inside this fraction of the radius: plain bark; outside: darker rim
+const RIM = 0.5;               // how dark the rim gets at the very edge
+const LEAD = 46;               // px the light runs ahead of a growing tip
+const BLOOM_SOFT = 0.12;       // ignition clock a cluster takes to burst and settle
+const TIME_SCALE = 1.25;       // bloom-time texture stores clock / TIME_SCALE
+const SETTLE_LEVEL = 0.5;      // the warmth left in the veins at the end
+const LABELS = [[1, "Stillness: motes of light drift up from the corner"],
+  [2.5, "The roots wake"], [4, "The light climbs and the shoot follows it"],
+  [6, "The trunk winds and thickens"], [8, "Branches reach out; the veins breathe"],
+  [9, "The crown fills"], [11.5, "Ignition: the bloom is lit, inner clusters first"],
+  [STORY + 1, "The settle: the warmth stays"]];
+
+// Leaves open behind the light, are shed from older wood as it thickens, and
+// loosen and drift down as the flowers ignite.
+const LEAF_GAP = [24, 36];     // px between fronds on twigs, on bigger limbs
+const LEAF_SIZE = 40;          // px, average frond length
+const LEAF_OPEN = 0.05;        // growth clock a frond takes to unfold
+const LEAF_SHED = 170;         // px of new growth after which limb leaves are shed
+const SHED_FALL = 0.05;        // growth clock a shed leaf takes to fall
+const DROP_FALL = 0.35;        // ignition clock a leaf takes to drift down
+
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ramp = (p, [a, b]) => clamp((p - a) / (b - a));
+const smoothstep = t => t * t * (3 - 2 * t);
+const $ = id => document.getElementById(id);
+
+const WOOD_VS = `#version 300 es
+in vec2 pos; in vec4 seg; in vec2 rad; in vec3 extra; in vec2 arc; in vec3 wk;
+uniform vec2 size;
+out vec2 p; flat out vec4 s; flat out vec2 r; flat out vec3 e; flat out vec2 sa; flat out vec3 w;
+void main() {
+  p = pos; s = seg; r = rad; e = extra; sa = arc; w = wk;
+  gl_Position = vec4(pos.x / size.x * 2.0 - 1.0, 1.0 - pos.y / size.y * 2.0, 0.0, 1.0);
+}`;
+const WOOD_FS = `#version 300 es
+precision highp float;
+in vec2 p; flat in vec4 s; flat in vec2 r; flat in vec3 e;   // e = age at a, age at b, seed
+flat in vec2 sa;                                              // wood: distance along the limb at a, b; light: lead
+flat in vec3 w;                                               // when the wood grew at a, b; kind (1 = light)
+uniform vec2 size; uniform sampler2D bark, gold, goldTime;
+uniform float clock, core, rim, breathAmp, breathPhase, ignite, igniteOn, settle, settleLevel;
+out vec4 color;
+float hash(vec2 q) { return fract(sin(dot(q, vec2(127.1, 311.7))) * 43758.5453); }
+float noise(vec2 q) {
+  vec2 i = floor(q), f = fract(q), u = f * f * (3.0 - 2.0 * f);
+  return mix(mix(hash(i), hash(i + vec2(1, 0)), u.x), mix(hash(i + vec2(0, 1)), hash(i + vec2(1, 1)), u.x), u.y);
+}
+float fbm(vec2 q) { float v = 0.0, a = 0.5; for (int k = 0; k < 4; k++) { v += a * noise(q); q *= 2.03; a *= 0.5; } return v; }
+const vec3 LIGHT = vec3(1.0, 0.8, 0.42);
+void main() {
+  vec2 a = s.xy, ba = s.zw - s.xy;
+  float L = max(length(ba), 1e-4);
+  vec2 dir = ba / L, nrm = vec2(-dir.y, dir.x);
+  float h = clamp(dot(p - a, ba) / (L * L), 0.0, 1.0);
+  float rr = mix(r.x, r.y, h);
+  vec2 off = p - a - ba * h;
+  float age = mix(e.x, e.y, h);
+  if (w.z > 0.5) {
+    // The thread of light ahead of the tip: a soft gold line, fading forward.
+    float d = length(off) / rr;
+    if (d > 1.0) discard;
+    float lit = exp(-d * d * 5.0) * (1.0 - clamp(-age / sa.x, 0.0, 1.0));
+    gl_FragDepth = 0.9;                            // always behind wood
+    color = vec4(LIGHT * lit, lit * 0.7);
+    return;
+  }
+  // Ragged silhouette: the bark edge wanders by ~1.5px, finer along the limb.
+  float along = mix(sa.x, sa.y, h) + e.z * 997.0, across = dot(off, nrm) / rr;
+  float edge = (fbm(vec2(along * 0.09, e.z * 13.0)) - 0.5) * 3.2 + (noise(p * 0.6) - 0.5) * 0.8;
+  float d = (length(off) + edge * min(1.0, rr / 3.0)) / rr;   // 0 centre line, 1 bark edge
+  float aa = 1.1 / rr;
+  if (d > 1.0 + aa) discard;
+  gl_FragDepth = clamp(d * 0.5, 0.0, 1.0);        // most central tube wins
+  vec2 uv = p / size;
+  vec3 c = texture(bark, uv).rgb;
+  // How long ago (growth clock) this wood grew: young wood is the last ~4%.
+  float when = mix(w.x, w.y, h);
+  float since = max(clock - when, 0.0);
+  // Young wood turns as it extends, so its ridges wind like rope; once the
+  // tip has moved on the twist stops and the wood holds still.
+  float twist = min(since, 0.1) * 50.0;
+  float ridge = fbm(vec2(along * 0.035, across * 2.6 + e.z * 7.0 + along * 0.015 + twist));
+  float fine = noise(vec2(along * 0.4, across * 9.0 + twist * 3.0));
+  c *= 0.8 + 0.32 * ridge + 0.08 * (fine - 0.5);
+  c *= 1.0 - 0.14 * across * sign(dir.y + 1e-3);
+  // Fresh growth is smoother and lighter, a reddish young-shoot brown.
+  float youth = 1.0 - smoothstep(0.0, 0.03, since);
+  c = mix(c, vec3(0.56, 0.38, 0.31) * (0.92 + 0.16 * ridge), youth * 0.6);
+  c *= 1.0 - rim * smoothstep(core, 1.0, d);      // rounded limb: darker towards the edge
+  // The light inside: it carries on from the thread into the young wood.
+  float centre = exp(-across * across * 6.0);
+  float glow = centre * (1.0 - smoothstep(0.0, 0.035, since)) * 0.75;
+  // Veins: slow breaths rising from root to tips, the ignition wave, then the
+  // warmth that stays.
+  float vein = texture(gold, uv).a;
+  float breath = breathAmp * (0.5 + 0.5 * sin(breathPhase - when * 3.2));
+  float wave = igniteOn * exp(-pow((when - ignite) / 0.07, 2.0));
+  float warm = settleLevel * clamp((settle - texture(goldTime, uv).r) / 0.15, 0.0, 1.0);
+  glow += wave * (0.45 * centre + 0.6 * vein);
+  c = mix(c, vec3(0.93, 0.66, 0.2), clamp(vein * max(breath, warm) * 1.8, 0.0, 1.0));
+  c = mix(c, LIGHT, clamp(glow, 0.0, 1.0));
+  float alpha = 1.0 - smoothstep(1.0 - aa, 1.0 + aa, d);
+  color = vec4(c * alpha, alpha);
+}`;
+const QUAD_VS = `#version 300 es
+in vec2 pos; out vec2 uv;
+void main() { uv = vec2(pos.x * 0.5 + 0.5, 0.5 - pos.y * 0.5); gl_Position = vec4(pos, 0.0, 1.0); }`;
+const BLOOM_FS = `#version 300 es
+precision highp float;
+in vec2 uv;
+uniform sampler2D petals, petalTime, gold, goldTime;
+uniform float ignite, soft, timeScale, settle, settleLevel;
+out vec4 color;
+void main() {
+  vec4 c = texture(petals, uv);
+  // A cluster is lit, not unfolded: when the ignition wave reaches its twig it
+  // bursts from its heart outward in a soft warm flare that settles to violet.
+  // Florets (~6px cells) each get a small head start or delay.
+  vec2 bt = texture(petalTime, uv).rg;            // r = when the wave lights it, g = depth (1 = heart)
+  float n = fract(sin(dot(floor(uv * vec2(160.0, 276.0)), vec2(12.99, 78.23))) * 43758.55);
+  float o = (ignite - bt.r * timeScale + (n - 0.5) * 0.03) / soft;   // 0 = lit, 1 = settled
+  float reach = o * 1.4 - (1.0 - bt.g);          // the burst front, heart → rim
+  float a = c.a * smoothstep(0.0, 0.2, reach);
+  float flare = smoothstep(0.0, 0.2, o) * (1.0 - smoothstep(0.2, 1.2, o));
+  c.rgb = mix(c.rgb, vec3(1.0, 0.86, 0.64), flare * 0.6);
+  // The warmth that stays: a soft glow from the veins into the crown.
+  float glow = texture(gold, uv, 3.5).a * settleLevel * clamp((settle - texture(goldTime, uv, 3.5).r) / 0.15, 0.0, 1.0);
+  vec3 gc = vec3(1.0, 0.72, 0.3) * glow * 0.5;
+  color = vec4(c.rgb * a + gc, a + glow * 0.25);
+}`;
+const LEAF_VS = `#version 300 es
+in vec2 corner; in vec4 place; in vec4 dims; in vec3 tone;
+uniform vec2 size;
+out vec2 uv; out vec4 t;
+void main() {
+  // place = stem base xy, unit direction the frond points; dims = width, length, mirror, alpha.
+  vec2 d = place.zw, right = vec2(-d.y, d.x);
+  float u = (corner.y * 0.5 + 0.5) * dims.y;
+  vec2 p = place.xy + d * u + right * corner.x * 0.5 * dims.x;
+  uv = vec2(corner.x * dims.z * 0.5 + 0.5, 0.5 - corner.y * 0.5);
+  t = vec4(tone, dims.w);
+  gl_Position = vec4(p.x / size.x * 2.0 - 1.0, 1.0 - p.y / size.y * 2.0, 0.0, 1.0);
+}`;
+const LEAF_FS = `#version 300 es
+precision highp float;
+in vec2 uv; in vec4 t;                     // t = maturity, fall, glow, alpha
+uniform sampler2D leaf; uniform float painted;
+out vec4 color;
+void main() {
+  vec4 c = texture(leaf, uv);
+  // The sprite's own light and dark (lit leaflets, darker stem, bright backlit
+  // rims) recoloured in muted sage, dusty with lilac, then faded gold as it falls.
+  float shade = dot(c.rgb, vec3(0.3, 0.5, 0.2)) / 0.6;
+  vec3 g = mix(vec3(0.68, 0.71, 0.56), vec3(0.47, 0.5, 0.43), t.x);
+  g = mix(g, vec3(0.74, 0.64, 0.44), t.y);
+  vec3 rgb = mix(g * shade, c.rgb, painted);
+  // As the light passes, the leaf's edges catch it briefly.
+  rgb += vec3(1.0, 0.8, 0.45) * t.z * smoothstep(0.7, 0.95, shade * 0.6) * 0.8;
+  float a = c.a * t.w;
+  color = vec4(rgb * a, a);
+}`;
+const SPARK_VS = `#version 300 es
+in vec2 corner; in vec3 spot; in vec3 tint;
+uniform vec2 size;
+out vec2 v; out vec3 col;
+void main() {
+  v = corner; col = tint;
+  vec2 p = spot.xy + corner * spot.z;
+  gl_Position = vec4(p.x / size.x * 2.0 - 1.0, 1.0 - p.y / size.y * 2.0, 0.0, 1.0);
+}`;
+const SPARK_FS = `#version 300 es
+precision highp float;
+in vec2 v; in vec3 col;
+out vec4 color;
+void main() {
+  float d2 = dot(v, v);
+  if (d2 > 1.0) discard;
+  float f = exp(-d2 * 4.5) * (1.0 - d2);
+  color = vec4(col * f, max(col.r, max(col.g, col.b)) * f * 0.55);
+}`;
+
+let gl, W, H, segs, roots, base, wood, bloom, leafProg, sparkProg;
+let quadBuf, woodBuf, leafBuf, sparkBuf, leaves = [], motes = [], tex = {};
+
+function program(vs, fs) {
+  const p = gl.createProgram();
+  for (const [type, src] of [[gl.VERTEX_SHADER, vs], [gl.FRAGMENT_SHADER, fs]]) {
+    const sh = gl.createShader(type);
+    gl.shaderSource(sh, src); gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
+    gl.attachShader(p, sh);
+  }
+  gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  return p;
+}
+
+const image = src => new Promise(res => { const i = new Image(); i.onload = () => res(i); i.src = src; });
+async function texture(name, mip = false) {
+  const t = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, t);
+  gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, await image(ASSETS[name]));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  if (mip) gl.generateMipmap(gl.TEXTURE_2D);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, mip ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR);
+  return t;
+}
+
+function bind(prog, units, uniforms) {
+  gl.useProgram(prog);
+  Object.entries(units).forEach(([name, t], i) => {
+    gl.activeTexture(gl.TEXTURE0 + i);
+    gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.uniform1i(gl.getUniformLocation(prog, name), i);
+  });
+  gl.uniform2f(gl.getUniformLocation(prog, "size"), W, H);
+  for (const [name, v] of Object.entries(uniforms)) gl.uniform1f(gl.getUniformLocation(prog, name), v);
+}
+
+// When (on the growth clock) a limb's growing tip reaches `at` px along it:
+// the inverse of the smoothstep that drives the tip.
+function reach(s, at) {
+  const y = clamp(at / s.len);
+  return s.t0 + (0.5 - Math.sin(Math.asin(1 - 2 * y) / 3)) * (s.t1 - s.t0);
+}
+function pointAt(P, at) {
+  for (let i = 0; i + 4 < P.length; i += 4) {
+    if (P[i + 7] < at) continue;
+    const f = clamp((at - P[i + 3]) / Math.max(P[i + 7] - P[i + 3], 1e-4));
+    const dx = P[i + 4] - P[i], dy = P[i + 5] - P[i + 1], L = Math.hypot(dx, dy) || 1;
+    return [P[i] + dx * f, P[i + 1] + dy * f, dx / L, dy / L, P[i + 2]];
+  }
+  return null;
+}
+let k = 1;
+const rnd = () => { const h = Math.sin(k++ * 78.233) * 43758.5453; return h - Math.floor(h); };
+
+async function load() {
+  ({ size: [W, H], segments: segs } = ASSETS.skeleton);
+  const canvas = $("tree");
+  canvas.width = W; canvas.height = H;
+  gl = canvas.getContext("webgl2", { premultipliedAlpha: true, antialias: false, depth: true });
+  if (!gl) {
+    $("stage").textContent = "This browser has WebGL2 turned off. Open the sandbox in Chrome or Safari.";
+    return;
+  }
+  wood = program(WOOD_VS, WOOD_FS);
+  bloom = program(QUAD_VS, BLOOM_FS);
+  leafProg = program(LEAF_VS, LEAF_FS);
+  sparkProg = program(SPARK_VS, SPARK_FS);
+  tex.bark = await texture("bark");
+  tex.petals = await texture("blossoms");
+  tex.petalTime = await texture("bloom-time");
+  tex.gold = await texture("gold", true);
+  tex.goldTime = await texture("gold-map", true);
+  tex.leaves = [];
+  for (let i = 1; ASSETS["leaf_" + i]; i++) tex.leaves.push(await texture("leaf_" + i, true));
+  segs.forEach((s, i) => {
+    // The pipe model follows foliage: twigs (orders 1–2) carry the leaves and
+    // flowers; bigger limbs mostly just carry them. A young spear stays slim.
+    s.load = s.order <= 2 ? 1 : WOOD_LOAD;
+    s.total = s.len * s.load;
+    s.kids = 0;
+    const h = Math.sin(i * 12.9898) * 43758.5453;
+    // A limb that carries on through a fork keeps its character (same seed).
+    const parent = segs[s.parent];
+    s.same = !!parent && parent.order === s.order;
+    s.seed = s.same ? parent.seed : h - Math.floor(h);
+    // Distance along the whole limb at this piece's start, so waver and bark
+    // texture carry on through forks instead of restarting.
+    s.offset = s.same ? parent.offset + parent.len : 0;
+    if (parent) parent.kids++;
+  });
+  for (let i = segs.length - 1; i > 0; i--) segs[segs[i].parent].total += segs[i].total;
+  // The trunk enters from below the screen: no round cap at its foot.
+  const root = segs[0].pts;
+  base = [root[0], root[1]];
+  root.unshift(root[0], root[1] + 400, root[2], -400);
+  // When each skeleton point grew: the veins breathe and ignite in this order.
+  for (const s of segs) s.when = Float32Array.from({ length: s.pts.length / 4 }, (_, i) => reach(s, s.pts[i * 4 + 3]));
+  placeRoots();
+  placeLeaves();
+  placeMotes();
+
+  [woodBuf, leafBuf, sparkBuf, quadBuf] = [0, 0, 0, 0].map(() => gl.createBuffer());
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+  render(0);
+}
+
+// Two or three roots grip the ground at the trunk's foot, spreading sideways
+// and slightly down before they leave the bottom edge.
+function placeRoots() {
+  const y0 = H - 70;
+  roots = [[-1, 0.14, 340, -40], [1, 0.22, 200, 25], [-0.35, 1, 120, -15]].map(([dx, dy, len, bend]) => {
+    const pts = [], n = 16;
+    const L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+    let s = 0, px = base[0], py = y0;
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, sway = Math.sin(t * Math.PI) * bend;
+      const x = base[0] + ux * len * t - uy * sway, y = y0 + uy * len * t + ux * sway * 0.3;
+      s += Math.hypot(x - px, y - py); px = x; py = y;
+      pts.push(x, y, 1 - t, s);
+    }
+    return { pts, len: s, seed: rnd(), when: new Float32Array(n + 1) };
+  });
+}
+
+function placeLeaves() {
+  for (const s of segs) {
+    const twig = s.order <= 2, gap = LEAF_GAP[twig ? 0 : 1];
+    let side = rnd() < 0.5 ? -1 : 1;
+    for (let at = gap * (0.3 + 0.7 * rnd()); at < s.len; at += gap * (0.75 + 0.5 * rnd())) {
+      const q = pointAt(s.pts, at);
+      // None on the trunk foot at the bottom edge: it is old wood from the start.
+      if (!q || q[0] < -40 || q[0] > W + 40 || q[1] > H - 70) continue;
+      side = -side;
+      // Fronds stand out from the shoot at 40–75° and lean towards the light.
+      const turn = side * (0.7 + 0.6 * rnd());
+      let fx = q[2] * Math.cos(turn) - q[3] * Math.sin(turn), fy = q[2] * Math.sin(turn) + q[3] * Math.cos(turn);
+      fx = fx * 0.7 - 0.12; fy = fy * 0.7 - 0.3;
+      const fl = Math.hypot(fx, fy);
+      const birth = reach(s, at) + 0.01 * rnd();
+      // Limb leaves are shed once the tip has moved on; the rest loosen as the
+      // ignition wave passes them, all gone before the wave ends.
+      const shed = twig ? Infinity : Math.max(birth + 0.06, reach(s, at + LEAF_SHED));
+      const drop = Math.min(birth + 0.03 + 0.06 * rnd(), IGNITE_END - DROP_FALL - 0.05);
+      leaves.push({ x: q[0], y: q[1], bx: q[2], by: q[3], fx: fx / fl, fy: fy / fl, side, birth, shed, drop,
+        size: LEAF_SIZE * (0.7 + 0.6 * rnd()) * (twig ? 1 : 0.85), wide: 0.7 + 0.35 * rnd(),
+        mirror: rnd() < 0.5 ? -1 : 1, sprite: Math.floor(rnd() * tex.leaves.length) });
+    }
+  }
+}
+
+// Motes of light, like dust in a sunbeam, rising from the bottom-right corner.
+function placeMotes() {
+  for (let i = 0; i < 70; i++) {
+    const x = W * (0.42 + 0.62 * Math.sqrt(rnd()));
+    motes.push({ x, phase: rnd(), speed: 30 + 50 * rnd(), sway: 6 + 14 * rnd(), period: 3 + 3 * rnd(),
+      size: 2.5 + 3.5 * rnd(), glow: 0.5 + 0.5 * rnd(), off: rnd() * 6.28 });
+  }
+}
+
+// 6 vertices per limb step, 16 floats each: pos.xy, seg (a.xy, b.xy), rad (ra, rb),
+// extra (age at a, age at b, limb seed), arc (distance along the limb at a, b),
+// wk (when the wood grew at a, b; kind: 0 wood, 1 light).
+const STRIDE = 16;
+let verts = new Float32Array(STRIDE * 6 * 8000), n = 0;
+function quad(ax, ay, bx, by, ra, rb, ga, gb, seed, sa, sb, wa, wb, kind) {
+  if (n + STRIDE * 6 > verts.length) { const v = new Float32Array(verts.length * 2); v.set(verts); verts = v; }
+  const R = Math.max(ra, rb) + 3, dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1;
+  const ux = dx / L * R, uy = dy / L * R, nx = -uy, ny = ux;
+  const c = [[ax - ux + nx, ay - uy + ny], [bx + ux + nx, by + uy + ny],
+             [bx + ux - nx, by + uy - ny], [ax - ux - nx, ay - uy - ny]];
+  for (const j of [0, 1, 2, 0, 2, 3]) {
+    verts.set([c[j][0], c[j][1], ax, ay, bx, by, ra, rb, ga, gb, seed, sa, sb, wa, wb, kind], n);
+    n += STRIDE;
+  }
+}
+
+// One limb: wood up to its growing front, then the thread of light ahead of it.
+function limb(P, when, front, rad, seed, offset, lead, threadR) {
+  for (let i = 0; i + 4 < P.length; i += 4) {
+    const s0 = P[i + 3];
+    if (s0 >= front) break;
+    let x1 = P[i + 4], y1 = P[i + 5], s1 = P[i + 7], w1 = when[i / 4 + 1];
+    if (s1 > front) {                   // the growing tip, part-way along this step
+      const f = (front - s0) / (s1 - s0);
+      x1 = P[i] + (x1 - P[i]) * f; y1 = P[i + 1] + (y1 - P[i + 1]) * f; s1 = front;
+      w1 = when[i / 4] + (w1 - when[i / 4]) * f;
+    }
+    quad(P[i], P[i + 1], x1, y1, rad(P[i + 2], s0), rad(P[i + 6], s1), front - s0, front - s1,
+      seed, s0 + offset, s1 + offset, when[i / 4], w1, 0);
+  }
+  if (lead <= 0) return;
+  const end = front + lead;
+  for (let i = 0; i + 4 < P.length; i += 4) {
+    const s0 = P[i + 3], s1 = P[i + 7];
+    if (s1 <= front) continue;
+    if (s0 >= end) break;
+    const a = clamp((front - s0) / (s1 - s0)), b = clamp((end - s0) / (s1 - s0));
+    const at = (f, j) => P[i + j] + (P[i + 4 + j] - P[i + j]) * f;
+    quad(at(a, 0), at(a, 1), at(b, 0), at(b, 1), threadR, threadR,
+      front - (s0 + (s1 - s0) * a), front - (s0 + (s1 - s0) * b), seed, lead, lead, 0, 0, 1);
+  }
+}
+
+function buildWood(g, rootF) {
+  for (const s of segs) {
+    s.u = smoothstep(clamp((g - s.t0) / Math.max(s.t1 - s.t0, 1e-4)));
+    s.above = s.u * s.len * s.load;
+  }
+  for (let i = segs.length - 1; i > 0; i--) segs[segs[i].parent].above += segs[i].above;
+  for (const s of segs) s.girth = (s.above / s.total) ** PIPE;
+  n = 0;
+  let footR = 0;
+  for (const s of segs) {
+    if (s.u <= 0) continue;
+    const front = s.u * s.len;
+    // A continuing limb starts at its parent's girth and eases into its own,
+    // so there is no step (and no visible seam) at the fork.
+    const g0 = s.same ? segs[s.parent].girth : s.girth;
+    const girth = at => g0 + (s.girth - g0) * smoothstep(clamp(at / BLEND));
+    const P = s.pts;
+    // Each limb has its own build (some stouter, some slender) and wavers
+    // gently in thickness along its length; the tip narrows to a point.
+    const build = s.order < 3 ? 0.75 + 0.5 * s.seed : 0.92 + 0.16 * s.seed;
+    const waver = at => 1 + 0.09 * Math.sin((at + s.offset) * 0.05 + s.seed * 40)
+                          + 0.06 * Math.sin((at + s.offset) * 0.13 + s.seed * 91);
+    // Only a real tip narrows to a point: still growing, or nothing grows beyond it.
+    const growing = s.u < 1;
+    const tip = growing || !s.kids ? front : Infinity;
+    const own = (rf, at) => Math.max(MIN_R, rf * girth(at) * build * waver(at) * smoothstep(clamp((tip - at) / TAPER)) ** 0.8);
+    // Through a fork, the radius itself eases from where the parent ended.
+    const r0 = s.same ? segs[s.parent].endR : null;
+    const rad = (rf, at) => r0 == null ? own(rf, at) : r0 + (own(rf, at) - r0) * smoothstep(clamp(at / BLEND));
+    s.endR = rad(P[P.length - 2], s.len);
+    if (s === segs[0]) footR = rad(P[2], 0);
+    // The light runs ahead only while the limb grows, thinning towards the twigs.
+    const lead = growing ? Math.min(LEAD, 10 + front * 2, s.len - front) : 0;
+    limb(P, s.when, front, rad, s.seed, s.offset, lead, 1.6 + 0.5 * s.order);
+  }
+  // Roots: they wake first, then thicken with the trunk they hold up.
+  if (rootF > 0) {
+    const rb = Math.max(9, footR * 0.36);
+    for (const r of roots) {
+      const front = rootF * r.len;
+      const rad = (t, at) => Math.max(MIN_R, rb * t ** 0.9 * smoothstep(clamp((front - at) / TAPER)) ** 0.8);
+      limb(r.pts, r.when, front, rad, r.seed, 0, rootF < 1 ? Math.min(LEAD, 10 + front * 2) : 0, 3);
+    }
+  }
+  return n / STRIDE;
+}
+
+// 11 floats per frond: place (x, y, dx, dy), dims (w, h, mirror, alpha), tone (maturity, fall, glow).
+const LEAF_STRIDE = 11;
+let leafData = new Float32Array(0);
+function buildLeaves(g, c, sprite) {
+  if (leafData.length < leaves.length * LEAF_STRIDE) leafData = new Float32Array(leaves.length * LEAF_STRIDE);
+  let m = 0;
+  for (const l of leaves) {
+    if (l.sprite !== sprite || g <= l.birth) continue;
+    const f = Math.max(clamp((g - l.shed) / SHED_FALL), clamp((c - l.drop) / DROP_FALL));
+    if (f >= 1) continue;
+    const o = smoothstep(clamp((g - l.birth) / LEAF_OPEN));
+    // Unfolding: the bud lies along the shoot, then swings out and opens wide.
+    // Falling: it loosens, tips over and drifts slowly down.
+    const sw = o + f * 0.5 * l.side;
+    let dx = l.bx + (l.fx - l.bx) * sw, dy = l.by + (l.fy - l.by) * sw + f * f * 0.6;
+    const dl = Math.hypot(dx, dy) || 1;
+    const len = l.size * (0.3 + 0.7 * o);
+    leafData.set([l.x + l.side * 14 * f * f, l.y + f * f * 70, dx / dl, dy / dl,
+      len * 0.88 * l.wide * (0.15 + 0.85 * smoothstep(clamp((o - 0.15) / 0.85))), len, l.mirror,
+      smoothstep(clamp(o / 0.2)) * (1 - smoothstep(clamp((f - 0.4) / 0.6))),
+      smoothstep(clamp((g - l.birth) / 0.2)), smoothstep(clamp(f / 0.6)),
+      1 - smoothstep(clamp((g - l.birth) / 0.04))], m);
+    m += LEAF_STRIDE;
+  }
+  return m / LEAF_STRIDE;
+}
+
+// 6 floats per spark: spot (x, y, radius), tint (premultiplied light).
+let sparkData = new Float32Array(6 * 1200);
+function buildSparks(T, g) {
+  let m = 0;
+  const add = (x, y, r, i, col = [1, 0.82, 0.5]) => {
+    if (i <= 0.003 || m + 6 > sparkData.length) return;
+    sparkData.set([x, y, r, col[0] * i, col[1] * i, col[2] * i], m); m += 6;
+  };
+  // The glow that gathers at the base before the roots wake.
+  add(base[0], H - 30, 130, 0.5 * smoothstep(ramp(T, [0.6, 1.6])) * (1 - smoothstep(ramp(T, [2.8, 4.5]))));
+  // A soft glint where a new branch joins its parent.
+  for (const s of segs) {
+    if (s.parent < 0 || s.same) continue;
+    const x = (g - s.t0) / 0.035;
+    if (x > 0 && x < 1) add(s.pts[0], s.pts[1], 9 + 3 * s.order, 0.55 * Math.sin(Math.PI * x));
+  }
+  // Motes: faint in the stillness, quiet while the tree grows, brighter as it
+  // ignites; at the settle they slow to a stop and hang in the air.
+  const u = clamp(T - (STORY - 0.5), 0, 0.5);
+  const tm = Math.min(T, STORY - 0.5) + u - u * u;
+  const bright = 0.7 * smoothstep(ramp(T, [0, 1])) - 0.35 * smoothstep(ramp(T, [1.5, 3]))
+    + 0.45 * smoothstep(ramp(T, [8.5, 9.5])) - 0.2 * smoothstep(ramp(T, [11, 12]));
+  const span = H * 0.85;
+  for (const mo of motes) {
+    const y = (mo.phase * span + mo.speed * tm) % span;     // distance risen this cycle
+    const fade = smoothstep(clamp(y / 120)) * (1 - smoothstep(clamp((y - span + 260) / 260)));
+    add(mo.x + mo.sway * Math.sin(tm * 6.28 / mo.period + mo.off), H + 20 - y, mo.size * 2.4,
+      bright * mo.glow * fade, [1, 0.9, 0.7]);
+  }
+  return m / 6;
+}
+
+function attrib(prog, name, size, stride, offset, divisor = 0) {
+  const loc = gl.getAttribLocation(prog, name);
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, size, gl.FLOAT, false, stride * 4, offset * 4);
+  gl.vertexAttribDivisor(loc, divisor);
+  return loc;
+}
+// Instanced quads: corners from quadBuf, one set of fields per instance.
+function instanced(prog, buf, data, count, stride, fields) {
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+  const locs = [attrib(prog, "corner", 2, 2, 0)];
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, data.subarray(0, count * stride), gl.DYNAMIC_DRAW);
+  for (const [name, size, off] of fields) locs.push(attrib(prog, name, size, stride, off, 1));
+  gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, count);
+  // Leave no instanced arrays enabled for the next pass to read past their end.
+  for (const loc of locs) { gl.vertexAttribDivisor(loc, 0); gl.disableVertexAttribArray(loc); }
+}
+
+function render(p) {
+  // Weight: every phase starts slowly and gathers momentum.
+  const T = p * STORY;
+  const g = smoothstep(ramp(T, GROW)), rootF = smoothstep(ramp(T, ROOTS));
+  const c = ramp(T, IGNITE) * IGNITE_END, settle = ramp(T, SETTLE) * 1.15;
+  const breathAmp = $("breath").checked
+    ? 0.45 * smoothstep(ramp(T, BREATH_ON.slice(0, 2))) * (1 - smoothstep(ramp(T, BREATH_ON.slice(2))))
+    : 0;
+  gl.viewport(0, 0, W, H);
+  gl.clearColor(0, 0, 0, 0); gl.clearDepth(1);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+  const count = buildWood(g, rootF);
+  bind(wood, { bark: tex.bark, gold: tex.gold, goldTime: tex.goldTime }, {
+    clock: g, core: CORE, rim: RIM, breathAmp, breathPhase: T / BREATH_PERIOD * 2 * Math.PI,
+    ignite: c, igniteOn: smoothstep(clamp(c / 0.05)) * (1 - smoothstep(ramp(c, [1.1, IGNITE_END]))),
+    settle, settleLevel: SETTLE_LEVEL });
+  gl.bindBuffer(gl.ARRAY_BUFFER, woodBuf);
+  gl.bufferData(gl.ARRAY_BUFFER, verts.subarray(0, count * STRIDE), gl.DYNAMIC_DRAW);
+  const woodLocs = [attrib(wood, "pos", 2, STRIDE, 0), attrib(wood, "seg", 4, STRIDE, 2),
+    attrib(wood, "rad", 2, STRIDE, 6), attrib(wood, "extra", 3, STRIDE, 8),
+    attrib(wood, "arc", 2, STRIDE, 11), attrib(wood, "wk", 3, STRIDE, 13)];
+  gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LESS);
+  gl.drawArrays(gl.TRIANGLES, 0, count);
+  gl.disable(gl.DEPTH_TEST);
+  woodLocs.forEach(l => gl.disableVertexAttribArray(l));
+
+  tex.leaves.forEach((t, i) => {
+    const count = buildLeaves(g, c, i);
+    if (!count) return;
+    bind(leafProg, { leaf: t }, { painted: $("painted").checked ? 1 : 0 });
+    instanced(leafProg, leafBuf, leafData, count, LEAF_STRIDE, [["place", 4, 0], ["dims", 4, 4], ["tone", 3, 8]]);
+  });
+
+  bind(bloom, { petals: tex.petals, petalTime: tex.petalTime, gold: tex.gold, goldTime: tex.goldTime },
+    { ignite: c, soft: BLOOM_SOFT, timeScale: TIME_SCALE, settle, settleLevel: SETTLE_LEVEL });
+  gl.bindBuffer(gl.ARRAY_BUFFER, quadBuf);
+  const bl = attrib(bloom, "pos", 2, 2, 0);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  gl.disableVertexAttribArray(bl);
+
+  const sparks = buildSparks(T, g);
+  if (sparks) {
+    bind(sparkProg, {}, {});
+    instanced(sparkProg, sparkBuf, sparkData, sparks, 6, [["spot", 3, 0], ["tint", 3, 3]]);
+  }
+
+  $("pv").textContent = T.toFixed(1) + " s";
+  $("stage").textContent = LABELS.find(([t]) => T < t)[1];
+}
+
+const slider = $("progress"), playBtn = $("play"), dur = $("duration"), reduced = $("reduced");
+let playing = false, last = 0, queued = false, avg = 0;
+function set(p) {
+  slider.value = p;
+  if (queued) return;
+  queued = true;
+  requestAnimationFrame(() => { queued = false; render(+slider.value); });
+}
+slider.oninput = () => set(+slider.value);
+$("painted").onchange = $("breath").onchange = () => set(+slider.value);
+dur.oninput = () => ($("dv").textContent = dur.value);
+$("reset").onclick = () => { stop(); set(0); };
+function stop() { playing = false; playBtn.textContent = "Play"; }
+playBtn.onclick = () => {
+  if (playing) return stop();
+  if (reduced.checked) return set(1);
+  if (+slider.value >= 1) slider.value = 0;
+  playing = true; playBtn.textContent = "Pause"; last = performance.now();
+  requestAnimationFrame(function tick(now) {
+    if (!playing) return;
+    const dt = now - last;
+    const p = Math.min(1, +slider.value + dt / (dur.value * 1000));
+    last = now;
+    if (dt > 0) {
+      avg = avg ? avg * 0.9 + dt * 0.1 : dt;
+      $("fps").textContent = `Frame rate: ${Math.round(1000 / avg)} fps`;
+    }
+    slider.value = p; render(p);
+    if (p >= 1) return stop();
+    requestAnimationFrame(tick);
+  });
+};
+load();
+</script>
+</body>
+</html>

@@ -40,3 +40,8 @@
    Aura / GradientShift layers are hidden. */
 .screen[data-bg='plain'] { background: var(--color-canvas); }
 .screen[data-bg='plain'] [data-bg-layer] { display: none; }
+
+/* Mobile toasts drop in from the top, under the status bar (designer, 2026-10-28). */
+.toastHost,
+.toastHost[data-lifted],
+.toastHost[data-over-composer] { top: calc(var(--safe-top) + var(--space-2)); bottom: auto; }

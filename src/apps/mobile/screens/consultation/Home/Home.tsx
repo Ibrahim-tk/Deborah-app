@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
+import { selectVisitToLog, useAppStore } from '@shared/store';
 import { Aura, GradientShift, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
@@ -58,7 +58,6 @@ export default function Home() {
     if (profile) greeted.add(profile.id);
     setSheet(false);
   };
-  const docCount = useAppStore((s) => selectDocuments(s).length);
   // Home composer always starts a new chat. Resume lives on the "Continue your chat" card.
   const chat = () => {
     closeSheet();
@@ -82,8 +81,6 @@ export default function Home() {
   const journey = () => gate('journey', () => push('M-7.3'));
   const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
-  const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
-  const documents = { meta: docCount === 0 ? 'Nothing saved yet' : `${docCount} saved`, onPress: go('M-11.1') };
   const intakeCard = {
     progress: d.completion,
     complete: d.completion >= 1,
@@ -139,9 +136,6 @@ export default function Home() {
             destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
-            onLabs={() => open('M-5.3')}
-            reports={reports}
-            documents={documents}
             onNotes={go('M-9.1')}
           />
         )}
@@ -156,12 +150,9 @@ export default function Home() {
             intakeCard={intakeCard}
             journey={d.planCard ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
             onNotes={go('M-9.1')}
-            reports={reports}
-            documents={documents}
             destinations={destinations}
             recommendations={d.recommendations}
             onShop={shop}
-            onLabs={() => open('M-5.3')}
           />
         )}
       </div>

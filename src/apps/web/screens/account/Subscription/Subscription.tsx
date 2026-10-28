@@ -31,7 +31,7 @@ export default function Subscription() {
   const cancel = async () => {
     const choice = await alert({
       title: 'Cancel subscription?',
-      message: renewsAt ? `Your plan stays active until ${formatShortDate(renewsAt)}.` : 'Your plan stays active until the end of this period.',
+      message: `Your subscription stays active until the end of the current billing period${renewsAt ? ` (${formatShortDate(renewsAt)})` : ''}.`,
       buttons: [{ label: 'Keep plan', style: 'cancel' }, { label: 'Cancel subscription', style: 'destructive' }],
     });
     if (choice !== 1) return;
@@ -49,6 +49,8 @@ export default function Subscription() {
               <p className={styles.meta}>
                 Free trial · {freeLeft ?? 0} {freeLeft === 1 ? 'consultation' : 'consultations'} left
               </p>
+              {/* OPEN: "Trial length — the doc says 14 days, Karen said 40 days on the call." Default: consultation count. */}
+              <p className={styles.meta}>Includes conversations with the Oracle only. Other modules and family members open with a plan.</p>
               <Button fullWidth onClick={() => nav.open('M-4.2')}>Choose a plan</Button>
             </>
           ) : (
@@ -73,7 +75,7 @@ export default function Subscription() {
             )}
           </div>
         )}
-        {cancelled && !trial && <p className={styles.note}>You can keep using every feature until your plan ends.</p>}
+        {cancelled && !trial && <p className={styles.note}>Your subscription stays active until the end of the current billing period.</p>}
       </div>
     </DerivedPage>
   );

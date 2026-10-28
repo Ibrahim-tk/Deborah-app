@@ -9,7 +9,7 @@
  */
 import { useState } from 'react';
 import type { PendingFact } from '@shared/types/domain';
-import { Button, Checkbox, Icon } from '@web/ui';
+import { Button, Checkbox } from '@web/ui';
 import styles from './ReviewFactsCard.module.css';
 
 export interface ReviewFactsCardProps {
@@ -25,15 +25,8 @@ export function ReviewFactsCard({ facts, onConfirm, onDiscard }: ReviewFactsCard
   const pending = facts.filter((f) => f.status === 'pending');
   const [off, setOff] = useState<string[]>([]);
 
-  if (!pending.length) {
-    const saved = facts.filter((f) => f.status === 'confirmed');
-    return (
-      <p className={styles.note} role="status">
-        <Icon name="check" size={16} />
-        {saved.length ? `Saved to your health profile: ${saved.map((f) => f.label.toLowerCase()).join(', ')}.` : 'Nothing from this conversation was saved to your profile.'}
-      </p>
-    );
-  }
+  // Answered: the app shows a toast (designer, 2026-10-28), so the card leaves the thread instead of a status line.
+  if (!pending.length) return null;
 
   const keep = pending.filter((f) => !off.includes(f.id)).map((f) => f.id);
   const toggle = (id: string, on: boolean) => setOff((xs) => (on ? xs.filter((x) => x !== id) : [...xs, id]));

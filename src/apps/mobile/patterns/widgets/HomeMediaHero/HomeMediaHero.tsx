@@ -1,10 +1,10 @@
 /**
  * HomeMediaHero — main continue card (compact hero) or tonal artifact hero.
- * Compact: orb + arrow on top · title + one line at the bottom, on the vibrant aurora field (white copy).
+ * Compact: a deep plum pill — tree avatar, eyebrow + title, big chevron on the right; the whole pill taps.
  */
 import type { ReactNode } from 'react';
 import { DeborahBlob } from '@mobile/ui/DeborahBlob';
-import { Icon, type IconName } from '@mobile/ui';
+import { Icon } from '@mobile/ui';
 import { type HomeArtifactId, type HomeTone } from '../homeArtifacts';
 import styles from './HomeMediaHero.module.css';
 
@@ -13,8 +13,6 @@ export interface HomeMediaHeroProps {
   title: string;
   tone?: HomeTone;
   artifact?: HomeArtifactId;
-  /** Shown top-right on compact hero (e.g. "4 days ago"). */
-  when?: string;
   meta?: string;
   pending?: string;
   ctaLabel?: string;
@@ -26,8 +24,6 @@ export interface HomeMediaHeroProps {
   kickerIcon?: string;
   /** Small uppercase line above the title (compact hero). */
   eyebrow?: string;
-  /** Supporting facts under the title, icon + short label (compact hero). */
-  stats?: { icon: IconName; label: string }[];
 }
 
 export function HomeMediaHero({
@@ -35,44 +31,39 @@ export function HomeMediaHero({
   title,
   tone = 'hero',
   artifact: _artifact,
-  when,
   meta,
   pending,
   ctaLabel,
   onCta,
   children,
   eyebrow,
-  stats,
 }: HomeMediaHeroProps) {
   const compactHero = tone === 'hero';
 
   if (compactHero) {
-    return (
-      <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>
-        {/* Same hierarchy as the health-detail cards (2026-10-21): orb + arrow on top, title + one line at the bottom. */}
-        <div className={styles.bodyCompact}>
-          <div className={styles.top}>
-            <DeborahBlob size={40} label="The Oracle" className={styles.orb} />
-            {onCta && (
-              <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
-                <Icon name="chevron" size={18} />
-              </button>
-            )}
-          </div>
-          <div className={styles.copy}>
-            {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
-            <h2 id={titleId} className={styles.titleCompact}>{title}</h2>
-            {stats && stats.length > 0 ? (
-              <ul className={styles.stats}>
-                {stats.map((st) => (
-                  <li key={st.label}><Icon name={st.icon} size={14} />{st.label}</li>
-                ))}
-              </ul>
-            ) : (meta || when) && <p className={styles.when}>{meta ?? when}</p>}
-          </div>
-          {children}
-        </div>
-      </section>
+    // Player-pill layout (ref 2026-10-28): tree avatar · eyebrow + title · big chevron. The whole pill is the tap target.
+    const inner = (
+      <>
+        <span className={styles.avatar} aria-hidden>
+          <DeborahBlob size={44} />
+        </span>
+        <span className={styles.copy}>
+          {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}
+          <span id={titleId} className={styles.titleCompact}>{title}</span>
+        </span>
+        {onCta && (
+          <span className={styles.chevron} aria-hidden>
+            <Icon name="chevron" size={18} />
+          </span>
+        )}
+      </>
+    );
+    return onCta ? (
+      <button type="button" className={styles.root} data-tone={tone} data-compact onClick={onCta} aria-label={`${ctaLabel ?? 'Continue'}: ${title}`}>
+        {inner}
+      </button>
+    ) : (
+      <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>{inner}{children}</section>
     );
   }
 

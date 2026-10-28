@@ -34,9 +34,7 @@ const answered = (s: State) => {
   const msg = conv?.messages.find((m) => m.kind === 'answer');
   return { conversationId: conv?.id, messageId: msg?.id };
 };
-const firstDoc = (s: State) => Object.keys(s.documents.byId)[0];
 const familyMember = (s: State) => Object.values(s.profiles.byId).find((p) => p.relationship !== 'self')?.id;
-const firstReport = (s: State) => Object.keys(s.labs.reportsById)[0];
 
 const ASK = { tab: 'ask' as const, under: ['M-2.0'] };
 const HEALTH = { tab: 'health' as const, under: ['M-7.2'] };
@@ -119,14 +117,6 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
     ],
   },
   {
-    title: 'Lab results',
-    screens: [
-      { id: 'M-5.3', name: 'Add lab results', ...ASK, as: 'sheet' },
-      { id: 'M-5.4', name: 'Check your results', ...ASK, as: 'modal', params: () => ({ source: 'pdf', fileName: 'Lab report.pdf' }) },
-      { id: 'M-9.5', name: 'Lab report', ...HEALTH, as: 'push', params: (s) => ({ reportId: firstReport(s) }) },
-    ],
-  },
-  {
     title: 'My Health',
     screens: [
       { id: 'M-7.2', name: 'My Health', tab: 'health', as: 'root' },
@@ -154,23 +144,9 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-9.6', name: 'View provider summary', ...HEALTH, as: 'modal', params: (s) => answered(s) },
       { id: 'M-9.6', name: 'Download PDF', ...HEALTH, as: 'modal', params: (s) => answered(s) },
       { id: 'M-9.8', name: 'Log provider visit outcome', tab: 'health', under: ['M-7.2', 'M-9.1'], as: 'sheet' },
-      { id: 'M-11.3', name: 'Upload supporting documents after visit', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'sheet' },
       // OPEN: "AI updates context" and "discuss outcome with Deborah" live inside the log-visit flow, not as screens.
       { id: 'M-9.8', name: 'AI updates context (profile updates on save)', tab: 'health', under: ['M-7.2', 'M-9.1'], as: 'sheet' },
       { id: 'M-9.1', name: 'Discuss outcome with the Oracle (Records → Talk first)', ...HEALTH, as: 'push' },
-    ],
-  },
-  {
-    title: 'Doc & lab management',
-    screens: [
-      { id: 'M-11.3', name: 'Upload documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'sheet' },
-      { id: 'M-5.4', name: 'OCR / data extraction', ...ASK, as: 'modal', params: () => ({ source: 'pdf', fileName: 'Lab report.pdf' }) },
-      { id: 'M-11.2', name: 'Ask Oracle about document', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
-      { id: 'M-5.3', name: 'Type of uploads', ...ASK, as: 'sheet' },
-      { id: 'M-11.2', name: 'Preview documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
-      { id: 'M-11.2', name: 'Download documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
-      { id: 'M-11.2', name: 'Delete documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
-      { id: 'M-11.1', name: 'Rename documents (library)', tab: 'health', under: ['M-7.2'], as: 'push' },
     ],
   },
   {

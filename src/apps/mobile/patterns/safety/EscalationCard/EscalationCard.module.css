@@ -95,3 +95,48 @@
 .check { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--radius-full); background: var(--color-accent-tint); color: var(--color-accent); }
 .sent { margin: 0; max-width: 32ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
 .actions { width: 100%; }
+
+/* —— Booking banner, ported from web (designer, 2026-10-28) — phone-sized: overrides the earlier hero. —— */
+.hero {
+  position: relative; overflow: hidden; isolation: isolate;
+  display: flex; align-items: stretch;
+  min-height: 0; padding: 0; border: 0;
+  border-radius: var(--radius-card);
+  background: url('/images/home/book-bg.webp') center / cover no-repeat, #f6e6f0;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6);
+}
+.heroCopy { position: relative; z-index: 1; display: grid; align-content: center; justify-items: start; gap: var(--space-2); padding: var(--space-5); width: 100%; max-width: 100%; min-height: 0; }
+.heroTitle { margin: 0; max-width: 14ch; font: var(--weight-regular) calc(28px * var(--type-scale, 1)) / 1.1 var(--font-display); letter-spacing: -0.015em; color: var(--color-ink); }
+.heroBody { margin: 0; max-width: 32ch; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.cta { margin-top: var(--space-2); white-space: nowrap; }
+
+/* Match web proportions (designer, 2026-10-28): compact CTA, copy column leaves room for a small tree bottom-right. */
+.heroCopy { padding-right: 0; max-width: 70%; }
+.heroTitle { max-width: none; font-size: calc(26px * var(--type-scale, 1)); }
+.cta { margin-top: var(--space-1); }
+.tree {
+  position: absolute;
+  right: var(--space-3);
+  bottom: 0;
+  z-index: 0;
+  height: 78%;
+  width: auto;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* Tighter card (designer, 2026-10-28): smaller title, less vertical padding; tree larger and flush right where the
+   art is cropped; background mirrored so the purple tone sits top-left. */
+.hero { background: #f6e6f0; }
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Lavender end of the art anchored right, then mirrored → purple sits top-left. */
+  background: url('/images/home/book-bg.webp') right center / cover no-repeat;
+  transform: scaleX(-1);
+}
+.heroCopy { padding-block: var(--space-4); gap: var(--space-1); }
+.heroTitle { font-size: calc(22px * var(--type-scale, 1)); line-height: 1.15; }
+.tree { right: 0; height: 96%; }

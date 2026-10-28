@@ -22,3 +22,6 @@
   color: var(--color-ink-secondary);
   text-decoration: none;
 }
+
+/* Supporting lines on the Settings scale (designer, 2026-10-28). */
+.subtitle, .context { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }

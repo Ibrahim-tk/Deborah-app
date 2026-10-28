@@ -306,7 +306,7 @@ export function WidgetPatterns() {
           )}
         </Specimen>
         <Specimen name="HomeMediaHero" path="patterns/widgets/HomeMediaHero" note="Compact continue hero — mauve gradient + violet bloom.">
-          <HomeMediaHero titleId="ds-media" title="Ongoing tiredness and a question about thyroid function" when="4 days ago" tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={noop} />
+          <HomeMediaHero titleId="ds-media" eyebrow="Continue your conversation" title="Thyroid and tiredness" tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={noop} />
         </Specimen>
         <Specimen name="SuggestionCarousel" path="patterns/widgets/SuggestionCarousel" note="Next-step cards — icon · title · arrow · floral PNG.">
           <SuggestionCarousel items={[{ key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: noop }, { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps the Oracle tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: noop }]} />

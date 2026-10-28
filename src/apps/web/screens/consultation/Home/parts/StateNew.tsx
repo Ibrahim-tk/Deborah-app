@@ -14,13 +14,10 @@ export interface StateNewProps {
   destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
-  reports?: { meta: string; onPress: () => void };
-  documents?: { meta: string; onPress: () => void };
-  onLabs: () => void;
   onNotes: () => void;
 }
 
-export function StateNew({ onStart, chat, destinations, recommendations, onShop, reports, documents, onLabs, onNotes }: StateNewProps) {
+export function StateNew({ onStart, chat, destinations, recommendations, onShop, onNotes }: StateNewProps) {
   return (
     <>
       {chat ? (
@@ -48,7 +45,7 @@ export function StateNew({ onStart, chat, destinations, recommendations, onShop,
         />
       )}
 
-      <HomeSections reports={reports} documents={documents} onLabs={onLabs} onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} hideShop />
+      <HomeSections onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} hideShop />
     </>
   );
 }

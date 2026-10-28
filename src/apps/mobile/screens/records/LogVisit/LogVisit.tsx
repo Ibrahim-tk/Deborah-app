@@ -131,8 +131,6 @@ export default function LogVisit() {
   const footer =
     mode === 'read' ? (
       <div className={styles.footer}>
-        {/* Miro Step 6: supporting documents from the visit (after-visit summary, lab order, results). */}
-        <Button variant="secondary" fullWidth leadingIcon="upload" onClick={() => open('M-11.3')}>Add documents from this visit</Button>
         <Button fullWidth onClick={dismissSheet}>Done</Button>
       </div>
     ) : (

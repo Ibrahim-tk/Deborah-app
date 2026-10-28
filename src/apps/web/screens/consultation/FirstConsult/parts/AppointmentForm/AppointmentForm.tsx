@@ -20,6 +20,10 @@ export interface Appointment {
 export function AppointmentForm({ active, onSave }: { active: boolean; onSave: (a: Appointment) => void }) {
   const [provider, setProvider] = useState('');
   const [specialty, setSpecialty] = useState<string>();
+  // "Other" opens a field to type the specialty (designer, 2026-10-28); the typed text is what's saved.
+  const [otherSpecialty, setOtherSpecialty] = useState('');
+  const isOther = specialty === 'Other';
+  const savedSpecialty = isOther ? otherSpecialty.trim() || 'Other' : specialty;
   const [date, setDate] = useState('');
   const [picking, setPicking] = useState(false);
   // Today from the simulated clock; appointments are today or later.
@@ -29,10 +33,13 @@ export function AppointmentForm({ active, onSave }: { active: boolean; onSave: (
     <form
       className={styles.root}
       aria-label="Appointment details"
-      onSubmit={(e) => { e.preventDefault(); if (active && date) onSave({ provider: provider.trim(), specialty, date }); }}
+      onSubmit={(e) => { e.preventDefault(); if (active && date) onSave({ provider: provider.trim(), specialty: savedSpecialty, date }); }}
     >
       <Input label="Provider name" placeholder="e.g. Dr. Patel" value={provider} autoCapitalize="words" disabled={!active} onChange={(e) => setProvider(e.target.value)} />
       <Select label="Specialty" options={visitSpecialties.map((o) => ({ value: o.label, label: o.label }))} value={specialty} onChange={setSpecialty} />
+      {isOther && (
+        <Input label="Which specialty?" placeholder="e.g. Dermatology" value={otherSpecialty} autoCapitalize="words" disabled={!active} onChange={(e) => setOtherSpecialty(e.target.value)} />
+      )}
       {/* Date field opens CalendarGrid in BottomSheet (overlay), not inline. */}
       <div className={styles.dateField}>
         <span className={styles.dateLabel} id="appt-date-label">Appointment date</span>

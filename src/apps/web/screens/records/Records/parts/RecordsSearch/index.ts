@@ -1,1 +1,0 @@
-export { RecordsSearch } from './RecordsSearch';

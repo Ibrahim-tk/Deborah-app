@@ -78,3 +78,33 @@
 .checkBox[data-on] { background: var(--color-accent); box-shadow: none; }
 /* Design-system Button (md); only placement lives here. */
 .submit { justify-self: start; }
+
+
+/* Rows arrive one by one (designer, 2026-10-28): soft fade + short rise, staggered by --i; fade only with reduced motion. */
+.checkRow { animation: row-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+.submit { animation: row-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--n, 0) * 70ms); }
+@keyframes row-in { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  @keyframes row-in { from { opacity: 0; } }
+}
+
+/* Web checklist (designer, 2026-10-28): soft container at half the chat width; Skip + Submit bottom-right. */
+.root[data-checklist] {
+  display: grid;
+  gap: var(--space-4);
+  width: 50%;
+  min-width: 320px;
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  animation: row-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--n, 0) * 70ms);
+}
+/* Compact pair (designer, 2026-10-28): 32 px, Skip and Submit match. */
+.actions > * { min-height: 32px; padding-block: 0; }

@@ -36,18 +36,11 @@ function writeAll(all: Record<string, string>) {
 }
 
 /** Which client sticky to show for this screen, or null to hide. */
-function clientNoteKey(screenId: string, chatEmpty: boolean, recordsGuide: string | null): string | null {
+function clientNoteKey(screenId: string, chatEmpty: boolean): string | null {
   if (screenId === 'M-2.1') return chatEmpty ? 'chat-empty' : 'chat-running';
   if (screenId === 'M-9.7') return 'visit-notes';
   if (screenId === 'M-7.3') return 'healing-plan';
-  if (screenId === 'M-9.1') {
-    if (recordsGuide === 'records-labs' || recordsGuide === 'records-attachments' || recordsGuide === 'records-notes') {
-      return recordsGuide;
-    }
-    return 'records-notes';
-  }
-  if (screenId === 'M-9.5' || screenId === 'M-5.3' || screenId === 'M-5.4') return 'records-labs';
-  if (screenId === 'M-11.1' || screenId === 'M-11.3') return 'records-attachments';
+  if (screenId === 'M-9.1') return 'records-notes';
   return null;
 }
 
@@ -59,7 +52,6 @@ export interface ScreenNoteProps {
 export function ScreenNote({ audience = 'internal' }: ScreenNoteProps) {
   const forClient = audience === 'client';
   const appScreen = useShellStore((s) => s.screen);
-  const recordsGuide = useShellStore((s) => s.clientGuide);
   const isLocked = useAppStore((s) => s.isLocked);
   const conversation = useAppStore(selectActiveConversation);
   const screen = isLocked ? { id: 'M-5.1', title: 'Lock screen' } : appScreen;
@@ -76,7 +68,7 @@ export function ScreenNote({ audience = 'internal' }: ScreenNoteProps) {
 
   if (forClient) {
     const chatEmpty = !(conversation?.messages?.length);
-    const key = clientNoteKey(screen.id, chatEmpty, recordsGuide);
+    const key = clientNoteKey(screen.id, chatEmpty);
     const text = key ? CLIENT_GUIDE[key] : undefined;
     if (!text) return null;
     return (

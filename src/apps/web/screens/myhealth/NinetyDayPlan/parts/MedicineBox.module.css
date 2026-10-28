@@ -57,3 +57,6 @@
 
 /* No uppercase; lighter caption (designer, 2026-10-28). */
 .wellLabel { text-transform: none; letter-spacing: 0; font-weight: var(--weight-regular); font-size: var(--fs-footnote); line-height: var(--lh-footnote); color: #5a4f55; }
+
+/* One flat checklist (2026-10-28): no group labels or dividers; rows breathe on spacing alone. */
+.rows { gap: var(--space-3); }

@@ -91,7 +91,8 @@ function StepControl({ step, answers, set, advance }: StepBodyProps) {
               describeLabel={step.describeLabel ?? 'Describe'}
               describePlaceholder={step.describePlaceholder ?? 'describe your situation'}
               describeText={describeKey ? (answers[describeKey] ?? '') : ''}
-              describeAlwaysSpan={step.describeAlwaysSpan}
+              // Gender: "Prefer not to say" and "Other" share the last row; Other spans only once picked.
+              describeAlwaysSpan={step.key === 'gender' ? false : step.describeAlwaysSpan}
               onDescribeChange={describeKey ? (text) => set(describeKey, text) : undefined}
               onDescribeConfirm={
                 describeValue

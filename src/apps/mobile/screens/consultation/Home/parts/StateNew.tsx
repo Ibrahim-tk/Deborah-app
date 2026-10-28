@@ -14,22 +14,17 @@ export interface StateNewProps {
   destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
-  reports?: { meta: string; onPress: () => void };
-  documents?: { meta: string; onPress: () => void };
-  onLabs: () => void;
   onNotes: () => void;
 }
 
-export function StateNew({ onStart, chat, intakeCard, destinations, recommendations, onShop, reports, documents, onLabs, onNotes }: StateNewProps) {
+export function StateNew({ onStart, chat, intakeCard, destinations, recommendations, onShop, onNotes }: StateNewProps) {
   return (
     <>
       {chat ? (
         <HomeMediaHero
           titleId="continue-chat"
-          title="Continue your chat"
-          eyebrow="In progress"
-          meta={chat.title}
-          when={chat.when}
+          eyebrow="Continue your conversation"
+          title={chat.title || 'Your last conversation'}
           tone="hero"
           artifact="violet-bloom"
           ctaLabel="Continue"
@@ -38,12 +33,11 @@ export function StateNew({ onStart, chat, intakeCard, destinations, recommendati
       ) : (
         <HomeMediaHero
           titleId="start-deborah"
-          title="Start with the Oracle"
           eyebrow="New"
-          meta="Tell her what’s going on. She’ll ask a few questions, then share what she thinks."
+          title="Start with the Oracle"
           tone="hero"
           artifact="violet-bloom"
-          ctaLabel="Start with the Oracle"
+          ctaLabel="Start a conversation"
           onCta={onStart}
         />
       )}
@@ -52,7 +46,7 @@ export function StateNew({ onStart, chat, intakeCard, destinations, recommendati
         <IntakeCompletionCard progress={intakeCard.progress} complete={intakeCard.complete} onAction={intakeCard.onAction} />
       )}
 
-      <HomeSections reports={reports} documents={documents} onLabs={onLabs} onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} />
+      <HomeSections onNotes={onNotes} destinations={destinations} recommendations={recommendations} onShop={onShop} />
     </>
   );
 }

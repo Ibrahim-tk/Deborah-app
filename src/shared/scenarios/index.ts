@@ -35,12 +35,10 @@ import s25 from './S25-visit-debrief.json';
 import s25b from './S25b-visit-log-anytime.json';
 import s25c from './S25c-visit-logged.json';
 import s25d from './S25d-visit-safety.json';
-import s26 from './S26-documents-empty.json';
-import s26b from './S26b-documents-populated.json';
 import s26c from './S26c-documents-chat-prompt.json';
 
 export const SEEDS: Record<string, ScenarioSeed> = Object.fromEntries(
-  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, s25, s25b, s25c, s25d, s26, s26b, s26c, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
+  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, s25, s25b, s25c, s25d, s26c, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
 );
 
 export const SCENARIO_GROUPS: ScenarioGroup[] = [
@@ -71,8 +69,6 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S25b', label: 'Log your visit — anytime', group: 'QA', description: 'No provider brief. Opens the visit debrief directly; Records › New note › Log a provider visit does the same.', startsAt: 'M-2.1 Visit debrief', phase: 7 },
   { id: 'S25c', label: 'Log your visit — already logged', group: 'QA', description: 'A gynecology visit is saved as an after-visit note. Records › Visit Notes reopens it in read mode (M-9.8).', startsAt: 'M-9.1 Records', phase: 7 },
   { id: 'S25d', label: 'Log your visit — safety', group: 'QA', description: 'Brief saved. During the debrief, ask “Should I stop taking my magnesium?” — the medication safety response appears and nothing is logged as a change.', startsAt: 'M-2.1 Visit debrief', phase: 7 },
-  { id: 'S26', label: 'Documents — empty', group: 'QA', description: 'No uploads or saved reports. Documents and reports shows both empty states and Upload a document (screens arrive in documents phases 2–5).', startsAt: 'M-11.1 Documents and reports', phase: 7 },
-  { id: 'S26b', label: 'Documents — populated', group: 'QA', description: 'Four uploads (lab PDF, shared imaging report, prescription photo, visit-note TXT; one deleted, hidden), a visit summary and saved guidance. Family plan: the daughter has her own lab upload.', startsAt: 'M-11.1 Documents and reports', phase: 7 },
   { id: 'S26c', label: 'Documents — the Oracle offers an upload', group: 'QA', description: 'A lab result was saved with Not now. The next chat opens with “You uploaded … Want to talk it through?” (documents phase 4).', startsAt: 'M-2.0 Home', phase: 7 },
   { id: 'S05', label: 'Last free consultation', group: 'Trial', description: 'Two of three free consultations used.', startsAt: 'M-2.1 (empty), 1 left', phase: 3 },
   { id: 'S06', label: 'Trial exhausted', group: 'Conversion', description: 'All three free consultations used. The free-limit sheet shows; any new question is held until a plan is chosen.', startsAt: 'M-2.1 + M-4.1 sheet', phase: 5 },

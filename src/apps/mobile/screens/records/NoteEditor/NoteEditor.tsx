@@ -19,12 +19,13 @@ import { ChecklistPreview } from './parts/ChecklistPreview';
 import { DEFAULT_TITLE, useNoteAutosave } from './parts/useNoteAutosave';
 import styles from './NoteEditor.module.css';
 
-type EditableKind = Exclude<NoteKind, 'saved-answer'>;
+type EditableKind = Extract<NoteKind, 'questions' | 'after-visit'>;
+// Two balanced segments; 'free' notes keep their kind but show as plain text (no "Other" segment).
 const KINDS: { value: EditableKind; label: string; icon: IconName }[] = [
-  { value: 'questions', label: 'Questions for my visit', icon: 'chat' },
+  { value: 'questions', label: 'Before my visit', icon: 'chat' },
   { value: 'after-visit', label: 'After my visit', icon: 'calendar' },
-  { value: 'free', label: 'Other', icon: 'note' },
 ];
+const isEditable = (k: NoteKind): k is EditableKind => KINDS.some((o) => o.value === k);
 
 export default function NoteEditor() {
   const params = useScreenParams<{ noteId: string; kind: NoteKind; profileId: string }>();
@@ -73,10 +74,10 @@ export default function NoteEditor() {
         <div className={styles.body}>
           <Input label="Title" placeholder={DEFAULT_TITLE[kind]} value={title} onChange={(e) => setTitle(e.target.value)} />
 
-          {kind === 'saved-answer' ? (
-            <p className={styles.kindText}>Saved answer from the Oracle</p>
-          ) : (
+          {isEditable(kind) ? (
             <Segmented label="Note type" options={KINDS} value={kind} onChange={setKind} />
+          ) : (
+            <p className={styles.kindText}>{kind === 'saved-answer' ? 'Saved answer from the Oracle' : 'Note'}</p>
           )}
 
           {source && (

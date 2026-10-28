@@ -1,1 +1,0 @@
-export { LabPreview } from './LabPreview';

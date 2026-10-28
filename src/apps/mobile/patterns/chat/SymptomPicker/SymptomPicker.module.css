@@ -31,3 +31,14 @@
 
 /* Search heading above the tabs. */
 .results { padding-bottom: var(--space-2); font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+
+/* No dividers between groups; spacing alone separates them (designer, 2026-10-28). */
+.group { border-bottom: 0; padding: var(--space-3) 0; }
+.tabs { box-shadow: none; }
+/* Search and close share one 40px height so the header reads as one row. */
+.search { --field-h: 40px; }
+.list { max-height: min(56vh, 520px); overflow-y: auto; }
+.list { position: relative; }
+/* Inactive tabs lighter; active keeps full ink (designer, 2026-10-28). */
+.tab { color: #5a4f55; }
+.tab[aria-selected='true'] { color: var(--color-ink); }

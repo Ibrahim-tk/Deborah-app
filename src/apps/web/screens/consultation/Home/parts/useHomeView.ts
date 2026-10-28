@@ -47,7 +47,7 @@ export function useHomeView() {
   const recommendations: Recommendation[] = [];
   if (d.product) recommendations.push({ product: d.product, reason: `Because you mentioned ${lowerFirst(topic)}` });
   const planProduct = productList.find((p) => p.id === plan?.productId && p.id !== d.product?.id);
-  if (planProduct) recommendations.push({ product: planProduct, reason: 'Part of your Your Wellness Plan' });
+  if (planProduct) recommendations.push({ product: planProduct, reason: 'Part of your Wellness Plan' });
   if (recommendations.length === 0 && state !== 'new') {
     const gold = productList.find((p) => p.id === 'genesis-gold');
     if (gold) recommendations.push({ product: gold, reason: `Fits your focus on ${lowerFirst(topic)}` });

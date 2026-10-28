@@ -63,7 +63,7 @@ export default function ScanLabel() {
               {/* Simulated camera: no device camera in the prototype. */}
               <div className={styles.viewfinder} role="img" aria-label="Camera viewfinder (simulated)">
                 <span className={styles.frame} aria-hidden />
-                <p className={styles.hint}>Point at a pill bottle, supplement label or lab report</p>
+                <p className={styles.hint}>Point at a pill bottle or supplement label</p>
               </div>
               <p className={styles.label}>What’s in frame? (simulated)</p>
               <div className={styles.list}>

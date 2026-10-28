@@ -35,3 +35,5 @@
 .item[data-selected] { font-weight: var(--weight-medium); }
 .check { display: grid; color: var(--color-accent); }
 @media (prefers-reduced-motion: reduce) { .popup, .icon { transition: none; } .popup[data-starting-style], .popup[data-ending-style] { transform: none; } }
+
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

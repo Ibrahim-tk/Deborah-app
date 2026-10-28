@@ -42,3 +42,4 @@
 .root[data-size='sm'] .text { gap: 0; }
 .root[data-round] .box { border-radius: var(--radius-full); }
 .root[data-round][data-size='sm'] .box { margin-top: calc((var(--lh-subhead) - 14px) / 2 + 3px); } /* optical nudge: centres the circle on the label's x-height */
+.root[data-round][data-size='md'] .box { margin-top: calc((var(--lh-callout) - 22px) / 2 + 2px); } /* optical nudge (2026-10-28): circle sits level with the first line */

@@ -61,3 +61,9 @@
 .group label + span { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: 0; color: #5a4f55; }
 .legend { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); letter-spacing: 0; color: #5a4f55; }
 .text { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); }
+
+
+/* "Preferred frequency" reads as a row title, same as "Follow-up after guidance" (designer, 2026-10-28). */
+.legend { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); }
+/* Breathing room above the frequency group (designer, 2026-10-28); a fieldset legend ignores the grid gap. */
+.legend { margin-bottom: var(--space-3); }

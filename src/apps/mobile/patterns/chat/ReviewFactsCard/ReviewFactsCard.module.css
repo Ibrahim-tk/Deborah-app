@@ -9,8 +9,7 @@
   -webkit-backdrop-filter: var(--glass-warm-blur);
   backdrop-filter: var(--glass-warm-blur);
 }
-.intro { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
-.close { flex: none; margin: calc(var(--space-2) * -1) calc(var(--space-2) * -1) calc(var(--space-2) * -1) 0; }
+.intro { display: grid; gap: var(--space-1); }
 .title {
   margin: 0;
   font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
@@ -22,8 +21,6 @@
   color: var(--color-ink-secondary);
 }
 .list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
-.actions { display: grid; gap: var(--space-2); justify-items: center; }
-.actions > :not(:last-child) { width: 100%; }
 .note {
   display: flex;
   align-items: flex-start;
@@ -34,4 +31,8 @@
 }
 .note > svg { flex: none; margin-top: 2px; }
 /* A little thinner than the default 48–52 pt primary (design 2026-10-21); still a 44 pt tap target. */
-.save { min-height: 44px; padding-top: var(--space-2); padding-bottom: var(--space-2); }
+/* Skip (ghost) beside Save, both on the right (design 2026-10-26). */
+.actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-2); }
+
+/* Compact actions never wrap (designer, 2026-10-28). */
+.actions > * { white-space: nowrap; }

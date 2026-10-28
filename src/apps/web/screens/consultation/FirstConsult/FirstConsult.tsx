@@ -38,7 +38,7 @@ import { useProfileContext } from './parts/profileContext';
 import { useProxyContext } from './parts/proxyContext';
 import styles from './FirstConsult.module.css';
 
-const EXITS: Record<string, string> = { '/labs/upload': 'M-5.3', '/book': 'M-8.2', '/shop/genesis-gold': 'M-2.7' };
+const EXITS: Record<string, string> = { '/book': 'M-8.2', '/shop/genesis-gold': 'M-2.7' };
 
 export default function FirstConsult() {
   // `flow: 'returning'`: the signed-in demo (Maria, seed R01) instead of the first consultation.
@@ -95,7 +95,7 @@ export default function FirstConsult() {
   const prep = visitPrepItems(flow.nodes.answer_1);
 
 
-  // Leaving the script: free chat opens the normal conversation; labs, booking and shop open their screens.
+  // Leaving the script: free chat opens the normal conversation; booking and shop open their screens.
   const last = entries.at(-1);
   useEffect(() => {
     if (last?.kind !== 'end' || !last.route || last.route === '/chat') return;

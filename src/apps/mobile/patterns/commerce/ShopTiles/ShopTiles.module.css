@@ -34,11 +34,15 @@
 .tile:active { transform: scale(0.98); }
 .tile:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 
-.copy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: var(--space-3) 0 var(--space-1) var(--space-3); }
+.copy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: var(--space-3) var(--space-1) var(--space-1) var(--space-1); }
 .name { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); letter-spacing: -0.01em; }
 .tagline { margin-top: 2px; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-/* Round "go" button anchored bottom-left, like a play control. */
-.go { display: grid; place-items: center; width: 40px; height: 40px; margin-top: auto; border-radius: var(--radius-full); background: color-mix(in srgb, var(--gold-300) 45%, transparent); color: var(--color-ink); }
+/* Round "go" button anchored bottom-right. */
+.go { display: grid; place-items: center; width: 40px; height: 40px; margin-top: auto; align-self: flex-end; border-radius: var(--radius-full); background: color-mix(in srgb, var(--gold-300) 45%, transparent); color: var(--color-ink); }
 
 .art { position: relative; display: grid; place-items: center; overflow: hidden; border-radius: 22px; background: var(--color-surface); }
 .art img { width: 88%; height: 88%; object-fit: contain; }
+
+/* White tile, soft lilac panel behind the product art (designer, 2026-10-28). Hairline keeps the white tile on cream. */
+.tile { background: var(--white); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
+.art { background: radial-gradient(75% 75% at 50% 45%, #f1e9fa, #e6dbf4); }

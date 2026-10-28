@@ -18,7 +18,7 @@ export function Segmented<T extends string>({ options, value, onChange, label }:
       {options.map((o) => (
         <button key={o.value} type="button" role="tab" aria-selected={o.value === value} className={styles.segment} onClick={() => onChange(o.value)}>
           {o.icon && <Icon name={o.icon} size={16} className={styles.icon} />}
-          {o.label}
+          <span className={styles.text}>{o.label}</span>
         </button>
       ))}
     </div>

@@ -1,6 +1,6 @@
 /** Renders the conversation's messages by kind, plus the thinking line; ready → guidance (no CTA). */
 import { useEffect } from 'react';
-import { useNav, useNavStore } from '@web/navigation';
+import { useNavStore } from '@web/navigation';
 import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList } from '@shared/data';
 import { isMinor, pendingFacts } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
@@ -28,6 +28,7 @@ import {
   SentAttachments,
 } from '@web/patterns/chat';
 import type { useConversation } from '@web/hooks/useConversation';
+import { useToast } from '@web/hooks/toast.store';
 import type { useMessageActions } from './useMessageActions';
 import { SafetyMessage } from './SafetyMessage';
 import { DocumentMessage } from './DocumentMessage';
@@ -43,7 +44,6 @@ export interface MessageListProps {
   actions: ReturnType<typeof useMessageActions>;
   onShop: (productId: string) => void;
   onBook: () => void;
-  onUploadLabs: () => void;
   onRestartPlan: () => void;
   onVisitNotes: () => void;
   onOpenPlan: () => void;
@@ -64,7 +64,6 @@ export function MessageList({
   actions,
   onShop,
   onBook,
-  onUploadLabs,
   onRestartPlan,
   onVisitNotes,
   onOpenPlan: _onOpenPlan,
@@ -75,8 +74,8 @@ export function MessageList({
   onEditFacts,
 }: MessageListProps) {
   const { messages, status } = conversation;
-  const { push } = useNav();
   const goHome = useNavStore((s) => s.goHome);
+  const toast = useToast();
   const reports = useAppStore((s) => s.labs.reportsById);
   // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
   const keepAnswered = useAppStore((s) => s.authFlow === 'login');
@@ -146,9 +145,14 @@ export function MessageList({
         <MessageBubble key={m.id} role="deborah" turnStart={turnStart}>
           <ReviewFactsCard
             facts={conversation.facts ?? []}
-            onConfirm={(keep, drop) => { s.confirmFacts(conversation.id, keep); s.discardFacts(conversation.id, drop); }}
+            onConfirm={(keep, drop) => {
+              s.confirmFacts(conversation.id, keep);
+              s.discardFacts(conversation.id, drop);
+              // Toast confirms the save (designer, 2026-10-28); the inline line stays as the chat record.
+              toast(keep.length ? 'Saved to your health profile' : 'Nothing was saved', keep.length ? { icon: 'check' } : undefined);
+            }}
             onEdit={onEditFacts}
-            onDiscard={(ids) => s.discardFacts(conversation.id, ids)}
+            onDiscard={(ids) => { s.discardFacts(conversation.id, ids); toast('Nothing was saved'); }}
           />
         </MessageBubble>
       );
@@ -177,7 +181,7 @@ export function MessageList({
             activeSection={m.meta?.activeSection}
             onAddQuestion={actions.addQuestion}
             labsNote={lab?.collectedAt ? `Based on your labs from ${formatShortDate(lab.collectedAt)}` : undefined}
-            sourceSlot={lab && <SourceTrace {...labTrace(lab, () => push('M-9.5', { reportId: lab.id }))} />}
+            sourceSlot={lab && <SourceTrace {...labTrace(lab)} />}
             productSlot={
               product && m.answer.product && <ProductCard product={product} productRef={m.answer.product} onShop={() => onShop(product.id)} />
             }
@@ -211,6 +215,7 @@ export function MessageList({
                   facts={pending}
                   showVisitNotes
                   onEditFacts={onEditFacts}
+                  onFactsResult={(n) => toast(n ? 'Saved to your health profile' : 'Nothing was saved', n ? { icon: 'check' } : undefined)}
                   onBook={onTeamBook}
                   onLearnGold={() => onShop(product?.id ?? 'genesis-gold')}
                   onVisitNotes={onVisitNotes}
@@ -274,7 +279,6 @@ export function MessageList({
           <QuickReplies
             options={quick.options}
             label={m.kind === 'labRequest' ? 'Lab results' : m.kind === 'documentOffer' ? 'Your document' : conversation.scriptId === DEBRIEF_SCRIPT_ID ? 'Your visit' : 'How did it go?'}
-            primary={m.kind === 'labRequest' ? { label: 'Upload my labs', icon: 'upload', onPress: onUploadLabs } : undefined}
             onSelect={(id) => reply(m.id, id)}
             answered={quickActive ? undefined : quick.answered}
           />

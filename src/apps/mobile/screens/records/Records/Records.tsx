@@ -1,7 +1,7 @@
 /**
  * @screen  M-9.1 · My Health records
  * @flow    F09 My Health records
- * @states  loading (skeleton) · notes · labs · search overlay (page dimmed · dropdown: lab tiles, reports, notes · no results) (consultations removed, design 2026-10-20) · each segment empty · other profile
+ * @states  loading (skeleton) · notes · search overlay (page dimmed · dropdown: notes · no results) (consultations removed 2026-10-20; labs removed 2026-10-28) · empty · other profile
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-598
  * @spec    docs/ux/F09-records.md#m-91--records
  * @xref    web: W-9.1 (apps/web/screens/records/Records) — not built
@@ -17,7 +17,7 @@ import { RecordsSearch } from './parts/RecordsSearch';
 import { SearchResults } from './parts/SearchResults';
 import styles from './Records.module.css';
 
-// Oct 27: "Labs & Attachments" becomes My Visit Notes only.
+// Oct 27: "Labs & Attachments" becomes My Visit Notes only (lab reports removed 2026-10-28).
 const SEGMENTS: { value: Segment; label: string }[] = [
   { value: 'notes', label: 'Visit Notes' },
 ];
@@ -31,7 +31,7 @@ export default function Records() {
   const profile = useAppStore((s) => s.profiles.byId[profileId]);
   const [segment, setSegment] = useState<Segment>(SEGMENTS.some((s) => s.value === params.segment) ? params.segment as Segment : 'notes');
   const [loading, setLoading] = useState(true);
-  // Search (design direction 2026-10-20): the nav bar's search button stretches into a field; results span labs and notes.
+  // Search (design direction 2026-10-20): the nav bar's search button stretches into a field over visit notes.
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
   const [expanded, setExpanded] = useState(false);
@@ -44,13 +44,11 @@ export default function Records() {
     return () => window.clearTimeout(t);
   }, []);
 
-  // Client sticky follows the Visit Notes / Labs / Attachments tab.
+  // Client sticky for Visit Notes.
   useEffect(() => {
-    const guide =
-      segment === 'labs' ? 'records-labs' : segment === 'attachments' ? 'records-attachments' : 'records-notes';
-    setClientGuide(guide);
+    setClientGuide('records-notes');
     return () => setClientGuide(null);
-  }, [segment, setClientGuide]);
+  }, [setClientGuide]);
 
   const otherProfile = Boolean(profile) && (profileId !== activeProfileId || profile?.relationship !== 'self');
 

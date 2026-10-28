@@ -211,14 +211,4 @@ export const GUIDANCE_JOURNEYS: JourneyRun[] = [
     answers: [...SESSION_GATES],
     review: 'save',
   },
-  {
-    id: 'guidance-labs',
-    label: 'Guidance · lab summary refresh',
-    description: 'S04 answered chat. What’s next → Upload labs → Take a photo → send to the Oracle → updated summary.',
-    scenario: 'S04',
-    message: '',
-    answers: [],
-    review: 'save',
-    afterAnswer: 'whatsNext-labs',
-  },
 ];

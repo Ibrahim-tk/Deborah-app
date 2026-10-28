@@ -6,7 +6,7 @@ export type ISODate = string;
 
 export type ContentStatus = 'placeholder' | 'handbook' | 'approved';
 
-export type PlanTier = 'trial' | 'individual' | 'family' | 'premium';
+export type PlanTier = 'trial' | 'individual' | 'family';
 export type Billing = 'monthly' | 'annual';
 /** `daughter` / `son` are legacy aliases; new intake saves `child`. */
 export type Relationship = 'self' | 'child' | 'daughter' | 'son' | 'partner' | 'parent' | 'other';

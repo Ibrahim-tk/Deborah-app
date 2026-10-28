@@ -30,9 +30,9 @@ export const selectAnsweredCount = (s: AppState, profileId = s.activeProfileId):
 
 export const selectNow = (s: AppState): Date => nowFrom(s);
 
-/** Family = 4 profiles (1 primary + 3); Premium = 6 (extra family slots). */
+/** Family = 4 profiles (1 primary + 3); more members are a paid add-on. */
 export const selectCanAddProfile = (s: AppState): boolean => {
-  const max = s.plan === 'premium' ? 6 : s.plan === 'family' ? 4 : 1;
+  const max = s.plan === 'family' ? 4 : 1;
   return max > 1 && s.profiles.order.length < max;
 };
 

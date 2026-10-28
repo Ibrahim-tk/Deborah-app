@@ -302,7 +302,7 @@ export interface VisitSpecialtyOption {
 
 /** commerce/plans.json (docs/06-data-model.md §3). */
 export interface PlanOption {
-  id: 'individual' | 'family' | 'premium';
+  id: 'individual' | 'family';
   name: string;
   monthly: number;
   annual: number;

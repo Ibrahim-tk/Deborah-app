@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { selectDocuments, selectVisitToLog, useAppStore } from '@shared/store';
+import { selectVisitToLog, useAppStore } from '@shared/store';
 
 import { ChatLauncher, ConversationHeader } from '@web/patterns/chat';
 import { IntakeCompletionCard } from '@web/patterns/widgets';
@@ -57,7 +57,6 @@ export default function Home() {
     if (profile) greeted.add(profile.id);
     setSheet(false);
   };
-  const docCount = useAppStore((s) => selectDocuments(s).length);
   // Home composer always starts a new chat. Resume lives on the "Continue your chat" card.
   const chat = () => {
     closeSheet();
@@ -81,8 +80,6 @@ export default function Home() {
   const journey = () => gate('journey', () => push('M-7.3'));
   const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
-  const reports = d.reportsMeta ? { meta: d.reportsMeta, onPress: go('M-9.1') } : undefined;
-  const documents = { meta: docCount === 0 ? 'Nothing saved yet' : `${docCount} saved`, onPress: go('M-11.1') };
   // Dismissed for this visit only; the card returns on the next Home mount.
   const [intakeHidden, setIntakeHidden] = useState(false);
   const intakeCard = {
@@ -136,9 +133,6 @@ export default function Home() {
               destinations={destinations}
               recommendations={d.recommendations}
               onShop={shop}
-              onLabs={() => open('M-5.3')}
-              reports={reports}
-              documents={documents}
               onNotes={go('M-9.1')}
             />
           )}
@@ -153,12 +147,9 @@ export default function Home() {
               intakeCard={intakeCard}
               journey={d.planCard ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
               onNotes={go('M-9.1')}
-              reports={reports}
-              documents={documents}
               destinations={destinations}
               recommendations={d.recommendations}
               onShop={shop}
-              onLabs={() => open('M-5.3')}
             />
           )}
         </div>

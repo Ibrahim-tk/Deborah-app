@@ -3,7 +3,6 @@ import { CheckInCard } from '@web/patterns/health';
 import { HealingPlanCard } from '@web/patterns/widgets';
 import { useNav } from '@web/navigation';
 import { useHubData } from '@web/screens/myhealth/useHubData';
-import { AttachmentsCard } from './AttachmentsCard';
 import { HealthDetails } from './HealthDetails';
 import { useAccountGate } from '@web/hooks/useAccountGate';
 
@@ -26,9 +25,7 @@ export function HubPopulated() {
       )}
       <CheckInCard state={checkIn} upcoming={upcoming} onCheckIn={() => openAsk({ mode: 'checkin' })} onReminders={() => push('M-10.4')} />
       {/* History and Visit Notes live on My Notes (M-9.1), not here (design 2026-10-20). */}
-      {/* Design request 2026-10-20: the health profile lives here; labs and documents have their own tab. */}
-      {/* Design request 2026-10-27: lab reports and images open Attachments (M-9.12). */}
-      <AttachmentsCard />
+      {/* Design request 2026-10-20: the health profile lives here (lab reports removed 2026-10-28). */}
       <HealthDetails />
       {/* "For you from the Oracle" and the library link removed from My Health (designer, 2026-10-21). */}
     </>

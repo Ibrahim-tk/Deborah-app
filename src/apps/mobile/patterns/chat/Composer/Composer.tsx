@@ -1,6 +1,6 @@
 /**
- * @pattern Composer — card composer: optional top banner, auto-growing text area (1–5 lines), + menu (Camera · Upload) and
- *          Symptoms (opens SymptomPicker) inside the + menu, mic beside send → Stop while
+ * @pattern Composer — card composer: optional top banner, auto-growing text area (1–5 lines), Symptoms
+ *          (opens SymptomPicker), mic beside send → Stop while
  *          generating, counter from 1,800, send disabled above 2,000. Simulated voice recording
  *          shows ✕ (cancel) · live wave · timer · Stop (to field) · Send.
  * @usedBy  M-2.1
@@ -25,24 +25,12 @@ export const MAX_CHARS = 2000;
 /** Simulated speech while dictating (design 2026-10-20): [flat ms, talking ms, …], then it loops. */
 const SPEECH_PATTERN = [3000, 2500, 2000, 2500, 4000];
 
-export type AttachSource = 'camera' | 'upload';
-
-/** A photo or file waiting in the composer (shown as a thumbnail tile with ×). */
-export interface ComposerAttachment {
-  id: string;
-  name: string;
-  /** Preview URL for images; files without one show a document icon. */
-  image?: string;
-}
-
 export interface ComposerProps {
   value: string;
   onChange: (value: string) => void;
   /** Sends the draft; voice "send" passes the dictated text directly. */
   onSend: (text?: string) => void;
   onStop: () => void;
-  /** + menu: Camera or Upload. */
-  onAttach: (source: AttachSource) => void;
   onFocusChange: (focused: boolean) => void;
   generating: boolean;
   /** When set, the composer is locked and this note is shown (e.g. emergency). */
@@ -68,9 +56,6 @@ export interface ComposerProps {
   /** Dropdown mode: picked symptoms and a toggle; the Symptoms button opens SymptomDropdown over the composer. */
   symptomsSelected?: string[];
   onSymptomToggle?: (symptom: string) => void;
-  /** Photos / files added from the + menu, shown as tiles above the text. */
-  attachments?: ComposerAttachment[];
-  onRemoveAttachment?: (id: string) => void;
   /** Lets the screen hide suggestions while dictating. */
   onRecordingChange?: (recording: boolean) => void;
 }
@@ -83,8 +68,6 @@ export function Composer({
   onSymptoms,
   tokens = [],
   onRemoveToken,
-  attachments = [],
-  onRemoveAttachment,
   symptomsActive,
   symptomsSelected,
   onSymptomToggle,
@@ -107,7 +90,7 @@ export function Composer({
   const length = value.length;
   const symptomsOn = symptomsActive ?? tokens.length > 0;
   const [symptomMenu, setSymptomMenu] = useState(false);
-  const canSend = (value.trim().length > 0 || tokens.length > 0 || attachments.length > 0) && length <= MAX_CHARS && !generating && !lockedNote;
+  const canSend = (value.trim().length > 0 || tokens.length > 0) && length <= MAX_CHARS && !generating && !lockedNote;
 
   useEffect(() => onRecordingChange?.(recording), [recording, onRecordingChange]);
 
@@ -221,18 +204,6 @@ export function Composer({
         <div className={styles.root}>
           {banner && <div className={styles.banner}>{banner}</div>}
           {options}
-          {attachments.length > 0 && (
-            <ul className={styles.attachments} aria-label="Attachments">
-              {attachments.map((a) => (
-                <li key={a.id} className={styles.attachment} data-file={!a.image || undefined}>
-                  {a.image ? <img src={a.image} alt={a.name} className={styles.attachmentImg} /> : <Icon name="file" size={24} />}
-                  <button type="button" className={styles.attachmentRemove} aria-label={`Remove ${a.name}`} onClick={() => onRemoveAttachment?.(a.id)}>
-                    <Icon name="close" size={12} strokeWidth={2.25} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
           {tokens.length > 0 && (
             <ul className={styles.tokens} aria-label="Added symptoms">
               {tokens.map((t) => (

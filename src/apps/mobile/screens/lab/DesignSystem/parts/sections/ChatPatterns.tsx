@@ -3,7 +3,6 @@ import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'rea
 import {
   CareDisclaimer, ChatHeader, ChatLauncher, Composer, ConversationHeader, ErrorBubble, Greeting, MessageBubble,
   QuickReplies, ScrollToLatest, SuggestedQuestions, SuggestionList, ThinkingIndicator, TrialCounter,
-  type ComposerAttachment,
 } from '@mobile/patterns/chat';
 import { scripts, FALLBACK_SCRIPT_ID, suggestionsData } from '@shared/data';
 import { Group, Section } from '../Section';
@@ -19,7 +18,6 @@ const VOICE = script.voiceSample;
 const composerBase = {
   onSend: noop as (text?: string) => void,
   onStop: noop,
-  onAttach: noop as (source: 'camera' | 'upload') => void,
   onFocusChange: noop as (focused: boolean) => void,
   placeholder: PLACEHOLDER,
   voiceSample: VOICE,
@@ -137,24 +135,6 @@ function AttachMenuComposer() {
   );
 }
 
-function AttachmentsComposer() {
-  const [attachments, setAttachments] = useState<ComposerAttachment[]>([
-    { id: 'img', name: 'lab-panel.jpg', image: '/images/deborah/portrait-placeholder.svg' },
-    { id: 'doc', name: 'results.pdf' },
-  ]);
-  return (
-    <Composer
-      {...composerBase}
-      value=""
-      onChange={noop}
-      generating={false}
-      onSymptoms={noop}
-      attachments={attachments}
-      onRemoveAttachment={(id) => setAttachments((list) => list.filter((a) => a.id !== id))}
-    />
-  );
-}
-
 const COUNTER_NEAR = 'a'.repeat(1850);
 const COUNTER_OVER = 'a'.repeat(2050);
 
@@ -246,10 +226,6 @@ export function ChatPatterns() {
                 <Composer {...composerBase} value={COUNTER_OVER} onChange={noop} generating={false} onSymptoms={noop} />
               </Variant>
             </ComposerBlock>
-          </Specimen>
-
-          <Specimen name="Composer · attachments" path="patterns/chat/Composer" note="Image thumb + file tile with remove.">
-            <AttachmentsComposer />
           </Specimen>
 
           <Specimen name="Composer · symptoms control" path="patterns/chat/Composer" note="Product path: onSymptoms opens SymptomPicker sheet. Default vs active.">

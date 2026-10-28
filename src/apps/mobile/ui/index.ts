@@ -12,6 +12,7 @@ export * from './TextArea';
 export * from './Checkbox';
 export * from './Toggle';
 export * from './Segmented';
+export * from './ToggleGroup';
 export * from './Select';
 export * from './Card';
 export * from './Panel';

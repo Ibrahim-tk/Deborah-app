@@ -81,7 +81,6 @@ export default function WidgetLab() {
               onChange={setDraft}
               onSend={(text) => send(text ?? draft)}
               onStop={() => {}}
-              onAttach={() => later({ id: mid(), role: 'deborah', text: 'Add it here:', widget: 'upload' })}
               onFocusChange={() => {}}
               generating={typing}
               placeholder="Try “book a visit”, “my energy”, “labs”…"

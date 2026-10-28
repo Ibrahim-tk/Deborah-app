@@ -1,13 +1,9 @@
 /** Shared lower half of every home state (design 2026-10-21): Manage your health details · shop. */
 import { RecommendationCard, SuggestionCarousel, type Recommendation } from '@mobile/patterns/widgets';
 
-type Link = { meta: string; onPress: () => void };
 export type Destinations = [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
 
 export interface HomeSectionsProps {
-  reports?: Link;
-  documents?: Link;
-  onLabs: () => void;
   destinations: Destinations;
   recommendations: Recommendation[];
   onShop: (productId: string) => void;

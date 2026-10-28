@@ -5,9 +5,9 @@
     "monthly": 29,
     "annual": 290,
     "features": [
+      "Myself only, all modules",
       "Full chat access with the Oracle",
-      "Persistent login, saved history & PDF notes",
-      "1 primary profile"
+      "Saved history and visit notes"
     ],
     "profiles": 1
   },
@@ -17,23 +17,12 @@
     "monthly": 39,
     "annual": 390,
     "features": [
-      "Everything in Individual",
-      "1 primary + 3 family profiles",
-      "Each person keeps a private history"
+      "Myself plus 3 family profiles, all modules",
+      "Each person keeps a private history",
+      "Add more members for an extra monthly fee each"
     ],
     "profiles": 4,
-    "recommended": true
-  },
-  {
-    "id": "premium",
-    "name": "Premium",
-    "monthly": 79,
-    "annual": 790,
-    "features": [
-      "Everything in Family",
-      "Extra family profiles available",
-      "1-on-1 consultations with the Oracle"
-    ],
-    "profiles": 6
+    "recommended": true,
+    "addOnMonthly": 9
   }
 ]

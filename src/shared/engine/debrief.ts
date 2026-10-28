@@ -126,7 +126,7 @@ export function debriefReplySteps(ctx: EngineContext, messageId: string, optionI
     }
     case 'uploadDoc':
     case 'uploadNo':
-      // The UI opens M-11.3 for an upload; either way Deborah moves on to "talk it through?".
+      // Values are typed into the chat as text (no uploads); either way Deborah moves on to "talk it through?".
       return [...head, ...say(ctx, d.discuss, { quickReplies: { options: d.discussOptions } })];
     case 'discussNo':
       return [...head, endDebrief(conv), ...say(ctx, d.discussNo)];

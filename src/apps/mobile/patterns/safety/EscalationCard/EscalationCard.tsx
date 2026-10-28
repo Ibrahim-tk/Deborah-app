@@ -45,12 +45,15 @@ export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: E
 
   return (
     <>
-      {/* Branded hero card: heading + CTA left, no portrait (Oct 27: Deborah's photo removed; routes to the support team). */}
+      {/* Booking banner, same as web (designer, 2026-10-28): soft gradient, serif heading + line + CTA; no portrait. */}
       <div className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.heroTitle}>Talk with our support team</p>
+          <p className={styles.heroBody}>Get personalized support, ask questions, or discuss your health goals.</p>
           <Button size="sm" className={styles.cta} onClick={request}>Consult with support team</Button>
         </div>
+        {/* Small blossom tree on the right (designer, 2026-10-28) — decorative, the web portrait's slot. */}
+        <img src="/images/home/support-tree.webp" alt="" className={styles.tree} />
       </div>
       <BottomSheet open={Boolean(open)} onClose={done}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>

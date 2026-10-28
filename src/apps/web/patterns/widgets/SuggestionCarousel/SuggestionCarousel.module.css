@@ -29,7 +29,7 @@
   scroll-snap-align: start;
 }
 
-/* Home dashboard: equal essentials cards (2-up, 4-up when wide). */
+/* Home dashboard: equal essentials cards (stacked, 3-up when wide; Attachments removed 2026-10-28). */
 .essentials {
   display: grid;
   gap: var(--space-3);
@@ -39,10 +39,7 @@
 }
 .essentialsItem { min-width: 0; }
 @media (min-width: 900px) {
-  .essentials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (min-width: 1280px) {
-  .essentials { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .essentials { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 .card {
@@ -256,3 +253,30 @@
 .essentials .card[data-tone] { background: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)), url('/images/home/essential-lilac.png') center / cover no-repeat, #e4d4fb; }
 .essentials .card[data-tone='mint'] { background: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)), url('/images/home/essential-peach.png') center / cover no-repeat, #f8dfe0; }
 .essentials .card[data-tone='rose'] { background: linear-gradient(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.4)), url('/images/home/essential-blue.png') center / cover no-repeat, #dfe0fa; }
+
+/* Soft pastel mist (designer, 2026-10-28): white base with blurred tone blooms; no aurora photo. Ink copy.
+   lilac → lavender · mint (My Health) → blush pink · rose (Family) → periwinkle lavender. */
+.card[data-tone] {
+  background:
+    radial-gradient(60% 55% at 12% 8%, rgb(214 200 246 / 0.75), transparent 70%),
+    radial-gradient(55% 50% at 70% 92%, rgb(208 192 244 / 0.7), transparent 70%),
+    radial-gradient(45% 45% at 95% 60%, rgb(226 216 250 / 0.6), transparent 70%),
+    linear-gradient(160deg, #f6f2fd 0%, #f1ecfb 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7);
+}
+.card[data-tone='mint'] {
+  background:
+    radial-gradient(60% 55% at 10% 8%, rgb(250 206 222 / 0.7), transparent 70%),
+    radial-gradient(55% 50% at 75% 88%, rgb(248 196 216 / 0.7), transparent 70%),
+    linear-gradient(160deg, #fdf3f6 0%, #fbeef2 100%);
+}
+.card[data-tone='rose'],
+.card[data-tone='gold'] {
+  background:
+    radial-gradient(60% 55% at 12% 8%, rgb(206 204 248 / 0.75), transparent 70%),
+    radial-gradient(55% 50% at 70% 92%, rgb(212 200 246 / 0.7), transparent 70%),
+    linear-gradient(160deg, #f4f3fd 0%, #eeecfb 100%);
+}
+.card[data-tone]::before,
+.card[data-tone]::after { content: none; }
+.card[data-tone] .title, .card[data-tone] .sub { color: var(--color-ink); }

@@ -16,8 +16,8 @@ export default function PlanSuccess() {
   const plan = useAppStore((s) => s.plan);
   // Upgrading from M-6.3 returns to M-6.2: adding the family member becomes the main action.
   const { returnTo } = useScreenParams<{ returnTo: string }>();
-  const addFirst = returnTo === 'M-6.2' && (plan === 'family' || plan === 'premium');
-  const canAddFamily = plan === 'family' || plan === 'premium';
+  const addFirst = returnTo === 'M-6.2' && plan === 'family';
+  const canAddFamily = plan === 'family';
 
   const continueChat = () => {
     returnToConversation();

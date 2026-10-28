@@ -1,0 +1,8 @@
+/* Smallest caption, centred, tucked up under the composer (pulls back part of the parent's grid gap). */
+.root {
+  margin-top: calc(var(--space-1) * -1);
+  text-align: center;
+  font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body);
+  letter-spacing: 0;
+  color: var(--color-ink-secondary);
+}

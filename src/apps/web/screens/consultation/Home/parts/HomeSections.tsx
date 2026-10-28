@@ -1,17 +1,12 @@
-/** Shared lower half of Home: health essentials (4) · more for you (full-width plan + two product cards). */
+/** Shared lower half of Home: health essentials (3) · more for you (full-width plan + two product cards). */
 import { productList } from '@shared/data';
 import { Button } from '@web/ui';
-import { useNav } from '@web/navigation';
 import { HealingPlanCard, SuggestionCarousel, type Recommendation } from '@web/patterns/widgets';
 import layout from './HomeStates.module.css';
 
-type Link = { meta: string; onPress: () => void };
 export type Destinations = [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
 
 export interface HomeSectionsProps {
-  reports?: Link;
-  documents?: Link;
-  onLabs: () => void;
   destinations: Destinations;
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
@@ -24,7 +19,6 @@ export interface HomeSectionsProps {
 }
 
 export function HomeSections({ destinations, recommendations, onShop, onNotes, journey, hideShop }: HomeSectionsProps) {
-  const { open } = useNav();
   // Recommended first, then the catalogue, so there are always two cards.
   const products = [...recommendations.map((r) => r.product), ...productList]
     .filter((p, i, all) => p && all.findIndex((q) => q.id === p.id) === i)
@@ -43,16 +37,6 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
             artifact: 'blue-bloom',
             icon: 'calendar',
             onPress: onNotes,
-          },
-          {
-            // Design request 2026-10-27: lab reports and images (M-9.12).
-            key: 'attachments',
-            title: 'Attachments',
-            sub: 'Your lab reports and images',
-            tone: 'sky',
-            artifact: 'flask-bloom',
-            icon: 'labs',
-            onPress: () => open('M-9.12'),
           },
           {
             key: 'health',

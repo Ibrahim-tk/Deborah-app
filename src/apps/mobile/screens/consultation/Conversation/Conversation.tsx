@@ -6,8 +6,7 @@
  * @spec    docs/ux/F02-consultation.md#m-21-conversation
  * @xref    web: W-2.1 (apps/web/screens/consultation/Conversation) — not built
  */
-import { HeldChoiceContext, useComposerAttachments, type HeldChoice } from '@mobile/patterns/chat';
-import { meta } from '@mobile/navigation';
+import { HeldChoiceContext, type HeldChoice } from '@mobile/patterns/chat';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { asksForAnswer, isMinor, pendingFacts } from '@shared/engine';
 import { suggestionsData } from '@shared/data';
@@ -16,7 +15,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { ActionSheet } from '@mobile/ui';
 import { AnimatePresence, Aura, GradientShift, MotionDiv } from '@mobile/ui';
-import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
+import { AiDisclosure, ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -29,6 +28,7 @@ import { useDocumentHandoff } from './parts/useDocumentHandoff';
 import { useMessageActions } from './parts/useMessageActions';
 import { useHealthConsent } from './parts/useHealthConsent';
 import { IntakeTile } from '@mobile/patterns/health';
+import { VisitNotesThread } from './parts/VisitNotesThread';
 import { healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import styles from './Conversation.module.css';
 import { useAccountGate } from '@mobile/hooks/useAccountGate';
@@ -39,6 +39,9 @@ const SHOW_TRIAL_COUNTER = false;
 export default function Conversation() {
   const chat = useConversation();
   const { conversation, profile, freeLeft, busy } = chat;
+  // "Create visit notes" runs in the thread, as on web; keyed to the conversation so switching chats resets it.
+  const [visitNotesFor, setVisitNotesFor] = useState<string>();
+  const visitNotes = Boolean(conversation?.id) && visitNotesFor === conversation?.id;
   const profilePct = profile ? healthProfileCompletion(profile) : 1;
   const { open, push, pop, switchTab, presentSheet } = useNav();
   const gate = useAccountGate();
@@ -54,7 +57,6 @@ export default function Conversation() {
   // Multi-choice answers held in the composer (design 2026-10-21, same as M-2.12).
   const [held, setHeld] = useState<HeldChoice | null>(null);
   const heldValue = useMemo(() => ({ held, setHeld }), [held]);
-  const attachments = useComposerAttachments('M-2.1', meta('M-2.1')?.title ?? 'Conversation');
   const withPicked = (text: string) => {
     if (!symptoms.length) return text;
     setSymptoms([]);
@@ -112,7 +114,10 @@ export default function Conversation() {
       ? quizMsg?.intake
       : undefined;
   const quizFreeText = Boolean(quiz && (quiz.input === 'text' || quiz.options.length === 0));
-  const { ref: scrollRef, onScroll, showLatest, toBottom } = useAutoScroll(`${intake.progress.step}:${messages.length}:${last?.text?.length}:${JSON.stringify(last?.answer?.sections.map((s) => s.body.length + (s.bullets?.length ?? 0)))}:${conversation?.thinking}`);
+  const { ref: scrollRef, onScroll, showLatest, toBottom } = useAutoScroll(`${intake.progress.step}:${messages.length}:${last?.text?.length}:${JSON.stringify(last?.answer?.sections.map((s) => s.body.length + (s.bullets?.length ?? 0)))}:${conversation?.thinking}`,
+    // Eye-level turns: each new user message glides up under the header (designer, 2026-10-28).
+    messages.filter((m) => m.role === 'user').length,
+  );
 
   useEffect(() => () => setChromeHidden(false), [setChromeHidden]);
   // The follow-up opt-in (M-2.8) waited for Review and Confirm; offer it once every fact is handled.
@@ -219,7 +224,6 @@ export default function Conversation() {
       <Aura />
       <GradientShift />
       <ChatHeader
-        disclosure={!isEmpty && !profiling}
         onBack={() => pop()}
         onNewChat={() => chat.startNew()}
         canStartNew={!isEmpty && !profiling}
@@ -261,16 +265,11 @@ export default function Conversation() {
                   actions={actions}
                   onShop={(id) => open('M-2.7', { productId: id })}
                   onBook={() => push('M-8.2')}
-                  onUploadLabs={() => gate('documents', () => open('M-5.3'))}
                   onRestartPlan={() => gate('journey', () => {
                     switchTab('health');
                     push('M-7.3');
                   })}
-                  onVisitNotes={() => {
-                    const msg = [...(conversation?.messages ?? [])].reverse().find((m) => m.kind === 'answer' && m.answer);
-                    if (msg) actions.saveAnswer(msg, conversation?.topic ?? 'your question');
-                    else open('M-9.4');
-                  }}
+                  onVisitNotes={() => setVisitNotesFor(conversation?.id)}
                   onOpenPlan={() => {
                     switchTab('health');
                     push('M-7.3');
@@ -287,6 +286,14 @@ export default function Conversation() {
               )
             )}
           </AnimatePresence>
+          {visitNotes && !isEmpty && (
+            <VisitNotesThread
+              answer={[...(conversation?.messages ?? [])].reverse().find((m) => m.kind === 'answer' && m.answer)?.answer}
+              topic={conversation?.topic ?? 'Your visit notes'}
+              // Phone has no side panel: the finished notes open in My Visit Notes (M-9.7).
+              onOpenNotes={(id) => (id ? open('M-9.7', { noteId: id }) : open('M-9.1'))}
+            />
+          )}
           {consent.widget}
         </div>
       </div>
@@ -314,21 +321,9 @@ export default function Conversation() {
               setHeld(null);
               return;
             }
-            const typed = withPicked(text ?? draft);
-            // Photos / files: post them as images, "Reading your photo…", then a placeholder reply (dummy).
-            if (attachments.items.length) {
-              const items = attachments.items.map((a) => ({ name: a.name, src: a.image }));
-              attachments.clear();
-              setDraft('');
-              chat.shareAttachments(items, typed);
-              return;
-            }
-            send(typed);
+            send(withPicked(text ?? draft));
           }}
           onStop={chat.stop}
-          onAttach={(source) => gate('documents', () => attachments.attach(source))}
-          attachments={attachments.items}
-          onRemoveAttachment={attachments.remove}
           // Symptoms open the SymptomPicker sheet (search + close, area tabs, pills).
           onSymptoms={() => setSymptomSheet(true)}
           symptomsActive={symptoms.length > 0}
@@ -370,9 +365,10 @@ export default function Conversation() {
           // Trial counter hidden for now (design direction 2026-10-08); the free-limit sheet still gates.
           banner={SHOW_TRIAL_COUNTER && freeLeft !== null && <TrialCounter inline left={freeLeft} onChoosePlan={() => open('M-4.1')} />}
         />}
+        {/* Oct 27: AI disclosure under the composer on every chat screen (not during profile intake). */}
+        {!profiling && <AiDisclosure />}
       </div>
 
-      {attachments.overlay}
       <ActionSheet
         open={Boolean(pressed)}
         onClose={() => setPressed(null)}

@@ -1,7 +1,8 @@
-/** Renders the conversation's messages by kind, plus the thinking line and answer CTA. */
-import { useNav } from '@mobile/navigation';
+/** Renders the conversation's messages by kind, plus the thinking line; ready → guidance (no CTA). */
+import { useEffect } from 'react';
+import { useNavStore } from '@mobile/navigation';
 import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList } from '@shared/data';
-import { ANSWER_REQUEST_LABEL, isMinor, pendingFacts } from '@shared/engine';
+import { isMinor, pendingFacts } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom, formatShortDate } from '@shared/utils';
@@ -10,8 +11,8 @@ import { DeborahBlob } from '@mobile/ui';
 import { ProductCard, ProductDisclosure, ShopTiles } from '@mobile/patterns/commerce';
 import {
   AfterGuidanceTrail,
+  GuidanceEnd,
   AnswerActions,
-  AnswerCTA,
   AnswerSections,
   CareDisclaimer,
   ClosingLine,
@@ -20,7 +21,6 @@ import {
   MessageBubble,
   QuickReplies,
   ReviewFactsCard,
-  SuggestedQuestions,
   ThinkingIndicator,
   VisitSummaryCard,
   SourceTrace,
@@ -28,6 +28,7 @@ import {
   SentAttachments,
 } from '@mobile/patterns/chat';
 import type { useConversation } from '@mobile/hooks/useConversation';
+import { useToast } from '@mobile/hooks/toast.store';
 import type { useMessageActions } from './useMessageActions';
 import { SafetyMessage } from './SafetyMessage';
 import { DocumentMessage } from './DocumentMessage';
@@ -43,7 +44,6 @@ export interface MessageListProps {
   actions: ReturnType<typeof useMessageActions>;
   onShop: (productId: string) => void;
   onBook: () => void;
-  onUploadLabs: () => void;
   onRestartPlan: () => void;
   onVisitNotes: () => void;
   onOpenPlan: () => void;
@@ -64,7 +64,6 @@ export function MessageList({
   actions,
   onShop,
   onBook,
-  onUploadLabs,
   onRestartPlan,
   onVisitNotes,
   onOpenPlan: _onOpenPlan,
@@ -75,12 +74,20 @@ export function MessageList({
   onEditFacts,
 }: MessageListProps) {
   const { messages, status } = conversation;
-  const { push } = useNav();
+  const goHome = useNavStore((s) => s.goHome);
+  const toast = useToast();
   const reports = useAppStore((s) => s.labs.reportsById);
   // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
   const keepAnswered = useAppStore((s) => s.authFlow === 'login');
   // DN-12: no products for anyone under 18, the shop tiles included.
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
+
+  // Ready for guidance: run it — no "Tell me what you think" tap.
+  const requestAnswer = chat.requestAnswer;
+  useEffect(() => {
+    if (busy || status !== 'ready') return;
+    void requestAnswer();
+  }, [busy, status, requestAnswer]);
 
   // Check-in quick replies: the engine answers; some options also act in the UI.
   const debriefReply = useDebriefReplies(chat, conversation.id, onFocusComposer);
@@ -102,9 +109,6 @@ export function MessageList({
     const turnStart = m.role === 'deborah' && messages[i - 1]?.role !== 'deborah';
     const isLatestDeborah = i === lastDeborahIndex;
     const placeholder = m.meta?.status === 'placeholder';
-    // F11: Deborah's reply to a shared document offers its own questions even in an empty chat.
-    const docReply = m.role === 'deborah' && Boolean(m.meta?.documentId) && m.kind === 'text';
-    const showSuggestions = isLatestDeborah && !busy && (status === 'ready' || status === 'answered' || docReply) && (m.suggestions?.length ?? 0) > 0;
 
     if (m.role === 'user' && m.meta?.documentId) return <DocumentMessage key={m.id} documentId={m.meta.documentId} />;
     // Composer photos: the images themselves, then any text in its usual bubble (design 2026-10-21).
@@ -141,9 +145,14 @@ export function MessageList({
         <MessageBubble key={m.id} role="deborah" turnStart={turnStart}>
           <ReviewFactsCard
             facts={conversation.facts ?? []}
-            onConfirm={(keep, drop) => { s.confirmFacts(conversation.id, keep); s.discardFacts(conversation.id, drop); }}
+            onConfirm={(keep, drop) => {
+              s.confirmFacts(conversation.id, keep);
+              s.discardFacts(conversation.id, drop);
+              // Toast confirms the save (designer, 2026-10-28); the inline line stays as the chat record.
+              toast(keep.length ? 'Saved to your health profile' : 'Nothing was saved', keep.length ? { icon: 'check' } : undefined);
+            }}
             onEdit={onEditFacts}
-            onDiscard={(ids) => s.discardFacts(conversation.id, ids)}
+            onDiscard={(ids) => { s.discardFacts(conversation.id, ids); toast('Nothing was saved'); }}
           />
         </MessageBubble>
       );
@@ -172,7 +181,7 @@ export function MessageList({
             activeSection={m.meta?.activeSection}
             onAddQuestion={actions.addQuestion}
             labsNote={lab?.collectedAt ? `Based on your labs from ${formatShortDate(lab.collectedAt)}` : undefined}
-            sourceSlot={lab && <SourceTrace {...labTrace(lab, () => push('M-9.5', { reportId: lab.id }))} />}
+            sourceSlot={lab && <SourceTrace {...labTrace(lab)} />}
             productSlot={
               product && m.answer.product && <ProductCard product={product} productRef={m.answer.product} onShop={() => onShop(product.id)} />
             }
@@ -206,15 +215,17 @@ export function MessageList({
                   facts={pending}
                   showVisitNotes
                   onEditFacts={onEditFacts}
+                  onFactsResult={(n) => toast(n ? 'Saved to your health profile' : 'Nothing was saved', n ? { icon: 'check' } : undefined)}
                   onBook={onTeamBook}
                   onLearnGold={() => onShop(product?.id ?? 'genesis-gold')}
                   onVisitNotes={onVisitNotes}
                   onFollowUp={onFocusComposer}
                 />
               )}
+              {showNext && <GuidanceEnd onHome={goHome} onContinue={onFocusComposer} />}
             </>
           )}
-          {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}
+          {/* Web: no "You could ask" list after answers (designer, 2026-10-23). */}
         </MessageBubble>
       );
     }
@@ -268,12 +279,11 @@ export function MessageList({
           <QuickReplies
             options={quick.options}
             label={m.kind === 'labRequest' ? 'Lab results' : m.kind === 'documentOffer' ? 'Your document' : conversation.scriptId === DEBRIEF_SCRIPT_ID ? 'Your visit' : 'How did it go?'}
-            primary={m.kind === 'labRequest' ? { label: 'Upload my labs', icon: 'upload', onPress: onUploadLabs } : undefined}
             onSelect={(id) => reply(m.id, id)}
             answered={quickActive ? undefined : quick.answered}
           />
         )}
-        {showSuggestions && <SuggestedQuestions questions={m.suggestions ?? []} onSelect={(q) => chat.send(q)} />}
+        {/* Web: no "You could ask" list after answers (designer, 2026-10-23). */}
       </MessageBubble>
     );
   };
@@ -291,13 +301,6 @@ export function MessageList({
       ])}
 
       {conversation.thinking && <ThinkingIndicator label={conversation.thinking} />}
-
-      {/* "Tell me what you think" only once the Oracle has enough context to answer (intake done). */}
-      {!busy && status === 'ready' && (
-        <div className={styles.cta}>
-          <AnswerCTA label={ANSWER_REQUEST_LABEL} emphasis="primary" onPress={chat.requestAnswer} />
-        </div>
-      )}
     </>
   );
 }

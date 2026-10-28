@@ -12,3 +12,6 @@
   text-align: center;
 }
 .icon { flex: none; color: var(--color-success-ink); }
+
+/* Compact mobile toast (designer, 2026-10-28): footnote text, tighter padding. */
+.root { gap: var(--space-1); padding: var(--space-2) var(--space-4); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); }

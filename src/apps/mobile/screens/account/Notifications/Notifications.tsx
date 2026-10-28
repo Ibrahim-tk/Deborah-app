@@ -9,7 +9,7 @@
  */
 import { FOLLOW_UP_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Header, Panel, Segmented, Toggle, useAlert } from '@mobile/ui';
+import { Button, Header, Panel, Toggle, ToggleGroup, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './Notifications.module.css';
@@ -18,7 +18,8 @@ import { useAccountGate } from '@mobile/hooks/useAccountGate';
 /** F10: 1 week · 2 weeks · 1 month — Off is the check-in toggle, not a segment. */
 const INTERVALS = [
   { value: '7', label: 'Weekly' },
-  { value: '14', label: 'Every 2 weeks' },
+  // Short label so all three segments fit a phone without truncating.
+  { value: '14', label: '2 weeks' },
   { value: '30', label: 'Monthly' },
 ];
 // Same default as M-2.8 Follow-up opt-in.
@@ -133,15 +134,6 @@ export default function Notifications() {
 
         {enabled && !denied && (
           <>
-            <section className={styles.group} aria-label="Follow-up after guidance">
-              <Toggle checked={checkIns} onChange={setCheckIns} label="Follow-up after guidance" description="The Oracle asks how you’re doing after she’s shared guidance." />
-              {checkIns && (
-                <fieldset className={styles.interval}>
-                  <legend className={styles.legend}>Preferred frequency</legend>
-                  <Segmented label="Preferred frequency" options={INTERVALS} value={String(days)} onChange={changeInterval} />
-                </fieldset>
-              )}
-            </section>
             <section className={styles.group} aria-label="Wellness Plan check-in">
               <Toggle checked={prefs?.plan !== false} onChange={(on) => void setPref('plan', on)} label="Wellness Plan check-in" description="A nudge to log today’s habits while your plan is running." />
             </section>
@@ -150,6 +142,16 @@ export default function Notifications() {
             </section>
             <section className={styles.group} aria-label="Booking reminders">
               <Toggle checked={bookingReminders} onChange={setBooking} label="Booking reminders" description="The day before a consult with support team." />
+            </section>
+            <section className={styles.group} aria-label="Follow-up after guidance">
+              {checkIns && (
+                // Mobile: frequency first, then the follow-up toggle (designer, 2026-10-28). Web keeps the dropdown below.
+                <fieldset className={styles.interval}>
+                  <legend className={styles.legend}>Preferred frequency</legend>
+                  <ToggleGroup label="Preferred frequency" options={INTERVALS} value={String(days)} onChange={changeInterval} />
+                </fieldset>
+              )}
+              <Toggle checked={checkIns} onChange={setCheckIns} label="Follow-up after guidance" description="The Oracle asks how you’re doing after she’s shared guidance." />
             </section>
           </>
         )}

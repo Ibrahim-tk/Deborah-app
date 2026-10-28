@@ -1,17 +1,19 @@
 /**
- * @pattern AnswerActions — one row: Copy · Save PDF · Share · Listen icons, then small
+ * @pattern AnswerActions — one row: Copy · Read aloud icons (styled tooltips), then small
  *          Visit Notes (and Book on lab answers) at the end
  * @usedBy  M-2.1, M-9.2
  * @spec    docs/ux/F02-consultation.md#pattern-spec--answeractions · DESIGN.md › Messages › Message actions
- * @xref    web: apps/web/patterns/chat/AnswerActions — not built
+ * @xref    web: apps/mobile/patterns/chat/AnswerActions — not built
  */
 import { Icon, type IconName } from '@mobile/ui';
 import styles from './AnswerActions.module.css';
 
 export interface AnswerActionsProps {
-  onSavePdf: () => void;
+  /** Kept for API compatibility; the PDF tool was removed (design 2026-10-26). */
+  onSavePdf?: () => void;
   onVisitNotes: () => void;
-  onShare: () => void;
+  /** Kept for API compatibility; the Share tool was removed (design 2026-10-26). */
+  onShare?: () => void;
   onCopy: () => void;
   onListen: () => void;
   /** Kept for API compatibility; feedback controls were removed. */
@@ -22,7 +24,8 @@ export interface AnswerActionsProps {
 
 function Tool({ icon, label, onPress }: { icon: IconName; label: string; onPress: () => void }) {
   return (
-    <button type="button" className={styles.tool} onClick={onPress} aria-label={label} title={label}>
+    // Own styled tooltip (data-tip) instead of the native title bubble.
+    <button type="button" className={styles.tool} onClick={onPress} aria-label={label} data-tip={label}>
       <Icon name={icon} size={20} />
     </button>
   );
@@ -37,16 +40,14 @@ function Action({ icon, label, onPress }: { icon: IconName; label: string; onPre
   );
 }
 
-/* One quiet row: icon tools (Copy · Save PDF · Share · Listen) on the left, small labelled
+/* One quiet row: icon tools (Copy · Read aloud) on the left, small labelled
    actions (Visit Notes, Consult with support team) on the right. Feedback thumbs removed (2026-10-08). */
-export function AnswerActions({ onSavePdf, onVisitNotes, onShare, onCopy, onListen, onBook }: AnswerActionsProps) {
+export function AnswerActions({ onVisitNotes, onCopy, onListen, onBook }: AnswerActionsProps) {
   return (
     <div className={styles.root}>
       <div className={styles.tools} role="toolbar" aria-label="Answer tools">
         <Tool icon="copy" label="Copy" onPress={onCopy} />
-        <Tool icon="pdf" label="Save PDF" onPress={onSavePdf} />
-        <Tool icon="share" label="Share" onPress={onShare} />
-        <Tool icon="listen" label="Listen" onPress={onListen} />
+        <Tool icon="listen" label="Read aloud" onPress={onListen} />
       </div>
       <div className={styles.actions}>
         {onBook && <Action icon="calendar" label="Book" onPress={onBook} />}

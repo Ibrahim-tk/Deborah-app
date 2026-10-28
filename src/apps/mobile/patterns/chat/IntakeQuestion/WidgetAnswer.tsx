@@ -15,9 +15,11 @@ export interface WidgetAnswerProps {
   onFinish: (ids: string[]) => void;
   /** "Other" → type the answer in the composer. */
   onOther: () => void;
+  /** Checklist questions: Skip until something is picked (designer, 2026-10-28). */
+  onSkip?: () => void;
 }
 
-export function WidgetAnswer({ intake, locked, onFinish, onOther }: WidgetAnswerProps) {
+export function WidgetAnswer({ intake, locked, onFinish, onOther, onSkip }: WidgetAnswerProps) {
   const { held, setHeld } = useHeldChoice();
   const options = intake.options.map((o) => ({ id: o.id, label: o.label }));
   const ids = options.map((o) => o.id);
@@ -43,6 +45,7 @@ export function WidgetAnswer({ intake, locked, onFinish, onOther }: WidgetAnswer
         value={held?.key === key ? held.ids : []}
         onChange={(next) => setHeld(next.length ? { key, ids: next, labels: next.map(labelOf), finish: onFinish } : null)}
         onOther={onOther}
+        onSkip={onSkip}
         onSubmit={(next) => { setHeld(null); onFinish(next); }}
       />
     );
@@ -54,6 +57,7 @@ export function WidgetAnswer({ intake, locked, onFinish, onOther }: WidgetAnswer
       options={options}
       disabled={locked}
       answered={answered}
+      onSkip={onSkip}
       onSubmit={(next) => (next[0] === 'other' ? onOther() : onFinish(next))}
     />
   );

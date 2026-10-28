@@ -1,7 +1,7 @@
 /** The list for one Records segment: rows newest first, empty state, primary action. */
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { selectProfileConversations, selectProfileLabs, selectProfileNotes, useAppStore } from '@shared/store';
+import { selectProfileConversations, selectProfileNotes, useAppStore } from '@shared/store';
 import type { Conversation, Note } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
 import { ActionTile, BottomSheet, Button, Divider } from '@mobile/ui';
@@ -9,15 +9,13 @@ import { ConsultationRow, EmptyState, VisitNoteCard } from '@mobile/patterns/hea
 import { useNav } from '@mobile/navigation';
 import styles from '../Records.module.css';
 import own from './RecordsList.module.css';
-import { AttachmentsGallery } from './AttachmentsGallery';
-import { useAccountGate } from '@mobile/hooks/useAccountGate';
 
-export type Segment = 'consultations' | 'notes' | 'labs' | 'attachments';
+export type Segment = 'consultations' | 'notes';
 
 export interface RecordsListProps {
   segment: Segment;
   profileId: string;
-  /** Asking and adding labs act on the active profile's chat, so they are hidden for others. */
+  /** Asking acts on the active profile's chat, so it is hidden for others. */
   isActiveProfile: boolean;
 }
 
@@ -44,10 +42,8 @@ const hasLabs = (c: Conversation) => c.messages.some((m) => (m.answer?.labsRefer
 
 export function RecordsList({ segment, profileId, isActiveProfile }: RecordsListProps) {
   const { open, openAsk } = useNav();
-  const gate = useAccountGate();
   const conversations = useAppStore(useShallow((s) => selectProfileConversations(s, profileId)));
   const notes = useAppStore(useShallow((s) => selectProfileNotes(s, profileId)));
-  const labs = useAppStore(useShallow((s) => selectProfileLabs(s, profileId)));
   const [noteMenu, setNoteMenu] = useState(false);
   const newNote = () => setNoteMenu(true);
   // "+ New note" (design 2026-10-20): a sheet with two choices — a note for herself, or log a provider visit
@@ -61,8 +57,6 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
       </div>
     </BottomSheet>
   );
-  // ASSUMPTION: viewing another profile's records offers no Ask / Add labs (they act on the active profile).
-  const addLabs = isActiveProfile ? () => gate('documents', () => open('M-5.3')) : undefined;
 
   if (segment === 'consultations') {
     if (conversations.length === 0) {
@@ -96,65 +90,35 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
     );
   }
 
-  if (segment === 'attachments') return <AttachmentsGallery profileId={profileId} />;
-
-  if (segment === 'notes') {
-    if (notes.length === 0) {
-      return (
-        <div className={styles.top}>
-          <EmptyState icon="note" title="Jot down questions before your next visit" actionLabel="New note" actionIcon="plus" onAction={newNote} />
-          {noteMenuSheet}
-        </div>
-      );
-    }
-    return (
-      <>
-        {noteMenuSheet}
-        <ul className={own.cards}>
-          {notes.map((n) => (
-            <li key={n.id}>
-              <VisitNoteCard
-                date={dateFor(n)}
-                title={n.title || 'Untitled note'}
-                detail={detailFor(n)}
-                logged={Boolean(n.visitLog)}
-                onOpen={() => (n.kind === 'provider-brief' ? open('M-9.7', { noteId: n.id }) : n.visit ? open('M-9.8', { noteId: n.id }) : open('M-9.4', { noteId: n.id }))}
-                onLog={() => open('M-9.9', { noteId: n.id })}
-                onAsk={() => { useAppStore.getState().archiveActive(n.profileId); openAsk({ prefill: askAbout(n), focus: true }); }}
-              />
-            </li>
-          ))}
-        </ul>
-        {/* New sits bottom right, floating (design 2026-10-20). */}
-        <Button className={own.fab} leadingIcon="plus" onClick={newNote}>New note</Button>
-      </>
-    );
-  }
-
-  if (labs.length === 0) {
+  // Lab reports removed (design 2026-10-28): notes are the only other segment.
+  if (notes.length === 0) {
     return (
       <div className={styles.top}>
-        <EmptyState icon="labs" title="No lab results yet" actionLabel={addLabs && 'Add labs'} actionIcon="plus" onAction={addLabs} />
+        <EmptyState icon="note" title="Jot down questions before your next visit" actionLabel="New note" actionIcon="plus" onAction={newNote} />
+        {noteMenuSheet}
       </div>
     );
   }
   return (
     <>
-      {/* Same card language as Visit Notes, compact (design 2026-10-20). */}
+      {noteMenuSheet}
       <ul className={own.cards}>
-        {labs.map((r) => (
-          <li key={r.id}>
+        {notes.map((n) => (
+          <li key={n.id}>
             <VisitNoteCard
-              doodle="file"
-              date={r.collectedAt ? new Date(r.collectedAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date not set'}
-              title={r.panelTitle || r.labName || 'Lab results'}
-              detail={[r.labName, `${r.values.length} ${r.values.length === 1 ? 'result' : 'results'}`].filter(Boolean).join(' · ')}
-              onOpen={() => open('M-9.5', { reportId: r.id })}
+              date={dateFor(n)}
+              title={n.title || 'Untitled note'}
+              detail={detailFor(n)}
+              logged={Boolean(n.visitLog)}
+              onOpen={() => (n.kind === 'provider-brief' ? open('M-9.7', { noteId: n.id }) : n.visit ? open('M-9.8', { noteId: n.id }) : open('M-9.4', { noteId: n.id }))}
+              onLog={() => open('M-9.9', { noteId: n.id })}
+              onAsk={() => { useAppStore.getState().archiveActive(n.profileId); openAsk({ prefill: askAbout(n), focus: true }); }}
             />
           </li>
         ))}
       </ul>
-      {addLabs && <Button className={own.fab} leadingIcon="plus" onClick={addLabs}>Add labs</Button>}
+      {/* New sits bottom right, floating (design 2026-10-20). */}
+      <Button className={own.fab} leadingIcon="plus" onClick={newNote}>New note</Button>
     </>
   );
 }

@@ -42,3 +42,7 @@
 
 /* Sent photos + optional text, stacked on the right (design 2026-10-21). */
 .sentGroup { display: grid; gap: var(--space-1); justify-items: end; }
+
+/* Eye-level turns (designer, 2026-10-28): useAutoScroll sizes this spacer so the latest user message can sit just
+   under the header while the reply is still short. No transition — it must track the reply as it grows. */
+.column { padding-bottom: calc(var(--space-6) + var(--anchor-space, 0px)); }

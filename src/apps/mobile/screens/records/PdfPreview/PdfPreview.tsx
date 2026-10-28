@@ -67,7 +67,7 @@ export default function PdfPreview() {
         {brief ? (
           <div className={styles.body}>
             <BriefDocument brief={brief} />
-            <p className={styles.footnote}>Printable summaries are part of Premium.</p>
+            <p className={styles.footnote}>Printable summaries are part of the Individual and Family plans.</p>
           </div>
         ) : source ? (
           <div className={styles.body}>
@@ -77,7 +77,7 @@ export default function PdfPreview() {
               profileName={profileName ?? 'You'}
               date={formatShortDate(source.message.createdAt)}
             />
-            <p className={styles.footnote}>Printable summaries are part of Premium.</p>
+            <p className={styles.footnote}>Printable summaries are part of the Individual and Family plans.</p>
           </div>
         ) : (
           <EmptyState icon="pdf" text="There’s no answer to print yet. Once Oracle answers, you can save a summary here." />

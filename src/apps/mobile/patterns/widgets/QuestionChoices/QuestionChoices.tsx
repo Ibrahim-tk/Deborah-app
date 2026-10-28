@@ -3,7 +3,7 @@
  * `pills="inline"` (default) → compact InlineChoicePills for chat.
  * `pills="regular"` → full-size ChoicePills for intake forms.
  */
-import { useRef, useState } from 'react';
+import { useRef, useState, type CSSProperties } from 'react';
 import type { Option } from '@shared/types/domain';
 import { Button, Icon, OptionList, OptionRow } from '@mobile/ui';
 import { ChoicePills } from '../ChoicePills';
@@ -33,6 +33,8 @@ export interface QuestionChoicesProps {
    * Pill size: `inline` (default) for chat /wid; `regular` for Health Basics intake forms.
    */
   pills?: 'inline' | 'regular';
+  /** Chat checklist: shown as "Skip" until something is picked, then it becomes Submit (designer, 2026-10-28). */
+  onSkip?: () => void;
 }
 
 export function QuestionChoices({
@@ -49,6 +51,7 @@ export function QuestionChoices({
   pills = 'inline',
   value,
   onChange,
+  onSkip,
 }: QuestionChoicesProps) {
   const [own, setOwn] = useState<string[]>(initialSelected);
   const selected = value ?? own;
@@ -102,6 +105,65 @@ export function QuestionChoices({
     onToggle: multi ? (_: string, i: number) => toggle(options[i].id) : undefined,
     endSlot: tick,
   };
+
+  // Chat only. More than three options: naked checkbox rows + a small Submit; the widget stays in the
+  // thread (locked, showing what was picked) once sent.
+  if (!regular && options.length > 3) {
+    const pick = (id: string) => {
+      if (locked) return;
+      if (id === 'other' && onOther) return onOther();
+      // Tapping the picked option again clears it (designer, 2026-10-28), so Skip comes back.
+      setSelected(multi ? toggleSelection(selected, id, exclusive) : selected.includes(id) ? [] : [id]);
+    };
+    return (
+      <div className={styles.root} role="group" aria-label={label} data-question-choices data-checklist>
+        <div className={styles.checklist}>
+          {options.map((o, i) => {
+            const on = values.includes(o.id);
+            return (
+              <button
+                key={o.id}
+                type="button"
+                role={multi ? 'checkbox' : 'radio'}
+                aria-checked={on}
+                className={styles.checkRow}
+                style={{ '--i': i } as CSSProperties}
+                disabled={locked}
+                onClick={() => pick(o.id)}
+              >
+                <span className={styles.checkBox} data-on={on || undefined} aria-hidden>
+                  {on && <Icon name="check" size={12} strokeWidth={2.5} />}
+                </span>
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
+        {/* One button that changes in place (designer, 2026-10-28): Skip while nothing is picked, Submit once
+            something is. Same element, so it never fades out and back in. Without a skip handler it's always Submit. */}
+        {!locked && (onSkip || selected.length > 0) && (
+          <Button
+            size="md"
+            variant={selected.length ? 'primary' : 'secondary'}
+            className={styles.submit}
+            style={{ '--n': options.length } as CSSProperties}
+            onClick={() => {
+              if (selected.length) return submit(selected);
+              if (submitted.current || !onSkip) return;
+              submitted.current = true;
+              setSent(true);
+              onSkip();
+            }}
+          >
+            {selected.length ? 'Submit' : 'Skip'}
+          </Button>
+        )}
+      </div>
+    );
+  }
+
+  // Chat chips (three or fewer): gone once answered — the user's own bubble carries the answer.
+  if (!regular && (sent || answered)) return null;
 
   return (
     <div

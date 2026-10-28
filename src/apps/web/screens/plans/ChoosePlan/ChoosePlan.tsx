@@ -29,7 +29,7 @@ const BILLING: { value: Billing; label: string }[] = [
 ];
 
 // Savings come from plans.json (recommended plan's monthly × 12 vs annual).
-// OPEN: "recommended plan; prices/annual pricing; Premium + family" (F04 M-4.2).
+// Oct 27: only Individual and Family plans (no Premium, no teen plan).
 const ref = planList.find((p) => p.recommended) ?? planList[0];
 const SAVE_PCT = Math.round((1 - ref.annual / (ref.monthly * 12)) * 100);
 

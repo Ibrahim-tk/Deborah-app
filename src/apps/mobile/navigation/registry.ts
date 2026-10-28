@@ -41,8 +41,6 @@ export const registry: Record<string, ScreenMeta> = {
   'M-4.5': { title: 'You’re all set', component: lazy(() => import('@mobile/screens/plans/PlanSuccess')), presentation: 'push', statusBar: 'light', figma: `${FIGMA}49-353`, spec: 'docs/ux/F04-plans-account.md#m-45--youre-all-set' },
 
   // F05 Follow-up & labs (M-5.1 lock screen lives in shell/device/LockScreen)
-  'M-5.3': { title: 'Add lab results', component: lazy(() => import('@mobile/screens/followup/AddLabs')), presentation: 'sheet', closeButton: true, detent: 'medium', dismissible: true, figma: `${FIGMA}49-547`, spec: 'docs/ux/F05-followup-labs.md#m-53--add-your-lab-results' },
-  'M-5.4': { title: 'Check your results', component: lazy(() => import('@mobile/screens/followup/ConfirmLabs')), presentation: 'modal', figma: `${FIGMA}49-547`, spec: 'docs/ux/F05-followup-labs.md#m-54--check-your-results' },
 
   // F06 Family profiles
   'M-6.1': { title: 'Profile switcher', component: lazy(() => import('@mobile/screens/profiles/ProfileSwitcher')), presentation: 'sheet', closeButton: true, detent: 'medium', dismissible: true, figma: `${FIGMA}50-203`, spec: 'docs/ux/F06-family-profiles.md#m-61--profile-switcher' },
@@ -69,8 +67,6 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.1': { title: 'My Health records', component: lazy(() => import('@mobile/screens/records/Records')), presentation: 'push', tabBar: true, figma: `${FIGMA}50-598`, spec: 'docs/ux/F09-records.md#m-91--records' },
   'M-9.2': { title: 'Consultation', component: lazy(() => import('@mobile/screens/records/ConsultationDetail')), presentation: 'push', figma: `${FIGMA}50-598`, spec: 'docs/ux/F09-records.md#m-92--consultation-detail' },
   'M-9.4': { title: 'Note', component: lazy(() => import('@mobile/screens/records/NoteEditor')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-94--note-editor-not-in-wireframes' },
-  'M-9.5': { title: 'Lab report', component: lazy(() => import('@mobile/screens/records/LabReport')), presentation: 'push', figma: '', spec: 'docs/ux/F09-records.md#m-95--lab-report-not-in-wireframes' },
-  'M-9.11': { title: 'Edit lab report', component: lazy(() => import('@mobile/screens/records/EditLabReport')), presentation: 'modal', figma: '', spec: 'Design request 2026-10-21 (OPEN: add to docs/ux/F09)' },
   'M-9.6': { title: 'PDF preview', component: lazy(() => import('@mobile/screens/records/PdfPreview')), presentation: 'modal', figma: '', spec: 'docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes' },
   'M-9.7': { title: 'My Visit Notes', component: lazy(() => import('@mobile/screens/records/VisitBrief')), presentation: 'modal', figma: '', spec: 'docs/ux/F09b-visit-brief.md' },
   'M-9.10': { title: 'New note', component: lazy(() => import('@mobile/screens/records/MyVisitNote')), presentation: 'modal', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F09)' },
@@ -78,9 +74,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-9.8': { title: 'Log your visit', component: lazy(() => import('@mobile/screens/records/LogVisit')), presentation: 'sheet', detent: 'large', dismissible: false, figma: '', spec: 'docs/ux/F09c-log-visit.md#m-98--log-your-visit' },
 
   // F11 Documents and reports — OPEN: planned = phases of docs/planning/documents-reports-plan-2026-10-19.md (not docs/11-build-plan.md).
-  'M-11.1': { title: 'Documents and reports', component: lazy(() => import('@mobile/screens/documents/Library')), presentation: 'push', tabBar: true, figma: '', spec: 'docs/ux/F11-documents.md#m-111--documents-and-reports' },
   'M-11.2': { title: 'Document', component: lazy(() => import('@mobile/screens/documents/DocumentPreview')), presentation: 'push', figma: '', spec: 'docs/ux/F11-documents.md#m-112--document-preview' },
-  'M-11.3': { title: 'Upload a document', component: lazy(() => import('@mobile/screens/documents/UploadDocument')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'docs/ux/F11-documents.md#m-113--upload-a-document' },
 
   // F10 Account, privacy & data
   'M-10.1': { title: 'Settings', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },

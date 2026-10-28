@@ -16,10 +16,6 @@ export interface StateReturningProps {
   steps: NextStep[];
   journey?: { concern?: string; done: number; total: number; onPress: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
-  reports?: { meta: string; onPress: () => void };
-  /** F11 Documents and reports (M-11.1). */
-  documents?: { meta: string; onPress: () => void };
-  onLabs: () => void;
   destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
@@ -27,14 +23,12 @@ export interface StateReturningProps {
 }
 
 export function StateReturning(p: StateReturningProps) {
-  const heroTitle =
-    p.summary?.replace(/^[·\s]+/, '').trim()
-    || `Ongoing ${p.topic.replace(/^Your /i, '').toLowerCase()} and questions about your health`;
+  const heroTopic = p.topic.replace(/^Your /i, '').replace(/^./, (c) => c.toUpperCase());
 
   return (
     <>
-      <HomeMediaHero titleId="continue-deborah" title={heroTitle} when={p.when} eyebrow="Continue with the Oracle"
-        stats={[{ icon: 'chat', label: p.topic.replace(/^Your /i, '').replace(/^./, (c) => c.toUpperCase()) }, ...(p.when ? [{ icon: 'calendar' as const, label: p.when }] : [])]} tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
+      <HomeMediaHero titleId="continue-deborah" eyebrow="Continue your conversation" title={heroTopic}
+        tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
       {p.intakeCard && !p.intakeCard.complete ? (
         <IntakeCompletionCard progress={p.intakeCard.progress} onAction={p.intakeCard.onAction} />
       ) : (

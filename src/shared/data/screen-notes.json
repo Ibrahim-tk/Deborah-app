@@ -42,7 +42,7 @@
   "M-4.2": {
     "title": "Choose plan",
     "flow": "F04 Free limit, plans & account",
-    "note": "Maria compares the Individual, Family and Premium plans, either monthly or annually. One plan is always preselected based on where she came from (for example, Family when she came from the upgrade sheet). Continue takes her to account creation if she has no account yet, or straight to payment."
+    "note": "Maria compares the Individual and Family plans, either monthly or annually. One plan is always preselected based on where she came from (for example, Family when she came from the upgrade sheet). Continue takes her to account creation if she has no account yet, or straight to payment."
   },
   "M-4.3": {
     "title": "Create account / Sign in",
@@ -167,7 +167,7 @@
   "M-9.6": {
     "title": "PDF preview",
     "flow": "F09 My Health records",
-    "note": "Printable summary for a clinician. When the conversation has enough detail (Miro Step 5), this shows the full My Visit Notes brief; otherwise a shorter questions-and-tests page. Share and Print are simulated. Premium gating is still open; the prototype allows it for everyone."
+    "note": "Printable summary for a clinician. When the conversation has enough detail (Miro Step 5), this shows the full My Visit Notes brief; otherwise a shorter questions-and-tests page. Share and Print are simulated. Plan gating is still open; the prototype allows it for everyone."
   },
   "M-9.7": {
     "title": "My Visit Notes",

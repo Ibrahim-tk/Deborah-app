@@ -16,6 +16,8 @@ export interface HealthFact {
 export interface SaveHealthProfileProps {
   facts: HealthFact[];
   onEdit?: () => void;
+  /** Answered: how many facts were saved (0 = none). The screen shows the toast (designer, 2026-10-28). */
+  onResult?: (saved: number) => void;
 }
 
 /** Demo seed when the engine has not proposed facts yet (prototype, F02g). */
@@ -28,7 +30,7 @@ export const DEMO_HEALTH_FACTS: HealthFact[] = [
   { label: 'Genesis Gold®', value: 'Not tried yet' },
 ];
 
-export function SaveHealthProfile({ facts, onEdit }: SaveHealthProfileProps) {
+export function SaveHealthProfile({ facts, onEdit, onResult }: SaveHealthProfileProps) {
   const [list, setList] = useState<PendingFact[]>(() =>
     facts.map((f, i) => ({
       id: `hp${i}`,
@@ -49,9 +51,13 @@ export function SaveHealthProfile({ facts, onEdit }: SaveHealthProfileProps) {
       onConfirm={(keep, drop) => {
         mark(keep, 'confirmed');
         mark(drop, 'discarded');
+        onResult?.(keep.length);
       }}
       onEdit={onEdit ?? (() => {})}
-      onDiscard={(ids) => mark(ids, 'discarded')}
+      onDiscard={(ids) => {
+        mark(ids, 'discarded');
+        onResult?.(0);
+      }}
     />
   );
 }

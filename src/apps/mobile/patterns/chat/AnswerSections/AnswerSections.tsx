@@ -2,7 +2,7 @@
  * @pattern AnswerSections — 7-section Deborah answer, fixed order, product slot in §6
  * @usedBy  M-2.1, M-9.2
  * @spec    docs/ux/F02-consultation.md#answer-sections · DESIGN.md › Answer sections
- * @xref    web: apps/web/patterns/chat/AnswerSections — not built
+ * @xref    web: apps/mobile/patterns/chat/AnswerSections — not built
  */
 import { useState, type ReactNode } from 'react';
 import type { Answer, SectionKey } from '@shared/types/domain';
@@ -52,7 +52,8 @@ export function AnswerSections({ answer, streaming, activeSection, productSlot, 
           </Button>
         </div>
       )}
-      {answer.sections.map((section, i) => (
+      {/* While streaming, only sections the stream has reached are shown; each one arrives as it starts (design 2026-10-26). */}
+      {answer.sections.map((section, i) => (Boolean(streaming) && activeIndex >= 0 && i > activeIndex) ? null : (
         <Section
           key={section.key}
           number={i + 1}

@@ -15,10 +15,6 @@ export interface StateReturningProps {
   steps: NextStep[];
   journey?: { concern?: string; done: number; total: number; onPress: () => void };
   intakeCard?: { progress: number; complete: boolean; onAction: () => void };
-  reports?: { meta: string; onPress: () => void };
-  /** F11 Documents and reports (M-11.1). */
-  documents?: { meta: string; onPress: () => void };
-  onLabs: () => void;
   destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }];
   recommendations: Recommendation[];
   onShop: (productId: string) => void;

@@ -78,9 +78,14 @@ export function Section({ number, section, open, pending, streaming, onToggle, o
           <Icon name="chevronDown" size={18} className={styles.chevron} />
         </span>
       </button>
-      {open && !pending && (
-        <div id={id} className={styles.content} aria-live={streaming ? 'polite' : undefined}>
-          {body}
+      {/* Always mounted so open/close can animate its height (grid 0fr → 1fr) instead of jumping. */}
+      {!pending && (
+        <div id={id} className={styles.reveal} data-open={open || undefined} aria-hidden={!open || undefined}>
+          <div className={styles.revealInner}>
+            <div className={styles.content} aria-live={streaming ? 'polite' : undefined}>
+              {body}
+            </div>
+          </div>
         </div>
       )}
     </section>

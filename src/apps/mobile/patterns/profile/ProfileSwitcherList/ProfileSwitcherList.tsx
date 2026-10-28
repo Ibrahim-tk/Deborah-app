@@ -30,12 +30,12 @@ export function ProfileSwitcherList({ profiles, activeId, addState, maxProfiles 
           return (
             <li key={p.id}>
               <button type="button" className={styles.row} aria-current={active || undefined} data-active={active} onClick={() => onSelect(p.id)}>
-                <Avatar initial={p.name} size={44} />
+                <Avatar initial={p.name} size={48} />
                 <span className={styles.text}>
                   <span className={styles.name}>{p.name}</span>
                   <span className={styles.relation}>{relationshipLabel(p.relationship, p.intake?.relationshipOther)}</span>
                 </span>
-                {active && <Icon name="check" size={22} className={styles.check} />}
+                {active && <Icon name="check" size={20} className={styles.check} />}
                 {active && <span className={styles.srOnly}>Active profile</span>}
               </button>
             </li>
@@ -45,12 +45,12 @@ export function ProfileSwitcherList({ profiles, activeId, addState, maxProfiles 
 
       <button type="button" className={styles.add} onClick={onAdd} disabled={addState === 'full'}>
         <span className={styles.addIcon} aria-hidden="true">
-          <Icon name="plus" size={22} />
+          <Icon name="plus" size={20} />
         </span>
         <span className={styles.addLabel}>Add a family member</span>
         {addState === 'locked' && (
           <span className={styles.lock}>
-            <Icon name="lock" size={18} /> Family plan
+            <Icon name="lock" size={16} /> Family plan
           </span>
         )}
         {addState === 'full' && (

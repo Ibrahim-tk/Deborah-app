@@ -133,12 +133,12 @@
           "label": "Agender"
         },
         {
-          "value": "other",
-          "label": "Not listed"
-        },
-        {
           "value": "prefer-not",
           "label": "Prefer not to say"
+        },
+        {
+          "value": "other",
+          "label": "Other"
         }
       ],
       "describeValue": "other",

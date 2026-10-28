@@ -38,7 +38,7 @@ export interface IntakeQuestionProps {
   onSkip?: () => void;
 }
 
-export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurface }: IntakeQuestionProps) {
+export function IntakeQuestion({ intake, active, onAnswer, onSkip, onOther, onAnswerSurface }: IntakeQuestionProps) {
   const [expanded, setExpanded] = useState(false);
   const [composerOther, setComposerOther] = useState(false);
   const [sent, setSent] = useState(false);
@@ -122,7 +122,7 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
   if (intake.widget) {
     return (
       <div className={styles.root}>
-        <WidgetAnswer intake={intake} locked={locked || composerOther} onFinish={finish} onOther={focusComposer} />
+        <WidgetAnswer intake={intake} locked={locked || composerOther} onFinish={finish} onOther={focusComposer} onSkip={active ? onSkip : undefined} />
         {composerOther && active && !sent && <p className={styles.composerHint}>Type it in the box below, then send.</p>}
       </div>
     );
@@ -184,6 +184,7 @@ export function IntakeQuestion({ intake, active, onAnswer, onOther, onAnswerSurf
         answered={intake.answered ?? (composerOther ? ['other'] : undefined)}
         onSubmit={onGate}
         onOther={onOther ? focusComposer : undefined}
+        onSkip={active ? onSkip : undefined}
       />
       {composerOther && active && !sent && (
         <p className={styles.composerHint}>Type it in the box below, then send.</p>

@@ -11,7 +11,7 @@ export interface ToastProps {
 export function Toast({ message, icon }: ToastProps) {
   return (
     <div className={styles.root} role="status" aria-live="polite">
-      {icon && <Icon name={icon} size={18} className={styles.icon} />}
+      {icon && <Icon name={icon} size={16} className={styles.icon} />}
       <span>{message}</span>
     </div>
   );
