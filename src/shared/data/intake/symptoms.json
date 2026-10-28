@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Hypothalamus Symptom Check list for the composer SymptomPicker (M-2.1, M-2.12). From YOC App developer PDF. `id` links a group to chatIntake journey groups when present. Needs Deborah's review.",
+  "note": "Hypothalamus Symptom Check list for the composer SymptomPicker (M-2.1, M-2.12). From YOC App developer PDF. `id` links a group to chatIntake journey groups when present. Needs the Oracle's review.",
   "quick": [
     "Fatigue",
     "Sleep",

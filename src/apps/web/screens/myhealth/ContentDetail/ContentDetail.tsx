@@ -27,9 +27,9 @@ export default function ContentDetail() {
 
   if (!item) {
     return (
-      <DerivedPage title="For you" composerPlaceholder="Ask Deborah…">
+      <DerivedPage title="For you" composerPlaceholder="Ask Oracle…">
         <div className={styles.stack} data-xref="M-7.4 · For-you content detail">
-          <EmptyState icon="book" text="This item isn’t in Deborah’s library any more." actionLabel="Back" onAction={pop} />
+          <EmptyState icon="book" text="This item isn’t in the Oracle’s library any more." actionLabel="Back" onAction={pop} />
         </div>
       </DerivedPage>
     );
@@ -41,7 +41,7 @@ export default function ContentDetail() {
   const why = reason?.replace(/^Because\s+/i, '');
 
   return (
-    <DerivedPage title="For you" composerPlaceholder="Ask Deborah about this…">
+    <DerivedPage title="For you" composerPlaceholder="Ask Oracle about this…">
       <article className={styles.stack} data-xref="M-7.4 · For-you content detail" data-placeholder={item.status === 'placeholder' || undefined} data-status={item.status}>
         <div className={styles.share}>
           <IconButton icon="share" label="Share" onClick={() => toast('Copied link (demo)')} />
@@ -59,7 +59,7 @@ export default function ContentDetail() {
             reads after the title and summary so the page doesn't open mid-text. */}
         {!video && <MediaBlock item={item} />}
         <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ prefill: `I ${verb} '${item.title}' — ` })}>
-          Ask Deborah about this
+          Ask Oracle about this
         </Button>
         {product && (
           <div className={styles.group} data-placeholder={product.status === 'placeholder' || undefined}>

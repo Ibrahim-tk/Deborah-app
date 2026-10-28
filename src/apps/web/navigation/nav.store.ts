@@ -110,7 +110,14 @@ export const useNavStore = create<NavState>()((set, get) => {
     sidebarOpen: false,
     railCollapsed: false,
 
-    push: (id, params) => updateFront((r) => [...r, route(id, params)], 'push'),
+    // Re-pushing the screen already on top (double tap, a link to the current page) is a no-op,
+    // so Back never reveals an identical copy of the same page.
+    push: (id, params) =>
+      updateFront((r) => {
+        const top = r[r.length - 1];
+        const same = top?.id === id && JSON.stringify(top.params ?? {}) === JSON.stringify(params ?? {});
+        return same ? r : [...r, route(id, params)];
+      }, 'push'),
     pop: () => {
       const top = get().layers[get().layers.length - 1];
       if (top?.kind === 'modal' && top.routes.length <= 1) return get().dismissModal();

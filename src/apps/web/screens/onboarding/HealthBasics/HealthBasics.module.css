@@ -250,3 +250,10 @@
   to { -webkit-mask-position: 0 0%; mask-position: 0 0%; filter: blur(6px); }
 }
 @media (prefers-reduced-motion: reduce) { .root[data-exiting] .main, .root[data-exiting] .art, .glory { animation: none; } }
+
+/* Oct 27: optional / privacy note on the sex-characteristics steps. */
+.stepNote {
+  margin: 0 0 var(--space-3);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}

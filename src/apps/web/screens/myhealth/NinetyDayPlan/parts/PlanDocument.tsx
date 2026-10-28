@@ -44,7 +44,7 @@ export function PlanDocument({
   );
 
   return (
-    <article className={styles.doc} data-placeholder={doc.status === 'placeholder' || undefined} aria-label={`Healing Plan for ${patientName}`}>
+    <article className={styles.doc} data-placeholder={doc.status === 'placeholder' || undefined} aria-label={`Wellness Plan for ${patientName}`}>
       {advocate && <p className={styles.advocate}>You’re looking after {patientName}.</p>}
 
       <LivingPlan

@@ -1,0 +1,32 @@
+/* Floating prototype tooling beside the phone, so a shadow is allowed. */
+.panel {
+  position: fixed;
+  left: var(--space-6);
+  bottom: var(--space-6);
+  z-index: 50;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  color: var(--midnight-900);
+  font: 400 13px/18px var(--font-ui);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.18);
+}
+.title { margin: 0; font-weight: 500; }
+.row { display: flex; align-items: center; gap: var(--space-2); margin: 0; }
+.row input[type='range'] { flex: 1; }
+.row select { margin-left: auto; font: inherit; }
+.value { margin-left: auto; font-variant-numeric: tabular-nums; }
+.buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+.buttons button {
+  padding: var(--space-2);
+  border: 1px solid var(--midnight-200);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}

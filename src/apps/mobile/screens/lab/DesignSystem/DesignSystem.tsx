@@ -54,9 +54,9 @@ export default function DesignSystem() {
     <div ref={setRoot} className={styles.root} data-xref="LAB · Design system">
       <aside className={styles.sidebar} aria-label="Design system">
         <div className={styles.brand}>
-          <DeborahBlob size={36} label="Deborah" />
+          <DeborahBlob size={36} label="The Oracle" />
           <div>
-            <p className={styles.brandName}>Oracle Clinician</p>
+            <p className={styles.brandName}>Your Oracle</p>
             <p className={styles.brandSub}>Mobile design system</p>
           </div>
         </div>

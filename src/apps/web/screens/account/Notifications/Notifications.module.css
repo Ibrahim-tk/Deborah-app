@@ -55,3 +55,8 @@
 /* Align cards with the page title (DerivedPage already insets the body); room under the frequency label. */
 .stack { padding-inline: 0; }
 .legend { margin-bottom: var(--space-3); }
+
+/* Frequency as its own settings row: same title as the toggle rows, dropdown on the right. */
+.selectRow { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.rowTitle { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); }
+.selectField { flex: none; width: 200px; }

@@ -181,7 +181,7 @@ export const GUIDANCE_JOURNEYS: JourneyRun[] = [
     id: 'guidance-happy',
     label: 'Guidance · happy path + Book',
     description:
-      'Full E2E: Welcome → sign-up → Myself profile → Ask Deborah → intake → 7 sections → Review Save → What’s next → Book a consultation.',
+      'Full E2E: Welcome → sign-up → Myself profile → Ask Oracle → intake → 7 sections → Review Save → What’s next → Consult with support team.',
     scenario: 'S01',
     onboarding: true,
     // Burst sign-up + explicit Health Basics (Myself / sex Female / age) so onboarding does not idle.
@@ -214,7 +214,7 @@ export const GUIDANCE_JOURNEYS: JourneyRun[] = [
   {
     id: 'guidance-labs',
     label: 'Guidance · lab summary refresh',
-    description: 'S04 answered chat. What’s next → Upload labs → Take a photo → send to Deborah → updated summary.',
+    description: 'S04 answered chat. What’s next → Upload labs → Take a photo → send to the Oracle → updated summary.',
     scenario: 'S04',
     message: '',
     answers: [],

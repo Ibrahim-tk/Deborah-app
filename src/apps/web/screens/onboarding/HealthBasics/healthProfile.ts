@@ -6,7 +6,8 @@ import type { Profile } from '@shared/types/domain';
 import { encodeNamedReasons } from '@web/patterns/widgets/NamedReasonList/namedReasons';
 import { ageFromAnswers, profileVisibleSteps, type Answers } from './steps';
 
-const GENDERS = new Set(['male', 'female', 'trans-woman', 'trans-man', 'intersex', 'non-binary', 'other']);
+import { SEX_CHARACTERISTIC_KEYS } from './saveOnboarding';
+const GENDERS = new Set(['man', 'woman', 'non-binary', 'agender', 'other', 'prefer-not']);
 const PRONOUNS: Record<string, string> = {
   'she/her': 'she-her',
   'he/him': 'he-him',
@@ -20,6 +21,7 @@ export function answersFromProfile(p: Profile): Answers {
   else a.profileFor = 'self';
   if (p.dob) a.birthDate = p.dob.slice(0, 10);
   if (p.sexAtBirth) a.sex = p.sexAtBirth;
+  else if (p.health?.careContext?.value?.sexSelection === 'prefer-not') a.sex = 'prefer-not';
 
   const gender = p.intake.genderIdentity ?? p.health?.genderIdentity?.value;
   if (gender && GENDERS.has(gender)) a.gender = gender;
@@ -47,6 +49,7 @@ export function answersFromProfile(p: Profile): Answers {
   }
 
   const care = p.health?.careContext?.value ?? {};
+  for (const k of SEX_CHARACTERISTIC_KEYS) if (care[k]) a[k] = care[k];
   if (p.intake.periodsStarted) a.periodsStarted = p.intake.periodsStarted;
   if (p.intake.periodsNotes) a.periodsNotes = p.intake.periodsNotes;
   if (p.intake.hrtStatus) a.hrtStatus = p.intake.hrtStatus;

@@ -37,10 +37,10 @@ export default function DeborahWelcome() {
   };
 
   return (
-    <div data-xref="M-1.9 · Deborah's welcome">
+    <div data-xref="M-1.9 · the Oracle's welcome">
       <Sheet footer={<Button fullWidth onClick={ask}>{member ? `Start a conversation about ${member.name}` : 'Start a conversation'}</Button>}>
         <div className={styles.hello} data-placeholder>
-          <DeborahBlob size={88} label="Deborah" />
+          <DeborahBlob size={88} label="The Oracle" />
           <div className={styles.copy}>
             <TextReveal as="h1" className={styles.text} text={title} delay={350} />
             <TextReveal className={styles.body} text={body} delay={650} />

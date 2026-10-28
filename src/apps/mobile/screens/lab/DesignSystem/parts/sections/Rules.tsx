@@ -8,7 +8,7 @@ const DO = [
   'Keep readable text at 7:1 or higher; check new pairs on the Colour page.',
   'Use option rows for choices, at least the row minimum height.',
   'Carry hierarchy with size, family, colour and space — not weight above 500.',
-  'Show Deborah with her gold ring or glass blob wherever she speaks.',
+  'Show the Oracle with her gold ring or glass blob wherever she speaks.',
   'Pair colour-coded states with an icon and words.',
   'Consume third-party libraries through the ui adapter (Icon, Motion).',
 ];

@@ -16,7 +16,7 @@
       { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["How do these results compare with my earlier labs?", "Is my {labMarker} where you'd like it to be, given how I've been feeling?", "Would it help to recheck any of these in about three months?", "Are there other markers worth adding next time?"] },
       { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["Repeating the same panel in about 90 days, so you can compare like with like", "Whether ferritin, vitamin D or Free T4 would round out the picture"] },
       { "key": "doNow", "title": "What You Can Do Now", "body": "Your next 90 days: keep the foundations steady so your next labs reflect real change.", "bullets": ["Same bedtime and wake time, even on weekends", "Protein with breakfast within an hour of waking", "A ten-minute walk outside after lunch"] },
-      { "key": "word", "title": "A Word from Deborah", "body": "{name}, bringing your labs back to me was a real act of care for yourself. We'll continue, one steady step at a time." }
+      { "key": "word", "title": "A word from the Oracle", "body": "{name}, bringing your labs back to me was a real act of care for yourself. We'll continue, one steady step at a time." }
     ],
     "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",
     "habitsForPlan": ["Same bedtime and wake time, even on weekends", "Protein with breakfast within an hour of waking", "A ten-minute walk outside after lunch"],

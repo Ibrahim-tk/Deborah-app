@@ -1,9 +1,22 @@
 {
   "status": "placeholder",
   "note": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Sex assigned at birth still routes those profile banks. Under-13 Myself → M-1.10. Wording placeholder pending Deborah.",
-  "onboardingKeys": ["profileFor", "relationship", "memberName", "birthDate", "consent", "sex", "gender", "pronouns"],
+  "onboardingKeys": [
+    "profileFor",
+    "relationship",
+    "memberName",
+    "birthDate",
+    "consent",
+    "sex",
+    "gender",
+    "pronouns"
+  ],
   "steps": [
-    { "key": "profileFor", "kind": "profileFor", "title": "Who is this profile for?" },
+    {
+      "key": "profileFor",
+      "kind": "profileFor",
+      "title": "Who is this profile for?"
+    },
     {
       "key": "relationship",
       "kind": "choice",
@@ -11,14 +24,28 @@
       "title": "Who are they to you?",
       "showIf": {
         "profileFor": {
-          "in": ["dependent"]
+          "in": [
+            "dependent"
+          ]
         }
       },
       "choices": [
-        { "value": "parent", "label": "Parent" },
-        { "value": "child", "label": "Child" },
-        { "value": "partner", "label": "Partner" },
-        { "value": "other", "label": "Someone else" }
+        {
+          "value": "parent",
+          "label": "Parent"
+        },
+        {
+          "value": "child",
+          "label": "Child"
+        },
+        {
+          "value": "partner",
+          "label": "Partner"
+        },
+        {
+          "value": "other",
+          "label": "Someone else"
+        }
       ],
       "describeValue": "other",
       "describeKey": "relationshipOther",
@@ -33,18 +60,27 @@
       "placeholder": "First name",
       "showIf": {
         "profileFor": {
-          "in": ["dependent"]
+          "in": [
+            "dependent"
+          ]
         }
       }
     },
-    { "key": "birthDate", "kind": "date", "title": "When were you born?", "titleOther": "When was {name} born?" },
+    {
+      "key": "birthDate",
+      "kind": "date",
+      "title": "When were you born?",
+      "titleOther": "When was {name} born?"
+    },
     {
       "key": "consent",
       "kind": "consent",
       "title": "Before we set up {name}’s profile",
       "showIf": {
         "profileFor": {
-          "in": ["dependent"]
+          "in": [
+            "dependent"
+          ]
         }
       }
     },
@@ -55,9 +91,22 @@
       "title": "What was your sex assigned at birth?",
       "titleOther": "What was {name}’s sex assigned at birth?",
       "choices": [
-        { "value": "male", "label": "Male" },
-        { "value": "female", "label": "Female" },
-        { "value": "intersex", "label": "Intersex" }
+        {
+          "value": "male",
+          "label": "Male"
+        },
+        {
+          "value": "female",
+          "label": "Female"
+        },
+        {
+          "value": "intersex",
+          "label": "Intersex"
+        },
+        {
+          "value": "prefer-not",
+          "label": "Prefer not to say"
+        }
       ]
     },
     {
@@ -67,19 +116,40 @@
       "title": "How do you describe your gender?",
       "titleOther": "How does {name} describe their gender?",
       "choices": [
-        { "value": "male", "label": "Male" },
-        { "value": "female", "label": "Female" },
-        { "value": "trans-woman", "label": "Trans woman" },
-        { "value": "trans-man", "label": "Trans man" },
-        { "value": "intersex", "label": "Intersex" },
-        { "value": "non-binary", "label": "Non-binary" },
-        { "value": "other", "label": "Other" }
+        {
+          "value": "man",
+          "label": "Man"
+        },
+        {
+          "value": "woman",
+          "label": "Woman"
+        },
+        {
+          "value": "non-binary",
+          "label": "Non-binary"
+        },
+        {
+          "value": "agender",
+          "label": "Agender"
+        },
+        {
+          "value": "other",
+          "label": "Not listed"
+        },
+        {
+          "value": "prefer-not",
+          "label": "Prefer not to say"
+        }
       ],
       "describeValue": "other",
       "describeKey": "genderOther",
       "describeLabel": "Gender",
       "describePlaceholder": "How you describe your gender",
-      "describeAlwaysSpan": true
+      "describeAlwaysSpan": true,
+      "childLabels": {
+        "man": "Boy",
+        "woman": "Girl"
+      }
     },
     {
       "key": "pronouns",
@@ -88,10 +158,22 @@
       "title": "What are your preferred pronouns?",
       "titleOther": "What are {name}’s preferred pronouns?",
       "choices": [
-        { "value": "he-him", "label": "He/Him" },
-        { "value": "she-her", "label": "She/Her" },
-        { "value": "they-them", "label": "They/Them" },
-        { "value": "describe", "label": "Other" }
+        {
+          "value": "he-him",
+          "label": "He/Him"
+        },
+        {
+          "value": "she-her",
+          "label": "She/Her"
+        },
+        {
+          "value": "they-them",
+          "label": "They/Them"
+        },
+        {
+          "value": "describe",
+          "label": "Other"
+        }
       ],
       "describeValue": "describe",
       "describeKey": "pronounsOther",
@@ -108,9 +190,13 @@
       "single": true,
       "showIf": {
         "profileFor": {
-          "in": ["dependent"]
+          "in": [
+            "dependent"
+          ]
         },
-        "age": { "max": 12 }
+        "age": {
+          "max": 12
+        }
       }
     },
     {
@@ -124,9 +210,13 @@
       "none": "None",
       "showIf": {
         "profileFor": {
-          "in": ["dependent"]
+          "in": [
+            "dependent"
+          ]
         },
-        "age": { "max": 12 }
+        "age": {
+          "max": 12
+        }
       }
     },
     {
@@ -137,16 +227,28 @@
       "placeholder": "e.g. Penicillin",
       "none": "None",
       "suggestions": [
-        { "label": "Penicillin" },
-        { "label": "Sulfa drugs" },
-        { "label": "Aspirin" },
-        { "label": "NSAIDs" }
+        {
+          "label": "Penicillin"
+        },
+        {
+          "label": "Sulfa drugs"
+        },
+        {
+          "label": "Aspirin"
+        },
+        {
+          "label": "NSAIDs"
+        }
       ],
       "showIf": {
         "profileFor": {
-          "in": ["dependent"]
+          "in": [
+            "dependent"
+          ]
         },
-        "age": { "max": 12 }
+        "age": {
+          "max": 12
+        }
       }
     },
     {
@@ -157,17 +259,40 @@
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
-        "age": { "min": 18, "max": 59 }
+        "age": {
+          "min": 18,
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "menstruation", "label": "Menstruation" },
-        { "value": "pre-menopausal", "label": "Pre-menopausal" },
-        { "value": "peri-menopausal", "label": "Peri-menopausal" },
-        { "value": "post-menopausal", "label": "Post-menopausal" },
-        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
-        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+        {
+          "value": "menstruation",
+          "label": "Menstruation"
+        },
+        {
+          "value": "pre-menopausal",
+          "label": "Pre-menopausal"
+        },
+        {
+          "value": "peri-menopausal",
+          "label": "Peri-menopausal"
+        },
+        {
+          "value": "post-menopausal",
+          "label": "Post-menopausal"
+        },
+        {
+          "value": "surgically-menopausal",
+          "label": "Surgically menopausal"
+        },
+        {
+          "value": "pregnant-postpartum",
+          "label": "Pregnant / Postpartum"
+        }
       ]
     },
     {
@@ -178,17 +303,40 @@
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
-        "age": { "min": 13, "max": 17 }
+        "age": {
+          "min": 13,
+          "max": 17
+        }
       },
       "choices": [
-        { "value": "menstruation", "label": "Menstruation" },
-        { "value": "pre-menopausal", "label": "Pre-menopausal" },
-        { "value": "peri-menopausal", "label": "Peri-menopausal" },
-        { "value": "post-menopausal", "label": "Post-menopausal" },
-        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
-        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+        {
+          "value": "menstruation",
+          "label": "Menstruation"
+        },
+        {
+          "value": "pre-menopausal",
+          "label": "Pre-menopausal"
+        },
+        {
+          "value": "peri-menopausal",
+          "label": "Peri-menopausal"
+        },
+        {
+          "value": "post-menopausal",
+          "label": "Post-menopausal"
+        },
+        {
+          "value": "surgically-menopausal",
+          "label": "Surgically menopausal"
+        },
+        {
+          "value": "pregnant-postpartum",
+          "label": "Pregnant / Postpartum"
+        }
       ]
     },
     {
@@ -199,17 +347,33 @@
       "titleOther": "Have {name}’s periods started?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
         "reproductiveStage": {
-          "in": ["menstruation"]
+          "in": [
+            "menstruation"
+          ]
         },
-        "age": { "min": 13, "max": 59 }
+        "age": {
+          "min": 13,
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" },
-        { "value": "describe", "label": "I’m not sure / I want to describe" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "describe",
+          "label": "I’m not sure / I want to describe"
+        }
       ],
       "describeValue": "describe",
       "describeKey": "periodsNotes",
@@ -224,13 +388,24 @@
       "titleOther": "Using any puberty blockers for {name}?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
-        "age": { "min": 13, "max": 17 }
+        "age": {
+          "min": 13,
+          "max": 17
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ],
       "describeValue": "yes",
       "describeKey": "pubertyBlockersDetails",
@@ -247,12 +422,18 @@
       "single": true,
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
         "reproductiveStage": {
-          "in": ["post-menopausal"]
+          "in": [
+            "post-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       }
     },
     {
@@ -263,16 +444,28 @@
       "titleOther": "Has {name} had a hysterectomy?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
         "reproductiveStage": {
-          "in": ["surgically-menopausal"]
+          "in": [
+            "surgically-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ]
     },
     {
@@ -283,17 +476,32 @@
       "titleOther": "Has {name} had their ovaries removed?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
         "reproductiveStage": {
-          "in": ["surgically-menopausal"]
+          "in": [
+            "surgically-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" },
-        { "value": "partial", "label": "Partial" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "partial",
+          "label": "Partial"
+        }
       ]
     },
     {
@@ -304,19 +512,39 @@
       "titleOther": "Is {name} currently on hormone replacement therapy (HRT)?",
       "showIf": {
         "sex": {
-          "in": ["female"]
+          "in": [
+            "female"
+          ]
         },
         "reproductiveStage": {
-          "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"]
+          "in": [
+            "peri-menopausal",
+            "post-menopausal",
+            "surgically-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "yes-previously", "label": "Yes, Previously" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "yes-previously",
+          "label": "Yes, Previously"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ],
-      "expandValues": ["yes", "yes-previously"],
+      "expandValues": [
+        "yes",
+        "yes-previously"
+      ],
       "expandKey": "hrtType",
       "expandTitle": "Please specify"
     },
@@ -329,14 +557,29 @@
       "titleOther": "Please specify",
       "showIf": {
         "hrtStatus": {
-          "in": ["yes", "yes-previously"]
+          "in": [
+            "yes",
+            "yes-previously"
+          ]
         }
       },
       "choices": [
-        { "value": "estrogen-only", "label": "Estrogen only" },
-        { "value": "combined", "label": "Combined" },
-        { "value": "progesterone-only", "label": "Progesterone only" },
-        { "value": "other", "label": "Other / not sure" }
+        {
+          "value": "estrogen-only",
+          "label": "Estrogen only"
+        },
+        {
+          "value": "combined",
+          "label": "Combined"
+        },
+        {
+          "value": "progesterone-only",
+          "label": "Progesterone only"
+        },
+        {
+          "value": "other",
+          "label": "Other / not sure"
+        }
       ]
     },
     {
@@ -346,15 +589,32 @@
       "title": "How has your body gone through any puberty?",
       "titleOther": "How has {name}’s body gone through any puberty?",
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" },
-        { "value": "currently", "label": "Currently going through" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "currently",
+          "label": "Currently going through"
+        }
       ],
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
-        "age": { "min": 13, "max": 59 }
+        "age": {
+          "min": 13,
+          "max": 59
+        }
       }
     },
     {
@@ -365,17 +625,43 @@
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
-        "age": { "min": 18, "max": 59 }
+        "age": {
+          "min": 18,
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "menstruation", "label": "Menstruation" },
-        { "value": "pre-menopausal", "label": "Pre-menopausal" },
-        { "value": "peri-menopausal", "label": "Peri-menopausal" },
-        { "value": "post-menopausal", "label": "Post-menopausal" },
-        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
-        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+        {
+          "value": "menstruation",
+          "label": "Menstruation"
+        },
+        {
+          "value": "pre-menopausal",
+          "label": "Pre-menopausal"
+        },
+        {
+          "value": "peri-menopausal",
+          "label": "Peri-menopausal"
+        },
+        {
+          "value": "post-menopausal",
+          "label": "Post-menopausal"
+        },
+        {
+          "value": "surgically-menopausal",
+          "label": "Surgically menopausal"
+        },
+        {
+          "value": "pregnant-postpartum",
+          "label": "Pregnant / Postpartum"
+        }
       ]
     },
     {
@@ -386,17 +672,43 @@
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
-        "age": { "min": 13, "max": 17 }
+        "age": {
+          "min": 13,
+          "max": 17
+        }
       },
       "choices": [
-        { "value": "menstruation", "label": "Menstruation" },
-        { "value": "pre-menopausal", "label": "Pre-menopausal" },
-        { "value": "peri-menopausal", "label": "Peri-menopausal" },
-        { "value": "post-menopausal", "label": "Post-menopausal" },
-        { "value": "surgically-menopausal", "label": "Surgically menopausal" },
-        { "value": "pregnant-postpartum", "label": "Pregnant / Postpartum" }
+        {
+          "value": "menstruation",
+          "label": "Menstruation"
+        },
+        {
+          "value": "pre-menopausal",
+          "label": "Pre-menopausal"
+        },
+        {
+          "value": "peri-menopausal",
+          "label": "Peri-menopausal"
+        },
+        {
+          "value": "post-menopausal",
+          "label": "Post-menopausal"
+        },
+        {
+          "value": "surgically-menopausal",
+          "label": "Surgically menopausal"
+        },
+        {
+          "value": "pregnant-postpartum",
+          "label": "Pregnant / Postpartum"
+        }
       ]
     },
     {
@@ -407,17 +719,36 @@
       "titleOther": "Have {name}’s periods started?",
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
         "reproductiveStage": {
-          "in": ["menstruation"]
+          "in": [
+            "menstruation"
+          ]
         },
-        "age": { "min": 13, "max": 59 }
+        "age": {
+          "min": 13,
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" },
-        { "value": "describe", "label": "I’m not sure / I want to describe" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "describe",
+          "label": "I’m not sure / I want to describe"
+        }
       ],
       "describeValue": "describe",
       "describeKey": "periodsNotes",
@@ -434,12 +765,21 @@
       "single": true,
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
         "reproductiveStage": {
-          "in": ["post-menopausal"]
+          "in": [
+            "post-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       }
     },
     {
@@ -450,16 +790,31 @@
       "titleOther": "Has {name} had a hysterectomy?",
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
         "reproductiveStage": {
-          "in": ["surgically-menopausal"]
+          "in": [
+            "surgically-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ]
     },
     {
@@ -470,17 +825,35 @@
       "titleOther": "Has {name} had their ovaries removed?",
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
         "reproductiveStage": {
-          "in": ["surgically-menopausal"]
+          "in": [
+            "surgically-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" },
-        { "value": "partial", "label": "Partial" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "partial",
+          "label": "Partial"
+        }
       ]
     },
     {
@@ -491,19 +864,42 @@
       "titleOther": "Is {name} currently on hormone replacement therapy (HRT)?",
       "showIf": {
         "sex": {
-          "in": ["trans-man", "trans-woman", "prefer-not", "intersex"]
+          "in": [
+            "trans-man",
+            "trans-woman",
+            "prefer-not",
+            "intersex"
+          ]
         },
         "reproductiveStage": {
-          "in": ["peri-menopausal", "post-menopausal", "surgically-menopausal"]
+          "in": [
+            "peri-menopausal",
+            "post-menopausal",
+            "surgically-menopausal"
+          ]
         },
-        "age": { "max": 59 }
+        "age": {
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "yes-previously", "label": "Yes, Previously" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "yes-previously",
+          "label": "Yes, Previously"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ],
-      "expandValues": ["yes", "yes-previously"],
+      "expandValues": [
+        "yes",
+        "yes-previously"
+      ],
       "expandKey": "hrtType",
       "expandTitle": "Please specify"
     },
@@ -518,9 +914,14 @@
       "single": true,
       "showIf": {
         "sex": {
-          "in": ["male"]
+          "in": [
+            "male"
+          ]
         },
-        "age": { "min": 13, "max": 17 }
+        "age": {
+          "min": 13,
+          "max": 17
+        }
       }
     },
     {
@@ -533,9 +934,14 @@
       "optional": true,
       "showIf": {
         "sex": {
-          "in": ["male"]
+          "in": [
+            "male"
+          ]
         },
-        "age": { "min": 13, "max": 17 }
+        "age": {
+          "min": 13,
+          "max": 17
+        }
       }
     },
     {
@@ -549,9 +955,14 @@
       "single": true,
       "showIf": {
         "sex": {
-          "in": ["male"]
+          "in": [
+            "male"
+          ]
         },
-        "age": { "min": 18, "max": 59 }
+        "age": {
+          "min": 18,
+          "max": 59
+        }
       }
     },
     {
@@ -562,13 +973,24 @@
       "titleOther": "Fertility or Reproductive Concerns for {name}?",
       "showIf": {
         "sex": {
-          "in": ["male"]
+          "in": [
+            "male"
+          ]
         },
-        "age": { "min": 18, "max": 59 }
+        "age": {
+          "min": 18,
+          "max": 59
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ]
     },
     {
@@ -581,7 +1003,9 @@
       "reasonPlaceholder": "What is it for?",
       "none": "None",
       "showIf": {
-        "age": { "min": 13 }
+        "age": {
+          "min": 13
+        }
       }
     },
     {
@@ -594,7 +1018,9 @@
       "reasonPlaceholder": "What is it for?",
       "none": "None",
       "showIf": {
-        "age": { "min": 13 }
+        "age": {
+          "min": 13
+        }
       }
     },
     {
@@ -604,12 +1030,168 @@
       "title": "Are you taking Genesis Gold?",
       "titleOther": "Is {name} taking Genesis Gold?",
       "showIf": {
-        "age": { "min": 13 }
+        "age": {
+          "min": 13
+        }
       },
       "choices": [
-        { "value": "yes", "label": "Yes" },
-        { "value": "no", "label": "No" }
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
       ]
+    },
+    {
+      "key": "sexVariation",
+      "kind": "choice",
+      "presentation": "rows",
+      "optional": true,
+      "title": "Do you have a variation in sex characteristics?",
+      "titleOther": "Does {name} have a variation in sex characteristics?",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "unknown",
+          "label": "I don’t know"
+        },
+        {
+          "value": "prefer-not",
+          "label": "Prefer not to say"
+        }
+      ],
+      "describeValue": "yes",
+      "describeKey": "sexVariationName",
+      "describeLabel": "If you know your variation, you can name it here.",
+      "describePlaceholder": "If you know your variation, you can name it here.",
+      "showIf": {
+        "sexCharacteristicsAsk": {
+          "in": [
+            "yes"
+          ]
+        }
+      },
+      "note": "Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
+    },
+    {
+      "key": "sexCharacteristics",
+      "kind": "text",
+      "optional": true,
+      "title": "Which of these do you currently have?",
+      "titleOther": "Which of these does {name} currently have?",
+      "none": "None of these",
+      "suggestions": [
+        {
+          "label": "Ovaries"
+        },
+        {
+          "label": "Uterus"
+        },
+        {
+          "label": "Testes"
+        },
+        {
+          "label": "Breast tissue"
+        },
+        {
+          "label": "Penis"
+        },
+        {
+          "label": "Vagina"
+        }
+      ],
+      "showIf": {
+        "sexCharacteristicsAsk": {
+          "in": [
+            "yes"
+          ]
+        }
+      },
+      "note": "Pick as many as apply, or none. Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
+    },
+    {
+      "key": "hormoneTherapy",
+      "kind": "choice",
+      "presentation": "yesNo",
+      "optional": true,
+      "title": "Are you taking hormones or hormone-blocking medicine?",
+      "titleOther": "Is {name} taking hormones or hormone-blocking medicine?",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ],
+      "expandValues": [
+        "yes"
+      ],
+      "expandKey": "hormoneTherapyPrescribed",
+      "expandTitle": "Is a healthcare provider prescribing this therapy?",
+      "expandChoices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        }
+      ],
+      "showIf": {
+        "sexCharacteristicsAsk": {
+          "in": [
+            "yes"
+          ]
+        }
+      },
+      "note": "Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
+    },
+    {
+      "key": "sexProcedures",
+      "kind": "text",
+      "optional": true,
+      "title": "Have you had any of these surgeries or procedures?",
+      "titleOther": "Has {name} had any of these surgeries or procedures?",
+      "none": "None of these",
+      "suggestions": [
+        {
+          "label": "Gonadectomy"
+        },
+        {
+          "label": "Hysterectomy"
+        },
+        {
+          "label": "Orchiectomy"
+        },
+        {
+          "label": "Chest or breast surgery"
+        },
+        {
+          "label": "Genital surgery"
+        }
+      ],
+      "showIf": {
+        "sexCharacteristicsAsk": {
+          "in": [
+            "yes"
+          ]
+        }
+      },
+      "note": "Pick as many as apply, or none. Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
     }
   ]
 }

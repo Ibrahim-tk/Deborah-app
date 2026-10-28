@@ -72,7 +72,7 @@ export default function DocumentPreview() {
         <DetailRows label="About this document" rows={rows} />
         {doc.extraction && doc.extraction.fields.length > 0 && (
           <DetailRows
-            label="What Deborah can see"
+            label="What the Oracle can see"
             rows={doc.extraction.fields.map((f) => [f.label, f.value])}
             footnote={doc.extraction.status !== 'approved' ? 'Example details for the prototype.' : undefined}
           />
@@ -81,7 +81,7 @@ export default function DocumentPreview() {
       <div className={styles.footer}>
         {/* ASSUMPTION: like M-9.5, another profile's document can't be discussed in the active chat. */}
         {isActiveProfile && (
-          <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ documentId: doc.id })}>Discuss with Deborah</Button>
+          <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ documentId: doc.id })}>Discuss with the Oracle</Button>
         )}
         {/* Prototype: no real file is written. */}
         <Button fullWidth variant="secondary" leadingIcon="download" onClick={() => toast('Downloaded')}>Download</Button>

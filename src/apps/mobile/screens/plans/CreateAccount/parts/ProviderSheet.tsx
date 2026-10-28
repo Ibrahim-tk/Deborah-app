@@ -37,7 +37,7 @@ export function ProviderSheet({ open, provider, email, onDone, onCancel }: Provi
             <button type="button" className={styles.cancel} onClick={onCancel}>Cancel</button>
           </div>
           <img src="/favicon.svg" alt="" className={styles.icon} />
-          <p className={styles.title}>Sign in to Your Oracle Clinician</p>
+          <p className={styles.title}>Sign in to Your Oracle</p>
           <p className={styles.as}>
             <Spinner size={16} /> Continue as {email}
           </p>

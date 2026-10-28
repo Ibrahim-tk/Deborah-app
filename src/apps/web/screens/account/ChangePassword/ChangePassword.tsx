@@ -55,7 +55,7 @@ export default function ChangePassword() {
   }, [done, pop, toast]);
 
   return (
-    <DerivedPage title="Change password" composerPlaceholder="Ask Deborah about your account…">
+    <DerivedPage title="Change password" composerPlaceholder="Ask Oracle about your account…">
       <div className={styles.stack} data-xref="M-10.7 · Change password">
         {done ? (
           <div className={styles.done} role="status">

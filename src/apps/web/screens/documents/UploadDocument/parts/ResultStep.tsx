@@ -20,7 +20,7 @@ export function ResultStep({ title, extraction, askDeborah = true }: { title: st
           {extraction.status !== 'approved' && <p className={styles.hint}>Example details for the prototype.</p>}
         </section>
       )}
-      {askDeborah && <p className={styles.question}>Ask Deborah to review it now?</p>}
+      {askDeborah && <p className={styles.question}>Ask Oracle to review it now?</p>}
     </div>
   );
 }

@@ -130,9 +130,9 @@ export function StateMenu() {
               />
               <MenuItem
                 label="Booking reminder"
-                description="Delivers the reminder for the next booking with Deborah now."
+                description="Delivers the reminder for the next booking with the Oracle now."
                 onSelect={() => {
-                  if (!deliverBookingReminderNow()) showToast('No booking yet — book Deborah first');
+                  if (!deliverBookingReminderNow()) showToast('No booking yet — consult with support team first');
                   close();
                 }}
               />

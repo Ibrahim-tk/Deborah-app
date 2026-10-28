@@ -1,0 +1,52 @@
+{
+  "size": [
+    955,
+    1647
+  ],
+  "base": [
+    782.4991694352159,
+    1646.0
+  ],
+  "stages": [
+    {
+      "name": "young_tree",
+      "moved": [
+        -82,
+        0
+      ],
+      "reach": 1.0
+    },
+    {
+      "name": "young_buds",
+      "moved": [
+        -26,
+        0
+      ],
+      "reach": 1.0
+    },
+    {
+      "name": "young_bloom",
+      "moved": [
+        -14,
+        0
+      ],
+      "reach": 1.0
+    },
+    {
+      "name": "mature_wood",
+      "moved": [
+        1,
+        0
+      ],
+      "reach": 1.0
+    },
+    {
+      "name": "mature_bloom",
+      "moved": [
+        0,
+        0
+      ],
+      "reach": 1.0
+    }
+  ]
+}

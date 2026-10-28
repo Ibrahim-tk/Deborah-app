@@ -9,7 +9,7 @@
  * Same plain-form language as Edit health profile: inputs, text areas, dropdowns, repeating rows. Ends with
  * your own optional notes. Save writes `visitLog` onto the note. Clinical wording is placeholder.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { uid } from '@shared/utils';
 import { useAppStore } from '@shared/store';
 import type { VisitLog as Log } from '@shared/types/domain';
@@ -17,6 +17,7 @@ import { IconButton, Input, Segmented, Select } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useNav, useScreenParams } from '@web/navigation';
 import { useToast } from '@web/hooks/toast.store';
+import { useDetailHost } from '../../DetailHost';
 import { Area, ItemList, Section } from './parts/Rows';
 import styles from './VisitLog.module.css';
 
@@ -30,6 +31,7 @@ export default function VisitLog() {
   const { noteId = '', profileId } = useScreenParams<{ noteId: string; profileId: string }>();
   const { pop } = useNav();
   const toast = useToast();
+  const embedded = useDetailHost() !== null;
   const note = useAppStore((s) => s.notes.byId[noteId]);
   const brief = note?.brief;
   const [log, setLog] = useState<Log>(() => note?.visitLog ?? {
@@ -54,11 +56,17 @@ export default function VisitLog() {
     pop();
   };
 
+  // In the side pane the pane's own Done closes the form, so changes save as you type (no tick).
+  useEffect(() => {
+    if (embedded && note) useAppStore.getState().updateNote(noteId, { visitLog: { ...log, loggedAt: new Date().toISOString() } });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [log]);
+
   return (
     <DerivedPage
       title="Log your visit"
-      composerPlaceholder="Ask Deborah about this visit…"
-      trailing={<IconButton icon="check" label="Save visit log" onClick={save} />}
+      composerPlaceholder="Ask Oracle about this visit…"
+      trailing={embedded ? undefined : <IconButton icon="check" label="Save visit log" onClick={save} />}
     >
       <div className={styles.body} data-xref="M-9.9 · Log your visit" data-placeholder>
         <Input label="Visit date" type="date" {...t('visitDate')} />

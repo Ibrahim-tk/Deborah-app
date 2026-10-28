@@ -9,6 +9,7 @@
 .toolbar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: var(--space-1);
 }
 
@@ -26,6 +27,15 @@
   letter-spacing: -0.015em;
   color: var(--color-ink-secondary);
 }
-.titleBlock { display: grid; gap: var(--space-1); justify-items: center; text-align: center; padding: var(--space-2) 0; }
-.title { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); color: var(--color-ink); text-wrap: balance; }
-.sub { font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.sub { margin: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+.actions { display: flex; justify-content: flex-end; align-items: center; gap: var(--space-1); }
+/* Tighter, smaller header icons so they sit quietly beside the title. */
+.headerActions { display: flex; align-items: center; gap: 0; }
+.headerActions [data-icon-button] { width: 40px; height: 40px; }
+.headerActions [data-icon-button] svg { width: 18px; height: 18px; }
+/* The avatar orb reads as extra weight on the left; less start padding balances it. */
+.headerActions .ask { margin-inline-start: var(--space-2); padding-inline-start: var(--space-3); }
+/* The original report photo itself, no container; click to see it full size. */
+.original { justify-self: start; width: calc(var(--space-8) * 7.5); max-width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+.original[aria-expanded='true'] { cursor: zoom-out; }
+.full { max-width: calc(var(--space-8) * 10); }

@@ -141,7 +141,7 @@ export default function UploadDocument() {
       </div>
     ) : step === 'result' && canAsk ? (
       <div className={styles.actions}>
-        <Button fullWidth leadingIcon="deborah" onClick={() => finish(true)}>Yes, ask Deborah</Button>
+        <Button fullWidth leadingIcon="deborah" onClick={() => finish(true)}>Yes, ask the Oracle</Button>
         <Button fullWidth variant="ghost" onClick={() => finish(false)}>Not now</Button>
       </div>
     ) : step === 'result' ? (
@@ -150,7 +150,7 @@ export default function UploadDocument() {
 
   return (
     <div className={styles.root} data-xref="M-11.3 · Upload a document">
-      <DerivedPage title={TITLES[step]} composerPlaceholder="Ask Deborah about this document…" onBack={onPageBack}>
+      <DerivedPage title={TITLES[step]} composerPlaceholder="Ask Oracle about this document…" onBack={onPageBack}>
         <div ref={stepRef} tabIndex={-1} aria-label={TITLES[step]} className={styles.step}>
         {step === 'method' && <MethodStep rejected={rejected} onCamera={() => setCamera(true)} onPick={() => input.current?.click()} />}
         {step === 'type' && file && <TypeStep file={file} value={type} onSelect={setType} />}

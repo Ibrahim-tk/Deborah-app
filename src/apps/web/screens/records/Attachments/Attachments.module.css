@@ -15,23 +15,22 @@
 .cards {
   display: grid;
   gap: var(--space-3);
-  margin: 0 var(--margin-screen);
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
 .empty,
 .loading {
-  padding: var(--space-4) var(--margin-screen);
+  padding: var(--space-4) 0;
   margin: 0;
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   color: var(--color-ink-secondary);
 }
 
-.fab {
-  position: absolute;
-  right: var(--margin-screen);
-  bottom: calc(var(--safe-bottom) + 100px);
-  z-index: 5;
-  box-shadow: 0 8px 24px rgb(61 16 86 / 0.25);
-}
+/* Every block shares the header's left and right edges (gallery included). */
+.stack > ul { margin-inline: 0; }
+
+.filters { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+/* Compact switch on the left; the tab's Add action balances it on the right. */
+.tabs { width: 240px; }

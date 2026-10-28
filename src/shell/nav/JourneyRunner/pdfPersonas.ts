@@ -210,7 +210,7 @@ function buildRun(gender: PdfGender, band: PdfAgeBand): PdfPersonaRun {
     label: `${gender} · ${BAND_LABEL[band]}`,
     description: gate
       ? 'Myself → birth date under 13 → Ask adult sheet (M-1.10).'
-      : `Myself → ${BAND_LABEL[band]} → ${sexNote}identity → pronouns → intake → Deborah → Ask Deborah.`,
+      : `Myself → ${BAND_LABEL[band]} → ${sexNote}identity → pronouns → intake → the Oracle → Ask Oracle.`,
     scenario: 'S01',
     onboarding: true,
     profile: buildProfile(gender, band),

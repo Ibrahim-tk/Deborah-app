@@ -9,7 +9,12 @@
 import { Avatar, GlassButton, ScrollEdge } from '@mobile/ui';
 import styles from './ChatHeader.module.css';
 
+// Oct 27: AI disclosure on every chat screen once the conversation begins (not on intake).
+export const AI_DISCLOSURE = 'You’re chatting with the Oracle, an AI system.';
+
 export interface ChatHeaderProps {
+  /** Conversation has begun: show the AI disclosure line. */
+  disclosure?: boolean;
   onBack: () => void;
   onNewChat: () => void;
   /** Show new-chat only once the thread has messages (welcome shows profile alone). */
@@ -21,6 +26,7 @@ export interface ChatHeaderProps {
 }
 
 export function ChatHeader({
+  disclosure = false,
   onBack,
   onNewChat,
   canStartNew,
@@ -32,6 +38,7 @@ export function ChatHeader({
       <ScrollEdge active={scrolled} />
       <header className={styles.root}>
         <GlassButton icon="back" aria-label="Back to Home" onClick={onBack} />
+        {disclosure && <p className={styles.disclosure}>{AI_DISCLOSURE}</p>}
         <div className={styles.right}>
           {canStartNew && <GlassButton icon="newChat" aria-label="New conversation" onClick={onNewChat} />}
           {profile && (

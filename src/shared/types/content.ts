@@ -400,6 +400,10 @@ export interface HealthBasicsStep {
   /** namedReasons: placeholder for the reason field. */
   reasonPlaceholder?: string;
   choices?: { value: string; label: string }[];
+  /** Small note under the step (Oct 27: the optional / privacy line on the sex-characteristics section). */
+  note?: string;
+  /** Choice steps: labels to use for a child profile (Oct 27: Boy / Girl instead of Man / Woman). */
+  childLabels?: Record<string, string>;
   placeholder?: string;
   /** Text steps: the one-tap empty answer. */
   none?: string;

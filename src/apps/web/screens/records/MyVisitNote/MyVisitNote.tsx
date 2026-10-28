@@ -57,7 +57,7 @@ export default function MyVisitNote() {
   return (
     <DerivedPage
       title="New note"
-      composerPlaceholder="Ask Deborah about this note…"
+      composerPlaceholder="Ask Oracle about this note…"
       trailing={<IconButton icon="check" label="Save note" onClick={save} />}
     >
       <div className={styles.body} data-xref="M-9.10 · New note" data-placeholder>

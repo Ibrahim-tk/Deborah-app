@@ -40,7 +40,7 @@ export function useIntakeFlow() {
     consent();
     go({ choice: 'import', step: 'connecting' });
     const allowed = await alert({
-      title: '“Your Oracle Clinician” Would Like to Access Health Data',
+      title: '“Your Oracle” Would Like to Access Health Data',
       message: 'Read: date of birth, biological sex, height, weight, and clinical records (medications, allergies, conditions).',
       buttons: [{ label: 'Don’t Allow', style: 'cancel' }, { label: 'Allow' }],
     });

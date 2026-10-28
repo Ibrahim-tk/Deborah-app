@@ -41,7 +41,7 @@ export default function ConsultationDetail() {
     detailHost ? (
       <div className={styles.embed} data-xref="M-9.2 · Consultation detail">{body}</div>
     ) : (
-      <DerivedPage title={title} composerPlaceholder="Ask Deborah about this visit…">
+      <DerivedPage title={title} composerPlaceholder="Ask Oracle about this visit…">
         <div className={styles.stack} data-xref="M-9.2 · Consultation detail">{body}</div>
       </DerivedPage>
     );

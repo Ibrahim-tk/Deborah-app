@@ -36,7 +36,7 @@ export function Controls() {
           </Variant>
           <Variant label="action · chevron · disabled">
             <OptionList>
-              <OptionRow leadingIcon="calendar" chevron onSelect={() => {}}>Book a consultation</OptionRow>
+              <OptionRow leadingIcon="calendar" chevron onSelect={() => {}}>Consult with support team</OptionRow>
               <OptionRow leadingIcon="upload" disabled>Upload labs</OptionRow>
             </OptionList>
           </Variant>
@@ -60,7 +60,7 @@ export function Controls() {
           <Variant label="password (eye toggle)"><Input label="Password" type="password" placeholder="Enter your password" /></Variant>
           <Variant label="leading · trailing"><Input label="Weight" placeholder="150" leading="lb" trailing={<span>kg?</span>} /></Variant>
           <Variant label="disabled"><Input label="Email" defaultValue="maria@example.com" disabled /></Variant>
-          <Variant label="TextArea (grows 1–5 lines)"><TextArea label="Note" placeholder="Add a note for Deborah…" value={note} onChange={(e) => setNote(e.target.value)} minRows={2} maxRows={5} /></Variant>
+          <Variant label="TextArea (grows 1–5 lines)"><TextArea label="Note" placeholder="Add a note for the Oracle…" value={note} onChange={(e) => setNote(e.target.value)} minRows={2} maxRows={5} /></Variant>
         </Specimen>
 
         <Specimen name="Checkbox · Toggle · Segmented · Select" path="ui/Checkbox" note="Whole row tappable. Toggle on = accent. Segmented: Linen track, Paper selected segment.">

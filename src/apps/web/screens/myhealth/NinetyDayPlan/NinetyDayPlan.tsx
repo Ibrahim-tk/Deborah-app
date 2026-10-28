@@ -8,7 +8,7 @@
  *
  * One plan per person. New concerns lead; the clinical letter stays underneath.
  */
-import { HEALING_PLAN_TITLE } from '@shared/copy/healingPlan';
+import { HEALING_PLAN_TITLE, WELLNESS_PLAN_DISCLAIMER } from '@shared/copy/healingPlan';
 import { guardrailsData } from '@shared/data';
 import { careTeamFromNotes, profileHasMedicines, withConcerns } from '@shared/engine/planConcerns';
 import { selectActiveProfile, selectPlan90, selectProfileNotes, useAppStore, type AppState } from '@shared/store';
@@ -53,8 +53,8 @@ export default function NinetyDayPlan() {
     const choice = await alert({
       title: 'This concern is resolved?',
       message: concern
-        ? `${concern.title} leaves the active plan. Deborah still keeps it with your history.`
-        : 'It leaves the active plan. Deborah still keeps it with your history.',
+        ? `${concern.title} leaves the active plan. The Oracle still keeps it with your history.`
+        : 'It leaves the active plan. The Oracle still keeps it with your history.',
       buttons: [{ label: 'Not yet', style: 'cancel' }, { label: 'It’s resolved' }],
     });
     if (choice !== 1) return;
@@ -62,18 +62,19 @@ export default function NinetyDayPlan() {
   };
 
   return (
-    <DerivedPage title={HEALING_PLAN_TITLE} composerPlaceholder="Ask Deborah about your plan…">
-      <div className={styles.stack} data-xref="M-7.3 · My Healing Plan">
+    <DerivedPage title={HEALING_PLAN_TITLE} composerPlaceholder="Ask Oracle about your plan…">
+      <div className={styles.stack} data-xref="M-7.3 · Your Wellness Plan">
         {!plan ? (
           <EmptyState
             icon="calendar"
-            text={advocate ? `What are your concerns for ${patientName}?` : 'Your healing plan appears after your first consultation with Deborah.'}
+            text={advocate ? `What are your concerns for ${patientName}?` : 'Your wellness plan appears after your first conversation.'}
             actionLabel="Ask Oracle"
             actionIcon="deborah"
             onAction={() => openAsk({ focus: true })}
           />
         ) : (
           <>
+            <p className={styles.disclaimer} data-placeholder>{WELLNESS_PLAN_DISCLAIMER}</p>
             <PlanDocument
               patientName={patientName}
               advocate={advocate}

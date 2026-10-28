@@ -9,7 +9,7 @@
 import { useState, type ReactNode } from 'react';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, IconButton, Menu, useAlert } from '@web/ui';
+import { Button, IconButton, useAlert } from '@web/ui';
 import { EmptyState } from '@web/patterns/health';
 import { DerivedPage } from '@web/patterns/shell';
 import { useConversation } from '@web/hooks/useConversation';
@@ -31,24 +31,39 @@ export default function LabReport() {
   const live = useAppStore((s) => s.labs.reportsById[reportId]);
   // Keep the last version on screen while the pop animates out after Delete.
   const [kept, setKept] = useState(live);
+  const [showFull, setShowFull] = useState(false);
   if (live && live !== kept) setKept(live);
   const report = live ?? kept;
   const isActiveProfile = useAppStore((s) => s.activeProfileId === report?.profileId);
   const back = detailHost ? detailHost.clear : canGoBack ? pop : undefined;
 
-  const wrap = (title: string, body: ReactNode) =>
+  const wrap = (title: string, body: ReactNode, trailing?: ReactNode) =>
     detailHost ? (
-      <div className={styles.embed} data-xref="M-9.5 · Lab report">{body}</div>
+      <div className={styles.embed} data-xref="M-9.5 · Lab report">
+        {trailing && <div className={styles.actions}>{trailing}</div>}
+        {body}
+      </div>
     ) : (
-      <DerivedPage title={title} composerPlaceholder="Ask Deborah about these labs…">
-        <div className={styles.stack} data-xref="M-9.5 · Lab report">{body}</div>
+      <DerivedPage
+        title={title}
+        trailing={trailing}
+        composerPlaceholder="Ask Oracle about these labs…"
+      >
+        <div className={styles.stack} data-xref="M-9.5 · Lab report">
+          {body}
+        </div>
       </DerivedPage>
     );
 
   if (!report) {
     return wrap(
       'Lab report',
-      <EmptyState icon="labs" text="This lab report is no longer available." actionLabel="Back to records" onAction={back ?? pop} />,
+      <EmptyState
+        icon="labs"
+        text="This lab report is no longer available."
+        actionLabel="Back to records"
+        onAction={back ?? pop}
+      />,
     );
   }
 
@@ -56,7 +71,10 @@ export default function LabReport() {
     const choice = await alert({
       title: 'Delete these lab results?',
       message: 'They will be removed from your records. This can’t be undone.',
-      buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Delete', style: 'destructive' }],
+      buttons: [
+        { label: 'Cancel', style: 'cancel' },
+        { label: 'Delete', style: 'destructive' },
+      ],
     });
     if (choice !== 1) return;
     (back ?? pop)();
@@ -71,32 +89,54 @@ export default function LabReport() {
 
   const title = report.panelTitle || report.labName || 'Lab report';
 
+  const sub =
+    [
+      report.labName && !/^sample\b/i.test(report.labName) ? report.labName : undefined,
+      report.collectedAt ? formatShortDate(report.collectedAt) : undefined,
+    ]
+      .filter(Boolean)
+      .join(' · ') || 'Your lab report';
+
+  // Standard detail header (design 2026-10-27): title once, actions on the right of it.
+  const actions = (
+    <div className={styles.headerActions}>
+      <IconButton
+        size="sm"
+        icon="edit"
+        label="Edit"
+        onClick={() => open('M-9.11', { reportId: report.id })}
+      />
+      <IconButton size="sm" icon="delete" label="Delete" onClick={remove} />
+      {isActiveProfile && (
+        <Button className={styles.ask} leadingIcon="deborah" onClick={ask}>
+          Ask Oracle
+        </Button>
+      )}
+    </div>
+  );
+
   return wrap(
     title,
     <>
-      <div className={styles.toolbar}>
-        <IconButton icon="info" label="About these results" onClick={() => toast('Educational results only — not a diagnosis.')} />
-        <Menu
-          side="bottom"
-          align="end"
-          trigger={<IconButton icon="more" label="More options" />}
-          items={[{ id: 'edit', label: 'Edit', icon: 'edit' }, { id: 'delete', label: 'Delete', icon: 'delete', destructive: true }]}
-          onSelect={(id) => (id === 'edit' ? open('M-9.11', { reportId: report.id }) : remove())}
-        />
-      </div>
-      {/* Preview in the middle, then the panel's name, then the values (design direction 2026-10-20). */}
-      <LabPreview report={report} />
-      <div className={styles.titleBlock}>
-        <h2 className={styles.title}>{title}</h2>
-        <p className={styles.sub}>
-          {/* Placeholder lab names ("Sample Lab") are left out; the date stands alone. */}
-          {[report.labName && !/^sample\b/i.test(report.labName) ? report.labName : undefined, report.collectedAt ? formatShortDate(report.collectedAt) : undefined].filter(Boolean).join(' · ') || 'Your lab report'}
-        </p>
-      </div>
-      <LabValueGrid title="Your results" values={report.values} />
-      {isActiveProfile && (
-        <Button fullWidth leadingIcon="deborah" onClick={ask}>Ask Deborah about these labs</Button>
+      {/* Placeholder lab names ("Sample Lab") are left out; the date stands alone. */}
+      <p className={styles.sub}>{sub}</p>
+      {/* The original sits in a slim row; the results stay the main content. */}
+      <button
+        type="button"
+        className={styles.original}
+        aria-expanded={showFull}
+        aria-label={showFull ? 'Hide original report' : 'View original report full size'}
+        onClick={() => setShowFull((v) => !v)}
+      >
+        <LabPreview report={report} />
+      </button>
+      {showFull && (
+        <div className={styles.full}>
+          <LabPreview report={report} />
+        </div>
       )}
+      <LabValueGrid title="Your results" values={report.values} />
     </>,
+    actions,
   );
 }

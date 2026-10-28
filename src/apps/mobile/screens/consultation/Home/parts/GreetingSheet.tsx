@@ -14,17 +14,17 @@ export interface GreetingSheetProps {
 
 export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m the Oracle, an AI that speaks in Deborah’s voice. Ask me anything about how you’re feeling, and we’ll take it from there together.`;
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m the Oracle, an AI that speaks in the Oracle’s voice. Ask me anything about how you’re feeling, and we’ll take it from there together.`;
   return (
     <BottomSheet
       showClose
       open={open}
       onClose={onDismiss}
-      label="Deborah says hello"
-      footer={<Button fullWidth onClick={onOpenChat}>Start your first conversation</Button>}
+      label="The Oracle says hello"
+      footer={<Button fullWidth onClick={onOpenChat}>Start a conversation</Button>}
     >
       <div className={styles.body} data-placeholder>
-        <DeborahBlob size={80} label="Deborah" />
+        <DeborahBlob size={80} label="The Oracle" />
         <TextReveal className={styles.hello} text={hello} delay={350} />
       </div>
     </BottomSheet>

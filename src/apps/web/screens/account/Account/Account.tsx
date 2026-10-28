@@ -104,7 +104,7 @@ export default function Account() {
     },
     {
       title: 'Support',
-      rows: [{ title: 'About Deborah', subtitle: 'Book a consultation', icon: 'info', onPress: () => nav.push('M-7.6') }],
+      rows: [{ title: 'About the Oracle', subtitle: 'Consult with support team', icon: 'info', onPress: () => nav.push('M-7.6') }],
     },
   ];
 
@@ -112,7 +112,7 @@ export default function Account() {
 
   return (
     <>
-      <DerivedPage title="Settings" composerPlaceholder="Ask Deborah about your account…">
+      <DerivedPage title="Settings" composerPlaceholder="Ask Oracle about your account…">
         <div className={styles.stack} data-xref="M-10.1 · Account">
           <div className={styles.profile}>
             <span className={styles.avatar} aria-hidden>{initial}</span>
@@ -183,7 +183,7 @@ export default function Account() {
           </Button>
         }
       >
-        <p className={styles.text}>Used only by Deborah’s team. We don’t send texts or verification codes.</p>
+        <p className={styles.text}>Used only by the support team. We don’t send texts or verification codes.</p>
         <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
       </BottomSheet>
       <NameSheet key={`name-${sheetKey}`} open={sheet === 'name'} onClose={() => setSheet(null)} />

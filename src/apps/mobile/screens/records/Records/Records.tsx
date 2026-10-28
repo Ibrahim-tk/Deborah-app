@@ -17,11 +17,9 @@ import { RecordsSearch } from './parts/RecordsSearch';
 import { SearchResults } from './parts/SearchResults';
 import styles from './Records.module.css';
 
-// Text-only segments (design 2026-10-21): no icons; Attachments is the image gallery.
+// Oct 27: "Labs & Attachments" becomes My Visit Notes only.
 const SEGMENTS: { value: Segment; label: string }[] = [
   { value: 'notes', label: 'Visit Notes' },
-  { value: 'labs', label: 'Labs' },
-  { value: 'attachments', label: 'Attachments' },
 ];
 
 export default function Records() {
@@ -31,7 +29,7 @@ export default function Records() {
   const activeProfileId = useAppStore((s) => s.activeProfileId);
   const profileId = params.profileId ?? activeProfileId;
   const profile = useAppStore((s) => s.profiles.byId[profileId]);
-  const [segment, setSegment] = useState<Segment>(params.segment === 'labs' || params.segment === 'attachments' ? params.segment : 'notes');
+  const [segment, setSegment] = useState<Segment>(SEGMENTS.some((s) => s.value === params.segment) ? params.segment as Segment : 'notes');
   const [loading, setLoading] = useState(true);
   // Search (design direction 2026-10-20): the nav bar's search button stretches into a field; results span labs and notes.
   const [searching, setSearching] = useState(false);
@@ -59,7 +57,7 @@ export default function Records() {
   return (
     <div className={styles.root} data-xref="M-9.1 · My Health records">
       <Header
-        title="My Health records"
+        title="My Visit Notes"
         onBack={canGoBack ? pop : undefined}
         backLabel={previousTitle}
         right={<GlassButton icon="search" aria-label="Search records" onClick={() => setSearching(true)} />}
@@ -67,7 +65,7 @@ export default function Records() {
       <div className={styles.body}>
         <div className={styles.top}>
           {otherProfile && <p className={styles.context}>{`${profile?.name}’s records`}</p>}
-          <Segmented label="Record type" options={SEGMENTS} value={segment} onChange={setSegment} />
+          {SEGMENTS.length > 1 && <Segmented label="Record type" options={SEGMENTS} value={segment} onChange={setSegment} />}
         </div>
         {loading ? (
           <div className={styles.skeleton} aria-busy="true" aria-label="Loading records">

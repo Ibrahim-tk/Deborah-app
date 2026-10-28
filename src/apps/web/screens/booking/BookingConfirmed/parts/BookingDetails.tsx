@@ -18,14 +18,14 @@ export function BookingDetails({ booking }: { booking: Booking }) {
     ['Length', `${booking.durationMin} min`],
     ['Format', bookingInfo.format],
     ['State', booking.state],
-    ['App history', booking.shareHistory ? 'Shared with Deborah' : 'Not shared'],
+    ['App history', booking.shareHistory ? 'Shared with the Oracle' : 'Not shared'],
     ['Status', cancelled ? 'Cancelled' : 'Booked'],
   ];
 
   const cancel = async () => {
     const choice = await alert({
       title: 'Cancel this booking?',
-      message: `${formatDayDate(booking.slot)} at ${formatTime(booking.slot)} with Deborah.`,
+      message: `${formatDayDate(booking.slot)} at ${formatTime(booking.slot)} with the Oracle.`,
       buttons: [{ label: 'Keep booking', style: 'cancel' }, { label: 'Cancel booking', style: 'destructive' }],
     });
     if (choice !== 1) return;
@@ -41,7 +41,7 @@ export function BookingDetails({ booking }: { booking: Booking }) {
         </Panel>
       )}
       <Card>
-        <h2 className={styles.title}>Consultation with Deborah</h2>
+        <h2 className={styles.title}>Consultation with the Oracle</h2>
         <dl className={styles.rows}>
           {rows.map(([k, v]) => (
             <div key={k} className={styles.row}>

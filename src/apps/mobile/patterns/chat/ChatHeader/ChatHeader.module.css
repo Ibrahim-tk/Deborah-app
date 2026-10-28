@@ -56,3 +56,14 @@
 .avatar:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .avatar .avatarGlass { background: transparent; color: var(--color-ink); }
 .avatar .avatarGlass > span { font: var(--weight-medium) 17px / 1 var(--font-body); letter-spacing: -0.01em; }
+
+/* Oct 27 AI disclosure: plain text between the controls. */
+.disclosure {
+  flex: 1;
+  min-width: 0;
+  margin: 0 var(--space-2);
+  text-align: center;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--color-ink-secondary);
+}

@@ -185,7 +185,7 @@ export function DeborahHero({
 export function DeborahFooter({ year = new Date().getFullYear() }: { year?: number }) {
   return (
     <footer className="deborah-footer">
-      <p className="deborah-footer__copyright">© {year} Oracle Clinician. All rights reserved.</p>
+      <p className="deborah-footer__copyright">© {year} Your Oracle. All rights reserved.</p>
     </footer>
   );
 }

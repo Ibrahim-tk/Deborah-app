@@ -34,19 +34,19 @@ export default function Library() {
   const openCommunity = async () => {
     const choice = await alert({
       title: 'Leave the app to open Facebook?',
-      message: 'Deborah’s community group opens in Facebook.',
+      message: 'The Oracle’s community group opens in Facebook.',
       buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Open' }],
     });
     if (choice === 1) toast('Opening Facebook (demo)');
   };
 
   return (
-    <div className={styles.root} data-xref="M-7.5 · Deborah’s library">
-      <Header title="Deborah’s library" onBack={pop} backLabel={previousTitle} />
+    <div className={styles.root} data-xref="M-7.5 · the Oracle’s library">
+      <Header title="The Oracle’s library" onBack={pop} backLabel={previousTitle} />
       <div className={styles.scroll}>
         <div className={styles.body}>
           <div className={styles.filters}>
-            <Input label="Search Deborah’s library" type="search" placeholder="Sleep, hot flashes, cycles…" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <Input label="Search the Oracle’s library" type="search" placeholder="Sleep, hot flashes, cycles…" value={query} onChange={(e) => setQuery(e.target.value)} />
             <Segmented label="Show" options={TABS} value={tab} onChange={setTab} />
             <TopicSelect value={topic} onChange={setTopic} />
           </div>
@@ -56,8 +56,8 @@ export default function Library() {
               <EmptyState
                 icon="search"
                 title="Nothing found."
-                text="Try ‘sleep’ or ask Deborah directly."
-                actionLabel="Ask Deborah"
+                text="Try ‘sleep’ or ask the Oracle directly."
+                actionLabel="Ask Oracle"
                 actionIcon="deborah"
                 onAction={() => openAsk({ focus: true })}
               />
@@ -71,7 +71,7 @@ export default function Library() {
           <div className={styles.group}>
             {/* OPEN: real community URL / platform — the prototype never leaves the app. */}
             <ListRow title="Join the community (Facebook group)" trailing={<Icon name="external" size={20} className={styles.external} />} onPress={openCommunity} />
-            <ListRow title="About Deborah" onPress={() => push('M-7.6')} />
+            <ListRow title="About the Oracle" onPress={() => push('M-7.6')} />
           </div>
         </div>
       </div>

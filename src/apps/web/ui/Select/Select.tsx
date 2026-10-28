@@ -14,15 +14,17 @@ export interface SelectProps<T extends string> {
   options: { value: T; label: string }[];
   value?: T;
   placeholder?: string;
+  /** Keep the label for screen readers only (the row shows its own title). */
+  hideLabel?: boolean;
   onChange: (value: T) => void;
 }
 
-export function Select<T extends string>({ label, options, value, placeholder = 'Choose…', onChange }: SelectProps<T>) {
+export function Select<T extends string>({ label, options, value, placeholder = 'Choose…', hideLabel, onChange }: SelectProps<T>) {
   const id = useId();
   const current = options.find((o) => o.value === value);
   return (
     <div className={styles.root}>
-      <span id={id} className={styles.label}>{label}</span>
+      <span id={id} className={hideLabel ? styles.srOnly : styles.label}>{label}</span>
       <Base.Root value={value ?? null} onValueChange={(v) => v != null && onChange(v as T)} items={options}>
         <Base.Trigger className={styles.trigger} aria-labelledby={id}>
           <span className={current ? undefined : styles.placeholder}>{current?.label ?? placeholder}</span>

@@ -13,7 +13,7 @@ export function TopNav() {
   return (
     <header className={styles.root}>
       <span className={styles.brand}>
-        <span aria-hidden="true">◆</span> Oracle Clinician · internal v{VERSION}
+        <span aria-hidden="true">◆</span> Your Oracle · internal v{VERSION}
       </span>
       <nav className={styles.center} aria-label="Prototype">
         {/* Version switch hidden (design 2026-10-21): Version 2 is the only version (it's already the default). */}

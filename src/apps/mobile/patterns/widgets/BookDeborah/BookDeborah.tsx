@@ -53,7 +53,7 @@ export function BookDeborah({
             The team has been notified
           </h2>
           <p className={styles.sheetBody}>
-            Someone from Deborah’s team will contact you soon to set up a time.
+            Someone from the support team will contact you soon to set up a time.
           </p>
           <Button fullWidth onClick={() => setOpen(false)}>
             Done

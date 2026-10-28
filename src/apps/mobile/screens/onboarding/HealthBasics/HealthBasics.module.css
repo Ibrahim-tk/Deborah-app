@@ -48,6 +48,23 @@
   animation: tree-in 600ms var(--ease-out) both;
 }
 @keyframes tree-in { from { opacity: 0; } }
+/* BloomTree2 (sandbox): placed inside the art box (the space above the question, which flexes per question) by its
+   trunk base, at (83%, 88%) of the square art (tree-rig.json anchor). The base sits just above the question, right of
+   centre; the roots sink into the blur; the crown fills the box and bleeds off the left edge on narrow phones. */
+.root > .art2 { position: relative; container-type: size; }
+.bloom2 {
+  --tree: min(112cqh, 125cqw);
+  position: absolute;
+  left: calc(102cqw - var(--tree) * 0.83);
+  top: calc(100cqh - 3cqh - var(--tree) * 0.88);
+  width: var(--tree);
+  height: var(--tree);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 90%, transparent 100%);
+  animation: tree-in 600ms var(--ease-out) both;
+}
+@media (prefers-reduced-motion: reduce) { .bloom2 { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .bloom { animation: none; } }
 /* Question band: natural height; only scrolls if it cannot fit even with the bloom at its floor. */
 .body { flex: 0 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-2) var(--margin-screen) var(--space-4); }
@@ -136,3 +153,10 @@
 .describeInput::placeholder { color: var(--color-ink-placeholder); }
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
+
+/* Oct 27: optional / privacy note on the sex-characteristics steps. */
+.stepNote {
+  margin: 0 0 var(--space-3);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}

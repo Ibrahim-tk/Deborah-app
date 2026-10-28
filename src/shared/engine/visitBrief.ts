@@ -19,7 +19,7 @@ export const VISIT_BRIEF_DISCLAIMER = [
   'Not a licensed prescriber',
 ] as const;
 
-export const VISIT_BRIEF_WHAT_THIS_IS = 'Note for the provider — prepared with the Oracle, Deborah’s AI health education tool, from our conversation';
+export const VISIT_BRIEF_WHAT_THIS_IS = 'Note for the provider — prepared with Your Oracle, an AI health education tool, from our conversation';
 
 const GENESIS_GOLD_NOTE =
   'Genesis Gold contains no hormones and is not a pharmaceutical product. Please monitor response alongside any other care.';

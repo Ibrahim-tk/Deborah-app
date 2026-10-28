@@ -139,7 +139,7 @@ export default function UploadDocument() {
       </div>
     ) : step === 'result' && canAsk ? (
       <div className={styles.actions}>
-        <Button fullWidth leadingIcon="deborah" onClick={() => finish(true)}>Yes, ask Deborah</Button>
+        <Button fullWidth leadingIcon="deborah" onClick={() => finish(true)}>Yes, ask the Oracle</Button>
         <Button fullWidth variant="ghost" onClick={() => finish(false)}>Not now</Button>
       </div>
     ) : step === 'result' ? (

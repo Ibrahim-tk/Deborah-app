@@ -109,7 +109,7 @@ export default function CreateAccount() {
   const fromChat = returnTo === 'chat';
   const title = step === 'merge' ? 'Keep this phone’s conversations?' : signin ? 'Welcome back' : switchedToCreate ? 'Create your account' : fromChat || sheet ? 'Save your profile' : 'Save your health history';
   const subtitle = step === 'merge'
-    ? `You chatted with Deborah before signing in. Add those conversations to ${pendingAddress}?`
+    ? `You chatted with the Oracle before signing in. Add those conversations to ${pendingAddress}?`
     : signin
       ? 'Sign in to pick up where you left off.'
       : switchedToCreate

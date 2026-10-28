@@ -21,7 +21,7 @@ export function RevokeConsentSheet({ open, onClose, onRevoke }: { open: boolean;
       }
     >
       <p className={styles.text} data-placeholder>
-        Deborah will stop using your symptoms, medications and history in her answers. What you’ve already shared stays
+        the Oracle will stop using your symptoms, medications and history in her answers. What you’ve already shared stays
         in your account, but it isn’t used until you agree again. She’ll ask the next time you start a chat.
       </p>
     </BottomSheet>

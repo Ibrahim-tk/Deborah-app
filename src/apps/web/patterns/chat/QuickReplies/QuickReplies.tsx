@@ -7,7 +7,7 @@
  */
 import type { Option } from '@shared/types/domain';
 import type { IconName } from '@web/ui';
-import { QuestionChoices, UploadCard } from '@web/patterns/widgets';
+import { QuestionChoices } from '@web/patterns/widgets';
 import { Button } from '@web/ui';
 import styles from './QuickReplies.module.css';
 
@@ -24,9 +24,7 @@ export interface QuickRepliesProps {
 export function QuickReplies({ options, onSelect, primary, label = 'Reply', answered }: QuickRepliesProps) {
   return (
     <div className={styles.root}>
-      {primary && !answered && (primary.icon === 'upload'
-        ? <UploadCard label={primary.label} onAdd={primary.onPress} />
-        : <Button fullWidth leadingIcon={primary.icon} onClick={primary.onPress}>{primary.label}</Button>)}
+      {primary && !answered && primary.icon !== 'upload' && <Button fullWidth leadingIcon={primary.icon} onClick={primary.onPress}>{primary.label}</Button>}
       <QuestionChoices label={label} options={options} answered={answered ? [answered] : undefined} onSubmit={(ids) => onSelect(ids[0])} />
     </div>
   );

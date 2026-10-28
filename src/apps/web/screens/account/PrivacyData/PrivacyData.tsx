@@ -58,7 +58,7 @@ export default function PrivacyData() {
 
   return (
     <>
-      <DerivedPage title="Privacy & data" composerPlaceholder="Ask Deborah about your privacy…">
+      <DerivedPage title="Privacy & data" composerPlaceholder="Ask Oracle about your privacy…">
         <div className={styles.stack} data-xref="M-10.2 · Privacy & data">
           <div className={styles.group}>
             <ListRow
@@ -74,7 +74,7 @@ export default function PrivacyData() {
           <div className={styles.group}>
             <ListRow
               title="Health data consent"
-              subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — Deborah will ask in chat'}
+              subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — the Oracle will ask in chat'}
               onPress={consentAt ? () => setRevoking(true) : undefined}
               trailing={consentAt ? undefined : null}
             />

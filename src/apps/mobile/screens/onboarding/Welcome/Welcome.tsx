@@ -64,7 +64,7 @@ export default function Welcome() {
         </div>
         <div className={styles.bottom}>
           <Input
-            label="Your first name"
+            label="What should we call you?"
             placeholder="First name"
             value={name}
             autoComplete="given-name"

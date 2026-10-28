@@ -18,3 +18,10 @@
   padding: var(--space-1) var(--margin-screen) calc(var(--tabbar-space) + var(--space-8));
   background: var(--color-canvas);
 }
+
+/* Oct 27 wellness plan disclaimer: plain secondary text above the plan. */
+.disclaimer {
+  margin: 0 0 var(--space-3);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  color: var(--color-ink-secondary);
+}

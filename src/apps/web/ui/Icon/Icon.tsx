@@ -59,7 +59,7 @@ import {
   ThumbsUpIcon,
   Tick02Icon,
   Upload04Icon,
-  Download04Icon,
+  Download01Icon,
   UserIcon,
   Video01Icon,
   VolumeHighIcon,
@@ -90,7 +90,7 @@ const map = {
   shop: ShoppingBag02Icon,
   calendar: Calendar03Icon,
   upload: Upload04Icon,
-  download: Download04Icon,
+  download: Download01Icon,
   camera: Camera01Icon,
   file: File01Icon,
   /** New chat — speech bubble with a plus. */

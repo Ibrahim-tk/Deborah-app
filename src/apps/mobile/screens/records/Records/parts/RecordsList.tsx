@@ -71,7 +71,7 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
           <EmptyState
             icon="chat"
             title="No consultations yet"
-            actionLabel={isActiveProfile ? 'Ask Deborah' : undefined}
+            actionLabel={isActiveProfile ? 'Ask Oracle' : undefined}
             actionIcon="deborah"
             onAction={() => openAsk({ focus: true })}
           />

@@ -4,7 +4,7 @@ import styles from './sections.module.css';
 
 const PRINCIPLES: [string, string][] = [
   ['What ships is the source', 'This lab reads live CSS on .phone-root and mounts the same ui/ and patterns/ modules V2 screens import. No parallel mock kit.'],
-  ['One action colour', 'Accent is the only colour that means “you can do something here”. Gold and rose stay for Deborah moments.'],
+  ['One action colour', 'Accent is the only colour that means “you can do something here”. Gold and rose stay for Oracle moments.'],
   ['Seven to one', 'Readable text pairs aim for 7:1 on their surface. Contrast is measured live on the Colour page.'],
   ['Medium is the ceiling', 'Nothing heavier than 500. Hierarchy comes from size, family, colour and space.'],
   ['Only floating things cast shadows', 'Cards, options and inputs are flat. Composer, sheets, menus and toasts float.'],
@@ -16,14 +16,14 @@ const LAYERS: [string, string][] = [
   ['src/styles/tokens.primitives.css', 'Brand ramps, spacing, radius, motion primitives.'],
   ['apps/mobile/styles/mobile.tokens.css', 'Semantic roles, type scale, layout, elevation on .phone-root.'],
   ['apps/mobile/styles/mobile.refresh.css', 'Translucent surfaces, field and button recipes.'],
-  ['apps/mobile/styles/mobile.skin.deborah.css', 'Deborah skin (loaded last) — the values this lab shows.'],
+  ['apps/mobile/styles/mobile.skin.deborah.css', 'The Oracle skin (loaded last) — the values this lab shows.'],
 ];
 
 export function Foundations() {
   return (
     <Section
       id="overview"
-      title="Oracle Clinician"
+      title="Your Oracle"
       lede={
         <>
           Mobile design system for <strong>Version 2</strong> only. Swatches are computed from the phone’s live stylesheets;

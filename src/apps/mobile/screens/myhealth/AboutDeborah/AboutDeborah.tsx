@@ -18,8 +18,8 @@ export default function AboutDeborah() {
   const placeholder = persona.status === 'placeholder' || undefined;
 
   return (
-    <div className={styles.root} data-xref="M-7.6 · About Deborah">
-      <Header title="About Deborah" onBack={pop} backLabel={previousTitle} />
+    <div className={styles.root} data-xref="M-7.6 · About the Oracle">
+      <Header title="About the Oracle" onBack={pop} backLabel={previousTitle} />
       <div className={styles.scroll}>
         <div className={styles.body} data-placeholder={placeholder} data-status={persona.status}>
           <div className={styles.intro}>
@@ -29,7 +29,7 @@ export default function AboutDeborah() {
           </div>
 
           <section className={styles.section} aria-labelledby="about-philosophy">
-            <h3 id="about-philosophy" className={styles.heading}>How Deborah works</h3>
+            <h3 id="about-philosophy" className={styles.heading}>How the Oracle works</h3>
             {persona.philosophy.map((p) => (
               <p key={p} className={styles.paragraph}>{p}</p>
             ))}

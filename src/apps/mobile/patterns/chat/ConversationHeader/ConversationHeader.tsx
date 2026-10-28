@@ -23,7 +23,7 @@ export interface ConversationHeaderProps {
   profile?: { name: string; guest: boolean; onPress: () => void };
 }
 
-export function ConversationHeader({ onMenu, title = 'Ask Deborah', transparent, onNotifications, profile }: ConversationHeaderProps) {
+export function ConversationHeader({ onMenu, title = 'Ask Oracle', transparent, onNotifications, profile }: ConversationHeaderProps) {
   const bell = onNotifications && !profile?.guest && (
     <GlassButton icon="bell" aria-label="Notifications" onClick={onNotifications} />
   );

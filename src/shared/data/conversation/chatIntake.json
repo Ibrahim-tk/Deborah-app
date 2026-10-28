@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Core experience question bank (plan C-05, nodes DN-07 to DN-11). Journey × symptom group → up to 3 clarifiers in priority order, then the journey's red-flag screen. Questions whose profileField starts with intake./profile. become pending facts (Review and Confirm); conversation.* answers stay in the conversation. Every question and red flag is placeholder copy from docs/ux/F02b where it exists, otherwise new; all need Deborah's sign-off. Teen and child journeys have no bank yet: they keep the script's own questions (Phase 3).",
+  "note": "Core experience question bank (plan C-05, nodes DN-07 to DN-11). Journey × symptom group → up to 3 clarifiers in priority order, then the journey's red-flag screen. Questions whose profileField starts with intake./profile. become pending facts (Review and Confirm); conversation.* answers stay in the conversation. Every question and red flag is placeholder copy from docs/ux/F02b where it exists, otherwise new; all need the Oracle's sign-off. Teen and child journeys have no bank yet: they keep the script's own questions (Phase 3).",
   "maxClarifiers": 3,
   "groups": [
     { "id": "sleep", "title": "Sleep & energy", "match": ["sleep", "insomnia", "tired", "fatigue", "exhausted", "energy", "3am", "wake", "waking", "restless"] },

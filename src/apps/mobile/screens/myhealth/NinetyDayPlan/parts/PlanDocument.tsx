@@ -44,12 +44,12 @@ export function PlanDocument({
   );
 
   return (
-    <article className={styles.doc} data-placeholder={doc.status === 'placeholder' || undefined} aria-label={`Healing Plan for ${patientName}`}>
+    <article className={styles.doc} data-placeholder={doc.status === 'placeholder' || undefined} aria-label={`Wellness Plan for ${patientName}`}>
       <header className={styles.hero}>
         <DeborahBlob size={72} label="Oracle" />
         <div className={styles.heroCopy}>
           <h1 className={styles.title}>
-            Healing Plan
+            Wellness Plan
             <span className={styles.forWhom}>for {patientName}</span>
           </h1>
           {advocate && <p className={styles.advocate}>You’re looking after {patientName}.</p>}
@@ -58,7 +58,7 @@ export function PlanDocument({
             <span aria-hidden> · </span>
             {doc.dateLabel}
           </p>
-          <p className={styles.reference}>Deborah answers from this plan and your history.</p>
+          <p className={styles.reference}>Oracle answers from this plan and your history.</p>
         </div>
       </header>
 

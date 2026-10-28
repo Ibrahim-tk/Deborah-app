@@ -27,7 +27,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-2.8': { title: 'Follow-up opt-in', component: lazy(() => import('@mobile/screens/consultation/FollowUpOptIn')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-28--follow-up-opt-in' },
   'M-2.9': { title: 'Scan a label', component: lazy(() => import('@mobile/screens/consultation/ScanLabel')), presentation: 'sheet', closeButton: true, detent: 'large', dismissible: true, figma: '', spec: 'intake V2 brief §3 Step E (OPEN: add to ux/F02)' },
   'M-2.11': { title: 'Profile question', component: lazy(() => import('@mobile/screens/consultation/ProfileQuestion')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: '', spec: 'intake V2 brief §4 (OPEN: add to ux/F02)' },
-  'M-2.13': { title: 'What Deborah noted', component: lazy(() => import('@mobile/screens/consultation/ReviewFacts')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'docs/ux/F02b-profile-aware-chat-intake.md#review-and-confirm' },
+  'M-2.13': { title: 'What the Oracle noted', component: lazy(() => import('@mobile/screens/consultation/ReviewFacts')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'docs/ux/F02b-profile-aware-chat-intake.md#review-and-confirm' },
   'M-2.14': { title: 'Complete Intake', component: lazy(() => import('@mobile/screens/consultation/CompleteIntake')), presentation: 'push', figma: '', spec: 'Client discovery 2026-10-16 (placeholder sections)' },
   'M-2.12': { title: 'First consultation', component: lazy(() => import('@mobile/screens/consultation/FirstConsult')), presentation: 'push', figma: '', spec: 'data/conversation/flows/firstConsult.json (OPEN: add to ux/F02)' },
   'M-2.15': { title: 'Terms updated', component: lazy(() => import('@mobile/screens/account/PolicyUpdate')), presentation: 'modal', dismissible: false, figma: '', spec: 'Client discovery 2026-10-16 re-consent' },
@@ -53,15 +53,15 @@ export const registry: Record<string, ScreenMeta> = {
 
   // F07 My Health hub (M-7.1 is the hub's empty state)
   'M-7.2': { title: 'My Health', component: lazy(() => import('@mobile/screens/myhealth/MyHealthHub')), presentation: 'tabRoot', tab: 'health', stack: 'main', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-72--my-health-hub' },
-  'M-7.3': { title: 'My Healing Plan', component: lazy(() => import('@mobile/screens/myhealth/NinetyDayPlan')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-73--your-90-day-plan' },
+  'M-7.3': { title: 'Your Wellness Plan', component: lazy(() => import('@mobile/screens/myhealth/NinetyDayPlan')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-73--your-90-day-plan' },
   'M-7.4': { title: 'For you', component: lazy(() => import('@mobile/screens/myhealth/ContentDetail')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-74--for-you-content-detail' },
-  'M-7.5': { title: 'Deborah’s library', component: lazy(() => import('@mobile/screens/myhealth/Library')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-75--deborahs-library' },
-  'M-7.6': { title: 'About Deborah', component: lazy(() => import('@mobile/screens/myhealth/AboutDeborah')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-76--about-deborah' },
+  'M-7.5': { title: 'The Oracle’s library', component: lazy(() => import('@mobile/screens/myhealth/Library')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-75--deborahs-library' },
+  'M-7.6': { title: 'About the Oracle', component: lazy(() => import('@mobile/screens/myhealth/AboutDeborah')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-76--about-deborah' },
   'M-7.8': { title: 'Edit health profile', component: lazy(() => import('@mobile/screens/myhealth/EditHealthSection')), presentation: 'modal', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@mobile/screens/myhealth/EditHealthDetail')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
   // F08 Book Deborah
-  'M-8.2': { title: 'Consult with Deborah', component: lazy(() => import('@mobile/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
+  'M-8.2': { title: 'Consult with support team', component: lazy(() => import('@mobile/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
   'M-8.3': { title: 'Pick a time', component: lazy(() => import('@mobile/screens/booking/Scheduler')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-83--pick-a-time-simulated-scheduler' },
   'M-8.4': { title: 'Booking confirmed', component: lazy(() => import('@mobile/screens/booking/BookingConfirmed')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-84--booking-confirmed' },
 

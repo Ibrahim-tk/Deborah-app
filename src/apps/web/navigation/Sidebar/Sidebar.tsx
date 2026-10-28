@@ -150,7 +150,7 @@ export function Sidebar() {
             <div className={styles.scroll}>
               {!collapsed && <h2 className={styles.heading}>Recent conversations</h2>}
               {history.length === 0 ? (
-                !collapsed && <p className={styles.empty}>Your conversations with Deborah will appear here.</p>
+                !collapsed && <p className={styles.empty}>Your conversations with the Oracle will appear here.</p>
               ) : (
                 <ul className={`${styles.list} ${styles.recent}`}>
                   {history.slice(0, RECENT_LIMIT).map((c) => {

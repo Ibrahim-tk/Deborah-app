@@ -42,7 +42,7 @@ export default function EditLabReport() {
   };
 
   return (
-    <DerivedPage title="Edit lab report" composerPlaceholder="Ask Deborah about these labs…">
+    <DerivedPage title="Edit lab report" composerPlaceholder="Ask Oracle about these labs…">
       <div className={styles.body} data-xref="M-9.11 · Edit lab report">
         <p className={styles.note}>Change anything that doesn’t match your report.</p>
         <section className={styles.field} aria-label="Report name">

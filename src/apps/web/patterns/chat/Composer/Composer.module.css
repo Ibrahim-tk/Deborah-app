@@ -153,3 +153,29 @@
 .attachmentRemove { position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 20px; height: 20px; border-radius: var(--radius-full); background: rgb(20 16 24 / 0.72); color: var(--white); }
 .attachmentRemove::after { content: ''; position: absolute; inset: -10px; }
 .attachmentRemove:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 1px; }
+
+/* Balanced insets (designer, 2026-10-28): the card has an 8px inner gutter on the sides and bottom,
+   so the 36px send disc (centred in its 48px hit area) sits 14px from both the right and bottom edges,
+   and the Symptoms hover pill no longer touches the left edge. Text starts 22px in, matching the placeholder. */
+.root { padding: var(--space-3) var(--space-2) var(--space-2); }
+.symptomsBtn { margin-left: 0; padding-left: 14px; }
+.end > :first-child { margin-right: 0; }
+
+/* One alignment grid (designer, 2026-10-28), mirroring the send disc (14px from right and bottom):
+   every pill edge (symptom tokens, Symptoms button) sits 14px from the left, and every text start
+   (token labels, placeholder, "Symptoms") sits 22px in. Symptoms matches the 36px send disc height. */
+.tokens { padding: 0 6px; }
+.token { padding-left: 8px; }
+.field { padding-inline: 14px; }
+.symptomsBtn { margin-left: 6px; padding-left: 8px; height: 30px; min-height: 0; }
+/* Pill edges inset 12px on the left — equal to the 12px top inset above the token row (designer, 2026-10-28).
+   Text stays on one line 20px in: tokens, placeholder and "Symptoms". */
+.tokens { padding-left: 4px; }
+.field { padding-inline: 12px; }
+.symptomsBtn { margin-left: 4px; }
+/* Send disc 12px from right and bottom — the same 12px inset as the top and left pills (designer, 2026-10-28).
+   6px card gutter + 6px between the 48px hit area and the 36px disc. Left side re-based on the 6px gutter. */
+.root { padding: var(--space-3) 6px 6px; }
+.tokens { padding-left: 6px; }
+.field { padding-inline: 14px; }
+.symptomsBtn { margin-left: 6px; }

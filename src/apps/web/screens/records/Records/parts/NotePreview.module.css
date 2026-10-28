@@ -3,7 +3,7 @@
 .bar {
   flex: none; position: sticky; top: 0; z-index: 2;
   display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
-  min-height: 52px; padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  min-height: 52px; padding: var(--space-2) var(--space-6) var(--space-2) calc(var(--space-4) * 2); /* title lines up with the padded note below */
   background: var(--color-canvas);
   border-bottom: 1px solid color-mix(in srgb, var(--color-border-hairline) 60%, transparent);
 }

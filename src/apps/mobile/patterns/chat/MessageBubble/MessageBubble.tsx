@@ -46,7 +46,7 @@ export function MessageBubble({ role, text, streaming, turnStart, placeholder, o
   return (
     <div className={styles.deborah}>
       {/* No orb before replies (design direction 2026-10-12); the speaker stays for screen readers. */}
-      {turnStart && <span className={styles.srOnly}>Deborah</span>}
+      {turnStart && <span className={styles.srOnly}>The Oracle</span>}
       {text !== undefined && (
         <p className={styles.text} aria-live={streaming ? 'polite' : undefined} data-placeholder={placeholder || undefined} {...press}>
           <StreamingText text={text} streaming={streaming} />

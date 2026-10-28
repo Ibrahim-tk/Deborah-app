@@ -60,7 +60,7 @@
       },
       {
         "key": "word",
-        "title": "A Word from Deborah",
+        "title": "A word from the Oracle",
         "body": "Take care, {name}. Check back when you get your results — I'll be here."
       }
     ],
@@ -70,7 +70,7 @@
       "frame90": "Results first; product choice follows the finding."
     },
     "closingLine": "I never tell you to stop a prescribed or recommended medicine — ask your provider before any change. I'll be here when results arrive.",
-    "habitsForPlan": ["Ask before changing Pepcid", "Consider Sacred Seven while awaiting SIBO results", "Bring results back to Deborah"],
+    "habitsForPlan": ["Ask before changing Pepcid", "Consider Sacred Seven while awaiting SIBO results", "Bring results back to the Oracle"],
     "goal": "Clear next step after SIBO results",
     "summary": "Post-visit bloating; waiting on SIBO; Pepcid and Genesis Gold questions."
   },

@@ -45,7 +45,7 @@ export function shareDocumentSteps(ctx: EngineContext, doc: HealthDocument, repo
 /** The one-time offer for an upload saved with "Not now". */
 export function offerDocumentSteps(ctx: EngineContext, doc: HealthDocument): Step[] {
   return [
-    ...pause('Deborah is here', 400, 700),
+    ...pause('The Oracle is here', 400, 700),
     ...deborahText(ctx, interpolate(r.offer, { title: doc.title }), {
       kind: 'documentOffer',
       quickReplies: { options: r.offerOptions },

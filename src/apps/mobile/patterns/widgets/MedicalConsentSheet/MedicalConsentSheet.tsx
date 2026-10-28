@@ -42,8 +42,8 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
             <>To answer your questions, the Oracle uses what you share about your health: </>
           )}
           {/* OPEN: privacy promise removed per docs/copy/voice-tone-ux-copy.md §6 — add a storage/sale line only once legal verifies it. */}
-          such as symptoms, medications and history. The Oracle is an AI informed by Deborah Maragopoulos’ experience,
-          not Deborah herself. Its guidance is education, not a diagnosis or prescription.
+          such as symptoms, medications and history. The Oracle is an AI informed by Genesis Health Products’ experience,
+          not a person. Its guidance is education, not a diagnosis or prescription.
         </p>
         <Checkbox checked={checked} onChange={setChecked} label="I’ve read and agree to the Health Consent" />
       </div>

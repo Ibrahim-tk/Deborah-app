@@ -8,7 +8,7 @@ import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom, formatShortDate } from '@shared/utils';
 import type { Conversation, Message } from '@shared/types/domain';
 import { DeborahBlob } from '@web/ui';
-import { ProductCard, ShopTiles } from '@web/patterns/commerce';
+import { ProductCard, ProductDisclosure, ShopTiles } from '@web/patterns/commerce';
 import {
   AfterGuidanceTrail,
   GuidanceEnd,
@@ -195,11 +195,16 @@ export function MessageList({
                 onFeedback={actions.feedback}
                 onBook={lab ? onBook : undefined}
               />
-              {!minor && !conversation.noProduct && !conversation.redFlag && <ShopTiles
+              {!minor && !conversation.noProduct && !conversation.redFlag && (
+                <>
+                  <ShopTiles
                 products={productList.filter((p) => p.id !== product?.id)}
-                title="Deborah’s formulations"
+                title="Recommended products"
                 onShop={onShop}
-              />}
+                  />
+                  <ProductDisclosure />
+                </>
+              )}
               {/* F02g: save-facts → bridge → consult ad → Genesis Gold + visit notes. */}
               {showNext && (
                 <AfterGuidanceTrail
@@ -287,7 +292,7 @@ export function MessageList({
           <CareDisclaimer key="care" text={consentDoc.careLine} onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
         ),
         // A chat that opens with Deborah (first-visit onboarding) shows her orb once, top left.
-        i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="Deborah" className={styles.firstOrb} />,
+        i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="The Oracle" className={styles.firstOrb} />,
         renderOne(m, i),
       ])}
 

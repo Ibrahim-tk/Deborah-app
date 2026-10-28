@@ -16,7 +16,7 @@ export function useDeleteDocument() {
     const choice = await alert({
       title: 'Delete this document?',
       // OPEN: may users delete a document they've shared? Default yes, with this line.
-      message: `Deborah will no longer use this document in your conversations.${shared ? ' It stays with anyone you already shared it with.' : ''}`,
+      message: `The Oracle will no longer use this document in your conversations.${shared ? ' It stays with anyone you already shared it with.' : ''}`,
       buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Delete', style: 'destructive' }],
     });
     if (choice !== 1) return false;

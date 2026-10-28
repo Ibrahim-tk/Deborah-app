@@ -32,10 +32,10 @@ export default function AskName() {
 
   return (
     <div data-xref="M-1.11 · Your name">
-      <Sheet title="What should Deborah call you?">
+      <Sheet title="What should the Oracle call you?">
         <form className={styles.body} onSubmit={continueOn} noValidate>
           <Input
-            label="Your first name"
+            label="What should we call you?"
             placeholder="First name"
             value={name}
             autoComplete="given-name"

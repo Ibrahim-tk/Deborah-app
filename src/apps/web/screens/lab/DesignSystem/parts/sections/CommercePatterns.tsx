@@ -30,7 +30,7 @@ export function CommercePatterns() {
           <Variant label="ProductCard">
             <div data-placeholder><ProductCard product={product} productRef={{ productId: product.id, why: product.tagline, frame90: 'Try it for 90 days, then check in.' }} onShop={noop} /></div>
           </Variant>
-          <Variant label="ShopTiles"><ShopTiles title="Formulated by Deborah" products={productList.slice(0, 3)} onShop={noop} /></Variant>
+          <Variant label="ShopTiles"><ShopTiles title="Formulated by Genesis Health Products" products={productList.slice(0, 3)} onShop={noop} /></Variant>
         </Specimen>
         <Specimen name="ProfileSwitcherList" path="patterns/profile/ProfileSwitcherList" note="Initial, name, relationship, check on the active row.">
           <ProfileSwitcherList profiles={[...PROFILES]} activeId={active} addState="available" maxProfiles={4} onSelect={setActive} onAdd={noop} />

@@ -35,7 +35,7 @@ export default function Legal() {
   ];
 
   return (
-    <DerivedPage title="Terms & disclaimer" composerPlaceholder="Ask Deborah about your account…">
+    <DerivedPage title="Terms & disclaimer" composerPlaceholder="Ask Oracle about your account…">
       <div className={styles.doc} data-xref="M-10.5 · Terms & disclaimer" data-scroll-body>
         {docs.map((d) => (
           <section key={d.key} ref={(el) => (refs.current[d.key] = el)} className={styles.section} data-placeholder={placeholder}>

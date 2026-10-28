@@ -23,7 +23,7 @@ export function ReportsList({ profileId }: { profileId: string }) {
   if (reports.length === 0) {
     return (
       <div className={styles.empty}>
-        <EmptyState icon="pdf" title="No saved reports yet" text="Visit summaries and guidance you save from Deborah appear here." />
+        <EmptyState icon="pdf" title="No saved reports yet" text="Visit summaries and guidance you save from the Oracle appear here." />
       </div>
     );
   }

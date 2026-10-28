@@ -2,8 +2,8 @@ import { step as s, type ManualJourney } from './types';
 
 const onboardingEvidence = ['src/apps/mobile/screens/onboarding/HealthBasics/', 'src/apps/mobile/screens/onboarding/DeborahWelcome/'];
 const consentGap = 'Consent wording is placeholder pending legal review. Birth-year gates use calendar-year age, not an exact birthday.';
-const ask = s('Ask Deborah', 'Send “I’ve been having headaches lately”. Agree to health-data processing if asked. Answer each relevant question; use None where appropriate.', 'Questions reflect the selected profile. Facts remain pending until confirmation.', 'M-2.1', ['Safety concern → safety response', 'Missing basic → question before answer']);
-const review = s('Review and Confirm', 'When the answer finishes, inspect what Deborah noted. Choose Save to my profile.', 'The facts become confirmed. No guest sign-up card appears. A first-answer reminder offer may follow.', 'M-2.1', ['Edit → M-2.13 → Use this → Save', 'Don’t save → discard pending facts']);
+const ask = s('Ask Oracle', 'Send “I’ve been having headaches lately”. Agree to health-data processing if asked. Answer each relevant question; use None where appropriate.', 'Questions reflect the selected profile. Facts remain pending until confirmation.', 'M-2.1', ['Safety concern → safety response', 'Missing basic → question before answer']);
+const review = s('Review and Confirm', 'When the answer finishes, inspect what the Oracle noted. Choose Save to my profile.', 'The facts become confirmed. No guest sign-up card appears. A first-answer reminder offer may follow.', 'M-2.1', ['Edit → M-2.13 → Use this → Save', 'Don’t save → discard pending facts']);
 
 export const CORE_JOURNEYS: ManualJourney[] = [
   {
@@ -46,7 +46,7 @@ export const CORE_JOURNEYS: ManualJourney[] = [
   {
     id: 'returning', name: 'Returning user consultation', persona: 'Maria', scenario: 'R01', status: 'IMPLEMENTED',
     goal: 'Return to Home with history and start or continue a conversation.', behavior: 'Seeded account and history; responses are scripted.', evidence: ['src/apps/mobile/screens/consultation/Home/', 'src/shared/scenarios/R01-returning-signin.json'], gaps: [],
-    steps: [s('Returning Home', 'Inspect the Home summary and Continue option.', 'Past consultation and profile context are available; no onboarding form.', 'M-2.0'), s('Continue or ask', 'Open Continue, or Ask Deborah. If the scripted first consult opens, follow its options.', 'Existing history is preserved and the chosen conversation opens.', undefined, ['Continue → previous conversation', 'Ask → new/scripted consultation']), s('Finish consultation', 'Follow the displayed questions and review any facts before saving.', 'An answer or explicit safety outcome is delivered; previously known basics are reused.')],
+    steps: [s('Returning Home', 'Inspect the Home summary and Continue option.', 'Past consultation and profile context are available; no onboarding form.', 'M-2.0'), s('Continue or ask', 'Open Continue, or Ask Oracle. If the scripted first consult opens, follow its options.', 'Existing history is preserved and the chosen conversation opens.', undefined, ['Continue → previous conversation', 'Ask → new/scripted consultation']), s('Finish consultation', 'Follow the displayed questions and review any facts before saving.', 'An answer or explicit safety outcome is delivered; previously known basics are reused.')],
   },
   {
     id: 'signin', name: 'Sign in and restore history', persona: 'Maria', scenario: 'S01', status: 'IMPLEMENTED',

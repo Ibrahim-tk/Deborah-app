@@ -16,7 +16,7 @@ export function Colors() {
   const read = useTokenReader();
   const canvas = read('--color-canvas');
   return (
-    <Section id="color" title="Colour" lede="Colours as computed on .phone-root today (mobile tokens + Deborah skin). Product CSS uses semantic roles; ramps are the primitives underneath.">
+    <Section id="color" title="Colour" lede="Colours as computed on .phone-root today (mobile tokens + the Oracle skin). Product CSS uses semantic roles; ramps are the primitives underneath.">
       {COLOR_GROUPS.map((g) => (
         <Group key={g.title} title={g.title} note={g.note}>
           <div className={styles.swatches}>

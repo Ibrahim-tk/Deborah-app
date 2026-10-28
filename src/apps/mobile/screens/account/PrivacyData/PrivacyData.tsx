@@ -74,7 +74,7 @@ export default function PrivacyData() {
         <div className={styles.group}>
           <ListRow
             title="Health data consent"
-            subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — Deborah will ask in chat'}
+            subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — the Oracle will ask in chat'}
             onPress={consentAt ? () => setRevoking(true) : undefined}
             trailing={consentAt ? undefined : null}
           />

@@ -26,7 +26,7 @@ export function SafetyPatterns() {
         <Specimen name="MedicationSafetyCard" path="patterns/safety/MedicationSafetyCard" note="Additive Linen panel. Never contains dosing.">
           <div data-placeholder><MedicationSafetyCard body={g.medication.body} linkLabel={g.medication.interactionLink.label} onCheckInteractions={noop} /></div>
         </Specimen>
-        <Specimen name="EscalationCard · OutOfScopeReply" path="patterns/safety/EscalationCard" note="The human path: book a consultation with Deborah. Shown inline here (sheet={false}).">
+        <Specimen name="EscalationCard · OutOfScopeReply" path="patterns/safety/EscalationCard" note="The human path: consult with support team. Shown inline here (sheet={false}).">
           <div data-placeholder>
             <EscalationCard body={g.escalation.body} sheet={false} onBook={noop} onDismiss={noop} details={['30 min', 'Video or phone']} />
           </div>

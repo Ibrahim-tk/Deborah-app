@@ -19,7 +19,10 @@
   min-width: 0;
   animation: option-in 500ms ease-out calc(var(--i, 0) * 70ms) both;
 }
-.slot[data-describing] { animation: none; }
+/* Morphed field / restored pill crossfade in while the slot glides (FLIP in TSX). */
+.slot[data-describing] { overflow: hidden; border-radius: var(--radius-pill); }
+.morphIn { height: 100%; animation: morph-in 320ms var(--ease-out) 80ms both; }
+@keyframes morph-in { from { opacity: 0; } }
 /* Selected Other: full-width row spanning both columns. */
 .slot[data-span] { grid-column: 1 / -1; }
 
@@ -55,7 +58,7 @@
 
 @keyframes option-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
-  .slot, .option { animation: none; transition: none; }
+  .slot, .option, .morphIn { animation: none; transition: none; }
 }
 
 /* Round check, right side: empty ring → filled accent with a tick (matches the who-for cards). */

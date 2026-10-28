@@ -237,7 +237,7 @@ function HrtExpandDemo() {
 
 export function WidgetPatterns() {
   return (
-    <Section id="widgets" title="Chat widgets" lede={<>Small interactive cards Deborah drops into the thread. Same <code>patterns/widgets</code> as V2 chat — edit once, see it in <code>/wid?flow=v2</code> and Conversation.</>}>
+    <Section id="widgets" title="Chat widgets" lede={<>Small interactive cards the Oracle drops into the thread. Same <code>patterns/widgets</code> as V2 chat — edit once, see it in <code>/wid?flow=v2</code> and Conversation.</>}>
       <Grid>
         <Specimen name="InlineConsent" path="patterns/widgets/InlineConsent" note="Health-data consent inline in the chat. Variant row (chosen 2026-10-14).">
           <Variant label="row"><InlineConsent onAgree={noop} onDecline={noop} /></Variant>
@@ -290,7 +290,7 @@ export function WidgetPatterns() {
           <Variant label="incomplete"><IntakeCompletionCard progress={0.65} onAction={noop} /></Variant>
           <Variant label="complete"><IntakeCompletionCard progress={1} complete onAction={noop} /></Variant>
         </Specimen>
-        <Specimen name="HealingPlanCard" path="patterns/widgets/HealingPlanCard" note="My Healing Plan on Home (locked + unlocked).">
+        <Specimen name="HealingPlanCard" path="patterns/widgets/HealingPlanCard" note="Your Wellness Plan on Home (locked + unlocked).">
           <Variant label="locked"><HealingPlanCard locked /></Variant>
           <Variant label="unlocked"><HealingPlanCard concern="Steady sleep" done={2} total={5} onPress={noop} /></Variant>
         </Specimen>
@@ -309,7 +309,7 @@ export function WidgetPatterns() {
           <HomeMediaHero titleId="ds-media" title="Ongoing tiredness and a question about thyroid function" when="4 days ago" tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={noop} />
         </Specimen>
         <Specimen name="SuggestionCarousel" path="patterns/widgets/SuggestionCarousel" note="Next-step cards — icon · title · arrow · floral PNG.">
-          <SuggestionCarousel items={[{ key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: noop }, { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps Deborah tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: noop }]} />
+          <SuggestionCarousel items={[{ key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: noop }, { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps the Oracle tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: noop }]} />
         </Specimen>
       </Grid>
     </Section>

@@ -38,7 +38,7 @@ export function SafetyMessage({ message: m, conversationId, busy, chat, onFocusC
     m,
     conversationId,
     (m.kind === 'emergency' && !m.meta?.acknowledged) || m.kind === 'crisis' || uncovered,
-    uncovered ? 'Summary sent to Deborah’s team (demo)' : undefined,
+    uncovered ? 'Summary sent to the support team (demo)' : undefined,
   );
 
   const call = async (title: string, demo: string) => {

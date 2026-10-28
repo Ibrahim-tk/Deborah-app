@@ -35,7 +35,7 @@ function iconForKey(key: string): IconName {
 
 export function SuggestionCarousel({
   items,
-  label = 'Start with Deborah',
+  label = 'Start with the Oracle',
 }: {
   items: SuggestionCard[];
   label?: string;

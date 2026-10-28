@@ -19,12 +19,12 @@ const ACTIONS: { id: string; icon: IconName; title: string; subtitle: string }[]
     id: 'intake',
     icon: 'health',
     title: 'Complete your health profile',
-    subtitle: 'A few questions so Deborah can guide you better.',
+    subtitle: 'A few questions so the Oracle can guide you better.',
   },
   {
     id: 'checkin',
     icon: 'chat',
-    title: 'Check in with Deborah',
+    title: 'Check in with the Oracle',
     subtitle: 'Share how the last week has felt.',
   },
   {
@@ -54,7 +54,7 @@ export default function SimpleHome() {
           <DeborahBlob size={96} label="Oracle" />
           <h1 className={styles.title}>{greetingLine(name)}</h1>
           <p className={styles.body}>
-            Here’s a quiet look at what needs your attention. Start with the items below, or ask Deborah anything.
+            Here’s a quiet look at what needs your attention. Start with the items below, or ask the Oracle anything.
           </p>
         </header>
 
@@ -91,8 +91,8 @@ export default function SimpleHome() {
       <div className={styles.dock}>
         <ChatLauncher
           glow
-          placeholder="Ask Deborah anything…"
-          onOpen={() => toast('Opens Ask Deborah (lab)')}
+          placeholder="Ask Oracle anything…"
+          onOpen={() => toast('Opens Ask Oracle (lab)')}
         />
       </div>
       <ToastHost lifted={false} overComposer={false} />

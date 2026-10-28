@@ -51,7 +51,7 @@ export const NAV: { title: string; items: Entry[] }[] = [
     title: 'Patterns',
     items: [
       { id: 'chat', label: 'Chat', Component: ChatPatterns },
-      { id: 'answer', label: 'Deborah’s answer', Component: AnswerPatterns },
+      { id: 'answer', label: 'The Oracle’s answer', Component: AnswerPatterns },
       { id: 'safety', label: 'Safety', Component: SafetyPatterns },
       { id: 'health', label: 'My Health', Component: HealthPatterns },
       { id: 'commerce', label: 'Plans and family', Component: CommercePatterns },

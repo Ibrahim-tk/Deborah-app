@@ -4,7 +4,7 @@
   "status": "placeholder",
   "description": "Scripted first consultation after sign-up (docs/ux/F02c). Reads the health basics as context and never re-asks them: mood check-in -> what she already knows -> topic -> 3 clarifiers (symptoms, impact, duration) -> safety screen -> 7-section answer -> follow-up -> visit prep -> labs -> booking -> check-in reminder. {tokens} come from the profile and earlier answers. Prebuilt Q&A, no live LLM.",
   "startNode": "opener",
-  "contentStatus": "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off before any user-facing use.",
+  "contentStatus": "DRAFT. All the Oracle-voice copy, tests and product guidance need the Oracle's clinical sign-off before any user-facing use.",
   "carriedFromIntake": {
     "note": "Never re-ask any of these. Use them to personalize.",
     "firstName": "Linda",
@@ -281,7 +281,7 @@
       "bot": "Thank you for telling me, Linda. Night sweats together with fever, chills or weight loss you can't explain are worth getting checked by a provider soon, before we look at hormones. This doesn't count toward your free answers.",
       "countsTowardFreeLimit": false,
       "next": "check_more",
-      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); Deborah's tile is offered after the answer (talk_direct)."
+      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); the Oracle's tile is offered after the answer (talk_direct)."
     },
     "thinking": {
       "type": "loading",
@@ -381,8 +381,8 @@
             "Get 20 minutes of morning daylight to reset your body clock."
           ],
           "productCard": {
-            "label": "From Deborah's own line",
-            "disclosure": "Deborah created this product. It's optional, and you don't need it to use the app.",
+            "label": "From the Oracle's own line",
+            "disclosure": "The Oracle created this product. It's optional, and you don't need it to use the app.",
             "name": "Genesis Gold®",
             "line": "Plant-based nutrition designed to support the hypothalamus. Most women give it at least 90 days.",
             "personalNote": "{medNote}",
@@ -400,7 +400,7 @@
         },
         {
           "id": 7,
-          "title": "A Word from Deborah",
+          "title": "A word from the Oracle",
           "preview": "A note for you",
           "body": "Linda, so many women are told this is 'just hormones' and to wait it out. You don't have to. Understanding the why is the first step to sleeping through the night again."
         }
@@ -454,7 +454,7 @@
         "type": "escalation",
         "options": [
           {
-            "label": "Book a consult with Deborah",
+            "label": "Consult with support team",
             "next": "offer_booking"
           },
           {
@@ -487,7 +487,7 @@
         ]
       },
       "uiNote": "Lands in F09 My Health records.",
-      "next": "offer_labs"
+      "next": "offer_checkin"
     },
     "offer_labs": {
       "type": "question",
@@ -514,7 +514,7 @@
       "bot": "Lovely. These are my next openings.",
       "widget": {
         "type": "slot_picker",
-        "title": "Book a consult with Deborah",
+        "title": "Consult with support team",
         "meta": "30 min · Video",
         "options": [
           {
@@ -531,7 +531,7 @@
       "bot": "Lovely. Just check this looks right.",
       "widget": {
         "type": "confirm_card",
-        "title": "Deborah · 30 min",
+        "title": "The Oracle · 30 min",
         "value": "$150",
         "detail": "{slot} · Video",
         "label": "Booked. You'll get a reminder."
@@ -585,7 +585,7 @@
     "exit_booking": {
       "type": "end",
       "route": "/book",
-      "note": "F08 Book Deborah."
+      "note": "F08 Consult with support team."
     },
     "exit_product": {
       "type": "end",
@@ -602,7 +602,7 @@
       "bot": "Thank you for telling me, Linda. Chest pain or fainting always deserves a proper check, and soon. If it's happening right now, please call 911 or go to the nearest emergency room. Otherwise, let's get you seen by a provider this week. This doesn't count toward your free answers.",
       "countsTowardFreeLimit": false,
       "next": "check_more",
-      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); Deborah's tile is offered after the answer (talk_direct)."
+      "uiNote": "Safety note as plain text (design direction 2026-10-14: no tile here); the Oracle's tile is offered after the answer (talk_direct)."
     },
     "check_more": {
       "type": "question",
@@ -1200,7 +1200,7 @@
         },
         {
           "id": 7,
-          "title": "A Word from Deborah",
+          "title": "A word from the Oracle",
           "body": "Linda, you knew something wasn't right, and you were right. Being told you're \"fine\" when you feel this way is so hard. Keep trusting yourself. Your body is asking for support, and we can give it that together."
         }
       ],

@@ -27,7 +27,7 @@ export function HubPopulated() {
       {/* History and Visit Notes live on My Notes (M-9.1), not here (design 2026-10-20). */}
       {/* Design request 2026-10-20: the health profile lives here; labs and documents have their own tab. */}
       <HealthDetails />
-      {/* "For you from Deborah" and the library link removed from My Health (designer, 2026-10-21). */}
+      {/* "For you from the Oracle" and the library link removed from My Health (designer, 2026-10-21). */}
     </>
   );
 }

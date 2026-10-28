@@ -47,7 +47,7 @@ export function HealthPatterns() {
           {libraryItems.slice(0, 2).map((item) => <div key={item.id} data-placeholder><ContentCard item={item} reason="Because you asked about sleep" onPress={noop} /></div>)}
         </Specimen>
         <Specimen name="EmptyState" path="patterns/health/EmptyState" note="title-2 invitation, one line of callout, one primary button.">
-          <EmptyState icon="note" title="No notes yet" text="Save an answer or jot down questions for your visit." actionLabel="Ask Deborah" actionIcon="chat" onAction={noop} />
+          <EmptyState icon="note" title="No notes yet" text="Save an answer or jot down questions for your visit." actionLabel="Ask Oracle" actionIcon="chat" onAction={noop} />
         </Specimen>
       </Grid>
     </Section>

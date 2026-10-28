@@ -46,7 +46,7 @@ export default function EditHealthSection() {
   return (
     <DerivedPage
       title={`Edit ${current?.title.toLowerCase() ?? 'profile'}`}
-      composerPlaceholder="Ask Deborah about your health profile…"
+      composerPlaceholder="Ask Oracle about your health profile…"
     >
       <div className={styles.body} data-xref="M-7.8 · Edit health profile section">
         <p className={styles.note}>The Oracle uses these to tailor its guidance.</p>

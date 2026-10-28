@@ -32,7 +32,7 @@ export function StateReturning(p: StateReturningProps) {
 
   return (
     <>
-      <HomeMediaHero titleId="continue-deborah" title={heroTitle} eyebrow="Continue with Deborah"
+      <HomeMediaHero titleId="continue-deborah" title={heroTitle} eyebrow="Continue with the Oracle"
         tone="hero" artifact="violet-bloom" ctaLabel="Continue" onCta={p.onContinue} />
       <HomeSections {...p} journey={p.intakeCard && !p.intakeCard.complete ? undefined : p.journey} />
     </>

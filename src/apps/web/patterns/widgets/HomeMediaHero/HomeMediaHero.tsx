@@ -51,7 +51,7 @@ export function HomeMediaHero({
       <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>
         {/* Banner row (designer, 2026-10-23): large orb · eyebrow + serif title · arrow, on a violet gradient. */}
         <div className={styles.bodyCompact}>
-          <DeborahBlob size={88} label="Deborah" className={styles.orb} />
+          <DeborahBlob size={88} label="The Oracle" className={styles.orb} />
           <div className={styles.copy}>
             {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
             <h2 id={titleId} className={styles.titleCompact}>{title}</h2>

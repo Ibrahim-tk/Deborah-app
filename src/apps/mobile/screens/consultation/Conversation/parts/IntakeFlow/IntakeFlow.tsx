@@ -12,7 +12,7 @@ import { ProfileCard } from '@mobile/patterns/intake';
 import type { IntakeFlowApi } from './useIntakeFlow';
 import styles from './IntakeFlow.module.css';
 
-const DISCLAIMER = 'Deborah is here to guide you, not replace your doctor. In an emergency, contact local emergency services.';
+const DISCLAIMER = 'The Oracle is here to guide you, not replace your doctor. In an emergency, contact local emergency services.';
 
 export interface IntakeFlowProps {
   flow: IntakeFlowApi;

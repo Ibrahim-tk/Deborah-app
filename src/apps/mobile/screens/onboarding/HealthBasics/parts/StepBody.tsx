@@ -1,7 +1,7 @@
 /** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / FullChoicePillsGrid / QuestionChoices / ChipPicker. */
 import { FullChoicePills, FullChoicePillsGrid, InlineChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@mobile/patterns/widgets';
 import { DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
-import { list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
+import { choiceLabel, list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
@@ -20,7 +20,18 @@ export interface StepBodyProps {
   advance: (value: string, extra?: Answers) => void;
 }
 
-export function StepBody({ step, answers, set, advance }: StepBodyProps) {
+export function StepBody(props: StepBodyProps) {
+  const { note } = props.step;
+  if (!note) return <StepControl {...props} />;
+  return (
+    <>
+      <p className={styles.stepNote}>{note}</p>
+      <StepControl {...props} />
+    </>
+  );
+}
+
+function StepControl({ step, answers, set, advance }: StepBodyProps) {
   const value = answers[step.key] ?? '';
   // Chips add or remove a name in the comma list, so typing and tapping mix freely.
   const picked = list(value, step.none);
@@ -50,7 +61,7 @@ export function StepBody({ step, answers, set, advance }: StepBodyProps) {
     case 'profileFor':
       return <ProfileForStep value={value} onPick={advance} />;
     case 'choice': {
-      const options = (step.choices ?? []).map((c) => ({ id: c.value, label: c.label }));
+      const options = (step.choices ?? []).map((c) => ({ id: c.value, label: choiceLabel(step, c.value, c.label, answers) }));
       const describeValue = step.describeValue;
       const describeKey = step.describeKey;
       const expandValues = step.expandValues;

@@ -41,7 +41,7 @@ function Action({ icon, label, onPress }: { icon: IconName; label: string; onPre
 }
 
 /* One quiet row: icon tools (Copy · Read aloud) on the left, small labelled
-   actions (Visit Notes, Book Deborah) on the right. Feedback thumbs removed (2026-10-08). */
+   actions (Visit Notes, Consult with support team) on the right. Feedback thumbs removed (2026-10-08). */
 export function AnswerActions({ onVisitNotes, onCopy, onListen, onBook }: AnswerActionsProps) {
   return (
     <div className={styles.root}>

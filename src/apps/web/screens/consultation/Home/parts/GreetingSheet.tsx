@@ -16,17 +16,17 @@ export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingShe
   // OPEN: greeting copy is placeholder until Deborah approves it.
   // Heading → body hierarchy; warmth per docs/copy/voice-tone-ux-copy.md (no promised outcomes, AI ≠ Deborah).
   const hello = `Hi${name ? ` ${name}` : ''}, I’m the Oracle.`;
-  const intro = 'Tell me how you’re feeling, and we’ll look at what’s going on together, one step at a time. My guidance draws on Deborah Maragopoulos’ experience.';
+  const intro = 'Tell me how you’re feeling, and we’ll look at what’s going on together, one step at a time. My guidance draws on Genesis Health Products’ experience.';
   return (
     <BottomSheet
       showClose
       open={open}
       onClose={onDismiss}
-      label="Deborah says hello"
-      footer={<Button fullWidth onClick={onOpenChat}>Start your first conversation</Button>}
+      label="The Oracle says hello"
+      footer={<Button fullWidth onClick={onOpenChat}>Start a conversation</Button>}
     >
       <div className={styles.body} data-placeholder>
-        <DeborahBlob size={80} label="Deborah" />
+        <DeborahBlob size={80} label="The Oracle" />
         <div className={styles.copy}>
           <TextReveal as="h2" className={styles.hello} text={hello} delay={350} />
           <TextReveal className={styles.intro} text={intro} delay={550} />

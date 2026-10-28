@@ -27,13 +27,15 @@ export function ChatLauncher({ placeholder = 'Describe how you’re feeling…',
           onSend={noop}
           onStop={noop}
           onAttach={noop}
+          // Same toolbar as chat (designer, 2026-10-28): Symptoms shows but does nothing here; a tap opens chat.
+          onSymptoms={noop}
           onFocusChange={noop}
           generating={false}
           placeholder={placeholder}
           voiceSample=""
         />
       </div>
-      <button type="button" className={styles.hit} onClick={onOpen} aria-label="Message Deborah" />
+      <button type="button" className={styles.hit} onClick={onOpen} aria-label="Message the Oracle" />
     </div>
   );
 }

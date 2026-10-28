@@ -4,7 +4,7 @@
  * @spec    docs/ux/F02e-guidance.md
  * @xref    web: apps/web/patterns/chat/GuidanceNextSteps — not built
  */
-import { HEALING_PLAN_VIEW_CTA } from '@shared/copy/healingPlan';
+import { HEALING_PLAN_VIEW_CTA, WELLNESS_PLAN_DISCLAIMER } from '@shared/copy/healingPlan';
 import { OptionList, OptionRow } from '@mobile/ui';
 import styles from './GuidanceNextSteps.module.css';
 
@@ -30,7 +30,6 @@ const ROWS: { id: GuidanceNextId; label: string; gate?: 'product' | 'plan' }[] =
   { id: 'followUp', label: 'Ask a follow-up' },
   { id: 'provider', label: 'Discuss with provider' },
   { id: 'save', label: 'Save summary' },
-  { id: 'labs', label: 'Upload labs or results' },
   { id: 'product', label: 'Buy recommended product', gate: 'product' },
   { id: 'plan', label: HEALING_PLAN_VIEW_CTA, gate: 'plan' },
 ];
@@ -52,6 +51,7 @@ export function GuidanceNextSteps({ onSelect, showProduct, showPlan, disabled }:
           </OptionRow>
         ))}
       </OptionList>
+      {showPlan && <p className={styles.disclaimer}>{WELLNESS_PLAN_DISCLAIMER}</p>}
     </div>
   );
 }

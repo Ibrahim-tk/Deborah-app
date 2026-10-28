@@ -74,8 +74,8 @@ export default function ReviewFacts() {
     const toggle = (id: string) =>
       setPicked((xs) => (!q?.multi ? [id] : id === 'none' ? ['none'] : xs.includes(id) ? xs.filter((x) => x !== id) : [...xs.filter((x) => x !== 'none'), id]));
     return (
-      <DerivedPage title={editing.label} composerPlaceholder="Ask Deborah about your profile…" onBack={() => setEditing(undefined)}>
-        <div className={styles.body} data-xref="M-2.13 · Review what Deborah noted">
+      <DerivedPage title={editing.label} composerPlaceholder="Ask Oracle about your profile…" onBack={() => setEditing(undefined)}>
+        <div className={styles.body} data-xref="M-2.13 · Review what the Oracle noted">
           {q ? (
             <>
               <p className={styles.prompt}>{q.prompt}</p>
@@ -98,8 +98,8 @@ export default function ReviewFacts() {
   }
 
   return (
-    <DerivedPage title="What Deborah noted" composerPlaceholder="Ask Deborah about your profile…">
-      <div className={styles.body} data-xref="M-2.13 · Review what Deborah noted">
+    <DerivedPage title="What the Oracle noted" composerPlaceholder="Ask Oracle about your profile…">
+      <div className={styles.body} data-xref="M-2.13 · Review what the Oracle noted">
         <p className={styles.intro}>{facts.length ? 'Tap anything that isn’t quite right. Nothing is saved until you confirm.' : 'Everything from this conversation has been handled.'}</p>
         <ul className={styles.list}>
           {facts.map((f) => (

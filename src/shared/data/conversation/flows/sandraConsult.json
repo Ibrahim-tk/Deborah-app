@@ -184,7 +184,7 @@
     },
     "pieces": {
       "type": "message",
-      "bot": "At 46, changing periods and night sweats can fit “the Pause”—Deborah’s term for the perimenopausal transition. Interrupted sleep could also be adding to the fatigue and brain fog.",
+      "bot": "At 46, changing periods and night sweats can fit “the Pause”—the Oracle’s term for the perimenopausal transition. Interrupted sleep could also be adding to the fatigue and brain fog.",
       "next": "habits"
     },
     "habits": {
@@ -247,7 +247,7 @@
         {
           "id": 2,
           "title": "The hypothalamic connection",
-          "body": "The hypothalamus helps regulate temperature and sleep. Deborah calls it the “maestro” of the hormonal symphony. Your symptoms alone can’t tell us exactly what is happening with it."
+          "body": "The hypothalamus helps regulate temperature and sleep. The Oracle calls it the “maestro” of the hormonal symphony. Your symptoms alone can’t tell us exactly what is happening with it."
         },
         {
           "id": 3,
@@ -271,7 +271,7 @@
         },
         {
           "id": 7,
-          "title": "A word from Deborah",
+          "title": "A word from the Oracle",
           "body": "“You’re noticing a pattern, and it deserves a closer look. You don’t have to figure out every piece before asking for help.”"
         }
       ],
@@ -844,7 +844,7 @@
         },
         {
           "id": 7,
-          "title": "A Word from Deborah",
+          "title": "A word from the Oracle",
           "body": "Sandra, you’re carrying so much: grief, a demanding job, and a body in transition. Of course you’re exhausted. This isn’t the end of feeling like yourself. It’s the Pause, and it can be the beginning of a stronger, wiser chapter. Let’s give your hypothalamus what it needs, and walk through this together."
         }
       ],

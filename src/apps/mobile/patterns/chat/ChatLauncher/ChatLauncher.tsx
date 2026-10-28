@@ -33,7 +33,7 @@ export function ChatLauncher({ placeholder = 'Describe how you’re feeling…',
           voiceSample=""
         />
       </div>
-      <button type="button" className={styles.hit} onClick={onOpen} aria-label="Message Deborah" />
+      <button type="button" className={styles.hit} onClick={onOpen} aria-label="Message the Oracle" />
     </div>
   );
 }

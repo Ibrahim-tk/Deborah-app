@@ -1,7 +1,7 @@
 /** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / FullChoicePillsGrid / QuestionChoices / ChipPicker. */
 import { FullChoicePills, FullChoicePillsGrid, InlineChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@web/patterns/widgets';
 import { DateWheel, Input, RulerSlider, YearWheel } from '@web/ui';
-import { list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
+import { choiceLabel, list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
@@ -50,7 +50,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
     case 'profileFor':
       return <ProfileForStep value={value} onPick={(v) => set(step.key, v)} />;
     case 'choice': {
-      const options = (step.choices ?? []).map((c) => ({ id: c.value, label: c.label }));
+      const options = (step.choices ?? []).map((c) => ({ id: c.value, label: choiceLabel(step, c.value, c.label, answers) }));
       const describeValue = step.describeValue;
       const describeKey = step.describeKey;
       const expandValues = step.expandValues;
@@ -63,6 +63,13 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
       // Other rows (incl. otherPuberty): stacked FullChoicePills + describe morph + expand follow-up.
       if (step.presentation === 'yesNo' || step.presentation === 'rows' || describeValue || expandValues) {
         const useGrid = step.key === 'gender';
+        // Gender grid: "Prefer not to say" then "Other" share the last row; Other's field opens below.
+        const gridOptions = useGrid && describeValue
+          ? [
+              ...options.filter((o) => o.id !== describeValue),
+              ...options.filter((o) => o.id === describeValue).map((o) => ({ ...o, label: 'Other' })),
+            ]
+          : options;
         const Pills = useGrid ? FullChoicePillsGrid : FullChoicePills;
         const expandPrompt = step.expandTitle ?? (expandStep ? titleFor(expandStep, answers) : 'Please specify');
         const expandOpts = expandChoices ?? [];
@@ -72,13 +79,13 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
           <div className={styles.choiceStack}>
             <Pills
               label={step.title}
-              options={options}
+              options={gridOptions}
               selected={value || undefined}
               describeValue={describeValue}
               describeLabel={step.describeLabel ?? 'Describe'}
               describePlaceholder={step.describePlaceholder ?? 'describe your situation'}
               describeText={describeKey ? (answers[describeKey] ?? '') : ''}
-              describeAlwaysSpan={step.describeAlwaysSpan}
+              describeAlwaysSpan={useGrid ? false : step.describeAlwaysSpan}
               onDescribeChange={describeKey ? (text) => set(describeKey, text) : undefined}
               onDescribeConfirm={
                 describeValue

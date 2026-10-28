@@ -147,7 +147,7 @@ export default function LogVisit() {
     <>
       <DerivedPage
         title={mode === 'read' ? saved?.title ?? 'After my visit' : 'Log your visit'}
-        composerPlaceholder="Ask Deborah about this visit…"
+        composerPlaceholder="Ask Oracle about this visit…"
         onBack={close}
         trailing={titleEnd}
       >

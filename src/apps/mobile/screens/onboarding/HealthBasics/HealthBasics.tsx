@@ -22,6 +22,7 @@ import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
 import { ConsentSheet } from './parts/ConsentSheet';
 import { BloomReveal } from './parts/BloomReveal';
+import { BloomReveal2, useTreeDev } from './parts/BloomReveal2';
 import { useTitleFade } from './parts/useTitleFade';
 import { useStepTransition } from './parts/useStepTransition';
 import { namedReasonsComplete } from '@mobile/patterns/widgets';
@@ -37,6 +38,9 @@ const CONFIRM_MS = 280;
 export default function HealthBasics() {
   const { presentSheet, pop } = useNav();
   const atDetails = useStartAtDetails();
+  // Feature flag (off by default): the layered tree, on only in the /internal/tree sandbox for now.
+  const newTree = useTreeDev((s) => s.useNewTree);
+  const Bloom = newTree ? BloomReveal2 : BloomReveal;
   // `start: 'details'` (internal Screens menu): skip "who is this for" as Myself, open on basic details.
   const [answers, setAnswers] = useState<Answers>(atDetails ? { profileFor: 'self', birthDate: DEFAULT_DOB } : { birthDate: DEFAULT_DOB });
   const answersRef = useRef(answers);
@@ -130,8 +134,8 @@ export default function HealthBasics() {
         </span>
       </header>
       {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
-      <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-        <BloomReveal className={styles.bloom} progress={bloomProgress(at, steps.length)} />
+      <div className={newTree ? `${styles.art} ${styles.art2}` : styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
+        <Bloom className={newTree ? styles.bloom2 : styles.bloom} progress={bloomProgress(at, steps.length)} />
       </div>
       {/* Progressive blur: from the bottom of the screen up to just above the title (height is measured). */}
       <div className={styles.fade} style={{ height: fade.height, '--feather': `${fade.feather}px` } as CSSProperties} aria-hidden="true"><i /><i /><i /></div>

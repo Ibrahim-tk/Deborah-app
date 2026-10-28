@@ -3,6 +3,7 @@ import { selectActiveProfile, useAppStore } from '@shared/store';
 import { IntakeCompletionCard } from '@web/patterns/widgets';
 import { healthProfileCompletion } from '@web/screens/onboarding/HealthBasics/healthProfile';
 import { useNav } from '@web/navigation';
+import { AttachmentsCard } from './AttachmentsCard';
 import { HealthDetails } from './HealthDetails';
 
 export function HubEmpty() {
@@ -15,6 +16,8 @@ export function HubEmpty() {
       {/* Designer, 2026-10-21: no empty block or "Start my first consultation" — the Home intake card instead. */}
       {progress < 1 && <IntakeCompletionCard progress={progress} onAction={() => push('M-2.14')} />}
       {/* Design request 2026-10-20: My Health holds the health profile; labs and documents live in their own tab. */}
+      {/* Design request 2026-10-27: lab reports and images open Attachments (M-9.12). */}
+      <AttachmentsCard />
       <HealthDetails />
       {/* "Popular starting points" removed (designer, 2026-10-21): not offered. */}
     </>

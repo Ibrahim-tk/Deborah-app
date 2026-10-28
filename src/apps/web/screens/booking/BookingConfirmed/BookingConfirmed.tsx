@@ -58,7 +58,7 @@ export default function BookingConfirmed() {
           >
             <Icon name="check" size={40} strokeWidth={1.5} />
           </MotionDiv>
-          <h1 className={styles.title}>Booked with Deborah</h1>
+          <h1 className={styles.title}>Booked with the Oracle</h1>
           <p className={styles.when}>
             {formatDayDate(booking.slot)} at {formatTime(booking.slot)}
           </p>

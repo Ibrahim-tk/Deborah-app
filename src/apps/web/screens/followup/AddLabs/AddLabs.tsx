@@ -87,7 +87,7 @@ export default function AddLabs() {
 
   return (
     <div data-xref="M-5.3 · Add lab results">
-      <DerivedPage contentWidth={560} title="Add your lab results" composerPlaceholder="Ask Deborah about your labs…">
+      <DerivedPage contentWidth={560} title="Add your lab results" composerPlaceholder="Ask Oracle about your labs…">
         {processing ? (
           // Full-screen reading step (design 2026-10-20); the page stays behind it.
           <ReportProcessing progress={progress} />

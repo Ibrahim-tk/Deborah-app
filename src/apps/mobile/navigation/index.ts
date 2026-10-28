@@ -1,6 +1,6 @@
 /** Mobile navigation public API for screens and hooks. */
 import { lazy } from 'react';
-export { useNav, useRoute, useScreenParams } from './useNav';
+export { RouteContext, useNav, useRoute, useScreenParams } from './useNav';
 export { useNavStore } from './nav.store';
 export { meta, registry } from './registry';
 export type { Params, Route, TabId } from './types';
@@ -10,3 +10,5 @@ export const WidgetLabScreen = lazy(() => import('@mobile/screens/lab/WidgetLab'
 export const DesignSystemScreen = lazy(() => import('@mobile/screens/lab/DesignSystem'));
 /** Simple Home layout lab (/internal/home). */
 export const SimpleHomeScreen = lazy(() => import('@mobile/screens/lab/SimpleHome'));
+/** Tree sandbox (/internal/tree): onboarding profile with BloomTree2 and a dev panel. */
+export const TreeLabScreen = lazy(() => import('@mobile/screens/lab/TreeLab'));

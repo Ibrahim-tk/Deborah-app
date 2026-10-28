@@ -8,7 +8,7 @@ import styles from './PageFooter.module.css';
 export function PageFooter() {
   return (
     <footer className={styles.root}>
-      <span>© {new Date().getFullYear()} Oracle Clinician. All rights reserved.</span>
+      <span>© {new Date().getFullYear()} Your Oracle. All rights reserved.</span>
       <nav className={styles.links}>
         <a className={styles.link} href="#">Privacy Policy</a>
         <a className={styles.link} href="#">Terms</a>

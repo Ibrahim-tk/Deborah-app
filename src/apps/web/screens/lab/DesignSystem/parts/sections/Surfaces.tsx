@@ -37,15 +37,15 @@ export function Surfaces() {
         </Specimen>
 
         <Specimen name="Card" path="ui/Card" note="tone: default · subtle · emphasis · danger. Pass onPress for a pressable card.">
-          <Variant label="default"><Card><p className="t-headline">Your health profile</p><p className="t-callout">Four answers help Deborah tailor her reply.</p></Card></Variant>
+          <Variant label="default"><Card><p className="t-headline">Your health profile</p><p className="t-callout">Four answers help the Oracle tailor her reply.</p></Card></Variant>
           <Variant label="subtle"><Card tone="subtle"><p className="t-callout">A quieter grouping surface.</p></Card></Variant>
           <Variant label="emphasis · pressable"><Card tone="emphasis" onPress={() => {}}><p className="t-callout">Tap me: pressed feedback, no shadow.</p></Card></Variant>
           <Variant label="danger"><Card tone="danger"><p className="t-callout">Reserved for urgent safety moments.</p></Card></Variant>
         </Specimen>
 
-        <Specimen name="Panel" path="ui/Panel" note="No border, no side stripe. Semantic tones always carry an icon and words. goldRule = “A Word from Deborah”.">
+        <Specimen name="Panel" path="ui/Panel" note="No border, no side stripe. Semantic tones always carry an icon and words. goldRule = “A word from the Oracle”.">
           <Variant label="linen · goldRule"><Panel goldRule><p className="t-body"><em>You are not broken. Your body is talking, and we are learning to listen.</em></p></Panel></Variant>
-          <Variant label="lilac"><Panel tone="lilac" icon="info"><p className="t-callout">Deborah reads your profile before she answers.</p></Panel></Variant>
+          <Variant label="lilac"><Panel tone="lilac" icon="info"><p className="t-callout">The Oracle reads your profile before she answers.</p></Panel></Variant>
           <Variant label="success"><Panel tone="success" icon="success"><p className="t-callout">Profile saved.</p></Panel></Variant>
           <Variant label="warning"><Panel tone="warning" icon="alert"><p className="t-callout">One answer is missing.</p></Panel></Variant>
           <Variant label="danger"><Panel tone="danger" icon="alert"><p className="t-callout">We couldn’t read that file. Try a clearer photo.</p></Panel></Variant>

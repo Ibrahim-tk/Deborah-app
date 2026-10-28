@@ -7,7 +7,7 @@
  * @usedBy  Health Basics (sex, pronouns, gender, otherPuberty); WidgetLab / DesignSystem specimens
  * OPEN: DESIGN.md bans pills; used here by design direction 2026-10-14.
  */
-import { type CSSProperties } from 'react';
+import { type CSSProperties, useLayoutEffect, useRef } from 'react';
 import { PillDescribeField } from '../PillDescribeField';
 import type { FullChoiceOption, FullChoicePillsProps } from '../FullChoicePills/FullChoicePills';
 import { Icon } from '@web/ui';
@@ -34,6 +34,37 @@ export function FullChoicePillsGrid({
 }: FullChoicePillsGridProps) {
   const dense = options.length > 4;
   const describing = Boolean(describeValue && selected === describeValue);
+  const morphRef = useRef<HTMLDivElement>(null);
+  const lastRect = useRef<DOMRect | null>(null);
+
+  // FLIP: glide the Other slot from its cell to the full-width row (and back) instead of jumping.
+  useLayoutEffect(() => {
+    const el = morphRef.current;
+    const prev = lastRect.current;
+    if (!el) return;
+    if (prev && !describing) el.firstElementChild?.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280, easing: 'ease-out' });
+    const next = el.getBoundingClientRect();
+    lastRect.current = next;
+    if (!prev || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (prev.width === next.width && prev.top === next.top && prev.left === next.left) return;
+    el.style.transition = 'none';
+    el.style.width = `${prev.width}px`;
+    el.style.height = `${prev.height}px`;
+    el.style.transform = `translate(${prev.left - next.left}px, ${prev.top - next.top}px)`;
+    void el.offsetWidth;
+    el.style.transition = 'transform 420ms var(--ease-out), width 420ms var(--ease-out), height 420ms var(--ease-out)';
+    el.style.width = `${next.width}px`;
+    el.style.height = `${next.height}px`;
+    el.style.transform = '';
+    const done = () => {
+      el.style.transition = '';
+      el.style.width = '';
+      el.style.height = '';
+      lastRect.current = el.getBoundingClientRect();
+    };
+    el.addEventListener('transitionend', done, { once: true });
+    return () => el.removeEventListener('transitionend', done);
+  }, [describing]);
 
   return (
     <div
@@ -52,12 +83,14 @@ export function FullChoicePillsGrid({
           return (
             <div
               key={o.id}
+              ref={isDescribe ? morphRef : undefined}
               className={styles.slot}
               style={{ '--i': i } as CSSProperties}
               data-describing={showField || undefined}
               data-span={span || undefined}
             >
               {showField ? (
+                <div className={styles.morphIn}>
                 <PillDescribeField
                   label={describeLabel}
                   placeholder={describePlaceholder}
@@ -66,6 +99,7 @@ export function FullChoicePillsGrid({
                   onChange={(text) => onDescribeChange?.(text)}
                   onConfirm={() => onDescribeConfirm?.()}
                 />
+                </div>
               ) : (
                 <button
                   type="button"

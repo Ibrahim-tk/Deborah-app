@@ -127,12 +127,13 @@ export default function CompleteIntake() {
             <div className={template.footer}>
               {step && (
                 <div className={template.navRow}>
-                  <Button type="button" variant="ghost" onClick={goBack}>Back</Button>
+                  {step.presentation === 'namedReasons' && !value.trim() ? (
+                    <Button type="button" variant="ghost" onClick={() => advance(step.none ?? 'None')}>Skip</Button>
+                  ) : (
+                    <Button type="button" variant="ghost" onClick={goBack}>Back</Button>
+                  )}
                   <Button type="submit" disabled={!canContinue}>{last ? 'Save profile' : 'Next'}</Button>
                 </div>
-              )}
-              {step?.presentation === 'namedReasons' && !value.trim() && (
-                <Button type="button" variant="ghost" fullWidth onClick={() => advance(step.none ?? 'None')}>Skip</Button>
               )}
             </div>
           </div>

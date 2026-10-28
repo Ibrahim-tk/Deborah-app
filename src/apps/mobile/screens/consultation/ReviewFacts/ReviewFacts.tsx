@@ -73,7 +73,7 @@ export default function ReviewFacts() {
     const toggle = (id: string) =>
       setPicked((xs) => (!q?.multi ? [id] : id === 'none' ? ['none'] : xs.includes(id) ? xs.filter((x) => x !== id) : [...xs.filter((x) => x !== 'none'), id]));
     return (
-      <div data-xref="M-2.13 · Review what Deborah noted">
+      <div data-xref="M-2.13 · Review what the Oracle noted">
         <Sheet title={editing.label} detent="large" footer={
           <div className={styles.footer}>
             <Button fullWidth disabled={q ? !picked.length : false} onClick={saveEdit}>Use this</Button>
@@ -100,8 +100,8 @@ export default function ReviewFacts() {
   }
 
   return (
-    <div data-xref="M-2.13 · Review what Deborah noted">
-      <Sheet title="What Deborah noted" detent="large" footer={
+    <div data-xref="M-2.13 · Review what the Oracle noted">
+      <Sheet title="What the Oracle noted" detent="large" footer={
         <div className={styles.footer}>
           {facts.length ? (
             <>

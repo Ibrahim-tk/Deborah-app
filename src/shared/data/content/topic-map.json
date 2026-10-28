@@ -4,5 +4,5 @@
   "thyroid-fatigue": { "topics": ["thyroid", "fatigue", "labs"], "reason": "you asked about your thyroid" },
   "lab-review": { "topics": ["labs"], "reason": "you shared your lab results" },
   "teen-irregular-periods": { "topics": ["teen", "cycles"], "reason": "you asked about irregular periods" },
-  "generic": { "topics": ["foundations"], "reason": "it's where Deborah starts with everyone" }
+  "generic": { "topics": ["foundations"], "reason": "it's where the Oracle starts with everyone" }
 }

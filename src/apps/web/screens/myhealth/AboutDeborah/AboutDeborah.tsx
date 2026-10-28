@@ -16,8 +16,8 @@ export default function AboutDeborah() {
   const placeholder = persona.status === 'placeholder' || undefined;
 
   return (
-    <DerivedPage title="About Deborah" composerPlaceholder="Ask Deborah about herself…">
-      <div className={styles.stack} data-xref="M-7.6 · About Deborah" data-placeholder={placeholder} data-status={persona.status}>
+    <DerivedPage title="About the Oracle" composerPlaceholder="Ask Oracle about herself…">
+      <div className={styles.stack} data-xref="M-7.6 · About the Oracle" data-placeholder={placeholder} data-status={persona.status}>
         <div className={styles.intro}>
           <DeborahBlob size={120} label={`Portrait of ${persona.name}`} />
           <h2 className={styles.name}>{persona.credentialsLine}</h2>
@@ -25,7 +25,7 @@ export default function AboutDeborah() {
         </div>
 
         <section className={styles.section} aria-labelledby="about-philosophy">
-          <h3 id="about-philosophy" className={styles.heading}>How Deborah works</h3>
+          <h3 id="about-philosophy" className={styles.heading}>How the Oracle works</h3>
           {persona.philosophy.map((p) => (
             <p key={p} className={styles.paragraph}>{p}</p>
           ))}

@@ -1,7 +1,7 @@
 {
   "status": "placeholder",
-  "brand": "Your Oracle Clinician · Genesis Health",
-  "preparedBy": "Deborah Maragopoulos, MN FNP",
+  "brand": "Your Oracle · Genesis Health",
+  "preparedBy": "Genesis Health Products",
   "dateLabel": "October 2026",
   "clinical": {
     "title": "Clinical Summary",
@@ -124,13 +124,12 @@
     }
   ],
   "resources": [
-    { "label": "Educational videos", "href": "https://youtube.com/c/DeborahMaragopoulosFNP", "external": true },
     { "label": "Fullscript dispensary", "href": "https://us.fullscript.com/welcome/dmaragopoulos-", "external": true },
     { "label": "CALM practice guide", "href": "https://genesisgold.com/blog/how-to-be-the-calm-in-your-life/", "external": true },
     { "label": "Lean body mass calculator", "href": "https://www.calculator.net/body-fat-calculator.html", "external": true }
   ],
   "signature": {
-    "name": "Deborah Maragopoulos",
-    "title": "MN, FNP · The Hormone Queen® · Genesis Health"
+    "name": "Genesis Health Products",
+    "title": "Genesis Health"
   }
 }

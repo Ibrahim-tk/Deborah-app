@@ -16,7 +16,7 @@ export const CLIENT_GUIDE: Record<string, string> = {
   'records-attachments':
     'Photos and files you’ve attached are here.',
   'healing-plan':
-    'This is the Healing Plan. Newest concern stays on top — check off actions as you go. Confirm when a concern is resolved. The letter below is Deborah’s reference.',
+    'This is the Wellness Plan. Newest concern stays on top — check off actions as you go. Confirm when a concern is resolved. The letter below is the Oracle’s reference.',
 };
 
 export type ClientGuideKey = keyof typeof CLIENT_GUIDE;

@@ -1,0 +1,82 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Intake v1.2 Ownership Proposal</title>
+<style>
+@page { size: A4; margin: 18mm; }
+body { font: 11.5px/1.5 Helvetica, Arial, sans-serif; color: #000; max-width: 820px; margin: 0 auto; padding: 0 16px; background: #fff; }
+h1 { font-size: 18px; margin: 16px 0 2px; }
+h2 { font-size: 13px; margin: 18px 0 6px; page-break-after: avoid; }
+h3 { font-size: 12px; margin: 10px 0 4px; }
+p { margin: 4px 0 8px; }
+table { width: 100%; border-collapse: collapse; margin: 4px 0 8px; }
+th, td { border: 1px solid #999; padding: 4px 6px; text-align: left; vertical-align: top; }
+th { font-weight: bold; }
+tr { page-break-inside: avoid; }
+ul { margin: 2px 0 8px; padding-left: 20px; }
+li { margin-bottom: 2px; }
+.c { text-align: center; width: 40px; }
+</style></head><body>
+
+<h1>Intake Spec v1.2: Design and Dev Responsibilities</h1>
+<p>Proposal from the Design team to the Delivery Lead<br>Your Oracle Clinician, 27 October 2026</p>
+
+<h2>Summary</h2>
+<p>Design owns how the intake looks and feels: wording, placement, screens and demo paths. The AI/Dev team owns the logic: which question is shown when, warning rules, and what the AI is told. Design work is 2 days.</p>
+
+<h2>1. Why we're proposing this</h2>
+<table>
+<tr><th>#</th><th>Reason</th></tr>
+<tr><td>1</td><td>The prototype is a design tool. It has no real backend and no real AI.</td></tr>
+<tr><td>2</td><td>Most of the v1.2 spec is conditional logic: which question appears for which body, age, stage or gender. The real engine has to do this anyway.</td></tr>
+<tr><td>3</td><td>Building the same logic in the prototype would create two versions of the rules, which would drift apart.</td></tr>
+<tr><td>4</td><td>Design decides how a question appears. The engine decides whether it appears.</td></tr>
+</table>
+
+<h2>2. Design team tasks (2 days)</h2>
+<table>
+<tr><th>Group</th><th>Task</th><th>Time</th></tr>
+<tr><td rowspan="5">Wording and options</td><td>Update gender, sex at birth and pronoun choices to v1.2</td><td rowspan="5">0.25 day</td></tr>
+<tr><td>Add "Prefer not to say" where the spec requires it</td></tr>
+<tr><td>Simpler wording for the teen intersex question</td></tr>
+<tr><td>Full list of 7 HRT types</td></tr>
+<tr><td>Decide where each question sits: sign-up, onboarding, Health Profile or chat</td></tr>
+<tr><td rowspan="6">New screen patterns</td><td>"Who are you asking about today?" picker</td><td rowspan="6">1 day</td></tr>
+<tr><td>Chat banners for child, older parent and general information chats</td></tr>
+<tr><td>Yes / No / N/A symptom row</td></tr>
+<tr><td>"Me / family" medical history grid</td></tr>
+<tr><td>Multi-select organ picker</td></tr>
+<tr><td>Include / exclude toggles on the provider summary</td></tr>
+<tr><td rowspan="4">Demo paths</td><td>Trans man profile</td><td rowspan="4">0.5 day</td></tr>
+<tr><td>Parent asking about a child</td></tr>
+<tr><td>Asking about a partner (general information only)</td></tr>
+<tr><td>Older parent with an urgent warning</td></tr>
+<tr><td>Handoff notes</td><td>One line per question: "shows when X; if Y, then Z", with a link to the spec</td><td>0.25 day</td></tr>
+</table>
+<p>The routing code added for the demo is a stand-in only and should not be used as the real rules.</p>
+
+<h2>3. AI / Dev team responsibilities</h2>
+<table>
+<tr><th>Area</th><th>What it means</th></tr>
+<tr><td>Question branching rules</td><td>Which question shows for which organs, sex at birth, stage, age and gender. Never route by gender alone. "Prefer not to say" never blocks.</td></tr>
+<tr><td>Chat type flag (A/B/C/D)</td><td>Self, child, older parent, partner. Set at the start of each chat and passed to the AI as fixed context. Never guessed or changed mid-chat.</td></tr>
+<tr><td>Warning levels by chat type</td><td>The same symptoms give different urgency depending on who the chat is about, including the older-parent UTI / sepsis rule.</td></tr>
+<tr><td>Answer logic</td><td>N/A pre-set on the symptom list, required vs. optional fields, no repeated questions between the profile and the chat.</td></tr>
+<tr><td>What the AI is told</td><td>Which profile answers go to the AI, pronouns and body terms in replies, and the content of the provider summary.</td></tr>
+<tr><td>Data and privacy</td><td>Encryption, no sensitive fields sent to analytics or Shopify, edit and delete for each answer, data handling for under-13s and proxies.</td></tr>
+<tr><td>Platform</td><td>Stripe payments, social login, and syncing new articles into the knowledge base.</td></tr>
+</table>
+
+<h2>4. Shared items</h2>
+<table>
+<tr><th>Item</th><th>Design</th><th>AI / Dev</th></tr>
+<tr><td>"Who are you asking about?"</td><td>Screen, wording, banners</td><td>Stores and passes the flag; selects the logic</td></tr>
+<tr><td>Symptom checklist</td><td>Yes / No / N/A row</td><td>Which items apply; N/A rules</td></tr>
+<tr><td>Provider summary</td><td>Layout and toggles</td><td>Content and PDF generation</td></tr>
+<tr><td>Teen and child forms</td><td>Layout, tone, grouping</td><td>Fields, age rules, legal limits</td></tr>
+</table>
+
+<h2>5. Effort</h2>
+<table>
+<tr><th>Team</th><th>Scope</th><th>Time</th></tr>
+<tr><td>Design</td><td>Wording, placement, screen patterns, demo paths, handoff notes</td><td>2 days</td></tr>
+<tr><td>AI / Dev</td><td>Branching rules, chat type flag, warning levels, AI context, privacy, platform</td><td>To be estimated by the AI/Dev team</td></tr>
+</table>
+</body></html>

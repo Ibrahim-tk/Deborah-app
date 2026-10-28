@@ -2,7 +2,7 @@
  * @screen  M-1.4 · Create your profile
  * @flow    F01 First launch & onboarding (design direction 2026-10-13 rev 5)
  * @presentation full-screen fade from Welcome (M-1.2) — naked, no sheet/container
- * @states  email · password · phone (optional) · code · you're in · sign-in (email · password · code · welcome back)
+ * @states  email · password · code · you're in · sign-in (email · password · code · welcome back)
  *          · forgot password (email · code · new password · password set)
  * @figma   —
  * @spec    docs/ux/F01-onboarding.md (OPEN: add M-1.4 to the spec)
@@ -18,7 +18,7 @@ import { consentDoc } from '@shared/data';
 import { loadScenario, useAppStore } from '@shared/store';
 import { cx } from '@shared/utils';
 import { Button, Input, TextReveal } from '@web/ui';
-import { PhoneField, type PhoneValue } from '@web/patterns/widgets';
+import type { PhoneValue } from '@web/patterns/widgets';
 import { countryFor, isValidPhone, type CountryCode } from '@shared/utils/phone';
 import { useNav, useScreenParams } from '@web/navigation';
 import { CodeStep } from '@web/screens/plans/CreateAccount/parts/CodeStep';
@@ -72,7 +72,7 @@ export default function CreateProfile() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const [phone, setPhone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
+  const [phone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string; phone?: string }>({});
 
   // Outgoing question fades up, then the next fades in.
@@ -209,8 +209,6 @@ export default function CreateProfile() {
                         setErrors((x) => ({ ...x, confirm: undefined }));
                       }}
                     />
-                    {/* Optional — leave blank to skip. */}
-                    <PhoneField value={phone} error={errors.phone} onChange={(v) => { setPhone(v); setErrors((x) => ({ ...x, phone: undefined })); }} />
                   </>
                 )}
                 <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>

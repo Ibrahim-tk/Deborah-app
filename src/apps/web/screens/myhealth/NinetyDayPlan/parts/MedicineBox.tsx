@@ -25,12 +25,14 @@ export function MedicineBox({ actions, hasMedicines, onToggle, onCheckInteractio
   const wells = WELLS.map((well) => ({ ...well, actions: actions.filter((a) => a.well === well.id) })).filter((well) => well.actions.length);
 
   if (!actions.length) {
-    return <p className={styles.empty}>Deborah hasn’t added actions for this yet.</p>;
+    return <p className={styles.empty}>The Oracle hasn’t added actions for this yet.</p>;
   }
 
   return (
     <div className={styles.box}>
-      <ProgressBar value={actions.length ? done / actions.length : 0} label="Actions done" valueText={`${done} of ${actions.length}`} />
+      <div className={styles.progress}>
+        <ProgressBar value={actions.length ? done / actions.length : 0} label="Actions done" valueText={`${done} of ${actions.length}`} />
+      </div>
       {showSafety && (
         <MedicationSafetyCard
           body={guardrailsData.medication.body}
@@ -45,8 +47,9 @@ export function MedicineBox({ actions, hasMedicines, onToggle, onCheckInteractio
             {well.actions.map((action) => (
               <li key={action.id}>
                 <Checkbox
+                  round
                   checked={action.done}
-                  label={action.text}
+                  label={<span className={styles.actionText}>{action.text}</span>}
                   description={action.note}
                   onChange={() => onToggle(action.id)}
                 />

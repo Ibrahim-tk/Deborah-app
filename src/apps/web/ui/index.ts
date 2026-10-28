@@ -59,3 +59,4 @@ export { trapFocus } from './focusTrap';
 export * from './CodeInput';
 export * from './TopBanner';
 export * from './FluxLoader';
+export * from './Lightbox';

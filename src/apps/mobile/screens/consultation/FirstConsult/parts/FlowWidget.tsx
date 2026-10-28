@@ -4,7 +4,7 @@
  */
 import type { FlowOption, FlowWidget as Widget } from '@shared/types/flow';
 import { Button } from '@mobile/ui';
-import { ConfirmCard, MoodScale, ReminderCard, ScaleCheck, SlotPicker, UploadCard } from '@mobile/patterns/widgets';
+import { ConfirmCard, MoodScale, ReminderCard, ScaleCheck, SlotPicker } from '@mobile/patterns/widgets';
 import styles from '../FirstConsult.module.css';
 
 const TYPES = ['mood_scale', 'scale_check', 'upload_card', 'slot_picker', 'confirm_card', 'reminder_card'];
@@ -29,7 +29,7 @@ export function FlowWidget({ widget: w, active, say, onPick }: FlowWidgetProps) 
       case 'scale_check':
         return <ScaleCheck title={w.title ?? ''} low={w.low ?? 'Not at all'} high={w.high ?? 'Completely'} words={w.steps} onDone={(v, word) => answer(word, String(v))} />;
       case 'upload_card':
-        return <UploadCard onUploaded={(f) => answer(`Uploaded ${f}`, f)} />;
+        return null; // Oct 27: no uploads in the app
       case 'slot_picker':
         return <SlotPicker title={w.title ?? ''} meta={w.meta} days={DAYS} onPick={(day, time) => answer(`${day}, ${time}`)} />;
       case 'confirm_card':

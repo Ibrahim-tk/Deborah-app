@@ -49,7 +49,7 @@ export function CrisisSupportCard({
         </span>
         <span className={styles.recordText}>
           <span className={styles.recordTitle}>Support is available</span>
-          <span className={styles.recordMeta}>Call, text, or keep talking with Deborah</span>
+          <span className={styles.recordMeta}>Call, text, or keep talking with the Oracle</span>
         </span>
         <Icon name="chevron" size={18} className={styles.recordChevron} />
       </button>
@@ -70,7 +70,7 @@ export function CrisisSupportCard({
               <p className={styles.note}>{moreSupport[1]}</p>
             )}
             <Button variant="ghost" fullWidth onClick={keep}>
-              Keep talking with Deborah
+              Keep talking with the Oracle
             </Button>
           </div>
         </div>

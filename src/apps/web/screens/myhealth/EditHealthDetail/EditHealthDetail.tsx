@@ -53,7 +53,7 @@ export default function EditHealthDetail() {
   const title = step ? titleFor(step, answers) : 'Not applicable';
 
   return (
-    <DerivedPage title={title} composerPlaceholder="Ask Deborah about your health profile…">
+    <DerivedPage title={title} composerPlaceholder="Ask Oracle about your health profile…">
       <div className={styles.body} data-xref="M-7.7 · Edit health detail">
         {step ? <StepBody step={step} answers={answers} set={set} advance={advance} /> : <p className={styles.note}>This question doesn’t apply to this profile right now.</p>}
         {step && !tap && <Button fullWidth onClick={() => save(ref.current)}>Save</Button>}

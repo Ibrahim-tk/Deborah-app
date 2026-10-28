@@ -2,7 +2,7 @@
   "M-2.0": {
     "title": "Home",
     "flow": "F02 Core consultation",
-    "note": "The three suggestion chips under “How are you feeling today?” are different demo stories — tap them one by one to walk a real chat, then follow into Visit Notes after an answer. Typing free text works too. From here you can also open My Health, My Notes, labs, or the Healing Plan card when one exists."
+    "note": "The three suggestion chips under “How are you feeling today?” are different demo stories — tap them one by one to walk a real chat, then follow into Visit Notes after an answer. Typing free text works too. From here you can also open My Health, My Notes, labs, or the Wellness Plan card when one exists."
   },
   "M-1.1": {
     "title": "Splash",
@@ -12,7 +12,7 @@
   "M-1.2": {
     "title": "Welcome",
     "flow": "F01 First launch & onboarding",
-    "note": "Maria meets Deborah for the first time. The aim is a warm, human first contact that asks only for her first name and makes clear she is talking to an AI version of Deborah. Get started accepts the terms and opens her first conversation. Sign in is there for returning users."
+    "note": "Maria meets the Oracle for the first time. The aim is a warm, human first contact that asks only for her first name and makes clear she is talking to an AI. Get started accepts the terms and opens her first conversation. Sign in is there for returning users."
   },
   "M-1.3": {
     "title": "Before we begin (consent)",
@@ -22,17 +22,17 @@
   "M-2.1": {
     "title": "Conversation",
     "flow": "F02 Core consultation",
-    "note": "This is the consultation. Suggestions and replies drive a scripted flow: light intake, then Deborah’s answer, then What’s next. From What’s next you can open the Healing Plan, upload labs, or move into Visit Notes. Try one Home suggestion all the way through to see the full path."
+    "note": "This is the consultation. Suggestions and replies drive a scripted flow: light intake, then the Oracle’s answer, then What’s next. From What’s next you can open the Wellness Plan, upload labs, or move into Visit Notes. Try one Home suggestion all the way through to see the full path."
   },
   "M-2.7": {
     "title": "Shop (in-app browser)",
     "flow": "F02 Core consultation",
-    "note": "Maria tapped a product from an answer, her 90-day plan or a piece of content. A mock Genesis Gold page opens in an in-app browser, labelled 'Formulated by Deborah', with ?ref=app. Shopping is a demo and checkout happens on the real site. Done takes her back to exactly where she was."
+    "note": "Maria tapped a product from an answer, her 90-day plan or a piece of content. A mock Genesis Gold page opens in an in-app browser, labelled 'Formulated by Genesis Health Products', with ?ref=app. Shopping is a demo and checkout happens on the real site. Done takes her back to exactly where she was."
   },
   "M-2.8": {
     "title": "Follow-up opt-in",
     "flow": "F02 Core consultation",
-    "note": "This sheet appears right after Maria's first completed answer. Deborah offers to check in later so they can build on today. Maria picks a reminder interval. Our own friendly prompt always comes before the system permission alert. Not now dismisses it without any pressure."
+    "note": "This sheet appears right after Maria's first completed answer. The Oracle offers to check in later so they can build on today. Maria picks a reminder interval. Our own friendly prompt always comes before the system permission alert. Not now dismisses it without any pressure."
   },
   "M-4.1": {
     "title": "Free limit reached",
@@ -62,12 +62,12 @@
   "M-5.1": {
     "title": "Lock screen notification",
     "flow": "F05 Follow-up & return with labs",
-    "note": "Weeks later, Deborah reaches out with a generic nudge: 'How are you feeling this week?'. The lock screen never shows health details. Tapping it unlocks the phone and deep-links into a check-in conversation for the right profile. It is the moment that brings Maria back."
+    "note": "Weeks later, the Oracle reaches out with a generic nudge: 'How are you feeling this week?'. The lock screen never shows health details. Tapping it unlocks the phone and deep-links into a check-in conversation for the right profile. It is the moment that brings Maria back."
   },
   "M-5.3": {
     "title": "Add lab results",
     "flow": "F05 Follow-up & return with labs",
-    "note": "Upload or enter labs here (photo, PDF, or typed values). You’ll confirm the numbers on the next screen; Deborah can then use them in chat. This is simulated reading — not real OCR."
+    "note": "Upload or enter labs here (photo, PDF, or typed values). You’ll confirm the numbers on the next screen; the Oracle can then use them in chat. This is simulated reading — not real OCR."
   },
   "M-5.4": {
     "title": "Confirm lab results",
@@ -102,47 +102,47 @@
   "M-7.1": {
     "title": "My Health (empty)",
     "flow": "F07 My Health hub",
-    "note": "The active profile hasn't completed a consultation yet. The hub is never blank: it explains that her health picture builds as she talks with Deborah and offers popular starting points. Start my first consultation opens the Ask tab. The hub fills in automatically after her first answer."
+    "note": "The active profile hasn't completed a consultation yet. The hub is never blank: it explains that her health picture builds as she talks with the Oracle and offers popular starting points. Start my first consultation opens the Ask tab. The hub fills in automatically after her first answer."
   },
   "M-7.2": {
     "title": "My Health hub",
     "flow": "F07 My Health hub",
-    "note": "This person’s health home between chats. The Healing Plan card opens the living plan. Check-in and health profile sit underneath. Tap the plan card to see concerns, actions, and Deborah’s letter."
+    "note": "This person’s health home between chats. The Wellness Plan card opens the living plan. Check-in and health profile sit underneath. Tap the plan card to see concerns, actions, and the Oracle’s letter."
   },
   "M-7.3": {
-    "title": "My Healing Plan",
+    "title": "Your Wellness Plan",
     "flow": "F07 My Health hub",
-    "note": "This is the living Healing Plan. Newest concern stays open at the top; earlier ones stay collapsed underneath. Check off actions in the wells — that only tracks progress, it does not close the concern. Tap “This concern is resolved” and confirm when that topic is done; the name stays under Resolved. The clinical letter below is Deborah’s standing reference."
+    "note": "This is the living Wellness Plan. Newest concern stays open at the top; earlier ones stay collapsed underneath. Check off actions in the wells — that only tracks progress, it does not close the concern. Tap “This concern is resolved” and confirm when that topic is done; the name stays under Resolved. The clinical letter below is the Oracle’s standing reference."
   },
   "M-7.4": {
     "title": "Content detail",
     "flow": "F07 My Health hub",
-    "note": "Maria opens a video or article Deborah picked for her, with a line explaining why she is seeing it. Ask Deborah about this takes her into chat with the composer already filled in, so learning turns into conversation. A related product, if there is one, opens the shop."
+    "note": "Maria opens a video or article the Oracle picked for her, with a line explaining why she is seeing it. Ask Oracle about this takes her into chat with the composer already filled in, so learning turns into conversation. A related product, if there is one, opens the shop."
   },
   "M-7.5": {
-    "title": "Deborah's library",
+    "title": "The Oracle's library",
     "flow": "F07 My Health hub",
-    "note": "Maria can browse all of Deborah's content: search it, filter by For you, All or New, or by topic. Empty results gently send her to ask Deborah directly. This screen also links to the Facebook community and to About Deborah."
+    "note": "Maria can browse all of the Oracle's content: search it, filter by For you, All or New, or by topic. Empty results gently send her to ask the Oracle directly. This screen also links to the Facebook community and to About the Oracle."
   },
   "M-7.6": {
-    "title": "About Deborah",
+    "title": "About the Oracle",
     "flow": "F07 My Health hub",
     "note": "This screen tells Maria who is behind the app: Deborah's portrait, credentials, philosophy and books. Its job is to build trust in the real person. The main action is Book a consultation with Deborah. The bio and photography are placeholders until Deborah approves them."
   },
   "M-8.2": {
     "title": "Booking info",
-    "flow": "F08 Book Deborah",
-    "note": "When the app isn't enough, Maria can book Deborah herself. This screen explains what to expect from the 50-minute video visit, asks which state she lives in (for licensing) and offers an opt-in to share her app history. Choose a time leads to the scheduler. The price is still to be decided."
+    "flow": "F08 Consult with support team",
+    "note": "When the app isn't enough, Maria can reach the support team herself. This screen explains what to expect from the 50-minute video visit, asks which state she lives in (for licensing) and offers an opt-in to share her app history. Choose a time leads to the scheduler. The price is still to be decided."
   },
   "M-8.3": {
     "title": "Scheduler",
-    "flow": "F08 Book Deborah",
+    "flow": "F08 Consult with support team",
     "note": "Maria picks a day and an available slot. This is a simulated, native-feeling scheduler. A summary bar confirms her choice, and Confirm booking books it, sets a reminder for the day before and replaces this screen with the confirmation."
   },
   "M-8.4": {
     "title": "Booking confirmed",
-    "flow": "F08 Book Deborah",
-    "note": "'Booked with Deborah', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
+    "flow": "F08 Consult with support team",
+    "note": "'Booked with the Oracle', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
   },
   "M-9.1": {
     "title": "My Notes",
@@ -152,17 +152,17 @@
   "M-9.2": {
     "title": "Consultation detail",
     "flow": "F09 My Health records",
-    "note": "Maria rereads a past consultation: the transcript, the collapsed intake summary and Deborah's full 7-section answer. She can download a PDF to bring to her provider, share it, or continue the chat, which reopens that conversation and Deborah remembers it."
+    "note": "Maria rereads a past consultation: the transcript, the collapsed intake summary and the Oracle's full 7-section answer. She can download a PDF to bring to her provider, share it, or continue the chat, which reopens that conversation and the Oracle remembers it."
   },
   "M-9.4": {
     "title": "Note editor",
     "flow": "F09 My Health records",
-    "note": "Maria writes down questions before a visit, notes after a visit, or a saved answer. Question notes render as a checklist. Notes save automatically, so nothing gets lost. It isn't in the wireframes, and it's still open whether Deborah may read these notes later."
+    "note": "Maria writes down questions before a visit, notes after a visit, or a saved answer. Question notes render as a checklist. Notes save automatically, so nothing gets lost. It isn't in the wireframes, and it's still open whether the Oracle may read these notes later."
   },
   "M-9.5": {
     "title": "Lab report",
     "flow": "F09 My Health records",
-    "note": "A saved lab report. Ask Deborah about these labs to pull them into a conversation so she has the numbers as context. You can also edit or delete from the menu."
+    "note": "A saved lab report. Ask Oracle about these labs to pull them into a conversation so she has the numbers as context. You can also edit or delete from the menu."
   },
   "M-9.6": {
     "title": "PDF preview",
@@ -182,7 +182,7 @@
   "M-10.1": {
     "title": "Account",
     "flow": "F10 Account, privacy & data",
-    "note": "This is one calm place for Maria's plan, family profiles, notifications, privacy, legal and About Deborah. Trial users see a Choose a plan card at the top. Sign out keeps her data in her account and returns her to Welcome."
+    "note": "This is one calm place for Maria's plan, family profiles, notifications, privacy, legal and About the Oracle. Trial users see a Choose a plan card at the top. Sign out keeps her data in her account and returns her to Welcome."
   },
   "M-10.2": {
     "title": "Privacy & data",
@@ -207,11 +207,11 @@
   "M-11.1": {
     "title": "Documents and reports",
     "flow": "F11 Documents and reports",
-    "note": "Upload documents and reports here, or open one you already saved. You can bring a document into chat later so Deborah has that context when she answers."
+    "note": "Upload documents and reports here, or open one you already saved. You can bring a document into chat later so the Oracle has that context when she answers."
   },
   "M-11.3": {
     "title": "Upload a document",
     "flow": "F11 Documents and reports",
-    "note": "Add a document now. It lands in Documents; from there you can ask Deborah about it in chat so she answers with that file in mind. Upload is simulated in the prototype."
+    "note": "Add a document now. It lands in Documents; from there you can ask the Oracle about it in chat so she answers with that file in mind. Upload is simulated in the prototype."
   }
 }

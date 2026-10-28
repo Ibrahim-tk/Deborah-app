@@ -24,7 +24,7 @@ export const EXTENDED_JOURNEYS: ManualJourney[] = [
   {
     id: 'labs-analysis', name: 'Lab-informed answer and records', persona: 'Maria', scenario: 'S08', status: 'PARTIALLY IMPLEMENTED',
     goal: 'Inspect a confirmed report and its lab-informed answer.', behavior: 'Seeded lab values and scripted analysis; not AI document understanding.', evidence: ['src/apps/mobile/screens/records/LabReport/', 'src/shared/engine/labs.ts'], gaps: ['No actual AI analysis or automatic general medical-document-to-profile extraction.'],
-    steps: [s('Open stored labs', 'From My Health open records → Labs, then a report.', 'Stored confirmed values appear for this profile.', 'M-9.5'), s('Ask about results', 'Choose Ask Deborah about these labs.', 'A lab-informed consultation opens or generates using the confirmed values.', 'M-2.1'), s('Check output', 'Read the answer and its referenced lab values; handle any review card.', 'Lab references match the local report. Health facts are confirmed separately; no unreviewed document extraction is implied.')],
+    steps: [s('Open stored labs', 'From My Health open records → Labs, then a report.', 'Stored confirmed values appear for this profile.', 'M-9.5'), s('Ask about results', 'Choose Ask Oracle about these labs.', 'A lab-informed consultation opens or generates using the confirmed values.', 'M-2.1'), s('Check output', 'Read the answer and its referenced lab values; handle any review card.', 'Lab references match the local report. Health facts are confirmed separately; no unreviewed document extraction is implied.')],
   },
   {
     id: 'visit-notes', name: 'Doctor visit notes', persona: 'Maria', scenario: 'S08', status: 'PARTIALLY IMPLEMENTED',
@@ -45,15 +45,15 @@ export const EXTENDED_JOURNEYS: ManualJourney[] = [
   },
   {
     id: 'log-visit', name: 'Log your visit — after the appointment', persona: 'Maria', scenario: 'S25', status: 'IMPLEMENTED',
-    goal: 'Tell Deborah how a provider visit went, review what she noted, update the health profile and talk it through.',
+    goal: 'Tell the Oracle how a provider visit went, review what she noted, update the health profile and talk it through.',
     behavior: 'Keyword extraction (no AI) over typed text; at most three skippable follow-ups; nothing reaches the profile without Save. Local notifications only.',
     evidence: ['src/shared/engine/debrief.ts', 'src/shared/engine/visitExtract.ts', 'src/shared/engine/visitOutcome.ts', 'src/apps/mobile/screens/records/LogVisit/', 'docs/ux/F09c-log-visit.md'],
     gaps: ['Extraction is rule-based and misses unusual phrasing. Medication card and out-of-scope rules apply unchanged inside the debrief (OPEN in F09c › Safety). No voice transcript of the visit itself.'],
     steps: [
-      s('Open from notification', 'Load S25. Tap “Deborah: How did your appointment go?” on the lock screen.', 'Visit debrief opens: “Welcome back, Maria. How did your visit go?” with Tell Deborah · Fill it in myself · Not now.', 'M-2.1', ['Home → “How did your visit go?”', 'Records → New note → Log a provider visit', 'Chat: “I just saw my endocrinologist…” → Log my visit']),
-      s('Tell Deborah', 'Tap Tell Deborah. Send: “Saw my gynecologist. She said it’s probably perimenopause. She ordered FSH. She started me on progesterone cream and told me to stop magnesium glycinate.”', 'No follow-up questions needed. Summary card lists provider, what they said, FSH (ordered), both medication changes and two health profile updates.', 'M-2.1', ['Shorter message → up to 3 follow-ups, each with Skip', '“Should I stop taking my magnesium?” → medication card (S25d), nothing logged']),
+      s('Open from notification', 'Load S25. Tap “the Oracle: How did your appointment go?” on the lock screen.', 'Visit debrief opens: “Welcome back, Maria. How did your visit go?” with Tell the Oracle · Fill it in myself · Not now.', 'M-2.1', ['Home → “How did your visit go?”', 'Records → New note → Log a provider visit', 'Chat: “I just saw my endocrinologist…” → Log my visit']),
+      s('Tell the Oracle', 'Tap Tell the Oracle. Send: “Saw my gynecologist. She said it’s probably perimenopause. She ordered FSH. She started me on progesterone cream and told me to stop magnesium glycinate.”', 'No follow-up questions needed. Summary card lists provider, what they said, FSH (ordered), both medication changes and two health profile updates.', 'M-2.1', ['Shorter message → up to 3 follow-ups, each with Skip', '“Should I stop taking my magnesium?” → medication card (S25d), nothing logged']),
       s('Review and save', 'Tap Review and save. Untick “Remove magnesium glycinate”. Save.', 'Toast “Saved — health profile updated”. Chat: “Saved to My Visit Notes, and your health profile has 1 change.”', 'M-9.8', ['Looks right, save → saves from chat and applies all updates', 'Close with edits → Save this visit? alert']),
-      s('Discuss with Deborah', 'Tap Yes, let’s talk, then send “I keep waking up hot at night”.', 'A normal (counted) consultation starts in the same thread; its answer opens with “After your gynecology visit on Oct 22, 2026, you noted: …”.', 'M-2.1', ['Not now → saved, chat ends']),
+      s('Discuss with the Oracle', 'Tap Yes, let’s talk, then send “I keep waking up hot at night”.', 'A normal (counted) consultation starts in the same thread; its answer opens with “After your gynecology visit on Oct 22, 2026, you noted: …”.', 'M-2.1', ['Not now → saved, chat ends']),
       s('Reopen', 'Open My Health records → Visit Notes → After my gynecology visit (or load S25c).', 'Read mode with Edit · Share · Delete; “Your notes before the visit” opens the linked brief.', 'M-9.8'),
     ],
   },
@@ -90,7 +90,7 @@ export const EXTENDED_JOURNEYS: ManualJourney[] = [
   {
     id: 'booking', name: 'Escalation and booking', persona: 'Maria', scenario: 'S12', status: 'IMPLEMENTED',
     goal: 'Follow the human consultation path.', behavior: 'Local availability, sharing checkbox and payment simulation; no real appointment.', evidence: ['src/apps/mobile/screens/booking/', 'docs/ux/F08-book-deborah.md'], gaps: ['No real telehealth availability or booking service.'],
-    steps: [s('Trigger escalation', 'Send “I still need help with my sleep”. Answer any displayed questions until the escalation offer.', 'A route to booking Deborah is offered.', 'M-2.1'), s('Select a slot', 'Follow the booking offer, choose a displayed date/time and continue.', 'Booking details and history-sharing choice appear.', 'M-8.2'), s('Confirm mock appointment', 'Review details; sharing is off unless selected. Complete the simulated booking.', 'A local confirmation appears, without making a real appointment.', 'M-8.4')],
+    steps: [s('Trigger escalation', 'Send “I still need help with my sleep”. Answer any displayed questions until the escalation offer.', 'A route to booking the Oracle is offered.', 'M-2.1'), s('Select a slot', 'Follow the booking offer, choose a displayed date/time and continue.', 'Booking details and history-sharing choice appear.', 'M-8.2'), s('Confirm mock appointment', 'Review details; sharing is off unless selected. Complete the simulated booking.', 'A local confirmation appears, without making a real appointment.', 'M-8.4')],
   },
   ...([
     ['emergency', 'Emergency safety', 'I have chest pain and trouble breathing', 'Emergency response; no normal answer, product or consultation charge.'],

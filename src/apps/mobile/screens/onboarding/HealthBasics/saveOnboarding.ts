@@ -93,6 +93,8 @@ function collected(a: Answers, now: Date) {
   if (a.hrtTaken) care.hrtTaken = a.hrtTaken;
 
   if (a.sex) care.sexSelection = a.sex;
+  // Oct 27 optional sex-characteristics section: kept with the care context, never sold or shared.
+  for (const k of SEX_CHARACTERISTIC_KEYS) if (a[k]?.trim()) care[k] = a[k]!.trim();
   if (pronouns) care.pronouns = pronouns;
 
   const healthPatch = {
@@ -146,6 +148,9 @@ function collected(a: Answers, now: Date) {
 }
 
 /** Writes the onboarding profile; returns the profile the first chat should open as. */
+/** Oct 27 conditional section answers (optional, health profile). */
+export const SEX_CHARACTERISTIC_KEYS = ['sexVariation', 'sexVariationName', 'sexCharacteristics', 'hormoneTherapy', 'hormoneTherapyPrescribed', 'sexProcedures'] as const;
+
 export function saveOnboarding(a: Answers): string {
   const s = useAppStore.getState();
   const now = nowFrom(s);

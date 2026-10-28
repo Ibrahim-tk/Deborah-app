@@ -161,7 +161,7 @@ export default function FirstConsult() {
 
   const action = (value: string) => {
     if (value === 'book_request') return toast('Request sent. Watch your email.');
-    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with Deborah`); return push('M-8.2'); }
+    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with the Oracle`); return push('M-8.2'); }
     // Miro Step 5: Visit prep / §7 save land on the structured provider brief (M-9.7).
     if (value === 'visit_notes' || value === 'save') {
       const id = saveProviderBrief();
@@ -220,6 +220,7 @@ export default function FirstConsult() {
       <Aura />
       <GradientShift />
       <ChatHeader
+        disclosure={started}
         onBack={pop}
         onNewChat={() => openAsk()}
         canStartNew={started}
@@ -229,7 +230,7 @@ export default function FirstConsult() {
         <div className={styles.column} data-started={started || undefined} data-placeholder>
           {/* Before she answers: the orb and serif greeting sit centred, as on the empty chat (M-2.1). Once she
               answers, a small orb moves top left, the greeting becomes the first message and the chat runs on. */}
-          <div className={styles.orb}><DeborahBlob size={started ? 48 : 112} label="Deborah" /></div>
+          <div className={styles.orb}><DeborahBlob size={started ? 48 : 112} label="The Oracle" /></div>
           {entries.map((e) => (
             <div key={e.id} data-entry={e.kind} className={styles.entry}>
             <EntryView
@@ -273,8 +274,8 @@ export default function FirstConsult() {
             </div>
           ))}
           {consent.widget}
-          {typing && <ThinkingIndicator label="Deborah is writing…" />}
-          {/* No "Keep talking with Deborah" CTA at the end (design 2026-10-21): the composer is right there. */}
+          {typing && <ThinkingIndicator label="The Oracle is writing…" />}
+          {/* No "Keep talking with the Oracle" CTA at the end (design 2026-10-21): the composer is right there. */}
         </div>
       </div>
       <div className={styles.bottom}>

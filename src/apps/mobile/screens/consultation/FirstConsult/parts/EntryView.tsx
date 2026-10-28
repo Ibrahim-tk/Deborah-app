@@ -1,10 +1,12 @@
 /** One line of the scripted consult, drawn with the chat's own patterns (M-2.1) plus a few flow widgets. */
+import { isMinor } from '@shared/engine';
+import { selectActiveProfile, useAppStore } from '@shared/store';
 import { findProduct } from '@shared/data';
-import { formatShortDate } from '@shared/utils';
+import { formatShortDate, nowFrom } from '@shared/utils';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { Button, Panel, TextReveal } from '@mobile/ui';
 import { AfterGuidanceTrail, AnswerSections, ClosingLine, MessageBubble, SuggestionList } from '@mobile/patterns/chat';
-import { ProductCard } from '@mobile/patterns/commerce';
+import { ProductCard, ProductDisclosure } from '@mobile/patterns/commerce';
 import { EmergencyInterrupt, EscalationCard } from '@mobile/patterns/safety';
 import { buildAnswer } from './buildAnswer';
 import { FlowWidget } from './FlowWidget';
@@ -38,6 +40,8 @@ export interface EntryViewProps {
 }
 
 export function EntryView({ entry, active, say, onPick, onAction, renderPrep, renderNotesCard, onAppointment, onCreateVisitNotes, selection, onSelect }: EntryViewProps) {
+  // Oct 27: no product cards or mentions for minors (13–17 and children).
+  const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
   if (entry.kind === 'user') return <MessageBubble role="user" text={entry.text} />;
   if (entry.kind === 'thinking') return <ThinkingSteps steps={entry.steps} durationMs={entry.durationMs} />;
   if (entry.kind === 'end') return null;
@@ -57,7 +61,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
           wordSlot={<Button variant="secondary" leadingIcon="note" fullWidth onClick={() => onAction('visit_notes')}>Save to Visit notes</Button>}
           productSlot={
             product && answer.product
-              ? <ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} />
+              ? !minor && <ProductCard product={product} productRef={answer.product} onShop={() => onAction('exit_product')} />
               : undefined
           }
         />
@@ -101,7 +105,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
   if (node.type === 'safety') {
     return (
       <MessageBubble role="deborah" text={entry.text} turnStart>
-        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Book a consult with Deborah', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
+        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Consult with support team', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
       </MessageBubble>
     );
   }
@@ -111,12 +115,12 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
     const [book, notNow] = w.options ?? [];
     return (
       <MessageBubble role="deborah" text={entry.text} turnStart>
-        {/* Without options (the safety note) the tile stays as a standing path to Deborah while the chat moves on. */}
+        {/* Without options (the safety note) the tile stays as a standing path to the Oracle while the chat moves on. */}
         <EscalationCard
           sheet={false}
           body={entry.text}
           dismissed={!book || !active}
-          onBook={() => onPick(node, [book ?? { label: 'Book a consult with Deborah', next: 'exit_booking' }])}
+          onBook={() => onPick(node, [book ?? { label: 'Consult with support team', next: 'exit_booking' }])}
           onDismiss={() => notNow && onPick(node, [notNow])}
         />
       </MessageBubble>
@@ -133,7 +137,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
   const choices = custom || w?.type === 'call_sheet' ? undefined : w?.options;
   return (
     <MessageBubble role="deborah" text={entry.text} turnStart>
-      {/* What Deborah already knows from intake, as plain text (no tags). */}
+      {/* What the Oracle already knows from intake, as plain text (no tags). */}
       {custom && <FlowWidget widget={w} active={active} say={say} onPick={(picked) => onPick(node, picked)} />}
       {choices && active && (
         <FlowChoice
@@ -183,7 +187,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
         />
       )}
       {w?.type === 'visit_notes_card' && renderNotesCard?.(w.title ?? 'Your visit notes')}
-      {w?.type === 'product_card' && (() => {
+      {w?.type === 'product_card' && !minor && (() => {
         const p = findProduct(w.productId ?? 'genesis-gold');
         if (!p) return null;
         return (
@@ -193,6 +197,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
               productRef={{ productId: p.id, why: say(w.why) || p.tagline, frame90: say(w.frame90) || '' }}
               onShop={() => onAction('exit_product')}
             />
+            <ProductDisclosure />
           </div>
         );
       })()}

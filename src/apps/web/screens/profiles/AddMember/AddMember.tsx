@@ -104,7 +104,7 @@ export default function AddMember() {
   return (
     <DerivedPage contentWidth={560}
       title="Add family member"
-      composerPlaceholder="Ask Deborah about family profiles…"
+      composerPlaceholder="Ask Oracle about family profiles…"
       onBack={close}
     >
       <form className={styles.body} data-xref="M-6.2 · Add family member" noValidate onSubmit={(e) => { e.preventDefault(); create(); }}>

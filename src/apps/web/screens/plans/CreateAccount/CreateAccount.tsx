@@ -126,7 +126,7 @@ export default function CreateAccount() {
 
   const title = step === 'merge' ? 'Keep this phone’s conversations?' : signin ? 'Welcome back' : switchedToCreate ? 'Create your account' : fromChat || sheet ? 'Save your profile' : 'Save your health history';
   const subtitle = step === 'merge'
-    ? `You chatted with Deborah before signing in. Add those conversations to ${pendingAddress}?`
+    ? `You chatted with the Oracle before signing in. Add those conversations to ${pendingAddress}?`
     : signin
       ? 'Sign in to pick up where you left off.'
       : switchedToCreate
@@ -206,7 +206,7 @@ export default function CreateAccount() {
                   {agreed && <Icon name="check" size={12} strokeWidth={2.5} />}
                 </span>
                 <span className={styles.legalText}>
-                  I agree to the terms of use and Privacy Notice, and to Deborah’s care disclaimer.
+                  I agree to the terms of use and Privacy Notice, and to the Oracle’s care disclaimer.
                 </span>
               </label>
             </div>
@@ -258,7 +258,7 @@ export default function CreateAccount() {
 
   return (
     <div className={styles.root} data-xref="M-4.3 · Create account">
-      <DerivedPage contentWidth={560} title={title} composerPlaceholder="Ask Deborah about your account…" onBack={stepBack} showBack>
+      <DerivedPage contentWidth={560} title={title} composerPlaceholder="Ask Oracle about your account…" onBack={stepBack} showBack>
         <div className={styles.body}>
           <p className={styles.why}>{subtitle}</p>
           {steps}

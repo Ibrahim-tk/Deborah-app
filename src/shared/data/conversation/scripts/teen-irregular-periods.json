@@ -15,7 +15,7 @@
       { "key": "providerQuestions", "title": "Questions for Your Provider", "body": "", "bullets": ["Is this pattern typical for how long she's been having periods?", "Which signs would mean we should look further?", "Could her sleep, stress or activity be playing a part?", "What should we track before the next visit?"] },
       { "key": "tests", "title": "Tests Worth Discussing", "body": "", "bullets": ["Whether any tests are useful yet, given her age.", "Iron and ferritin if her periods are heavy.", "A thyroid check if she's also tired or her weight has changed."] },
       { "key": "doNow", "title": "What You Can Do Now", "body": "Gentle foundations help a young hypothalamus find its rhythm:", "bullets": ["A steady bedtime, even on weekends.", "Breakfast with some protein.", "A simple cycle diary she keeps herself."] },
-      { "key": "word", "title": "A Word from Deborah", "body": "Thank you for paying attention. Talking openly about cycles at this age helps {name} learn to listen to her own body — that's a gift for life." }
+      { "key": "word", "title": "A word from the Oracle", "body": "Thank you for paying attention. Talking openly about cycles at this age helps {name} learn to listen to her own body — that's a gift for life." }
     ],
     "product": { "productId": "genesis-gold", "why": "Placeholder — not shown for minors.", "frame90": "Placeholder." },
     "closingLine": "Bring this to your provider. I help you ask better questions — your provider makes clinical decisions.",

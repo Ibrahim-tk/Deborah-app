@@ -5,9 +5,11 @@
  * Text size stays on Account.
  * OPEN: not in the F02/F07/F10 specs or Figma yet — specs still describe a bottom tab bar.
  */
+import { nowFrom } from '@shared/utils';
+import { isMinor } from '@shared/engine';
 import { useShallow } from 'zustand/react/shallow';
 import { findProduct } from '@shared/data';
-import { selectHistory, useAppStore } from '@shared/store';
+import { selectHistory, useAppStore, selectActiveProfile } from '@shared/store';
 import { ProductCard } from '@mobile/patterns/commerce';
 import { AnimatePresence, Avatar, DURATION, EASE_IOS, Icon, MotionDiv, type IconName } from '@mobile/ui';
 import { useNavStore } from '../nav.store';
@@ -72,7 +74,8 @@ export function Sidebar() {
     icon: 'account',
     onSelect: () => nav.presentSheet('M-4.3', { mode: 'signin', sheet: true }),
   };
-  const gold = findProduct('genesis-gold');
+  const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
+  const gold = minor ? undefined : findProduct('genesis-gold');
 
   const row = (it: Item) => (
     <li key={it.label}>
@@ -122,7 +125,7 @@ export function Sidebar() {
 
                 <h2 className={styles.heading}>Recent conversations</h2>
                 {history.length === 0 ? (
-                  <p className={styles.empty}>Your conversations with Deborah will appear here.</p>
+                  <p className={styles.empty}>Your conversations with the Oracle will appear here.</p>
                 ) : (
                   <ul className={styles.list}>
                     {history.slice(0, RECENT_LIMIT).map((c) => (

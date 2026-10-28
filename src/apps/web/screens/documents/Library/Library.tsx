@@ -74,7 +74,7 @@ export default function Library() {
       tabs={<Segmented label="Library" options={TABS} value={tab} onChange={setTab} />}
       split={splitUploads}
       detail={detail}
-      composerPlaceholder="Ask Deborah about a document…"
+      composerPlaceholder="Ask Oracle about a document…"
     >
       <div className={styles.stack} data-xref="M-11.1 · Documents and reports">
         <ProfileLine profileId={profileId} switchable={!params.profileId} />

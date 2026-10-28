@@ -14,7 +14,7 @@ export function Feedback() {
     return () => window.clearInterval(t);
   }, []);
   return (
-    <Section id="feedback" title="Progress and presence" lede="A rotating ring and changing words — never typing dots. Deborah with her gold ring or glass blob.">
+    <Section id="feedback" title="Progress and presence" lede="A rotating ring and changing words — never typing dots. The Oracle with her gold ring or glass blob.">
       <Grid>
         <Specimen name="Spinner · ProgressStatus" path="ui/ProgressStatus" note="Status crossfades as steps change.">
           <Row>
@@ -33,16 +33,16 @@ export function Feedback() {
           </Row>
         </Specimen>
 
-        <Specimen name="Avatar · DeborahBlob" path="ui/Avatar" note="Profiles: Cormorant initial on lilac. Deborah: portrait + gold ring, or glass blob.">
+        <Specimen name="Avatar · DeborahBlob" path="ui/Avatar" note="Profiles: Cormorant initial on lilac. The Oracle: portrait + gold ring, or glass blob.">
           <Row>
             <Variant label="initial"><Avatar initial="Maria" size={40} /></Variant>
             <Variant label="initial 56"><Avatar initial="Sofia" size={56} /></Variant>
-            <Variant label="Deborah · ring"><Avatar image="/images/deborah/portrait-placeholder.svg" ring size={40} label="Deborah" /></Variant>
+            <Variant label="The Oracle · ring"><Avatar image="/images/deborah/portrait-placeholder.svg" ring size={40} label="The Oracle" /></Variant>
           </Row>
           <Row>
-            <Variant label="Blob 32"><DeborahBlob size={32} label="Deborah" /></Variant>
-            <Variant label="Blob 56"><DeborahBlob size={56} label="Deborah" /></Variant>
-            <Variant label="Blob 96"><DeborahBlob size={96} label="Deborah" /></Variant>
+            <Variant label="Blob 32"><DeborahBlob size={32} label="The Oracle" /></Variant>
+            <Variant label="Blob 56"><DeborahBlob size={56} label="The Oracle" /></Variant>
+            <Variant label="Blob 96"><DeborahBlob size={96} label="The Oracle" /></Variant>
           </Row>
         </Specimen>
 

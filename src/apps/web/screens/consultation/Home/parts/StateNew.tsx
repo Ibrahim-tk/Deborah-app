@@ -38,12 +38,12 @@ export function StateNew({ onStart, chat, destinations, recommendations, onShop,
       ) : (
         <HomeMediaHero
           titleId="start-deborah"
-          title="Start with Deborah"
+          title="Start with the Oracle"
           eyebrow="New"
           meta="Tell her what’s going on. She’ll ask a few questions, then share what she thinks."
           tone="hero"
           artifact="violet-bloom"
-          ctaLabel="Start with Deborah"
+          ctaLabel="Start with the Oracle"
           onCta={onStart}
         />
       )}

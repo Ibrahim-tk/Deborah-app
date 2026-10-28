@@ -48,19 +48,20 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
   // Category tabs: jump to a group; the active tab follows the scroll.
   const listRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<string>();
-  const scroller = () => listRef.current?.closest<HTMLElement>('[data-sheet-scroll]') ?? listRef.current?.parentElement ?? null;
+  // The list scrolls itself (web, 2026-10-28), so group offsets are measured inside it.
+  const scroller = () => listRef.current;
   const jump = (title: string) => {
     const el = listRef.current?.querySelector<HTMLElement>(`[data-group="${CSS.escape(title)}"]`);
     const box = scroller();
     if (!el || !box) return;
     setActive(title);
-    box.scrollTo({ top: el.offsetTop - (listRef.current?.offsetTop ?? 0), behavior: 'smooth' });
+    box.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
   };
   useEffect(() => {
     const box = scroller();
     if (!open || !box) return;
     const onScroll = () => {
-      const top = box.scrollTop + (listRef.current?.offsetTop ?? 0) + 8;
+      const top = box.scrollTop + 8;
       const sections = [...(listRef.current?.querySelectorAll<HTMLElement>('[data-group]') ?? [])];
       const current = sections.filter((el) => el.offsetTop <= top).at(-1) ?? sections[0];
       if (current) setActive(current.dataset.group);
@@ -75,7 +76,8 @@ export function SymptomPicker({ open, onClose, onAdd }: SymptomPickerProps) {
       showClose
       open={open}
       onClose={close}
-      height="large"
+      // Sized to content: a fixed-height panel showed a second box under the button (designer, 2026-10-28).
+      height="auto"
       label="Add symptoms"
       /* Sheet footer: pinned to the very bottom of the sheet. */
       footer={

@@ -54,7 +54,7 @@ export default function WidgetLab() {
   return (
     <div className={styles.root} data-xref="LAB · Widget lab">
       <header className={styles.header}>
-        <DeborahBlob size={36} label="Deborah" />
+        <DeborahBlob size={36} label="The Oracle" />
         <div>
           <p className={styles.name}>Widget lab</p>
           <p className={styles.sub}>Every chat widget, in context. Ask anything below.</p>
@@ -74,7 +74,7 @@ export default function WidgetLab() {
               </div>
             ),
           )}
-          {typing && <ThinkingIndicator label="Deborah is writing…" />}
+          {typing && <ThinkingIndicator label="The Oracle is writing…" />}
           <div className={styles.composer}>
             <Composer
               value={draft}

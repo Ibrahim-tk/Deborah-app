@@ -96,9 +96,9 @@ export default function VisitBrief() {
 
   if (!brief || !profileId) {
     return (
-      <DerivedPage title="For my provider" composerPlaceholder="Ask Deborah about your visit notes…">
+      <DerivedPage title="For my provider" composerPlaceholder="Ask Oracle about your visit notes…">
         <div className={styles.body} data-xref="M-9.7 · My Visit Notes">
-          <EmptyState icon="note" text="There’s not enough from this conversation yet for a provider note. Keep talking with Deborah first." />
+          <EmptyState icon="note" text="There’s not enough from this conversation yet for a provider note. Keep talking with the Oracle first." />
           <div className={styles.actions}>
             <Button fullWidth onClick={pop}>Done</Button>
           </div>
@@ -156,7 +156,7 @@ export default function VisitBrief() {
   const dateValue = brief.appointmentDate ? brief.appointmentDate.slice(0, 10) : '';
 
   return (
-    <DerivedPage title={heading} composerPlaceholder="Ask Deborah about your visit notes…">
+    <DerivedPage title={heading} composerPlaceholder="Ask Oracle about your visit notes…">
       <div className={styles.body} data-xref="M-9.7 · My Visit Notes">
         {/* The only two things to fill in here; the rest of the notes are read-only. */}
         <section className={styles.fields} aria-label="Your appointment">

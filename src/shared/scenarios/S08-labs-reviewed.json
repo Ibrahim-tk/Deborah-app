@@ -222,8 +222,8 @@
       "queue": [
         {
           "id": "n-2",
-          "title": "Your Oracle Clinician",
-          "body": "Deborah: How are you feeling this week?",
+          "title": "Your Oracle",
+          "body": "The Oracle: How are you feeling this week?",
           "deepLink": "followup:p-self",
           "deliverAt": "2026-11-16T09:00:00-08:00",
           "delivered": false,

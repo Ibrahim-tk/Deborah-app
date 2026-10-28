@@ -37,11 +37,11 @@ export default function DeborahWelcome() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-1.9 · Deborah's welcome">
+    <div className={styles.root} data-xref="M-1.9 · the Oracle's welcome">
       {/* Arrives inside the same glow the onboarding exit ended on, which clears to reveal the welcome. */}
       <div className={styles.glory} aria-hidden />
       <div className={styles.stage} data-placeholder>
-        <DeborahBlob size={112} label="Deborah" />
+        <DeborahBlob size={112} label="The Oracle" />
         <div className={styles.copy}>
           <TextReveal as="h1" className={styles.text} text={title} delay={500} />
           <TextReveal className={styles.body} text={body} delay={850} />

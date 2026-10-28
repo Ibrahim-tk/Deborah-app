@@ -62,9 +62,9 @@ export default function GuestAuth() {
     <div className={styles.root} data-xref="M-4.0 · Guest auth">
       <IconButton icon="close" label="Close" className={styles.close} onClick={dismissSheet} />
       <div className={styles.hero}>
-        <DeborahBlob size={88} label="Deborah" />
+        <DeborahBlob size={88} label="The Oracle" />
         <h1 className={styles.title}>Sign in or sign up</h1>
-        <p className={styles.body}>Start conversation with Deborah</p>
+        <p className={styles.body}>Start conversation with the Oracle</p>
       </div>
 
       {step === 'email' && (

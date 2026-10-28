@@ -157,7 +157,7 @@ export default function ChoosePlan() {
         )}
       </main>
 
-      <footer className={styles.footer}>© {new Date().getFullYear()} Oracle Clinician. All rights reserved.</footer>
+      <footer className={styles.footer}>© {new Date().getFullYear()} Your Oracle. All rights reserved.</footer>
     </div>
   );
 

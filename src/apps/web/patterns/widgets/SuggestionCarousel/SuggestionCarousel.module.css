@@ -29,7 +29,7 @@
   scroll-snap-align: start;
 }
 
-/* Home dashboard: three equal essentials cards. */
+/* Home dashboard: equal essentials cards (2-up, 4-up when wide). */
 .essentials {
   display: grid;
   gap: var(--space-3);
@@ -39,7 +39,10 @@
 }
 .essentialsItem { min-width: 0; }
 @media (min-width: 900px) {
-  .essentials { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .essentials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1280px) {
+  .essentials { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 .card {

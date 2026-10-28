@@ -25,12 +25,12 @@ const allowed = (s: AppState, type?: string) =>
   !type || REQUIRED.has(type) || (s.notifications.enabled !== false && s.notifications.prefs?.[type as keyof NonNullable<AppState['notifications']['prefs']>] !== false);
 
 // Lock-screen text stays generic: never symptoms, conditions or product names (PHI).
-export const FOLLOW_UP_TITLE = 'Your Oracle Clinician';
-export const FOLLOW_UP_BODY = 'Deborah: How are you feeling this week?';
-export const BOOKING_REMINDER_BODY = 'Reminder: you have a consultation with Deborah tomorrow.';
-export const BOOKING_DAY_AFTER_BODY = 'Deborah: How did your appointment go?';
+export const FOLLOW_UP_TITLE = 'Your Oracle';
+export const FOLLOW_UP_BODY = 'The Oracle: How are you feeling this week?';
+export const BOOKING_REMINDER_BODY = 'Reminder: you have a consult with support team tomorrow.';
+export const BOOKING_DAY_AFTER_BODY = 'The Oracle: How did your appointment go?';
 /** Miro Step 5: no appointment date — follow up after 7 days regardless. */
-export const VISIT_NOTES_TAKE_BODY = 'Deborah: Take your visit notes to the appointment — how did it go?';
+export const VISIT_NOTES_TAKE_BODY = 'The Oracle: Take your visit notes to the appointment — how did it go?';
 
 export const notificationsActions: StateCreator<AppState, [], [], Actions> = (set, get) => ({
   // Settings decide what arrives: the master switch and per-type prefs; critical and re-consent always come through.

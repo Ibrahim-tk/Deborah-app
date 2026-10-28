@@ -1,0 +1,448 @@
+{
+ "version": 1,
+ "size": [
+  1024,
+  1023
+ ],
+ "anchor": {
+  "trunkBase": [
+   849.3,
+   906.3
+  ],
+  "rootOrigin": [
+   817.8,
+   776.2
+  ]
+ },
+ "order": [
+  "roots",
+  "trunk",
+  "canopy",
+  "sprites"
+ ],
+ "layers": {
+  "trunk.seedling": "layers/trunk_seedling.webp",
+  "canopy.seedling": "layers/canopy_seedling.webp",
+  "roots.seedling": "layers/roots_seedling.webp",
+  "trunk.young": "layers/trunk_young.webp",
+  "canopy.young": "layers/canopy_young.webp",
+  "roots.young": "layers/roots_young.webp",
+  "trunk.mature": "layers/trunk_mature.webp",
+  "canopy.mature": "layers/canopy_mature.webp",
+  "roots.mature": "layers/roots_mature.webp"
+ },
+ "growthMaps": {
+  "trunk.mature": "layers/trunk_mature_growth.webp",
+  "roots.mature": "layers/roots_mature_growth.webp"
+ },
+ "atlas": "sprites.webp",
+ "sprites": [
+  {
+   "id": "blossom_01",
+   "kind": "blossom",
+   "frame": [
+    132,
+    0,
+    264,
+    149
+   ],
+   "x": 111,
+   "y": 295,
+   "region": "outer-left",
+   "sway": 0.845,
+   "order": 0.845
+  },
+  {
+   "id": "blossom_02",
+   "kind": "blossom",
+   "frame": [
+    398,
+    0,
+    226,
+    148
+   ],
+   "x": 504,
+   "y": 590,
+   "region": "inner-left",
+   "sway": 0.35,
+   "order": 0.35
+  },
+  {
+   "id": "blossom_03",
+   "kind": "blossom",
+   "frame": [
+    116,
+    155,
+    234,
+    128
+   ],
+   "x": 323,
+   "y": 116,
+   "region": "outer-left",
+   "sway": 0.87,
+   "order": 0.87
+  },
+  {
+   "id": "blossom_04",
+   "kind": "blossom",
+   "frame": [
+    626,
+    0,
+    196,
+    148
+   ],
+   "x": 548,
+   "y": 444,
+   "region": "inner-left",
+   "sway": 0.457,
+   "order": 0.457
+  },
+  {
+   "id": "blossom_05",
+   "kind": "blossom",
+   "frame": [
+    0,
+    290,
+    170,
+    103
+   ],
+   "x": 51,
+   "y": 421,
+   "region": "outer-left",
+   "sway": 0.871,
+   "order": 0.871
+  },
+  {
+   "id": "blossom_06",
+   "kind": "blossom",
+   "frame": [
+    0,
+    0,
+    130,
+    153
+   ],
+   "x": 436,
+   "y": 374,
+   "region": "inner-left",
+   "sway": 0.598,
+   "order": 0.598
+  },
+  {
+   "id": "blossom_07",
+   "kind": "blossom",
+   "frame": [
+    512,
+    155,
+    170,
+    119
+   ],
+   "x": 411,
+   "y": 520,
+   "region": "inner-left",
+   "sway": 0.502,
+   "order": 0.502
+  },
+  {
+   "id": "blossom_08",
+   "kind": "blossom",
+   "frame": [
+    319,
+    290,
+    169,
+    98
+   ],
+   "x": 754,
+   "y": 506,
+   "region": "inner-left",
+   "sway": 0.367,
+   "order": 0.367
+  },
+  {
+   "id": "blossom_09",
+   "kind": "blossom",
+   "frame": [
+    352,
+    155,
+    158,
+    125
+   ],
+   "x": 160,
+   "y": 457,
+   "region": "outer-left",
+   "sway": 0.754,
+   "order": 0.754
+  },
+  {
+   "id": "blossom_10",
+   "kind": "blossom",
+   "frame": [
+    810,
+    155,
+    178,
+    104
+   ],
+   "x": 253,
+   "y": 216,
+   "region": "outer-left",
+   "sway": 0.851,
+   "order": 0.851
+  },
+  {
+   "id": "blossom_11",
+   "kind": "blossom",
+   "frame": [
+    824,
+    0,
+    119,
+    144
+   ],
+   "x": 799,
+   "y": 610,
+   "region": "inner-right",
+   "sway": 0.234,
+   "order": 0.234
+  },
+  {
+   "id": "blossom_12",
+   "kind": "blossom",
+   "frame": [
+    172,
+    290,
+    145,
+    102
+   ],
+   "x": 703,
+   "y": 164,
+   "region": "outer-left",
+   "sway": 0.725,
+   "order": 0.725
+  },
+  {
+   "id": "blossom_13",
+   "kind": "blossom",
+   "frame": [
+    0,
+    155,
+    114,
+    133
+   ],
+   "x": 314,
+   "y": 463,
+   "region": "inner-left",
+   "sway": 0.635,
+   "order": 0.635
+  },
+  {
+   "id": "blossom_14",
+   "kind": "blossom",
+   "frame": [
+    587,
+    290,
+    125,
+    86
+   ],
+   "x": 783,
+   "y": 270,
+   "region": "inner-left",
+   "sway": 0.619,
+   "order": 0.619
+  },
+  {
+   "id": "blossom_15",
+   "kind": "blossom",
+   "frame": [
+    684,
+    155,
+    124,
+    109
+   ],
+   "x": 485,
+   "y": 68,
+   "region": "outer-left",
+   "sway": 0.876,
+   "order": 0.876
+  },
+  {
+   "id": "blossom_16",
+   "kind": "blossom",
+   "frame": [
+    490,
+    290,
+    95,
+    88
+   ],
+   "x": 354,
+   "y": 389,
+   "region": "inner-left",
+   "sway": 0.68,
+   "order": 0.68
+  },
+  {
+   "id": "blossom_17",
+   "kind": "blossom",
+   "frame": [
+    823,
+    290,
+    103,
+    72
+   ],
+   "x": 749,
+   "y": 445,
+   "region": "inner-left",
+   "sway": 0.447,
+   "order": 0.447
+  },
+  {
+   "id": "blossom_18",
+   "kind": "blossom",
+   "frame": [
+    714,
+    290,
+    107,
+    73
+   ],
+   "x": 576,
+   "y": 203,
+   "region": "outer-left",
+   "sway": 0.732,
+   "order": 0.732
+  },
+  {
+   "id": "petal_19",
+   "kind": "petal",
+   "frame": [
+    928,
+    290,
+    31,
+    32
+   ],
+   "x": 97,
+   "y": 522,
+   "region": "outer-left",
+   "sway": 0.859,
+   "order": 0.859
+  },
+  {
+   "id": "petal_20",
+   "kind": "petal",
+   "frame": [
+    961,
+    290,
+    31,
+    30
+   ],
+   "x": 299,
+   "y": 622,
+   "region": "inner-left",
+   "sway": 0.625,
+   "order": 0.625
+  },
+  {
+   "id": "petal_21",
+   "kind": "petal",
+   "frame": [
+    0,
+    395,
+    33,
+    27
+   ],
+   "x": 271,
+   "y": 266,
+   "region": "outer-left",
+   "sway": 0.878,
+   "order": 0.878
+  },
+  {
+   "id": "petal_22",
+   "kind": "petal",
+   "frame": [
+    58,
+    395,
+    23,
+    23
+   ],
+   "x": 701,
+   "y": 663,
+   "region": "inner-left",
+   "sway": 0.281,
+   "order": 0.281
+  },
+  {
+   "id": "petal_23",
+   "kind": "petal",
+   "frame": [
+    83,
+    395,
+    22,
+    23
+   ],
+   "x": 563,
+   "y": 313,
+   "region": "inner-left",
+   "sway": 0.671,
+   "order": 0.671
+  },
+  {
+   "id": "petal_24",
+   "kind": "petal",
+   "frame": [
+    35,
+    395,
+    21,
+    26
+   ],
+   "x": 357,
+   "y": 160,
+   "region": "outer-left",
+   "sway": 0.915,
+   "order": 0.915
+  }
+ ],
+ "timing": {
+  "roots": [
+   0.08,
+   0.45
+  ],
+  "trunk.seedling": [
+   0.05,
+   0.2
+  ],
+  "trunk.young": [
+   0.2,
+   0.5
+  ],
+  "trunk.mature": [
+   0.4,
+   0.75
+  ],
+  "canopy.seedling": [
+   0.12,
+   0.3
+  ],
+  "canopy.young": [
+   0.45,
+   0.75
+  ],
+  "canopy.mature": [
+   0.65,
+   0.95
+  ],
+  "sprites": [
+   0.6,
+   0.95
+  ],
+  "gold": [
+   0.95,
+   1.0
+  ]
+ },
+ "gold": {
+  "reference": "layers/gold_reference.webp",
+  "rgb": [
+   250,
+   185,
+   84
+  ]
+ },
+ "_open": "OPEN: timing windows and sprite regions are first-pass defaults; tune in the sandbox."
+}

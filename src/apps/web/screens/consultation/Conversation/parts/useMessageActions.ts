@@ -56,7 +56,7 @@ export function useMessageActions(profileId: string | undefined, onGateFail?: ()
         openVisitBriefOrGate(m);
         return;
       }
-      saveNote('Saved from Deborah', m.text ?? '', m.id);
+      saveNote('Saved from the Oracle', m.text ?? '', m.id);
     },
     saveAnswer: (m: Message, _topic: string) => {
       if (m.answer) openVisitBriefOrGate(m);

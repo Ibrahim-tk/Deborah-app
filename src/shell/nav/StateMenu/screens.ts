@@ -82,11 +82,11 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
     screens: [
       { id: 'M-2.0', name: 'Personalized greeting', tab: 'ask', as: 'root' },
       { id: 'M-7.2', name: 'Health profile completion %', tab: 'health', as: 'root' },
-      { id: 'M-7.3', name: 'My Healing Plan journey', ...HEALTH, as: 'push' },
+      { id: 'M-7.3', name: 'Your Wellness Plan journey', ...HEALTH, as: 'push' },
       { id: 'M-10.4', name: 'Notifications / reminders', ...ACCOUNT, as: 'push' },
       { id: 'M-6.1', name: 'Profile toggle', ...ASK, as: 'sheet' },
-      { id: 'M-2.1', name: 'Ask Deborah CTA', ...ASK, as: 'push' },
-      { id: 'M-8.2', name: 'Consult with Deborah', ...HEALTH, as: 'push' },
+      { id: 'M-2.1', name: 'Ask Oracle CTA', ...ASK, as: 'push' },
+      { id: 'M-8.2', name: 'Consult with support team', ...HEALTH, as: 'push' },
       { id: 'M-2.1', name: 'What’s next? (after an answer)', ...ASK, as: 'push' },
     ],
   },
@@ -100,7 +100,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-2.12', name: 'Family chat — Eleanor, 80 (premade)', ...ASK, as: 'push', params: () => ({ flow: 'proxy' }) },
       { id: 'M-2.14', name: 'Complete intake', ...ASK, as: 'push' },
       { id: 'M-7.2', name: 'Health profile (My Health)', tab: 'health', as: 'root' },
-      { id: 'M-2.13', name: 'What Deborah noted', ...ASK, as: 'sheet', params: (s) => ({ conversationId: answered(s).conversationId }) },
+      { id: 'M-2.13', name: 'What the Oracle noted', ...ASK, as: 'sheet', params: (s) => ({ conversationId: answered(s).conversationId }) },
       { id: 'M-2.8', name: 'Follow-up reminder', ...ASK, as: 'sheet' },
       { id: 'M-2.15', name: 'Terms updated', ...ASK, as: 'modal' },
       { id: 'M-2.11', name: 'Profile question', ...ASK, as: 'sheet', params: () => ({ topic: 'lifestyle' }) },
@@ -134,7 +134,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-7.3', name: 'Healing plan', ...HEALTH, as: 'push' },
       { id: 'M-7.4', name: 'For you', ...HEALTH, as: 'push', params: () => ({ itemId: libraryItems[0]?.id }) },
       { id: 'M-7.5', name: 'Library', ...HEALTH, as: 'push' },
-      { id: 'M-7.6', name: 'About Deborah', ...HEALTH, as: 'push' },
+      { id: 'M-7.6', name: 'About the Oracle', ...HEALTH, as: 'push' },
       { id: 'M-7.7', name: 'Edit health detail', ...HEALTH, as: 'sheet', params: (s) => ({ profileId: s.activeProfileId, key: 'medications' }) },
     ],
   },
@@ -157,7 +157,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-11.3', name: 'Upload supporting documents after visit', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'sheet' },
       // OPEN: "AI updates context" and "discuss outcome with Deborah" live inside the log-visit flow, not as screens.
       { id: 'M-9.8', name: 'AI updates context (profile updates on save)', tab: 'health', under: ['M-7.2', 'M-9.1'], as: 'sheet' },
-      { id: 'M-9.1', name: 'Discuss outcome with Deborah (Records → Talk first)', ...HEALTH, as: 'push' },
+      { id: 'M-9.1', name: 'Discuss outcome with the Oracle (Records → Talk first)', ...HEALTH, as: 'push' },
     ],
   },
   {
@@ -165,7 +165,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
     screens: [
       { id: 'M-11.3', name: 'Upload documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'sheet' },
       { id: 'M-5.4', name: 'OCR / data extraction', ...ASK, as: 'modal', params: () => ({ source: 'pdf', fileName: 'Lab report.pdf' }) },
-      { id: 'M-11.2', name: 'Ask Deborah about document', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
+      { id: 'M-11.2', name: 'Ask Oracle about document', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
       { id: 'M-5.3', name: 'Type of uploads', ...ASK, as: 'sheet' },
       { id: 'M-11.2', name: 'Preview documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
       { id: 'M-11.2', name: 'Download documents', tab: 'health', under: ['M-7.2', 'M-11.1'], as: 'push', params: (s) => ({ documentId: firstDoc(s) }) },
@@ -205,7 +205,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-10.4', name: 'Enable/disable notifications', ...ACCOUNT, as: 'push' },
       { id: 'M-2.8', name: 'Follow-up after guidance', ...ASK, as: 'sheet' },
       { id: 'M-10.4', name: '30-day inactivity reminder', ...ACCOUNT, as: 'push' },
-      { id: 'M-7.3', name: 'Healing Plan check-in', ...HEALTH, as: 'push' },
+      { id: 'M-7.3', name: 'Wellness Plan check-in', ...HEALTH, as: 'push' },
       { id: 'M-2.8', name: 'Critical follow-up', ...ASK, as: 'sheet' },
       { id: 'M-2.15', name: 'Re-consent on policy update', ...ASK, as: 'modal' },
     ],
@@ -224,7 +224,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
   {
     title: 'Healing plan',
     screens: [
-      { id: 'M-7.3', name: 'View my Healing Plan', ...HEALTH, as: 'push' },
+      { id: 'M-7.3', name: 'View my Wellness Plan', ...HEALTH, as: 'push' },
       { id: 'M-7.3', name: 'Track goals / actions', ...HEALTH, as: 'push' },
       { id: 'M-7.3', name: 'AI updates plan milestones', ...HEALTH, as: 'push' },
     ],
@@ -233,11 +233,11 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
     title: 'Knowledge-driven experience',
     // OPEN: books / protocols / blogs / website have no separate screens; they open Deborah's library.
     screens: [
-      { id: 'M-2.1', name: 'Oracle uses approved Deborah content', ...ASK, as: 'push' },
+      { id: 'M-2.1', name: 'Oracle uses approved the Oracle content', ...ASK, as: 'push' },
       { id: 'M-7.5', name: 'Books', ...HEALTH, as: 'push' },
       { id: 'M-7.5', name: 'Protocols', ...HEALTH, as: 'push' },
       { id: 'M-7.5', name: 'Blogs', ...HEALTH, as: 'push' },
-      { id: 'M-7.6', name: 'Website (About Deborah)', ...HEALTH, as: 'push' },
+      { id: 'M-7.6', name: 'Website (About the Oracle)', ...HEALTH, as: 'push' },
       { id: 'M-2.1', name: 'Q&A', ...ASK, as: 'push' },
       { id: 'M-2.1', name: 'Knowledge-gap escalation', ...ASK, as: 'push' },
       { id: 'M-2.1', name: 'No open-internet retrieval', ...ASK, as: 'push' },
@@ -246,7 +246,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
   {
     title: 'Booking',
     screens: [
-      { id: 'M-8.2', name: 'Consult with Deborah', ...HEALTH, as: 'push' },
+      { id: 'M-8.2', name: 'Consult with support team', ...HEALTH, as: 'push' },
       { id: 'M-8.3', name: 'Pick a time', ...HEALTH, as: 'push' },
       { id: 'M-8.4', name: 'Booking confirmed', ...HEALTH, as: 'push', params: (s) => ({ bookingId: s.booking.bookings[0]?.id }) },
     ],

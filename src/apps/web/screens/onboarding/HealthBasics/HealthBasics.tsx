@@ -149,13 +149,14 @@ export default function HealthBasics() {
                 <div className={styles.footer}>
                   {/* Back + Next; Back is shown but disabled on the first question (balance). */}
                   <div className={styles.navRow}>
-                    <Button type="button" variant="ghost" onClick={goBack} disabled={at === 0}>Back</Button>
+                    {/* Medicines / supplements: nothing to add → quiet Skip beside Back (was "I don't take any"). */}
+                    {under.presentation === 'namedReasons' && !underValue.trim() ? (
+                      <Button type="button" variant="ghost" onClick={() => advance(under.none ?? 'None')}>Skip</Button>
+                    ) : (
+                      <Button type="button" variant="ghost" onClick={goBack} disabled={at === 0}>Back</Button>
+                    )}
                     <Button type="submit" disabled={!canContinue}>Next</Button>
                   </div>
-                  {/* Medicines / supplements: nothing to add → quiet Skip under Continue (was "I don't take any"). */}
-                  {under.presentation === 'namedReasons' && !underValue.trim() && (
-                    <Button type="button" variant="ghost" fullWidth onClick={() => advance(under.none ?? 'None')}>Skip</Button>
-                  )}
                 </div>
               </>
             )}

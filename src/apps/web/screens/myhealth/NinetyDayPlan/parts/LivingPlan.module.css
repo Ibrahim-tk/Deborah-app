@@ -141,3 +141,7 @@
 /* No divider above Earlier concerns; no underline on hover (designer, 2026-10-23). */
 .earlier { padding-top: 0; border-top: 0; }
 .foldHead:hover .foldName { text-decoration: none; }
+
+/* Same row title as the pillars (designer, 2026-10-28). */
+.foldName { font: var(--weight-regular) var(--fs-headline) / var(--lh-headline) var(--font-body); }
+.title { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); }

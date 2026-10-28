@@ -1,12 +1,13 @@
 /**
  * @shell Shell — fixed TopNav + stage. Mobile: scaled IPhoneFrame. Web: full-bleed (no browser chrome).
  * Widgets: (/internal/wid) in the IPhoneFrame. Design system: (/internal/design-system), full-bleed.
- * Simple Home lab: (/internal/home) in the IPhoneFrame.
+ * Simple Home lab: (/internal/home) in the IPhoneFrame. Tree sandbox: (/internal/tree) in the IPhoneFrame.
  */
 import MobileApp from '@mobile/MobileApp';
 import WidgetLabApp from '@mobile/WidgetLabApp';
 import DesignSystemApp from '@mobile/DesignSystemApp';
 import SimpleHomeApp from '@mobile/SimpleHomeApp';
+import TreeLabApp from '@mobile/TreeLabApp';
 import WebApp from '@web/WebApp';
 import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
@@ -22,7 +23,7 @@ import styles from './Shell.module.css';
 
 export interface ShellProps {
   /** `widgets`: /wid. `design-system`: /design-system. `home-lab`: /home simple layout lab. */
-  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'home-lab';
+  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'home-lab' | 'tree-lab';
 }
 
 export function Shell({ platform }: ShellProps) {
@@ -43,6 +44,10 @@ export function Shell({ platform }: ShellProps) {
         ) : platform === 'widgets' ? (
           <IPhoneFrame>
             <WidgetLabApp />
+          </IPhoneFrame>
+        ) : platform === 'tree-lab' ? (
+          <IPhoneFrame>
+            <TreeLabApp />
           </IPhoneFrame>
         ) : platform === 'home-lab' ? (
           <IPhoneFrame>

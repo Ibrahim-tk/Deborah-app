@@ -19,7 +19,7 @@ const snapshot = (d: NoteDraft) => `${d.title}\u0000${d.kind}\u0000${d.body}`;
 export const DEFAULT_TITLE: Record<NoteKind, string> = {
   questions: 'Questions for my visit',
   'after-visit': 'After my visit',
-  'saved-answer': 'Saved from Deborah',
+  'saved-answer': 'Saved from the Oracle',
   free: 'Note',
   'provider-brief': 'For my provider',
 };

@@ -1,7 +1,7 @@
 [
   {
     "id": "v-001", "type": "video", "title": "Why you wake at 3am",
-    "summary": "Deborah explains the cortisol and blood-sugar rhythm behind early waking, and three gentle evening habits to try.",
+    "summary": "The Oracle explains the cortisol and blood-sugar rhythm behind early waking, and three gentle evening habits to try.",
     "topics": ["sleep", "stress"], "durationMin": 12, "publishedAt": "2026-09-28T09:00:00-07:00",
     "thumbnail": "/images/home/suggest-sleep.jpg",
     "audience": "adult", "relatedProductId": "genesis-gold", "status": "placeholder"
@@ -20,9 +20,9 @@
   },
   {
     "id": "l-003", "type": "lesson", "title": "The Five Pillars, in five minutes",
-    "summary": "A short lesson on the foundations Deborah returns to in every consultation.",
+    "summary": "A short lesson on the foundations the Oracle returns to in every consultation.",
     "body": [
-      "Sleep, nourishment, movement, stress and connection — the Five Pillars are where Deborah starts with everyone.",
+      "Sleep, nourishment, movement, stress and connection — the Five Pillars are where the Oracle starts with everyone.",
       "None of them needs to be perfect. Pick the one that feels easiest and build from there for two weeks before adding another."
     ],
     "topics": ["foundations"], "durationMin": 5, "publishedAt": "2026-08-20T09:00:00-07:00",

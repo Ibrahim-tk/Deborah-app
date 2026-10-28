@@ -16,7 +16,6 @@ import { nowFrom } from '@shared/utils';
 import { Button, IconButton, OptionRow, Sheet } from '@web/ui';
 import { ThinkingIndicator } from '@web/patterns/chat';
 import { useToast } from '@web/hooks/toast.store';
-import { useAccountGate } from '@web/hooks/useAccountGate';
 import { useNav, useScreenParams } from '@web/navigation';
 import styles from './ScanLabel.module.css';
 
@@ -33,7 +32,6 @@ export default function ScanLabel() {
   const { field = 'medications' } = useScreenParams<{ field: Field }>();
   const { dismissSheet } = useNav();
   const toast = useToast();
-  const gate = useAccountGate();
   const profile = useAppStore(selectActiveProfile);
   const [state, setState] = useState<'camera' | 'reading' | 'results'>('camera');
   const [found, setFound] = useState<{ field: Field; names: string[] }>({ field, names: [] });
@@ -73,9 +71,6 @@ export default function ScanLabel() {
                   <OptionRow key={s.id} leadingIcon="camera" chevron onSelect={() => scan(s)}>{s.label}</OptionRow>
                 ))}
               </div>
-              <Button variant="secondary" fullWidth leadingIcon="upload" onClick={() => gate('documents', () => toast('PDF upload is simulated in the prototype'))}>
-                Upload a PDF instead
-              </Button>
             </>
           )}
           {state === 'reading' && <ThinkingIndicator label="Reading the label…" />}

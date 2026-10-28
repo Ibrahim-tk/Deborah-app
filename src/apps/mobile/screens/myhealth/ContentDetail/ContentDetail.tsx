@@ -39,7 +39,7 @@ export default function ContentDetail() {
       <div className={styles.root} data-xref="M-7.4 · For-you content detail">
         {header}
         <div className={styles.body}>
-          <EmptyState icon="book" text="This item isn’t in Deborah’s library any more." actionLabel="Back" onAction={pop} />
+          <EmptyState icon="book" text="This item isn’t in the Oracle’s library any more." actionLabel="Back" onAction={pop} />
         </div>
       </div>
     );
@@ -68,7 +68,7 @@ export default function ContentDetail() {
               reads after the title and summary so the page doesn't open mid-text. */}
           {!video && <MediaBlock item={item} />}
           <Button fullWidth leadingIcon="deborah" onClick={() => openAsk({ prefill: `I ${verb} '${item.title}' — ` })}>
-            Ask Deborah about this
+            Ask Oracle about this
           </Button>
           {product && (
             <div className={styles.group} data-placeholder={product.status === 'placeholder' || undefined}>

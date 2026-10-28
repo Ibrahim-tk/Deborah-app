@@ -91,7 +91,7 @@ export default function ConfirmLabs() {
   };
 
   return (
-    <DerivedPage contentWidth={640} title="Check your results" composerPlaceholder="Ask Deborah about these labs…">
+    <DerivedPage contentWidth={640} title="Check your results" composerPlaceholder="Ask Oracle about these labs…">
       <div className={styles.body} data-xref="M-5.4 · Check your results">
         <Card className={styles.meta}>
           <Input label="Lab" placeholder="e.g. Quest Diagnostics" value={labName} onChange={(e) => setLabName(e.target.value)} />

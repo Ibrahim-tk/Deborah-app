@@ -37,12 +37,12 @@ export const COLOR_GROUPS: { title: string; note?: string; text?: boolean; token
     text: true,
     tokens: [
       { name: '--color-ink', use: 'Headings, primary text, icons' },
-      { name: '--color-ink-body', use: "Deborah's reading prose" },
+      { name: '--color-ink-body', use: "The Oracle's reading prose" },
       { name: '--color-ink-secondary', use: 'Secondary text, subtitles' },
       { name: '--color-ink-tertiary', use: 'Metadata, timestamps' },
       { name: '--color-ink-placeholder', use: 'Placeholders only' },
       { name: '--color-gold-ink', use: 'Answer numerals (gold as text)' },
-      { name: '--color-deborah-rose', use: "Deborah's sign-off only" },
+      { name: '--color-deborah-rose', use: "The Oracle's sign-off only" },
     ],
   },
   {
@@ -72,7 +72,7 @@ export const COLOR_GROUPS: { title: string; note?: string; text?: boolean; token
   {
     title: 'Brand and cards',
     tokens: [
-      { name: '--color-gold', use: 'Deborah signature moments' },
+      { name: '--color-gold', use: 'The Oracle signature moments' },
       { name: '--card-tone-lilac', use: 'Tonal card' },
       { name: '--card-tone-linen', use: 'Tonal card' },
       { name: '--card-tone-rose', use: 'Tonal card' },
@@ -95,7 +95,7 @@ export const TYPE_ROLES: { cls: string; role: string; use: string; sample: strin
   { cls: 't-title-2', role: 'title-2', use: 'Card headings, empty states', sample: 'Your 90-day plan' },
   { cls: 't-title-3', role: 'title-3', use: 'Inline navigation titles', sample: 'Health profile' },
   { cls: 't-headline', role: 'headline', use: 'Answer section titles, list row titles', sample: 'What I’m hearing' },
-  { cls: 't-body', role: 'body', use: "Deborah's answers, message text", sample: 'Let’s look at what your body is telling you, one step at a time.' },
+  { cls: 't-body', role: 'body', use: "The Oracle's answers, message text", sample: 'Let’s look at what your body is telling you, one step at a time.' },
   { cls: 't-callout', role: 'callout', use: 'Card body, options, inputs', sample: 'Tap the answer that fits best.' },
   { cls: 't-button', role: 'button', use: 'Every button label', sample: 'Continue' },
   { cls: 't-subhead', role: 'subhead', use: 'Secondary text, list subtitles', sample: '3 free consultations left' },

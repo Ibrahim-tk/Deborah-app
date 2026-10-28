@@ -32,7 +32,7 @@ export function NotePreview({ noteId, mode: initial = 'view', onClear }: { noteI
   const Screen = meta(screenId)?.component;
   const share = async () => {
     if (!navigator.share) return toast('Sharing isn’t available in this browser');
-    try { await navigator.share({ title: note.title || 'My visit notes', text: 'Notes for my provider from Your Oracle Clinician' }); } catch { /* dismissed */ }
+    try { await navigator.share({ title: note.title || 'My visit notes', text: 'Notes for my provider from Your Oracle' }); } catch { /* dismissed */ }
   };
   const saveName = () => {
     const t = renaming?.trim();
@@ -63,12 +63,12 @@ export function NotePreview({ noteId, mode: initial = 'view', onClear }: { noteI
         <div className={styles.tools}>
           {mode === 'view' ? (
             // Edit also renames: the name becomes editable in this bar.
-            <Button variant="ghost" size="sm" leadingIcon="edit" onClick={() => { setRenaming(note.title || ''); setMode('edit'); }}>Edit</Button>
+            <IconButton icon="edit" label="Edit" size="sm" onClick={() => { setRenaming(note.title || ''); setMode('edit'); }} />
           ) : (
             <Button variant="ghost" size="sm" onClick={() => { if (renaming !== null) saveName(); setMode('view'); }}>Done</Button>
           )}
           <IconButton icon="download" label="Download PDF" size="sm" onClick={() => toast('Downloaded as PDF (demo)')} />
-          <Button size="sm" leadingIcon="share" onClick={share}>Share</Button>
+          <Button size="sm" onClick={share}>Share</Button>
           <IconButton icon="close" label="Close preview" size="sm" onClick={onClear} />
         </div>
       </div>

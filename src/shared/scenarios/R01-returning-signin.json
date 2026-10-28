@@ -167,7 +167,7 @@
               },
               {
                 "label": "Summary",
-                "value": "Report text Deborah can read with you"
+                "value": "Report text the Oracle can read with you"
               }
             ]
           },
@@ -483,7 +483,7 @@
             "header": {
               "name": "Maria",
               "dob": "1978",
-              "whatThisIs": "Note for the provider — prepared with the Oracle, Deborah’s AI health education tool, from our conversation"
+              "whatThisIs": "Note for the provider — prepared with Your Oracle, an AI health education tool, from our conversation"
             },
             "appointmentDate": "2026-10-10T09:30:00-07:00",
             "chiefComplaint": "Night sweats and waking at 3am for about 8–12 months.",
@@ -575,7 +575,7 @@
             "header": {
               "name": "Maria",
               "dob": "1978",
-              "whatThisIs": "Note for the provider — prepared with the Oracle, Deborah’s AI health education tool, from our conversation"
+              "whatThisIs": "Note for the provider — prepared with Your Oracle, an AI health education tool, from our conversation"
             },
             "appointmentDate": "2026-10-29T14:00:00-07:00",
             "chiefComplaint": "Tired most afternoons; TSH checked last year only.",
@@ -623,7 +623,7 @@
             "header": {
               "name": "Maria",
               "dob": "1978",
-              "whatThisIs": "Note for the provider — prepared with the Oracle, Deborah’s AI health education tool, from our conversation"
+              "whatThisIs": "Note for the provider — prepared with Your Oracle, an AI health education tool, from our conversation"
             },
             "appointmentDate": "2026-11-05T11:00:00-08:00",
             "chiefComplaint": "Reviewing my October thyroid and hormone panel.",
@@ -713,7 +713,7 @@
           "id": "n-r01-1",
           "type": "plan",
           "title": "Today’s habits are waiting",
-          "body": "Day 19 of your Healing Plan. A minute to check in?",
+          "body": "Day 19 of your Wellness Plan. A minute to check in?",
           "deepLink": "plan",
           "deliverAt": "2026-10-14T08:00:00-07:00",
           "delivered": true,
@@ -723,7 +723,7 @@
           "id": "n-r01-2",
           "type": "followup",
           "title": "How are you doing?",
-          "body": "Deborah would like to hear how the last few nights have been.",
+          "body": "The Oracle would like to hear how the last few nights have been.",
           "deepLink": "followup:p-self",
           "deliverAt": "2026-10-13T18:30:00-07:00",
           "delivered": true,
@@ -732,7 +732,7 @@
         {
           "id": "n-r01-3",
           "type": "critical",
-          "title": "Please check in with Deborah",
+          "title": "Please check in with the Oracle",
           "body": "You mentioned something earlier that’s worth a closer look. Tap to continue.",
           "deepLink": "followup:p-self",
           "deliverAt": "2026-10-12T10:15:00-07:00",
@@ -743,7 +743,7 @@
           "id": "n-r01-4",
           "type": "booking",
           "title": "Your consultation is tomorrow",
-          "body": "30 min with Deborah · Video. Tap to see the details.",
+          "body": "30 min with the Oracle · Video. Tap to see the details.",
           "deepLink": "chat",
           "deliverAt": "2026-10-10T09:00:00-07:00",
           "delivered": true,
@@ -753,7 +753,7 @@
           "id": "n-r01-5",
           "type": "reconsent",
           "title": "We’ve updated our privacy policy",
-          "body": "Please review and agree to keep using Your Oracle Clinician.",
+          "body": "Please review and agree to keep using Your Oracle.",
           "deepLink": "terms",
           "deliverAt": "2026-10-08T12:00:00-07:00",
           "delivered": true,

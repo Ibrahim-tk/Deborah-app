@@ -94,7 +94,7 @@ export default function VisitBrief() {
     return (
       <div className={styles.root} data-xref="M-9.7 · My Visit Notes">
         <Modal title="For my provider" right={<Button variant="ghost" size="md" onClick={dismissModal}>Done</Button>}>
-          <EmptyState icon="note" text="There’s not enough from this conversation yet for a provider note. Keep talking with Deborah first." />
+          <EmptyState icon="note" text="There’s not enough from this conversation yet for a provider note. Keep talking with the Oracle first." />
         </Modal>
       </div>
     );
@@ -149,7 +149,7 @@ export default function VisitBrief() {
   const onShare = async () => {
     persist();
     if (!navigator.share) return toast('Sharing isn’t available in this browser');
-    try { await navigator.share({ title: 'For my provider', text: 'Notes for my provider from Your Oracle Clinician' }); } catch { /* dismissed */ }
+    try { await navigator.share({ title: 'For my provider', text: 'Notes for my provider from Your Oracle' }); } catch { /* dismissed */ }
   };
 
   const onDownload = () => open('M-9.6', { briefNoteId: persist() });

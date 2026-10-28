@@ -97,7 +97,7 @@ export default function LabReport() {
       </div>
       {isActiveProfile && (
         <div className={styles.footer}>
-          <Button fullWidth leadingIcon="deborah" onClick={ask}>Ask Deborah about these labs</Button>
+          <Button fullWidth leadingIcon="deborah" onClick={ask}>Ask Oracle about these labs</Button>
         </div>
       )}
     </div>

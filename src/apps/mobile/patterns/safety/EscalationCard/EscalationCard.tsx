@@ -45,22 +45,18 @@ export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: E
 
   return (
     <>
-      {/* Branded hero card: heading + CTA left, Deborah cut-out right (bottom dissolves into the card). */}
+      {/* Branded hero card: heading + CTA left, no portrait (Oct 27: Deborah's photo removed; routes to the support team). */}
       <div className={styles.hero}>
         <div className={styles.heroCopy}>
-          <p className={styles.heroTitle}>Talk with Deborah directly</p>
-          <Button size="sm" className={styles.cta} onClick={request}>Book Consultation</Button>
-        </div>
-        <div className={styles.portraitStack} aria-hidden>
-          <img className={styles.portrait} src="/images/deborah/cutout.png" alt="" />
-          <img className={styles.portraitBlur} src="/images/deborah/cutout.png" alt="" />
+          <p className={styles.heroTitle}>Talk with our support team</p>
+          <Button size="sm" className={styles.cta} onClick={request}>Consult with support team</Button>
         </div>
       </div>
       <BottomSheet open={Boolean(open)} onClose={done}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>
           <span className={styles.check} aria-hidden><Icon name="check" size={28} /></span>
           <h2 id="escalation-title" className={styles.title}>Request sent</h2>
-          <p className={styles.sent}>Your request has been sent. Someone from Deborah’s team will contact you soon.</p>
+          <p className={styles.sent}>Your request has been sent. Someone from the support team will contact you soon.</p>
           <div className={styles.actions}>
             <Button fullWidth onClick={done}>Done</Button>
           </div>

@@ -52,7 +52,7 @@ export function HomeMediaHero({
         {/* Same hierarchy as the health-detail cards (2026-10-21): orb + arrow on top, title + one line at the bottom. */}
         <div className={styles.bodyCompact}>
           <div className={styles.top}>
-            <DeborahBlob size={40} label="Deborah" className={styles.orb} />
+            <DeborahBlob size={40} label="The Oracle" className={styles.orb} />
             {onCta && (
               <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
                 <Icon name="chevron" size={18} />

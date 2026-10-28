@@ -1,5 +1,5 @@
 {
-  "// OPEN": "Specialty list needs Deborah's sign-off (docs/ux/F09c-log-visit.md › Open questions 1).",
+  "// OPEN": "Specialty list needs the Oracle's sign-off (docs/ux/F09c-log-visit.md › Open questions 1).",
   "options": [
     { "id": "primary-care", "label": "Primary care", "short": "primary care", "keywords": ["primary care", "pcp", "family doctor", "gp", "general practitioner", "internist", "my doctor"] },
     { "id": "gynecology", "label": "Gynecology", "short": "gynecology", "keywords": ["gyn", "gynecologist", "gynaecologist", "ob-gyn", "obgyn", "ob/gyn"] },

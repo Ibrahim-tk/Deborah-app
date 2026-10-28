@@ -21,7 +21,7 @@ import styles from './NotificationInbox.module.css';
 const TYPE: Record<NotificationType, { label: string; icon: IconName }> = {
   followup: { label: 'Follow-up', icon: 'chat' },
   inactivity: { label: 'Reminder', icon: 'bell' },
-  plan: { label: 'Healing Plan', icon: 'calendar' },
+  plan: { label: 'Wellness Plan', icon: 'calendar' },
   critical: { label: 'Important', icon: 'alert' },
   reconsent: { label: 'Policy update', icon: 'file' },
   booking: { label: 'Booking', icon: 'calendar' },
@@ -67,7 +67,7 @@ export default function NotificationInbox() {
           </button>
         )}
         {items.length === 0 ? (
-          <div className={styles.empty}><EmptyState icon="calendar" title="You’re all caught up" text="Reminders and follow-ups from Deborah will show here." /></div>
+          <div className={styles.empty}><EmptyState icon="calendar" title="You’re all caught up" text="Reminders and follow-ups from the Oracle will show here." /></div>
         ) : (
           <>
             <ul className={styles.list}>

@@ -13,7 +13,7 @@
     "fields": [
       { "label": "Study", "value": "Pelvic ultrasound" },
       { "label": "Date", "value": "Date shown on the report" },
-      { "label": "Summary", "value": "Report text Deborah can read with you" }
+      { "label": "Summary", "value": "Report text the Oracle can read with you" }
     ]
   },
   "prescription": {

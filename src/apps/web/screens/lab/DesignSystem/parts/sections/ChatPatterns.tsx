@@ -13,7 +13,7 @@ import styles from './sections.module.css';
 const noop = () => {};
 const script = scripts[FALLBACK_SCRIPT_ID];
 
-const PLACEHOLDER = 'Ask Deborah anything…';
+const PLACEHOLDER = 'Ask Oracle anything…';
 const VOICE = script.voiceSample;
 
 const composerBase = {
@@ -164,11 +164,11 @@ function ComposerBlock({ children }: { children: ReactNode }) {
 
 export function ChatPatterns() {
   return (
-    <Section id="chat" title="Chat" lede="Deborah unboxed; user in lilac. Composer is the solid writing surface — every product state below.">
+    <Section id="chat" title="Chat" lede="The Oracle unboxed; user in lilac. Composer is the solid writing surface — every product state below.">
       <Grid>
         <Specimen name="ConversationHeader · ChatHeader" path="patterns/chat/ConversationHeader" note="Glass controls float over the chat; titles stay quiet.">
           <Variant label="ConversationHeader">
-            <div className={styles.headerStage}><ConversationHeader onMenu={noop} title="Ask Deborah" profile={{ name: 'Maria', guest: false, onPress: noop }} onNotifications={noop} /></div>
+            <div className={styles.headerStage}><ConversationHeader onMenu={noop} title="Ask Oracle" profile={{ name: 'Maria', guest: false, onPress: noop }} onNotifications={noop} /></div>
           </Variant>
           <Variant label="ChatHeader">
             <div className={styles.headerStage}><ChatHeader guest onSignIn={noop} onSignUp={noop} /></div>
@@ -179,7 +179,7 @@ export function ChatPatterns() {
           <Greeting />
         </Specimen>
 
-        <Specimen name="MessageBubble · ThinkingIndicator" path="patterns/chat/MessageBubble" note="Avatar at the start of each Deborah turn. Working: one ring + changing words.">
+        <Specimen name="MessageBubble · ThinkingIndicator" path="patterns/chat/MessageBubble" note="Avatar at the start of each Oracle turn. Working: one ring + changing words.">
           <div className={styles.thread} data-placeholder>
             <MessageBubble role="user" text={script.voiceSample} />
             <MessageBubble role="deborah" turnStart text={script.openingMessage} />
@@ -187,7 +187,7 @@ export function ChatPatterns() {
           </div>
         </Specimen>
 
-        <Specimen name="QuickReplies · SuggestedQuestions" path="patterns/chat/QuickReplies" note="Option rows under a Deborah message; follow-ups as borderless rows.">
+        <Specimen name="QuickReplies · SuggestedQuestions" path="patterns/chat/QuickReplies" note="Option rows under an Oracle message; follow-ups as borderless rows.">
           <Variant label="QuickReplies">
             <QuickReplies label="Did it help?" options={[{ id: 'y', label: 'Yes' }, { id: 'p', label: 'Partly' }, { id: 'n', label: 'Not yet' }]} onSelect={noop} />
           </Variant>

@@ -106,7 +106,7 @@ export default function Account() {
     },
     {
       title: 'Support',
-      rows: [{ title: 'About Deborah', subtitle: 'Book a consultation', icon: 'info', onPress: () => nav.push('M-7.6') }],
+      rows: [{ title: 'About the Oracle', subtitle: 'Consult with support team', icon: 'info', onPress: () => nav.push('M-7.6') }],
     },
   ];
 
@@ -193,7 +193,7 @@ export default function Account() {
           </Button>
         }
       >
-        <p className={styles.text}>Used only by Deborah’s team. We don’t send texts or verification codes.</p>
+        <p className={styles.text}>Used only by the support team. We don’t send texts or verification codes.</p>
         <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
       </BottomSheet>
       <NameSheet key={`name-${sheetKey}`} open={sheet === 'name'} onClose={() => setSheet(null)} />

@@ -40,7 +40,7 @@ export default function Subscription() {
   };
 
   return (
-    <DerivedPage title="Subscription" composerPlaceholder="Ask Deborah about your plan…">
+    <DerivedPage title="Subscription" composerPlaceholder="Ask Oracle about your plan…">
       <div className={styles.stack} data-xref="M-10.3 · Subscription">
         <Card>
           {trial ? (

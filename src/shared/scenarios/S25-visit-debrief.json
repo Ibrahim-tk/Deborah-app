@@ -112,7 +112,7 @@
             "header": {
               "name": "Maria",
               "dob": "1978",
-              "whatThisIs": "Note for the provider — prepared with the Oracle, Deborah’s AI health education tool, from our conversation"
+              "whatThisIs": "Note for the provider — prepared with Your Oracle, an AI health education tool, from our conversation"
             },
             "appointmentDate": "2026-10-22T09:30:00-07:00",
             "chiefComplaint": "Night sweats and waking hot for about 8–12 months, worse since last spring.",
@@ -152,8 +152,8 @@
       "queue": [
         {
           "id": "n-visit-s25",
-          "title": "Your Oracle Clinician",
-          "body": "Deborah: How did your appointment go?",
+          "title": "Your Oracle",
+          "body": "The Oracle: How did your appointment go?",
           "deepLink": "visit:n-brief-s25",
           "deliverAt": "2026-10-23T16:00:00.000Z",
           "delivered": true,

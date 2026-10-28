@@ -55,7 +55,7 @@ export function Section({ number, section, open, pending, streaming, onToggle, o
           ))}
         </ul>
       )}
-      {isWord && section.body && !streaming && <p className={styles.signoff}>— Deborah</p>}
+      {isWord && section.body && !streaming && <p className={styles.signoff}>— the Oracle</p>}
       {extra}
     </>
   );

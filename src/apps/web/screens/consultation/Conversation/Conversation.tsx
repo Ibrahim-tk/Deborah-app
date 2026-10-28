@@ -334,6 +334,7 @@ export default function Conversation() {
         </aside>
       )}
       <ChatHeader
+        disclosure={!isEmpty && !profiling}
         onBack={() => pop()}
         onNewChat={() => chat.startNew()}
         canStartNew={!isEmpty && !profiling}
@@ -386,7 +387,7 @@ export default function Conversation() {
                     push('M-7.3');
                   }}
                   onTeamBook={() => {
-                    toast('Summary sent to Deborah’s team (demo)');
+                    toast('Summary sent to the support team (demo)');
                     push('M-8.2');
                   }}
                   onLongPress={setPressed}

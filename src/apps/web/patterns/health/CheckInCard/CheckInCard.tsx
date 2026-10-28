@@ -27,13 +27,13 @@ export interface CheckInCardProps {
 const when = (n: number) => (n <= 0 ? 'later today' : n === 1 ? 'tomorrow' : `in ${n} days`);
 
 function lines(state: Exclude<CheckInCardState, { kind: 'due' }>): { title: string; meta: string } {
-  if (state.kind === 'scheduled') return { title: `Next check-in with Deborah: ${when(state.daysUntil)}`, meta: 'Change when she checks in' };
-  if (state.kind === 'unscheduled') return { title: 'No check-in scheduled', meta: 'Choose when Deborah checks in' };
-  return { title: 'Turn on check-in reminders', meta: 'Deborah can remind you to tell her how you’re doing' };
+  if (state.kind === 'scheduled') return { title: `Next check-in with the Oracle: ${when(state.daysUntil)}`, meta: 'Change when she checks in' };
+  if (state.kind === 'unscheduled') return { title: 'No check-in scheduled', meta: 'Choose when the Oracle checks in' };
+  return { title: 'Turn on check-in reminders', meta: 'The Oracle can remind you to tell her how you’re doing' };
 }
 
 export function CheckInCard({ state, upcoming, onCheckIn, onReminders }: CheckInCardProps) {
-  const upcomingLine = upcoming && <span className={styles.upcoming}>Upcoming: consult with Deborah · {upcoming}</span>;
+  const upcomingLine = upcoming && <span className={styles.upcoming}>Upcoming: consult with support team · {upcoming}</span>;
 
   if (state.kind === 'due') {
     return (
@@ -41,7 +41,7 @@ export function CheckInCard({ state, upcoming, onCheckIn, onReminders }: CheckIn
         <span className={styles.icon}><Icon name="calendar" size={22} /></span>
         <span className={styles.text}>
           {/* Hierarchy (design 2026-10-20): what it is leads, when sits under it, then the action. */}
-          <span className={styles.title}>Check in with Deborah</span>
+          <span className={styles.title}>Check in with the Oracle</span>
           <span className={styles.meta}><span className={styles.due}>Due today</span> · about 2 minutes</span>
         </span>
         <Button fullWidth onClick={onCheckIn} className={styles.action}>Check in now</Button>

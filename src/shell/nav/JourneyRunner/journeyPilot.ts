@@ -74,7 +74,7 @@ function typeInput(el: HTMLInputElement, value: string) {
 
 const DONE = /Saved to your health profile|Nothing from this conversation was saved/;
 const EARLY_LOOK = /early first look|don.?t have enough yet for full guidance/i;
-const UNCOVERED = /outside what Deborah|approved educational materials|cataract/i;
+const UNCOVERED = /outside what the Oracle|approved educational materials|cataract/i;
 const LABS_REFRESH = /updated this with your labs/i;
 const FREE_TEXT_PLACEHOLDER = /Type your goal|Type your answer|Or type your answer|Or type something else|Or type a/i;
 const THIS_YEAR = new Date().getFullYear();
@@ -284,7 +284,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
     const send = find(phone, /^Add Report$/) ?? find(phone, /^Save changes$/);
     if (send) {
       send.click();
-      return { done: false, acted: true, step: 'Send labs to Deborah' };
+      return { done: false, acted: true, step: 'Send labs to the Oracle' };
     }
   }
 
@@ -341,7 +341,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
   if (!st.nextStepTapped) {
     const row =
       run.afterAnswer === 'whatsNext-book'
-        ? find(phone, /^Book a consult with Deborah$/) || find(phone, /^Book a consultation$/)
+        ? find(phone, /^Consult with support team$/) || find(phone, /^Consult with support team$/)
         : run.afterAnswer === 'whatsNext-followUp'
           ? find(phone, /^Ask a follow-up$/)
           : find(phone, /^Upload labs or results$/);
@@ -353,7 +353,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
     }
     const label =
       run.afterAnswer === 'whatsNext-book'
-        ? /^Book a consult with Deborah$|^Book a consultation$/
+        ? /^Consult with support team$|^Consult with support team$/
         : run.afterAnswer === 'whatsNext-followUp'
           ? /^Ask a follow-up$/
           : /^Upload labs or results$/;
@@ -376,7 +376,7 @@ function waitingForGuidanceStream(phone: HTMLElement) {
     [...phone.querySelectorAll<HTMLElement>('[data-xref^="M-2.1 "]')].filter(visible).at(-1) ?? phone;
   const body = chat.textContent ?? '';
   if (/Reading your answer|Let me look at this through my framework/i.test(body)) return true;
-  if (/Deborah is reviewing|Looking through my Handbook|Writing to you/i.test(body)) return true;
+  if (/the Oracle is reviewing|Looking through my Handbook|Writing to you/i.test(body)) return true;
   // Sections streaming before the action row appears.
   if (/What I.?m Hearing|The Hypothalamic Connection/i.test(body) && !find(phone, /Visit Notes/)) return true;
   return false;
@@ -408,13 +408,13 @@ export function journeyTick(run: JourneyRun, st: PilotState): PilotTick {
   const body = phone.textContent ?? '';
 
   if (run.stopAt === 'deborah' && inChat) {
-    return { done: true, acted: false, step: 'Ask Deborah', passed: true };
+    return { done: true, acted: false, step: 'Ask Oracle', passed: true };
   }
   if (run.stopAt === 'gate' && /^M-1\.10/.test(screen)) {
     return { done: true, acted: false, step: 'Ask adult (under-13 gate)', passed: true };
   }
   if (/^M-1\.9/.test(screen)) {
-    if (run.stopAt === 'deborah') return { done: true, acted: false, step: 'Deborah welcome', passed: true };
+    if (run.stopAt === 'deborah') return { done: true, acted: false, step: 'The Oracle welcome', passed: true };
     return { done: false, acted: false, step: 'Waiting for Start chatting' };
   }
 
@@ -422,13 +422,13 @@ export function journeyTick(run: JourneyRun, st: PilotState): PilotTick {
   if (/^M-2\.0\b/.test(screen) && (run.message || wantsAfterAnswer(run) || run.earlyAnswer)) {
     const openAsk =
       [...phone.querySelectorAll<HTMLButtonElement>('button')].find(
-        (b) => visible(b) && b.getAttribute('aria-label') === 'Message Deborah',
-      ) ?? find(phone, /^Message Deborah$/);
+        (b) => visible(b) && b.getAttribute('aria-label') === 'Message the Oracle',
+      ) ?? find(phone, /^Message the Oracle$/);
     if (openAsk) {
       openAsk.click();
-      return { done: false, acted: true, step: 'Opens Ask Deborah from Home' };
+      return { done: false, acted: true, step: 'Opens Ask Oracle from Home' };
     }
-    return { done: false, acted: false, step: 'Waiting for Ask Deborah on Home' };
+    return { done: false, acted: false, step: 'Waiting for Ask Oracle on Home' };
   }
 
   // Onboarding: PDF personas burst through Welcome + M-1.4 (sign-up + OTP); otherwise autopilot.
@@ -606,14 +606,14 @@ export function journeyTick(run: JourneyRun, st: PilotState): PilotTick {
 
   // Empty message without afterAnswer: end when chat is open (PDF deborah stop / self-child handled above).
   if (!run.message && inChat && !run.earlyAnswer && !wantsAfterAnswer(run)) {
-    return { done: true, acted: false, step: 'Ask Deborah', passed: true };
+    return { done: true, acted: false, step: 'Ask Oracle', passed: true };
   }
 
   // Labs / Whats next seeds: treat as already past the opening send.
   if (!run.message && (run.earlyAnswer || wantsAfterAnswer(run))) st.sent = true;
 
   // Uncovered: after request, handoff copy without Visit Notes.
-  if (UNCOVERED.test(run.message) && /outside what Deborah|approved educational/i.test(body) && st.sent) {
+  if (UNCOVERED.test(run.message) && /outside what the Oracle|approved educational/i.test(body) && st.sent) {
     const choicesLeft = [...phone.querySelectorAll<HTMLElement>('[data-question-choices]')].some((p) =>
       buttons(p).some((b) => b.hasAttribute('data-choice-id')),
     );

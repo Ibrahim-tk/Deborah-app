@@ -154,7 +154,7 @@ export function JourneyRunner() {
     <Popover trigger={<><span aria-hidden="true">▶</span> Journeys <span aria-hidden="true">▾</span></>} width="lg">
       {(close) => (
         <>
-          <MenuSection title="Ask Deborah guidance (Miro Step 4)">
+          <MenuSection title="Ask Oracle guidance (Miro Step 4)">
             {GUIDANCE_JOURNEYS.map((j) => (
               <MenuItem key={j.id} oneLine label={j.label} description={j.description} onSelect={() => { close(); start(j); }} />
             ))}

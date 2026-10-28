@@ -113,3 +113,11 @@
 /* Smaller Shop button on product cards (designer, 2026-10-23). */
 .product > button:last-child { min-height: 28px; height: 28px; padding-inline: var(--space-3); font-size: var(--fs-footnote); }
 .product > button:last-child :global(svg) { width: 14px; height: 14px; }
+
+/* Shop pinned to the card bottom so buttons line up across cards (designer, 2026-10-28). */
+.product { grid-template-rows: auto 1fr auto; align-content: stretch; }
+.productCopy { align-content: start; }
+
+/* Same soft edge as the Wellness Plan card: 6% ink hairline, rounder corners, white field (designer, 2026-10-28). */
+.product { padding: var(--space-3); border-radius: 28px; background: var(--white); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 6%, transparent); }
+.productWell { border-radius: 20px; }

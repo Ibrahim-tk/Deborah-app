@@ -47,7 +47,7 @@ export default function PdfPreview() {
   const hasContent = Boolean(brief || source);
 
   return (
-    <DerivedPage title="PDF preview" composerPlaceholder="Ask Deborah about this summary…">
+    <DerivedPage title="PDF preview" composerPlaceholder="Ask Oracle about this summary…">
       <div className={styles.body} data-xref="M-9.6 · PDF preview">
         {brief ? (
           <>
@@ -65,7 +65,7 @@ export default function PdfPreview() {
             <p className={styles.footnote}>Printable summaries are part of Premium.</p>
           </>
         ) : (
-          <EmptyState icon="pdf" text="There’s no answer to print yet. Once Deborah answers, you can save a summary here." />
+          <EmptyState icon="pdf" text="There’s no answer to print yet. Once Oracle answers, you can save a summary here." />
         )}
         {hasContent && (
           <div className={styles.footerStack}>

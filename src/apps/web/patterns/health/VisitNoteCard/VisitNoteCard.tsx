@@ -42,8 +42,8 @@ export function VisitNoteCard({ date, title, detail, doodle = 'note', logged = f
       {onLog && <div className={styles.footer}>
         {logged ? (
           <>
-            {/* Ask first (Deborah's orb), edit the log last (design 2026-10-20). */}
-            <Button variant="secondary" size="sm" leadingIcon="deborah" onClick={() => onAsk?.()}>Ask Deborah</Button>
+            {/* Ask first (the Oracle's orb), edit the log last (design 2026-10-20). */}
+            <Button variant="secondary" size="sm" leadingIcon="deborah" onClick={() => onAsk?.()}>Ask Oracle</Button>
             <IconButton icon="edit" size="sm" label="Edit visit log" className={styles.edit} onClick={onLog} />
           </>
         ) : (

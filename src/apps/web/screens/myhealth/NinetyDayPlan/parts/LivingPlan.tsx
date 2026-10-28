@@ -36,7 +36,7 @@ export function LivingPlan({ concerns, careTeam, hasMedicines, onToggle, onResol
           onCheckInteractions={onCheckInteractions}
         />
       ) : (
-        <p className={styles.quiet}>Nothing active. Deborah still has your history.</p>
+        <p className={styles.quiet}>Nothing active. The Oracle still has your history.</p>
       )}
 
       {earlier.length > 0 && (

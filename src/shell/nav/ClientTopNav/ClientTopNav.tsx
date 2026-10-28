@@ -6,7 +6,7 @@ import styles from './ClientTopNav.module.css';
 export function ClientTopNav() {
   return (
     <header className={styles.root}>
-      <h1 className={styles.brand}>Your Oracle Clinician</h1>
+      <h1 className={styles.brand}>Your Oracle</h1>
       <nav className={styles.actions} aria-label="Client">
         <button type="button" className={styles.link} onClick={() => requestClientNav('home')}>
           Home

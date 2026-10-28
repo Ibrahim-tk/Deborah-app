@@ -9,7 +9,7 @@
  */
 import { FOLLOW_UP_BODY, FOLLOW_UP_TITLE, useAppStore } from '@shared/store';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Panel, Segmented, Toggle, useAlert } from '@web/ui';
+import { Button, Panel, Select, Toggle, useAlert } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import styles from './Notifications.module.css';
@@ -48,7 +48,7 @@ export default function Notifications() {
       return false;
     }
     const choice = await alert({
-      title: '“Your Oracle Clinician” Would Like to Send You Notifications',
+      title: '“Your Oracle” Would Like to Send You Notifications',
       message: 'Notifications may include alerts, sounds and icon badges.',
       buttons: [{ label: 'Don’t Allow', style: 'cancel' }, { label: 'Allow' }],
     });
@@ -113,7 +113,7 @@ export default function Notifications() {
   };
 
   return (
-    <DerivedPage title="Notification settings" composerPlaceholder="Ask Deborah about reminders…">
+    <DerivedPage title="Notification settings" composerPlaceholder="Ask Oracle about reminders…">
       <div className={styles.stack} data-xref="M-10.4 · Notifications">
         {denied && (
           <Panel tone="warning" icon="alert">
@@ -125,28 +125,31 @@ export default function Notifications() {
         )}
 
         <section className={styles.group} aria-label="Notifications">
-          <Toggle checked={enabled && !denied} onChange={setEnabled} label="Allow notifications" description="Push notifications from Deborah on this phone." />
+          <Toggle checked={enabled && !denied} onChange={setEnabled} label="Allow notifications" description="Push notifications from the Oracle on this phone." />
         </section>
 
         {enabled && !denied && (
           <>
-            <section className={styles.group} aria-label="Follow-up after guidance">
-              <Toggle checked={checkIns} onChange={setCheckIns} label="Follow-up after guidance" description="Deborah asks how you’re doing after she’s shared guidance." />
-              {checkIns && (
-                <fieldset className={styles.interval}>
-                  <legend className={styles.legend}>Preferred frequency</legend>
-                  <Segmented label="Preferred frequency" options={INTERVALS} value={String(days)} onChange={changeInterval} />
-                </fieldset>
-              )}
-            </section>
-            <section className={styles.group} aria-label="Healing Plan check-in">
-              <Toggle checked={prefs?.plan !== false} onChange={(on) => void setPref('plan', on)} label="Healing Plan check-in" description="A nudge to log today’s habits while your plan is running." />
+            <section className={styles.group} aria-label="Wellness Plan check-in">
+              <Toggle checked={prefs?.plan !== false} onChange={(on) => void setPref('plan', on)} label="Wellness Plan check-in" description="A nudge to log today’s habits while your plan is running." />
             </section>
             <section className={styles.group} aria-label="30-day inactivity reminder">
-              <Toggle checked={prefs?.inactivity !== false} onChange={(on) => void setPref('inactivity', on)} label="30-day inactivity reminder" description="If you haven’t talked with Deborah for 30 days." />
+              <Toggle checked={prefs?.inactivity !== false} onChange={(on) => void setPref('inactivity', on)} label="30-day inactivity reminder" description="If you haven’t talked with the Oracle for 30 days." />
             </section>
             <section className={styles.group} aria-label="Booking reminders">
-              <Toggle checked={bookingReminders} onChange={setBooking} label="Booking reminders" description="The day before a consultation with Deborah." />
+              <Toggle checked={bookingReminders} onChange={setBooking} label="Booking reminders" description="The day before a consult with support team." />
+            </section>
+            <section className={styles.group} aria-label="Follow-up after guidance">
+              <Toggle checked={checkIns} onChange={setCheckIns} label="Follow-up after guidance" description="The Oracle asks how you’re doing after she’s shared guidance." />
+              {checkIns && (
+                // Web: a settings row with the dropdown where the toggle sits (designer, 2026-10-28).
+                <div className={styles.selectRow}>
+                  <span className={styles.rowTitle}>Preferred frequency</span>
+                  <div className={styles.selectField}>
+                    <Select label="Preferred frequency" hideLabel options={INTERVALS} value={String(days)} onChange={changeInterval} />
+                  </div>
+                </div>
+              )}
             </section>
           </>
         )}

@@ -7,7 +7,7 @@ import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom, formatShortDate } from '@shared/utils';
 import type { Conversation, Message } from '@shared/types/domain';
 import { DeborahBlob } from '@mobile/ui';
-import { ProductCard, ShopTiles } from '@mobile/patterns/commerce';
+import { ProductCard, ProductDisclosure, ShopTiles } from '@mobile/patterns/commerce';
 import {
   AfterGuidanceTrail,
   AnswerActions,
@@ -190,11 +190,16 @@ export function MessageList({
                 onFeedback={actions.feedback}
                 onBook={lab ? onBook : undefined}
               />
-              {!minor && !conversation.noProduct && !conversation.redFlag && <ShopTiles
+              {!minor && !conversation.noProduct && !conversation.redFlag && (
+                <>
+                  <ShopTiles
                 products={productList.filter((p) => p.id !== product?.id)}
-                title="Deborah’s formulations"
+                title="Recommended products"
                 onShop={onShop}
-              />}
+                  />
+                  <ProductDisclosure />
+                </>
+              )}
               {/* F02g: save-facts → bridge → consult ad → Genesis Gold + visit notes. */}
               {showNext && (
                 <AfterGuidanceTrail
@@ -281,13 +286,13 @@ export function MessageList({
           <CareDisclaimer key="care" text={consentDoc.careLine} onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
         ),
         // A chat that opens with Deborah (first-visit onboarding) shows her orb once, top left.
-        i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="Deborah" className={styles.firstOrb} />,
+        i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="The Oracle" className={styles.firstOrb} />,
         renderOne(m, i),
       ])}
 
       {conversation.thinking && <ThinkingIndicator label={conversation.thinking} />}
 
-      {/* "Tell me what you think" only once Deborah has enough context to answer (intake done). */}
+      {/* "Tell me what you think" only once the Oracle has enough context to answer (intake done). */}
       {!busy && status === 'ready' && (
         <div className={styles.cta}>
           <AnswerCTA label={ANSWER_REQUEST_LABEL} emphasis="primary" onPress={chat.requestAnswer} />

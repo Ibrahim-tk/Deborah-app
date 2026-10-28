@@ -37,7 +37,7 @@ export default function FollowUpOptIn() {
     }
     // The custom prompt always precedes the system alert.
     const choice = await alert({
-      title: '“Your Oracle Clinician” Would Like to Send You Notifications',
+      title: '“Your Oracle” Would Like to Send You Notifications',
       message: 'Notifications may include alerts, sounds and icon badges.',
       buttons: [{ label: 'Don’t Allow', style: 'cancel' }, { label: 'Allow' }],
     });

@@ -130,7 +130,7 @@ export default function Records() {
               New
             </Button>
           }
-          composerPlaceholder="Ask Deborah about a visit…"
+          composerPlaceholder="Ask Oracle about a visit…"
         >
           <div className={styles.stack}>
             {otherProfile && <p className={styles.context}>{`${profile?.name}’s visit notes`}</p>}

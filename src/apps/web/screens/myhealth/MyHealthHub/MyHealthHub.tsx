@@ -29,7 +29,7 @@ export default function MyHealthHub() {
   }, []);
 
   return (
-    <DerivedPage title="My Health" composerPlaceholder="Ask Deborah about your health…">
+    <DerivedPage title="My Health" composerPlaceholder="Ask Oracle about your health…">
       <div
         className={styles.stack}
         data-xref={hubState === 'empty' ? 'M-7.1 · My Health — first time' : 'M-7.2 · My Health hub'}

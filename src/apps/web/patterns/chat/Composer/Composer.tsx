@@ -15,7 +15,7 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import { BottomSheet, EdgeLight, Icon, IconButton, Menu, TextArea } from '@web/ui';
+import { BottomSheet, EdgeLight, Icon, IconButton, TextArea } from '@web/ui';
 import { SymptomDropdown } from '../SymptomDropdown';
 import styles from './Composer.module.css';
 
@@ -26,10 +26,6 @@ export const MAX_CHARS = 2000;
 const SPEECH_PATTERN = [3000, 2500, 2000, 2500, 4000];
 
 export type AttachSource = 'camera' | 'upload';
-const ATTACH_ITEMS = [
-  { id: 'camera', label: 'Camera', icon: 'camera' as const },
-  { id: 'upload', label: 'Upload', icon: 'upload' as const },
-];
 
 /** A photo or file waiting in the composer (shown as a thumbnail tile with ×). */
 export interface ComposerAttachment {
@@ -84,7 +80,6 @@ export function Composer({
   onChange,
   onSend,
   onStop,
-  onAttach,
   onSymptoms,
   tokens = [],
   onRemoveToken,
@@ -253,7 +248,7 @@ export function Composer({
           <div className={styles.field}>
             <TextArea
               ref={area}
-              label="Message Deborah"
+              label="Message the Oracle"
               value={value}
               placeholder={placeholder}
               disabled={generating || Boolean(lockedNote)}
@@ -276,12 +271,7 @@ export function Composer({
             )}
           </div>
           <div className={styles.toolbar}>
-            <Menu
-              items={ATTACH_ITEMS}
-              onSelect={(id) => onAttach(id as AttachSource)}
-              disabled={Boolean(lockedNote) || generating}
-              trigger={<IconButton icon="plus" size="sm" label="Add attachment" disabled={Boolean(lockedNote) || generating} />}
-            />
+            {/* Oct 27: no + / upload. Users can't upload labs, images or documents; lab values are typed as text. */}
             {/* Symptoms (design 2026-10-21): a labelled dropdown trigger beside +, opening a floating overlay above
                 the composer (SymptomDropdown) instead of the full sheet. Picked → tinted, label only. */}
             {(onSymptomToggle || onSymptoms) && (

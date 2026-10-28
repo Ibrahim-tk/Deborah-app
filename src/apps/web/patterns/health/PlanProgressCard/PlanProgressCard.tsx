@@ -27,7 +27,7 @@ export function PlanProgressCard({ day, length = 90, habitsDone, habitsTotal, on
         <Icon name="chevron" size={22} className={styles.chevron} />
       </span>
       {complete ? (
-        <span className={styles.complete}>You finished your {length} days — tell Deborah how it went</span>
+        <span className={styles.complete}>You finished your {length} days — tell the Oracle how it went</span>
       ) : (
         <>
           <ProgressBar value={day / length} label={`${HEALING_PLAN_TITLE} progress`} valueText={`Day ${day} of ${length}`} />

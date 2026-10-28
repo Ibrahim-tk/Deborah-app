@@ -6,13 +6,13 @@
     "It is not emergency care. In an emergency, call 911.",
     "Your health data stays private and is never sold."
   ],
-  "aiDisclosure": "You're talking to the Oracle, an AI that speaks in Deborah's voice, built only from her published work. The Oracle is not a doctor.",
+  "aiDisclosure": "You're talking to the Oracle, an AI that speaks in the Oracle's voice, built only from her published work. The Oracle is not a doctor.",
   "careLine": "Not a substitute for professional care. In an emergency, call local services.",
-  "aiDisclosureShort": "Prepared with the Oracle, Deborah's AI health education tool. The Oracle is not a doctor.",
+  "aiDisclosureShort": "Prepared with the Oracle, the Oracle's AI health education tool. The Oracle is not a doctor.",
   "terms": {
     "title": "Terms & Disclaimer",
     "body": [
-      "Your Oracle Clinician provides general health education based on the published work of Deborah Maragopoulos FNP. It is not medical advice, diagnosis or treatment.",
+      "Your Oracle provides general health education based on the published work of Genesis Health Products. It is not medical advice, diagnosis or treatment.",
       "Always talk with a qualified provider before making decisions about your health, medications or treatment. Never ignore professional advice or delay seeking it because of something you read here.",
       "If you think you may have a medical emergency, call 911 or go to the nearest emergency room immediately.",
       "Placeholder text — attorney-drafted terms will replace this before launch."
@@ -33,7 +33,7 @@
     "status": "placeholder",
     "open": "Medical-advocate consent wording pending legal review. Shared by onboarding (M-1.8) and Add family member (M-6.2).",
     "title": "Before we set up {name}’s profile",
-    "body": "As {name}’s medical advocate, you’ll manage their profile and talk with Deborah on their behalf. We just need to confirm you have their permission or the authority to do this.",
+    "body": "As {name}’s medical advocate, you’ll manage their profile and talk with the Oracle on their behalf. We just need to confirm you have their permission or the authority to do this.",
     "options": [
       {
         "value": "agreed",

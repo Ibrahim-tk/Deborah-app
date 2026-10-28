@@ -1,0 +1,78 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Intake Gaps and Plan</title>
+<style>
+@page { size: A4 landscape; margin: 14mm; }
+body { font: 11px/1.45 -apple-system, Helvetica, Arial, sans-serif; color: #1a1018; max-width: 1100px; margin: 0 auto; padding: 0 16px; background: #fff; }
+h1 { color: #613977; font-size: 20px; margin: 16px 0 4px; }
+h2 { color: #613977; font-size: 14px; margin: 18px 0 6px; }
+p.sub { color: #4a3f47; margin: 0 0 12px; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+th, td { border: 1px solid #e2dae6; padding: 5px 7px; text-align: left; vertical-align: top; }
+th { background: #f2ecf6; }
+tr { page-break-inside: avoid; }
+.big { font-size: 18px; font-weight: 600; }
+.note { background: #f2ecf6; border-left: 3px solid #613977; padding: 8px 10px; margin: 10px 0; }
+</style></head><body>
+<h1>Intake Spec v1.2 — Gaps and Plan</h1>
+<p class="sub">Your Oracle Clinician design prototype vs. Intake Form Specification v1.2. Internal. 27 Oct 2026.<br>
+Based on the code as it is now, including the step 1 changes that aren't saved to git yet.</p>
+
+<div class="note"><b>How time is counted:</b> this is a design prototype. There's no real backend and no real AI, and the questions are driven by data files. Most gaps mean adding questions to a data file and writing one scripted demo chat each. Times are for one person and assume we reuse the screens we already have.</div>
+
+<table>
+<tr><th>✅ Done</th><th>🟡 Partly done</th><th>❌ Missing</th><th>Total time</th></tr>
+<tr><td class="big">17</td><td class="big">8</td><td class="big">13</td><td class="big">About 7 days</td></tr>
+</table>
+
+<h2>🟡 Partly done</h2>
+<table>
+<tr><th>#</th><th>Gap</th><th>What's missing</th><th>Time</th></tr>
+<tr><td>1</td><td>Hormone therapy (HRT)</td><td>How it's taken, for how long, did it help, why they stopped</td><td>2 h</td></tr>
+<tr><td>2</td><td>Sign-up</td><td>Password needs a capital letter and a number; "How did you hear about us?"; "Already a Genesis Gold customer?"</td><td>2 h</td></tr>
+<tr><td>3</td><td>Teen questions</td><td>Remove adult options like "Pregnant"; simpler intersex question</td><td>2 h</td></tr>
+<tr><td>4</td><td>Older-parent chat</td><td>Exists, but isn't picked by the "who are you asking about" question</td><td>1 h</td></tr>
+<tr><td>5</td><td>Chat banners</td><td>Only the older-parent banner exists</td><td>2 h</td></tr>
+<tr><td>6</td><td>Consult questions</td><td>Health goal, why not reached yet, number of providers seen, anything else</td><td>3 h</td></tr>
+<tr><td>7</td><td>Lifestyle</td><td>Exercise, diet, stress (1–10), support people</td><td>2 h</td></tr>
+<tr><td>8</td><td>Old gender choices left over</td><td>"Complete your profile" screen, demo pages, auto-test tool</td><td>2 h</td></tr>
+</table>
+
+<h2>❌ Missing</h2>
+<table>
+<tr><th>#</th><th>Gap</th><th>Time</th></tr>
+<tr><td>9</td><td>"Who are you asking about today?" at the start of every chat</td><td>4 h</td></tr>
+<tr><td>10</td><td>Child chat (parent asking about a child), as one scripted demo</td><td>4 h</td></tr>
+<tr><td>11</td><td>Partner chat (general information only), as one scripted demo</td><td>3 h</td></tr>
+<tr><td>12</td><td>Warning levels that change by who the chat is about (shown in the demo chats)</td><td>4 h</td></tr>
+<tr><td>13</td><td>Symptom checklist with Yes / No / N/A</td><td>5 h</td></tr>
+<tr><td>14</td><td>Medical history grid (me and family)</td><td>5 h</td></tr>
+<tr><td>15</td><td>Period and pregnancy history</td><td>3 h</td></tr>
+<tr><td>16</td><td>Extra male questions (children, fertility, self-exam)</td><td>1 h</td></tr>
+<tr><td>17</td><td>Teen form: home, school, friends, safety</td><td>4 h</td></tr>
+<tr><td>18</td><td>Child form: birth, milestones, school, safety, eye/hearing/dental checks</td><td>4 h</td></tr>
+<tr><td>19</td><td>Hours of sleep as a profile question</td><td>1 h</td></tr>
+<tr><td>20</td><td>Choosing what goes in the provider summary</td><td>2 h</td></tr>
+<tr><td>21</td><td>Editing or deleting each sensitive answer</td><td>2 h</td></tr>
+</table>
+
+<h2>Plan</h2>
+<table>
+<tr><th>Phase</th><th>Items</th><th>Why this order</th><th>Time</th></tr>
+<tr><td><b>1. Who the chat is about</b></td><td>#9, #10, #11, #12, #4, #5</td><td>Most important: the wrong chat type means the wrong advice</td><td><b>2.5 days</b></td></tr>
+<tr><td><b>2. Quick fixes</b></td><td>#1, #2, #3, #8</td><td>Small, easy changes that close visible gaps</td><td><b>1 day</b></td></tr>
+<tr><td><b>3. Adult profile</b></td><td>#13, #14, #15, #16, #7, #19</td><td>Fills in the main health profile</td><td><b>2 days</b></td></tr>
+<tr><td><b>4. Teen and child</b></td><td>#17, #18</td><td>Complete forms for younger users</td><td><b>1 day</b></td></tr>
+<tr><td><b>5. Chat and privacy</b></td><td>#6, #20, #21</td><td>Final polish</td><td><b>1 day</b></td></tr>
+<tr><td colspan="3"><b>Total</b></td><td><b>About 7 days (1.5 weeks)</b></td></tr>
+</table>
+
+<h2>Not part of this prototype</h2>
+<p>The prototype only fakes these, so they need the backend or legal teams: Stripe payments, passing the chat type to the real AI, encrypting the data, syncing new articles into the knowledge base, and legal review (teen rules, privacy laws, under-13 data).</p>
+
+<h2>Decisions needed first</h2>
+<table>
+<tr><th>#</th><th>Question</th><th>Default if no answer</th></tr>
+<tr><td>1</td><td>Should these questions be full forms, or asked inside the chat?</td><td>Inside the chat, like today</td></tr>
+<tr><td>2</td><td>Should sleep, medicines and supplements be required?</td><td>Optional (skippable)</td></tr>
+<tr><td>3</td><td>Show the teen hormone questions now, or wait for the lawyer?</td><td>Hide them until the lawyer confirms</td></tr>
+</table>
+</body></html>

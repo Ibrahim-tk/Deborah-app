@@ -28,6 +28,7 @@
 .root[data-embedded] .column {
   max-width: none;
   margin-inline: 0;
+  padding-inline: var(--space-4); /* extra side room inside side panes */
 }
 
 /* Split columns live here (not only via composed masterDetail) so the grid always wins. */

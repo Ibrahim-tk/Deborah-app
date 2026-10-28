@@ -22,7 +22,7 @@ const product = findProduct(answer.product?.productId) ?? productList[0];
 
 /** Chevron-only Miro Step 4 note (docs/ux/F02e-guidance.md) — no diagrams on the mockup. */
 const GUIDANCE_FLOW_NOTE =
-  'Ask Deborah / Tell me what you think > enough details? yes > covers concern? yes > stream 7 sections > product if allowed > disclaimer / closing > Guidance given > ~14-day follow-up > What’s next. Not enough details > early first look > finish questions > ask again. Out of coverage > team handoff + Book (uncounted). What’s next rows: Ask a follow-up > Discuss with provider > Save summary > Book > Upload labs > Buy product > View 90-day plan.';
+  'Ask Oracle / Tell me what you think > enough details? yes > covers concern? yes > stream 7 sections > product if allowed > disclaimer / closing > Guidance given > ~14-day follow-up > What’s next. Not enough details > early first look > finish questions > ask again. Out of coverage > team handoff + Book (uncounted). What’s next rows: Ask a follow-up > Discuss with provider > Save summary > Book > Upload labs > Buy product > View 90-day plan.';
 
 const DEMO_BRIEF = briefFromAnswer(
   {
@@ -39,8 +39,8 @@ const DEMO_BRIEF = briefFromAnswer(
 
 export function AnswerPatterns() {
   return (
-    <Section id="answer" title="Deborah’s answer" lede="The signature seven-section framework as a calm accordion: Gold Ink numerals, headline titles, hairline dividers, no boxes. Copy shown here is placeholder script content.">
-      <Specimen name="AnswerSections" path="patterns/chat/AnswerSections" note="Fixed order, always seven. The product card lives only at the end of §6; §7 is “A Word from Deborah”.">
+    <Section id="answer" title="The Oracle’s answer" lede="The signature seven-section framework as a calm accordion: Gold Ink numerals, headline titles, hairline dividers, no boxes. Copy shown here is placeholder script content.">
+      <Specimen name="AnswerSections" path="patterns/chat/AnswerSections" note="Fixed order, always seven. The product card lives only at the end of §6; §7 is “A word from the Oracle”.">
         <div data-placeholder>
           <AnswerSections
             answer={answer}

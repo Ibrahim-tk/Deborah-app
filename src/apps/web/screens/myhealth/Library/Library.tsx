@@ -34,7 +34,7 @@ export default function Library() {
   const openCommunity = async () => {
     const choice = await alert({
       title: 'Leave the app to open Facebook?',
-      message: 'Deborah’s community group opens in Facebook.',
+      message: 'The Oracle’s community group opens in Facebook.',
       buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Open' }],
     });
     if (choice === 1) toast('Opening Facebook (demo)');
@@ -42,15 +42,15 @@ export default function Library() {
 
   return (
     <DerivedPage
-      title="Deborah’s library"
+      title="The Oracle’s library"
       tabs={<Segmented label="Show" options={TABS} value={tab} onChange={setTab} />}
       query={query}
       onQueryChange={setQuery}
-      searchLabel="Search Deborah’s library"
+      searchLabel="Search the Oracle’s library"
       searchPlaceholder="Sleep, hot flashes, cycles…"
-      composerPlaceholder="Ask Deborah about a topic…"
+      composerPlaceholder="Ask Oracle about a topic…"
     >
-      <div className={styles.stack} data-xref="M-7.5 · Deborah’s library">
+      <div className={styles.stack} data-xref="M-7.5 · the Oracle’s library">
         <TopicSelect value={topic} onChange={setTopic} />
 
         <section className={styles.list} aria-live="polite" aria-label="Library items">
@@ -58,8 +58,8 @@ export default function Library() {
             <EmptyState
               icon="search"
               title="Nothing found."
-              text="Try ‘sleep’ or ask Deborah directly."
-              actionLabel="Ask Deborah"
+              text="Try ‘sleep’ or ask the Oracle directly."
+              actionLabel="Ask Oracle"
               actionIcon="deborah"
               onAction={() => openAsk({ focus: true })}
             />
@@ -73,7 +73,7 @@ export default function Library() {
         <div className={styles.group}>
           {/* OPEN: real community URL / platform — the prototype never leaves the app. */}
           <ListRow title="Join the community (Facebook group)" trailing={<Icon name="external" size={20} className={styles.external} />} onPress={openCommunity} />
-          <ListRow title="About Deborah" onPress={() => push('M-7.6')} />
+          <ListRow title="About the Oracle" onPress={() => push('M-7.6')} />
         </div>
       </div>
     </DerivedPage>

@@ -374,7 +374,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
     case 'healingPlanLocked':
       return <HealingPlanCard locked />;
     case 'healingPlan':
-      return <HealingPlanCard concern="Steady sleep and calmer evenings" done={2} total={5} onPress={() => reply(undefined, 'Opening My Healing Plan (M-7.3).')} />;
+      return <HealingPlanCard concern="Steady sleep and calmer evenings" done={2} total={5} onPress={() => reply(undefined, 'Opening Your Wellness Plan (M-7.3).')} />;
     case 'intakeSection':
       return <IntakeSectionHeader title="Family history" lede="Placeholder until Dropbox questionnaires arrive." />;
     case 'healingSection':
@@ -383,7 +383,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return <PolicyUpdateConsent version="0.2-draft" onReviewTerms={noop} onReviewPrivacy={noop} onAccept={() => reply(undefined, 'Terms accepted.')} />;
     case 'primaryIntent':
       return (
-        <PrimaryIntentCard titleId="lab-intent" title="Sleep and night waking" body="Last chat · 3 days ago" kicker="Continue with Deborah" kickerIcon="chat">
+        <PrimaryIntentCard titleId="lab-intent" title="Sleep and night waking" body="Last chat · 3 days ago" kicker="Continue with the Oracle" kickerIcon="chat">
           <Button fullWidth onClick={() => reply(undefined, 'Opening chat…')}>Continue</Button>
         </PrimaryIntentCard>
       );
@@ -402,7 +402,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
       return (
         <NextIntentList
           items={[
-            { key: 'checkin', icon: 'bell', title: 'Check in with Deborah', sub: 'Tell her how things are going', onPress: () => reply(undefined, 'Opening check-in…') },
+            { key: 'checkin', icon: 'bell', title: 'Check in with the Oracle', sub: 'Tell her how things are going', onPress: () => reply(undefined, 'Opening check-in…') },
             { key: 'labs', icon: 'upload', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms', onPress: () => reply(undefined, 'Opening labs…') },
           ]}
         />
@@ -455,7 +455,7 @@ export function LabWidget({ kind, reply }: LabWidgetProps) {
         <SuggestionCarousel
           items={[
             { key: 'labs', title: 'Upload your recent labs', sub: 'She’ll read them alongside your symptoms.', tone: 'sky', artifact: 'blue-bloom', icon: 'file', onPress: () => reply(undefined, 'Opening labs…') },
-            { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps Deborah tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: () => reply('Help me with sleep.', 'Tell me more.') },
+            { key: 'sleep', title: 'Add sleep, food, movement & stress', sub: 'Helps the Oracle tailor her guidance.', tone: 'rose', artifact: 'pink-bloom', icon: 'moon', onPress: () => reply('Help me with sleep.', 'Tell me more.') },
           ]}
         />
       );

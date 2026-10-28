@@ -57,6 +57,24 @@ export function pronounsForSave(a: Answers): string | undefined {
   return map[a.pronouns] ?? a.pronouns;
 }
 
+const MATCHING_GENDER: Record<string, string> = { male: 'man', female: 'woman' };
+
+/**
+ * Oct 27 conditional section (adults and children): sex at birth is Intersex or Prefer not to say, or it
+ * doesn't match the stated gender.
+ */
+export function asksSexCharacteristics(a: Answers): boolean {
+  if (a.sex === 'intersex' || a.sex === 'prefer-not') return true;
+  const match = a.sex ? MATCHING_GENDER[a.sex] : undefined;
+  return Boolean(match && a.gender && a.gender !== 'prefer-not' && a.gender !== match);
+}
+
+/** Labels for a choice step: a child profile gets `childLabels` (Boy / Girl). */
+export function choiceLabel(s: Step, value: string, label: string, a: Answers): string {
+  const age = ageFromAnswers(a);
+  return forSomeoneElse(a) && age !== undefined && ageGroupFor(age) === 'child' ? s.childLabels?.[value] ?? label : label;
+}
+
 /** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`).
  * Intake `showIf` routes on sex at birth (pronouns / identity do not change the path). */
 export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
@@ -65,6 +83,7 @@ export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
   const derived: Record<string, ShowIfValue> = {
     ...a,
     ...(reproductiveStage && { reproductiveStage }),
+    sexCharacteristicsAsk: asksSexCharacteristics(a) ? 'yes' : 'no',
   };
   if (age === undefined) return derived;
   return { ...derived, age, ageGroup: ageGroupFor(age) };

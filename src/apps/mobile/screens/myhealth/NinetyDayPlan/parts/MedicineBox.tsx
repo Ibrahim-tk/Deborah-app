@@ -25,7 +25,7 @@ export function MedicineBox({ actions, hasMedicines, onToggle, onCheckInteractio
   const wells = WELLS.map((well) => ({ ...well, actions: actions.filter((a) => a.well === well.id) })).filter((well) => well.actions.length);
 
   if (!actions.length) {
-    return <p className={styles.empty}>Deborah hasn’t added actions for this yet.</p>;
+    return <p className={styles.empty}>The Oracle hasn’t added actions for this yet.</p>;
   }
 
   return (

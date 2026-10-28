@@ -23,7 +23,7 @@ export function PolicyUpdateConsent({ version, onReviewTerms, onReviewPrivacy, o
       </h2>
       <p className={styles.body}>
         We’ve updated our Terms & Disclaimer and Privacy Notice (version {version}). Please review and accept to keep using Your
-        Oracle Clinician.
+        Your Oracle.
       </p>
       <div className={styles.links}>
         <button type="button" className={styles.link} onClick={onReviewTerms}>

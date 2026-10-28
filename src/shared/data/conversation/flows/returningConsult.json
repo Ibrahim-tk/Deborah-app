@@ -2,8 +2,8 @@
   "flowId": "genesis_returning_consult_demo",
   "version": "1.0",
   "status": "placeholder",
-  "description": "Returning user (seed R01, Maria, 48, perimenopausal, on HRT), docs/ux/F02c › Returning. Unlike the first consult, Deborah opens from memory: welcome back, how last time's plan went, a sleep score, then the new concern. She never re-asks the profile: safety check first, 4 new questions (one free text), then Maria decides when to see the 7-section answer. Ends with booking and a check-in.",
-  "contentStatus": "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off before any user-facing use.",
+  "description": "Returning user (seed R01, Maria, 48, perimenopausal, on HRT), docs/ux/F02c › Returning. Unlike the first consult, the Oracle opens from memory: welcome back, how last time's plan went, a sleep score, then the new concern. She never re-asks the profile: safety check first, 4 new questions (one free text), then Maria decides when to see the 7-section answer. Ends with booking and a check-in.",
+  "contentStatus": "DRAFT. All the Oracle-voice copy, tests and product guidance need the Oracle's clinical sign-off before any user-facing use.",
   "startNode": "welcome_back",
   "carriedFromIntake": {
     "note": "From the returning profile (seed R01). Never re-asked.",
@@ -180,7 +180,7 @@
       "type": "question",
       "progress": "2 of 4",
       "bot": "When did this start? You've been on your estradiol patch and progesterone for about a year. Did the flutters begin around a dose change, on patch-change days, or on their own?",
-      "uiNote": "Uses her HRT detail fields. Deborah never asks 'Are you on any medication?'",
+      "uiNote": "Uses her HRT detail fields. The Oracle never asks 'Are you on any medication?'",
       "widget": {
         "type": "pill_select",
         "options": [
@@ -266,7 +266,7 @@
     },
     "thinking": {
       "type": "loading",
-      "bot": "Looking at this through Deborah's upstream lens…",
+      "bot": "Looking at this through the Oracle's upstream lens…",
       "widget": {
         "type": "thinking_steps",
         "steps": [
@@ -351,7 +351,7 @@
         },
         {
           "id": 7,
-          "title": "A Word from Deborah",
+          "title": "A word from the Oracle",
           "body": "Maria, a fluttering heart at 2am is frightening, and you were right to bring it up. The first step is to rule out serious causes, then work with your hormones, not against them."
         }
       ],
@@ -415,7 +415,7 @@
       "bot": "Because the flutters are new, I'd really like to hear about them myself. Here are my next openings, if you'd like one.",
       "widget": {
         "type": "slot_picker",
-        "title": "Book a consult with Deborah",
+        "title": "Consult with support team",
         "meta": "30 min · Video",
         "options": [
           {
@@ -432,7 +432,7 @@
       "bot": "Lovely. Just check this looks right.",
       "widget": {
         "type": "confirm_card",
-        "title": "Deborah · 30 min",
+        "title": "The Oracle · 30 min",
         "value": "$150",
         "detail": "{slot} · Video",
         "label": "Booked. You'll get a reminder."

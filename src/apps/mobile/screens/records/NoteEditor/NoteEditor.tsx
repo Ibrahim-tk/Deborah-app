@@ -74,13 +74,13 @@ export default function NoteEditor() {
           <Input label="Title" placeholder={DEFAULT_TITLE[kind]} value={title} onChange={(e) => setTitle(e.target.value)} />
 
           {kind === 'saved-answer' ? (
-            <p className={styles.kindText}>Saved answer from Deborah</p>
+            <p className={styles.kindText}>Saved answer from the Oracle</p>
           ) : (
             <Segmented label="Note type" options={KINDS} value={kind} onChange={setKind} />
           )}
 
           {source && (
-            <p className={styles.source}>{`From Deborah’s answer on ${formatShortDate(source.message.createdAt)}`}</p>
+            <p className={styles.source}>{`From the Oracle’s answer on ${formatShortDate(source.message.createdAt)}`}</p>
           )}
 
           <label className={styles.field}>

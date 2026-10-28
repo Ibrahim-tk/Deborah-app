@@ -39,7 +39,7 @@ export default function FreeLimit() {
         }
       >
         <div className={styles.body}>
-          <DeborahBlob size={56} label="Deborah" />
+          <DeborahBlob size={56} label="The Oracle" />
           <h2 className={styles.title}>You’ve used your {FREE_CONSULTATIONS} free consultations</h2>
           <p className={styles.text}>Your answers are saved. Choose a plan to keep talking with me.</p>
         </div>
