@@ -13,7 +13,7 @@
  * male health is in scope." Prototype: no separate login; "Male" has no male-specific content.
  */
 import { useState } from 'react';
-import { Button, Input, Modal, Select, useAlert } from '@mobile/ui';
+import { Button, DateField, Input, Modal, Select, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
 import { choiceLabel, orderedChoices, type Step } from '@mobile/screens/onboarding/HealthBasics/steps';
@@ -36,7 +36,8 @@ export default function AddMember() {
   const { dismissModal, switchProfile, openAsk } = useNav();
   const alert = useAlert();
   const toast = useToast();
-  const { answers, set, fields, today, dobError, valid, dirty } = useMemberForm();
+  const { answers, set, fields, today, age, dobError, valid, dirty } = useMemberForm();
+  const thisYear = Number(today.slice(0, 4));
   const [consentOpen, setConsentOpen] = useState(false);
   const [creating, setCreating] = useState(false);
 
@@ -68,7 +69,8 @@ export default function AddMember() {
       return <Input key={s.key} label={label} autoComplete="off" autoCapitalize="words" maxLength={40} value={value} onChange={(e) => set(s.key, e.target.value)} />;
     }
     if (s.kind === 'date') {
-      return <Input key={s.key} label={label} type="date" max={today} value={value} error={dobError} onChange={(e) => set(s.key, e.target.value)} />;
+      // Our own date wheel, not the browser picker (designer, 2026-10-29).
+      return <DateField key={s.key} label={label} value={value} minYear={thisYear - 100} maxYear={thisYear} defaultYear={thisYear - 10} error={dobError} onChange={(d) => set(s.key, d)} />;
     }
     const options = orderedChoices(s, answers).map((c) => ({ value: c.value, label: choiceLabel(s, c.value, c.label, answers) }));
     const describing = Boolean(s.describeKey && value === s.describeValue);
@@ -99,6 +101,8 @@ export default function AddMember() {
       >
         <form className={styles.body} noValidate onSubmit={(e) => { e.preventDefault(); if (valid) setConsentOpen(true); }}>
           {fields.map(field)}
+          {/* Under 13 (Oct 26 legal): parent or guardian records and asks; the child never chats. Mirrors web. */}
+          {age !== undefined && age < 13 && <p className={styles.hint}>Profiles for children under 13 are for parents and guardians only. You’ll ask questions on their behalf.</p>}
           <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>
         </form>
       </Modal>

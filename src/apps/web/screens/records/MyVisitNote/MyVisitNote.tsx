@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { uid } from '@shared/utils';
-import { IconButton, Input } from '@web/ui';
+import { IconButton, DateField } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useNav, useScreenParams } from '@web/navigation';
 import { useToast } from '@web/hooks/toast.store';
@@ -61,7 +61,7 @@ export default function MyVisitNote() {
       trailing={<IconButton icon="check" label="Save note" onClick={save} />}
     >
       <div className={styles.body} data-xref="M-9.10 · New note" data-placeholder>
-        <Input label="Appointment date (optional)" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <DateField label="Appointment date (optional)" value={date} minYear={new Date().getFullYear() - 5} maxYear={new Date().getFullYear() + 2} defaultYear={new Date().getFullYear()} onChange={setDate} />
         <Section n="1" title="What I want help with">
           <Area label="The main thing to raise" placeholder="e.g. Waking hot at 3am for about a year" value={complaint} onChange={(e) => setComplaint(e.target.value)} />
         </Section>

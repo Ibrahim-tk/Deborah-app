@@ -18,7 +18,7 @@ import { healingPlanContext } from '@shared/engine/planConcerns';
 import { BOOKING_DAY_AFTER_BODY, FOLLOW_UP_TITLE, selectPlan90, selectProfileNotes, useAppStore } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, Input, Select } from '@web/ui';
+import { Button, Input, Select, DateField } from '@web/ui';
 import { visitSpecialties } from '@shared/data';
 import { EmptyState } from '@web/patterns/health';
 import { DerivedPage } from '@web/patterns/shell';
@@ -112,7 +112,7 @@ export default function VisitBrief() {
     const next: VisitBriefContent = { ...brief, title: heading };
     const body = visitBriefPreview(next);
     // Keep the renamed note title; only brand-new notes fall back from the generic heading.
-    const title = (noteId && s.notes.byId[noteId]?.title?.trim()) || (heading === 'My Visit Notes' ? 'Your visit notes' : heading);
+    const title = (noteId && s.notes.byId[noteId]?.title?.trim()) || (heading === 'My Visit Notes' ? 'For my provider' : heading);
     if (noteId) {
       s.updateNote(noteId, { title, body, brief: next, kind: 'provider-brief', sourceMessageId: seed?.sourceMessageId, conversationId: seed?.conversationId });
       return noteId;
@@ -175,12 +175,7 @@ export default function VisitBrief() {
             value={brief.providerSpecialty}
             onChange={(v) => setBrief({ ...brief, providerSpecialty: v })}
           />
-          <Input
-            label="Appointment date"
-            type="date"
-            value={dateValue}
-            onChange={(e) => setBrief({ ...brief, appointmentDate: e.target.value ? new Date(`${e.target.value}T12:00:00`).toISOString() : undefined })}
-          />
+          <DateField label="Appointment date" value={dateValue} minYear={new Date().getFullYear() - 5} maxYear={new Date().getFullYear() + 2} defaultYear={new Date().getFullYear()} onChange={(d) => setBrief({ ...brief, appointmentDate: d ? new Date(`${d}T12:00:00`).toISOString() : undefined })} />
         </section>
         <BriefDocument brief={brief} flat />
         <div className={styles.actions}>

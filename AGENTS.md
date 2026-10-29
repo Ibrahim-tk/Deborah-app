@@ -25,3 +25,7 @@ Until a frozen `versions/client` snapshot exists (Phase 5, on request), edits un
 ## Frozen Version 1
 
 Do not edit `versions/v1/` unless the user explicitly requests a Version 1 fix. See `versions/v1/AGENTS.md` and `VERSIONS.md`.
+
+## Mobile ↔ Web parity
+
+Every UI, copy or behaviour fix lands in **both** `src/apps/mobile` and `src/apps/web` (mirrored files, never cross-imports), unless it is intentionally platform-only (desktop side menu, in-page Ask bar, inline detail panes; phone bottom sheets vs desktop pages). When a change is platform-only, say so in a comment at the change. Before finishing, diff the twin file to confirm they still agree.

@@ -92,7 +92,7 @@ export default function Records() {
     <div className={styles.empty}>
       <EmptyState
         icon="note"
-        title={q ? 'No notes match that search' : 'Nothing here'}
+        title={q ? 'No notes match that search' : 'No visit notes yet'}
       />
     </div>
   ) : (

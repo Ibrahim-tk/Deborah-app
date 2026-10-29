@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { uid } from '@shared/utils';
 import { useAppStore } from '@shared/store';
 import type { VisitLog as Log } from '@shared/types/domain';
-import { IconButton, Input, Segmented, Select } from '@web/ui';
+import { IconButton, Input, Segmented, Select, DateField } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useNav, useScreenParams } from '@web/navigation';
 import { useToast } from '@web/hooks/toast.store';
@@ -69,7 +69,7 @@ export default function VisitLog() {
       trailing={embedded ? undefined : <IconButton icon="check" label="Save visit log" onClick={save} />}
     >
       <div className={styles.body} data-xref="M-9.9 · Log your visit" data-placeholder>
-        <Input label="Visit date" type="date" {...t('visitDate')} />
+        <DateField label="Visit date" value={t('visitDate').value} minYear={new Date().getFullYear() - 5} maxYear={new Date().getFullYear() + 2} defaultYear={new Date().getFullYear()} onChange={(d) => t('visitDate').onChange({ target: { value: d } })} />
         <Section n="1" title="Why you went">
           <Area label="What you wanted help with" minRows={2} {...t('chiefComplaint')} />
           <Input label="How long has this been going on?" placeholder="e.g. 8–12 months" {...t('duration')} />

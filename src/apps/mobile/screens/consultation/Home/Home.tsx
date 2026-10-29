@@ -89,7 +89,7 @@ export default function Home() {
   const visitToLog = useAppStore((s) => selectVisitToLog(s));
   const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
     { title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', onPress: go('M-7.2') },
-    { title: 'Family', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
+    { title: 'Add Family Member', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
   ];
 
 

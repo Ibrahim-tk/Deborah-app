@@ -17,7 +17,7 @@ import { healingPlanContext } from '@shared/engine/planConcerns';
 import { BOOKING_DAY_AFTER_BODY, FOLLOW_UP_TITLE, selectPlan90, selectProfileNotes, useAppStore } from '@shared/store';
 import type { VisitBriefContent } from '@shared/types/domain';
 import { addDays, nowFrom, uid } from '@shared/utils';
-import { Button, GlassButton, Input, Modal } from '@mobile/ui';
+import { Button, GlassButton, Input, Modal, DateField } from '@mobile/ui';
 import { EmptyState } from '@mobile/patterns/health';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
@@ -178,12 +178,7 @@ export default function VisitBrief() {
               value={brief.providerName ?? ''}
               onChange={(e) => setBrief({ ...brief, providerName: e.target.value })}
             />
-            <Input
-              label="Appointment date"
-              type="date"
-              value={dateValue}
-              onChange={(e) => setBrief({ ...brief, appointmentDate: e.target.value ? new Date(`${e.target.value}T12:00:00`).toISOString() : undefined })}
-            />
+            <DateField label="Appointment date" value={dateValue} minYear={new Date().getFullYear() - 5} maxYear={new Date().getFullYear() + 2} defaultYear={new Date().getFullYear()} onChange={(d) => setBrief({ ...brief, appointmentDate: d ? new Date(`${d}T12:00:00`).toISOString() : undefined })} />
           </section>
           <BriefDocument brief={brief} flat />
         </div>

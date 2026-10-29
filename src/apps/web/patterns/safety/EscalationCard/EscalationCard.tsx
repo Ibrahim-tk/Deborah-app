@@ -28,17 +28,15 @@ export interface EscalationCardProps {
   sheet?: boolean;
 }
 
-export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: EscalationCardProps) {
+export function EscalationCard({ dismissed, onDismiss, sheet = true }: EscalationCardProps) {
   // Request-sent confirmation (designer, 2026-10-21): no booking screen. The sheet confirms that Deborah's team
   // has been emailed and will reach out; its only action is Done, which lets the conversation carry on.
   // OPEN: docs/ux/F03-safety.md still specifies "Book a consultation with Deborah · Not now" — update the spec.
   const [open, setOpen] = useState(sheet && !dismissed);
   const [sent, setSent] = useState(false);
+  // The card's own sheet confirms the request; onBook is not called so M-8.2 never opens on top of it.
   const request = () => {
-    if (!sent) {
-      setSent(true);
-      onBook?.();
-    }
+    if (!sent) setSent(true);
     setOpen(true);
   };
   const done = () => { setOpen(false); if (!dismissed) onDismiss(); };

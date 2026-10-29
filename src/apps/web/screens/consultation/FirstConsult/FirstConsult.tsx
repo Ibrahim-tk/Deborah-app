@@ -25,7 +25,7 @@ import { nowFrom, uid } from '@shared/utils';
 import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
 import type { FlowNode, FlowOption } from '@shared/types/flow';
 import { DeborahBlob } from '@web/ui';
-import { ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@web/patterns/chat';
+import { AI_DISCLOSURE, ChatHeader, Composer, SuggestionList, SymptomPicker, ThinkingIndicator, withSymptoms } from '@web/patterns/chat';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useNavStore, useScreenParams } from '@web/navigation';
 import { useHealthConsent } from '@web/screens/consultation/Conversation/parts/useHealthConsent';
@@ -100,7 +100,7 @@ export default function FirstConsult() {
   useEffect(() => {
     if (last?.kind !== 'end' || !last.route || last.route === '/chat') return;
     const id = EXITS[last.route];
-    if (id === 'M-8.2') push(id);
+    if (id === 'M-8.2') open(id);
     else if (id) open(id, id === 'M-2.7' ? { productId: 'genesis-gold' } : undefined);
   }, [last, open, push]);
 
@@ -160,7 +160,7 @@ export default function FirstConsult() {
 
   const action = (value: string) => {
     if (value === 'book_request') return toast('Request sent. Watch your email.');
-    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with the Oracle`); return push('M-8.2'); }
+    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with the Oracle`); return open('M-8.2'); }
     // Miro Step 5: Visit prep / §7 save land on the structured provider brief (M-9.7).
     if (value === 'visit_notes' || value === 'save') {
       const id = saveProviderBrief();
@@ -216,7 +216,6 @@ export default function FirstConsult() {
   return (
     <div className={styles.root} data-xref="M-2.12 · First conversation">
       <ChatHeader
-        disclosure={started}
         onNewChat={() => openAsk()}
         canStartNew={started}
         guest={guest}
@@ -312,6 +311,8 @@ export default function FirstConsult() {
           placeholder="Or tell me in your own words…"
           voiceSample=""
         />
+        {/* AI disclosure under the composer once chatting (mirrors mobile AiDisclosure, 2026-10-29). */}
+        {started && <p className={styles.aiDisclosure}>{AI_DISCLOSURE}</p>}
       </div>
       {attachments.overlay}
     </div>

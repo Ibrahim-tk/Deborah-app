@@ -1,5 +1,5 @@
 /** M-6.5 Basics: name, age, relationship — read rows, or fields while editing. */
-import { Input, ListRow, Select } from '@mobile/ui';
+import { Input, ListRow, Select, DateField } from '@mobile/ui';
 import { RELATIONSHIP_OPTIONS, relationshipLabel } from '@mobile/patterns/profile';
 import type { ProfileDraft } from './draft';
 import styles from '../ProfileDetails.module.css';
@@ -15,14 +15,14 @@ export interface BasicsSectionProps {
   onChange: (patch: Partial<ProfileDraft>) => void;
 }
 
-export function BasicsSection({ draft, editing, isSelf, ageText, today, onChange }: BasicsSectionProps) {
+export function BasicsSection({ draft, editing, isSelf, ageText, onChange }: BasicsSectionProps) {
   return (
     <section className={styles.section} aria-labelledby="basics-h">
       <h2 id="basics-h" className={styles.heading}>Basics</h2>
       {editing ? (
         <div className={styles.fields}>
           <Input label="First name" value={draft.name} onChange={(e) => onChange({ name: e.target.value })} />
-          <Input label="Date of birth" type="date" max={today} value={draft.dob} onChange={(e) => onChange({ dob: e.target.value })} />
+          <DateField label="Date of birth" value={draft.dob ?? ''} minYear={new Date().getFullYear() - 100} maxYear={new Date().getFullYear()} defaultYear={new Date().getFullYear() - 40} onChange={(d) => onChange({ dob: d })} />
           {!isSelf && (
             <Select
               label="Relationship"

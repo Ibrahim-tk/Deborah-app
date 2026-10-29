@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { uid } from '@shared/utils';
 import { useAppStore } from '@shared/store';
 import type { VisitLog as Log } from '@shared/types/domain';
-import { IconButton, Input, Modal, Segmented, Select } from '@mobile/ui';
+import { IconButton, Input, Modal, Segmented, Select, DateField } from '@mobile/ui';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { useToast } from '@mobile/hooks/toast.store';
 import { Area, ItemList, Section } from './parts/Rows';
@@ -57,7 +57,7 @@ export default function VisitLog() {
     <div className={styles.root} data-xref="M-9.9 · Log your visit">
       <Modal title="Log your visit" left={<IconButton icon="close" label="Close without saving" onClick={dismissModal} />} right={<IconButton icon="check" label="Save visit log" onClick={save} />}>
         <div className={styles.body} data-placeholder>
-          <Input label="Visit date" type="date" {...t('visitDate')} />
+          <DateField label="Visit date" value={t('visitDate').value} minYear={new Date().getFullYear() - 5} maxYear={new Date().getFullYear() + 2} defaultYear={new Date().getFullYear()} onChange={(d) => t('visitDate').onChange({ target: { value: d } })} />
           <Section n="1" title="Why you went">
             <Area label="What you wanted help with" minRows={2} {...t('chiefComplaint')} />
             <Input label="How long has this been going on?" placeholder="e.g. 8–12 months" {...t('duration')} />

@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
-import { Button, Input, Sheet } from '@mobile/ui';
+import { Button, Sheet, DateField } from '@mobile/ui';
 import { ChoicePills } from '@mobile/patterns/widgets';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
@@ -67,7 +67,7 @@ export default function ProfileQuestion() {
       >
         <div className={styles.body}>
           {topic === 'fullDob' ? (
-            <Input label="Date of birth" type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
+            <DateField label="Date of birth" value={dob} minYear={new Date().getFullYear() - 100} maxYear={new Date().getFullYear()} defaultYear={new Date().getFullYear() - 40} onChange={setDob} />
           ) : (
             <>
               <p className={styles.prompt}>{q.prompt}</p>

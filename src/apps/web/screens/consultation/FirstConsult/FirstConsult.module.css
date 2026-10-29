@@ -47,3 +47,6 @@
 /* Opening: the starters wait for the greeting's reveal, then fade in (no movement). */
 .starters { animation: widget-in 400ms ease-out 1100ms both; }
 @media (prefers-reduced-motion: reduce) { .starters { animation: none; } }
+
+/* AI disclosure: smallest caption under the composer (as Conversation). */
+.aiDisclosure { margin: calc(var(--space-1) * -1) 0 0; text-align: center; font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body); color: #8a8086; }

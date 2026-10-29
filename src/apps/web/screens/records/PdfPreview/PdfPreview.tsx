@@ -19,7 +19,7 @@ import { DerivedPage } from '@web/patterns/shell';
 import { useAccountGate } from '@web/hooks/useAccountGate';
 import { useToast } from '@web/hooks/toast.store';
 import { useScreenParams } from '@web/navigation';
-import { BriefDocument } from '../VisitBrief/parts/BriefDocument';
+import { BriefReport } from './parts/BriefReport';
 import { PdfPage } from './parts/PdfPage';
 import { resolveSource } from './parts/resolveSource';
 import styles from './PdfPreview.module.css';
@@ -54,7 +54,7 @@ export default function PdfPreview() {
       <div className={styles.body} data-xref="M-9.6 · PDF preview">
         {brief ? (
           <>
-            <BriefDocument brief={brief} />
+            <BriefReport brief={brief} date={formatShortDate(new Date().toISOString())} />
             <p className={styles.footnote}>Printable summaries are part of the Individual and Family plans.</p>
           </>
         ) : source ? (

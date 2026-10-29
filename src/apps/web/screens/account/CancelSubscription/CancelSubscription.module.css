@@ -1,0 +1,18 @@
+.root { display: flex; flex-direction: column; height: 100%; background: transparent; }
+.body { display: grid; align-content: start; gap: var(--space-6); max-width: 640px; }
+.section { display: grid; gap: var(--space-3); }
+.title { margin: 0; font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); }
+.text { margin: 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
+.list { display: grid; gap: var(--space-1); margin: 0; padding-left: var(--space-5); list-style: disc; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-body); }
+/* TextArea is bare (composer); give it field styling here. Doubled class beats its own reset. */
+.field.field {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+}
+.field.field:focus { box-shadow: inset 0 0 0 1px var(--field-border-focus); }
+.footer { display: flex; flex-wrap: wrap; gap: var(--space-3); padding-top: var(--space-4); }
+.footer > * { flex: 1 1 200px; }
+.reasons { display: grid; gap: var(--space-1); }

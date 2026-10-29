@@ -375,7 +375,7 @@ export default function Conversation() {
                   chat={chat}
                   actions={actions}
                   onShop={(id) => open('M-2.7', { productId: id })}
-                  onBook={() => push('M-8.2')}
+                  onBook={() => open('M-8.2')}
                   onRestartPlan={() => gate('journey', () => {
                     switchTab('health');
                     push('M-7.3');
@@ -388,7 +388,7 @@ export default function Conversation() {
                   }}
                   onTeamBook={() => {
                     toast('Summary sent to the support team (demo)');
-                    push('M-8.2');
+                    open('M-8.2');
                   }}
                   onLongPress={setPressed}
                   onFocusComposer={() => inputRef.current?.focus()}
