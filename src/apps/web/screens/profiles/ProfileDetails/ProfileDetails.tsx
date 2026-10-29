@@ -12,10 +12,11 @@ import { ageOn, isMinor } from '@shared/engine';
 import { SELF_PROFILE_ID, selectProfileConversations, selectProfileNotes, useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
-import { Button, Header, ListRow, useAlert } from '@web/ui';
+import { Avatar, Button, Header, ListRow, useAlert } from '@web/ui';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@web/navigation';
 import { useDetailHost } from '../../DetailHost';
+import { relationshipLabel } from '@web/patterns/profile';
 import { BasicsSection } from './parts/BasicsSection';
 import { HealthSection } from './parts/HealthSection';
 import { AGE_BANDS, fromDraft, labelOf, toDateInput, toDraft, type ProfileDraft } from './parts/draft';
@@ -80,15 +81,29 @@ export default function ProfileDetails() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-6.5 · Profile details">
-      <Header
-        title={profile.name}
-        // Web master–detail: no second Back inside the pane (the page has its own way out).
-        onBack={editing || detailHost ? undefined : back}
-        backLabel={previousTitle}
-        left={editing ? <Button variant="ghost" size="md" onClick={() => setDraft(null)}>Cancel</Button> : undefined}
-        right={<Button variant="ghost" size="md" onClick={toggleEdit}>{editing ? 'Done' : 'Edit'}</Button>}
-      />
+    <div className={styles.root} data-xref="M-6.5 · Profile details" data-pane={detailHost ? '' : undefined}>
+      {detailHost ? (
+        // Desktop detail pane (designer, 2026-10-29): left-aligned identity head — avatar · serif name · relation — with Edit on the right.
+        <div className={styles.paneHead}>
+          <Avatar initial={profile.name} size={56} />
+          <div className={styles.identity}>
+            <h1 className={styles.name}>{profile.name}</h1>
+            <p className={styles.relation}>{relationshipLabel(profile.relationship, profile.intake?.relationshipOther)}</p>
+          </div>
+          <div className={styles.headActions}>
+            {editing && <Button variant="ghost" size="sm" onClick={() => setDraft(null)}>Cancel</Button>}
+            <Button variant={editing ? 'primary' : 'secondary'} size="sm" leadingIcon={editing ? undefined : 'edit'} onClick={toggleEdit}>{editing ? 'Done' : 'Edit'}</Button>
+          </div>
+        </div>
+      ) : (
+        <Header
+          title={profile.name}
+          onBack={editing ? undefined : back}
+          backLabel={previousTitle}
+          left={editing ? <Button variant="ghost" size="md" onClick={() => setDraft(null)}>Cancel</Button> : undefined}
+          right={<Button variant="ghost" size="md" onClick={toggleEdit}>{editing ? 'Done' : 'Edit'}</Button>}
+        />
+      )}
       <div className={styles.body}>
         <BasicsSection draft={view} editing={editing} isSelf={isSelf} ageText={ageText} today={toDateInput(now)} onChange={change} />
         <HealthSection draft={view} editing={editing} minor={minor} onChange={change} />
@@ -98,8 +113,8 @@ export default function ProfileDetails() {
             <h2 id="records-h" className={styles.heading}>History</h2>
             <div className={styles.rows}>
               {/* OPEN: M-9.1 shows the active profile; these pass profileId so it can filter (see report). */}
-              <ListRow title="Consultations" value={String(counts.consultations)} onPress={() => records('consultations')} />
-              <ListRow title="Visit Notes" value={String(counts.notes)} onPress={() => records('notes')} />
+              <ListRow density="compact" title="Consultations" value={String(counts.consultations)} onPress={() => records('consultations')} />
+              <ListRow density="compact" title="Visit Notes" value={String(counts.notes)} onPress={() => records('notes')} />
             </div>
           </section>
         )}

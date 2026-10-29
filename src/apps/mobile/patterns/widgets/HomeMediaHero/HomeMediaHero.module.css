@@ -319,3 +319,39 @@ button.root[data-tone='hero']:focus-visible { outline: 2px solid var(--color-foc
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px rgb(255 255 255 / 0.08);
 }
 .root[data-tone='hero'] .avatar { background: none; box-shadow: none; }
+
+/* Frosted chevron (designer, 2026-10-29): same blurred white disc + ink chevron as the health-detail card arrows. */
+.root[data-tone='hero'] .chevron {
+  background: rgb(255 255 255 / 0.55);
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.8), inset 0 1px 0 rgb(255 255 255 / 0.9);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .root[data-tone='hero'] .chevron { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgb(255 255 255 / 0.88); }
+}
+/* Same 44px disc as the card arrows (designer, 2026-10-29). */
+.root[data-tone='hero'] .chevron { width: 44px; height: 44px; }
+
+/* Richer soft gradient (designer, 2026-10-29): layered diffuse blooms — dusty rose top-right, lavender mist
+   bottom-centre, a faint orchid glow behind the avatar — over the plum base. The copy band stays deep (≥ 7:1). */
+.root[data-tone='hero'] {
+  background:
+    radial-gradient(38% 130% at 96% 10%, rgb(232 176 206 / 0.38), transparent 70%),
+    radial-gradient(45% 120% at 62% 120%, rgb(176 150 230 / 0.32), transparent 72%),
+    radial-gradient(30% 110% at 82% 90%, rgb(140 108 214 / 0.3), transparent 70%),
+    radial-gradient(22% 120% at 4% 50%, rgb(168 112 200 / 0.3), transparent 70%),
+    linear-gradient(105deg, #36104b 0%, #451a5c 45%, #55286e 75%, #6a3a7e 100%);
+}
+
+/* Stronger blooms (designer, 2026-10-29): same layering, fuller and brighter; a soft rose wisp crosses the top edge. */
+.root[data-tone='hero'] {
+  background:
+    radial-gradient(45% 150% at 98% 5%, rgb(240 182 214 / 0.6), transparent 70%),
+    radial-gradient(55% 130% at 60% 125%, rgb(186 158 240 / 0.5), transparent 72%),
+    radial-gradient(36% 120% at 84% 95%, rgb(150 116 226 / 0.5), transparent 70%),
+    radial-gradient(40% 60% at 45% -10%, rgb(226 170 210 / 0.28), transparent 75%),
+    radial-gradient(26% 130% at 4% 50%, rgb(180 120 212 / 0.45), transparent 70%),
+    linear-gradient(105deg, #36104b 0%, #451a5c 42%, #5a2c74 72%, #74438a 100%);
+}

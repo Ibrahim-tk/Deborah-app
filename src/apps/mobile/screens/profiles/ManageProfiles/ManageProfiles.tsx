@@ -36,7 +36,7 @@ export default function ManageProfiles() {
                 title={p.name}
                 subtitle={relationshipLabel(p.relationship, p.intake?.relationshipOther)}
                 value={`${Math.round(healthProfileCompletion(p) * 100)}%`}
-                leading={<Avatar initial={p.name} size={40} />}
+                leading={<Avatar initial={p.name} size={48} />}
                 onPress={() => push('M-6.5', { profileId: p.id })}
               />
             </li>
@@ -44,7 +44,9 @@ export default function ManageProfiles() {
         </ul>
 
         <button type="button" className={styles.add} onClick={() => add(false)} disabled={addState === 'full'}>
-          <Icon name="plus" size={22} />
+          <span className={styles.addIcon} aria-hidden="true">
+            <Icon name="plus" size={22} />
+          </span>
           <span className={styles.addLabel}>Add a family member</span>
           {addState === 'locked' && (
             <span className={styles.lock}>

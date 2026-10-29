@@ -53,7 +53,7 @@
   color: #5a4f55;
 }
 .well { gap: 0; }
-.well + .well { padding-top: var(--space-4); border-top: 1px solid var(--color-border-hairline); }
+.well + .well { padding-top: var(--space-4); border-top: 1px solid var(--stroke-card); }
 
 /* No uppercase; lighter caption (designer, 2026-10-28). */
 .wellLabel { text-transform: none; letter-spacing: 0; font-weight: var(--weight-regular); font-size: var(--fs-footnote); line-height: var(--lh-footnote); color: #5a4f55; }

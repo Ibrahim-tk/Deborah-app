@@ -32,12 +32,12 @@ export function HealthSection({ draft, editing, minor, onChange }: HealthSection
       <section className={styles.section} aria-labelledby="health-h">
         <h2 id="health-h" className={styles.heading}>Health info</h2>
         <div className={styles.rows}>
-          <ListRow title="Age range" value={labelOf(AGE_BANDS, intake.ageBand) ?? NOT_SHARED} trailing={null} />
-          <ListRow title="Conditions" subtitle={conditionsText || NOT_SHARED} trailing={null} />
-          <ListRow title="Medications" subtitle={intake.medications.join(', ') || NOT_SHARED} trailing={null} />
-          <ListRow title="Cycle" value={labelOf(CYCLES, intake.cycle) ?? NOT_SHARED} trailing={null} />
-          {minor && <ListRow title="Periods for" value={labelOf(ONSETS, intake.onset) ?? NOT_SHARED} trailing={null} />}
-          <ListRow title="Notes" subtitle={intake.notes || NOT_SHARED} trailing={null} />
+          <ListRow density="compact" title="Age range" value={labelOf(AGE_BANDS, intake.ageBand) ?? NOT_SHARED} trailing={null} />
+          <ListRow density="compact" title="Conditions" subtitle={conditionsText || NOT_SHARED} trailing={null} />
+          <ListRow density="compact" title="Medications" subtitle={intake.medications.join(', ') || NOT_SHARED} trailing={null} />
+          <ListRow density="compact" title="Cycle" value={labelOf(CYCLES, intake.cycle) ?? NOT_SHARED} trailing={null} />
+          {minor && <ListRow density="compact" title="Periods for" value={labelOf(ONSETS, intake.onset) ?? NOT_SHARED} trailing={null} />}
+          <ListRow density="compact" title="Notes" subtitle={intake.notes || NOT_SHARED} trailing={null} />
         </div>
       </section>
     );

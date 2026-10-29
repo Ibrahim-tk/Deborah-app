@@ -38,7 +38,7 @@
   isolation: isolate;
   /* Flat white, as on the who-for cards. */
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 1px var(--surface-border);
+  box-shadow: inset 0 0 0 1px var(--stroke-card);
   font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
   letter-spacing: -0.015em;
   color: var(--color-ink);
@@ -65,7 +65,7 @@
 .check {
   position: relative; flex: none; display: grid; place-items: center; width: 24px; height: 24px; margin-left: var(--space-3);
   border-radius: var(--radius-full);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 15%, transparent);
+  box-shadow: inset 0 0 0 1px var(--stroke-card);
   color: var(--color-ink-on-accent); transition: background var(--dur-quick) var(--ease-out);
 }
 .option[aria-checked='true'] .check { background: var(--color-accent); box-shadow: none; }

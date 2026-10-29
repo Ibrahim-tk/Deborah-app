@@ -34,9 +34,9 @@ export function BasicsSection({ draft, editing, isSelf, ageText, today, onChange
         </div>
       ) : (
         <div className={styles.rows}>
-          <ListRow title="Name" value={draft.name} trailing={null} />
-          <ListRow title="Age" value={ageText} trailing={null} />
-          <ListRow title="Relationship" value={relationshipLabel(draft.relationship)} trailing={null} />
+          <ListRow density="compact" title="Name" value={draft.name} trailing={null} />
+          <ListRow density="compact" title="Age" value={ageText} trailing={null} />
+          <ListRow density="compact" title="Relationship" value={relationshipLabel(draft.relationship)} trailing={null} />
         </div>
       )}
     </section>

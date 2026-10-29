@@ -37,7 +37,7 @@
   padding: var(--space-2);
   border-radius: var(--radius-md, 12px);
   background: var(--color-surface);
-  box-shadow: inset 0 0 0 1px var(--surface-border);
+  box-shadow: inset 0 0 0 1px var(--stroke-card);
   min-width: 0;
 }
 .productWell {
@@ -119,5 +119,5 @@
 .productCopy { align-content: start; }
 
 /* Same soft edge as the Wellness Plan card: 6% ink hairline, rounder corners, white field (designer, 2026-10-28). */
-.product { padding: var(--space-3); border-radius: 28px; background: var(--white); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 6%, transparent); }
+.product { padding: var(--space-3); border-radius: 28px; background: var(--white); box-shadow: inset 0 0 0 1px var(--stroke-card); }
 .productWell { border-radius: 20px; }

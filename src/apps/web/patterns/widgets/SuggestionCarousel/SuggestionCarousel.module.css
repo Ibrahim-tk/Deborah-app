@@ -280,3 +280,27 @@
 .card[data-tone]::before,
 .card[data-tone]::after { content: none; }
 .card[data-tone] .title, .card[data-tone] .sub { color: var(--color-ink); }
+
+/* Ported from mobile (designer, 2026-10-29): bare icon glyph aligned to the title's left edge, no outline ring. */
+.card[data-tone] .icon { box-shadow: none; width: auto; place-items: center start; }
+
+/* Frosted arrow, same as mobile: soft blurred white disc with an ink chevron instead of the black fill. */
+.card[data-tone] .arrow {
+  background: rgb(255 255 255 / 0.55);
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.8), inset 0 1px 0 rgb(255 255 255 / 0.9);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .card[data-tone] .arrow { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgb(255 255 255 / 0.88); }
+}
+
+/* Serif titles (designer, 2026-10-29): same display type as the Wellness Plan card. */
+.card .title {
+  font: var(--weight-medium) calc(21px * var(--type-scale, 1)) / 1.2 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Home essentials: every sub-line is exactly one line so the three cards balance (designer, 2026-10-29). */
+.essentials .card .sub { max-width: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-wrap: nowrap; }

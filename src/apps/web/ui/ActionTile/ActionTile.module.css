@@ -1,5 +1,5 @@
 /* One quiet frosted row (icon · title + meta · chevron). */
-.tile { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 64px; padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-card-sm, 20px); background: var(--surface-1, var(--color-surface)); box-shadow: inset 0 0 0 1px var(--surface-border, var(--color-border-hairline)); text-align: left; cursor: pointer; transition: background var(--dur-base) var(--ease-out); }
+.tile { display: flex; align-items: center; gap: var(--space-3); width: 100%; min-height: 64px; padding: var(--space-3) var(--space-4); border: 0; border-radius: var(--radius-card-sm, 20px); background: var(--surface-1, var(--color-surface)); box-shadow: inset 0 0 0 1px var(--stroke-card); text-align: left; cursor: pointer; transition: background var(--dur-base) var(--ease-out); }
 .tile:active { background: var(--color-accent-tint); }
 .tile:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 .well { display: grid; flex: none; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--color-accent-tint); color: var(--color-accent); }

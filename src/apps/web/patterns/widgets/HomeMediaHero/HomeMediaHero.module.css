@@ -262,3 +262,101 @@
 .root[data-tone='hero'] .stats li,
 .root[data-tone='hero'] .when { color: rgb(255 255 255 / 0.9); }
 .root[data-tone='hero'] .arrow { width: 48px; height: 48px; background: var(--purple-900, var(--color-ink)); color: var(--white); }
+
+/* Player pill, ported from mobile (designer, 2026-10-29): soft plum with diffuse lavender light, bare tree avatar,
+   eyebrow + title, white chevron disc. Desktop scale: 56 avatar, 40 chevron. White copy on the deep band (≥ 7:1). */
+.root[data-tone='hero'] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-full);
+  background:
+    radial-gradient(60% 160% at 100% 0%, rgb(196 168 226 / 0.28), transparent 70%),
+    radial-gradient(50% 140% at 0% 100%, rgb(150 110 190 / 0.22), transparent 70%),
+    linear-gradient(110deg, #3b1450 0%, #4a2160 55%, #573170 100%);
+  color: var(--white);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  transition: transform var(--dur-quick) var(--ease-out);
+}
+.root[data-tone='hero']::before, .root[data-tone='hero']::after { display: none; }
+button.root[data-tone='hero']:active { transform: scale(0.995); }
+button.root[data-tone='hero']:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+
+.avatar { display: grid; flex: none; place-items: center; width: 56px; height: 56px; }
+
+.root[data-tone='hero'] .copy { display: grid; flex: 1; gap: 2px; min-width: 0; align-self: center; }
+.root[data-tone='hero'] .eyebrow {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: #eadcf3;
+}
+.root[data-tone='hero'] .titleCompact {
+  margin: 0;
+  max-width: none;
+  font: var(--weight-medium) var(--fs-headline) / var(--lh-headline) var(--font-body);
+  letter-spacing: -0.015em;
+  color: var(--white);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.chevron {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.92);
+  color: var(--color-accent);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) { button.root[data-tone='hero']:active { transform: none; } }
+
+/* Frosted chevron (designer, 2026-10-29): same blurred white disc + ink chevron as the health-detail card arrows. */
+.root[data-tone='hero'] .chevron {
+  background: rgb(255 255 255 / 0.55);
+  color: var(--color-ink);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.8), inset 0 1px 0 rgb(255 255 255 / 0.9);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(140%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .root[data-tone='hero'] .chevron { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgb(255 255 255 / 0.88); }
+}
+/* Same 44px disc as the card arrows (designer, 2026-10-29). */
+.root[data-tone='hero'] .chevron { width: 44px; height: 44px; }
+
+/* Richer soft gradient (designer, 2026-10-29): layered diffuse blooms — dusty rose top-right, lavender mist
+   bottom-centre, a faint orchid glow behind the avatar — over the plum base. The copy band stays deep (≥ 7:1). */
+.root[data-tone='hero'] {
+  background:
+    radial-gradient(38% 130% at 96% 10%, rgb(232 176 206 / 0.38), transparent 70%),
+    radial-gradient(45% 120% at 62% 120%, rgb(176 150 230 / 0.32), transparent 72%),
+    radial-gradient(30% 110% at 82% 90%, rgb(140 108 214 / 0.3), transparent 70%),
+    radial-gradient(22% 120% at 4% 50%, rgb(168 112 200 / 0.3), transparent 70%),
+    linear-gradient(105deg, #36104b 0%, #451a5c 45%, #55286e 75%, #6a3a7e 100%);
+}
+
+/* Stronger blooms (designer, 2026-10-29): same layering, fuller and brighter; a soft rose wisp crosses the top edge. */
+.root[data-tone='hero'] {
+  background:
+    radial-gradient(45% 150% at 98% 5%, rgb(240 182 214 / 0.6), transparent 70%),
+    radial-gradient(55% 130% at 60% 125%, rgb(186 158 240 / 0.5), transparent 72%),
+    radial-gradient(36% 120% at 84% 95%, rgb(150 116 226 / 0.5), transparent 70%),
+    radial-gradient(40% 60% at 45% -10%, rgb(226 170 210 / 0.28), transparent 75%),
+    radial-gradient(26% 130% at 4% 50%, rgb(180 120 212 / 0.45), transparent 70%),
+    linear-gradient(105deg, #36104b 0%, #451a5c 42%, #5a2c74 72%, #74438a 100%);
+}

@@ -131,14 +131,14 @@
 
 .gold {
   padding: var(--space-3);
-  border: 1px solid var(--color-border-hairline);
+  border: 1px solid var(--stroke-card);
   border-radius: var(--radius-sm);
   background: var(--surface-field-linen);
 }
 
 .disclaimer {
   padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border-hairline);
+  border-top: 1px solid var(--stroke-card);
   font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-ui);
   color: var(--color-ink-secondary);
 }
@@ -154,7 +154,7 @@
   display: grid;
   gap: var(--space-2);
   padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border-hairline);
+  border-bottom: 1px solid var(--stroke-card);
 }
 
 /* List fields are ui/Input and ui/Select (chrome and focus live there). */

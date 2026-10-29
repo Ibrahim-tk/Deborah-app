@@ -1,4 +1,4 @@
-.root { border-radius: var(--radius-card-sm, 20px); background: var(--white); box-shadow: inset 0 0 0 1px var(--color-border-hairline); overflow: hidden; }
+.root { border-radius: var(--radius-card-sm, 20px); background: var(--white); box-shadow: inset 0 0 0 1px var(--stroke-card); overflow: hidden; }
 .main { display: flex; align-items: center; gap: var(--space-4); width: 100%; padding: var(--space-4); text-align: left; }
 .main:active { background: var(--color-accent-tint); }
 .main:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
@@ -7,7 +7,7 @@
 .status { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-accent); }
 .title { font: var(--weight-medium) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink); }
 .meta { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-.footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-top: 1px solid var(--color-border-hairline); }
+.footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-top: 1px solid var(--stroke-card); }
 .state { display: inline-flex; min-height: 44px; align-items: center; gap: var(--space-2); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
 .done { color: var(--color-accent); }
 .state { white-space: nowrap; }

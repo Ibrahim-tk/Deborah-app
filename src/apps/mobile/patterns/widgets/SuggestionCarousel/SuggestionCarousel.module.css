@@ -331,3 +331,9 @@
   -webkit-backdrop-filter: blur(12px) saturate(140%);
   backdrop-filter: blur(12px) saturate(140%);
 }
+
+/* Serif titles (designer, 2026-10-29): same display type as the Wellness Plan card. */
+.card .title {
+  font: var(--weight-medium) calc(21px * var(--type-scale, 1)) / 1.2 var(--font-display);
+  letter-spacing: -0.01em;
+}

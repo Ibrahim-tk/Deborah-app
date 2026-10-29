@@ -43,7 +43,7 @@
   border-radius: var(--radius-full);
   /* Light lilac card (design direction 2026-10-12): reads as a tappable suggestion on the parchment. */
   background: color-mix(in srgb, var(--purple-50) 70%, var(--white));
-  border: 1px solid color-mix(in srgb, var(--purple-100) 45%, var(--white));
+  border: 1px solid var(--stroke-card);
   -webkit-backdrop-filter: var(--glass-warm-blur);
   backdrop-filter: var(--glass-warm-blur);
   color: var(--color-ink);

@@ -44,5 +44,5 @@
 .art img { width: 88%; height: 88%; object-fit: contain; }
 
 /* White tile, soft lilac panel behind the product art (designer, 2026-10-28). Hairline keeps the white tile on cream. */
-.tile { background: var(--white); box-shadow: inset 0 0 0 1px var(--color-border-hairline); }
+.tile { background: var(--white); box-shadow: inset 0 0 0 1px var(--stroke-card); }
 .art { background: radial-gradient(75% 75% at 50% 45%, #f1e9fa, #e6dbf4); }

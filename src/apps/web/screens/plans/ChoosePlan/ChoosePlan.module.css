@@ -42,7 +42,7 @@
 }
 .top { display: flex; align-items: center; min-height: 64px; padding: var(--space-4) var(--space-6); }
 .main { display: grid; align-content: center; padding: var(--space-4) var(--margin-screen) var(--space-8); }
-.summary { display: grid; gap: var(--space-2); margin: 0; padding: var(--space-4) var(--space-5); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--surface-border); }
+.summary { display: grid; gap: var(--space-2); margin: 0; padding: var(--space-4) var(--space-5); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--stroke-card); }
 .summary > div { display: flex; justify-content: space-between; gap: var(--space-4); font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); }
 .summary dt { color: var(--color-ink-secondary); }
 .summary dd { margin: 0; color: var(--color-ink); }

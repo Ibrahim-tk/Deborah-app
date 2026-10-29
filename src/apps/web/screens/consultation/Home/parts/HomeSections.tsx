@@ -35,13 +35,13 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
             sub: 'Saved notes from visits and chats',
             tone: 'lilac',
             artifact: 'blue-bloom',
-            icon: 'calendar',
+            icon: 'note',
             onPress: onNotes,
           },
           {
             key: 'health',
             title: 'My Health',
-            sub: 'I’m here to talk about my own health.', // copy shared with the profile-for step (2026-10-26)
+            sub: 'Talk about my own health', // one line, balanced with the other two cards (designer, 2026-10-29)
             tone: 'mint',
             artifact: 'leaf-flower',
             icon: 'health',
@@ -50,7 +50,7 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
           {
             key: 'family',
             title: 'Add Family Member',
-            sub: 'I’d like to help a family member or loved one.',
+            sub: 'Help a family member or loved one',
             tone: 'rose',
             artifact: 'pink-bloom',
             icon: 'family',

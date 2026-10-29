@@ -33,3 +33,44 @@
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
 }
 .textField.textField:focus { box-shadow: inset 0 0 0 1px var(--field-border-focus); }
+
+/* Desktop detail pane (designer, 2026-10-29): identity head + left-aligned column, Settings type scale (15 / 13),
+   white grouped cards with hairlines — the same family as the Settings and Subscription pages. */
+.paneHead {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: min(100%, 720px);
+  padding: var(--space-6) var(--space-8) var(--space-2);
+}
+.identity { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.name { margin: 0; font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.relation { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: #5a4f55; }
+.headActions { flex: none; display: flex; align-items: center; gap: var(--space-2); }
+
+.root[data-pane] .body {
+  width: min(100%, 720px);
+  margin-inline: 0;
+  gap: var(--space-6);
+  padding: var(--space-4) var(--space-8) calc(var(--safe-bottom) + var(--space-8));
+}
+.root[data-pane] .heading { margin: 0; font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
+.root[data-pane] .section { gap: var(--space-2); }
+.root[data-pane] .rows {
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+}
+.root[data-pane] .rows.rows > * { min-height: 52px; padding: var(--space-3) var(--space-5); }
+.root[data-pane] .rows > * + * { box-shadow: inset 0 1px 0 var(--color-border-control); }
+
+/* Inline under the profile list (designer, 2026-10-29): flows with the page — no own scroller or side padding —
+   and uses the Settings groups: soft lift field, faint separators, no outline. */
+.root[data-pane] { height: auto; }
+.root[data-pane] .paneHead { width: 100%; padding: var(--space-4) 0 var(--space-2); }
+.root[data-pane] .body { width: 100%; overflow: visible; padding: var(--space-2) 0 var(--space-8); gap: var(--space-5); }
+.root[data-pane] .heading { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); padding-inline: var(--space-4); }
+.root[data-pane] .rows { border-radius: var(--radius-xl); background: var(--surface-field-lift); box-shadow: none; }
+.root[data-pane] .rows.rows > * { padding-inline: var(--space-4); }
+.root[data-pane] .rows > * + * { box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent); }

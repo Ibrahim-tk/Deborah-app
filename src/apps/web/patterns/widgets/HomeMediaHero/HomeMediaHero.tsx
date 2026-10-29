@@ -1,6 +1,6 @@
 /**
  * HomeMediaHero — main continue card (compact hero) or tonal artifact hero.
- * Compact: one banner row — large orb · eyebrow + serif title · arrow — on a violet gradient (white copy).
+ * Compact: a deep plum pill (same as mobile) — tree avatar, eyebrow + title, chevron disc; the whole pill clicks.
  */
 import type { ReactNode } from 'react';
 import { DeborahBlob } from '@web/ui/DeborahBlob';
@@ -47,30 +47,31 @@ export function HomeMediaHero({
   const compactHero = tone === 'hero';
 
   if (compactHero) {
-    return (
-      <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>
-        {/* Banner row (designer, 2026-10-23): large orb · eyebrow + serif title · arrow, on a violet gradient. */}
-        <div className={styles.bodyCompact}>
-          <DeborahBlob size={88} label="The Oracle" className={styles.orb} />
-          <div className={styles.copy}>
-            {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
-            <h2 id={titleId} className={styles.titleCompact}>{title}</h2>
-            {stats && stats.length > 0 ? (
-              <ul className={styles.stats}>
-                {stats.map((st) => (
-                  <li key={st.label}><Icon name={st.icon} size={14} />{st.label}</li>
-                ))}
-              </ul>
-            ) : (meta || when) && <p className={styles.when}>{meta ?? when}</p>}
-          </div>
-          {onCta && (
-            <button type="button" className={styles.arrow} onClick={onCta} aria-label={ctaLabel ?? 'Continue'}>
-              <Icon name="chevron" size={18} />
-            </button>
-          )}
-          {children}
-        </div>
-      </section>
+    // Player pill, ported from mobile (designer, 2026-10-29): tree avatar · eyebrow + title · chevron disc.
+    // The whole pill is the click target. `when` / `stats` stay in the API but no longer render here.
+    void when; void stats;
+    const inner = (
+      <>
+        <span className={styles.avatar} aria-hidden>
+          <DeborahBlob size={56} />
+        </span>
+        <span className={styles.copy}>
+          {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}
+          <span id={titleId} className={styles.titleCompact}>{title}</span>
+        </span>
+        {onCta && (
+          <span className={styles.chevron} aria-hidden>
+            <Icon name="chevron" size={18} />
+          </span>
+        )}
+      </>
+    );
+    return onCta ? (
+      <button type="button" className={styles.root} data-tone={tone} data-compact onClick={onCta} aria-label={`${ctaLabel ?? 'Continue'}: ${title}`}>
+        {inner}
+      </button>
+    ) : (
+      <section className={styles.root} data-tone={tone} data-compact aria-labelledby={titleId}>{inner}{children}</section>
     );
   }
 

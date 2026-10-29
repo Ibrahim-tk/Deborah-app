@@ -10,7 +10,7 @@
   border: 0;
   border-radius: var(--radius-card-sm, 20px);
   background: var(--surface-1, var(--color-surface));
-  box-shadow: inset 0 0 0 1px var(--surface-border, var(--color-border-hairline));
+  box-shadow: inset 0 0 0 1px var(--stroke-card);
   text-align: left;
   cursor: pointer;
   transition: background var(--dur-base) var(--ease-out);
