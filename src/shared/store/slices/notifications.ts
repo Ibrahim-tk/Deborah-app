@@ -27,7 +27,7 @@ const allowed = (s: AppState, type?: string) =>
 // Lock-screen text stays generic: never symptoms, conditions or product names (PHI).
 export const FOLLOW_UP_TITLE = 'Your Oracle';
 export const FOLLOW_UP_BODY = 'The Oracle: How are you feeling this week?';
-export const BOOKING_REMINDER_BODY = 'Reminder: you have a consult with support team tomorrow.';
+export const BOOKING_REMINDER_BODY = 'Reminder: you have a consultation tomorrow.';
 export const BOOKING_DAY_AFTER_BODY = 'The Oracle: How did your appointment go?';
 /** Miro Step 5: no appointment date — follow up after 7 days regardless. */
 export const VISIT_NOTES_TAKE_BODY = 'The Oracle: Take your visit notes to the appointment — how did it go?';

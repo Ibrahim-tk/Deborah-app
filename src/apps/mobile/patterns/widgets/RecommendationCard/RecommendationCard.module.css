@@ -7,3 +7,6 @@
   padding: 0;
   list-style: none;
 }
+
+/* Home cards share one radius (designer, 2026-10-29); the image nests concentrically inside the 12px padding. */
+.list { --product-card-radius: var(--home-radius); --product-media-radius: calc(var(--home-radius) - 12px); }

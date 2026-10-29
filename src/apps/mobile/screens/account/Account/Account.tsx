@@ -9,9 +9,8 @@
 import { Fragment, useState, type ReactNode } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
-import { BottomSheet, Button, Divider, Header, Icon, ListRow, useAlert, type IconName } from '@mobile/ui';
+import { Divider, Header, Icon, ListRow, useAlert, type IconName } from '@mobile/ui';
 import { useCollapsingTitle } from '@mobile/hooks/useCollapsingTitle';
-import { PhoneField, formatPhone, type PhoneValue } from '@mobile/patterns/widgets';
 import { useNav, useNavStore, useRoute } from '@mobile/navigation';
 import { NameSheet } from './parts/NameSheet';
 import { EmailSheet } from './parts/EmailSheet';
@@ -41,21 +40,14 @@ export default function Account() {
   const alert = useAlert();
   const name = useAppStore((s) => s.userName);
   const email = useAppStore((s) => s.accountEmail);
-  const phoneCountry = useAppStore((s) => s.accountPhoneCountry);
-  const phoneNumber = useAppStore((s) => s.accountPhoneNumber);
   const plan = useAppStore((s) => s.plan);
   const trial = plan === 'trial';
   const planName = findPlan(plan)?.name;
   const { collapsed, onScroll } = useCollapsingTitle();
-  const [phoneOpen, setPhoneOpen] = useState(false);
   const [sheet, setSheet] = useState<'name' | 'email' | null>(null);
   const [sheetKey, setSheetKey] = useState(0);
   const openSheet = (which: 'name' | 'email') => { setSheetKey((k) => k + 1); setSheet(which); };
   const lastName = useAppStore((s) => s.accountLastName);
-  const [phoneDraft, setPhoneDraft] = useState<PhoneValue>({ countryCode: '+1', number: '' });
-  const phoneDisplay = formatPhone(
-    phoneNumber ? { countryCode: phoneCountry || '+1', number: phoneNumber } : undefined,
-  );
 
   const signOut = async () => {
     const choice = await alert({
@@ -71,10 +63,6 @@ export default function Account() {
   };
 
 
-  const openPhone = () => {
-    setPhoneDraft({ countryCode: phoneCountry || '+1', number: phoneNumber || '' });
-    setPhoneOpen(true);
-  };
 
   // Revamp (design direction 2026-10-19): labelled sections, one leading icon per row, values on the right.
   const sections: { title: string; rows: SettingsRow[] }[] = [
@@ -84,7 +72,6 @@ export default function Account() {
         // Account details (design 2026-10-21): edited in sheets, like Phone number.
         { title: 'Name', value: [name, lastName].filter(Boolean).join(' ') || 'Not added', icon: 'account', onPress: () => openSheet('name') },
         { title: 'Email', value: email || 'Not added', icon: 'mail', onPress: () => openSheet('email') },
-        { title: 'Phone number', value: phoneDisplay ?? 'Not added', icon: 'phone', onPress: openPhone },
         { title: 'Change password', icon: 'lock', onPress: () => nav.push('M-10.7') },
         { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') },
         { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
@@ -106,7 +93,7 @@ export default function Account() {
     },
     {
       title: 'Support',
-      rows: [{ title: 'About the Oracle', subtitle: 'Consult with support team', icon: 'info', onPress: () => nav.push('M-7.6') }],
+      rows: [{ title: 'About the Oracle', subtitle: 'Book a consultation', icon: 'info', onPress: () => nav.push('M-7.6') }],
     },
   ];
 
@@ -176,26 +163,6 @@ export default function Account() {
           <p>Version {VERSION} · Prototype</p>
         </footer>
       </div>
-      <BottomSheet
-        showClose
-        open={phoneOpen}
-        onClose={() => setPhoneOpen(false)}
-        title="Phone number"
-        footer={
-          <Button
-            fullWidth
-            onClick={() => {
-              useAppStore.getState().setContactPhone(phoneDraft.countryCode, phoneDraft.number);
-              setPhoneOpen(false);
-            }}
-          >
-            Save
-          </Button>
-        }
-      >
-        <p className={styles.text}>Used only by the support team. We don’t send texts or verification codes.</p>
-        <PhoneField value={phoneDraft} onChange={setPhoneDraft} />
-      </BottomSheet>
       <NameSheet key={`name-${sheetKey}`} open={sheet === 'name'} onClose={() => setSheet(null)} />
       <EmailSheet key={`email-${sheetKey}`} open={sheet === 'email'} onClose={() => setSheet(null)} />
     </div>

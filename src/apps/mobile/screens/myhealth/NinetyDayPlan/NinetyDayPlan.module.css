@@ -25,3 +25,5 @@
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
 }
+/* No italics anywhere on the Wellness Plan (designer, 2026-10-29). */
+.root, .root * { font-style: normal; }

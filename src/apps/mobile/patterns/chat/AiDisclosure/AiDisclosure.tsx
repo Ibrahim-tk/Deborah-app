@@ -7,7 +7,7 @@
  */
 import styles from './AiDisclosure.module.css';
 
-export const AI_DISCLOSURE = 'You’re chatting with the Oracle, an AI system.';
+export const AI_DISCLOSURE = 'You’re chatting with Oracle, an AI system.';
 
 export function AiDisclosure() {
   return <p className={styles.root}>{AI_DISCLOSURE}</p>;

@@ -1,4 +1,5 @@
-/* Horizontal intake CTA — consulting-room wash, not candy pastels. */
+/* Row layout mirrors mobile (designer, 2026-10-29); the stack layout below is web-only. */
+/* Horizontal intake CTA — pure white card with a hairline edge (design 2026-10-28). */
 .root {
   position: relative;
   display: flex;
@@ -10,13 +11,9 @@
   padding: var(--space-4);
   overflow: hidden;
   border: 0;
-  border-radius: var(--radius-xl);
-  background: linear-gradient(
-    105deg,
-    color-mix(in srgb, var(--purple-50) 72%, var(--gold-50)) 0%,
-    color-mix(in srgb, var(--gold-50) 68%, var(--white)) 46%,
-    color-mix(in srgb, var(--gold-100) 42%, var(--purple-50)) 100%
-  );
+  border-radius: var(--home-radius); /* Home cards share one radius (designer, 2026-10-29). */
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--stroke-card);
   color: var(--color-ink);
   text-align: left;
   isolation: isolate;
@@ -25,36 +22,13 @@
   transition: background-color var(--dur-quick) var(--ease-out);
 }
 
-.root::after {
-  content: '';
-  position: absolute;
-  right: -12%;
-  top: -40%;
-  z-index: 0;
-  width: 48%;
-  max-width: 160px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 40% 40%,
-    color-mix(in srgb, var(--purple-100) 55%, transparent),
-    transparent 70%
-  );
-  pointer-events: none;
-}
-
 .root > * {
   position: relative;
   z-index: 1;
 }
 
 .root:active {
-  background: linear-gradient(
-    105deg,
-    color-mix(in srgb, var(--purple-100) 55%, var(--gold-50)) 0%,
-    color-mix(in srgb, var(--gold-100) 50%, var(--white)) 50%,
-    color-mix(in srgb, var(--gold-100) 55%, var(--purple-100)) 100%
-  );
+  background: color-mix(in srgb, var(--purple-50) 60%, var(--white));
 }
 
 .root:focus-visible {
@@ -62,7 +36,7 @@
   outline-offset: 2px;
 }
 
-/* Same well language as SuggestionCarousel — white glyph on a tone-matched disc. */
+/* Light lilac well with a deep purple glyph, so the white card stays calm (design 2026-10-28). */
 .mark {
   display: grid;
   flex: none;
@@ -70,8 +44,8 @@
   width: 36px;
   height: 36px;
   border-radius: var(--home-tone-icon-radius, var(--radius-full));
-  background: color-mix(in srgb, var(--purple-500) 55%, var(--purple-100));
-  color: var(--white);
+  background: var(--purple-50);
+  color: var(--purple-600);
 }
 
 .copy {
@@ -101,9 +75,7 @@
   --ring-stroke: 4;
   --ring-track: color-mix(in srgb, var(--purple-500) 22%, transparent);
   border-radius: var(--radius-full);
-  background: rgb(255 255 255 / 0.6);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: var(--white);
 }
 
 /* Stack layout — floating card (web Home, bottom-right). White surface, dismissible. */
@@ -126,3 +98,19 @@
 .track { display: block; height: 8px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--purple-500) 14%, transparent); overflow: hidden; }
 .fill { display: block; height: 100%; border-radius: inherit; width: calc(var(--progress, 0) * 100%); background: var(--color-accent); transition: width var(--dur-quick) var(--ease-out); }
 @media (prefers-reduced-motion: reduce) { .fill { transition: none; } }
+
+/* Balanced close (designer, 2026-10-29): the ✕ centres on the title's first line and its glyph lines up with the
+   card's right padding, in quiet secondary ink; the title keeps room so it never runs under it. */
+.close {
+  top: calc(var(--space-6) + (var(--lh-title-3) - var(--tap-min)) / 2);
+  right: calc(var(--space-5) - (var(--tap-min) - 20px) / 2);
+  color: var(--color-ink-secondary);
+}
+.stackTitle { padding-right: calc(var(--tap-min) - var(--space-2)); }
+
+/* Colour hierarchy (designer, 2026-10-29): title leads in ink · body in warm grey · meter caption and % quietest,
+   regular weight · ✕ a light, thin glyph in the same quiet grey so the top row stops shouting. */
+.stackBody { color: #5a4f55; }
+.meterLabel, .meterStatus { font-weight: var(--weight-regular); color: #7a7076; }
+.close { color: #7a7076; }
+.close svg { width: 18px; height: 18px; stroke-width: 1.5; }

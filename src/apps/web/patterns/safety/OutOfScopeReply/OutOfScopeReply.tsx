@@ -19,7 +19,7 @@ export interface OutOfScopeReplyProps {
 export function OutOfScopeReply({ suggestions, onBook, onSelect, disabled }: OutOfScopeReplyProps) {
   return (
     <div className={styles.root}>
-      <OptionRow chevron leadingIcon="calendar" onSelect={onBook}>Want a person to help? Consult with support team</OptionRow>
+      <OptionRow chevron leadingIcon="calendar" onSelect={onBook}>Want a person to help? Book a consultation</OptionRow>
       <p className={styles.label}>Things I can help with:</p>
       <OptionList label="Things I can help with">
         {suggestions.slice(0, 3).map((s) => (

@@ -28,17 +28,15 @@ export interface EscalationCardProps {
   sheet?: boolean;
 }
 
-export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: EscalationCardProps) {
+export function EscalationCard({ dismissed, onDismiss, sheet = true }: EscalationCardProps) {
   // Request-sent confirmation (designer, 2026-10-21): no booking screen. The sheet confirms that Deborah's team
   // has been emailed and will reach out; its only action is Done, which lets the conversation carry on.
   // OPEN: docs/ux/F03-safety.md still specifies "Book a consultation with Deborah · Not now" — update the spec.
   const [open, setOpen] = useState(sheet && !dismissed);
   const [sent, setSent] = useState(false);
+  // The card's own sheet confirms the request; onBook is not called so M-8.2 never opens on top of it.
   const request = () => {
-    if (!sent) {
-      setSent(true);
-      onBook?.();
-    }
+    if (!sent) setSent(true);
     setOpen(true);
   };
   const done = () => { setOpen(false); if (!dismissed) onDismiss(); };
@@ -48,9 +46,9 @@ export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: E
       {/* Booking banner, same as web (designer, 2026-10-28): soft gradient, serif heading + line + CTA; no portrait. */}
       <div className={styles.hero}>
         <div className={styles.heroCopy}>
-          <p className={styles.heroTitle}>Talk with our support team</p>
-          <p className={styles.heroBody}>Get personalized support, ask questions, or discuss your health goals.</p>
-          <Button size="sm" className={styles.cta} onClick={request}>Consult with support team</Button>
+          <p className={styles.heroTitle}>Book a consultation</p>
+          <p className={styles.heroBody}>Want to talk it through with a person? Our support team will reach out to you.</p>
+          <Button size="sm" className={styles.cta} onClick={request}>Book</Button>
         </div>
         {/* Small blossom tree on the right (designer, 2026-10-28) — decorative, the web portrait's slot. */}
         <img src="/images/home/support-tree.webp" alt="" className={styles.tree} />

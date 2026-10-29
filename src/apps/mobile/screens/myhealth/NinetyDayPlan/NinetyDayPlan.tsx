@@ -10,6 +10,7 @@
  */
 import { HEALING_PLAN_TITLE, WELLNESS_PLAN_DISCLAIMER } from '@shared/copy/healingPlan';
 import { guardrailsData } from '@shared/data';
+import { isMinor } from '@shared/engine';
 import { careTeamFromNotes, profileHasMedicines, withConcerns } from '@shared/engine/planConcerns';
 import { selectActiveProfile, selectPlan90, selectProfileNotes, useAppStore, type AppState } from '@shared/store';
 import { Button, Header, useAlert } from '@mobile/ui';
@@ -41,6 +42,8 @@ export default function NinetyDayPlan() {
   const advocate = Boolean(profile && profile.relationship !== 'self');
   const concerns = plan ? withConcerns(plan).concerns ?? [] : [];
   const hasMedicines = profileHasMedicines(profile);
+  // Oracle Change Requests (Oct 26): the Wellness Plan is not available to users under 18.
+  const underage = Boolean(profile && isMinor(profile));
 
   const toggle = (concernId: string, actionId: string) => {
     if (!profile) return;
@@ -65,7 +68,11 @@ export default function NinetyDayPlan() {
     <div className={styles.root} data-xref="M-7.3 · Your Wellness Plan">
       <Header title={HEALING_PLAN_TITLE} onBack={pop} backLabel={previousTitle} />
       <div className={styles.scroll}>
-        {!plan ? (
+        {underage ? (
+          <div className={styles.body}>
+            <EmptyState icon="calendar" text="Your Wellness Plan is for adults 18 and over. You can still ask Oracle questions any time." />
+          </div>
+        ) : !plan ? (
           <div className={styles.body}>
             <EmptyState
               icon="calendar"

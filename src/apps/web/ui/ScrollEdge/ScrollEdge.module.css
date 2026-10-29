@@ -61,3 +61,6 @@
   .fade::before { content: none; }
   .fade { background: linear-gradient(to bottom, var(--color-canvas) 35%, transparent); }
 }
+
+/* Desktop (designer, 2026-10-29): plain fade only, no blur at the top edge. */
+.blurStrong, .blurSoft { -webkit-backdrop-filter: none; backdrop-filter: none; }

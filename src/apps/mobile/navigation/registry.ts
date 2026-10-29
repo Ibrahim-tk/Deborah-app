@@ -59,7 +59,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@mobile/screens/myhealth/EditHealthDetail')), presentation: 'sheet', detent: 'large', dismissible: true, figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
   // F08 Book Deborah
-  'M-8.2': { title: 'Consult with support team', component: lazy(() => import('@mobile/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
+  'M-8.2': { title: 'Book a consultation', component: lazy(() => import('@mobile/screens/booking/BookingInfo')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
   'M-8.3': { title: 'Pick a time', component: lazy(() => import('@mobile/screens/booking/Scheduler')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-83--pick-a-time-simulated-scheduler' },
   'M-8.4': { title: 'Booking confirmed', component: lazy(() => import('@mobile/screens/booking/BookingConfirmed')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-84--booking-confirmed' },
 
@@ -80,6 +80,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-10.1': { title: 'Settings', component: lazy(() => import('@mobile/screens/account/Account')), presentation: 'tabRoot', tab: 'account', stack: 'main', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-101--account' },
   'M-10.2': { title: 'Privacy & data', component: lazy(() => import('@mobile/screens/account/PrivacyData')), presentation: 'push', figma: `${FIGMA}50-695`, spec: 'docs/ux/F10-account-privacy.md#m-102--privacy--data' },
   'M-10.3': { title: 'Subscription', component: lazy(() => import('@mobile/screens/account/Subscription')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-103--subscription-not-in-wireframes' },
+  'M-10.8': { title: 'Cancel subscription', component: lazy(() => import('@mobile/screens/account/CancelSubscription')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-103--subscription-not-in-wireframes' },
   'M-10.4': { title: 'Notification settings', component: lazy(() => import('@mobile/screens/account/Notifications')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md#m-104--notifications-not-in-wireframes' },
   // Modal everywhere (opened read-only from M-1.3 too); same component per the spec.
   'M-10.6': { title: 'Notifications', component: lazy(() => import('@mobile/screens/account/NotificationInbox')), presentation: 'push', figma: '', spec: 'docs/ux/F10-account-privacy.md' },

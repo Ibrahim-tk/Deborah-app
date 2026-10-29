@@ -48,7 +48,7 @@ export const SCENARIO: LabMessage[] = [
   d('And overall, how are you feeling this week?', 'mood', 'Mood check-in'),
   d('Thank you. Here is how I’d think about it.', 'answer', '7-section answer (signature card + Visit notes)'),
   d('Many women in your situation ask about this one. Talk to your clinician first.', 'product', 'Product card'),
-  d('Would you like to bring this to the support team?', 'slots', 'Consult with support team'),
+  d('Would you like to bring this to the support team?', 'slots', 'Book a consultation'),
   d('If you have recent labs, add them and I’ll read them alongside your answers.', 'upload', 'Upload'),
   d('One small thing to try tonight:', 'tip', 'Inline tip'),
   d('I put your questions for your next appointment together.', 'prep', 'Visit prep card'),

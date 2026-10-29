@@ -35,7 +35,7 @@
 }
 
 .forWhom {
-  font: italic var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
   color: var(--color-gold-ink);
 }
 
@@ -259,7 +259,7 @@
 
 .pillarIntro {
   margin: 0;
-  font: italic var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
   color: var(--color-ink-secondary);
 }
 
@@ -315,7 +315,7 @@
 
 .signatureName {
   margin: 0;
-  font: italic var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
+  font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display);
   color: var(--color-deborah-rose);
 }
 
@@ -423,3 +423,9 @@
 .resourceTiles::-webkit-scrollbar { display: none; }
 .resourceTile { flex: none; width: 152px; min-height: 104px; scroll-snap-align: start; }
 .resourceLabel { overflow-wrap: anywhere; }
+
+/* Pillar body aligns with the pillar number, no left indent (designer, 2026-10-29). */
+.pillarBody { padding-left: 0; }
+.productMark { width: 56px; height: 56px; }
+/* Product cards match Home's radius (designer, 2026-10-29); image nests inside the 12px padding. */
+.pillarBody { --product-card-radius: var(--home-radius); --product-media-radius: calc(var(--home-radius) - 12px); }

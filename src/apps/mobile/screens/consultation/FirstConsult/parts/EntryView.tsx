@@ -108,7 +108,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
   if (node.type === 'safety') {
     return (
       <MessageBubble role="deborah" text={entry.text} turnStart>
-        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Consult with support team', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
+        <EscalationCard sheet={false} body={entry.text} dismissed={!active} onBook={() => onPick(node, [{ label: 'Book a consultation', next: 'exit_booking' }])} onDismiss={() => onPick(node, [{ label: 'I understand, continue', next: 'thinking' }])} />
       </MessageBubble>
     );
   }
@@ -123,7 +123,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
           sheet={false}
           body={entry.text}
           dismissed={!book || !active}
-          onBook={() => onPick(node, [book ?? { label: 'Consult with support team', next: 'exit_booking' }])}
+          onBook={() => onPick(node, [book ?? { label: 'Book a consultation', next: 'exit_booking' }])}
           onDismiss={() => notNow && onPick(node, [notNow])}
         />
       </MessageBubble>

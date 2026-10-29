@@ -5,9 +5,9 @@
 .row {
   display: flex;
   gap: var(--space-3);
-  min-height: var(--tap-min);
+  min-height: var(--checkbox-min-h, var(--tap-min));
   align-items: flex-start;
-  padding: var(--space-2) 0;
+  padding: var(--checkbox-pad-y, var(--space-2)) 0;
   cursor: pointer;
 }
 

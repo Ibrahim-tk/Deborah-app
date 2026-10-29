@@ -454,7 +454,7 @@
         "type": "escalation",
         "options": [
           {
-            "label": "Consult with support team",
+            "label": "Book a consultation",
             "next": "offer_booking"
           },
           {
@@ -514,7 +514,7 @@
       "bot": "Lovely. These are my next openings.",
       "widget": {
         "type": "slot_picker",
-        "title": "Consult with support team",
+        "title": "Book a consultation",
         "meta": "30 min · Video",
         "options": [
           {
@@ -585,7 +585,7 @@
     "exit_booking": {
       "type": "end",
       "route": "/book",
-      "note": "F08 Consult with support team."
+      "note": "F08 Book a consultation."
     },
     "exit_product": {
       "type": "end",

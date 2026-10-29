@@ -74,3 +74,8 @@
 .root[data-pane] .rows { border-radius: var(--radius-xl); background: var(--surface-field-lift); box-shadow: none; }
 .root[data-pane] .rows.rows > * { padding-inline: var(--space-4); }
 .root[data-pane] .rows > * + * { box-shadow: inset 0 1px 0 color-mix(in srgb, var(--color-ink) 6%, transparent); }
+
+/* Same containers as Settings (designer, 2026-10-29): hairline edge keeps the corners present; 20px sides. */
+.root[data-pane] .rows { box-shadow: inset 0 0 0 1px var(--stroke-card); padding-block: var(--space-1); }
+.root[data-pane] .rows.rows > * { padding-inline: var(--space-5); }
+.root[data-pane] .heading { padding-inline: var(--space-5); }

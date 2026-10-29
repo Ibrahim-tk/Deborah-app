@@ -100,7 +100,7 @@ export default function FirstConsult() {
   useEffect(() => {
     if (last?.kind !== 'end' || !last.route || last.route === '/chat') return;
     const id = EXITS[last.route];
-    if (id === 'M-8.2') push(id);
+    if (id === 'M-8.2') open(id);
     else if (id) open(id, id === 'M-2.7' ? { productId: 'genesis-gold' } : undefined);
   }, [last, open, push]);
 
@@ -159,7 +159,7 @@ export default function FirstConsult() {
 
   const action = (value: string) => {
     if (value === 'book_request') return toast('Request sent. Watch your email.');
-    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with the Oracle`); return push('M-8.2'); }
+    if (value.startsWith('book:')) { toast(`Holding ${value.slice(5)} with the Oracle`); return open('M-8.2'); }
     // Miro Step 5: Visit prep / §7 save land on the structured provider brief (M-9.7).
     if (value === 'visit_notes' || value === 'save') {
       const id = saveProviderBrief();

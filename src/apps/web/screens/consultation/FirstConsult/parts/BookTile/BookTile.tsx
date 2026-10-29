@@ -7,7 +7,7 @@ export function BookTile({ onBook }: { onBook: () => void }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <ActionTile icon="calendar" title="Consult with support team" meta="30 min · Video or phone" onClick={() => setOpen(true)} />
+      <ActionTile icon="calendar" title="Book a consultation" meta="30 min · Video or phone" onClick={() => setOpen(true)} />
       <BottomSheet open={open} onClose={() => setOpen(false)} showClose>
         <Sheet
           title="You’ll get an email"

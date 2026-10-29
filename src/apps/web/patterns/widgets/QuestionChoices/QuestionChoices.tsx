@@ -145,7 +145,7 @@ export function QuestionChoices({
             {onSkip && (
               <Button
                 size="md"
-                variant="secondary"
+                variant="ghost"
                 onClick={() => {
                   if (submitted.current) return;
                   submitted.current = true;

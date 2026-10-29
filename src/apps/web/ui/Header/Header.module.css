@@ -125,3 +125,14 @@
 .side > [data-icon-button] > * { position: relative; z-index: 1; }
 .side > [data-icon-button]:active { transform: scale(1.06); }
 .right { gap: var(--space-2); }
+
+/* Desktop (designer, 2026-10-29): plain fade only, no blur. Plain screens fade the canvas colour out;
+   photo screens get no band at all. */
+.root:not(.transparent)::after { -webkit-backdrop-filter: none; backdrop-filter: none; }
+:global([data-bg='plain']) .root:not(.transparent)::before {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: linear-gradient(to bottom, var(--color-canvas) 0%, var(--color-canvas) 55%, transparent 100%);
+  -webkit-mask-image: none;
+  mask-image: none;
+}

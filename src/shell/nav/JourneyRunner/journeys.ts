@@ -181,7 +181,7 @@ export const GUIDANCE_JOURNEYS: JourneyRun[] = [
     id: 'guidance-happy',
     label: 'Guidance · happy path + Book',
     description:
-      'Full E2E: Welcome → sign-up → Myself profile → Ask Oracle → intake → 7 sections → Review Save → What’s next → Consult with support team.',
+      'Full E2E: Welcome → sign-up → Myself profile → Ask Oracle → intake → 7 sections → Review Save → What’s next → Book a consultation.',
     scenario: 'S01',
     onboarding: true,
     // Burst sign-up + explicit Health Basics (Myself / sex Female / age) so onboarding does not idle.

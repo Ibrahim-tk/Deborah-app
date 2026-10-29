@@ -39,7 +39,8 @@ export default function Legal() {
       <div className={styles.doc} data-xref="M-10.5 · Terms & disclaimer" data-scroll-body>
         {docs.map((d) => (
           <section key={d.key} ref={(el) => (refs.current[d.key] = el)} className={styles.section} data-placeholder={placeholder}>
-            <h2 className={styles.heading}>{d.title}</h2>
+            {/* The page title already says "Terms & disclaimer"; the first section skips its own heading (2026-10-29). */}
+            {d.key !== 'terms' && <h2 className={styles.heading}>{d.title}</h2>}
             {d.body.map((p) => (
               <p key={p}>{p}</p>
             ))}

@@ -36,7 +36,7 @@ export function Controls() {
           </Variant>
           <Variant label="action · chevron · disabled">
             <OptionList>
-              <OptionRow leadingIcon="calendar" chevron onSelect={() => {}}>Consult with support team</OptionRow>
+              <OptionRow leadingIcon="calendar" chevron onSelect={() => {}}>Book a consultation</OptionRow>
               <OptionRow leadingIcon="upload" disabled>Upload labs</OptionRow>
             </OptionList>
           </Variant>

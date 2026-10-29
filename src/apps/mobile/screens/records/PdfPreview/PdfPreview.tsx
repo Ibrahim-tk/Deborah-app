@@ -17,7 +17,7 @@ import { Button, Modal } from '@mobile/ui';
 import { EmptyState } from '@mobile/patterns/health';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
-import { BriefDocument } from '../VisitBrief/parts/BriefDocument';
+import { BriefReport } from './parts/BriefReport';
 import { PdfPage } from './parts/PdfPage';
 import { resolveSource } from './parts/resolveSource';
 import styles from './PdfPreview.module.css';
@@ -66,7 +66,7 @@ export default function PdfPreview() {
       >
         {brief ? (
           <div className={styles.body}>
-            <BriefDocument brief={brief} />
+            <BriefReport brief={brief} date={formatShortDate(new Date().toISOString())} />
             <p className={styles.footnote}>Printable summaries are part of the Individual and Family plans.</p>
           </div>
         ) : source ? (

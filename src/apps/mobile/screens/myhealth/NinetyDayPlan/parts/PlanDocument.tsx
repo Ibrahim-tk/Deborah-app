@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { findProduct, healingPlanDocument } from '@shared/data';
 import type { PlanConcern } from '@shared/types/domain';
 import { Icon, ListRow, Panel } from '@mobile/ui';
+import { ProductCard } from '@mobile/patterns/commerce';
 import { LivingPlan } from './LivingPlan';
 import styles from './PlanDocument.module.css';
 
@@ -102,22 +103,24 @@ export function PlanDocument({
                     {p.products?.map((prod) => {
                       const catalog = findProduct(prod.productId);
                       return (
-                        <div key={prod.productId} className={styles.productRow}>
-                          <ListRow
-                            leading={
-                              catalog?.image ? (
-                                <img src={catalog.image} alt="" className={styles.productImg} />
-                              ) : (
-                                <span className={styles.productMark} aria-hidden>
-                                  <Icon name="shop" size={18} />
-                                </span>
-                              )
-                            }
-                            title={prod.name}
-                            subtitle={prod.dose}
-                            onPress={() => onShopProduct(prod.productId)}
+                        // Same product card as Home's "Recommended for you" (designer, 2026-10-29); dose rides as the line.
+                        catalog ? (
+                          <ProductCard
+                            key={prod.productId}
+                            product={catalog}
+                            productRef={{ productId: prod.productId, why: prod.dose ?? catalog.tagline, frame90: '' }}
+                            onShop={() => onShopProduct(prod.productId)}
                           />
-                        </div>
+                        ) : (
+                          <div key={prod.productId} className={styles.productRow}>
+                            <ListRow
+                              leading={<span className={styles.productMark} aria-hidden><Icon name="shop" size={18} /></span>}
+                              title={prod.name}
+                              subtitle={prod.dose}
+                              onPress={() => onShopProduct(prod.productId)}
+                            />
+                          </div>
+                        )
                       );
                     })}
                     {p.items.length > 0 && (

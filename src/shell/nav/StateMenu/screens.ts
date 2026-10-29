@@ -84,7 +84,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
       { id: 'M-10.4', name: 'Notifications / reminders', ...ACCOUNT, as: 'push' },
       { id: 'M-6.1', name: 'Profile toggle', ...ASK, as: 'sheet' },
       { id: 'M-2.1', name: 'Ask Oracle CTA', ...ASK, as: 'push' },
-      { id: 'M-8.2', name: 'Consult with support team', ...HEALTH, as: 'push' },
+      { id: 'M-8.2', name: 'Book a consultation', ...HEALTH, as: 'sheet' },
       { id: 'M-2.1', name: 'What’s next? (after an answer)', ...ASK, as: 'push' },
     ],
   },
@@ -222,7 +222,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
   {
     title: 'Booking',
     screens: [
-      { id: 'M-8.2', name: 'Consult with support team', ...HEALTH, as: 'push' },
+      { id: 'M-8.2', name: 'Book a consultation', ...HEALTH, as: 'sheet' },
       { id: 'M-8.3', name: 'Pick a time', ...HEALTH, as: 'push' },
       { id: 'M-8.4', name: 'Booking confirmed', ...HEALTH, as: 'push', params: (s) => ({ bookingId: s.booking.bookings[0]?.id }) },
     ],

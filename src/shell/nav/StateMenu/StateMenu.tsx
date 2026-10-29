@@ -132,7 +132,7 @@ export function StateMenu() {
                 label="Booking reminder"
                 description="Delivers the reminder for the next booking with the Oracle now."
                 onSelect={() => {
-                  if (!deliverBookingReminderNow()) showToast('No booking yet — consult with support team first');
+                  if (!deliverBookingReminderNow()) showToast('No booking yet — book a consultation first');
                   close();
                 }}
               />

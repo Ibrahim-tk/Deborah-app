@@ -49,8 +49,8 @@ export default function ManageProfiles() {
           </span>
           <span className={styles.addLabel}>Add a family member</span>
           {addState === 'locked' && (
-            <span className={styles.lock}>
-              <Icon name="lock" size={18} /> Family plan
+            <span className={styles.lock} aria-label="Family plan">
+              <Icon name="lock" size={18} />
             </span>
           )}
         </button>

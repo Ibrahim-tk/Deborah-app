@@ -278,8 +278,8 @@
       ],
       "describeValue": "yes",
       "describeKey": "sexVariationName",
-      "describeLabel": "If you know the name of your intersex variation, you can add it here.",
-      "describePlaceholder": "If you know the name of your intersex variation, you can add it here.",
+      "describeLabel": "Name of your variation, if you know it",
+      "describePlaceholder": "Name (optional)",
       "showIf": {
         "age": {
           "min": 18

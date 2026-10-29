@@ -141,7 +141,7 @@ export default function Notifications() {
               <Toggle checked={prefs?.inactivity !== false} onChange={(on) => void setPref('inactivity', on)} label="30-day inactivity reminder" description="If you haven’t talked with the Oracle for 30 days." />
             </section>
             <section className={styles.group} aria-label="Booking reminders">
-              <Toggle checked={bookingReminders} onChange={setBooking} label="Booking reminders" description="The day before a consult with support team." />
+              <Toggle checked={bookingReminders} onChange={setBooking} label="Booking reminders" description="The day before a consultation." />
             </section>
             <section className={styles.group} aria-label="Follow-up after guidance">
               {checkIns && (

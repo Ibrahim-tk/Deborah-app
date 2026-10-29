@@ -1,4 +1,6 @@
 .root { display: flex; flex-direction: column; height: 100%; background: transparent; }
+/* Profile text at 15px (designer, 2026-10-29): rows, values and fields use the subhead size. */
+.body { --fs-headline: var(--fs-subhead); --lh-headline: var(--lh-subhead); --fs-data: var(--fs-subhead); --lh-data: var(--lh-subhead); --fs-callout: var(--fs-subhead); --lh-callout: var(--lh-subhead); }
 .body {
   flex: 1;
   min-height: 0;

@@ -1,5 +1,5 @@
 /**
- * @screen  M-8.2 · Consult with support team
+ * @screen  M-8.2 · Book a consultation
  * @flow    F08 Human escalation — routes to the support team (Gabby). No booking or payment in the app (Oct 27).
  * @states  default · history shared · request sent
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470
@@ -27,8 +27,8 @@ export default function BookingInfo() {
   };
 
   return (
-    <div className={styles.root} data-xref="M-8.2 · Consult with support team">
-      <Header title="Consult with support team" onBack={pop} backLabel={previousTitle} />
+    <div className={styles.root} data-xref="M-8.2 · Book a consultation">
+      <Header title="Book a consultation" onBack={pop} backLabel={previousTitle} />
       <div className={styles.body}>
         <Card>
           <h2 className={styles.cardTitle}>What to expect</h2>

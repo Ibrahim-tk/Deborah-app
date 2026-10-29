@@ -15,7 +15,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { ActionSheet } from '@mobile/ui';
 import { AnimatePresence, Aura, GradientShift, MotionDiv } from '@mobile/ui';
-import { AiDisclosure, ChatHeader, Composer, Greeting, QuickSymptoms, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
+import { AiDisclosure, ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -264,7 +264,7 @@ export default function Conversation() {
                   chat={chat}
                   actions={actions}
                   onShop={(id) => open('M-2.7', { productId: id })}
-                  onBook={() => push('M-8.2')}
+                  onBook={() => open('M-8.2')}
                   onRestartPlan={() => gate('journey', () => {
                     switchTab('health');
                     push('M-7.3');
@@ -276,7 +276,7 @@ export default function Conversation() {
                   }}
                   onTeamBook={() => {
                     toast('Summary sent to the support team (demo)');
-                    push('M-8.2');
+                    open('M-8.2');
                   }}
                   onLongPress={setPressed}
                   onFocusComposer={() => inputRef.current?.focus()}
@@ -303,10 +303,6 @@ export default function Conversation() {
         {/* Empty chat shows starter suggestions; the intake tile waits until after an answer (design 2026-10-21). */}
         {isEmpty && !intakeMode && (
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
-        )}
-        {/* Quick symptom picks between the suggestions and the composer; picks ride as composer tokens (2026-10-28). */}
-        {isEmpty && !intakeMode && (
-          <QuickSymptoms selected={symptoms} onToggle={(s) => setSymptoms((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]))} onMore={() => setSymptomSheet(true)} />
         )}
         {profile && profilePct < 1 && conversation?.status === 'answered' && (
           <IntakeTile progress={profilePct} onOpen={() => push('M-2.14')} />

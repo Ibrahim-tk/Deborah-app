@@ -8,7 +8,7 @@
   position: absolute;
   inset: 10px 12px -8px;
   z-index: 0;
-  border-radius: var(--home-radius, 32px);
+  border-radius: var(--home-radius);
   background: color-mix(in srgb, var(--home-tone-mint) 70%, var(--purple-100));
   transform: rotate(-1.5deg);
   pointer-events: none;
@@ -19,7 +19,7 @@
   z-index: 1;
   display: grid;
   overflow: hidden;
-  border-radius: var(--home-radius, 32px);
+  border-radius: var(--home-radius);
   background: var(--home-tone-mint);
   color: var(--color-ink);
   transform: rotate(0.6deg);

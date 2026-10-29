@@ -131,17 +131,17 @@
   },
   "M-8.2": {
     "title": "Booking info",
-    "flow": "F08 Consult with support team",
+    "flow": "F08 Book a consultation",
     "note": "When the app isn't enough, Maria can reach the support team herself. This screen explains what to expect from the 50-minute video visit, asks which state she lives in (for licensing) and offers an opt-in to share her app history. Choose a time leads to the scheduler. The price is still to be decided."
   },
   "M-8.3": {
     "title": "Scheduler",
-    "flow": "F08 Consult with support team",
+    "flow": "F08 Book a consultation",
     "note": "Maria picks a day and an available slot. This is a simulated, native-feeling scheduler. A summary bar confirms her choice, and Confirm booking books it, sets a reminder for the day before and replaces this screen with the confirmation."
   },
   "M-8.4": {
     "title": "Booking confirmed",
-    "flow": "F08 Consult with support team",
+    "flow": "F08 Book a consultation",
     "note": "'Booked with the Oracle', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
   },
   "M-9.1": {

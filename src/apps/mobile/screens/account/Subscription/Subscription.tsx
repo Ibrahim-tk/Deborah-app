@@ -1,7 +1,7 @@
 /**
  * @screen  M-10.3 · Subscription
  * @flow    F10 Account, privacy & data
- * @states  active ("Renews on {date}") · cancelled ("Ends {date}") · trial ("Free trial · {n} consultations left") · cancel alert
+ * @states  active ("Renews on {date}") · cancelled ("Ends {date}") · trial ("Free trial · {n} consultations left") · cancel view (M-10.8)
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F10-account-privacy.md#m-103--subscription-not-in-wireframes
  * @xref    web: W-10.3 (apps/web/screens/account/Subscription) — not built
@@ -9,7 +9,7 @@
 import { findPlan } from '@shared/data';
 import { selectFreeLeft, useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Card, Divider, Header, ListRow, useAlert } from '@mobile/ui';
+import { Button, Card, Divider, Header, ListRow } from '@mobile/ui';
 import { planPrice } from '@mobile/patterns/commerce';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute } from '@mobile/navigation';
@@ -18,7 +18,6 @@ import styles from './Subscription.module.css';
 export default function Subscription() {
   const nav = useNav();
   const { previousTitle } = useRoute();
-  const alert = useAlert();
   const toast = useToast();
   const planId = useAppStore((s) => s.plan);
   const billing = useAppStore((s) => s.billing);
@@ -28,16 +27,8 @@ export default function Subscription() {
   const plan = findPlan(planId);
   const trial = planId === 'trial' || !plan;
 
-  const cancel = async () => {
-    const choice = await alert({
-      title: 'Cancel subscription?',
-      message: `Your subscription stays active until the end of the current billing period${renewsAt ? ` (${formatShortDate(renewsAt)})` : ''}.`,
-      buttons: [{ label: 'Keep plan', style: 'cancel' }, { label: 'Cancel subscription', style: 'destructive' }],
-    });
-    if (choice !== 1) return;
-    useAppStore.getState().cancelSubscription();
-    toast('Subscription cancelled');
-  };
+  // Standard cancel view with consent and feedback (designer, 2026-10-29), not a system alert.
+  const cancel = () => nav.push('M-10.8');
 
   return (
     <div className={styles.root} data-xref="M-10.3 · Subscription">

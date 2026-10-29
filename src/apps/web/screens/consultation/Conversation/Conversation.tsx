@@ -16,7 +16,7 @@ import { selectActiveConversation, SELF_PROFILE_ID, useAppStore } from '@shared/
 import type { Message } from '@shared/types/domain';
 import { nowFrom, uid } from '@shared/utils';
 import { ActionSheet, AnimatePresence, MotionDiv } from '@web/ui';
-import { ChatHeader, Composer, Greeting, QuickSymptoms, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@web/patterns/chat';
+import { AI_DISCLOSURE, ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@web/patterns/chat';
 import { useConversation } from '@web/hooks/useConversation';
 import { useNav, useNavStore, useScreenParams } from '@web/navigation';
 import { MessageList } from './parts/MessageList';
@@ -251,6 +251,8 @@ export default function Conversation() {
     : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile?.intake?.pronouns);
   // Someone else's chat: quick start questions in third person, using their pronouns.
   // Empty chat: orb + heading, composer, then suggestions — one centered group.
+  // Profile card can be closed for this visit (designer, 2026-10-29).
+  const [intakeCardClosed, setIntakeCardClosed] = useState(false);
   const emptyStart = isEmpty && !intakeMode;
 
   const composer = (
@@ -334,7 +336,6 @@ export default function Conversation() {
         </aside>
       )}
       <ChatHeader
-        disclosure={!isEmpty && !profiling}
         onBack={() => pop()}
         onNewChat={() => chat.startNew()}
         canStartNew={!isEmpty && !profiling}
@@ -397,14 +398,10 @@ export default function Conversation() {
               )
             )}
           </AnimatePresence>
-          {/* Desktop order (2026-10-28): quick symptoms → composer → suggestions. Picks ride as composer tokens. */}
-          {emptyStart && (
-            <QuickSymptoms selected={symptoms} onToggle={(s) => setSymptoms((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]))} onMore={() => setSymptomSheet(true)} />
-          )}
           {emptyStart && composer}
-          {emptyStart && intakeCompletion < 1 && (
+          {emptyStart && intakeCompletion < 1 && !intakeCardClosed && (
             <div className={styles.intakeFloat}>
-              <IntakeCompletionCard layout="stack" progress={intakeCompletion} onAction={() => push('M-2.14')} />
+              <IntakeCompletionCard layout="stack" progress={intakeCompletion} onAction={() => push('M-2.14')} onDismiss={() => setIntakeCardClosed(true)} />
             </div>
           )}
           {emptyStart && (
@@ -431,6 +428,8 @@ export default function Conversation() {
             and typing there answers "Other". Empty chat lifts it into the centered group. */}
         <SymptomPicker open={symptomSheet} onClose={() => setSymptomSheet(false)} onAdd={(xs) => setSymptoms((cur) => [...cur, ...xs.filter((x) => !cur.includes(x))])} />
         {!emptyStart && composer}
+        {/* AI disclosure under the composer, as on mobile (designer, 2026-10-29). */}
+        {!emptyStart && <p className={styles.aiDisclosure}>{AI_DISCLOSURE}</p>}
       </div>
 
       {attachments.overlay}

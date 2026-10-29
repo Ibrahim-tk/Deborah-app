@@ -63,7 +63,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@web/screens/myhealth/EditHealthDetail')), presentation: 'push', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
   // F08 Book Deborah
-  'M-8.2': { title: 'Consult with support team', component: lazy(() => import('@web/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
+  'M-8.2': { title: 'Book a consultation', component: lazy(() => import('@web/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
   'M-8.3': { title: 'Pick a time', component: lazy(() => import('@web/screens/booking/Scheduler')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-83--pick-a-time-simulated-scheduler' },
   'M-8.4': { title: 'Booking confirmed', component: lazy(() => import('@web/screens/booking/BookingConfirmed')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-84--booking-confirmed' },
 

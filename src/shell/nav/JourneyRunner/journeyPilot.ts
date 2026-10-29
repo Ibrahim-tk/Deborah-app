@@ -341,7 +341,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
   if (!st.nextStepTapped) {
     const row =
       run.afterAnswer === 'whatsNext-book'
-        ? find(phone, /^Consult with support team$/) || find(phone, /^Consult with support team$/)
+        ? find(phone, /^Book a consultation$/) || find(phone, /^Book a consultation$/)
         : run.afterAnswer === 'whatsNext-followUp'
           ? find(phone, /^Ask a follow-up$/)
           : find(phone, /^Upload labs or results$/);
@@ -353,7 +353,7 @@ function afterAnswerTick(run: JourneyRun, phone: HTMLElement, screen: string, st
     }
     const label =
       run.afterAnswer === 'whatsNext-book'
-        ? /^Consult with support team$|^Consult with support team$/
+        ? /^Book a consultation$|^Book a consultation$/
         : run.afterAnswer === 'whatsNext-followUp'
           ? /^Ask a follow-up$/
           : /^Upload labs or results$/;

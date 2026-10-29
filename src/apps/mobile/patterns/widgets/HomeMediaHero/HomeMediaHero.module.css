@@ -3,7 +3,7 @@
   position: relative;
   overflow: hidden;
   border: 0;
-  border-radius: var(--home-radius, 32px);
+  border-radius: var(--home-radius);
   text-align: left;
   -webkit-tap-highlight-color: transparent;
   isolation: isolate;

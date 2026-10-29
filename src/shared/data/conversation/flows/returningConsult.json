@@ -415,7 +415,7 @@
       "bot": "Because the flutters are new, I'd really like to hear about them myself. Here are my next openings, if you'd like one.",
       "widget": {
         "type": "slot_picker",
-        "title": "Consult with support team",
+        "title": "Book a consultation",
         "meta": "30 min · Video",
         "options": [
           {

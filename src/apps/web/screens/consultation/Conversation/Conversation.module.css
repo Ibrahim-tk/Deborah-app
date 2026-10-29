@@ -137,3 +137,13 @@
   bottom: var(--space-5);
   width: min(300px, calc(100% - 2 * var(--space-5)));
 }
+
+/* AI disclosure: smallest caption, centred under the composer (mirrors mobile AiDisclosure). */
+.aiDisclosure {
+  margin: calc(var(--space-1) * -1) 0 0;
+  text-align: center;
+  font: var(--weight-regular) var(--fs-caption) / var(--lh-caption) var(--font-body);
+  color: var(--color-ink-secondary);
+}
+/* Lighter disclaimer (designer, 2026-10-29). OPEN: DESIGN.md asks ≥ 7:1 for readable text; this grey is ~3.5:1. */
+.aiDisclosure { color: #8a8086; }

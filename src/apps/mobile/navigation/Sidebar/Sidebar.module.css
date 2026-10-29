@@ -117,3 +117,7 @@
 }
 
 .shop { min-width: 0; }
+/* Recent chat titles read light (designer, 2026-10-29): secondary ink, regular weight — still ≥ 7:1 on the panel. */
+.chat { font-weight: var(--weight-regular); color: #5a4f55; }
+/* Sidebar product card uses the Home card radius (designer, 2026-10-29). */
+.shop { --product-card-radius: var(--home-radius); --product-media-radius: calc(var(--home-radius) - 12px); }

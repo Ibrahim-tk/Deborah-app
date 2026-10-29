@@ -104,7 +104,7 @@ export default function Account() {
     },
     {
       title: 'Support',
-      rows: [{ title: 'About the Oracle', subtitle: 'Consult with support team', icon: 'info', onPress: () => nav.push('M-7.6') }],
+      rows: [{ title: 'About the Oracle', subtitle: 'Book a consultation', icon: 'info', onPress: () => nav.push('M-7.6') }],
     },
   ];
 

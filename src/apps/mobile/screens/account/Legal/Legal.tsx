@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react';
 import { consentDoc } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Modal } from '@mobile/ui';
+import { GlassButton, Modal } from '@mobile/ui';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import styles from './Legal.module.css';
 
@@ -37,7 +37,7 @@ export default function Legal() {
 
   return (
     <div className={styles.root} data-xref="M-10.5 · Terms & disclaimer">
-      <Modal title="Terms & disclaimer" right={<Button variant="ghost" size="md" onClick={dismissModal}>Done</Button>}>
+      <Modal title="Terms & disclaimer" right={<GlassButton icon="check" aria-label="Done" onClick={dismissModal} />}>
         <div className={styles.doc}>
           {docs.map((d) => (
             <section key={d.key} ref={(el) => (refs.current[d.key] = el)} className={styles.section} data-placeholder={placeholder}>

@@ -12,7 +12,7 @@ import { ageOn, isMinor } from '@shared/engine';
 import { SELF_PROFILE_ID, selectProfileConversations, selectProfileNotes, useAppStore } from '@shared/store';
 import type { Profile } from '@shared/types/domain';
 import { nowFrom } from '@shared/utils';
-import { Button, Header, ListRow, useAlert } from '@mobile/ui';
+import { Button, GlassButton, Header, ListRow, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute, useScreenParams } from '@mobile/navigation';
 import { BasicsSection } from './parts/BasicsSection';
@@ -82,8 +82,10 @@ export default function ProfileDetails() {
         title={profile.name}
         onBack={editing ? undefined : pop}
         backLabel={previousTitle}
-        left={editing ? <Button variant="ghost" size="md" onClick={() => setDraft(null)}>Cancel</Button> : undefined}
-        right={<Button variant="ghost" size="md" onClick={toggleEdit}>{editing ? 'Done' : 'Edit'}</Button>}
+        left={editing ? <GlassButton icon="close" aria-label="Cancel editing" onClick={() => setDraft(null)} /> : undefined}
+        right={editing
+          ? <GlassButton icon="check" aria-label="Save changes" onClick={toggleEdit} />
+          : <Button variant="ghost" size="md" onClick={toggleEdit}>Edit</Button>}
       />
       <div className={styles.body}>
         <BasicsSection draft={view} editing={editing} isSelf={isSelf} ageText={ageText} today={toDateInput(now)} onChange={change} />

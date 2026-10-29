@@ -5,7 +5,7 @@
   position: absolute;
   inset: 0;
   border: 0;
-  border-radius: var(--radius-xl);
+  border-radius: var(--composer-radius, var(--radius-xl));
   background: transparent;
   cursor: text;
   -webkit-tap-highlight-color: transparent;

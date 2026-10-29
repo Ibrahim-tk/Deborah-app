@@ -31,7 +31,7 @@ function useTeamNotifyToast(message: Message, conversationId: string, active: bo
 export function SafetyMessage({ message: m, conversationId, busy, chat, onFocusComposer }: SafetyMessageProps) {
   const alert = useAlert();
   const toast = useToast();
-  const { open, push } = useNav();
+  const { open } = useNav();
   const teamAlert = useAppStore((s) => s.conversations.byId[conversationId]?.teamAlert);
   const uncovered = m.kind === 'outOfScope' && teamAlert?.level === 'uncovered';
   useTeamNotifyToast(
@@ -79,13 +79,13 @@ export function SafetyMessage({ message: m, conversationId, busy, chat, onFocusC
         />
       );
     case 'outOfScope':
-      return <OutOfScopeReply suggestions={suggestionsData.default} disabled={busy} onBook={() => push('M-8.2')} onSelect={(s) => chat.send(s.text, s.scriptId)} />;
+      return <OutOfScopeReply suggestions={suggestionsData.default} disabled={busy} onBook={() => open('M-8.2')} onSelect={(s) => chat.send(s.text, s.scriptId)} />;
     case 'escalation':
       return (
         <EscalationCard
           body={m.text ?? g.escalation.body}
           dismissed={m.meta?.dismissed}
-          onBook={() => push('M-8.2')}
+          onBook={() => open('M-8.2')}
           onDismiss={() => useAppStore.getState().patchMessage(conversationId, m.id, { meta: { dismissed: true } })}
         />
       );

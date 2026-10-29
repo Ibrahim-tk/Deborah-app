@@ -5,7 +5,7 @@
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { IconButton } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
-import { answersFromProfile, healthProfileCompletion } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
+import { answersFromProfile } from '@mobile/screens/onboarding/HealthBasics/healthProfile';
 import { LOCKED_KEYS, healthDetailSections } from '@mobile/screens/onboarding/HealthBasics/healthDetails';
 import styles from './HealthDetails.module.css';
 
@@ -14,20 +14,16 @@ export function HealthDetails() {
   const profile = useAppStore(selectActiveProfile);
   if (!profile) return null;
   const sections = healthDetailSections(answersFromProfile(profile));
-  const pct = Math.round(healthProfileCompletion(profile) * 100);
   const edit = (section: string) => presentModal('M-7.8', { profileId: profile.id, section });
 
   return (
     <div className={styles.stack}>
-      <div className={styles.intro}>
-        <h2 className={styles.heading}>Health profile</h2>
-        <p className={styles.meta}>{pct === 100 ? 'Complete' : `${pct}% complete`}</p>
-      </div>
-      {sections.filter((s) => s.rows.length > 0).map((s) => (
+      {sections.filter((s) => s.rows.length > 0).map((s, i) => (
         <section key={s.id} className={styles.root} aria-labelledby={`hp-${s.id}`}>
           <div className={styles.head}>
-            <h3 id={`hp-${s.id}`} className={styles.title}>{s.title}</h3>
-            <IconButton icon="edit" size="sm" label={`Edit ${s.title.toLowerCase()}`} onClick={() => edit(s.id)} />
+            {/* First card carries the section name "Health profile" (designer, 2026-10-29). */}
+            <h2 id={`hp-${s.id}`} className={styles.title}>{i === 0 ? 'Health profile' : s.title}</h2>
+            <IconButton icon="edit" size="sm" label={`Edit ${i === 0 ? 'health profile' : s.title.toLowerCase()}`} onClick={() => edit(s.id)} />
           </div>
           <dl className={styles.list}>
             {s.rows.map((r) => {

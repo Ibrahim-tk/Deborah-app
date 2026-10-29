@@ -48,10 +48,12 @@ export function EscalationCard({ dismissed, onBook, onDismiss, sheet = true }: E
       {/* Booking banner (designer, 2026-10-23): soft gradient, serif heading + line + CTA left, the Oracle right. */}
       <div className={styles.hero}>
         <div className={styles.heroCopy}>
-          <p className={styles.heroTitle}>Talk with our support team</p>
-          <p className={styles.heroBody}>Get personalized support, ask questions, or discuss your health goals.</p>
-          <Button className={styles.cta} onClick={request}>Consult with support team</Button>
+          <p className={styles.heroTitle}>Book a consultation</p>
+          <p className={styles.heroBody}>Want to talk it through with a person? Our support team will reach out to you.</p>
+          <Button className={styles.cta} onClick={request}>Book</Button>
         </div>
+        {/* Blossom tree on the right, same art as mobile (designer, 2026-10-29) — decorative, in the old portrait slot. */}
+        <img src="/images/home/support-tree.webp" alt="" className={styles.tree} />
       </div>
       <BottomSheet open={Boolean(open)} onClose={done}>
         <div className={styles.sheet} role="group" aria-labelledby="escalation-title" data-placeholder>

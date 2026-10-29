@@ -33,7 +33,7 @@ function lines(state: Exclude<CheckInCardState, { kind: 'due' }>): { title: stri
 }
 
 export function CheckInCard({ state, upcoming, onCheckIn, onReminders }: CheckInCardProps) {
-  const upcomingLine = upcoming && <span className={styles.upcoming}>Upcoming: consult with support team · {upcoming}</span>;
+  const upcomingLine = upcoming && <span className={styles.upcoming}>Upcoming: consultation · {upcoming}</span>;
 
   if (state.kind === 'due') {
     return (
