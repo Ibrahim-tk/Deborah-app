@@ -56,7 +56,7 @@ export default function Conversation() {
   const toast = useToast();
   const intake = useIntakeFlow();
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
-  // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
+  // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first conversation" (focus).
   // `onboardClosing`: guest signup finished HealthBasics — closing line then flush held send.
   const { prefill, focus, onboardClosing } = useScreenParams<{ prefill: string; focus: boolean; onboardClosing: boolean }>();
   const guest = useAppStore((s) => !s.accountId);

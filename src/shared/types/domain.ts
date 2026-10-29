@@ -130,6 +130,8 @@ export interface Intake {
 }
 
 export interface Profile {
+  /** Two-letter U.S. state; sets the age of majority (Oracle Change Requests, Oct 26). Optional, defaults to 18. */
+  stateOfResidence?: string;
   id: ID;
   name: string;
   relationship: Relationship;
@@ -203,6 +205,7 @@ export type SectionKey =
   | 'providerQuestions'
   | 'tests'
   | 'doNow'
+  /** @deprecated "A Word from Deborah" — removed from answers (Oct 26); kept so old saved data still types. */
   | 'word';
 
 export const SECTION_ORDER: SectionKey[] = [

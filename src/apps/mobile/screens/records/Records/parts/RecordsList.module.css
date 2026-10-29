@@ -5,3 +5,5 @@
 /* Floating "new" action, bottom right (design 2026-10-20). Floating, so a soft shadow is allowed. */
 .fab { position: absolute; right: var(--margin-screen); bottom: calc(var(--safe-bottom) + var(--space-4)); z-index: 5; box-shadow: 0 8px 24px rgb(61 16 86 / 0.25); }
 .choices { display: grid; gap: var(--space-3); }
+/* Empty notes: no tile behind the message (designer, 2026-10-29). */
+.empty > :first-child { background: none; box-shadow: none; }

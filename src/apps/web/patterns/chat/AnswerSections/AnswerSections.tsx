@@ -63,7 +63,8 @@ export function AnswerSections({ answer, streaming, activeSection, productSlot, 
           streaming={Boolean(streaming) && section.key === activeSection}
           onToggle={() => setOpen((o) => (o.includes(section.key) ? o.filter((k) => k !== section.key) : [...o, section.key]))}
           onAddQuestion={section.key === 'providerQuestions' ? onAddQuestion : undefined}
-          extra={section.key === 'doNow' && productReady ? productSlot : section.key === 'word' && !streaming ? wordSlot : undefined}
+          extra={section.key === 'doNow' && productReady ? productSlot : i === answer.sections.length - 1 && !streaming ? wordSlot : undefined}
+          // "A Word from Deborah" section removed (Oracle Change Requests, Oct 26); its slot follows the last section.
         />
       ))}
     </div>

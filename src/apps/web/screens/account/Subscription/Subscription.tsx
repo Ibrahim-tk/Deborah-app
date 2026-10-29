@@ -47,10 +47,9 @@ export default function Subscription() {
             <>
               <h2 className={styles.title}>Free trial</h2>
               <p className={styles.meta}>
-                Free trial · {freeLeft ?? 0} {freeLeft === 1 ? 'consultation' : 'consultations'} left
+                Free trial · {freeLeft ?? 0} {freeLeft === 1 ? 'day' : 'days'} left
               </p>
-              {/* OPEN: "Trial length — the doc says 14 days, Karen said 40 days on the call." Default: consultation count. */}
-              <p className={styles.meta}>Includes conversations with the Oracle only. Other modules and family members open with a plan.</p>
+              <p className={styles.meta}>Includes conversations only. Your Wellness Plan, downloads and family profiles open with a plan.</p>
               <Button fullWidth onClick={() => nav.open('M-4.2')}>Choose a plan</Button>
             </>
           ) : (

@@ -113,7 +113,7 @@ export default function ProfileDetails() {
             <h2 id="records-h" className={styles.heading}>History</h2>
             <div className={styles.rows}>
               {/* OPEN: M-9.1 shows the active profile; these pass profileId so it can filter (see report). */}
-              <ListRow density="compact" title="Consultations" value={String(counts.consultations)} onPress={() => records('consultations')} />
+              <ListRow density="compact" title="Conversations" value={String(counts.consultations)} onPress={() => records('consultations')} />
               <ListRow density="compact" title="Visit Notes" value={String(counts.notes)} onPress={() => records('notes')} />
             </div>
           </section>

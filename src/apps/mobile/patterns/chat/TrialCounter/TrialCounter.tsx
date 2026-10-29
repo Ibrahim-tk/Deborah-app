@@ -21,7 +21,7 @@ export interface TrialCounterProps {
 export function TrialCounter({ left, onChoosePlan, inline }: TrialCounterProps) {
   if (left === null) return null;
   if (inline) {
-    const label = left === 0 ? 'No free consultations left' : `${left} free consultation${left === 1 ? '' : 's'} left`;
+    const label = left === 0 ? 'Your free trial has ended' : `${left} day${left === 1 ? '' : 's'} left in your free trial`;
     return (
       <div className={styles.inline}>
         <p className={styles.inlineText} aria-live="polite">{label}</p>
@@ -37,11 +37,11 @@ export function TrialCounter({ left, onChoosePlan, inline }: TrialCounterProps) 
     return (
       <div className={styles.hint}>
         <Button variant="link" size="sm" leadingIcon="lock" onClick={onChoosePlan}>
-          Choose a plan to start a new consultation
+          Choose a plan to keep talking
         </Button>
       </div>
     );
   }
-  const text = left === 0 ? 'No free consultations left' : `${left} free consultation${left === 1 ? '' : 's'} left`;
+  const text = left === 0 ? 'Your free trial has ended' : `${left} day${left === 1 ? '' : 's'} left in your free trial`;
   return <p className={styles.root} aria-live="polite">{text}</p>;
 }

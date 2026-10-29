@@ -43,3 +43,7 @@
 }
 
 :global(:root) { --prototype-nav-height: 56px; }
+
+/* Tabs sit centred in the bar, as on /internal. */
+.root { position: fixed; }
+.tabs { position: absolute; left: 50%; transform: translateX(-50%); }

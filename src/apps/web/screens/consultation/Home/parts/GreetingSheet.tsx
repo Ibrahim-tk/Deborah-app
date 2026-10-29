@@ -15,8 +15,8 @@ export interface GreetingSheetProps {
 export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
   // Heading → body hierarchy; warmth per docs/copy/voice-tone-ux-copy.md (no promised outcomes, AI ≠ Deborah).
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m the Oracle.`;
-  const intro = 'Tell me how you’re feeling, and we’ll look at what’s going on together, one step at a time. My guidance draws on Genesis Health Products’ experience.';
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m Oracle.`;
+  const intro = 'I’m an AI system. Tell me how you’re feeling, and we’ll look at what’s going on together, one step at a time.';
   return (
     <BottomSheet
       showClose

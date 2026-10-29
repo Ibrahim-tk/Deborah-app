@@ -19,6 +19,8 @@ import {
   gentleReplySteps,
   medicationSteps,
   outOfScopeSteps,
+  identitySteps,
+  appHelpSteps,
 } from './safety';
 import { isGated } from './counting';
 import { checkInDetailSteps, checkInReplySteps, isAwaitingCheckInDetail, startCheckInSteps } from './checkin';
@@ -36,7 +38,7 @@ export { CONSENT_ID } from './intake';
 export { ANSWER_REQUEST_LABEL } from './plans';
 export { greeting } from './memory';
 export { forFamilyMember, pronounForms } from './perspective';
-export { ageBandFor, ageGroupFor, ageOf, ageOn, isChildRelationship, isMinor } from './profile';
+export { ageBandFor, ageGroupFor, ageOfMajority, ageOf, ageOn, isChildRelationship, isMinor } from './profile';
 export { journeyFor, missingBasics, planClarifiers, CLARIFY } from './journey';
 export { symptomGroupOf } from './classifier';
 export { factFromAnswer, pendingFacts, withFacts } from './facts';
@@ -134,7 +136,11 @@ function handleText(ctx: EngineContext, text: string, suggestionScript?: string)
   const guard = classify(text, ctx);
   if (guard.replace) {
     const safety =
-      guard.replace === 'emergency' ? emergencySteps(ctx) : guard.replace === 'crisis' ? crisisSteps(ctx) : [...pause('Reading your message', 500, 800), ...outOfScopeSteps(ctx)];
+      guard.replace === 'emergency' ? emergencySteps(ctx)
+      : guard.replace === 'crisis' ? crisisSteps(ctx)
+      : guard.replace === 'identity' ? [...pause('Reading your message', 400, 600), ...identitySteps(ctx)]
+      : guard.replace === 'appHelp' ? [...pause('Reading your message', 400, 600), ...appHelpSteps(ctx)]
+      : [...pause('Reading your message', 500, 800), ...outOfScopeSteps(ctx)];
     return [userBubble(ctx, text), ...safety];
   }
   if (conv.gentleNext) return [userBubble(ctx, text), ...pause('Reading your message', 600, 900), ...gentleReplySteps(ctx)];

@@ -1,7 +1,14 @@
 {
   "id": "sleep-night",
   "topic": "not sleeping through the night",
-  "match": ["can't sleep", "cannot sleep", "wake up at night", "middle of the night", "wine", "not sleeping"],
+  "match": [
+    "can't sleep",
+    "cannot sleep",
+    "wake up at night",
+    "middle of the night",
+    "wine",
+    "not sleeping"
+  ],
   "ownIntake": true,
   "intake": [
     "tg-sleep-pattern",
@@ -53,7 +60,9 @@
         "bullets": [
           "Only if nights stay broken without alcohol — ask about hormones and overnight blood sugar with your provider."
         ],
-        "bulletTiers": ["also"]
+        "bulletTiers": [
+          "also"
+        ]
       },
       {
         "key": "doNow",
@@ -64,11 +73,6 @@
           "Keep Genesis Gold in the morning as directed.",
           "Avoid late heavy meals when you want deep sleep."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A word from the Oracle",
-        "body": "{name}, I'll be here when you're ready to talk again. One rough night after wine doesn't undo the care you're already giving your body."
       }
     ],
     "product": {
@@ -77,17 +81,30 @@
       "frame90": "Steady morning support plus a clear plan for the nights you drink."
     },
     "closingLine": "Download your visit notes so you remember what to ask. Check back anytime — I'll be here when you're ready.",
-    "habitsForPlan": ["DIM 100–200 mg before bed if you drink", "Genesis Gold every morning", "No late heavy meals on nights you need deep sleep"],
+    "habitsForPlan": [
+      "DIM 100–200 mg before bed if you drink",
+      "Genesis Gold every morning",
+      "No late heavy meals on nights you need deep sleep"
+    ],
     "goal": "Sleeping through the night",
     "summary": "Mid-night waking after wine; HRT and Genesis Gold on board."
   },
   "followUps": [
     {
-      "match": ["wine", "alcohol", "drink", "DIM"],
+      "match": [
+        "wine",
+        "alcohol",
+        "drink",
+        "DIM"
+      ],
       "reply": "I'm so glad you asked. When you do drink, have a plan: 100 to 200 mg of DIM before bed. You can find it in my Fullscript store. It doesn't replace talking with your provider if nights keep breaking without alcohol."
     },
     {
-      "match": ["eat", "dinner", "late"],
+      "match": [
+        "eat",
+        "dinner",
+        "late"
+      ],
       "reply": "Late eating can keep your liver and gut working when you need deep sleep and melatonin. A lighter, earlier dinner often helps on nights that matter."
     }
   ],

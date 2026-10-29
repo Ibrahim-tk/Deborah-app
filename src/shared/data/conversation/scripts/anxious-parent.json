@@ -1,7 +1,14 @@
 {
   "id": "anxious-parent",
   "topic": "anxious parent advocating for a child",
-  "match": ["frustrated", "pediatrician", "school", "ADHD", "my child", "appointment"],
+  "match": [
+    "frustrated",
+    "pediatrician",
+    "school",
+    "ADHD",
+    "my child",
+    "appointment"
+  ],
   "ownIntake": true,
   "intake": [
     "tg-parent-eval",
@@ -59,25 +66,33 @@
           "Read to your child; let him pick the book. Sharing stories captures attention; talk about what you both learned afterward.",
           "Put your own oxygen mask on first — the best thing for him is you healthy, calm and as steady as you can be."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A word from the Oracle",
-        "body": "I'm here for you, {name}. Check back anytime you have other questions — about his evaluation or about you."
       }
     ],
     "closingLine": "Come back after he's evaluated, or anytime. Take care — I'm thinking about you.",
-    "habitsForPlan": ["CALM meditation 5 minutes daily", "Regular meals and bedtime", "Read together and talk about the story"],
+    "habitsForPlan": [
+      "CALM meditation 5 minutes daily",
+      "Regular meals and bedtime",
+      "Read together and talk about the story"
+    ],
     "goal": "Steady parent, clearer path to evaluation",
     "summary": "Frustrated parent; sleep and stress eating; CALM and advocacy next steps."
   },
   "followUps": [
     {
-      "match": ["CALM", "meditat", "breathe", "hum"],
+      "match": [
+        "CALM",
+        "meditat",
+        "breathe",
+        "hum"
+      ],
       "reply": "Music you can hum, a scent you can carry, breathe in for four, hold four, out for eight. Repeat. Over time the scent or hum alone can help you calm when you're frustrated — and humming a lullaby around your child may help him too."
     },
     {
-      "match": ["ADHD", "medication", "meds"],
+      "match": [
+        "ADHD",
+        "medication",
+        "meds"
+      ],
       "reply": "No, not necessarily. Many options exist if attention challenges are confirmed — and we don't know that yet. Start with school evaluation and the pediatrician."
     }
   ],

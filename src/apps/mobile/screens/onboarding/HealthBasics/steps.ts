@@ -92,10 +92,23 @@ export function routeSexFor(a: Answers): string | undefined {
 const anyProcedures = (a: Answers) =>
   list(a.sexProcedures, SEX_CHARACTERISTICS_NONE).length > 0;
 
-/** Labels for a choice step: a child profile gets `childLabels` (Boy / Girl). */
-export function choiceLabel(s: Step, value: string, label: string, a: Answers): string {
+/** Someone else under 18 gets `childLabels` (Boy / Girl) — was under 13 until 2026-10-29. */
+const minorOther = (a: Answers) => {
   const age = ageFromAnswers(a);
-  return forSomeoneElse(a) && age !== undefined && ageGroupFor(age) === 'child' ? s.childLabels?.[value] ?? label : label;
+  return forSomeoneElse(a) && age !== undefined && age < 18;
+};
+
+/** Labels for a choice step: a minor's profile gets `childLabels` (Boy / Girl). */
+export function choiceLabel(s: Step, value: string, label: string, a: Answers): string {
+  return minorOther(a) ? s.childLabels?.[value] ?? label : label;
+}
+
+/** Choices in display order: with child labels, Boy comes before Girl (designer, 2026-10-29). */
+export function orderedChoices(s: Step, a: Answers) {
+  const choices = s.choices ?? [];
+  if (!minorOther(a) || !s.childLabels) return choices;
+  const rank = (v: string) => (v === 'man' ? 0 : v === 'woman' ? 1 : 2);
+  return [...choices].sort((x, y) => rank(x.value) - rank(y.value));
 }
 
 /** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`).

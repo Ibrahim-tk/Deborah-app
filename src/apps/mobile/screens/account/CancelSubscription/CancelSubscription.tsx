@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Checkbox, Header, OptionList, OptionRow, TextArea } from '@mobile/ui';
+import { Button, Checkbox, Header, TextArea } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './CancelSubscription.module.css';
@@ -59,13 +59,12 @@ export default function CancelSubscription() {
           <p className={styles.text}>Your conversations and health profile stay in your account.</p>
         </section>
 
-        <OptionList label="Why are you cancelling? (optional)">
+        {/* Small inline checkboxes, no container (single pick: ticking one clears the other). */}
+        <div className={styles.reasons} role="group" aria-label="Why are you cancelling? (optional)">
           {REASONS.map((r) => (
-            <OptionRow key={r.id} selected={reason === r.id} onSelect={() => setReason(reason === r.id ? null : r.id)}>
-              {r.label}
-            </OptionRow>
+            <Checkbox key={r.id} size="sm" checked={reason === r.id} onChange={(on) => setReason(on ? r.id : null)} label={r.label} />
           ))}
-        </OptionList>
+        </div>
 
         <TextArea
           label="Anything we could do better? (optional)"

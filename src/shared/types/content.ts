@@ -237,6 +237,10 @@ export interface GuardrailsData {
   };
   medication: { patterns: string[]; body: string; interactionLink: { label: string; url: string }; status: ContentStatus };
   outOfScope: { patterns: string[]; body: string; status: ContentStatus };
+  /** Scripted, truthful answer to "Are you a person?" (Oracle Change Requests, Oct 26 — exact wording). */
+  identity: { patterns: string[]; body: string; status: ContentStatus };
+  /** App-help intent (POC testing, Oct 26): questions about using the app, separate from out-of-scope (A10). */
+  appHelp: { patterns: string[]; body: string; status: ContentStatus };
   /** Miro Step 4: enough context but concern not in Deborah’s approved knowledge — team handoff (uncounted). */
   uncovered: { patterns: string[]; body: string; status: ContentStatus };
   escalation: { triggers: { unresolvedConsultations: number; phrases: string[] }; body: string; status: ContentStatus };

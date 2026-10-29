@@ -20,7 +20,7 @@ export interface RecordsListProps {
 }
 
 const topicOf = (c: Conversation) =>
-  c.topic ?? (c.scriptId === 'checkin' ? 'Check-in' : c.messages.find((m) => m.role === 'user')?.text) ?? 'Consultation';
+  c.topic ?? (c.scriptId === 'checkin' ? 'Check-in' : c.messages.find((m) => m.role === 'user')?.text) ?? 'Conversation';
 const isAnswered = (c: Conversation) => Boolean(c.countedAt) || c.messages.some((m) => m.kind === 'answer' && m.answer && !m.meta?.streaming);
 /** First line: just the date (the appointment when set, else when it was saved). */
 const dateFor = (n: Note) =>
@@ -64,7 +64,7 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
         <div className={styles.top}>
           <EmptyState
             icon="chat"
-            title="No consultations yet"
+            title="No conversations yet"
             actionLabel={isActiveProfile ? 'Ask Oracle' : undefined}
             actionIcon="deborah"
             onAction={() => openAsk({ focus: true })}
@@ -93,8 +93,8 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
   // Lab reports removed (design 2026-10-28): notes are the only other segment.
   if (notes.length === 0) {
     return (
-      <div className={styles.top}>
-        <EmptyState icon="note" title="Jot down questions before your next visit" actionLabel="New note" actionIcon="plus" onAction={newNote} />
+      <div className={`${styles.top} ${own.empty}`} data-records-empty>
+        <EmptyState icon="note" title="No visit notes yet" actionLabel="New note" actionIcon="plus" onAction={newNote} />
         {noteMenuSheet}
       </div>
     );

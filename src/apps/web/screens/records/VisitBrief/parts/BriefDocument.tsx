@@ -69,7 +69,7 @@ export function BriefDocument({ brief, onChange, flat }: BriefDocumentProps) {
       </section>
 
       <section className={`${styles.block} ${styles.fieldBlock}`}>
-        <h3 className={styles.h3}>2. Clinical Context — What the Oracle Identified</h3>
+        <h3 className={styles.h3}>2. Context from the Conversation</h3>
         <p className={styles.body}>{brief.clinicalContext}</p>
       </section>
 

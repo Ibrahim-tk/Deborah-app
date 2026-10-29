@@ -95,6 +95,8 @@ export interface SubscriptionSlice {
   plan: PlanTier;
   billing: Billing;
   freeConsultationsUsed: number;
+  /** 14-day trial start (set on the first counted conversation). */
+  trialStartedAt?: string;
   renewsAt?: string;
   /** M-10.3 Cancel: the plan stays active until `renewsAt`, then ends. */
   cancelled?: boolean;

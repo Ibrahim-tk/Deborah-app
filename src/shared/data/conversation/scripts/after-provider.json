@@ -1,7 +1,13 @@
 {
   "id": "after-provider",
   "topic": "after a provider visit for gas and bloating",
-  "match": ["still bloated", "Pepcid", "SIBO results", "after my visit", "provider"],
+  "match": [
+    "still bloated",
+    "Pepcid",
+    "SIBO results",
+    "after my visit",
+    "provider"
+  ],
   "ownIntake": true,
   "intake": [
     "tg-after-visit",
@@ -57,11 +63,6 @@
           "Genesis Gold has vital nutrients, but it may also feed bacterial overgrowth. You might switch to Sacred Seven amino acids (no plant foods that increase fermentation) until SIBO is treated, then return to Genesis Gold if that was the issue.",
           "Keep meal spacing and your symptom notes for the follow-up visit."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A word from the Oracle",
-        "body": "Take care, {name}. Check back when you get your results — I'll be here."
       }
     ],
     "product": {
@@ -70,17 +71,29 @@
       "frame90": "Results first; product choice follows the finding."
     },
     "closingLine": "I never tell you to stop a prescribed or recommended medicine — ask your provider before any change. I'll be here when results arrive.",
-    "habitsForPlan": ["Ask before changing Pepcid", "Consider Sacred Seven while awaiting SIBO results", "Bring results back to the Oracle"],
+    "habitsForPlan": [
+      "Ask before changing Pepcid",
+      "Consider Sacred Seven while awaiting SIBO results",
+      "Bring results back to the Oracle"
+    ],
     "goal": "Clear next step after SIBO results",
     "summary": "Post-visit bloating; waiting on SIBO; Pepcid and Genesis Gold questions."
   },
   "followUps": [
     {
-      "match": ["Pepcid", "famotidine", "stop"],
+      "match": [
+        "Pepcid",
+        "famotidine",
+        "stop"
+      ],
       "reply": "I don't want to contradict your provider. Pepcid may help symptoms until results return, but it isn't a SIBO treatment. If you have questions, bring them to your provider before making changes. More on drugs.com under Pepcid (famotidine)."
     },
     {
-      "match": ["Sacred Seven", "Genesis Gold", "switch"],
+      "match": [
+        "Sacred Seven",
+        "Genesis Gold",
+        "switch"
+      ],
       "reply": "Genesis Gold may feed overgrowth; Sacred Seven amino acids avoid plant foods that increase fermentation. After SIBO treatment, many people return to Genesis Gold. Confirm the switch with your provider."
     }
   ],

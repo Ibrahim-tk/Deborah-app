@@ -36,15 +36,15 @@ export default function ConsultationDetail() {
   if (!conversation) {
     return (
       <div className={styles.root} data-xref="M-9.2 · Consultation detail">
-        <Header title="Consultation" onBack={back} backLabel={previousTitle} />
+        <Header title="Conversation" onBack={back} backLabel={previousTitle} />
         <div className={styles.body}>
-          <EmptyState icon="chat" text="This consultation is no longer available." actionLabel="Back to records" onAction={pop} />
+          <EmptyState icon="chat" text="This conversation is no longer available." actionLabel="Back to records" onAction={pop} />
         </div>
       </div>
     );
   }
 
-  const topic = conversation.topic ?? (conversation.scriptId === 'checkin' ? 'Check-in' : 'Consultation');
+  const topic = conversation.topic ?? (conversation.scriptId === 'checkin' ? 'Check-in' : 'Conversation');
   const date = formatShortDate(conversation.countedAt ?? conversation.startedAt);
   const canContinue = conversation.profileId === activeProfileId;
 

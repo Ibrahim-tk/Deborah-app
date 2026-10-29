@@ -1,5 +1,5 @@
 /**
- * @screen  M-2.12 · First consultation (scripted)
+ * @screen  M-2.12 · First conversation (scripted)
  * @flow    F02 Core consultation — genesis_first_consult_v1 after onboarding (M-1.9), or with `flow: 'returning'`
  *          the signed-in demo genesis_returning_consult_demo (from Home's Ask Deborah, seed R01)
  * @states  opener · context · clarifier 1–3 · safety (red flag) · thinking · 7-section answer · follow-up ·
@@ -139,7 +139,7 @@ export default function FirstConsult() {
     const answer = buildAnswer(node, say);
     const title = node.notesTitle ? say(node.notesTitle) : undefined;
     const brief = {
-      ...briefFromAnswer(profile, answer, title ?? 'First consultation'),
+      ...briefFromAnswer(profile, answer, title ?? 'First conversation'),
       ...(title && { title }),
       ...(appointment?.provider && { providerName: appointment.provider }),
       ...(appointment?.date && { appointmentDate: new Date(`${appointment.date}T12:00:00`).toISOString() }),
@@ -212,7 +212,7 @@ export default function FirstConsult() {
     return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
   };
   return (
-    <div className={styles.root} data-xref="M-2.12 · First consultation">
+    <div className={styles.root} data-xref="M-2.12 · First conversation">
       {/* Same living backdrop as Home (M-2.0), so chat feels like the same space. */}
       <Aura />
       <GradientShift />

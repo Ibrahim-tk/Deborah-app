@@ -16,6 +16,7 @@ import { formatShortDate } from '@shared/utils';
 import { Button } from '@web/ui';
 import { EmptyState } from '@web/patterns/health';
 import { DerivedPage } from '@web/patterns/shell';
+import { useAccountGate } from '@web/hooks/useAccountGate';
 import { useToast } from '@web/hooks/toast.store';
 import { useScreenParams } from '@web/navigation';
 import { BriefDocument } from '../VisitBrief/parts/BriefDocument';
@@ -26,6 +27,8 @@ import styles from './PdfPreview.module.css';
 export default function PdfPreview() {
   const params = useScreenParams<{ messageId: string; conversationId: string; briefNoteId: string }>();
   const toast = useToast();
+  // Downloads are a plan feature; the free trial is conversations only (Oct 26).
+  const gate = useAccountGate();
   const source = useAppStore(useShallow((s) => resolveSource(s, params)));
   const profileName = useAppStore((s) => (source ? s.profiles.byId[source.conversation.profileId]?.name : undefined));
 
@@ -70,10 +73,10 @@ export default function PdfPreview() {
         {hasContent && (
           <div className={styles.footerStack}>
             {/* F11 Saved Reports: "Print or Download as PDF" (Miro). Prototype: no file is written. */}
-            <Button fullWidth leadingIcon="download" onClick={() => toast('PDF downloaded')}>Download PDF</Button>
+            <Button fullWidth leadingIcon="download" onClick={() => gate('documents', () => toast('PDF downloaded'))}>Download PDF</Button>
             <div className={styles.actions}>
-              <Button variant="secondary" leadingIcon="share" onClick={() => toast('Shared (demo)')}>Share</Button>
-              <Button variant="secondary" leadingIcon="file" onClick={() => window.print()}>Print</Button>
+              <Button variant="secondary" leadingIcon="share" onClick={() => gate('documents', () => toast('Shared (demo)'))}>Share</Button>
+              <Button variant="secondary" leadingIcon="file" onClick={() => gate('documents', () => window.print())}>Print</Button>
             </div>
           </div>
         )}

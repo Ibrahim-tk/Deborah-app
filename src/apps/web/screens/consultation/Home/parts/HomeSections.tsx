@@ -10,7 +10,7 @@ export interface HomeSectionsProps {
   destinations: Destinations;
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
-  /** My Visit Notes (M-9.1). */
+  /** My Notes card (M-9.1). */
   onNotes: () => void;
   /** My Healing Plan entry for “More for you”. */
   journey?: { concern?: string; done: number; total: number; onPress: () => void };
@@ -26,13 +26,13 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
   return (
     <div className={layout.lower}>
       <SuggestionCarousel
-        label="Your health essentials"
+        label="Manage your health details"
         layout="essentials"
         items={[
           {
             key: 'notes',
-            title: 'My Visit Notes',
-            sub: 'Saved notes from visits and chats',
+            title: 'My Notes',
+            sub: 'Saved notes',
             tone: 'lilac',
             artifact: 'blue-bloom',
             icon: 'note',
@@ -41,7 +41,7 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
           {
             key: 'health',
             title: 'My Health',
-            sub: 'Talk about my own health', // one line, balanced with the other two cards (designer, 2026-10-29)
+            sub: 'Your health profile',
             tone: 'mint',
             artifact: 'leaf-flower',
             icon: 'health',
@@ -49,8 +49,8 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
           },
           {
             key: 'family',
-            title: 'Add Family Member',
-            sub: 'Help a family member or loved one',
+            title: 'My Family',
+            sub: 'Family profiles',
             tone: 'rose',
             artifact: 'pink-bloom',
             icon: 'family',
@@ -60,10 +60,7 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
       />
 
       {(journey || !hideShop) && (
-      <section className={layout.more} aria-labelledby="home-more">
-        <h2 id="home-more" className={layout.moreLabel}>
-          More for you
-        </h2>
+      <section className={layout.more} aria-label="Recommended for you">
         {/* No plan before the first conversation, so no card (no locked placeholder). */}
         {journey && <HealingPlanCard concern={journey.concern} done={journey.done} total={journey.total} onPress={journey.onPress} />}
         {/* Two tall store-style product cards (image on top, name, Shop). */}

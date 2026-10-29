@@ -58,17 +58,25 @@
           "A simple breakfast, even something small.",
           "A short check-in each evening about how the day felt."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A Word From the Oracle",
-        "body": "Paying attention to this is the right instinct. Small, steady changes — and the right questions at the next appointment — usually make a real difference."
       }
     ]
   },
   "followUps": [
-    { "match": ["iron", "ferritin", "b12"], "reply": "Low iron and B12 are common causes of tiredness, especially with heavy periods or a vegetarian diet. A simple blood test with {name}'s provider can check both." },
-    { "match": ["sleep", "hours"], "reply": "Most teenagers need around eight to ten hours. Late screens and stress are the usual things that cut into it." }
+    {
+      "match": [
+        "iron",
+        "ferritin",
+        "b12"
+      ],
+      "reply": "Low iron and B12 are common causes of tiredness, especially with heavy periods or a vegetarian diet. A simple blood test with {name}'s provider can check both."
+    },
+    {
+      "match": [
+        "sleep",
+        "hours"
+      ],
+      "reply": "Most teenagers need around eight to ten hours. Late screens and stress are the usual things that cut into it."
+    }
   ],
   "fallbackReply": "That's a good question to bring to {name}'s provider. I can help put it into words for the appointment.",
   "status": "placeholder"

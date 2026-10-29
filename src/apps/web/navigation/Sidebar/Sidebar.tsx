@@ -257,7 +257,7 @@ export function Sidebar() {
                 >
                   <span className={styles.menuAdd}>
                     <span className={styles.menuAddLabel}>Add a family member</span>
-                    {addState === 'locked' && <span className={styles.menuMeta}>Family plan</span>}
+                    {addState === 'locked' && <span className={styles.menuMeta} aria-label="Family plan"><Icon name="lock" size={16} /></span>}
                     {addState === 'full' && (
                       <span className={styles.menuMeta}>
                         {profiles.length} of {maxProfilesFor(plan)}

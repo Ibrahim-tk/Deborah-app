@@ -3,7 +3,7 @@
  *          SymptomPicker sheet from the composer: a search field, then symptoms grouped by area as quiet option
  *          rows with a tick when picked (no pills). Typing something unlisted offers "Add “…”". Tap outside or
  *          Esc closes. Picks toggle straight into the composer.
- * @usedBy  Composer (M-2.1 Conversation, M-2.12 First consultation)
+ * @usedBy  Composer (M-2.1 Conversation, M-2.12 First conversation)
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { symptomGroups } from '@shared/data';

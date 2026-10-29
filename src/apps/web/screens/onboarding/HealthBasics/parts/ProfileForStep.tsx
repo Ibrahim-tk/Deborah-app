@@ -11,8 +11,8 @@ import { FamilyIcon, SelfIcon } from './ProfileIcons';
 import styles from './ProfileForStep.module.css';
 
 const CHOICES = [
-  { value: 'self', Glyph: SelfIcon, title: 'For myself', sub: 'I’m here to talk about my own health.' },
-  { value: 'dependent', Glyph: FamilyIcon, title: 'For someone I care about', sub: 'I’d like to help a family member or loved one.' },
+  { value: 'self', Glyph: SelfIcon, title: 'For myself', sub: 'My own health, sleep, hormones and energy.' },
+  { value: 'dependent', Glyph: FamilyIcon, title: 'For a family member', sub: 'Someone I care for, like a parent or child.' },
 ] as const;
 
 export interface ProfileForStepProps {

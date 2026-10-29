@@ -12,7 +12,7 @@ export function BookTile({ onBook }: { onBook: () => void }) {
         <Sheet
           title="You’ll get an email"
           subtitle="the support team will email you to find a time that works for a 30‑minute video or phone consult."
-          footer={<Button fullWidth onClick={() => { setOpen(false); onBook(); }}>Request a consultation</Button>}
+          footer={<Button fullWidth onClick={() => { setOpen(false); onBook(); }}>Book a consultation</Button>}
         >
           <p className={styles.note} data-placeholder>Nothing is booked until you confirm the time in that email.</p>
         </Sheet>

@@ -1,5 +1,5 @@
 /**
- * @screen  M-2.12 · First consultation (scripted)
+ * @screen  M-2.12 · First conversation (scripted)
  * @flow    F02 Core consultation — genesis_first_consult_v1 after onboarding (M-1.9), or with `flow: 'returning'`
  *          the signed-in demo genesis_returning_consult_demo (from Home's Ask Deborah, seed R01)
  * @states  opener · context · clarifier 1–3 · safety (red flag) · thinking · 7-section answer · follow-up ·
@@ -139,7 +139,7 @@ export default function FirstConsult() {
     const answer = buildAnswer(node, say);
     const title = node.notesTitle ? say(node.notesTitle) : undefined;
     const brief = {
-      ...briefFromAnswer(profile, answer, title ?? 'First consultation'),
+      ...briefFromAnswer(profile, answer, title ?? 'First conversation'),
       ...(title && { title }),
       ...(appointment?.provider && { providerName: appointment.provider }),
       ...(appointment?.specialty && { providerSpecialty: appointment.specialty }),
@@ -212,9 +212,9 @@ export default function FirstConsult() {
     const d = isoDay ? new Date(`${isoDay}T12:00:00`) : nowFrom(useAppStore.getState());
     return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
   };
-  const attachments = useComposerAttachments('M-2.12', meta('M-2.12')?.title ?? 'First consultation');
+  const attachments = useComposerAttachments('M-2.12', meta('M-2.12')?.title ?? 'First conversation');
   return (
-    <div className={styles.root} data-xref="M-2.12 · First consultation">
+    <div className={styles.root} data-xref="M-2.12 · First conversation">
       <ChatHeader
         disclosure={started}
         onNewChat={() => openAsk()}

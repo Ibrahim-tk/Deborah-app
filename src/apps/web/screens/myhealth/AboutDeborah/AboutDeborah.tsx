@@ -1,47 +1,38 @@
 /**
- * @screen  M-7.6 · About Deborah
+ * @screen  M-7.6 · About Oracle
  * @flow    F07 My Health hub
  * @states  default
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=52-280
  * @spec    docs/ux/F07-my-health-hub.md#m-76--about-deborah
  * @xref    web: W-7.6 (apps/web/screens/myhealth/AboutDeborah) — not built
  */
-// OPEN: "real photography, approved bio." — portrait and copy come from persona JSON (placeholder).
-import { persona } from '@shared/data';
+// Oracle Change Requests (Oct 26): no portrait, books or credentials — Oracle is an AI system.
+import { ABOUT_ORACLE } from '@shared/copy/aboutOracle';
+import { FTC_OWNERSHIP_STATEMENT } from '@shared/copy/disclosures';
 import { DeborahBlob } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import styles from './AboutDeborah.module.css';
 
 export default function AboutDeborah() {
-  const placeholder = persona.status === 'placeholder' || undefined;
 
   return (
-    <DerivedPage title="About the Oracle" composerPlaceholder="Ask Oracle about herself…">
-      <div className={styles.stack} data-xref="M-7.6 · About the Oracle" data-placeholder={placeholder} data-status={persona.status}>
+    <DerivedPage title="About the Oracle" composerPlaceholder="Ask Oracle a question…">
+      <div className={styles.stack} data-xref="M-7.6 · About the Oracle" data-placeholder>
         <div className={styles.intro}>
-          <DeborahBlob size={120} label={`Portrait of ${persona.name}`} />
-          <h2 className={styles.name}>{persona.credentialsLine}</h2>
-          <p className={styles.years}>{persona.yearsPractice}+ years in practice</p>
-        </div>
-
-        <section className={styles.section} aria-labelledby="about-philosophy">
-          <h3 id="about-philosophy" className={styles.heading}>How the Oracle works</h3>
-          {persona.philosophy.map((p) => (
-            <p key={p} className={styles.paragraph}>{p}</p>
+            <DeborahBlob size={120} label="Oracle" />
+            <h2 className={styles.name}>Oracle</h2>
+            <p className={styles.years}>{ABOUT_ORACLE.lede}</p>
+          </div>
+          {ABOUT_ORACLE.sections.map((sec) => (
+            <section key={sec.title} className={styles.section}>
+              <h3 className={styles.heading}>{sec.title}</h3>
+              {sec.body.map((p) => <p key={p} className={styles.paragraph}>{p}</p>)}
+            </section>
           ))}
-        </section>
-
-        <section className={styles.section} aria-labelledby="about-books">
-          <h3 id="about-books" className={styles.heading}>Books</h3>
-          <ul className={styles.books}>
-            {persona.books.map((b) => (
-              <li key={b.title} className={styles.book}>
-                <span className={styles.bookTitle}>{b.title}</span>
-                <span className={styles.bookMeta}>{b.year} · {b.note}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+          <section className={styles.section}>
+            <h3 className={styles.heading}>Who makes Oracle</h3>
+            <p className={styles.paragraph}>{FTC_OWNERSHIP_STATEMENT}</p>
+          </section>
       </div>
     </DerivedPage>
   );

@@ -1,10 +1,16 @@
 /** Profile rules shared by the engine and the app (docs/ux/F06-family-profiles.md). */
 import type { AgeBand, AgeGroup, Profile, Relationship } from '../types/domain';
 
-/** DN-03: under 13 is a child, 13–17 a teen, 18 and over an adult. */
-export function ageGroupFor(age: number): AgeGroup {
+/** Age of majority by state of residence (Oct 26): 19 in Alabama and Nebraska, 21 in Mississippi, else 18. */
+const MAJORITY: Record<string, number> = { AL: 19, NE: 19, MS: 21 };
+export function ageOfMajority(state?: string): number {
+  return (state && MAJORITY[state.toUpperCase()]) || 18;
+}
+
+/** DN-03: under 13 is a child, 13 to the state's age of majority a teen, then an adult. */
+export function ageGroupFor(age: number, state?: string): AgeGroup {
   if (age < 13) return 'child';
-  if (age < 18) return 'teen';
+  if (age < ageOfMajority(state)) return 'teen';
   return 'adult';
 }
 
@@ -24,9 +30,9 @@ export function isChildRelationship(r: Relationship): boolean {
  * Teen or child profile: teen script, third-person intake, no product card (ASSUMPTION, F06 OPEN).
  * Decided by age when it is known; the relationship alone never makes an adult child a minor.
  */
-export function isMinor(profile: Pick<Profile, 'intake' | 'relationship' | 'dob'> & Partial<Pick<Profile, 'health'>>, now: Date = new Date()): boolean {
+export function isMinor(profile: Pick<Profile, 'intake' | 'relationship' | 'dob'> & Partial<Pick<Profile, 'health' | 'stateOfResidence'>>, now: Date = new Date()): boolean {
   const age = ageOf(profile, now);
-  if (age !== undefined) return ageGroupFor(age) !== 'adult';
+  if (age !== undefined) return ageGroupFor(age, profile.stateOfResidence) !== 'adult';
   if (profile.intake.ageBand) return profile.intake.ageBand === 'teen';
   // OPEN: "child profile with no date of birth" — documented default (F06): a child relationship is a minor.
   return isChildRelationship(profile.relationship);

@@ -36,7 +36,7 @@ export function PdfPage({ answer, profileName, date, topic }: PdfPageProps) {
     <article className={styles.page} aria-label="Printable summary" data-placeholder={placeholder}>
       <header className={styles.pageHeader}>
         <p className={styles.brand}>{persona.brand.appName}</p>
-        <h2 className={styles.h2}>{topic ?? 'Consultation summary'}</h2>
+        <h2 className={styles.h2}>{topic ?? 'Conversation summary'}</h2>
         <p className={styles.small}>{`${profileName} · ${date}`}</p>
       </header>
 

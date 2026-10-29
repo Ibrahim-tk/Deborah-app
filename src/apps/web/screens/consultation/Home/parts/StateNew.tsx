@@ -23,9 +23,8 @@ export function StateNew({ onStart, chat, destinations, recommendations, onShop,
       {chat ? (
         <HomeMediaHero
           titleId="continue-chat"
-          title="Continue your chat"
-          eyebrow="In progress"
-          meta={chat.title}
+          eyebrow="Continue your conversation"
+          title={chat.title || 'Your last conversation'}
           when={chat.when}
           tone="hero"
           artifact="violet-bloom"
@@ -37,10 +36,9 @@ export function StateNew({ onStart, chat, destinations, recommendations, onShop,
           titleId="start-deborah"
           title="Start with the Oracle"
           eyebrow="New"
-          meta="Tell her what’s going on. She’ll ask a few questions, then share what she thinks."
           tone="hero"
           artifact="violet-bloom"
-          ctaLabel="Start with the Oracle"
+          ctaLabel="Start a conversation"
           onCta={onStart}
         />
       )}

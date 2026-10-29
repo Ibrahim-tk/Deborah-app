@@ -32,7 +32,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-2.11': { title: 'Profile question', component: lazy(() => import('@web/screens/consultation/ProfileQuestion')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: '', spec: 'intake V2 brief §4 (OPEN: add to ux/F02)' },
   'M-2.13': { title: 'What the Oracle noted', component: lazy(() => import('@web/screens/consultation/ReviewFacts')), presentation: 'push', figma: '', spec: 'docs/ux/F02b-profile-aware-chat-intake.md#review-and-confirm' },
   'M-2.14': { title: 'Complete Intake', component: lazy(() => import('@web/screens/consultation/CompleteIntake')), presentation: 'push', figma: '', spec: 'Client discovery 2026-10-16 (placeholder sections)' },
-  'M-2.12': { title: 'First consultation', component: lazy(() => import('@web/screens/consultation/FirstConsult')), presentation: 'push', figma: '', spec: 'data/conversation/flows/firstConsult.json (OPEN: add to ux/F02)' },
+  'M-2.12': { title: 'First conversation', component: lazy(() => import('@web/screens/consultation/FirstConsult')), presentation: 'push', figma: '', spec: 'data/conversation/flows/firstConsult.json (OPEN: add to ux/F02)' },
   'M-2.15': { title: 'Terms updated', component: lazy(() => import('@web/screens/account/PolicyUpdate')), presentation: 'modal', dismissible: false, figma: '', spec: 'Client discovery 2026-10-16 re-consent' },
 
   // F04 Free limit, plans & account
@@ -63,13 +63,13 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@web/screens/myhealth/EditHealthDetail')), presentation: 'push', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
   // F08 Book Deborah
-  'M-8.2': { title: 'Book a consultation', component: lazy(() => import('@web/screens/booking/BookingInfo')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
+  'M-8.2': { title: 'Book a consultation', component: lazy(() => import('@web/screens/booking/BookingInfo')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
   'M-8.3': { title: 'Pick a time', component: lazy(() => import('@web/screens/booking/Scheduler')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-83--pick-a-time-simulated-scheduler' },
   'M-8.4': { title: 'Booking confirmed', component: lazy(() => import('@web/screens/booking/BookingConfirmed')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-84--booking-confirmed' },
 
   // F09 Records (tab bar stays visible on the records list)
   'M-9.1': { title: 'My Visit Notes', component: lazy(() => import('@web/screens/records/Records')), presentation: 'push', tabBar: true, figma: `${FIGMA}50-598`, spec: 'docs/ux/F09-records.md#m-91--records' },
-  'M-9.2': { title: 'Consultation', component: lazy(() => import('@web/screens/records/ConsultationDetail')), presentation: 'push', figma: `${FIGMA}50-598`, spec: 'docs/ux/F09-records.md#m-92--consultation-detail' },
+  'M-9.2': { title: 'Conversation', component: lazy(() => import('@web/screens/records/ConsultationDetail')), presentation: 'push', figma: `${FIGMA}50-598`, spec: 'docs/ux/F09-records.md#m-92--consultation-detail' },
   'M-9.4': { title: 'Note', component: lazy(() => import('@web/screens/records/NoteEditor')), presentation: 'push', figma: '', spec: 'docs/ux/F09-records.md#m-94--note-editor-not-in-wireframes' },
   'M-9.6': { title: 'PDF preview', component: lazy(() => import('@web/screens/records/PdfPreview')), presentation: 'push', figma: '', spec: 'docs/ux/F09-records.md#m-96--pdf-preview-not-in-wireframes' },
   'M-9.7': { title: 'My Visit Notes', component: lazy(() => import('@web/screens/records/VisitBrief')), presentation: 'push', figma: '', spec: 'docs/ux/F09b-visit-brief.md' },

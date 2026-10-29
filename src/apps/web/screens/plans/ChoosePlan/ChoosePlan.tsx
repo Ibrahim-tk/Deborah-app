@@ -14,7 +14,7 @@ import { createPortal } from 'react-dom';
 import { findPlan, planList } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { Billing } from '@shared/types/domain';
-import { Button, Icon, OVERLAY_HOST_ID, Segmented, Spinner } from '@web/ui';
+import { Button, Icon, OVERLAY_HOST_ID, Spinner } from '@web/ui';
 import { simMs } from '@web/hooks/simTiming';
 import { PlanCard, planPrice } from '@web/patterns/commerce';
 import { useToast } from '@web/hooks/toast.store';
@@ -23,15 +23,8 @@ import styles from './ChoosePlan.module.css';
 
 type PaidPlan = (typeof planList)[number]['id'];
 
-const BILLING: { value: Billing; label: string }[] = [
-  { value: 'monthly', label: 'Monthly' },
-  { value: 'annual', label: 'Annual' },
-];
-
-// Savings come from plans.json (recommended plan's monthly × 12 vs annual).
 // Oct 27: only Individual and Family plans (no Premium, no teen plan).
 const ref = planList.find((p) => p.recommended) ?? planList[0];
-const SAVE_PCT = Math.round((1 - ref.annual / (ref.monthly * 12)) * 100);
 
 type Phase = 'choose' | 'confirm' | 'processing' | 'done';
 
@@ -51,7 +44,7 @@ export default function ChoosePlan() {
 
   // One plan is always selected: entry context, else the subscriber's plan, else recommended.
   const [selected, setSelected] = useState<PaidPlan>(preselect ?? (subscriber ? (currentPlan as PaidPlan) : ref.id));
-  const [billing, setBilling] = useState<Billing>(subscriber ? currentBilling : 'monthly');
+  const [billing, setBilling] = useState<Billing>('monthly');
   const [note, setNote] = useState<string | null>(null);
 
   const plan = findPlan(selected) ?? ref;
@@ -106,12 +99,9 @@ export default function ChoosePlan() {
           <div className={styles.body}>
             <div className={styles.intro}>
               <h1 className={styles.title}>Choose your plan</h1>
-              <p className={styles.subtitle}>Cancel anytime.</p>
+              <p className={styles.subtitle}>Renews monthly. Cancel anytime online.</p>
             </div>
-            <div className={styles.billing}>
-              <Segmented label="Billing" options={BILLING} value={billing} onChange={(b) => choose({ billing: b })} />
-              <p className={styles.save}>Save about {SAVE_PCT}% with annual billing</p>
-            </div>
+          {/* Monthly only (Oracle Change Requests, Oct 26): no annual toggle. */}
             {preselect === 'family' && <p className={styles.context}>Family lets everyone keep their own private history.</p>}
             <div className={styles.cards} role="radiogroup" aria-label="Plans">
               {planList.map((p) => (

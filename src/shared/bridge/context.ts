@@ -13,6 +13,7 @@ import {
   selectLatestLabs,
   selectPlan90,
   selectProfileNotes,
+  selectTrialDaysLeft,
   useAppStore,
   type AppState,
 } from '../store';
@@ -38,7 +39,7 @@ export function contextFor(s: AppState, conversation: Conversation): EngineConte
   return {
     profile,
     conversation,
-    subscription: { plan: s.plan, freeConsultationsUsed: s.freeConsultationsUsed },
+    subscription: { plan: s.plan, freeConsultationsUsed: s.freeConsultationsUsed, trialEnded: selectTrialDaysLeft(s) === 0 },
     answeredCount: selectAnsweredCount(s, profile.id),
     sameTopicCount: conversation.scriptId
       ? Object.values(s.conversations.byId).filter((c) => c.profileId === profile.id && c.scriptId === conversation.scriptId && c.countedAt).length

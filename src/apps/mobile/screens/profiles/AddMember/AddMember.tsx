@@ -1,59 +1,44 @@
 /**
  * @screen  M-6.2 · Add family member
  * @flow    F06 Family profiles
- * @states  empty · filling · minor (guardian consent) · adult (agreement consent) · DOB in future · under 13 (blocked) · valid · discard confirm
+ * @states  empty · filling · describe (relationship / gender / pronouns) · minor (Boy / Girl labels) · DOB in future
+ *          · valid · consent sheet (on Create profile) · discard confirm
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-203
  * @spec    docs/ux/F06-family-profiles.md#m-62--add-family-member
  * @xref    web: W-6.2 (apps/web/screens/profiles/AddMember) — not built
  *
+ * Same questions and branches as the onboarding intake for someone else (M-1.8), as one form.
+ * The medical-advocate consent opens as a bottom sheet only after "Create profile".
  * OPEN: "teen privacy (can the teen have her own login?), adult consent model (husband), whether
- * male health is in scope." Prototype: no separate login; medical-advocate radios for consent;
- * "Male" is offered as sex at birth but the engine has no male-specific content.
+ * male health is in scope." Prototype: no separate login; "Male" has no male-specific content.
  */
-import { Fragment, useState, type ReactNode } from 'react';
-import { consentDoc } from '@shared/data';
-import { ageBandFor, ageGroupFor } from '@shared/engine';
-import { useAppStore } from '@shared/store';
-import type { Profile } from '@shared/types/domain';
-import { nowFrom, uid } from '@shared/utils';
-import { RELATIONSHIP_OPTIONS } from '@mobile/patterns/profile';
-import { Button, Checkbox, Input, Modal, Panel, Select, useAlert } from '@mobile/ui';
+import { useState } from 'react';
+import { Button, Input, Modal, Select, useAlert } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav } from '@mobile/navigation';
+import { choiceLabel, orderedChoices, type Step } from '@mobile/screens/onboarding/HealthBasics/steps';
+import { saveOnboarding } from '@mobile/screens/onboarding/HealthBasics/saveOnboarding';
+import { ConsentSheet } from '@mobile/screens/onboarding/HealthBasics/parts/ConsentSheet';
 import { useMemberForm } from './useMemberForm';
 import styles from './AddMember.module.css';
 
-/** Split `{name}` placeholders and wrap the person name at medium weight (≤500). */
-function withName(template: string, who: string): ReactNode {
-  const parts = template.split('{name}');
-  if (parts.length === 1) return template;
-  return parts.map((part, i) => (
-    <Fragment key={i}>
-      {i > 0 && <strong className={styles.name}>{who}</strong>}
-      {part}
-    </Fragment>
-  ));
-}
-
-type Sex = NonNullable<Profile['sexAtBirth']>;
-
-const RELATIONSHIPS = RELATIONSHIP_OPTIONS;
-
-const SEXES: { value: Sex; label: string }[] = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-  { value: 'intersex', label: 'Intersex' },
-];
+/** Short field labels for the intake questions (the intake asks them as full sentences). */
+const LABELS: Record<string, string> = {
+  relationship: 'Relationship',
+  memberName: 'First name',
+  birthDate: 'Date of birth',
+  sex: 'Sex assigned at birth',
+  gender: 'Gender',
+  pronouns: 'Pronouns',
+};
 
 export default function AddMember() {
   const { dismissModal, switchProfile, openAsk } = useNav();
   const alert = useAlert();
   const toast = useToast();
-  const form = useMemberForm();
-  const { values, set, age, minor, dobError, underThirteen, valid, dirty, today, consentValue, setConsent } = form;
+  const { answers, set, fields, today, dobError, valid, dirty } = useMemberForm();
+  const [consentOpen, setConsentOpen] = useState(false);
   const [creating, setCreating] = useState(false);
-  const { body, options } = consentDoc.profileConsent;
-  const consentName = values.name.trim() || 'them';
 
   const close = async () => {
     if (!dirty) return dismissModal();
@@ -66,38 +51,43 @@ export default function AddMember() {
   };
 
   const create = () => {
-    if (!valid || age === null || creating) return;
+    if (creating) return;
     setCreating(true);
-    const s = useAppStore.getState();
-    const now = nowFrom(s).toISOString();
-    const id = uid('p');
-    const name = values.name.trim();
-    const group = ageGroupFor(age);
-    const path: NonNullable<Profile['consent']>['path'] =
-      consentValue === 'guardian'
-        ? group === 'adult'
-          ? 'adult-agreement'
-          : group === 'child'
-            ? 'guardian-child'
-            : 'guardian-teen'
-        : 'adult-agreement';
-    s.addProfile({
-      id,
-      name,
-      relationship: values.relationship ?? 'other',
-      // Noon local time so the stored date never shifts a day across time zones.
-      dob: new Date(`${values.dob}T12:00:00`).toISOString(),
-      sexAtBirth: values.sex,
-      intake: { ageBand: ageBandFor(age), conditions: [], medications: [] },
-      createdAt: now,
-      guardianConsentAt: minor ? now : undefined,
-      consent: { path, attestedAt: now, attestedBy: s.accountId ?? s.profiles.order[0] },
-    });
-    // switchProfile closes the modal and resets Ask + My Health; openAsk lands on a fresh
-    // Conversation, which is empty for the new profile ("Let's talk about {name}." + teen suggestions).
+    setConsentOpen(false);
+    const id = saveOnboarding(answers);
+    // switchProfile closes the modal and resets Ask + My Health; openAsk lands on a fresh Conversation.
     switchProfile(id);
     openAsk();
-    toast(`Now asking for ${name}`);
+    toast(`Now asking for ${answers.memberName?.trim()}`);
+  };
+
+  const field = (s: Step) => {
+    const label = LABELS[s.key] ?? s.title;
+    const value = answers[s.key] ?? '';
+    if (s.kind === 'name') {
+      return <Input key={s.key} label={label} autoComplete="off" autoCapitalize="words" maxLength={40} value={value} onChange={(e) => set(s.key, e.target.value)} />;
+    }
+    if (s.kind === 'date') {
+      return <Input key={s.key} label={label} type="date" max={today} value={value} error={dobError} onChange={(e) => set(s.key, e.target.value)} />;
+    }
+    const options = orderedChoices(s, answers).map((c) => ({ value: c.value, label: choiceLabel(s, c.value, c.label, answers) }));
+    const describing = Boolean(s.describeKey && value === s.describeValue);
+    return (
+      <div key={s.key} className={styles.group}>
+        <Select label={label} options={options} value={value || undefined} onChange={(v) => set(s.key, v)} />
+        {describing && (
+          <Input
+            label={s.describeLabel ?? label}
+            hideLabel
+            placeholder={s.describePlaceholder}
+            autoComplete="off"
+            maxLength={80}
+            value={answers[s.describeKey!] ?? ''}
+            onChange={(e) => set(s.describeKey!, e.target.value)}
+          />
+        )}
+      </div>
+    );
   };
 
   return (
@@ -105,50 +95,21 @@ export default function AddMember() {
       <Modal
         title="Add family member"
         onClose={close}
-        footer={<Button fullWidth disabled={!valid} loading={creating} onClick={create}>Create profile</Button>}
+        footer={<Button fullWidth disabled={!valid} loading={creating} onClick={() => setConsentOpen(true)}>Create profile</Button>}
       >
-        <form className={styles.body} noValidate onSubmit={(e) => { e.preventDefault(); create(); }}>
-          <Input
-            label="First name"
-            autoComplete="off"
-            autoCapitalize="words"
-            value={values.name}
-            onChange={(e) => set({ name: e.target.value })}
-          />
-          <Select label="Relationship" options={RELATIONSHIPS} value={values.relationship} onChange={(relationship) => set({ relationship })} />
-          <Input
-            label="Date of birth"
-            type="date"
-            max={today}
-            value={values.dob}
-            error={dobError}
-            onChange={(e) => set({ dob: e.target.value })}
-          />
-          {underThirteen && (
-            // OPEN: "COPPA rules — prototype blocks under 13" (F06 M-6.2 validation).
-            <Panel tone="warning" icon="alert">
-              <p className={styles.notice}>Profiles for children under 13 need extra consent steps.</p>
-            </Panel>
-          )}
-          <Select label="Sex at birth" options={SEXES} value={values.sex} onChange={(sex) => set({ sex })} />
-          {!underThirteen && (
-            <div className={styles.consent} data-placeholder>
-              <p className={styles.consentBody}>{withName(body, consentName)}</p>
-              <div className={styles.consentChecks} role="group" aria-label="Confirm your authority">
-                {options.map((o) => (
-                  <Checkbox
-                    key={o.value}
-                    checked={consentValue === o.value}
-                    onChange={(on) => (on ? setConsent(o.value) : setConsent(''))}
-                    label={withName(o.label, consentName)}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+        <form className={styles.body} noValidate onSubmit={(e) => { e.preventDefault(); if (valid) setConsentOpen(true); }}>
+          {fields.map(field)}
           <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>
         </form>
       </Modal>
+      <ConsentSheet
+        open={consentOpen}
+        name={answers.memberName ?? ''}
+        value={answers.consent ?? ''}
+        onChange={(v) => set('consent', v)}
+        onBack={() => setConsentOpen(false)}
+        onContinue={create}
+      />
     </div>
   );
 }

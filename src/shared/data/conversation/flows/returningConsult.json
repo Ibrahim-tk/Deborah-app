@@ -266,7 +266,7 @@
     },
     "thinking": {
       "type": "loading",
-      "bot": "Looking at this through the Oracle's upstream lens…",
+      "bot": "Looking at this upstream…",
       "widget": {
         "type": "thinking_steps",
         "steps": [

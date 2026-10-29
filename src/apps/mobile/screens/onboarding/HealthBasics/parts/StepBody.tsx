@@ -1,7 +1,7 @@
 /** The control for one onboarding step: who-for tiles, name, year wheel, consent, FullChoicePills / FullChoicePillsGrid / QuestionChoices / ChipPicker. */
 import { FullChoicePills, FullChoicePillsGrid, InlineChoicePills, NamedReasonList, QuestionChoices, decodeNamedReasons, encodeNamedReasons } from '@mobile/patterns/widgets';
 import { DateWheel, Input, RulerSlider, YearWheel } from '@mobile/ui';
-import { choiceLabel, list, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
+import { choiceLabel, list, orderedChoices, STEPS, titleFor, visibleSuggestions, type Answers, type Step } from '../steps';
 import styles from '../HealthBasics.module.css';
 import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
@@ -61,7 +61,7 @@ function StepControl({ step, answers, set, advance }: StepBodyProps) {
     case 'profileFor':
       return <ProfileForStep value={value} onPick={advance} />;
     case 'choice': {
-      const options = (step.choices ?? []).map((c) => ({ id: c.value, label: choiceLabel(step, c.value, c.label, answers) }));
+      const options = orderedChoices(step, answers).map((c) => ({ id: c.value, label: choiceLabel(step, c.value, c.label, answers) }));
       const describeValue = step.describeValue;
       const describeKey = step.describeKey;
       const expandValues = step.expandValues;

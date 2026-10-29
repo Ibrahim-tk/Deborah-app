@@ -6,7 +6,7 @@
 import { guardrailsData as g } from '../data';
 import type { EngineContext } from '../types/engine';
 
-export type Replacing = 'emergency' | 'crisis' | 'outOfScope';
+export type Replacing = 'emergency' | 'crisis' | 'identity' | 'appHelp' | 'outOfScope';
 
 export interface GuardrailResult {
   /** Replaces the normal flow for this message. */
@@ -24,6 +24,8 @@ const RULES = {
   crisis: compile(g.crisis.patterns),
   medication: compile(g.medication.patterns),
   outOfScope: compile(g.outOfScope.patterns),
+  identity: compile(g.identity.patterns),
+  appHelp: compile(g.appHelp.patterns),
   escalation: compile(g.escalation.triggers.phrases),
 };
 const any = (rules: { re: RegExp }[], text: string) => rules.some((r) => r.re.test(text));
@@ -48,6 +50,10 @@ function newMedicationMatches(raw: string, warned: string[]): string[] {
 export function classify(text: string, ctx: EngineContext): GuardrailResult {
   if (any(RULES.emergency, text)) return { replace: 'emergency', medication: [], escalation: false };
   if (any(RULES.crisis, text)) return { replace: 'crisis', medication: [], escalation: false };
+  // "Are you a person?" always gets the scripted identity answer (Oct 26), after safety.
+  if (any(RULES.identity, text)) return { replace: 'identity', medication: [], escalation: false };
+  // App-help questions get pointed to the right screen instead of the out-of-scope refusal (Oct 26).
+  if (any(RULES.appHelp, text)) return { replace: 'appHelp', medication: [], escalation: false };
   const medication = newMedicationMatches(text, ctx.conversation.medsWarned ?? []);
   if (any(RULES.outOfScope, text)) return { replace: 'outOfScope', medication, escalation: false };
   const offered = ctx.conversation.messages.some((m) => m.kind === 'escalation');

@@ -1,7 +1,7 @@
 /**
  * @pattern MedicalConsentSheet — sign-up only, once: before Deborah's first answer, ask for medical/health-data
  *          consent in the shared bottom sheet. The button enables only once the box is ticked (design 2026-10-20).
- * @usedBy  M-2.1 Conversation · M-2.12 First consultation (via useHealthConsent)
+ * @usedBy  M-2.1 Conversation · M-2.12 First conversation (via useHealthConsent)
  * @status  placeholder copy — OPEN: Deborah / legal to approve wording.
  */
 import { useState } from 'react';

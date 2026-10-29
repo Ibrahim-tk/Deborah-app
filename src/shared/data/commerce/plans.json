@@ -2,27 +2,26 @@
   {
     "id": "individual",
     "name": "Individual",
-    "monthly": 29,
-    "annual": 290,
+    "monthly": 19.97,
+    "annual": 239.64,
     "features": [
-      "Myself only, all modules",
-      "Full chat access with the Oracle",
-      "Saved history and visit notes"
+      "Myself only",
+      "Conversations, Your Wellness Plan and provider-ready notes",
+      "Renews monthly, cancel anytime online"
     ],
     "profiles": 1
   },
   {
     "id": "family",
     "name": "Family",
-    "monthly": 39,
-    "annual": 390,
+    "monthly": 29.97,
+    "annual": 359.64,
     "features": [
-      "Myself plus 3 family profiles, all modules",
+      "Myself plus up to 3 dependents",
       "Each person keeps a private history",
-      "Add more members for an extra monthly fee each"
+      "Flat $10/month on top of Individual"
     ],
     "profiles": 4,
-    "recommended": true,
-    "addOnMonthly": 9
+    "recommended": true
   }
 ]

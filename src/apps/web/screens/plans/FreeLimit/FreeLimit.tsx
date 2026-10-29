@@ -7,13 +7,24 @@
  * @xref    web: W-4.1 (apps/web/screens/plans/FreeLimit) — not built
  */
 import { useEffect } from 'react';
-import { FREE_CONSULTATIONS, useAppStore } from '@shared/store';
+import { TRIAL_DAYS, useAppStore } from '@shared/store';
 import { DeborahBlob, Button, Sheet } from '@web/ui';
-import { useNav } from '@web/navigation';
+import { useNav, useScreenParams } from '@web/navigation';
 import styles from './FreeLimit.module.css';
+
+// Oracle Change Requests (Oct 26): the free trial is conversations only.
+const LOCKED_COPY = {
+  journey: { title: 'Your Wellness Plan comes with a plan', body: 'Your free trial includes conversations. Choose a plan to unlock Your Wellness Plan.' },
+  documents: { title: 'Downloads come with a plan', body: 'Your free trial includes conversations. Choose a plan to download provider-ready notes.' },
+  family: { title: 'Family profiles come with a plan', body: 'Your free trial includes conversations. Choose the Family plan to add up to 3 dependents.' },
+};
 
 export default function FreeLimit() {
   const { dismissSheet, open } = useNav();
+
+  // `reason`: a plan-only feature tapped during the trial (Wellness Plan, downloads, family profiles).
+  const { reason } = useScreenParams<{ reason?: 'journey' | 'documents' | 'family' }>();
+  const locked = reason ? LOCKED_COPY[reason] : undefined;
 
   // Once shown, the post-answer prompt is no longer pending.
   useEffect(() => useAppStore.getState().dismissLimit(), []);
@@ -40,8 +51,8 @@ export default function FreeLimit() {
       >
         <div className={styles.body}>
           <DeborahBlob size={56} label="The Oracle" />
-          <h2 className={styles.title}>You’ve used your {FREE_CONSULTATIONS} free consultations</h2>
-          <p className={styles.text}>Your answers are saved. Choose a plan to keep talking with me.</p>
+          <h2 className={styles.title}>{locked ? locked.title : `Your ${TRIAL_DAYS}-day free trial has ended`}</h2>
+          <p className={styles.text}>{locked ? locked.body : 'Your conversations are saved. Choose a plan to keep talking with Oracle.'}</p>
         </div>
       </Sheet>
     </div>

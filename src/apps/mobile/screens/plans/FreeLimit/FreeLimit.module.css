@@ -1,3 +1,8 @@
 .body { display: grid; justify-items: start; gap: var(--space-3); padding-top: var(--space-2); }
 .title { margin-top: var(--space-2); font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.005em; }
 .text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
+/* Centred, as on web (designer, 2026-10-29). */
+.body { justify-items: center; text-align: center; }
+/* Balanced lines, no single-word orphan (designer, 2026-10-29). */
+.title { text-wrap: balance; }
+.text { text-wrap: pretty; }

@@ -76,6 +76,16 @@ export function medicationSteps(ctx: EngineContext, matched: string[]): Step[] {
   ];
 }
 
+/** Scripted identity answer: Oracle is an AI, not a person or clinician. Uncounted, never gated. */
+export function identitySteps(ctx: EngineContext): Step[] {
+  return [...deborahText(ctx, g.identity.body)];
+}
+
+/** App help: where things live in the app. Uncounted, never gated. */
+export function appHelpSteps(ctx: EngineContext): Step[] {
+  return [...deborahText(ctx, g.appHelp.body)];
+}
+
 export function outOfScopeSteps(ctx: EngineContext): Step[] {
   return [...deborahText(ctx, g.outOfScope.body, { kind: 'outOfScope' })];
 }

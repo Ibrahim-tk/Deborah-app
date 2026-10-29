@@ -12,7 +12,7 @@ export function HubEmpty() {
 
   return (
     <>
-      {/* Designer, 2026-10-21: no empty block or "Start my first consultation" — the Home intake card instead. */}
+      {/* Designer, 2026-10-21: no empty block or "Start my first conversation" — the Home intake card instead. */}
       {progress < 1 && <IntakeCompletionCard progress={progress} onAction={() => push('M-2.14')} />}
       {/* Design request 2026-10-20: My Health holds the health profile (lab reports removed 2026-10-28). */}
       <HealthDetails />

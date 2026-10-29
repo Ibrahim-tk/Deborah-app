@@ -32,17 +32,20 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SKIP_AUTH_VALIDATION = false;
 
 export default function CreateAccount() {
-  const { mode: initialMode = 'create', plan, billing, returnTo, sheet, provider: startWith, reason } = useScreenParams<{
+  const { mode: initialMode = 'create', plan, billing, returnTo, sheet, page, provider: startWith, reason } = useScreenParams<{
     mode: 'create' | 'signin';
     plan: string;
     billing: string;
     returnTo: string;
     sheet: boolean;
+    /** Gate save shown as a page, not a sheet (designer, 2026-10-29: no modals on desktop). */
+    page: boolean;
     provider: Provider | 'email';
     reason: GateReason;
   }>();
   const { pop, dismissSheet, presentSheet, resetTo } = useNav();
   const toast = useToast();
+  const asSheet = sheet && !page;
   const userName = useAppStore((s) => s.userName);
   const consentId = useId();
   // The chat's save-your-profile card names the method up front (F01 step 4).
@@ -65,7 +68,7 @@ export default function CreateAccount() {
   const handle = (userName || 'maria').toLowerCase().replace(/\s+/g, '.');
 
   const closeAuth = () => {
-    if (sheet) dismissSheet();
+    if (asSheet) dismissSheet();
     else pop();
   };
 
@@ -103,7 +106,7 @@ export default function CreateAccount() {
       // Guest save from Home (avatar, save card) or a hard gate: stay where she was.
       s.createAccount(address);
       if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
-      dismissSheet();
+      closeAuth();
       toast('Your profile is saved');
       if (reason) resumeGate();
     } else {
@@ -137,7 +140,7 @@ export default function CreateAccount() {
             ? 'Save your profile so you don’t lose your conversations.'
             : fromChat
               ? 'Your health details need an account behind them to stay protected.'
-              : 'Create an account so your consultations stay safe and come with you.';
+              : 'Create an account so your conversations stay safe and come with you.';
   const steps = (
     <>
       {step === 'choose' && (
@@ -162,7 +165,7 @@ export default function CreateAccount() {
               <ul className={styles.list}>
                 <li>Your history syncs across your devices.</li>
                 <li>Everything is stored securely and encrypted.</li>
-                <li>{signin ? 'Your plan and conversations are restored.' : 'Your free consultations move with you.'}</li>
+                <li>{signin ? 'Your plan and conversations are restored.' : 'Your conversations move with you.'}</li>
               </ul>
             </Panel>
           )}
@@ -242,7 +245,7 @@ export default function CreateAccount() {
     </>
   );
 
-  if (sheet) {
+  if (asSheet) {
     return (
       <div data-xref="M-4.3 · Sign in (sheet)">
         <Sheet title={title}>

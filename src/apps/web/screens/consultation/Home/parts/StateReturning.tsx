@@ -22,9 +22,7 @@ export interface StateReturningProps {
 }
 
 export function StateReturning(p: StateReturningProps) {
-  const heroTitle =
-    p.summary?.replace(/^[·\s]+/, '').trim()
-    || `Ongoing ${p.topic.replace(/^Your /i, '').toLowerCase()} and questions about your health`;
+  const heroTitle = p.topic.replace(/^Your /i, '').replace(/^./, (c) => c.toUpperCase());
 
   return (
     <>

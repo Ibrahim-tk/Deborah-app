@@ -1,6 +1,7 @@
 import type { StateCreator } from 'zustand';
 import type { ConfirmedFact, Conversation, ID, Message, PendingFact } from '../../types/domain';
 import { nowFrom } from '../../utils/dates';
+import { selectTrialDaysLeft } from '../selectors';
 import type { AppState, ConversationsSlice } from '../types';
 
 type Actions = Pick<
@@ -72,11 +73,14 @@ export const conversationsActions: StateCreator<AppState, [], [], Actions> = (se
     set((s) => {
       const c = s.conversations.byId[cid];
       if (!c || c.countedAt) return {};
-      const used = s.plan === 'trial' ? Math.min(3, s.freeConsultationsUsed + 1) : s.freeConsultationsUsed;
+      // 14-day trial (2026-10-29): conversations are unlimited; the trial clock starts on the first one.
+      const used = s.freeConsultationsUsed + (s.plan === 'trial' ? 1 : 0);
+      const trialStartedAt = s.plan === 'trial' ? s.trialStartedAt ?? nowFrom(s).toISOString() : s.trialStartedAt;
       return {
         ...withConversation(s, cid, (conv) => ({ ...conv, countedAt: nowFrom(s).toISOString() })),
         freeConsultationsUsed: used,
-        limitReachedPending: s.plan === 'trial' && used >= 3,
+        trialStartedAt,
+        limitReachedPending: s.plan === 'trial' && selectTrialDaysLeft({ ...s, trialStartedAt, freeConsultationsUsed: used }) === 0,
       };
     }),
   // DN-13: a newer note on the same field replaces the older pending one.

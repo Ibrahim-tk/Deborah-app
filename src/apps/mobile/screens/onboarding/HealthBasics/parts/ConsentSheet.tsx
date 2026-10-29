@@ -52,6 +52,7 @@ export function ConsentSheet({ open, name, value, onChange, onContinue, onBack }
             <Checkbox
               key={o.value}
               emphasis
+              round
               checked={value === o.value}
               onChange={(on) => onChange(on ? o.value : '')}
               label={withName(o.label, who)}

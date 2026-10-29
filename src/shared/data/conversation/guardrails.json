@@ -82,7 +82,7 @@
       "orthopedic surgery",
       "chemotherapy protocol"
     ],
-    "body": "This sits outside what the Oracle’s approved educational materials cover. I can send a short summary to the support team so they can follow up (usually within one business day), or you can book time with her.",
+    "body": "This sits outside the health education I can offer. I can send a short summary to the support team so they can follow up (usually within one business day), or you can book time with her.",
     "status": "placeholder"
   },
   "escalation": {
@@ -104,5 +104,25 @@
     "outOfScope": "Can you look at my MRI results?",
     "escalation": "I've tried everything and nothing is working.",
     "uncovered": "I need advice about my cataract surgery recovery."
+  },
+  "identity": {
+    "patterns": [
+      "are you (?:a |an )?(?:real |actual )?(?:person|human|people|bot|robot|ai|doctor|nurse|np|fnp|clinician|provider)",
+      "am i (?:talking|chatting|speaking) (?:to|with) (?:a )?(?:real |actual )?(?:person|human|bot|robot|ai|doctor|nurse)",
+      "who am i (?:talking|chatting|speaking) (?:to|with)",
+      "is this (?:a )?(?:real )?(?:person|human|bot|robot|ai)"
+    ],
+    "body": "I'm Oracle, an AI system. I'm not a person, nurse or doctor, and I can't diagnose, treat or prescribe.",
+    "status": "approved"
+  },
+  "appHelp": {
+    "patterns": [
+      "where (?:are|is|can i find|do i find) my (?:former |old |past |previous |earlier )?(?:conversations?|chats?|notes?|visit notes|history|settings|wellness plan|plan|records?)",
+      "(?:find|see|open|get to) my (?:former |old |past |previous )?(?:conversations?|chats?|notes?|visit notes|history|records?)",
+      "how do i (?:change|update|edit) my (?:settings|profile|notifications|plan|subscription|password)",
+      "how do i (?:cancel|delete|sign out|log out)"
+    ],
+    "body": "Your past conversations and saved notes are in Records — open My Health, then Records. Your Wellness Plan is on Home and in My Health. Settings, notifications and your subscription are in the menu under Settings.",
+    "status": "placeholder"
   }
 }

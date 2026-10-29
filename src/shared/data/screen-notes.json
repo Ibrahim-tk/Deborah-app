@@ -102,7 +102,7 @@
   "M-7.1": {
     "title": "My Health (empty)",
     "flow": "F07 My Health hub",
-    "note": "The active profile hasn't completed a consultation yet. The hub is never blank: it explains that her health picture builds as she talks with the Oracle and offers popular starting points. Start my first consultation opens the Ask tab. The hub fills in automatically after her first answer."
+    "note": "The active profile hasn't completed a consultation yet. The hub is never blank: it explains that her health picture builds as she talks with the Oracle and offers popular starting points. Start my first conversation opens the Ask tab. The hub fills in automatically after her first answer."
   },
   "M-7.2": {
     "title": "My Health hub",
@@ -127,7 +127,7 @@
   "M-7.6": {
     "title": "About the Oracle",
     "flow": "F07 My Health hub",
-    "note": "This screen tells Maria who is behind the app: Deborah's portrait, credentials, philosophy and books. Its job is to build trust in the real person. The main action is Book a consultation with Deborah. The bio and photography are placeholders until Deborah approves them."
+    "note": "This screen explains what Oracle is: an AI system for health education and encouragement, what it can and can’t do, and who makes it. No person, portrait, books or credentials (legal change requests, Oct 26). Copy is placeholder until legal approves it."
   },
   "M-8.2": {
     "title": "Booking info",

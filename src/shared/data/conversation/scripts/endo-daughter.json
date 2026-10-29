@@ -1,7 +1,13 @@
 {
   "id": "endo-daughter",
   "topic": "advocating for a daughter with endometriosis",
-  "match": ["endometriosis", "hysterectomy", "daughter", "adhesions", "GnRH"],
+  "match": [
+    "endometriosis",
+    "hysterectomy",
+    "daughter",
+    "adhesions",
+    "GnRH"
+  ],
   "ownIntake": true,
   "intake": [
     "tg-endo-confirm"
@@ -55,25 +61,31 @@
           "Ask the gynecologist specifically about laparoscopy and GnRH options — framed as discussion, not a demand to start a prescription without them.",
           "Come back here when you're ready with more questions."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A word from the Oracle",
-        "body": "Why don't you share this with your daughter and come back when you're ready? I'll be here for you and your daughter."
       }
     ],
     "closingLine": "Prescription options are suggestions to discuss with her provider, always with a drugs.com reference. I'll be here for you both.",
-    "habitsForPlan": ["Share options with your daughter", "Ask about laparoscopy and GnRH", "Return after the specialist visit"],
+    "habitsForPlan": [
+      "Share options with your daughter",
+      "Ask about laparoscopy and GnRH",
+      "Return after the specialist visit"
+    ],
     "goal": "Informed options beyond hysterectomy",
     "summary": "Daughter with endometriosis; hysterectomy framed as only option — other paths to discuss."
   },
   "followUps": [
     {
-      "match": ["GnRH", "medication", "drugs.com"],
+      "match": [
+        "GnRH",
+        "medication",
+        "drugs.com"
+      ],
       "reply": "GnRH-based medicines quiet hypothalamic pulses for a time and can help the immune attack on rogue endometrial tissue settle. Her gynecologist decides if that's right for her — read the medication pages on drugs.com together."
     },
     {
-      "match": ["hysterectomy", "cure"],
+      "match": [
+        "hysterectomy",
+        "cure"
+      ],
       "reply": "Hysterectomy does not cure endometriosis, because tissue can live outside the uterus. That's why other options deserve a full conversation."
     }
   ],

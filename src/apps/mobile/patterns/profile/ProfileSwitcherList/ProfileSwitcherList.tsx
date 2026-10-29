@@ -49,8 +49,8 @@ export function ProfileSwitcherList({ profiles, activeId, addState, maxProfiles 
         </span>
         <span className={styles.addLabel}>Add a family member</span>
         {addState === 'locked' && (
-          <span className={styles.lock}>
-            <Icon name="lock" size={16} /> Family plan
+          <span className={styles.lock} aria-label="Family plan">
+            <Icon name="lock" size={16} />
           </span>
         )}
         {addState === 'full' && (

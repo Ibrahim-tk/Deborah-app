@@ -48,12 +48,12 @@ export default function ConsultationDetail() {
 
   if (!conversation) {
     return wrap(
-      'Consultation',
-      <EmptyState icon="chat" text="This consultation is no longer available." actionLabel="Back to records" onAction={back ?? pop} />,
+      'Conversation',
+      <EmptyState icon="chat" text="This conversation is no longer available." actionLabel="Back to records" onAction={back ?? pop} />,
     );
   }
 
-  const topic = conversation.topic ?? (conversation.scriptId === 'checkin' ? 'Check-in' : 'Consultation');
+  const topic = conversation.topic ?? (conversation.scriptId === 'checkin' ? 'Check-in' : 'Conversation');
   const date = formatShortDate(conversation.countedAt ?? conversation.startedAt);
   const canContinue = conversation.profileId === activeProfileId;
 

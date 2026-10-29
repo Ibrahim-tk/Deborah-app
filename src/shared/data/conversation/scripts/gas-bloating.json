@@ -1,7 +1,14 @@
 {
   "id": "gas-bloating",
   "topic": "gas and bloating after meals",
-  "match": ["gas", "bloat", "bloating", "belch", "SIBO", "heartburn"],
+  "match": [
+    "gas",
+    "bloat",
+    "bloating",
+    "belch",
+    "SIBO",
+    "heartburn"
+  ],
   "ownIntake": true,
   "intake": [
     "tg-gas-foods",
@@ -53,7 +60,9 @@
         "bullets": [
           "SIBO breath test — shows what type of bacterial overgrowth, if any, may be contributing."
         ],
-        "bulletTiers": ["primary"]
+        "bulletTiers": [
+          "primary"
+        ]
       },
       {
         "key": "doNow",
@@ -64,11 +73,6 @@
           "Take a broad-spectrum digestive enzyme with meals — the one I normally recommend is Digestion HCl, in my Fullscript store.",
           "Keep a symptom record for a few days to a week to share with your provider."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A word from the Oracle",
-        "body": "You can download your visit notes here so you remember what to ask. Check back after your appointment and we'll go over what your provider said. I hope you feel better — I'll be here when you're ready to talk again."
       }
     ],
     "product": {
@@ -77,17 +81,29 @@
       "frame90": "Test first; enzymes and meal spacing can ease symptoms while you wait."
     },
     "closingLine": "Bring this to your provider. Download visit notes so you remember what to ask — I'll be here when you're ready.",
-    "habitsForPlan": ["Meals at least four hours apart", "Digestive enzyme with meals", "Symptom record for the visit"],
+    "habitsForPlan": [
+      "Meals at least four hours apart",
+      "Digestive enzyme with meals",
+      "Symptom record for the visit"
+    ],
     "goal": "Calmer digestion after meals",
     "summary": "Post-meal gas and bloating; ask about SIBO breath test."
   },
   "followUps": [
     {
-      "match": ["SIBO", "breath", "test"],
+      "match": [
+        "SIBO",
+        "breath",
+        "test"
+      ],
       "reply": "A SIBO breath test shows whether bacteria from the colon have moved into the small intestine and what type of overgrowth, if any, is there. Ask your provider to order it."
     },
     {
-      "match": ["enzyme", "Fullscript", "HCl"],
+      "match": [
+        "enzyme",
+        "Fullscript",
+        "HCl"
+      ],
       "reply": "A broad-spectrum digestive enzyme with meals helps break food down so bacteria produce less gas. Digestion HCl is the one I normally recommend in my Fullscript store — confirm it fits your history with your provider."
     }
   ],

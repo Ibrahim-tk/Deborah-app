@@ -1,3 +1,6 @@
 /* Content of the shared ui/BottomSheet (frame, scrim and motion live there). */
 .body { display: grid; justify-items: center; gap: var(--space-4); }
-.hello { max-width: 340px; /* wide enough for three balanced lines (design 2026-10-21) */ font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-display); /* Deborah's own words stay serif */ text-align: center; text-wrap: balance; }
+/* Same hierarchy as web (designer, 2026-10-29): serif greeting heading, sans body. */
+.copy { display: grid; gap: var(--space-2); max-width: 340px; text-align: center; }
+.hello { margin: 0; font: var(--weight-regular) var(--fs-title-2) / var(--lh-title-2) var(--font-display); color: var(--color-ink); text-wrap: balance; }
+.intro { margin: 0; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); color: var(--color-ink-secondary); text-wrap: balance; }

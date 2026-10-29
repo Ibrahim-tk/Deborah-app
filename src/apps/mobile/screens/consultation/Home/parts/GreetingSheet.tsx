@@ -14,7 +14,9 @@ export interface GreetingSheetProps {
 
 export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingSheetProps) {
   // OPEN: greeting copy is placeholder until Deborah approves it.
-  const hello = `Hi${name ? ` ${name}` : ''}, I’m the Oracle, an AI that speaks in the Oracle’s voice. Ask me anything about how you’re feeling, and we’ll take it from there together.`;
+  // Hierarchy (designer, 2026-10-29): serif greeting leads, the rest in sans. Oct 26 legal: Oracle is "an AI system".
+  const hello = `Hi${name ? ` ${name}` : ''}, I’m Oracle.`;
+  const intro = 'I’m an AI system. Tell me how you’re feeling, and we’ll look at what’s going on together, one step at a time.';
   return (
     <BottomSheet
       showClose
@@ -25,7 +27,10 @@ export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingShe
     >
       <div className={styles.body} data-placeholder>
         <DeborahBlob size={80} label="The Oracle" />
-        <TextReveal className={styles.hello} text={hello} delay={350} />
+        <div className={styles.copy}>
+          <TextReveal as="h2" className={styles.hello} text={hello} delay={350} />
+          <TextReveal className={styles.intro} text={intro} delay={550} />
+        </div>
       </div>
     </BottomSheet>
   );

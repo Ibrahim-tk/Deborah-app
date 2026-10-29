@@ -4,7 +4,7 @@ import type { ContentStatus, Conversation, HealthDocument, ID, Intake, LabReport
 export interface EngineContext {
   profile: Profile;
   conversation: Conversation;
-  subscription: { plan: PlanTier; freeConsultationsUsed: number };
+  subscription: { plan: PlanTier; freeConsultationsUsed: number; trialEnded?: boolean };
   /** Total answers ever completed for this profile (first-answer prompts). */
   answeredCount: number;
   /** Answered consultations for this profile on the conversation's topic (escalation trigger). */

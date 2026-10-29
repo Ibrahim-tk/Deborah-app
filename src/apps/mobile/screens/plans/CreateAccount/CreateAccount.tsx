@@ -120,7 +120,7 @@ export default function CreateAccount() {
             ? 'Save your profile so you don’t lose your conversations.'
             : fromChat
               ? 'Your health details need an account behind them to stay protected.'
-              : 'Create an account so your consultations stay safe and come with you.';
+              : 'Create an account so your conversations stay safe and come with you.';
   const steps = (
     <>
       {step === 'choose' && (
@@ -145,7 +145,7 @@ export default function CreateAccount() {
               <ul className={styles.list}>
                 <li>Your history syncs across your devices.</li>
                 <li>Everything is stored securely and encrypted.</li>
-                <li>{signin ? 'Your plan and conversations are restored.' : 'Your free consultations move with you.'}</li>
+                <li>{signin ? 'Your plan and conversations are restored.' : 'Your conversations move with you.'}</li>
               </ul>
             </Panel>
           )}

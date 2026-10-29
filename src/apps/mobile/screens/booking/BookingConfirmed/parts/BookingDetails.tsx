@@ -41,7 +41,7 @@ export function BookingDetails({ booking }: { booking: Booking }) {
         </Panel>
       )}
       <Card>
-        <h2 className={styles.title}>Consultation with the Oracle</h2>
+        <h2 className={styles.title}>Conversation with Oracle</h2>
         <dl className={styles.rows}>
           {rows.map(([k, v]) => (
             <div key={k} className={styles.row}>

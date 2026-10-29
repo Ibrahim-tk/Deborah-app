@@ -108,6 +108,7 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
       documents: { byId: {} },
       plan90: {},
       freeConsultationsUsed: 0,
+      trialStartedAt: undefined,
     }),
   requestDeepLink: (link) => set((s) => ({ deepLink: { link, nonce: (s.deepLink?.nonce ?? 0) + 1 } })),
   clearDeepLink: () => set({ deepLink: undefined }),

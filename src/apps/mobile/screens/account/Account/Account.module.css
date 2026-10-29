@@ -185,3 +185,8 @@
 
 /* Name / Email sheets: stacked fields with the sheet's own rhythm. */
 .sheetFields { display: grid; gap: var(--space-4); }
+
+/* Same card as the intake completion card (designer, 2026-10-29): white, hairline edge, Home radius, and a light
+   lilac circle with a deep purple glyph. */
+.plan { border-radius: var(--home-radius); background: var(--white); box-shadow: inset 0 0 0 1px var(--stroke-card); }
+.planMark { border-radius: var(--radius-full); background: var(--purple-50); color: var(--purple-600); }

@@ -126,7 +126,7 @@ export default function Account() {
             </span>
             <span className={styles.planCopy}>
               <h2 className={styles.planTitle}>Choose a plan</h2>
-              <p className={styles.planBody}>Unlimited consultations for you and your family.</p>
+              <p className={styles.planBody}>Unlimited conversations for you and your family.</p>
             </span>
             <span className={styles.planChevron} aria-hidden>
               <Icon name="chevron" size={18} />

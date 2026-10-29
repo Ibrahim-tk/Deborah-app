@@ -6,7 +6,18 @@ import type { AppNotification, Booking, Conversation, HealthDocument, LabReport,
 import { dayKey, daysBetween, nowFrom } from '../utils/dates';
 import type { AppState } from './types';
 
+/** Free trial length (Oracle Change Requests, Oct 26): 14 days, conversations only. */
+export const TRIAL_DAYS = 14;
+/** @deprecated 3-consultation trial replaced by the 14-day trial (2026-10-29). Kept for old scenarios. */
 export const FREE_CONSULTATIONS = 3;
+
+/** Trial days left (0 = ended), or null on a paid plan. Old scenarios without `trialStartedAt` count a
+ *  used-up consultation allowance as an ended trial. */
+export const selectTrialDaysLeft = (s: AppState): number | null => {
+  if (s.plan !== 'trial') return null;
+  if (!s.trialStartedAt) return s.freeConsultationsUsed >= FREE_CONSULTATIONS ? 0 : TRIAL_DAYS;
+  return Math.max(0, TRIAL_DAYS - daysBetween(s.trialStartedAt, nowFrom(s)));
+};
 
 export const selectActiveProfile = (s: AppState): Profile | undefined => s.profiles.byId[s.activeProfileId];
 
@@ -15,9 +26,8 @@ export const selectActiveConversation = (s: AppState): Conversation | undefined 
   return id ? s.conversations.byId[id] : undefined;
 };
 
-/** Free consultations left, or null on a paid plan (counter hidden). */
-export const selectFreeLeft = (s: AppState): number | null =>
-  s.plan === 'trial' ? Math.max(0, FREE_CONSULTATIONS - s.freeConsultationsUsed) : null;
+/** Trial days left, or null on a paid plan (counter hidden). Was free consultations left until 2026-10-29. */
+export const selectFreeLeft = selectTrialDaysLeft;
 
 /** Answered conversations for the active profile, newest first. */
 export const selectHistory = (s: AppState): Conversation[] =>

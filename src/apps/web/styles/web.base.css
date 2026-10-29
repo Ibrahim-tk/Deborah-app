@@ -57,3 +57,5 @@
 html.reduced-motion .web-root *,
 html.reduced-motion .web-root *::before,
 html.reduced-motion .web-root *::after { scroll-behavior: auto !important; }
+/* Dialogs take focus programmatically on open (tabIndex -1) — that is not a keyboard focus target, so no ring. */
+.web-root [role='dialog'][tabindex='-1']:focus-visible { outline: none; }

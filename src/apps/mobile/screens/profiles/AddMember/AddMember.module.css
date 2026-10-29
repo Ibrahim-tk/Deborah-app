@@ -1,13 +1,4 @@
 .root { height: 100%; }
 .body { display: grid; gap: var(--space-5); }
-.consent { display: grid; gap: var(--space-3); }
-.consentBody {
-  margin: 0;
-  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
-  color: var(--color-ink-body);
-}
-/* Medium weight only — DESIGN.md ceiling is 500 (override <strong> UA bold). */
-.name { font-weight: var(--weight-medium); }
-.consentChecks { display: grid; gap: var(--space-1); }
-.notice { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
+.group { display: grid; gap: var(--space-2); }
 .hint { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

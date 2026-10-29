@@ -48,7 +48,7 @@ export default function Conversation() {
   const toast = useToast();
   const intake = useIntakeFlow();
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
-  // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first consultation" (focus).
+  // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first conversation" (focus).
   const { prefill, focus } = useScreenParams<{ prefill: string; focus: boolean }>();
   const openSwitcher = useProfileSwitcher();
   // Picked symptoms ride as pills in the composer; they become words only when the message is sent.

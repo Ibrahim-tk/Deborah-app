@@ -31,6 +31,10 @@ export function useAccountGate() {
   const { presentSheet } = useNav();
   return useCallback(
     (reason: GateReason, action: () => void) => {
+      // Free trial is conversations only (Oracle Change Requests, Oct 26): plan features open the plan sheet.
+      if (useAppStore.getState().plan === 'trial' && (reason === 'journey' || reason === 'family' || reason === 'documents')) {
+        return presentSheet('M-4.1', { reason });
+      }
       if (useAppStore.getState().accountId) return action();
       pending = action;
       presentSheet('M-4.3', { sheet: true, reason });

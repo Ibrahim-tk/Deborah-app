@@ -1,7 +1,13 @@
 {
   "id": "pms-gen-pro",
   "topic": "PMS and Gen-Pro",
-  "match": ["PMS", "Gen-Pro", "progesterone", "perimenopause", "luteal"],
+  "match": [
+    "PMS",
+    "Gen-Pro",
+    "progesterone",
+    "perimenopause",
+    "luteal"
+  ],
   "ownIntake": true,
   "intake": [
     "tg-pms-symptoms",
@@ -51,7 +57,9 @@
         "bullets": [
           "FSH on day 3–5 of the cycle — may support a perimenopause picture, but symptoms lead."
         ],
-        "bulletTiers": ["also"]
+        "bulletTiers": [
+          "also"
+        ]
       },
       {
         "key": "doNow",
@@ -62,30 +70,37 @@
           "Your period should start within 24 to 48 hours after you stop. If it starts earlier, you may need a higher dose — come back after a cycle or so and we'll discuss it.",
           "Confirm this plan with your healthcare provider before you start."
         ]
-      },
-      {
-        "key": "word",
-        "title": "A word from the Oracle",
-        "body": "I hope this has helped, {name}. I look forward to hearing about your journey with Gen-Pro and whether it eases your PMS. See you soon."
       }
     ],
     "product": {
       "productId": "genesis-gold",
-      "why": "Gen-Pro is the Oracle's progesterone cream (each pump 25 mg). Discuss luteal dosing with your provider; Genesis Gold can sit alongside whole-body support while hormones settle.",
+      "why": "Gen-Pro is a progesterone cream from Genesis Health Products (each pump 25 mg). Discuss luteal dosing with your provider; Genesis Gold can sit alongside whole-body support while hormones settle.",
       "frame90": "Try one cycle at the low dose, then check back."
     },
     "closingLine": "Confirm dosing with your provider. Download visit notes, and check back after a cycle — I'll be here.",
-    "habitsForPlan": ["Gen-Pro 50 mg twice daily day 10–24", "Inner thigh application", "Track when your period starts after stopping"],
+    "habitsForPlan": [
+      "Gen-Pro 50 mg twice daily day 10–24",
+      "Inner thigh application",
+      "Track when your period starts after stopping"
+    ],
     "goal": "Easier luteal-phase PMS",
     "summary": "Intensifying PMS and shorter cycles; discuss Gen-Pro with provider."
   },
   "followUps": [
     {
-      "match": ["dose", "pump", "50", "start"],
+      "match": [
+        "dose",
+        "pump",
+        "50",
+        "start"
+      ],
       "reply": "I always like to start lower since you're probably still making some progesterone: 50 mg twice a day — two pumps twice a day — inner thigh, day 10 to day 24. Confirm with your provider first."
     },
     {
-      "match": ["FSH", "test"],
+      "match": [
+        "FSH",
+        "test"
+      ],
       "reply": "FSH on day 3 to 5 can be elevated in early perimenopause, but it's imperfect because estrogen swings. We lean on your symptoms more than one lab number."
     }
   ],
