@@ -148,8 +148,13 @@ function collected(a: Answers, now: Date) {
 }
 
 /** Writes the onboarding profile; returns the profile the first chat should open as. */
-/** Oct 27 conditional section answers (optional, health profile). */
-export const SEX_CHARACTERISTIC_KEYS = ['sexVariation', 'sexVariationName', 'sexCharacteristics', 'hormoneTherapy', 'hormoneTherapyPrescribed', 'sexProcedures'] as const;
+/** Sex-characteristics section answers (optional, health profile, all adults).
+ * OPEN: legal brief point 8 — "keep these fields away from analytics, ad pixels and Shopify." The
+ * prototype has none; production must exclude every key below. */
+export const SEX_CHARACTERISTIC_KEYS = [
+  'sexVariation', 'sexVariationName', 'sexCharacteristics', 'hormoneTherapy', 'hormoneTherapyPrescribed',
+  'hormoneTherapyNote', 'sexProcedures', 'sexProceduresNote',
+] as const;
 
 export function saveOnboarding(a: Answers): string {
   const s = useAppStore.getState();

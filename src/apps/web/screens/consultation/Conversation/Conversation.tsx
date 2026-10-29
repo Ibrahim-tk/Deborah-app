@@ -16,7 +16,7 @@ import { selectActiveConversation, SELF_PROFILE_ID, useAppStore } from '@shared/
 import type { Message } from '@shared/types/domain';
 import { nowFrom, uid } from '@shared/utils';
 import { ActionSheet, AnimatePresence, MotionDiv } from '@web/ui';
-import { ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@web/patterns/chat';
+import { ChatHeader, Composer, Greeting, QuickSymptoms, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@web/patterns/chat';
 import { useConversation } from '@web/hooks/useConversation';
 import { useNav, useNavStore, useScreenParams } from '@web/navigation';
 import { MessageList } from './parts/MessageList';
@@ -397,6 +397,10 @@ export default function Conversation() {
               )
             )}
           </AnimatePresence>
+          {/* Desktop order (2026-10-28): quick symptoms → composer → suggestions. Picks ride as composer tokens. */}
+          {emptyStart && (
+            <QuickSymptoms selected={symptoms} onToggle={(s) => setSymptoms((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]))} onMore={() => setSymptomSheet(true)} />
+          )}
           {emptyStart && composer}
           {emptyStart && intakeCompletion < 1 && (
             <div className={styles.intakeFloat}>

@@ -1,0 +1,50 @@
+/* Quick symptoms (designer, 2026-10-28): tiny label, then one horizontal rail of pills that bleeds to the screen
+   edges like SuggestionList. Picked pills take the soft accent tint, same as ui/Segmented. */
+.root { display: grid; gap: var(--space-2); min-width: 0; }
+.label { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: #5a4f55; }
+
+.list {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0 calc(var(--margin-screen) * -1);
+  padding: 2px var(--margin-screen);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.list::-webkit-scrollbar { display: none; }
+.list > li { flex: none; }
+
+.pill {
+  min-height: 36px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px var(--color-border-control);
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
+}
+.pill:active { background: color-mix(in srgb, var(--color-accent) 6%, var(--white)); }
+.pill[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--white));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-accent) 30%, transparent);
+  color: var(--color-accent);
+  font-weight: var(--weight-medium);
+}
+.pill:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .pill { transition: none; } }
+
+/* Desktop (designer, 2026-10-28): short pills; the rail stays inside the chat column, edges fade instead of bleeding. */
+.list {
+  margin: 0;
+  padding: 2px 0;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+}
+.pill { min-height: 30px; padding: 0 var(--space-3); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }

@@ -56,3 +56,8 @@
 .signIn { margin-top: var(--space-3); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); text-align: center; }
 .signInLink { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .link:focus-visible, .signInLink:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+
+/* Welcome block centred (designer, 2026-10-28): tree, "Your Oracle" and the quote share one centre line. */
+.intro { justify-items: center; }
+.note { justify-items: center; text-align: center; }
+.hello, .lede { margin-inline: auto; }

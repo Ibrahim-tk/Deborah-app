@@ -153,6 +153,27 @@ Full screen, one step at a time, the tree grows as you go (`data/intake/healthBa
 - Someone else is allowed on any plan as the first person added (D-3); M-6.1 still asks to upgrade for more.
 - Boys under 18 get only neutral how-long / how-often questions in chat (no cycle questions). OPEN: child and male-teen banks.
 
+### Sex-characteristics section (Health Profile M-2.14, intersex / legal brief, MVP baseline)
+
+Optional steps that **every adult (18+)** sees, before the reproductive and puberty banks. Teens and children never see them. Copy is placeholder pending Deborah.
+
+1. Variation in sex characteristics ("…sometimes called being intersex"): Yes / No / I don't know / Prefer not to say. Yes opens "If you know the name of your intersex variation…". **The privacy notice appears here, once, at the top of the section.**
+2. "Your body: which of these do you currently have?": multi-select organs, None of these, or Prefer not to say.
+3. Sex hormones or hormone-blocking medicines, for any reason: Yes / No / I don't know / Prefer not to say. Yes asks "Is a health care provider advising…": Yes / No / Partially, then shows an optional context field.
+4. Surgeries or procedures that changed reproductive or sex-related anatomy: multi-select, Other, None of these. Picking any of them shows an optional context field.
+
+**Routing:** the banks use `routeSex` (`steps.ts › routeSexFor`):
+- Uterus, cervix or ovaries → female bank.
+- Prostate or testes → male bank.
+- Both → intersex bank.
+- Skipped, None or Prefer not to say → sex assigned at birth, unchanged.
+
+**Hormones asked once:**
+- Answering "No" to hormones hides the menopause HRT question.
+- On reopening a profile, an existing HRT "Yes" pre-fills the hormones question.
+
+These answers stay out of analytics, pixels and Shopify. OPEN for production.
+
 ## M-1.10 · Ask a parent
 
 Root screen in the pre-auth stack, replacing M-1.8 when **your own** date of birth is under 13. Deborah's orb, "Let's bring in a parent", a short line that a

@@ -17,6 +17,7 @@ export * from './Composer';
 export * from './QuickReplies';
 export * from './AiDisclosure';
 export * from './ChatHeader';
+export * from './QuickSymptoms';
 export * from './GuidanceEnd';
 export * from './ChatLauncher';
 export * from './CareDisclaimer';

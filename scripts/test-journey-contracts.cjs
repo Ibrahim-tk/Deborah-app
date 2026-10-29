@@ -17,7 +17,7 @@ function source(file) {
   const module = { exports: {} }; cache.set(resolved, module);
   const js = ts.transpileModule(fs.readFileSync(resolved, 'utf8'), { fileName: resolved, compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
   const localRequire = (id) => id.startsWith('@flow-v1/') ? source('versions/v1/src/' + id.slice(9)) : id.startsWith('.') ? source(path.resolve(path.dirname(resolved), id)) : id.startsWith('@shared/') ? source('src/shared/' + id.slice(8)) : require(id);
-  new Function('require', 'module', 'exports', js)(localRequire, module, module.exports);
+  new Function('require', 'module', 'exports', js.replaceAll('import.meta.env', '({ DEV: true })'))(localRequire, module, module.exports);
   return module.exports;
 }
 const { useAppStore: store, loadScenario } = source('src/shared/store');
@@ -161,11 +161,14 @@ test('onboarding saves the same profile context for self, teen, child and adult 
     else assert.equal(id,'p-self');
   }
 });
+// Full M-1.8 + Health Profile path (onboarding keys, then profile banks).
+const fullPathKeys=()=>{const m=source('src/apps/mobile/screens/onboarding/HealthBasics/steps');return (a)=>[...m.visibleStepKeys(a),...m.profileStepKeys(a)];};
+// Adults' optional sex-characteristics section (legal brief), before the banks.
+const SC=['sexVariation','sexCharacteristics','hormoneTherapy','sexProcedures'];
 // Version 2 only — frozen V1 healthBasics has no gender × age meds branches.
 if (process.env.FLOW_TEST_VERSION !== 'v1') {
   test('V2 healthBasics visibleSteps branch by gender and age', () => {
-    const {visibleSteps}=source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
-    const keys=(a)=>visibleSteps(a).map((s)=>s.key);
+    const keys=fullPathKeys();
     const dobFor=(age)=>`${new Date().getFullYear()-age}-06-15`;
     // Sex routes banks; identity then pronouns, then banks.
     const base=(age,sex,extra={})=>{
@@ -177,11 +180,11 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     assert.ok(keys(base(35,'female')).indexOf('gender') > keys(base(35,'female')).indexOf('sex'));
     assert.ok(keys(base(35,'female')).indexOf('pronouns') > keys(base(35,'female')).indexOf('gender'));
     assert.deepEqual(keys(base(35,'female')).filter((k)=>!['profileFor','birthDate','sex','pronouns','gender'].includes(k)),
-      ['reproductive','medications','supplements','genesisGold']);
+      [...SC,'reproductive','medications','supplements','genesisGold']);
     assert.ok(!keys(base(35,'female')).includes('periodsStarted'));
     assert.ok(keys(base(35,'female',{ reproductive: 'menstruation' })).includes('periodsStarted'));
     assert.deepEqual(keys(base(35,'male')).filter((k)=>!['profileFor','birthDate','sex','pronouns','gender'].includes(k)),
-      ['pubertyAge','fertilityConcerns','medications','supplements','genesisGold']);
+      [...SC,'pubertyAge','fertilityConcerns','medications','supplements','genesisGold']);
     assert.ok(keys(base(15,'male')).includes('pubertyStart'));
     assert.ok(keys(base(15,'male')).includes('pubertyNotes'));
     assert.ok(!keys(base(15,'male')).includes('reproductive'));
@@ -212,7 +215,7 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
   });
 
   test('Myself Female trees include sex, identity, pronouns, then reproductive nests', () => {
-    const { visibleStepKeys } = source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
+    const visibleStepKeys = fullPathKeys();
     const y = new Date().getFullYear();
     const myself = (age, extra = {}) => ({
       profileFor: 'self',
@@ -224,28 +227,28 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     });
     // Adults 18–59: identity + pronouns early; reproductive; periods only after Menstruation.
     assert.deepEqual(visibleStepKeys(myself(28, { reproductive: 'pre-menopausal' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(28, { reproductive: 'menstruation', periodsStarted: 'yes' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'periodsStarted', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'periodsStarted', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(48, { reproductive: 'peri-menopausal', hrtStatus: 'yes', hrtType: 'combined' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(48, { reproductive: 'peri-menopausal', hrtStatus: 'no' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(55, { reproductive: 'post-menopausal', ageAtLastPeriod: '52', hrtStatus: 'no' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'ageAtLastPeriod', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'ageAtLastPeriod', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(50, { reproductive: 'surgically-menopausal', hysterectomy: 'yes', ovariesRemoved: 'partial', hrtStatus: 'yes', hrtType: 'estrogen-only' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'hysterectomy', 'ovariesRemoved', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'hysterectomy', 'ovariesRemoved', 'hrtStatus', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(28, { reproductive: 'pregnant-postpartum' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'reproductive', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'reproductive', 'medications', 'supplements', 'genesisGold',
     ]);
     assert.deepEqual(visibleStepKeys(myself(66)), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'medications', 'supplements', 'genesisGold',
     ]);
     assert.ok(!visibleStepKeys(myself(66, { reproductive: 'peri-menopausal' })).includes('hrtStatus'));
     assert.deepEqual(visibleStepKeys(myself(15, { reproductiveTeen: 'pre-menopausal', pubertyBlockers: 'no' })), [
@@ -256,7 +259,7 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     ]);
     // Non-binary: sex Prefer not → identity → pronouns → puberty → reproductive → meds.
     assert.deepEqual(visibleStepKeys(myself(28, { sex: 'prefer-not', pronouns: 'they-them', gender: 'non-binary', otherPuberty: 'yes', reproductive: 'pre-menopausal' })), [
-      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', 'otherPuberty', 'reproductive', 'medications', 'supplements', 'genesisGold',
+      'profileFor', 'birthDate', 'sex', 'gender', 'pronouns', ...SC, 'otherPuberty', 'reproductive', 'medications', 'supplements', 'genesisGold',
     ]);
     // Under-13 Myself: demography stays in the map; M-1.10 sheet on DOB Continue.
     assert.deepEqual(visibleStepKeys({ profileFor: 'self', birthDate: `${y - 8}-06-15` }), [
@@ -264,9 +267,69 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     ]);
   });
 
+  test('legal brief: sex-characteristics section for all adults, body answers route the banks', () => {
+    const keys = fullPathKeys();
+    const steps = source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
+    const y = new Date().getFullYear();
+    const me = (age, extra = {}) => ({ profileFor: 'self', birthDate: `${y - age}-06-15`, sex: 'female', gender: 'woman', pronouns: 'she-her', ...extra });
+    // Every adult sees the section (not only intersex / mismatch); teens and children never do.
+    for (const sex of ['female', 'male', 'intersex', 'prefer-not']) {
+      const k = keys(me(30, { sex }));
+      for (const key of SC) assert.ok(k.includes(key), `${sex} adult sees ${key}`);
+      assert.ok(k.indexOf('sexProcedures') < k.indexOf('medications'));
+    }
+    for (const key of SC) assert.ok(!keys(me(16)).includes(key), `teen hides ${key}`);
+    for (const key of SC) assert.ok(!keys(me(9, { profileFor: 'dependent', relationship: 'child', memberName: 'Sam', consent: 'yes' })).includes(key));
+    // Skipped / None / Prefer not → routes on sex at birth exactly as before.
+    for (const body of [undefined, 'None of these', 'Prefer not to say, Uterus']) {
+      assert.ok(keys(me(30, { sex: 'male', sexCharacteristics: body })).includes('pubertyAge'), String(body));
+      assert.ok(!keys(me(30, { sex: 'male', sexCharacteristics: body })).includes('reproductive'), String(body));
+    }
+    // Body answers win over sex at birth.
+    const uterus = keys(me(30, { sex: 'prefer-not', sexCharacteristics: 'Uterus, Ovaries' }));
+    assert.ok(uterus.includes('reproductive') && !uterus.includes('otherPuberty') && !uterus.includes('pubertyAge'));
+    const prostate = keys(me(30, { sex: 'female', sexCharacteristics: 'Prostate, Testes' }));
+    assert.ok(prostate.includes('pubertyAge') && prostate.includes('fertilityConcerns') && !prostate.includes('reproductive'));
+    const mixed = keys(me(30, { sex: 'male', sexCharacteristics: 'Uterus, Testes' }));
+    assert.ok(mixed.includes('otherPuberty') && mixed.includes('reproductive'));
+    assert.equal(steps.routeSexFor({ sex: 'male' }), 'male');
+    // Optional context fields only when relevant.
+    assert.ok(!keys(me(30)).includes('hormoneTherapyNote'));
+    assert.ok(keys(me(30, { hormoneTherapy: 'yes' })).includes('hormoneTherapyNote'));
+    assert.ok(!keys(me(30, { sexProcedures: 'None of these' })).includes('sexProceduresNote'));
+    assert.ok(keys(me(30, { sexProcedures: 'Hysterectomy' })).includes('sexProceduresNote'));
+    // Hormones asked once: "No" on the section hides the menopause HRT question.
+    assert.ok(keys(me(50, { reproductive: 'peri-menopausal' })).includes('hrtStatus'));
+    assert.ok(!keys(me(50, { reproductive: 'peri-menopausal', hormoneTherapy: 'no' })).includes('hrtStatus'));
+  });
+
+  test('legal brief: copy, options and one privacy notice', () => {
+    const hb = source('src/shared/data/intake/healthBasics.json');
+    const step = (k) => hb.steps.find((s) => s.key === k);
+    assert.equal(step('gender').title, 'How would you describe your gender?');
+    assert.deepEqual(step('gender').choices.map((c) => c.label), ['Woman', 'Man', 'Non-binary', 'Agender', 'Not listed', 'Prefer not to say']);
+    assert.deepEqual(step('sex').choices.map((c) => c.label), ['Male', 'Female', 'Intersex', 'Prefer not to say']);
+    assert.deepEqual(step('sexVariation').choices.map((c) => c.value), ['yes', 'no', 'unknown', 'prefer-not']);
+    assert.deepEqual(step('hormoneTherapy').choices.map((c) => c.value), ['yes', 'no', 'unknown', 'prefer-not']);
+    assert.deepEqual(step('hormoneTherapy').expandChoices.map((c) => c.value), ['yes', 'no', 'partially']);
+    for (const organ of ['Uterus', 'Cervix', 'Ovaries', 'Vagina', 'Testes', 'Prostate', 'Penis/phallus', 'Micropenis/macroclitoris', 'Breast tissue', 'Prefer not to say'])
+      assert.ok(step('sexCharacteristics').suggestions.some((x) => x.label === organ), organ);
+    assert.ok(step('sexProcedures').suggestions.some((x) => x.label === 'Other'));
+    const notes = hb.steps.filter((s) => /advertisers/.test(s.note ?? ''));
+    assert.deepEqual(notes.map((s) => s.key), ['sexVariation']);
+    assert.match(notes[0].note, /optional.*never sold or shared with advertisers, encrypted, and editable or deletable anytime/);
+  });
+
+  test('HRT answer pre-fills the hormones question when the profile is reopened', () => {
+    const { SEX_CHARACTERISTIC_KEYS } = source('src/apps/mobile/screens/onboarding/HealthBasics/saveOnboarding');
+    assert.ok(SEX_CHARACTERISTIC_KEYS.includes('hormoneTherapyNote') && SEX_CHARACTERISTIC_KEYS.includes('sexProceduresNote'));
+    const src = require('node:fs').readFileSync(require('node:path').resolve(__dirname, '../src/apps/mobile/screens/onboarding/HealthBasics/healthProfile.ts'), 'utf8');
+    assert.match(src, /a\.hormoneTherapy = 'yes'/);
+  });
+
   test('all 28 PDF personas match healthBasics visibleSteps', () => {
     const { PDF_PERSONA_RUNS, seedAnswersFor } = source('src/shell/nav/JourneyRunner/pdfPersonas');
-    const { visibleStepKeys } = source('src/apps/mobile/screens/onboarding/HealthBasics/steps');
+    const visibleStepKeys = fullPathKeys();
     assert.equal(PDF_PERSONA_RUNS.length, 28);
     for (const run of PDF_PERSONA_RUNS) {
       if (run.ageBand === 'lt13') {

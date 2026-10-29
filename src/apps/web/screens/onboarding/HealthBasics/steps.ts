@@ -57,17 +57,40 @@ export function pronounsForSave(a: Answers): string | undefined {
   return map[a.pronouns] ?? a.pronouns;
 }
 
-const MATCHING_GENDER: Record<string, string> = { male: 'man', female: 'woman' };
-
 /**
- * Oct 27 conditional section (adults and children): sex at birth is Intersex or Prefer not to say, or it
- * doesn't match the stated gender.
+ * Intersex / legal brief (MVP baseline): the sex-characteristics section is optional and asked of all
+ * adults (18+), not only when sex at birth is intersex or doesn't match gender.
  */
 export function asksSexCharacteristics(a: Answers): boolean {
-  if (a.sex === 'intersex' || a.sex === 'prefer-not') return true;
-  const match = a.sex ? MATCHING_GENDER[a.sex] : undefined;
-  return Boolean(match && a.gender && a.gender !== 'prefer-not' && a.gender !== match);
+  const age = ageFromAnswers(a);
+  return age !== undefined && age >= 18;
 }
+
+const SEX_CHARACTERISTICS_NONE = 'None of these';
+const MENSTRUAL_ORGANS = ['Uterus', 'Cervix', 'Ovaries'];
+const PROSTATE_ORGANS = ['Prostate', 'Testes'];
+
+/**
+ * Sex used to route the reproductive / puberty banks. The brief: "Use these answers, not gender identity
+ * alone, to decide which menstrual, reproductive or prostate questions appear." Body answers win when
+ * given; skipped, "None of these" or "Prefer not to say" falls back to sex assigned at birth.
+ */
+export function routeSexFor(a: Answers): string | undefined {
+  const body = list(a.sexCharacteristics, SEX_CHARACTERISTICS_NONE);
+  if (body.includes('Prefer not to say')) return a.sex;
+  const menstrual = body.some((x) => MENSTRUAL_ORGANS.includes(x));
+  const prostate = body.some((x) => PROSTATE_ORGANS.includes(x));
+  // OPEN: "Use these answers … to decide which menstrual, reproductive or prostate questions appear."
+  // Mixed anatomy uses the intersex bank (puberty → reproductive); confirm with Deborah.
+  if (menstrual && prostate) return 'intersex';
+  if (menstrual) return 'female';
+  if (prostate) return 'male';
+  return a.sex;
+}
+
+/** True when at least one procedure was picked (shows the optional context field). */
+const anyProcedures = (a: Answers) =>
+  list(a.sexProcedures, SEX_CHARACTERISTICS_NONE).length > 0;
 
 /** Labels for a choice step: a child profile gets `childLabels` (Boy / Girl). */
 export function choiceLabel(s: Step, value: string, label: string, a: Answers): string {
@@ -76,7 +99,7 @@ export function choiceLabel(s: Step, value: string, label: string, a: Answers): 
 }
 
 /** Answers plus what's derived from them (`age`, `ageGroup`, `reproductiveStage`).
- * Intake `showIf` routes on sex at birth (pronouns / identity do not change the path). */
+ * Banks route on `routeSex` (body answers, else sex at birth); pronouns / identity never change the path. */
 export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
   const age = ageFromAnswers(a);
   const reproductiveStage = a.reproductive ?? a.reproductiveTeen;
@@ -84,6 +107,8 @@ export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
     ...a,
     ...(reproductiveStage && { reproductiveStage }),
     sexCharacteristicsAsk: asksSexCharacteristics(a) ? 'yes' : 'no',
+    sexProceduresAny: anyProcedures(a) ? 'yes' : 'no',
+    ...(routeSexFor(a) && { routeSex: routeSexFor(a) }),
   };
   if (age === undefined) return derived;
   return { ...derived, age, ageGroup: ageGroupFor(age) };

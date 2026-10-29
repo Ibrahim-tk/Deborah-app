@@ -24,10 +24,10 @@ const pathsCode = ts.transpileModule(fs.readFileSync(path.join(root, 'src/shared
 new Function('exports', pathsCode)(pathsMod.exports);
 const { isLegacyPrototypePath, toInternalPath, legacyRedirectTarget } = pathsMod.exports;
 assert.equal(isLegacyPrototypePath('/mobile'), true);
-assert.equal(isLegacyPrototypePath('/web/foo'), true);
+assert.equal(isLegacyPrototypePath('/web/foo'), false);
 assert.equal(isLegacyPrototypePath('/internal/mobile'), false);
 assert.equal(toInternalPath('/mobile'), '/internal/mobile');
-assert.equal(toInternalPath('/web/a'), '/internal/web/a');
+assert.equal(toInternalPath('/web/a'), '/web/a');
 assert.equal(legacyRedirectTarget('/wid', '?flow=v2', '#x'), '/internal/wid?flow=v2#x');
 console.log('Legacy paths redirect under /internal.');
 for (const args of [['scripts/check-flow-v1.cjs'], ['scripts/test-journey-contracts.cjs']]) {

@@ -16,6 +16,7 @@ export * from './ScrollToLatest';
 export * from './Composer';
 export * from './QuickReplies';
 export * from './ChatHeader';
+export * from './QuickSymptoms';
 export * from './ChatLauncher';
 export * from './CareDisclaimer';
 export * from './ComposerOptions';

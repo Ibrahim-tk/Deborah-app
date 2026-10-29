@@ -54,6 +54,8 @@ export function answersFromProfile(p: Profile): Answers {
   if (p.intake.periodsNotes) a.periodsNotes = p.intake.periodsNotes;
   if (p.intake.hrtStatus) a.hrtStatus = p.intake.hrtStatus;
   if (p.intake.hrtType) a.hrtType = p.intake.hrtType;
+  // Pre-fill from the menopause HRT answer so no one answers hormones twice (legal brief point 5).
+  if (!a.hormoneTherapy && (a.hrtStatus === 'yes' || a.hrtStatus === 'yes-previously')) a.hormoneTherapy = 'yes';
   if (p.intake.pubertyStart) a.pubertyStart = p.intake.pubertyStart;
   if (p.intake.pubertyNotes && !care.otherPuberty) a.pubertyNotes = p.intake.pubertyNotes;
   if (care.otherPuberty) a.otherPuberty = care.otherPuberty;

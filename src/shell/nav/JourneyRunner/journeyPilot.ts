@@ -245,8 +245,8 @@ function profileTick(p: ProfileAnswers, top: HTMLElement, st: PilotState): Pilot
     return { done: false, acted: true, step: 'Gives consent' };
   }
 
-  // Meds / supplements: one-tap None.
-  const none = find(top, /^None$/);
+  // Meds / supplements / body / procedures: one-tap None.
+  const none = find(top, /^None( of these)?$/);
   if (none) { none.click(); return { done: false, acted: true, step: 'Answers “None”' }; }
 
   // Required free-text (puberty age wheel fallback / optional notes): open Other if needed, type default, Continue.

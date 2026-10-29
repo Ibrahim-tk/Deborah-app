@@ -45,7 +45,7 @@ export function HomeMediaHero({
     const inner = (
       <>
         <span className={styles.avatar} aria-hidden>
-          <DeborahBlob size={44} />
+          <DeborahBlob size={48} />
         </span>
         <span className={styles.copy}>
           {eyebrow && <span className={styles.eyebrow}>{eyebrow}</span>}

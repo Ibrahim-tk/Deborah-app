@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Sex assigned at birth still routes those profile banks. Under-13 Myself → M-1.10. Wording placeholder pending Deborah.",
+  "note": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Banks route on routeSex: the body answers (sexCharacteristics) when given, else sex assigned at birth. Under-13 Myself → M-1.10. Wording placeholder pending Deborah.",
   "onboardingKeys": [
     "profileFor",
     "relationship",
@@ -113,16 +113,16 @@
       "key": "gender",
       "kind": "choice",
       "presentation": "rows",
-      "title": "How do you describe your gender?",
-      "titleOther": "How does {name} describe their gender?",
+      "title": "How would you describe your gender?",
+      "titleOther": "How would you describe {name}’s gender?",
       "choices": [
-        {
-          "value": "man",
-          "label": "Man"
-        },
         {
           "value": "woman",
           "label": "Woman"
+        },
+        {
+          "value": "man",
+          "label": "Man"
         },
         {
           "value": "non-binary",
@@ -133,18 +133,18 @@
           "label": "Agender"
         },
         {
-          "value": "prefer-not",
-          "label": "Prefer not to say"
+          "value": "other",
+          "label": "Not listed"
         },
         {
-          "value": "other",
-          "label": "Other"
+          "value": "prefer-not",
+          "label": "Prefer not to say"
         }
       ],
       "describeValue": "other",
       "describeKey": "genderOther",
       "describeLabel": "Gender",
-      "describePlaceholder": "How you describe your gender",
+      "describePlaceholder": "Write in how you describe your gender",
       "describeAlwaysSpan": true,
       "childLabels": {
         "man": "Boy",
@@ -252,13 +252,234 @@
       }
     },
     {
+      "key": "sexVariation",
+      "kind": "choice",
+      "presentation": "rows",
+      "optional": true,
+      "title": "Were you born with a variation in your sex characteristics, such as your chromosomes, hormones, reproductive organs or genitals? This is sometimes called being intersex.",
+      "titleOther": "Was {name} born with a variation in their sex characteristics, such as chromosomes, hormones, reproductive organs or genitals? This is sometimes called being intersex.",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "unknown",
+          "label": "I don’t know"
+        },
+        {
+          "value": "prefer-not",
+          "label": "Prefer not to say"
+        }
+      ],
+      "describeValue": "yes",
+      "describeKey": "sexVariationName",
+      "describeLabel": "If you know the name of your intersex variation, you can add it here.",
+      "describePlaceholder": "If you know the name of your intersex variation, you can add it here.",
+      "showIf": {
+        "age": {
+          "min": 18
+        }
+      },
+      "note": "Answers are optional, used only to tailor your health education, never sold or shared with advertisers, encrypted, and editable or deletable anytime.",
+      "status": "placeholder"
+    },
+    {
+      "key": "sexCharacteristics",
+      "kind": "text",
+      "optional": true,
+      "title": "Your body: which of these do you currently have?",
+      "titleOther": "{name}’s body: which of these do they currently have?",
+      "none": "None of these",
+      "suggestions": [
+        {
+          "label": "Uterus"
+        },
+        {
+          "label": "Cervix"
+        },
+        {
+          "label": "Ovaries"
+        },
+        {
+          "label": "Vagina"
+        },
+        {
+          "label": "Testes"
+        },
+        {
+          "label": "Prostate"
+        },
+        {
+          "label": "Penis/phallus"
+        },
+        {
+          "label": "Micropenis/macroclitoris"
+        },
+        {
+          "label": "Breast tissue"
+        },
+        {
+          "label": "Prefer not to say"
+        }
+      ],
+      "showIf": {
+        "age": {
+          "min": 18
+        }
+      },
+      "note": "Pick as many as apply, or none.",
+      "status": "placeholder"
+    },
+    {
+      "key": "hormoneTherapy",
+      "kind": "choice",
+      "presentation": "rows",
+      "optional": true,
+      "title": "Do you take, or have you ever taken, sex hormones or hormone-blocking medicines, for any reason?",
+      "titleOther": "Does {name} take, or have they ever taken, sex hormones or hormone-blocking medicines, for any reason?",
+      "choices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "unknown",
+          "label": "I don’t know"
+        },
+        {
+          "value": "prefer-not",
+          "label": "Prefer not to say"
+        }
+      ],
+      "expandValues": [
+        "yes"
+      ],
+      "expandKey": "hormoneTherapyPrescribed",
+      "expandTitle": "Is a health care provider advising this care and/or prescribing these therapies?",
+      "expandChoices": [
+        {
+          "value": "yes",
+          "label": "Yes"
+        },
+        {
+          "value": "no",
+          "label": "No"
+        },
+        {
+          "value": "partially",
+          "label": "Partially"
+        }
+      ],
+      "showIf": {
+        "age": {
+          "min": 18
+        }
+      },
+      "status": "placeholder"
+    },
+    {
+      "key": "hormoneTherapyNote",
+      "kind": "text",
+      "title": "Which ones, and anything else you’d like to add?",
+      "titleOther": "Which ones, and anything else you’d like to add about {name}?",
+      "placeholder": "Optional — e.g. which medicines, or which parts a provider advises",
+      "single": true,
+      "optional": true,
+      "showIf": {
+        "age": {
+          "min": 18
+        },
+        "hormoneTherapy": {
+          "in": [
+            "yes"
+          ]
+        }
+      },
+      "status": "placeholder"
+    },
+    {
+      "key": "sexProcedures",
+      "kind": "text",
+      "optional": true,
+      "title": "Have you had any surgeries or procedures that changed your reproductive or sex-related anatomy, for any reason?",
+      "titleOther": "Has {name} had any surgeries or procedures that changed their reproductive or sex-related anatomy, for any reason?",
+      "none": "None of these",
+      "suggestions": [
+        {
+          "label": "Mastectomy or breast reduction"
+        },
+        {
+          "label": "Breast augmentation"
+        },
+        {
+          "label": "Hysterectomy"
+        },
+        {
+          "label": "Removal of ovaries"
+        },
+        {
+          "label": "Removal of testes"
+        },
+        {
+          "label": "Testicular prosthesis implantation"
+        },
+        {
+          "label": "Vaginoplasty"
+        },
+        {
+          "label": "Phalloplasty or metoidioplasty"
+        },
+        {
+          "label": "Laser hair removal or electrolysis"
+        },
+        {
+          "label": "Other"
+        }
+      ],
+      "showIf": {
+        "age": {
+          "min": 18
+        }
+      },
+      "status": "placeholder"
+    },
+    {
+      "key": "sexProceduresNote",
+      "kind": "text",
+      "title": "Anything you’d like to add about these?",
+      "titleOther": "Anything you’d like to add about {name}’s procedures?",
+      "placeholder": "Optional",
+      "single": true,
+      "optional": true,
+      "showIf": {
+        "age": {
+          "min": 18
+        },
+        "sexProceduresAny": {
+          "in": [
+            "yes"
+          ]
+        }
+      },
+      "status": "placeholder"
+    },
+    {
       "key": "reproductive",
       "kind": "choice",
       "presentation": "rows",
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -302,7 +523,7 @@
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -346,7 +567,7 @@
       "title": "Have your periods started?",
       "titleOther": "Have {name}’s periods started?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -387,7 +608,7 @@
       "title": "Using any puberty blockers?",
       "titleOther": "Using any puberty blockers for {name}?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -421,7 +642,7 @@
       "placeholder": "Age",
       "single": true,
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -443,7 +664,7 @@
       "title": "Have you had a hysterectomy?",
       "titleOther": "Has {name} had a hysterectomy?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -475,7 +696,7 @@
       "title": "Have you had your ovaries removed?",
       "titleOther": "Has {name} had their ovaries removed?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -511,7 +732,7 @@
       "title": "Are you currently on hormone replacement therapy (HRT)?",
       "titleOther": "Is {name} currently on hormone replacement therapy (HRT)?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "female"
           ]
@@ -525,6 +746,11 @@
         },
         "age": {
           "max": 59
+        },
+        "hormoneTherapy": {
+          "notIn": [
+            "no"
+          ]
         }
       },
       "choices": [
@@ -603,7 +829,7 @@
         }
       ],
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -624,7 +850,7 @@
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -671,7 +897,7 @@
       "title": "Where are you hormonally right now?",
       "titleOther": "Where is {name} hormonally right now?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -718,7 +944,7 @@
       "title": "Have your periods started?",
       "titleOther": "Have {name}’s periods started?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -764,7 +990,7 @@
       "placeholder": "Age",
       "single": true,
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -789,7 +1015,7 @@
       "title": "Have you had a hysterectomy?",
       "titleOther": "Has {name} had a hysterectomy?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -824,7 +1050,7 @@
       "title": "Have you had your ovaries removed?",
       "titleOther": "Has {name} had their ovaries removed?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -863,7 +1089,7 @@
       "title": "Are you currently on hormone replacement therapy (HRT)?",
       "titleOther": "Is {name} currently on hormone replacement therapy (HRT)?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "trans-man",
             "trans-woman",
@@ -880,6 +1106,11 @@
         },
         "age": {
           "max": 59
+        },
+        "hormoneTherapy": {
+          "notIn": [
+            "no"
+          ]
         }
       },
       "choices": [
@@ -913,7 +1144,7 @@
       "ageMax": 18,
       "single": true,
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "male"
           ]
@@ -933,7 +1164,7 @@
       "single": true,
       "optional": true,
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "male"
           ]
@@ -954,7 +1185,7 @@
       "ageMax": 25,
       "single": true,
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "male"
           ]
@@ -972,7 +1203,7 @@
       "title": "Fertility or Reproductive Concerns?",
       "titleOther": "Fertility or Reproductive Concerns for {name}?",
       "showIf": {
-        "sex": {
+        "routeSex": {
           "in": [
             "male"
           ]
@@ -1044,154 +1275,6 @@
           "label": "No"
         }
       ]
-    },
-    {
-      "key": "sexVariation",
-      "kind": "choice",
-      "presentation": "rows",
-      "optional": true,
-      "title": "Do you have a variation in sex characteristics?",
-      "titleOther": "Does {name} have a variation in sex characteristics?",
-      "choices": [
-        {
-          "value": "yes",
-          "label": "Yes"
-        },
-        {
-          "value": "no",
-          "label": "No"
-        },
-        {
-          "value": "unknown",
-          "label": "I don’t know"
-        },
-        {
-          "value": "prefer-not",
-          "label": "Prefer not to say"
-        }
-      ],
-      "describeValue": "yes",
-      "describeKey": "sexVariationName",
-      "describeLabel": "If you know your variation, you can name it here.",
-      "describePlaceholder": "If you know your variation, you can name it here.",
-      "showIf": {
-        "sexCharacteristicsAsk": {
-          "in": [
-            "yes"
-          ]
-        }
-      },
-      "note": "Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
-    },
-    {
-      "key": "sexCharacteristics",
-      "kind": "text",
-      "optional": true,
-      "title": "Which of these do you currently have?",
-      "titleOther": "Which of these does {name} currently have?",
-      "none": "None of these",
-      "suggestions": [
-        {
-          "label": "Ovaries"
-        },
-        {
-          "label": "Uterus"
-        },
-        {
-          "label": "Testes"
-        },
-        {
-          "label": "Breast tissue"
-        },
-        {
-          "label": "Penis"
-        },
-        {
-          "label": "Vagina"
-        }
-      ],
-      "showIf": {
-        "sexCharacteristicsAsk": {
-          "in": [
-            "yes"
-          ]
-        }
-      },
-      "note": "Pick as many as apply, or none. Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
-    },
-    {
-      "key": "hormoneTherapy",
-      "kind": "choice",
-      "presentation": "yesNo",
-      "optional": true,
-      "title": "Are you taking hormones or hormone-blocking medicine?",
-      "titleOther": "Is {name} taking hormones or hormone-blocking medicine?",
-      "choices": [
-        {
-          "value": "yes",
-          "label": "Yes"
-        },
-        {
-          "value": "no",
-          "label": "No"
-        }
-      ],
-      "expandValues": [
-        "yes"
-      ],
-      "expandKey": "hormoneTherapyPrescribed",
-      "expandTitle": "Is a healthcare provider prescribing this therapy?",
-      "expandChoices": [
-        {
-          "value": "yes",
-          "label": "Yes"
-        },
-        {
-          "value": "no",
-          "label": "No"
-        }
-      ],
-      "showIf": {
-        "sexCharacteristicsAsk": {
-          "in": [
-            "yes"
-          ]
-        }
-      },
-      "note": "Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
-    },
-    {
-      "key": "sexProcedures",
-      "kind": "text",
-      "optional": true,
-      "title": "Have you had any of these surgeries or procedures?",
-      "titleOther": "Has {name} had any of these surgeries or procedures?",
-      "none": "None of these",
-      "suggestions": [
-        {
-          "label": "Gonadectomy"
-        },
-        {
-          "label": "Hysterectomy"
-        },
-        {
-          "label": "Orchiectomy"
-        },
-        {
-          "label": "Chest or breast surgery"
-        },
-        {
-          "label": "Genital surgery"
-        }
-      ],
-      "showIf": {
-        "sexCharacteristicsAsk": {
-          "in": [
-            "yes"
-          ]
-        }
-      },
-      "note": "Pick as many as apply, or none. Optional. Your answers are never sold or shared, are encrypted, and are used only to tailor your health education."
     }
   ]
 }

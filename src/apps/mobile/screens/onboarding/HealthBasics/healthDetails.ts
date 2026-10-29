@@ -30,6 +30,12 @@ const LABELS: Record<string, string> = {
   allergies: 'Allergies',
   genesisGold: 'Genesis Gold®',
   guardianNames: 'Guardians',
+  sexVariation: 'Variation in sex characteristics',
+  sexCharacteristics: 'Body',
+  hormoneTherapy: 'Sex hormones or blockers',
+  hormoneTherapyNote: 'Hormone notes',
+  sexProcedures: 'Surgeries or procedures',
+  sexProceduresNote: 'Procedure notes',
 };
 
 /** Set once at onboarding and shown read-only afterwards (designer, 2026-10-21).

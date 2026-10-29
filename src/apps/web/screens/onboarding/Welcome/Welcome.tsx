@@ -58,7 +58,7 @@ export default function Welcome() {
           <DeborahBlob size={112} label={persona.name} />
           <div className={styles.note} data-placeholder={persona.status === 'placeholder' || undefined}>
             <TextReveal as="h1" className={styles.hello} text={persona.welcomeTitle} delay={500} />
-            <TextReveal className={styles.lede} text="Inspired by Genesis Health Products’ 30 years of caring for women and families, I’m here to listen and help you feel confident about your health." delay={800} />
+            <TextReveal className={styles.lede} text={persona.welcomeNote} delay={800} />
           </div>
         </div>
         <div className={styles.bottom}>

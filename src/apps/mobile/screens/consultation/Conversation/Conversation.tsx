@@ -15,7 +15,7 @@ import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import type { Message } from '@shared/types/domain';
 import { ActionSheet } from '@mobile/ui';
 import { AnimatePresence, Aura, GradientShift, MotionDiv } from '@mobile/ui';
-import { AiDisclosure, ChatHeader, Composer, Greeting, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
+import { AiDisclosure, ChatHeader, Composer, Greeting, QuickSymptoms, ScrollToLatest, SuggestionList, SymptomPicker, TrialCounter, withSymptoms } from '@mobile/patterns/chat';
 import { useConversation } from '@mobile/hooks/useConversation';
 import { useProfileSwitcher } from '@mobile/hooks/useProfileSwitcher';
 import { useNav, useNavStore, useScreenParams } from '@mobile/navigation';
@@ -303,6 +303,10 @@ export default function Conversation() {
         {/* Empty chat shows starter suggestions; the intake tile waits until after an answer (design 2026-10-21). */}
         {isEmpty && !intakeMode && (
           <SuggestionList suggestions={suggestions} onSelect={(x) => send(x.text, x.scriptId)} />
+        )}
+        {/* Quick symptom picks between the suggestions and the composer; picks ride as composer tokens (2026-10-28). */}
+        {isEmpty && !intakeMode && (
+          <QuickSymptoms selected={symptoms} onToggle={(s) => setSymptoms((cur) => (cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]))} onMore={() => setSymptomSheet(true)} />
         )}
         {profile && profilePct < 1 && conversation?.status === 'answered' && (
           <IntakeTile progress={profilePct} onOpen={() => push('M-2.14')} />

@@ -106,6 +106,8 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
     PDF_GENDER_LABEL[gender],
     pronounPickFor(gender),
   ];
+  // Adults (18+): optional sex-characteristics section — No variation, body/procedures "None of these", No hormones.
+  if (band === 'adult' || band === 'senior') out.push(/^No$/, /^No$/);
   if (band === 'senior') {
     out.push(/^No$/); // Genesis Gold
   } else if (sex === 'female') {
@@ -123,12 +125,22 @@ function picksFor(gender: PdfGender, band: PdfAgeBand): RegExp[] {
   return out;
 }
 
+/** Adults' optional sex-characteristics section, as the personas answer it (no change to routing). */
+const SEX_CHARACTERISTIC_STEPS = ['sexVariation', 'sexCharacteristics', 'hormoneTherapy', 'sexProcedures'];
+const SEX_CHARACTERISTIC_SEED = {
+  sexVariation: 'no',
+  sexCharacteristics: 'None of these',
+  hormoneTherapy: 'no',
+  sexProcedures: 'None of these',
+};
+
 /** Steps that should appear for this persona (mirrors healthBasics.json showIf). */
 export function expectedStepsFor(gender: PdfGender, band: PdfAgeBand): string[] {
   if (band === 'lt13') return ['profileFor', 'birthDate'];
   const sex = sexPickFor(gender);
   const keys = ['profileFor', 'birthDate', 'sex', 'gender', 'pronouns'];
   const teen = band === 'teen';
+  if (!teen) keys.push(...SEX_CHARACTERISTIC_STEPS);
   if (band === 'senior') {
     keys.push('medications', 'supplements', 'genesisGold');
     return keys;
@@ -161,6 +173,7 @@ export function seedAnswersFor(gender: PdfGender, band: PdfAgeBand, thisYear = n
   a.sex = sex;
   a.pronouns = pronounValueFor(gender);
   const teen = band === 'teen';
+  if (!teen) Object.assign(a, SEX_CHARACTERISTIC_SEED);
   if (band === 'senior') {
     // Meds block only.
   } else if (sex === 'female') {
