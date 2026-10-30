@@ -3,13 +3,18 @@
   align-content: start;
   gap: var(--space-6);
   padding-inline: 0; /* DerivedPage insets the body; aligns with the title */
+  /* One 15px reading size for every row, note and info line on this page (designer, 2026-10-31). */
+  --fs-headline: 15px; --lh-headline: 22px;
+  --fs-subhead: 15px; --lh-subhead: 22px;
+  --fs-footnote: 15px; --lh-footnote: 22px;
+  --fs-callout: 15px; --lh-callout: 22px;
 }
 /* Same list card as Settings (M-10.1), design 2026-10-21. */
 .group { overflow: hidden; border-radius: var(--radius-xl); background: var(--surface-field-lift); }
 .group > button { padding-inline: var(--space-4); }
 .heading { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
 .text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
-.note { margin-top: calc(var(--space-4) * -1); padding: 0 var(--space-5); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
+.note { margin-top: calc(var(--space-4) * -1); padding: 0 var(--space-5); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: #5a4f55; /* lighter neutral grey, still ≥7:1 on cream */ }
 /* Open info note (no panel): icon + title + text straight on the canvas. */
 .info { display: flex; gap: var(--space-3); padding: 0 var(--space-4); }
 .infoIcon { flex: none; padding-top: 2px; color: var(--color-ink-secondary); }
@@ -19,3 +24,6 @@
 /* Same container as Settings (designer, 2026-10-29): hairline edge, 20px sides. */
 .group { box-shadow: inset 0 0 0 1px var(--stroke-card); padding-block: var(--space-1); }
 .group > button { padding-inline: var(--space-5); }
+
+/* Line under the page title. */
+.lede { margin: 0; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }

@@ -25,3 +25,4 @@ export const INTERNAL_WEB = `${INTERNAL_PREFIX}/web`;
 export const INTERNAL_WID = `${INTERNAL_PREFIX}/wid`;
 export const INTERNAL_DESIGN_SYSTEM = `${INTERNAL_PREFIX}/design-system`;
 export const INTERNAL_HOME = `${INTERNAL_PREFIX}/home`;
+export const INTERNAL_EMAIL = `${INTERNAL_PREFIX}/email`;

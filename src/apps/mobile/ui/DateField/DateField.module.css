@@ -12,5 +12,13 @@
 .field [data-empty] { color: var(--color-ink-placeholder); }
 .icon { flex: none; color: var(--color-ink-secondary); }
 .error { font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-danger-ink); }
-.panel { display: grid; justify-items: end; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-lg); background: var(--white); box-shadow: inset 0 0 0 1px var(--stroke-card); }
-.panel > :first-child { justify-self: stretch; }
+/* Floating calendar overlay: soft shadow allowed (DESIGN.md), same as ui/Select's list. */
+.positioner { z-index: 50; outline: none; width: min(344px, var(--anchor-width)); }
+.panel {
+  display: grid; padding: var(--space-4); border-radius: var(--radius-lg); background: var(--white);
+  box-shadow: 0 8px 24px rgb(97 57 119 / 0.14), 0 1px 3px rgb(97 57 119 / 0.08);
+  transform-origin: var(--transform-origin); outline: none;
+  transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out);
+}
+.panel[data-starting-style], .panel[data-ending-style] { opacity: 0; transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) { .panel { transition: none; } .panel[data-starting-style], .panel[data-ending-style] { transform: none; } }

@@ -1,7 +1,7 @@
 /** M-9.8 edit mode: Visit · Provider seen · What I took away · lists · My own notes. */
 import { VISIT_CHECK_THIS } from '@shared/engine';
 import type { VisitOutcome } from '@shared/types/domain';
-import { DateWheel, Input, Select } from '@mobile/ui';
+import { DateField, Input, Select } from '@mobile/ui';
 import { IntakeSectionHeader } from '@mobile/patterns/widgets';
 import { MED_CHANGE_OPTIONS, SPECIALTY_OPTIONS, TEST_STATUS_OPTIONS } from './options';
 import { Area } from './Area';
@@ -28,11 +28,12 @@ export function EditSections({ draft, update, confidence = {}, today }: EditSect
     <>
       <section className={styles.section}>
         <IntakeSectionHeader title="Visit" />
-        <DateWheel
+        <DateField
           label="Visit date"
-          value={draft.visitDate}
+          value={draft.visitDate ?? ''}
           minYear={year - 2}
           maxYear={year}
+          defaultYear={year}
           onChange={(iso) => set((d) => { d.visitDate = iso > today ? today : iso; })}
         />
         {draft.reason && <p className={styles.meta}>Reason for the visit: {draft.reason}</p>}

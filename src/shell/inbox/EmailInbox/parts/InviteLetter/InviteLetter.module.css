@@ -1,0 +1,22 @@
+/* Branded invite email (Your Oracle) in the app Oracle skin (mobile.skin.deborah.css in each app):
+   accent #3a0353, ink #302335, cream canvas under the desktop onboarding backdrop. Values are written out because
+   the inbox page does not load the app theme. One centred column, no containers. */
+.backdrop {
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(rgb(249 247 240 / 0.5), rgb(249 247 240 / 0.5)),
+    #f9f7f0 url("/images/health-basics-bg.webp") center / cover no-repeat;
+}
+.letter { display: grid; justify-items: center; gap: var(--space-6); max-width: 560px; margin: 0 auto; padding: var(--space-12) var(--space-6); text-align: center; }
+.logo { display: block; width: 72px; height: 72px; }
+.body { display: grid; gap: var(--space-5); width: 100%; }
+.title { margin: 0; font: 400 36px / 1.1 var(--font-display); color: #302335; text-wrap: balance; }
+.rule { width: 48px; height: 1px; margin: 0 auto; background: var(--gold-600); }
+.text { margin: 0; font: 400 16px / 1.6 var(--font-body); color: #4d3d54; }
+.cta { justify-self: center; min-width: 220px; height: 52px; margin-top: var(--space-2); padding: 0 var(--space-8); border-radius: var(--radius-full); background: #3a0353; color: #ffffff; font: 500 16px / 1 var(--font-body); }
+.cta:hover { background: #2e0242; }
+.cta:focus-visible, .alt:focus-visible { outline: 2px solid #3a0353; outline-offset: 3px; }
+.alt { justify-self: center; font: 400 14px / 1.4 var(--font-body); color: #3a0353; text-decoration: underline; text-underline-offset: 3px; }
+.note { margin: 0; padding-top: var(--space-5); border-top: 1px solid #e5d8eb; font: 400 13px / 1.5 var(--font-body); color: #54455a; }
+.foot { display: grid; gap: var(--space-1); font: 400 12px / 1.5 var(--font-body); color: #54455a; }
+.foot p { margin: 0; }

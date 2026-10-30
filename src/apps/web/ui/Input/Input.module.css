@@ -68,3 +68,6 @@
 /* The host class lands on the root; the root and control just fill it. */
 .inline { display: flex; align-items: center; }
 .inline .control { flex: 1; min-width: 0; align-self: stretch; display: flex; }
+
+/* Disabled (the teen invite email): muted fill and text, no interaction. */
+.field:disabled { background: var(--color-surface-tonal, var(--field-fill)); color: var(--color-ink-secondary); -webkit-text-fill-color: var(--color-ink-secondary); opacity: 1; cursor: not-allowed; }

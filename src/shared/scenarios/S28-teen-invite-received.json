@@ -5,11 +5,11 @@
     "kind": "screen",
     "root": "preauth",
     "stack": [
-      "M-1.12"
+      "M-1.2"
     ],
     "params": {
-      "M-1.12": {
-        "email": "maya@icloud.com"
+      "M-1.2": {
+        "invite": "maya@icloud.com"
       }
     }
   },

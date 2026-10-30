@@ -13,6 +13,8 @@ import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
 import { IPhoneFrame } from '../device/IPhoneFrame';
 import { WebDeviceHost } from '../browser/WebDeviceHost';
+import { EmailInbox } from '../inbox/EmailInbox';
+import { INTERNAL_MOBILE, INTERNAL_WEB } from '@shared/utils/internalPaths';
 import { ScreenCaption } from './parts/ScreenCaption';
 import { ShellToast } from './parts/ShellToast';
 import { ScreenNote } from '../notes/ScreenNote';
@@ -23,7 +25,7 @@ import styles from './Shell.module.css';
 
 export interface ShellProps {
   /** `widgets`: /wid. `design-system`: /design-system. `home-lab`: /home simple layout lab. */
-  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'home-lab' | 'tree-lab';
+  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'home-lab' | 'tree-lab' | 'email';
 }
 
 export function Shell({ platform }: ShellProps) {
@@ -37,7 +39,9 @@ export function Shell({ platform }: ShellProps) {
     <div className={styles.root} data-theme={theme}>
       <TopNav />
       <main className={styles.stage}>
-        {platform === 'design-system' ? (
+        {platform === 'email' ? (
+          <EmailInbox mobilePath={INTERNAL_MOBILE} webPath={INTERNAL_WEB} />
+        ) : platform === 'design-system' ? (
           <div className={styles.fullBleed}>
             <DesignSystemApp />
           </div>

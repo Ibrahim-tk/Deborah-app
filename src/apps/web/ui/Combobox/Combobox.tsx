@@ -24,9 +24,14 @@ export interface ComboboxProps<T> {
   searchable?: boolean;
   emptyText?: string;
   label: string;
+  /** Pre-filtered results for large lists (e.g. world cities): turns off built-in filtering. */
+  filteredItems?: T[];
+  onSearch?: (query: string) => void;
+  /** Popup as wide as the trigger, aligned to its start (full-width form fields). */
+  matchTrigger?: boolean;
 }
 
-export function Combobox<T>({ items, value, onValueChange, itemToString, itemKey, renderItem, trigger, searchPlaceholder = 'Search', searchable = true, emptyText = 'No results', label }: ComboboxProps<T>) {
+export function Combobox<T>({ items, value, onValueChange, itemToString, itemKey, renderItem, trigger, searchPlaceholder = 'Search', searchable = true, emptyText = 'No results', label, filteredItems, onSearch, matchTrigger }: ComboboxProps<T>) {
   return (
     <Base.Root
       items={items}
@@ -34,10 +39,11 @@ export function Combobox<T>({ items, value, onValueChange, itemToString, itemKey
       onValueChange={(v) => v !== null && onValueChange(v as T)}
       itemToStringLabel={itemToString}
       isItemEqualToValue={(a, b) => itemKey(a as T) === itemKey(b as T)}
+      {...(onSearch && { filter: null, filteredItems, onInputValueChange: (q: string) => onSearch(q) })}
     >
       <Base.Trigger render={trigger} aria-label={label} />
       <Base.Portal container={document.getElementById(OVERLAY_HOST_ID)}>
-        <Base.Positioner side="bottom" align="end" sideOffset={8} className={styles.positioner}>
+        <Base.Positioner side="bottom" align={matchTrigger ? 'start' : 'end'} sideOffset={8} className={matchTrigger ? `${styles.positioner} ${styles.matchTrigger}` : styles.positioner}>
           <Base.Popup className={styles.popup} aria-label={label}>
             {searchable && (
               <label className={styles.search}>

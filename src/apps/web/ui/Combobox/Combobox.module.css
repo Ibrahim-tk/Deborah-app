@@ -1,5 +1,7 @@
 /* Floating element: soft shadow allowed (DESIGN.md). */
 .positioner { z-index: 50; outline: none; }
+.matchTrigger { width: var(--anchor-width); }
+.matchTrigger .popup { width: 100%; }
 .popup {
   width: min(320px, calc(var(--available-width) - 16px));
   max-height: min(360px, var(--available-height));

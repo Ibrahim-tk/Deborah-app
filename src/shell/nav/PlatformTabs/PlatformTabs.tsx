@@ -1,9 +1,10 @@
-/** @shell PlatformTabs — Mobile | Web | Design system | Components | Home. Keyboard: 1–5. */
+/** @shell PlatformTabs — Mobile | Web | Email | Design system | Components | Home. Keyboard: 1–5. */
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShellStore } from '../../shell.store';
 import {
   INTERNAL_DESIGN_SYSTEM,
+  INTERNAL_EMAIL,
   INTERNAL_HOME,
   INTERNAL_MOBILE,
   INTERNAL_WID,
@@ -21,6 +22,7 @@ export function PlatformTabs() {
   const isSystem = pathname.startsWith(INTERNAL_DESIGN_SYSTEM);
   const isWidgets = pathname.startsWith(INTERNAL_WID);
   const isHome = pathname.startsWith(INTERNAL_HOME);
+  const isEmail = pathname.startsWith(INTERNAL_EMAIL);
 
   const goProfile = () => navigate(INTERNAL_MOBILE);
   const goWeb = () => navigate(lastWebPath);
@@ -43,11 +45,15 @@ export function PlatformTabs() {
 
   return (
     <div className={styles.root} role="tablist" aria-label="Platform">
-      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets && !isHome} className={styles.tab} onClick={goProfile} title="Mobile (1)">
+      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets && !isHome && !isEmail} className={styles.tab} onClick={goProfile} title="Mobile (1)">
         Mobile
       </button>
       <button type="button" role="tab" aria-selected={isWeb} className={styles.tab} onClick={goWeb} title="Web (2)">
         Web
+      </button>
+      {/* Dummy inbox: the teen's invitation email (story 1.5). */}
+      <button type="button" role="tab" aria-selected={isEmail} className={styles.tab} onClick={() => navigate(INTERNAL_EMAIL)}>
+        Email
       </button>
       <button type="button" role="tab" aria-selected={isSystem} className={styles.tab} onClick={goSystem} title="Design system (3)">
         Design system

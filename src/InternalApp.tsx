@@ -11,6 +11,7 @@ export default function InternalApp() {
       <Route path="web/*" element={<Shell platform="web" />} />
       <Route path="wid" element={<Shell platform="widgets" />} />
       <Route path="design-system" element={<Shell platform="design-system" />} />
+      <Route path="email" element={<Shell platform="email" />} />
       <Route path="home" element={<Shell platform="home-lab" />} />
       <Route path="tree" element={<Shell platform="tree-lab" />} />
       <Route path="*" element={<Navigate to="mobile" replace />} />

@@ -181,7 +181,7 @@ export default function CreateProfile() {
                   value={email}
                   autoComplete="email"
                   inputMode="email"
-                  readOnly={Boolean(invite)}
+                  disabled={Boolean(invite)}
                   autoFocus={!invite}
                   error={errors.email}
                   onChange={(e) => {

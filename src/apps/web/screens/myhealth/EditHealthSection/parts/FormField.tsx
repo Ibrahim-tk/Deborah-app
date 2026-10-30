@@ -71,7 +71,7 @@ export function FormField({ step, label, shown, answers, set }: FormFieldProps) 
           }}
         />
         {describing && step.describeKey && (
-          <Input label={step.describeLabel ?? 'Describe'} placeholder={step.describePlaceholder} value={answers[step.describeKey] ?? ''} onChange={(e) => set(step.describeKey!, e.target.value)} />
+          <Input label="Please specify" placeholder={step.describePlaceholder} value={answers[step.describeKey] ?? ''} onChange={(e) => set(step.describeKey!, e.target.value)} />
         )}
         {expanding && expandKey && (
           <Select
@@ -83,6 +83,14 @@ export function FormField({ step, label, shown, answers, set }: FormFieldProps) 
         )}
       </div>
     );
+  }
+
+  // Age questions (e.g. "Age puberty started"): a dropdown in the form; the wheel stays in the intake only.
+  if (step.presentation === 'ageWheel') {
+    const min = step.ageMin ?? 7;
+    const max = step.ageMax ?? 18;
+    const options = Array.from({ length: max - min + 1 }, (_, i) => String(min + i)).map((n) => ({ value: n, label: n }));
+    return <Select label={label} options={options} value={value || undefined} placeholder="Choose an age" onChange={(v) => set(step.key, v)} />;
   }
 
   // Lists and free text keep the onboarding control (add tiles, text box).

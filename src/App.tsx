@@ -5,6 +5,7 @@ import { flowVersionFrom, flowVersionHref } from '@shared/utils/flowVersion';
 import { legacyRedirectTarget } from '@shared/utils/internalPaths';
 import ClientApp from './ClientApp';
 import ClientWebApp from './ClientWebApp';
+import { ClientEmailShell } from '@shell/ClientShell';
 
 const InternalApp = lazy(() => import('./InternalApp'));
 const InternalV1App = lazy(() => import('./InternalV1App'));
@@ -48,6 +49,8 @@ export default function App() {
       <Route path="/" element={<ClientApp />} />
       {/* Client desktop web — no internal password gate. Internal tooling remains at /internal/web. */}
       <Route path="/web/*" element={<ClientWebApp />} />
+      {/* Dummy inbox with the teen's invitation email (story 1.5). */}
+      <Route path="/email" element={<ClientEmailShell />} />
       <Route
         path="/internal/*"
         element={

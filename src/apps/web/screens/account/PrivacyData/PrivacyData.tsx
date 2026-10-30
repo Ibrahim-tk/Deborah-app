@@ -9,7 +9,7 @@
 import { useCallback, useState } from 'react';
 import { selectIsTeenAccount, useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Divider, Icon, ListRow, useAlert } from '@web/ui';
+import { Divider, ListRow, useAlert } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useNav } from '@web/navigation';
 import { DeleteConfirmSheet } from './parts/DeleteConfirmSheet';
@@ -63,6 +63,8 @@ export default function PrivacyData() {
     <>
       <DerivedPage title="Privacy & data" composerPlaceholder="Ask Oracle about your privacy…">
         <div className={styles.stack} data-xref="M-10.2 · Privacy & data">
+          {/* Plain line under the page title, no icon (designer, 2026-10-31). */}
+          <p className={styles.lede}>Your health information is never used for training without your consent.</p>
           <div className={styles.group}>
             <ListRow
               title="Download my data"
@@ -84,19 +86,9 @@ export default function PrivacyData() {
             />
           </div>}
 
-          {/* Open note on the canvas, no tinted panel (design 2026-10-21). */}
-          <div className={styles.info}>
-            <span className={styles.infoIcon} aria-hidden><Icon name="lock" size={18} /></span>
-            <div>
-              <p className={styles.infoTitle}>How your data is used</p>
-              <p className={styles.infoText}>Your health information is never used for training without your consent.</p>
-            </div>
-          </div>
-
           <div className={styles.group}>
             <ListRow title={teen ? 'Request to delete all my information' : 'Delete my account and all data'} destructive trailing={null} onPress={startDelete} />
           </div>
-          <p className={styles.note}>Deletion is certified within 30 days.</p>
         </div>
       </DerivedPage>
       <DeleteConfirmSheet open={confirming} onClose={closeConfirm} onConfirm={deleteAll} />

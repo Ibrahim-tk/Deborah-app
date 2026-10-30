@@ -33,6 +33,10 @@
     ],
     "cta": "Finish Sign Up"
   },
+  "setup": {
+    "title": "Create your teen account",
+    "lede": "Your parent or guardian invited you ({email}) to your own private Your Oracle account. Let’s set it up."
+  },
   "welcome": {
     "title": "Your Oracle for teens",
     "body": "Your account gives you access to health education through Oracle. Some features available to adults, such as product recommendations and Your Wellness Plan, are not available on teen accounts.",

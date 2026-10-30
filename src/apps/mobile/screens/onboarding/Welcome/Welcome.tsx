@@ -14,7 +14,7 @@
  * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
  */
 import { useId, useState, type FormEvent, type MouseEvent } from 'react';
-import { persona } from '@shared/data';
+import { persona, teenAccountCopy } from '@shared/data';
 import { Aura, Button, DeborahBlob, GradientShift, Icon, Input, TextReveal } from '@mobile/ui';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import styles from './Welcome.module.css';
@@ -62,11 +62,22 @@ export default function Welcome() {
         <div className={styles.intro}>
           <DeborahBlob size={112} label={persona.name} />
           <div className={styles.note} data-placeholder={persona.status === 'placeholder' || undefined}>
-            <TextReveal as="h1" className={styles.hello} text={persona.welcomeTitle} delay={500} />
-            <TextReveal className={styles.lede} text={persona.welcomeNote} delay={800} />
+            {/* Teen invite: say plainly this is the teen's own sign-up (story 1.5). */}
+            <TextReveal as="h1" className={styles.hello} text={invite ? teenAccountCopy.setup.title : persona.welcomeTitle} delay={500} />
+            {invite ? (
+              // The parent-entered email sits inside the sentence, bold, same size and colour.
+              <p className={styles.lede}>
+                {teenAccountCopy.setup.lede.split('{email}')[0]}
+                <strong className={styles.inviteAddress}>{invite}</strong>
+                {teenAccountCopy.setup.lede.split('{email}')[1]}
+              </p>
+            ) : (
+              <TextReveal className={styles.lede} text={persona.welcomeNote} delay={800} />
+            )}
           </div>
         </div>
         <div className={styles.bottom}>
+          {/* The email the parent entered; it comes from the invitation and can't be changed. */}
           <Input
             label="What should we call you?"
             placeholder="First name"

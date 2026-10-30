@@ -89,3 +89,6 @@
 .intro { justify-items: center; }
 .note { justify-items: center; text-align: center; }
 .hello, .lede { margin-inline: auto; }
+
+/* Teen invite: the parent-entered email, bold inside the lede (same size and colour). */
+.inviteAddress { font-weight: var(--weight-medium); color: inherit; }

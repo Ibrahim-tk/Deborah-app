@@ -5,7 +5,7 @@ import styles from './TeenFlowButton.module.css';
 
 const OPTIONS = [
   { id: 'S27', label: 'Parent — invite your teen', text: 'Family plan › Family profiles › Invite your teen to their own account.' },
-  { id: 'S28', label: 'Teen — open the invitation', text: 'The invite email › name › age › password with the email locked › teen basics › chat.' },
+  { id: 'S28', label: 'Teen — after Finish Sign Up', text: 'Skips the Email tab: name › age › password with the email locked › teen basics › chat.' },
 ];
 
 export function TeenFlowButton() {
