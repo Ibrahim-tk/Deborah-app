@@ -3,7 +3,7 @@
  *  · `scatter` (Health Basics exit): the canopy sheds its blossoms in three gusts; each petal tumbles in 3D,
  *    sways on its way across the page and thins into the air. Near petals are larger and softly out of focus,
  *    far ones small and faint, so the drift has depth.
- *  · `settle` (Deborah's welcome arrival): the last few stragglers drift down through the new screen.
+ *  · `settle` (Oracle's welcome arrival): the last few stragglers drift down through the new screen.
  * Pure CSS; every petal gets a seeded start, path, sway, spin, depth and timing through custom properties.
  */
 import type { CSSProperties } from 'react';

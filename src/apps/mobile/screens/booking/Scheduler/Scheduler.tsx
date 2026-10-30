@@ -1,6 +1,6 @@
 /**
  * @screen  M-8.3 · Pick a time (simulated scheduler)
- * @flow    F08 Book Deborah (human escalation)
+ * @flow    F08 Book a consultation (human escalation)
  * @states  no time chosen · time chosen (summary bar) · processing (1 s) · → replaced by M-8.4
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470
  * @spec    docs/ux/F08-book-deborah.md#m-83--pick-a-time-simulated-scheduler
@@ -57,7 +57,7 @@ export default function Scheduler() {
         profileId: s.activeProfileId,
         slot,
         durationMin: bookingInfo.durationMin,
-        // OPEN: price — 0 until Deborah's consultation price is known.
+        // OPEN: price — 0 until clinical review's consultation price is known.
         price: bookingInfo.price ?? 0,
         state,
         shareHistory,

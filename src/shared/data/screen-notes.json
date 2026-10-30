@@ -2,7 +2,7 @@
   "M-2.0": {
     "title": "Home",
     "flow": "F02 Core consultation",
-    "note": "The three suggestion chips under “How are you feeling today?” are different demo stories — tap them one by one to walk a real chat, then follow into Visit Notes after an answer. Typing free text works too. From here you can also open My Health, My Notes, labs, or the Wellness Plan card when one exists."
+    "note": "The three suggestion chips under “How are you feeling today?” are different demo stories — tap them one by one to walk a real chat, then follow into My Visit Notes after an answer. Typing free text works too. From here you can also open My Health, My Visit Notes, or the Wellness Plan card when one exists."
   },
   "M-1.1": {
     "title": "Splash",
@@ -145,7 +145,7 @@
     "note": "'Booked with the Oracle', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
   },
   "M-9.1": {
-    "title": "My Notes",
+    "title": "My Visit Notes",
     "flow": "F09 My Health records",
     "note": "Saved consultations, Visit Notes, and labs for this person. Open an old visit note to reread it, or start logging what changed after a provider visit. Labs here can be opened or asked about in chat."
   },
@@ -177,7 +177,7 @@
   "M-9.8": {
     "title": "Log your visit",
     "flow": "F09c Log your visit (Miro Step 6)",
-    "note": "Log what the provider said, tests ordered, and medication changes. Kind of provider is required before Save — leave it blank to see the gate. Open an older visit note from My Notes to reread what was already logged."
+    "note": "Log what the provider said, tests ordered, and medication changes. Kind of provider is required before Save — leave it blank to see the gate. Open an older visit note from My Visit Notes to reread what was already logged."
   },
   "M-10.1": {
     "title": "Account",

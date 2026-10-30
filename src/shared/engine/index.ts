@@ -37,7 +37,7 @@ export { CONSENT_ID } from './intake';
 
 export { ANSWER_REQUEST_LABEL } from './plans';
 export { greeting } from './memory';
-export { forFamilyMember, pronounForms } from './perspective';
+export { forFamilyMember, pronounForms, resolvePronouns } from './perspective';
 export { ageBandFor, ageGroupFor, ageOfMajority, ageOf, ageOn, isChildRelationship, isMinor } from './profile';
 export { journeyFor, missingBasics, planClarifiers, CLARIFY } from './journey';
 export { symptomGroupOf } from './classifier';
@@ -168,7 +168,7 @@ function handleText(ctx: EngineContext, text: string, suggestionScript?: string)
   return guard.escalation ? [...withMeds, ...escalationSteps(ctx)] : withMeds;
 }
 
-/** Medication card goes right after the user's bubble, before Deborah's normal reply. */
+/** Medication card goes right after the user's bubble, before the Oracle's normal reply. */
 function insertAfterUser(plan: EnginePlan, steps: EnginePlan): EnginePlan {
   const i = plan.findIndex((s) => s.type === 'message' && s.message.role === 'user');
   return i < 0 ? [...steps, ...plan] : [...plan.slice(0, i + 1), ...steps, ...plan.slice(i + 1)];

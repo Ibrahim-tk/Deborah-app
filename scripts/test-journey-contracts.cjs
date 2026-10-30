@@ -46,7 +46,13 @@ test('None stays exclusive and stable IDs survive toggles', () => {
 });
 test('every existing scenario loads without losing its active profile', () => {
   const { SEEDS } = source('src/shared/scenarios');
-  for (const id of Object.keys(SEEDS)) { assert.equal(loadScenario(id).ok,true,id); const s=store.getState(); if (id !== 'S01') assert.ok(s.profiles.byId[s.activeProfileId],id); }
+  for (const id of Object.keys(SEEDS)) {
+    assert.equal(loadScenario(id).ok, true, id);
+    const s = store.getState();
+    // Preauth / empty worlds (S01, S28 teen invite, …) have no profiles yet.
+    if (s.profiles.order.length === 0) continue;
+    assert.ok(s.profiles.byId[s.activeProfileId], id);
+  }
 });
 test('provider ending waits for review, then has seven sections with no quota or product plan', async () => {
   const { s, c, ctx }=seed();
@@ -293,11 +299,10 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     const mixed = keys(me(30, { sex: 'male', sexCharacteristics: 'Uterus, Testes' }));
     assert.ok(mixed.includes('otherPuberty') && mixed.includes('reproductive'));
     assert.equal(steps.routeSexFor({ sex: 'male' }), 'male');
-    // Optional context fields only when relevant.
+    // Optional hormone context only when relevant; procedure follow-up note removed (user 2026-10-31).
     assert.ok(!keys(me(30)).includes('hormoneTherapyNote'));
     assert.ok(keys(me(30, { hormoneTherapy: 'yes' })).includes('hormoneTherapyNote'));
-    assert.ok(!keys(me(30, { sexProcedures: 'None of these' })).includes('sexProceduresNote'));
-    assert.ok(keys(me(30, { sexProcedures: 'Hysterectomy' })).includes('sexProceduresNote'));
+    assert.ok(!keys(me(30, { sexProcedures: 'Hysterectomy' })).includes('sexProceduresNote'));
     // Hormones asked once: "No" on the section hides the menopause HRT question.
     assert.ok(keys(me(50, { reproductive: 'peri-menopausal' })).includes('hrtStatus'));
     assert.ok(!keys(me(50, { reproductive: 'peri-menopausal', hormoneTherapy: 'no' })).includes('hrtStatus'));
@@ -307,7 +312,7 @@ if (process.env.FLOW_TEST_VERSION !== 'v1') {
     const hb = source('src/shared/data/intake/healthBasics.json');
     const step = (k) => hb.steps.find((s) => s.key === k);
     assert.equal(step('gender').title, 'How would you describe your gender?');
-    assert.deepEqual(step('gender').choices.map((c) => c.label), ['Woman', 'Man', 'Non-binary', 'Agender', 'Not listed', 'Prefer not to say']);
+    assert.deepEqual(step('gender').choices.map((c) => c.label), ['Man', 'Woman', 'Non-binary', 'Agender', 'Not listed', 'Prefer not to say']);
     assert.deepEqual(step('sex').choices.map((c) => c.label), ['Male', 'Female', 'Intersex', 'Prefer not to say']);
     assert.deepEqual(step('sexVariation').choices.map((c) => c.value), ['yes', 'no', 'unknown', 'prefer-not']);
     assert.deepEqual(step('hormoneTherapy').choices.map((c) => c.value), ['yes', 'no', 'unknown', 'prefer-not']);

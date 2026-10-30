@@ -56,7 +56,7 @@ export default function Conversation() {
   const toast = useToast();
   const intake = useIntakeFlow();
   const setChromeHidden = useNavStore((s) => s.setChromeHidden);
-  // Set by nav.openAsk(): M-7.4 "Ask Deborah about this" (prefill), M-7.1 "Start my first conversation" (focus).
+  // Set by nav.openAsk(): M-7.4 "Ask Oracle about this" (prefill), M-7.1 "Start my first conversation" (focus).
   // `onboardClosing`: guest signup finished HealthBasics — closing line then flush held send.
   const { prefill, focus, onboardClosing } = useScreenParams<{ prefill: string; focus: boolean; onboardClosing: boolean }>();
   const guest = useAppStore((s) => !s.accountId);
@@ -81,7 +81,7 @@ export default function Conversation() {
   // Tone Guide: signup → 3 chips; login → 4. Same gate as Home new vs returning.
   const isLogin = useAppStore((s) => s.authFlow === 'login');
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  // Miro Step 5 “No” branch: back to Ask Deborah with the composer ready.
+  // Miro Step 5 “No” branch: back to Ask Oracle with the composer ready.
   const actions = useMessageActions(profile?.id, () => inputRef.current?.focus());
 
   const [draft, setDraft] = useState(prefill ?? '');
@@ -101,10 +101,10 @@ export default function Conversation() {
     }
     wasEmpty.current = isEmpty;
   }, [isEmpty]);
-  // F11: once Deborah has replied to a shared document, her questions replace the starter list.
+  // F11: once Oracle has replied to a shared document, her questions replace the starter list.
   // Intake V2 stays out of the way: the empty chat is only the orb and one question. The in-chat
   // intake shows only when she already started it (resume); otherwise the profile fills from Home
-  // (My Health card, M-7.2) and from Deborah's questions at the point of need.
+  // (My Health card, M-7.2) and from Oracle's questions at the point of need.
   const intakeMode = intake.enabled && isEmpty && intake.progress.step !== 'consent' && intake.progress.step !== 'done';
   const aboutStep = intakeMode && intake.progress.step === 'about';
   const generating = busy && conversation?.status === 'generating';
@@ -114,7 +114,7 @@ export default function Conversation() {
   // Active question widgets live beside the question in the transcript. The composer remains
   // available for the existing typed-answer path; other intake screens retain their own controls.
   // The about-you step still needs free text, so it keeps the composer.
-  // Opened from "Complete your health profile": stay blank until Deborah's first question lands,
+  // Opened from "Complete your health profile": stay blank until Oracle's first question lands,
   // never flashing the empty-chat greeting or suggestions.
   const profiling = (conversation?.status === 'intake' || (intakeMode && !aboutStep)) && !emergencyOpen;
   const quizMsg = [...messages].reverse().find((m) => m.kind === 'intakeQuestion');
@@ -205,14 +205,14 @@ export default function Conversation() {
       ) {
         return void chat.answerIntake(quiz.questionId, ['other'], t);
       }
-      // Guest: send so Deborah starts thinking, then open the auth gate over the thread.
+      // Guest: send so Oracle starts thinking, then open the auth gate over the thread.
       if (guest) {
         const accepted = await chatSend(t, scriptId);
         if (!accepted) setDraft(t);
         presentSheet('M-4.0', { mode: 'create' });
         return;
       }
-      // After sign-up's health basics: consent alert first, so Deborah can answer directly.
+      // After sign-up's health basics: consent alert first, so Oracle can answer directly.
       await askConsent();
       // Gated by the free limit: the message stays in the composer (F04).
       const accepted = await chatSend(t, scriptId);
@@ -248,7 +248,7 @@ export default function Conversation() {
     ? isLogin
       ? suggestionsData.returning
       : suggestionsData.newSignup
-    : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile?.intake?.pronouns);
+    : thirdPerson(minor ? suggestionsData.teen : suggestionsData.family, name, profile);
   // Someone else's chat: quick start questions in third person, using their pronouns.
   // Empty chat: orb + heading, composer, then suggestions — one centered group.
   // Profile card can be closed for this visit (designer, 2026-10-29).
@@ -410,7 +410,7 @@ export default function Conversation() {
           {visitNotes && !emptyStart && (
             <VisitNotesThread
               answer={[...(conversation?.messages ?? [])].reverse().find((m) => m.kind === 'answer' && m.answer)?.answer}
-              topic={conversation?.topic ?? 'Your visit notes'}
+              topic={conversation?.topic ?? 'My Visit Notes'}
               onOpenNotes={(id) => (id ? setPreview({ conv: activeConversationId, noteId: id }) : open('M-9.1'))}
             />
           )}

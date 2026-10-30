@@ -34,7 +34,7 @@
 }
 .widget { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
 .widget[data-done] { pointer-events: none; }
-/* Opening greeting: Deborah's first line in serif, no bubble (design direction 2026-10-14). */
+/* Opening greeting: Oracle's first line in serif, no bubble (design direction 2026-10-14). */
 .greetingLine { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-align: center; text-wrap: balance; }
 /* Reduced motion everywhere (design direction 2026-10-14): widgets and greetings only fade in, no movement. */
 .widget, .entry { animation: widget-in 320ms ease-out both; }

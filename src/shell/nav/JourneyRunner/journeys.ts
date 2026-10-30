@@ -29,7 +29,7 @@ export interface JourneyRun {
   /** Fill the onboarding profile (M-1.8) with these answers, then start the chat from M-1.9. */
   profile?: ProfileAnswers;
   /**
-   * Early exit for PDF matrix runs: stop at the under-13 gate or once Ask Deborah (M-2.1) is open.
+   * Early exit for PDF matrix runs: stop at the under-13 gate or once Ask Oracle (M-2.1) is open.
    * When unset, the run continues through chat answers and Review and Confirm.
    */
   stopAt?: 'gate' | 'deborah';
@@ -175,7 +175,7 @@ export const JOURNEYS: JourneyRun[] = [
   },
 ];
 
-/** Miro Step 4 Ask Deborah guidance — separate Journeys menu section. */
+/** Miro Step 4 Ask Oracle guidance — separate Journeys menu section. */
 export const GUIDANCE_JOURNEYS: JourneyRun[] = [
   {
     id: 'guidance-happy',

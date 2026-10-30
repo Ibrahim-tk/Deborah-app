@@ -8,7 +8,7 @@
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex assigned at birth,
+ * Version 2 onboarding profile: who Oracle will talk to, full date of birth, sex assigned at birth,
  * gender identity, and pronouns. Clinical questions live on the Health Profile (M-2.14).
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react';
@@ -23,7 +23,6 @@ import { StepBody } from './parts/StepBody';
 import { ConsentSheet } from './parts/ConsentSheet';
 import { PetalScatter } from './parts/PetalScatter';
 import { BloomReveal } from './parts/BloomReveal';
-import { useTitleFade } from './parts/useTitleFade';
 import { useStepTransition } from './parts/useStepTransition';
 import { namedReasonsComplete } from '@web/patterns/widgets';
 import { PageFooter } from '@web/patterns/shell';
@@ -61,12 +60,11 @@ export default function HealthBasics() {
   const under = consentOpen && at > 0 ? steps[at - 1] : step;
   // Outgoing question fades out before the next fades in.
   const { shown, leaving } = useStepTransition(under);
-  const fade = useTitleFade(shown.key);
   const value = answers[step.key] ?? '';
   const underValue = answers[under.key] ?? '';
   const last = at === steps.length - 1;
 
-  // Cinematic hand-off to Deborah's welcome: questions fade, the tree un-grows (its growth in reverse) while its blossoms go on the breeze.
+  // Cinematic hand-off to Oracle's welcome: questions fade, the tree un-grows (its growth in reverse) while its blossoms go on the breeze.
   const [exiting, setExiting] = useState(false);
   const EXIT_MS = 2600;
 
@@ -77,7 +75,7 @@ export default function HealthBasics() {
       resetTo('main', 'M-2.1', { onboardClosing: true });
       return;
     }
-    // Deborah's welcome fades in full-screen; its CTA starts the chat as (or about) this profile.
+    // Oracle's welcome fades in full-screen; its CTA starts the chat as (or about) this profile.
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setExiting(true);
     window.setTimeout(() => replace('M-1.9', { profileId }, 'fade'), reduced ? 0 : EXIT_MS);
@@ -135,6 +133,17 @@ export default function HealthBasics() {
     pop();
   };
 
+  // Medicines / supplements (namedReasons): empty → Skip + No; any named row → Next (No becomes Next).
+  const namedEmpty = under.presentation === 'namedReasons' && !namedReasonsComplete(underValue, under.none);
+  // OPEN: Skip vs No — Skip leaves the step unanswered (no None write); No = confirmed none. Product may later want an explicit "prefer not to say" token.
+  const skipNamed = () => {
+    const final = { ...answersRef.current };
+    if (!namedReasonsComplete(final[under.key], under.none)) delete final[under.key];
+    answersRef.current = final;
+    setAnswers(final);
+    next(final);
+  };
+
   return (
     <form className={styles.root} data-exiting={exiting || undefined} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
       <div className={styles.layout}>
@@ -147,20 +156,22 @@ export default function HealthBasics() {
               <>
                 <div className={styles.body}>
                   <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''}`}>
-                    <h1 ref={fade.titleRef} className={`${styles.title} ${styles.heading}`}><TextReveal as="span" text={titleFor(shown, answers)} delay={180} stagger={22} /></h1>
+                    <h1 className={`${styles.title} ${styles.heading}`}><TextReveal as="span" text={titleFor(shown, answers)} delay={180} stagger={22} /></h1>
                     <StepBody step={shown} answers={answers} set={set} advance={advance} />
                   </div>
                 </div>
                 <div className={styles.footer}>
-                  {/* Back + Next; Back is shown but disabled on the first question (balance). */}
+                  {/* Back always; empty namedReasons adds Skip + No; filled → Next. */}
                   <div className={styles.navRow}>
-                    {/* Medicines / supplements: nothing to add → quiet Skip beside Back (was "I don't take any"). */}
-                    {under.presentation === 'namedReasons' && !underValue.trim() ? (
-                      <Button type="button" variant="ghost" onClick={() => advance(under.none ?? 'None')}>Skip</Button>
-                    ) : (
-                      <Button type="button" variant="ghost" onClick={goBack} disabled={at === 0}>Back</Button>
+                    <Button type="button" variant="ghost" onClick={goBack} disabled={at === 0}>Back</Button>
+                    {namedEmpty && (
+                      <Button type="button" variant="ghost" onClick={skipNamed}>Skip</Button>
                     )}
-                    <Button type="submit" disabled={!canContinue}>Next</Button>
+                    {namedEmpty ? (
+                      <Button type="button" onClick={() => advance(under.none ?? 'None')}>No</Button>
+                    ) : (
+                      <Button type="submit" disabled={!canContinue}>Next</Button>
+                    )}
                   </div>
                 </div>
               </>

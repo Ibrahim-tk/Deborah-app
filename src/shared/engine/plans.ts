@@ -45,12 +45,12 @@ export function userBubble(ctx: EngineContext, text: string): Step {
   return { type: 'message', message: msg(ctx, { role: 'user', kind: 'text', text }) };
 }
 
-/** A short "Deborah is working" pause before she speaks. */
+/** A short "Oracle is working" pause before she speaks. */
 export function pause(label: string, min = 800, max = 1200): Step[] {
   return [{ type: 'thinking', on: true, label }, { type: 'delay', ms: between(min, max) }, { type: 'thinking', on: false }];
 }
 
-/** Deborah text message, streamed at text speed. */
+/** Oracle text message, streamed at text speed. */
 export function deborahText(ctx: EngineContext, text: string, extra: Partial<Message> = {}): Step[] {
   const m = msg(ctx, { role: 'deborah', kind: 'text', text: '', meta: { streaming: true, status: 'placeholder' }, ...extra });
   return [
@@ -357,5 +357,5 @@ export function answerSteps(
   return steps;
 }
 
-/** F09c Step 3: the answer after "Discuss this with Deborah" opens by recalling the visit she logged. */
+/** F09c Step 3: the answer after "Discuss this with the Oracle" opens by recalling the visit she logged. */
 const afterVisitLead = (conv: Conversation) => (conv.afterVisit ? `${conv.afterVisit.memory} ` : '');

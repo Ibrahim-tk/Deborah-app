@@ -81,16 +81,16 @@ export function routeSexFor(a: Answers): string | undefined {
   const menstrual = body.some((x) => MENSTRUAL_ORGANS.includes(x));
   const prostate = body.some((x) => PROSTATE_ORGANS.includes(x));
   // OPEN: "Use these answers … to decide which menstrual, reproductive or prostate questions appear."
-  // Mixed anatomy uses the intersex bank (puberty → reproductive); confirm with Deborah.
+  // Mixed anatomy uses the intersex bank (puberty → reproductive); confirm with the Oracle.
   if (menstrual && prostate) return 'intersex';
   if (menstrual) return 'female';
   if (prostate) return 'male';
   return a.sex;
 }
 
-/** True when at least one procedure was picked (shows the optional context field). */
-const anyProcedures = (a: Answers) =>
-  list(a.sexProcedures, SEX_CHARACTERISTICS_NONE).length > 0;
+// OPEN: F01 sex-characteristics §4 said picking a procedure shows an optional context field
+// ("Anything you’d like to add about these?" / sexProceduresNote). User (2026-10-31): that
+// follow-up doesn’t make sense — removed from the visible Health Profile / intake flow.
 
 /** Someone else under 18 gets `childLabels` (Boy / Girl) — was under 13 until 2026-10-29. */
 const minorOther = (a: Answers) => {
@@ -120,7 +120,6 @@ export const withDerived = (a: Answers): Record<string, ShowIfValue> => {
     ...a,
     ...(reproductiveStage && { reproductiveStage }),
     sexCharacteristicsAsk: asksSexCharacteristics(a) ? 'yes' : 'no',
-    sexProceduresAny: anyProcedures(a) ? 'yes' : 'no',
     ...(routeSexFor(a) && { routeSex: routeSexFor(a) }),
   };
   if (age === undefined) return derived;

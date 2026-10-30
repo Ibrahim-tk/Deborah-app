@@ -38,7 +38,7 @@ export interface ComposerProps {
   placeholder: string;
   /** Canned dictation inserted when recording stops. */
   voiceSample: string;
-  /** Lets the screen focus the text area (e.g. "Keep talking with Deborah"). */
+  /** Lets the screen focus the text area (e.g. "Keep talking with the Oracle"). */
   inputRef?: RefObject<HTMLTextAreaElement>;
   /** Inline strip docked to the top of the composer card (e.g. the TrialCounter banner). */
   banner?: ReactNode;

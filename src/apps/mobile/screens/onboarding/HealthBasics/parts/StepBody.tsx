@@ -7,7 +7,7 @@ import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
 
 const THIS_YEAR = new Date().getFullYear();
-// Same units as Deborah's in-chat rulers (patterns/chat IntakeFields): imperial in the US.
+// Same units as the Oracle's in-chat rulers (patterns/chat IntakeFields): imperial in the US.
 const US = /-(US|LR|MM)$/i.test(navigator.language);
 const height = (cm: number) => { const i = Math.round(cm / 2.54); return US ? `${Math.floor(i / 12)} ft ${i % 12} in` : `${cm} cm`; };
 const weight = (kg: number) => (US ? `${Math.round(kg / 0.4536)} lb` : `${kg} kg`);
@@ -206,9 +206,12 @@ function StepControl({ step, answers, set, advance }: StepBodyProps) {
         );
       }
       if (step.single && !step.none && !step.suggestions?.length) {
+        // Screen owns the question as h1 (HealthBasics / CompleteIntake / EditHealthDetail);
+        // keep label for a11y only so it isn’t printed twice.
         return (
           <Input
-            label={step.title}
+            label={titleFor(step, answers)}
+            hideLabel
             placeholder={step.placeholder ?? ''}
             value={value}
             autoComplete="off"

@@ -34,7 +34,7 @@ export function VisitNotesThread({ answer, topic, onOpenNotes }: { answer?: Answ
       };
       const id = uid('n');
       setNoteId(id);
-      s.addNote({ id, profileId: profile.id, kind: 'provider-brief', title: 'Your visit notes', body: visitBriefPreview(brief), brief, updatedAt: nowFrom(s).toISOString() });
+      s.addNote({ id, profileId: profile.id, kind: 'provider-brief', title: 'My Visit Notes', body: visitBriefPreview(brief), brief, updatedAt: nowFrom(s).toISOString() });
     }
     setSummary([a?.provider, a?.specialty, a?.date && formatShortDate(a.date)].filter(Boolean).join(' · ') || topic);
     setStep('done');
@@ -74,7 +74,7 @@ export function VisitNotesThread({ answer, topic, onOpenNotes }: { answer?: Answ
       {appt && <MessageBubble role="user" text={`${appt.provider ? `With ${appt.provider}, ` : ''}${formatShortDate(appt.date)}.`} />}
       {step === 'done' && (
         <MessageBubble role="deborah" text="Done. Here are your visit notes, ready to take with you.">
-          <VisitNoteCard date={date} title="Your visit notes" detail={summary} actionLabel="Open" onOpen={() => onOpenNotes(noteId)} onLog={() => onOpenNotes(noteId)} />
+          <VisitNoteCard date={date} title="My Visit Notes" detail={summary} actionLabel="Open" onOpen={() => onOpenNotes(noteId)} onLog={() => onOpenNotes(noteId)} />
         </MessageBubble>
       )}
     </>

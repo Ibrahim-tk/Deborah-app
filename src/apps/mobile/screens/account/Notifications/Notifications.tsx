@@ -18,8 +18,7 @@ import { useAccountGate } from '@mobile/hooks/useAccountGate';
 /** F10: 1 week · 2 weeks · 1 month — Off is the check-in toggle, not a segment. */
 const INTERVALS = [
   { value: '7', label: 'Weekly' },
-  // Short label so all three segments fit a phone without truncating.
-  { value: '14', label: '2 weeks' },
+  { value: '14', label: 'Every 2 weeks' },
   { value: '30', label: 'Monthly' },
 ];
 // Same default as M-2.8 Follow-up opt-in.

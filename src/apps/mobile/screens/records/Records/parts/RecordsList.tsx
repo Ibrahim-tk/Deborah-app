@@ -47,7 +47,7 @@ export function RecordsList({ segment, profileId, isActiveProfile }: RecordsList
   const [noteMenu, setNoteMenu] = useState(false);
   const newNote = () => setNoteMenu(true);
   // "+ New note" (design 2026-10-20): a sheet with two choices — a note for herself, or log a provider visit
-  // in the same form as the visit notes Deborah prepares (M-9.9).
+  // in the same form as the visit notes Oracle prepares (M-9.9).
   const pick = (go: () => void) => { setNoteMenu(false); go(); };
   const noteMenuSheet = (
     <BottomSheet open={noteMenu} onClose={() => setNoteMenu(false)} showClose title="New note">

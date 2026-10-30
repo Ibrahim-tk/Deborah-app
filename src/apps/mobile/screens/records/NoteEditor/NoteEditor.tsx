@@ -6,7 +6,7 @@
  * @spec    docs/ux/F09-records.md#m-94--note-editor-not-in-wireframes
  * @xref    web: W-9.4 (apps/web/screens/records/NoteEditor) — not built
  *
- * OPEN: "may Deborah read these notes in later consultations (consent)?" — not wired to chat.
+ * OPEN: "may the Oracle use these notes in later consultations (consent)?" — not wired to chat.
  */
 import { useState } from 'react';
 import { selectMessage, useAppStore } from '@shared/store';

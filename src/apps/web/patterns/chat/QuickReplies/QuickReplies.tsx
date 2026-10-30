@@ -1,5 +1,5 @@
 /**
- * @pattern QuickReplies — option rows under a Deborah message (check-in Yes / Partly / Not yet,
+ * @pattern QuickReplies — option rows under a Oracle message (check-in Yes / Partly / Not yet,
  *          lab request "Upload my labs" + Not yet). Gone once answered: the user's bubble says it.
  * @usedBy  M-2.1 (check-in state)
  * @spec    docs/ux/F05-followup-labs.md#m-21-state--check-in-figma-52 · DESIGN.md › Option rows

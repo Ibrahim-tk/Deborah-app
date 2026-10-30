@@ -1,11 +1,11 @@
 /**
- * @pattern MedicalConsentSheet — sign-up only, once: before Deborah's first answer, ask for medical/health-data
+ * @pattern MedicalConsentSheet — sign-up only, once: before Oracle's first answer, ask for medical/health-data
  *          consent in the shared bottom sheet. The button enables only once the box is ticked (design 2026-10-20).
  * @usedBy  M-2.1 Conversation · M-2.12 First conversation (via useHealthConsent)
  * @status  placeholder copy — OPEN: Deborah / legal to approve wording.
  */
 import { useState } from 'react';
-import { pronounForms } from '@shared/engine';
+import { pronounForms, resolvePronouns } from '@shared/engine';
 import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
 import { properName } from '@shared/utils';
 import { BottomSheet, Button, Checkbox } from '@web/ui';
@@ -24,8 +24,8 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
     return p && p.id !== SELF_PROFILE_ID && p.name ? p : undefined;
   });
   const name = member ? properName(member.name.trim().split(/\s+/)[0]) : '';
-  const their = member ? pronounForms(member.intake?.pronouns).their : '';
-  const title = member ? `May I have your consent to use ${name}’s health information?` : 'May I have your consent to use your health information?';
+  const their = member ? pronounForms(resolvePronouns(member)).their : '';
+  const title = member ? `Can the Oracle use ${name}’s health information?` : 'Can the Oracle use your health information?';
   return (
     <BottomSheet
       open={open}
@@ -37,9 +37,9 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
       <div className={styles.body} data-placeholder>
         <p className={styles.copy}>
           {member ? (
-            <>To answer your questions about {name}, the Oracle uses what you share about {their} health, </>
+            <>To answer your questions about {name}, the Oracle uses what you share about {their} health: </>
           ) : (
-            <>To answer your questions, the Oracle uses what you share about your health, </>
+            <>To answer your questions, the Oracle uses what you share about your health: </>
           )}
           {/* OPEN: privacy promise removed per docs/copy/voice-tone-ux-copy.md §6 — add a storage/sale line only once legal verifies it. */}
           such as symptoms, medications and history. The Oracle is an AI informed by Genesis Health Products’ experience,

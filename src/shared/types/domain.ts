@@ -31,7 +31,7 @@ export type JourneyId =
   | 'teen'
   | 'child';
 
-/** A fact Deborah noted in a conversation, waiting for the user's Confirm (DN-13). */
+/** A fact Oracle noted in a conversation, waiting for the user's Confirm (DN-13). */
 export interface PendingFact {
   id: ID;
   /** Profile field it fills (`medications`, `reproductive`…); one pending fact per key. */
@@ -164,7 +164,7 @@ export type MessageKind =
   | 'checkIn'
   | 'labRequest'
   | 'followUpPrompt'
-  /** F11: Deborah offers an upload saved with "Not now" (once). */
+  /** F11: Oracle offers an upload saved with "Not now" (once). */
   | 'documentOffer'
   /** Review and Confirm (meeting 2026-10-12 · B): facts noted in this conversation, saved only on Confirm. */
   | 'reviewFacts';
@@ -205,7 +205,7 @@ export type SectionKey =
   | 'providerQuestions'
   | 'tests'
   | 'doNow'
-  /** @deprecated "A Word from Deborah" — removed from answers (Oct 26); kept so old saved data still types. */
+  /** @deprecated "A Word from the Oracle" — removed from answers (Oct 26); kept so old saved data still types. */
   | 'word';
 
 export const SECTION_ORDER: SectionKey[] = [
@@ -215,7 +215,7 @@ export const SECTION_ORDER: SectionKey[] = [
   'providerQuestions',
   'tests',
   'doNow',
-  // 'word' ("A Word from Deborah") was removed from answers on Oct 26; requiring it broke every answer.
+  // 'word' ("A Word from the Oracle") was removed from answers on Oct 26; requiring it broke every answer.
 ];
 
 export interface AnswerSection {
@@ -276,7 +276,7 @@ export interface Message {
   answer?: Answer;
   /** Follow-up questions shown under a message. */
   suggestions?: string[];
-  /** Option rows under a Deborah message (check-in Yes / Partly / Not yet, lab request). */
+  /** Option rows under a Oracle message (check-in Yes / Partly / Not yet, lab request). */
   quickReplies?: QuickReplies;
   /** F09c debrief summary card: one line per filled bucket. */
   visitSummary?: { label: string; text: string }[];
@@ -337,7 +337,7 @@ export interface Conversation {
   checkInStage?: CheckInStage;
   /** Visit debrief progress (docs/ux/F09c-log-visit.md › M-2.1 state · Visit debrief). */
   debrief?: DebriefState;
-  /** F09c Step 3: "Discuss this with Deborah" — the consultation that follows carries the logged visit. */
+  /** F09c Step 3: "Discuss this with the Oracle" — the consultation that follows carries the logged visit. */
   afterVisit?: { noteId?: ID; memory: string; summary: string };
   /** Core experience (DN-07 · DN-08): symptom group and journey this consultation was planned for. */
   symptomGroup?: SymptomGroupId;
@@ -346,7 +346,7 @@ export interface Conversation {
   redFlag?: boolean;
   /** Uncounted provider-directed framework, generated only after pending facts are resolved. */
   providerReview?: { state: 'waiting' | 'generating' | 'done'; concerns: string[] };
-  /** DN-13: facts Deborah noted here. Used in this conversation; saved to the profile only on Confirm. */
+  /** DN-13: facts Oracle noted here. Used in this conversation; saved to the profile only on Confirm. */
   facts?: PendingFact[];
   /** M-2.8 is due but waits until the Review and Confirm card is resolved. */
   followUpAfterReview?: boolean;
@@ -440,7 +440,7 @@ export interface PlanConcern {
   addedAt: ISODate;
   status: 'active' | 'resolved';
   actions: PlanAction[];
-  /** Placeholder until Deborah approves a mismatch rule. Shown only when a visit specialty is on file. */
+  /** Placeholder until clinical review approves a mismatch rule. Shown only when a visit specialty is on file. */
   mismatch?: string;
 }
 

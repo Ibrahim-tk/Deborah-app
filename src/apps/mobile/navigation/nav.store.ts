@@ -245,7 +245,7 @@ export const useNavStore = create<NavState>()((set, get) => {
         // Healing Plan check-in notification → the 90-day plan (M-7.3).
         set({ root: 'main', activeTab: 'health', tabs: { ...s.tabs, health: [route(TAB_ROOTS.health), route('M-7.3')] }, layers: [], lastAction: 'reset' });
       } else if (kind === 'chat') {
-        // 30-day inactivity reminder → a fresh chat with Deborah.
+        // 30-day inactivity reminder → a fresh chat with the Oracle.
         set({ root: 'main', activeTab: 'ask', tabs: { ...s.tabs, ask: askChat({ focus: true }) }, layers: [], lastAction: 'reset' });
       } else if (kind === 'booking' || kind === 'content') {
         const target =

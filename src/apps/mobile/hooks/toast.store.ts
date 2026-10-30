@@ -1,12 +1,13 @@
 /** In-app toasts (DESIGN.md › Toasts): one at a time, 2.5 s, rendered above the tab bar by the Navigator. */
 import { create } from 'zustand';
 
-import type { IconName } from '@mobile/ui';
+/** Icon names the Toast UI accepts — kept local so hooks never import `@mobile/ui`. */
+type ToastIcon = 'check';
 
 interface ToastState {
-  toast: { id: number; message: string; icon?: IconName } | null;
+  toast: { id: number; message: string; icon?: ToastIcon } | null;
   /** Optional leading icon, e.g. `{ icon: 'check' }` for a confirmation. */
-  show: (message: string, opts?: { icon?: IconName }) => void;
+  show: (message: string, opts?: { icon?: ToastIcon }) => void;
   clear: () => void;
 }
 

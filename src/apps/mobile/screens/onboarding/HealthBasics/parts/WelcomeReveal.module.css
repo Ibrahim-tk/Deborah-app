@@ -1,0 +1,8 @@
+.root { position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 2; display: flex; flex-direction: column; padding: var(--space-6) var(--space-5) var(--space-8); }
+.hello { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-4); text-align: center; }
+.blob { animation: in 600ms var(--ease-out) both; }
+.text { margin: 0; max-width: 100%; font: var(--weight-regular) calc(34px * var(--type-scale)) / calc(38px * var(--type-scale)) var(--font-artistic, var(--font-display)); color: var(--color-ink); text-wrap: pretty; }
+.body { margin: 0; max-width: 34ch; font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body); letter-spacing: -0.015em; color: var(--color-ink-body); text-wrap: pretty; }
+.footer { animation: in 500ms 1600ms var(--ease-out) both; }
+@keyframes in { from { opacity: 0; } }
+.leaving { opacity: 0; filter: blur(6px); transition: opacity 500ms var(--ease-in-out, ease-in-out), filter 500ms var(--ease-in-out, ease-in-out); pointer-events: none; }

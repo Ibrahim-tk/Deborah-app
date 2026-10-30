@@ -30,7 +30,7 @@ export function IntakeCompletionCard({
   onDismiss,
 }: IntakeCompletionCardProps) {
   const pct = Math.round(Math.min(1, Math.max(0, progress)) * 100);
-  const heading = title ?? (complete ? 'Update your intake' : 'Complete your intake');
+  const heading = title ?? (complete ? 'Update your health profile' : 'Complete your health profile');
   const copy =
     body
     ?? (complete
@@ -38,20 +38,13 @@ export function IntakeCompletionCard({
       : 'A few quiet details so the Oracle can tailor its guidance to you.');
 
   if (layout === 'stack') {
-    // Card copy per docs/copy/voice-tone-ux-copy.md; gradient wash instead of the reference's flower graphic.
-    const stackTitle = title ?? (complete ? 'Your health profile' : 'Complete your health profile');
-    const stackBody =
-      body
-      ?? (complete
-        ? 'The details you’ve shared, all in one place.'
-        : 'A few details about your health help me tailor my guidance to you.');
     const status = `${pct}%`;
     return (
       <section className={styles.stack} aria-labelledby="intake-completion-title" data-placeholder>
         {onDismiss && <IconButton icon="close" size="sm" label="Dismiss" className={styles.close} onClick={onDismiss} />}
         <span className={styles.copy}>
-          <h3 id="intake-completion-title" className={styles.stackTitle}>{stackTitle}</h3>
-          <span className={styles.stackBody}>{stackBody}</span>
+          <h3 id="intake-completion-title" className={styles.stackTitle}>{heading}</h3>
+          <span className={styles.stackBody}>{copy}</span>
         </span>
         <span className={styles.meter}>
           <span className={styles.meterRow}>

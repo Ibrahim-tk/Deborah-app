@@ -206,7 +206,7 @@
 }
 @media (prefers-reduced-motion: reduce) { .root::before { animation: none; } }
 
-/* Cinematic exit (to Deborah's welcome), Kung Fu Panda peach-tree moment:
+/* Cinematic exit (to Oracle's welcome), Kung Fu Panda peach-tree moment:
    1. questions are carried off; 2. the tree shrinks back in reverse as its blossoms let go (PetalScatter);
    3. the faint ghost clears from the canopy down and the glow takes over. */
 .root[data-exiting] { pointer-events: none; }
@@ -231,7 +231,7 @@
 }
 /* Content is carried off with the swarm: drifts left, blurs, dissolves. */
 @keyframes exit-content { to { opacity: 0; filter: blur(24px); transform: translateX(-6vw) scale(0.98); } }
-/* The glory: petals melt into a soft bloom of light that fills the screen (Deborah's welcome resolves out of it). */
+/* The glory: petals melt into a soft bloom of light that fills the screen (Oracle's welcome resolves out of it). */
 .glory {
   position: absolute;
   inset: 0;

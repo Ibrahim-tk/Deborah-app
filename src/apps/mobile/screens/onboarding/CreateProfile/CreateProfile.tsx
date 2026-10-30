@@ -137,7 +137,7 @@ export default function CreateProfile() {
           <form key="form" className={styles.stage} onSubmit={submit} noValidate>
             {/* OPEN: placeholder UX copy until reviewed. Heading + subtitle live in the sheet header. */}
             <Input label="Email" type="email" placeholder="Your email" value={email} disabled={Boolean(invite)} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors((x) => ({ ...x, email: undefined })); }} />
-            <Input label="Password" type="password" placeholder="Enter your password" value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
+            <Input label="Password" type="password" placeholder={signin ? 'Enter your password' : `At least ${MIN_LENGTH} characters`} value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
             {signin && <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>Forgot password?</button>}
             {!signin && <Input label="Confirm password" type="password" placeholder="Confirm your password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />}
             <Button type="submit" fullWidth disabled={SKIP_AUTH_VALIDATION ? false : !email || !password || (!signin && !confirm)}>{signin ? 'Sign in' : 'Create account'}</Button>

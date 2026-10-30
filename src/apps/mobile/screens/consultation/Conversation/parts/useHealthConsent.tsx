@@ -1,7 +1,7 @@
 /**
  * First message after sign-up: Deborah asks for health-data consent (with the data-protection promise and
  * the disclaimer) as an inline widget in the thread, not a bottom sheet (design direction 2026-10-14);
- * then the held health basics are saved and Deborah answers directly.
+ * then the held health basics are saved and Oracle answers directly.
  * OPEN: "Not now" keeps the answers held; Deborah then asks for consent in chat as before.
  *
  * Prototype: FLAGS.skipHealthConsent auto-accepts and never renders InlineConsent.
@@ -27,7 +27,7 @@ export function useHealthConsent() {
     const run = (async () => {
       const s = useAppStore.getState();
       const reconsent = Boolean(s.healthConsentRevoked && !s.healthConsentAt);
-      // Sign-up once, and again after revoke (design 2026-10-20): medical consent in a bottom sheet before Deborah's first answer.
+      // Sign-up once, and again after revoke (design 2026-10-20): medical consent in a bottom sheet before Oracle's first answer.
       if ((s.authFlow === 'signup' && !s.healthConsentAt) || reconsent) {
         setSheet(true);
         await new Promise<boolean>((r) => { resolve.current = r; });

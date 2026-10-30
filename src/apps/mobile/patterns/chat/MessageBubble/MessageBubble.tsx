@@ -1,6 +1,6 @@
 /**
- * @pattern MessageBubble — user: Lilac Mist bubble, right-aligned. Deborah: unboxed full-width
- *          text, no avatar ("Deborah" is announced to screen readers at the start of each turn). Long-press opens actions.
+ * @pattern MessageBubble — user: Lilac Mist bubble, right-aligned. Oracle: unboxed full-width
+ *          text, no avatar ("Oracle" is announced to screen readers at the start of each turn). Long-press opens actions.
  * @usedBy  M-2.1, M-9.2
  * @spec    DESIGN.md › Messages · docs/ux/F02-consultation.md#m-21-conversation
  * @xref    web: apps/web/patterns/chat/MessageBubble — not built
@@ -13,7 +13,7 @@ export interface MessageBubbleProps {
   role: 'user' | 'deborah';
   text?: string;
   streaming?: boolean;
-  /** First Deborah message of a turn shows her avatar and name. */
+  /** First Oracle message of a turn shows her avatar and name. */
   turnStart?: boolean;
   placeholder?: boolean;
   onLongPress?: () => void;

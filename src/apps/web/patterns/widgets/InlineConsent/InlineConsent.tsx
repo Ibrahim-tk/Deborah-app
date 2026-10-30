@@ -3,7 +3,7 @@
  *          (design direction 2026-10-14). Privacy policy and Terms (with the disclaimer) open in a bottom sheet.
  * @usedBy  M-2.1, M-2.12 (first message after sign-up), widget lab (/wid)
  * @xref    web: — not built
- * OPEN: consent and data-protection wording is placeholder until Deborah and legal approve it.
+ * OPEN: consent and data-protection wording is placeholder until clinical review and legal approve it.
  */
 import { useRef, useState } from 'react';
 import { consentDoc } from '@shared/data';
@@ -39,9 +39,9 @@ export interface InlineConsentProps {
 export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', title, description, agreeLabel, declineLabel, disabled }: InlineConsentProps) {
   const [doc, setDoc] = useState<Doc>();
   // Last opened document stays rendered while the sheet animates out.
-  const lastDoc = useRef<Doc | undefined>(undefined);
-  if (doc) lastDoc.current = doc;
-  const shown = lastDoc.current ? DOCS[lastDoc.current] : undefined;
+  const [lastDoc, setLastDoc] = useState<Doc | undefined>(undefined);
+  const openDoc = (d: Doc) => { setLastDoc(d); setDoc(d); };
+  const shown = lastDoc ? DOCS[lastDoc] : undefined;
   const submitted = useRef(false);
   const act = (agree: boolean) => {
     if (disabled || submitted.current) return;
@@ -49,7 +49,7 @@ export function InlineConsent({ onAgree, onDecline, answered, variant = 'row', t
     (agree ? onAgree : onDecline)();
   };
   const link = (d: Doc) => (
-    <button type="button" className={styles.link} aria-haspopup="dialog" onClick={() => setDoc(d)}>{DOCS[d].link}</button>
+    <button type="button" className={styles.link} aria-haspopup="dialog" onClick={() => openDoc(d)}>{DOCS[d].link}</button>
   );
 
   return (

@@ -109,7 +109,9 @@
           "intake": {
             "ageBand": "teen",
             "conditions": [],
-            "medications": []
+            "medications": [],
+            "genderIdentity": "girl",
+            "pronouns": "she/her"
           },
           "createdAt": "2026-10-28T18:05:00-07:00",
           "guardianConsentAt": "2026-10-28T18:05:00-07:00"

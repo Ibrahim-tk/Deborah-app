@@ -1,5 +1,5 @@
 /**
- * @pattern ErrorBubble — Deborah-voice error with Retry; also the "Stopped · Continue" line
+ * @pattern ErrorBubble — Oracle-voice error with Retry; also the "Stopped · Continue" line
  * @usedBy  M-2.1
  * @spec    docs/ux/F02-consultation.md#m-21-conversation (States › error, stopped)
  * @xref    web: apps/web/patterns/chat/ErrorBubble — not built

@@ -1,6 +1,6 @@
 /**
  * Log your visit (docs/ux/F09c-log-visit.md · Miro Step 6): the visit record, probes for gaps,
- * profile facts to confirm, the seed for "Discuss this with Deborah", and the debrief opening.
+ * profile facts to confirm, the seed for "Discuss this with the Oracle", and the debrief opening.
  * Pure: no store, no timers. Conversation wiring arrives in log-visit phase 3.
  */
 import { debriefScript as d, DEBRIEF_SCRIPT_ID, visitSpecialties } from '../data';
@@ -87,7 +87,7 @@ export function visitProfileUpdates(o: VisitOutcome, profile: Profile): VisitPro
   });
 }
 
-/** Step 3 seed after "Yes, let's talk": topic and Deborah's memory line. */
+/** Step 3 seed after "Yes, let's talk": topic and Oracle's memory line. */
 export function debriefToConsultSeed(o: VisitOutcome): { topic: string; memory: string } {
   const specialty = specialtyLabel(o) ?? 'provider';
   return {

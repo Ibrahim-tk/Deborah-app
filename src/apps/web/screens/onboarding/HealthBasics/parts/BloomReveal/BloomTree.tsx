@@ -179,7 +179,7 @@ export default function BloomTree({ progress = 0, rate = 7, className, style }: 
   const canvas = useRef<HTMLCanvasElement>(null);
   const target = useRef(0);
   const speed = useRef(rate);
-  speed.current = rate;
+  useEffect(() => { speed.current = rate; }, [rate]);
   const wake = useRef<() => void>(() => {});
   const [failed, setFailed] = useState(false);
   const safeProgress = clamp(progress);

@@ -1,6 +1,6 @@
 /**
  * @screen  M-8.4 · Booking confirmed
- * @flow    F08 Book Deborah (human escalation)
+ * @flow    F08 Book a consultation (human escalation)
  * @states  confirmed (check animation) · read mode (details + Cancel booking) · cancelled · not found
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470
  * @spec    docs/ux/F08-book-deborah.md#m-84--booking-confirmed

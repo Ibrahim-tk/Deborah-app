@@ -1,7 +1,7 @@
 /**
  * @pattern VisitNoteCard — a Visit Note as a card (design 2026-10-20, Rodeo-style): one shared line-doodle
  *          illustration (the "who is this for" style), then date · what it's about · one relevant line.
- *          Footer: not logged → "Log visit" on Records, "Open" in chat (`actionLabel`); logged → "Ask Deborah"
+ *          Footer: not logged → "Log visit" on Records, "Open" in chat (`actionLabel`); logged → "Ask Oracle"
  *          and an Edit link to reopen the log.
  * @usedBy  M-9.1 (Visit Notes)
  */

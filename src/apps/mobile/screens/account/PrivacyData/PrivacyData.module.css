@@ -5,9 +5,5 @@
 .group > button { padding-inline: var(--space-4); }
 .heading { font: var(--weight-regular) var(--fs-title-3) / var(--lh-title-3) var(--font-body); }
 .text { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-body); }
-.note { margin-top: calc(var(--space-4) * -1); padding: 0 var(--space-5); font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }
-/* Open info note (no panel): icon + title + text straight on the canvas. */
-.info { display: flex; gap: var(--space-3); padding: 0 var(--space-4); }
-.infoIcon { flex: none; padding-top: 2px; color: var(--color-ink-secondary); }
-.infoTitle { margin: 0; font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
-.infoText { margin: 2px 0 0; font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink-secondary); }
+/* Line under the page title (matches web). */
+.lede { margin: 0; padding: 0 var(--space-1); font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }

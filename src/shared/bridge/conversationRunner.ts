@@ -4,7 +4,7 @@
  * navigates away; Stop cancels the remaining steps.
  */
 import { create } from 'zustand';
-import { chunkText, forFamilyMember, hasProviderSpecialty, streamInto, visitProfileUpdates } from '../engine';
+import { chunkText, forFamilyMember, hasProviderSpecialty, resolvePronouns, streamInto, visitProfileUpdates } from '../engine';
 import { SELF_PROFILE_ID, useAppStore } from '../store';
 import type { EnginePlan, Step, StoreAction } from '../types/engine';
 import { sleep } from '../utils';
@@ -101,7 +101,7 @@ async function stream(step: Extract<Step, { type: 'stream' }>, cid: string, toke
   return true;
 }
 
-/** A family member's chat: Deborah speaks about them in third person, with their pronouns. */
+/** A family member's chat: Oracle speaks about them in third person, with their pronouns. */
 function inPerspective(plan: EnginePlan, conversationId: string): EnginePlan {
   const s = useAppStore.getState();
   const started = plan.find((x) => x.type === 'store' && x.action.type === 'startConversation');
@@ -110,7 +110,7 @@ function inPerspective(plan: EnginePlan, conversationId: string): EnginePlan {
     (started?.type === 'store' && started.action.type === 'startConversation' ? started.action.conversation.profileId : undefined);
   const profile = profileId ? s.profiles.byId[profileId] : undefined;
   if (!profile || profile.id === SELF_PROFILE_ID || !profile.name) return plan;
-  return forFamilyMember(plan, profile.name, profile.intake?.pronouns);
+  return forFamilyMember(plan, profile.name, resolvePronouns(profile));
 }
 
 /** Returns false when the plan was gated (the caller keeps the user's text in the composer). */

@@ -3,7 +3,7 @@
  * @usedBy  Health Basics namedReasons; Widget lab (/wid); chat/intake surfaces with the same shape
  *
  * Main surface shows committed tiles + an add pill. Name/reason draft lives only in the sheet.
- * Quiet "I don't take any" stays under the add control unless `showNone={false}` (the screen owns Skip).
+ * Quiet none control under Add unless `showNone={false}` (screen footer owns Skip + No).
  * Tiles are owned locally so remove (X) is not undone by a stale parent render; remount via `key`
  * when the step/answers source changes (Health Basics already keys by step.key).
  */
@@ -23,7 +23,7 @@ export interface NamedReasonListProps {
   noneSelected?: boolean;
   namePlaceholder?: string;
   reasonPlaceholder?: string;
-  /** Show the quiet in-list "none" button. Off when the screen owns its own Skip (Health Basics). */
+  /** Show the quiet in-list "none" button. Off when the screen footer owns Skip + No. */
   showNone?: boolean;
   onChange: (entries: NamedReason[]) => void;
   onNone: () => void;

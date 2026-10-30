@@ -1,22 +1,27 @@
 import type { Suggestion } from '@shared/types/content';
-
-/** Pronoun forms for a profile's stored pronouns value (she-her, he-him, she-they…). Unknown → they. */
-const FORMS = {
-  she: { they: 'she', them: 'her', their: 'her', are: 'is', feel: 'feels' },
-  he: { they: 'he', them: 'him', their: 'his', are: 'is', feel: 'feels' },
-  they: { they: 'they', them: 'them', their: 'their', are: 'are', feel: 'feel' },
-};
+import { pronounForms, resolvePronouns } from '@shared/engine';
+import type { Profile } from '@shared/types/domain';
 
 /** Tokens for advocate/family copy: {they} {them} {their} {are} {feel}. */
 export function pronounTokens(pronouns = ''): Record<string, string> {
-  return pronouns.startsWith('she') ? FORMS.she : pronouns.startsWith('he') ? FORMS.he : FORMS.they;
+  const f = pronounForms(pronouns);
+  return {
+    they: f.they,
+    them: f.them,
+    their: f.their,
+    are: f.singular ? 'is' : 'are',
+    feel: f.singular ? 'feels' : 'feel',
+  };
 }
 
 const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
 
 /** Fills {name} {they} {them} {their} {are} {feel} (capitalised token → capitalised word). */
-export function thirdPerson(list: Suggestion[], name: string, pronouns?: string): Suggestion[] {
-  const f: Record<string, string> = { ...pronounTokens(pronouns), name: name || 'them' };
+export function thirdPerson(list: Suggestion[], name: string, pronouns?: string | Profile): Suggestion[] {
+  const resolved = typeof pronouns === 'string' || pronouns === undefined
+    ? pronouns
+    : resolvePronouns(pronouns);
+  const f: Record<string, string> = { ...pronounTokens(resolved), name: name || 'them' };
   return list.map((s) => ({
     ...s,
     text: s.text.replace(/\{(\w+)\}/g, (m, key: string) => {

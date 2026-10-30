@@ -5,7 +5,7 @@
   border-radius: var(--radius-xl) var(--radius-xl) var(--radius-sm) var(--radius-xl);
   background: var(--color-accent);
   color: var(--color-ink-on-accent);
-  /* Same size as Deborah's replies (design 2026-10-20). */
+  /* Same size as the Oracle's replies (design 2026-10-20). */
   font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body);
   letter-spacing: -0.015em;
   white-space: pre-wrap;

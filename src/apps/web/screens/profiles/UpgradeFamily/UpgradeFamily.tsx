@@ -34,7 +34,7 @@ export default function UpgradeFamily() {
           </>
         }
       >
-        <p className={styles.text}>{teen ? teenAccountCopy.errors.upgradeBody : '1 primary plus 3 family profiles, each with their own private history.'}</p>
+        <p className={styles.text}>{teen ? teenAccountCopy.errors.upgradeBody : '1 primary plus 3 family profiles you manage as their advocate. Invited teens keep a private account you can’t see.'}</p>
       </Sheet>
     </div>
   );

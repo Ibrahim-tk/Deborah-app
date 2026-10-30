@@ -14,9 +14,9 @@ import styles from './FreeLimit.module.css';
 
 // Oracle Change Requests (Oct 26): the free trial is conversations only.
 const LOCKED_COPY = {
-  journey: { title: 'Your Wellness Plan comes with a plan', body: 'Your free trial includes conversations. Choose a plan to unlock Your Wellness Plan.' },
-  documents: { title: 'Downloads come with a plan', body: 'Your free trial includes conversations. Choose a plan to download provider-ready notes.' },
-  family: { title: 'Family profiles come with a plan', body: 'Your free trial includes conversations. Choose the Family plan to add up to 3 dependents.' },
+  journey: { title: 'Your Wellness Plan unlocks with a subscription', body: 'Your free trial includes conversations. Choose a plan to unlock Your Wellness Plan.' },
+  documents: { title: 'Downloads unlock with a subscription', body: 'Your free trial includes conversations. Choose a plan to download provider-ready notes.' },
+  family: { title: 'Family profiles unlock with a subscription', body: 'Your free trial includes conversations. Choose the Family plan to add up to 3 family members.' },
 };
 
 export default function FreeLimit() {

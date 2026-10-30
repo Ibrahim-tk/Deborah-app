@@ -24,7 +24,7 @@ export function InviteLetter({ onFinish, onFinishWeb }: InviteLetterProps) {
         <p className={styles.note}>This link is unique to your parent’s Family Plan and can only be used once. If you weren’t expecting it, you can ignore this email.</p>
       </div>
       <div className={styles.foot}>
-        <p>Your Oracle · Health education, by Deborah Maragopoulos FNP</p>
+        <p>Your Oracle · Health education, by Genesis Health Products</p>
         <p>You’re receiving this because a parent or guardian invited you.</p>
       </div>
     </div>

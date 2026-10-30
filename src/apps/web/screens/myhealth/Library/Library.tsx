@@ -1,5 +1,5 @@
 /**
- * @screen  M-7.5 · Deborah's library
+ * @screen  M-7.5 · the Oracle's library
  * @flow    F07 My Health hub
  * @states  default (For you) · filtered (All / New / topic) · search with results · no results · leave-app alert (community)
  * @figma   https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=52-280

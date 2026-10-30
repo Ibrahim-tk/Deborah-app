@@ -25,7 +25,7 @@ export const registry: Record<string, ScreenMeta> = {
   // F02 Consultation
   // Ask tab root: Home dashboard. Chat (M-2.1) pushes on top.
   'M-2.0': { title: 'Home', component: lazy(() => import('@web/screens/consultation/Home')), presentation: 'tabRoot', tab: 'ask', stack: 'main', figma: '', spec: 'docs/ux/F02-consultation.md#m-20-home' },
-  // Ask Deborah (Tone Guide dummy scripts via suggestions.json → Conversation).
+  // Ask Oracle (Tone Guide dummy scripts via suggestions.json → Conversation).
   // Premade JSON flows stay on M-2.12 (FirstConsult) for lab/State menu only.
   'M-2.1': { title: 'Conversation', component: lazy(() => import('@web/screens/consultation/Conversation')), presentation: 'push', stack: 'main', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-21-conversation' },
   'M-2.7': { title: 'Shop', component: lazy(() => import('@web/screens/consultation/InAppShop')), presentation: 'modal', figma: `${FIGMA}48-361`, spec: 'docs/ux/F02-consultation.md#m-27--shop-in-app-browser' },
@@ -65,7 +65,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.8': { title: 'Edit health profile', component: lazy(() => import('@web/screens/myhealth/EditHealthSection')), presentation: 'push', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@web/screens/myhealth/EditHealthDetail')), presentation: 'push', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 
-  // F08 Book Deborah
+  // F08 Book a consultation
   'M-8.2': { title: 'Book a consultation', component: lazy(() => import('@web/screens/booking/BookingInfo')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-82--consult-with-deborah' },
   'M-8.3': { title: 'Pick a time', component: lazy(() => import('@web/screens/booking/Scheduler')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-83--pick-a-time-simulated-scheduler' },
   'M-8.4': { title: 'Booking confirmed', component: lazy(() => import('@web/screens/booking/BookingConfirmed')), presentation: 'push', figma: `${FIGMA}50-470`, spec: 'docs/ux/F08-book-deborah.md#m-84--booking-confirmed' },

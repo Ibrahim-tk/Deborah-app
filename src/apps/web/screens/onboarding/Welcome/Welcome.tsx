@@ -6,12 +6,12 @@
  * @spec    docs/ux/F01-onboarding.md#m-12--welcome
  * @xref    web: W-1.2 (apps/web/screens/onboarding/Welcome) — not built
  *
- * Version 2: Deborah's orb and note, then first-name field, legal checkbox (terms and services +
+ * Version 2: Oracle's orb and note, then first-name field, legal checkbox (terms and services +
  * Privacy Notice), Get Started, and Sign in. Must be checked before Get Started enables.
  * Health-data consent is a separate required step, but legal/consent.json › healthConsent has no
  * attorney body yet. Do not render that checkbox until `healthConsent.body` is supplied.
  * Sign-up (M-1.4) fades in full-screen after Get Started. Version 1 keeps the single legal line instead.
- * Note: this reverses the 12 Oct meeting's "no account before Deborah" (requirement A), as directed.
+ * Note: this reverses the 12 Oct meeting's "no account before the Oracle" (requirement A), as directed.
  */
 import { useId, useState, type FormEvent, type MouseEvent } from 'react';
 import { persona, teenAccountCopy } from '@shared/data';

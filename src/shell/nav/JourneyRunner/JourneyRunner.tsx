@@ -1,6 +1,6 @@
 /**
  * @shell JourneyRunner — "▶ Journeys" menu: plays one core-experience path, or runs all PDF age×gender
- * personas one by one (load scenario → Health Basics → Ask Deborah / under-13 gate).
+ * personas one by one (load scenario → Health Basics → Ask Oracle / under-13 gate).
  * PDF persona runs enable fast sign-up (splash/Welcome/M-1.4 + OTP) so the sheet clears in a few ticks.
  */
 import { useEffect, useRef, useState } from 'react';

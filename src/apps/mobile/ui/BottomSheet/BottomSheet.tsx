@@ -45,7 +45,7 @@ export function BottomSheetFrame({ onClose, height = 'auto', dismissible = true,
   const reduced = useReducedMotionPref();
   const panel = useRef<HTMLDivElement>(null);
   const close = useRef(onClose);
-  close.current = onClose;
+  useEffect(() => { close.current = onClose; }, [onClose]);
 
   // Escape closes; focus moves into the sheet and returns to whatever opened it.
   useEffect(() => {

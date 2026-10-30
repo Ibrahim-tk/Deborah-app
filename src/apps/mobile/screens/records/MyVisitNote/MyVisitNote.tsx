@@ -3,12 +3,12 @@
  * @flow    F09 Records — "+ New note › A note for myself"
  * @presentation modal (full screen)
  * @states  empty · filled
- * @spec    Design request 2026-10-20: same sections as the visit note Deborah prepares (M-9.7), in the visit-log
+ * @spec    Design request 2026-10-20: same sections as the visit note Oracle prepares (M-9.7), in the visit-log
  *          form style (dividers; description boxes, one item per line). OPEN: add to docs/ux/F09.
  * @xref    web: not built
  *
  * × (top left) closes without saving; ✓ (top right) saves a provider-brief note the visit notes list and
- * "Ask Deborah" can use.
+ * "Ask Oracle" can use.
  */
 import { useState } from 'react';
 import { selectActiveProfile, useAppStore } from '@shared/store';

@@ -60,7 +60,7 @@ export function Sidebar() {
   };
 
   // Drawer = conversations first: New conversation, then chat history. Shop ProductCard + Settings
-  // sit in the pinned footer. Everything else (plans, notifications, privacy, About Deborah,
+  // sit in the pinned footer. Everything else (plans, notifications, privacy, About the Oracle,
   // disclaimer) lives in Settings (M-10.1).
   const settings: Item = {
     label: 'Settings',

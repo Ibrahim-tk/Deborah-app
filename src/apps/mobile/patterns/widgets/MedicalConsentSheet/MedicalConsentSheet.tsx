@@ -1,11 +1,11 @@
 /**
- * @pattern MedicalConsentSheet — sign-up only, once: before Deborah's first answer, ask for medical/health-data
+ * @pattern MedicalConsentSheet — sign-up only, once: before Oracle's first answer, ask for medical/health-data
  *          consent in the shared bottom sheet. The button enables only once the box is ticked (design 2026-10-20).
  * @usedBy  M-2.1 Conversation · M-2.12 First conversation (via useHealthConsent)
  * @status  placeholder copy — OPEN: Deborah / legal to approve wording.
  */
 import { useState } from 'react';
-import { pronounForms } from '@shared/engine';
+import { pronounForms, resolvePronouns } from '@shared/engine';
 import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
 import { properName } from '@shared/utils';
 import { BottomSheet, Button, Checkbox } from '@mobile/ui';
@@ -24,7 +24,7 @@ export function MedicalConsentSheet({ open, onAgree }: MedicalConsentSheetProps)
     return p && p.id !== SELF_PROFILE_ID && p.name ? p : undefined;
   });
   const name = member ? properName(member.name.trim().split(/\s+/)[0]) : '';
-  const their = member ? pronounForms(member.intake?.pronouns).their : '';
+  const their = member ? pronounForms(resolvePronouns(member)).their : '';
   const title = member ? `Can the Oracle use ${name}’s health information?` : 'Can the Oracle use your health information?';
   return (
     <BottomSheet

@@ -40,7 +40,7 @@ export function EdgeLight({ radius = 24, duration = 16, paused = false, gather =
   const drifts = useRef(new Map<SVGRectElement, Animation[]>());
   const moves = useRef<Animation[]>([]);
   const live = useRef({ paused, gather, duration });
-  live.current = { paused, gather, duration };
+  useEffect(() => { live.current = { paused, gather, duration }; }, [paused, gather, duration]);
   const rects = () => [...(root.current?.querySelectorAll<SVGRectElement>(`rect[data-edge="${id}"]`) ?? [])];
 
   // Start the endless drift (still under reduced motion).

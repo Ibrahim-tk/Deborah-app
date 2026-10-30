@@ -1,6 +1,6 @@
 /**
  * @ui ActionTile — one quiet frosted row: icon well (or progress ring around the icon) · title + meta · chevron.
- * Used for standing paths in the thread (Talk with Deborah, Health intake).
+ * Used for standing paths in the thread (Talk with the Oracle, Health intake).
  */
 import { Icon, type IconName } from '../Icon';
 import { ProgressRing } from '../ProgressRing';

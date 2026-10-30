@@ -6,7 +6,7 @@ import { HomeMediaHero, type Recommendation } from '@web/patterns/widgets';
 import { HomeSections } from './HomeSections';
 
 export interface StateNewProps {
-  /** Opens chat with Deborah (no chat yet). */
+  /** Opens chat with the Oracle (no chat yet). */
   onStart: () => void;
   /** Set once she has chatted: the hero picks the chat back up. */
   chat?: { title?: string; when?: string; onContinue: () => void };

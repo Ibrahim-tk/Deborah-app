@@ -16,7 +16,7 @@ export type CheckInCardState =
 
 export interface CheckInCardProps {
   state: CheckInCardState;
-  /** "Tuesday, Oct 28 · 10:00 AM" — shown as "Upcoming: consult with Deborah · …". */
+  /** "Tuesday, Oct 28 · 10:00 AM" — shown as "Upcoming: consultation · …". */
   upcoming?: string;
   /** Due: start the check-in. */
   onCheckIn: () => void;

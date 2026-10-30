@@ -1,5 +1,5 @@
 /**
- * @screen  M-1.9 · Deborah's welcome
+ * @screen  M-1.9 · Oracle's welcome
  * @flow    F01 onboarding (plan P-06): the call to action after the onboarding profile (M-1.8)
  * @presentation full-screen fade — naked, no sheet/container
  * @states  for yourself ("Start a conversation") · for someone else ("Start a conversation about {name}")
@@ -7,10 +7,10 @@
  * @spec    docs/ux/F01-onboarding.md#m-19--deborahs-welcome
  * @xref    web: W-1.9 — not built
  *
- * Deborah's orb and her words revealing, then the CTA opens the first conversation (M-2.1) with the chat
+ * Oracle's orb and her words revealing, then the CTA opens the first conversation (M-2.1) with the chat
  * input ready. For someone else it first switches to their profile, so the chat is about them (third person,
  * ProfileBanner, minor rules for under-18s). The clinical Health Profile is optional and never gates this chat.
- * OPEN: welcome copy is placeholder until Deborah approves it.
+ * OPEN: welcome copy is placeholder until clinical review approves it.
  */
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
 import { Button, DeborahBlob, TextReveal } from '@web/ui';
@@ -29,7 +29,7 @@ export default function DeborahWelcome() {
     : 'I’m so glad you’re here. Let’s talk about your health. Tell me what’s on your mind today.';
 
   const ask = () => {
-    // Empty Ask Deborah only. Chips = Tone Guide scripted samples (signup 3 / login 4).
+    // Empty Ask Oracle only. Chips = Tone Guide scripted samples (signup 3 / login 4).
     // Land on Home, then push chat (different ids — not a double M-2.1 stack).
     if (member) switchProfile(member.id);
     resetTo('main', 'M-2.0');

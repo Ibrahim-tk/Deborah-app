@@ -73,7 +73,7 @@ export default function LogVisit() {
     const applied = st.applyVisitUpdates(profileId, updates.filter((u) => !off.includes(u.key)));
     setNoteId(id);
     reset(outcome);
-    // Opened from a debrief: Deborah confirms and asks "Discuss this with Deborah?".
+    // Opened from a debrief: Deborah confirms and asks "Discuss this with the Oracle?".
     if (params.conversationId && !noteId) void chat.debriefSaved(id, outcome, applied);
     toast(applied ? 'Saved — health profile updated' : 'Saved to My Visit Notes');
     dismissSheet();

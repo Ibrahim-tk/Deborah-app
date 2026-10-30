@@ -1,0 +1,13 @@
+/* --scene feeds the engine's clear colour; match the intake backdrop. */
+.root { --scene: var(--color-bg, #f7f5f1); position: absolute; bottom: -5%; left: -115%; width: 354%; height: 107.3%; pointer-events: none; }
+/* Tuned placement (size 354 · x -115 · y -5): roots at the bottom edge, crown running off the right. */
+.canvas { display: block; width: 100%; height: 100%; }
+/* The engine's sand dissolve stops at the original base, so the extended trunk would linger: fade the whole canvas out as the wind finishes. */
+.gone {
+  /* The extended trunk is outside the engine's sand dissolve: erase it from the bottom up while the wind runs. */
+  -webkit-mask-image: linear-gradient(to top, transparent var(--cut), #000 calc(var(--cut) + 12%));
+  mask-image: linear-gradient(to top, transparent var(--cut), #000 calc(var(--cut) + 12%));
+  animation: trunk-out 3000ms ease-in-out forwards;
+  opacity: 0; transition: opacity 2000ms var(--ease-in-out, ease-in-out) 6000ms; /* fades with the last of the 8s wind so the extended trunk (not in the sand dissolve) goes too */ }
+@property --cut { syntax: '<percentage>'; inherits: false; initial-value: -12%; }
+@keyframes trunk-out { to { --cut: 45%; } }

@@ -9,7 +9,7 @@
  * Same template as the onboarding intake (M-1.8, design request 2026-10-20): living backdrop, the
  * flowering tree as progress (paced to this profile's step count), one question at a time.
  * Web: full window over the app (no sidebar). Text Back top-left · Done (filled) top-right (save and close).
- * Footer: Back left · Next/Save right. Picks wait for Next, as in onboarding.
+ * Footer: Back left · Next/Save right. Choice steps tap-to-advance (last answer = Done); other picks use Next.
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
@@ -48,6 +48,10 @@ export default function CompleteIntake() {
   });
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];
+  // Refs so delayed advance() (CONFIRM_MS) always finishes against the step that was answered,
+  // and so "last" is computed from post-answer visible steps — not a stale render flag.
+  const stepRef = useRef(step);
+  stepRef.current = step;
   const value = step ? (answers[step.key] ?? '') : '';
   const last = steps.length > 0 && at === steps.length - 1;
 
@@ -65,21 +69,30 @@ export default function CompleteIntake() {
       return next;
     });
   };
-  const next = (final: Answers) => {
-    if (step?.presentation === 'ageWheel' && !final[step.key]) {
-      final = { ...final, [step.key]: '12' };
+  /** Persist, then pop when this answer leaves no further profile steps (Done). */
+  const next = (final: Answers, answeredKey?: string) => {
+    const key = answeredKey ?? stepRef.current?.key;
+    if (key && stepRef.current?.key === key && stepRef.current.presentation === 'ageWheel' && !final[key]) {
+      final = { ...final, [key]: '12' };
       answersRef.current = final;
       setAnswers(final);
     }
     persist(final);
-    if (last) pop();
-    else setI(at + 1);
+    const visible = profileVisibleSteps(final);
+    const idx = key ? visible.findIndex((s) => s.key === key) : -1;
+    // Gone, or answered the last visible question → same as header Done.
+    if (idx < 0 || idx >= visible.length - 1) pop();
+    else setI(idx + 1);
   };
   const advance = (v: string, extra?: Answers) => {
-    const final = { ...answersRef.current, ...extra, [step.key]: v };
+    const current = stepRef.current;
+    if (!current) return;
+    const key = current.key;
+    const final = { ...answersRef.current, ...extra, [key]: v };
     answersRef.current = final;
     setAnswers(final);
-    window.setTimeout(() => next(final), step.kind === 'text' ? 0 : CONFIRM_MS);
+    // Capture key now — after setAnswers, visible steps / stepRef may change before the timer.
+    window.setTimeout(() => next(final, key), current.kind === 'text' ? 0 : CONFIRM_MS);
   };
   const goBack = () => {
     persist(answersRef.current);
@@ -98,11 +111,23 @@ export default function CompleteIntake() {
     (step.optional === true ||
       step.kind === 'date' || step.kind === 'year' || step.kind === 'measure' ||
       textOk ||
-      (step.kind === 'name' && NAME_PATTERN.test(value.trim())) ||
-      (step.kind === 'choice' && Boolean(value)));
+      (step.kind === 'name' && NAME_PATTERN.test(value.trim())));
+  // Choice rows tap-to-advance (incl. Genesis Gold last step → persist + Done).
+  const tapToAnswer = step?.kind === 'choice';
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (canContinue) next(answersRef.current);
+  };
+  // Empty namedReasons → Skip + No; any named row → Next (No becomes Next).
+  const namedEmpty = !!step && step.presentation === 'namedReasons' && !namedReasonsComplete(value, step.none);
+  // OPEN: Skip vs No — Skip leaves unanswered (no None write); No = confirmed none. Product may later want an explicit "prefer not to say" token.
+  const skipNamed = () => {
+    if (!step) return;
+    const final = { ...answersRef.current };
+    if (!namedReasonsComplete(final[step.key], step.none)) delete final[step.key];
+    answersRef.current = final;
+    setAnswers(final);
+    next(final);
   };
 
   if (!profile) return null;
@@ -121,18 +146,21 @@ export default function CompleteIntake() {
                 <h1 className={`${template.title} ${template.heading}`}>
                   <TextReveal as="span" text={step ? titleFor(step, answers) : 'Nothing else applies to this profile right now.'} delay={180} stagger={22} />
                 </h1>
-                {step && <StepBody step={step} answers={answers} set={set} advance={advance} />}
+                {step && <StepBody step={step} answers={answers} set={set} advance={advance} advanceOnPick />}
               </div>
             </div>
             <div className={template.footer}>
               {step && (
                 <div className={template.navRow}>
-                  {step.presentation === 'namedReasons' && !value.trim() ? (
-                    <Button type="button" variant="ghost" onClick={() => advance(step.none ?? 'None')}>Skip</Button>
-                  ) : (
-                    <Button type="button" variant="ghost" onClick={goBack}>Back</Button>
+                  <Button type="button" variant="ghost" onClick={goBack}>Back</Button>
+                  {!tapToAnswer && namedEmpty && (
+                    <Button type="button" variant="ghost" onClick={skipNamed}>Skip</Button>
                   )}
-                  <Button type="submit" disabled={!canContinue}>{last ? 'Save profile' : 'Next'}</Button>
+                  {!tapToAnswer && (namedEmpty ? (
+                    <Button type="button" onClick={() => advance(step.none ?? 'None')}>No</Button>
+                  ) : (
+                    <Button type="submit" disabled={!canContinue}>{last ? 'Save profile' : 'Next'}</Button>
+                  ))}
                 </div>
               )}
             </div>

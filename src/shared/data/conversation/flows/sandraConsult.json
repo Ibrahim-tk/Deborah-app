@@ -374,7 +374,7 @@
       "next": "close",
       "widget": {
         "type": "visit_notes_card",
-        "title": "Your visit notes"
+        "title": "My Visit Notes"
       }
     },
     "close": {

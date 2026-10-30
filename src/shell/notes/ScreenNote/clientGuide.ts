@@ -10,7 +10,7 @@ export const CLIENT_GUIDE: Record<string, string> = {
   'visit-notes':
     'These are visit notes. You can save a copy or download them to share with a clinician.',
   'records-notes':
-    'Your visit notes are here. Open an old one, or log what happened after a provider visit.',
+    'My Visit Notes are here. Open an old one, or log what happened after a provider visit.',
   'healing-plan':
     'This is the Wellness Plan. Newest concern stays on top — check off actions as you go. Confirm when a concern is resolved. The letter below is the Oracle’s reference.',
 };

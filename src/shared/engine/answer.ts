@@ -48,7 +48,7 @@ export function buildAnswer(script: Script, profile: Profile, labs?: LabReport):
   // Keep `bullets` absent on sections that never had any.
   const clean = sections.map((s, i) => (base[i].bullets || s.bullets.length ? s : { ...s, bullets: undefined }));
 
-  // ASSUMPTION (pending Deborah, F06 OPEN): no product card for teen or child profiles.
+  // ASSUMPTION (pending clinical review, F06 OPEN): no product card for teen or child profiles.
   return {
     sections: clean,
     product: isMinor(profile) ? undefined : script.answer.product,

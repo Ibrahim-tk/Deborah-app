@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useState, type RefObject } from 'react';
 
 /** Feather above the title (px): the blur ramps in over this band and is at full strength behind the text. */
 const FEATHER = 72;
@@ -8,9 +8,9 @@ const LIFT = 40;
 /**
  * Height for the screen-level blur layer so it reaches from the bottom of the screen to just above the
  * question title. Re-measures when the question (and so the title's position) changes or the screen resizes.
+ * Pass a caller-owned `titleRef` so the hook return is not mixed with a RefObject (react-hooks/refs).
  */
-export function useTitleFade(key: string) {
-  const titleRef = useRef<HTMLHeadingElement>(null);
+export function useTitleFade(key: string, titleRef: RefObject<HTMLHeadingElement | null>) {
   const [height, setHeight] = useState<number>();
 
   useLayoutEffect(() => {
@@ -31,7 +31,7 @@ export function useTitleFade(key: string) {
     if (body) for (const child of Array.from(body.children)) ro.observe(child);
     root.addEventListener('scroll', measure, true);
     return () => { ro.disconnect(); root.removeEventListener('scroll', measure, true); };
-  }, [key]);
+  }, [key, titleRef]);
 
-  return { titleRef, height, feather: FEATHER };
+  return { height, feather: FEATHER };
 }

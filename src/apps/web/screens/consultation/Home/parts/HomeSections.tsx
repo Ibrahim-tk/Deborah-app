@@ -10,7 +10,7 @@ export interface HomeSectionsProps {
   destinations: Destinations;
   recommendations: Recommendation[];
   onShop: (productId: string) => void;
-  /** My Notes card (M-9.1). */
+  /** My Visit Notes card (M-9.1). */
   onNotes: () => void;
   /** My Healing Plan entry for “More for you”. */
   journey?: { concern?: string; done: number; total: number; onPress: () => void };
@@ -31,7 +31,7 @@ export function HomeSections({ destinations, recommendations, onShop, onNotes, j
         items={[
           {
             key: 'notes',
-            title: 'My Notes',
+            title: 'My Visit Notes',
             sub: 'Saved notes',
             tone: 'lilac',
             artifact: 'blue-bloom',

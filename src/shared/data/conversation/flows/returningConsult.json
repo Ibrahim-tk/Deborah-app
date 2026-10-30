@@ -398,7 +398,7 @@
     "weight_done": {
       "type": "message",
       "bot": "Thanks, I've saved that. The amount for your weight is on the Genesis Gold guide. Because you're on HRT, please check with your prescriber before you start.",
-      "uiNote": "OPEN: no dose is shown until Deborah supplies the weight table (never invent dosing).",
+      "uiNote": "OPEN: no dose is shown until clinical review supplies the weight table (never invent dosing).",
       "next": "saved"
     },
     "saved": {

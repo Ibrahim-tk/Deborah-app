@@ -14,7 +14,7 @@ export interface TranscriptProps {
   onShop: (productId: string) => void;
 }
 
-// Safety cards are interactive in chat; here they are summarised as plain Deborah text.
+// Safety cards are interactive in chat; here they are summarised as plain Oracle text.
 const SAFETY_FALLBACK: Partial<Record<Message['kind'], string>> = {
   emergency: 'I shared emergency guidance here.',
   crisis: 'I shared crisis support resources here.',

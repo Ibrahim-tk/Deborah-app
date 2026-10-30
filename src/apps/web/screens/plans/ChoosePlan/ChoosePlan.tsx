@@ -102,7 +102,7 @@ export default function ChoosePlan() {
               <p className={styles.subtitle}>Renews monthly. Cancel anytime online.</p>
             </div>
           {/* Monthly only (Oracle Change Requests, Oct 26): no annual toggle. */}
-            {preselect === 'family' && <p className={styles.context}>Family lets everyone keep their own private history.</p>}
+            {preselect === 'family' && <p className={styles.context}>Family lets you manage up to 3 family members as their medical advocate.</p>}
             <div className={styles.cards} role="radiogroup" aria-label="Plans">
               {planList.map((p) => (
                 <PlanCard key={p.id} plan={p} billing={billing} selected={p.id === selected} current={subscriber && p.id === currentPlan} onSelect={() => choose({ plan: p.id })} />
@@ -130,7 +130,7 @@ export default function ChoosePlan() {
             <span className={styles.check}><Icon name="check" size={32} /></span>
             <h1 className={styles.title}>You’re all set.</h1>
             <p className={styles.subtitle}>Your {plan.name} plan is active.</p>
-            <Button onClick={toDashboard}>Continue to dashboard</Button>
+            <Button onClick={toDashboard}>Continue my conversation</Button>
           </div>
         )}
       </main>

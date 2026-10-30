@@ -11,7 +11,7 @@ export interface Persona {
   /** Welcome (M-1.2): large serif greeting line. */
   welcomeTitle: string;
   welcomeNote: string;
-  /** M-7.6 About Deborah. OPEN: approved bio. */
+  /** M-7.6 About the Oracle. OPEN: approved bio. */
   credentialsLine: string;
   philosophy: string[];
   books: { title: string; year: number; note: string }[];
@@ -341,7 +341,7 @@ export interface LabMarker {
   unit: string;
 }
 
-/** content/library.json — Deborah's library (docs/06-data-model.md §3). */
+/** content/library.json — the Oracle's library (docs/06-data-model.md §3). */
 export interface LibraryItem {
   id: string;
   type: 'video' | 'article' | 'lesson';

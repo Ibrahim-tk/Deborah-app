@@ -1,5 +1,5 @@
 /**
- * @pattern ReviewFactsCard — Review and Confirm (meeting 2026-10-12 · B, plan DN-13): what Deborah noted in
+ * @pattern ReviewFactsCard — Review and Confirm (meeting 2026-10-12 · B, plan DN-13): what Oracle noted in
  *          this conversation, one row per fact with a checkbox (all ticked to start). Save to my profile saves
  *          the ticked rows and drops the rest; Skip for now drops everything. Nothing reaches
  *          the profile any other way. Resolved: one plain line saying what was saved.

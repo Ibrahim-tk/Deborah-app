@@ -8,7 +8,7 @@
  * @spec    docs/ux/F01-onboarding.md#m-18--onboarding-profile
  * @xref    web: W-1.8 — not built
  *
- * Version 2 onboarding profile: who Deborah will talk to, full date of birth, sex assigned at birth,
+ * Version 2 onboarding profile: who Oracle will talk to, full date of birth, sex assigned at birth,
  * gender identity, and pronouns. Clinical questions live on the Health Profile (M-2.14).
  */
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
@@ -21,7 +21,8 @@ import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, 
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
 import { ConsentSheet } from './parts/ConsentSheet';
-import { BloomReveal } from './parts/BloomReveal';
+import { WelcomeReveal } from './parts/WelcomeReveal';
+import { BloomReveal3 } from './parts/BloomReveal3';
 import { BloomReveal2, useTreeDev } from './parts/BloomReveal2';
 import { useTitleFade } from './parts/useTitleFade';
 import { useStepTransition } from './parts/useStepTransition';
@@ -34,13 +35,18 @@ const DEFAULT_DOB = `${THIS_YEAR - 35}-06-15`;
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 // Long enough to see a tapped tile or row confirm before the next question.
 const CONFIRM_MS = 280;
+// Finish, three beats on the same screen (no M-1.9 sheet): 1 wind starts and the question blows away with it ·
+// 2 the wind ends and the tree + its particles fade (GenesisTree .gone) · 3 Oracle's welcome reveals on a clean backdrop.
+const WIND_MS = 8000;
+const CLEAR_MS = 400;
+// The question fades up and is removed from the screen at this point of the wind.
+const BLOW_MS = 1200;
 
 export default function HealthBasics() {
   const { presentSheet, pop } = useNav();
   const atDetails = useStartAtDetails();
   // Feature flag (off by default): the layered tree, on only in the /internal/tree sandbox for now.
   const newTree = useTreeDev((s) => s.useNewTree);
-  const Bloom = newTree ? BloomReveal2 : BloomReveal;
   // `start: 'details'` (internal Screens menu): skip "who is this for" as Myself, open on basic details.
   // Teen accounts answer only for themselves (story 1.5): skip "Who is this for?".
   const teen = useAppStore((s) => s.accountKind === 'teen');
@@ -50,6 +56,7 @@ export default function HealthBasics() {
     answersRef.current = answers;
   }, [answers]);
   const [i, setI] = useState(atDetails || teen ? 1 : 0);
+  const [done, setDone] = useState<{ profileId: string; phase: 'blow' | 'cleared' | 'welcome' } | null>(null);
   // Date of birth already given on the age step (M-1.13): Myself skips it here.
   const accountDob = useAppStore((s) => s.accountDob);
   const steps = visibleSteps(accountDob && !forSomeoneElse(answers) ? { ...answers, birthDate: accountDob } : answers)
@@ -62,15 +69,18 @@ export default function HealthBasics() {
   const under = consentOpen && at > 0 ? steps[at - 1] : step;
   // Outgoing question fades out before the next fades in.
   const { shown, leaving } = useStepTransition(under);
-  const fade = useTitleFade(shown.key);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const fade = useTitleFade(shown.key, titleRef);
   const value = answers[step.key] ?? '';
   const underValue = answers[under.key] ?? '';
   const last = at === steps.length - 1;
 
   const finish = (final: Answers) => {
     const profileId = saveOnboarding(accountDob && !forSomeoneElse(final) ? { ...final, birthDate: accountDob } : final);
-    // Deborah's sheet opens over the full bloom; its CTA starts the chat as (or about) this profile.
-    presentSheet('M-1.9', { profileId });
+    // Oracle's welcome opens over the full bloom; its CTA starts the chat as (or about) this profile.
+    setDone({ profileId, phase: 'blow' });
+    window.setTimeout(() => setDone({ profileId, phase: 'cleared' }), BLOW_MS);
+    window.setTimeout(() => setDone({ profileId, phase: 'welcome' }), WIND_MS + CLEAR_MS);
   };
 
   const set = (key: string, v: string) => {
@@ -126,6 +136,17 @@ export default function HealthBasics() {
     pop();
   };
 
+  // Medicines / supplements (namedReasons): empty → Skip + No; any named row → Continue (No becomes Continue).
+  const namedEmpty = under.presentation === 'namedReasons' && !namedReasonsComplete(underValue, under.none);
+  // OPEN: Skip vs No — Skip leaves the step unanswered (no None write); No = confirmed none. Product may later want an explicit "prefer not to say" token.
+  const skipNamed = () => {
+    const final = { ...answersRef.current };
+    if (!namedReasonsComplete(final[under.key], under.none)) delete final[under.key];
+    answersRef.current = final;
+    setAnswers(final);
+    next(final);
+  };
+
   return (
     <form className={styles.root} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
       {/* Same living backdrop as Welcome (M-1.2), so the questions feel like one continuous space. */}
@@ -140,24 +161,32 @@ export default function HealthBasics() {
       </header>
       {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
       <div className={newTree ? `${styles.art} ${styles.art2}` : styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-        <Bloom className={newTree ? styles.bloom2 : styles.bloom} progress={bloomProgress(at, steps.length)} />
+        {newTree
+          ? <BloomReveal2 className={styles.bloom2} progress={bloomProgress(at, steps.length)} />
+          : <BloomReveal3 progress={bloomProgress(at, steps.length)} wind={done !== null} />}
       </div>
       {/* Progressive blur: from the bottom of the screen up to just above the title (height is measured). */}
-      <div className={styles.fade} style={{ height: fade.height, '--feather': `${fade.feather}px` } as CSSProperties} aria-hidden="true"><i /><i /><i /></div>
+      <div className={`${styles.fade} ${done ? styles.fadeOff : ''}`} style={{ height: fade.height, '--feather': `${fade.feather}px` } as CSSProperties} aria-hidden="true"><i /><i /><i /></div>
       {/* While the consent sheet is open, hide the DOB step so it doesn’t sit half-visible under a seam. */}
-      {!consentOpen && (
+      {done?.phase === 'welcome' && <WelcomeReveal profileId={done.profileId} />}
+      {!consentOpen && (!done || done.phase === 'blow') && (
         <>
-          <div className={styles.body}>
+          <div className={`${styles.body} ${done?.phase === 'blow' ? styles.blowAway : ''}`}>
             <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''}`}>
-              <h1 ref={fade.titleRef} className={`${styles.title} ${styles.heading}`}>{titleFor(shown, answers)}</h1>
+              <h1 ref={titleRef} className={`${styles.title} ${styles.heading}`}>{titleFor(shown, answers)}</h1>
               <StepBody step={shown} answers={answers} set={set} advance={advance} />
             </div>
           </div>
-          <div className={styles.footer}>
-            {!tapToAnswer && <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>}
-            {/* Medicines / supplements: nothing to add → quiet Skip under Continue (was "I don't take any"). */}
-            {under.presentation === 'namedReasons' && !underValue.trim() && (
-              <Button type="button" variant="ghost" fullWidth onClick={() => advance(under.none ?? 'None')}>Skip</Button>
+          <div className={`${styles.footer} ${done?.phase === 'blow' ? styles.blowAway : ''}`}>
+            {!tapToAnswer && (
+              namedEmpty ? (
+                <>
+                  <Button type="button" fullWidth onClick={() => advance(under.none ?? 'None')}>No</Button>
+                  <Button type="button" variant="ghost" fullWidth onClick={skipNamed}>Skip</Button>
+                </>
+              ) : (
+                <Button type="submit" fullWidth disabled={!canContinue}>Continue</Button>
+              )
             )}
           </div>
         </>

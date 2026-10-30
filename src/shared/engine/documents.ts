@@ -2,7 +2,7 @@
  * F11 Documents (docs/ux/F11-documents.md › Deborah handoff). A shared document becomes a user
  * attachment bubble, then:
  * - lab result with a lab report → the existing lab-review answer (shareLabs, direct);
- * - prescription → the medication safety card first (never dosing), then Deborah's reply;
+ * - prescription → the medication safety card first (never dosing), then Oracle's reply;
  * - other types → a short placeholder reply with suggested questions. Not a counted consultation.
  */
 import { documentReview } from '../data';

@@ -39,7 +39,7 @@ export default function Home() {
   const [sheet, setSheet] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // First visit: Deborah's greeting sheet slides up ~1.5 s after landing.
+  // First visit: Oracle's greeting sheet slides up ~1.5 s after landing.
   useEffect(() => {
     if (!eligible) return;
     const id = window.setTimeout(() => setSheet(true), GREETING_DELAY_MS);
@@ -130,7 +130,7 @@ export default function Home() {
           <StateNew
             onStart={() => { closeSheet(); openAsk({ focus: true }); }}
             chat={
-              // Live Ask Deborah history only. Sandra/proxy premade flows stay off Home so suggestion
+              // Live Ask Oracle history only. Sandra/proxy premade flows stay off Home so suggestion
               // pills always mean Tone Guide dummy scripts on M-2.1, not a parallel first-consult story.
               history.length || d.midIntake ? { title: d.summary ?? d.topic, when: d.when, onContinue: () => { closeSheet(); resume(); } } : undefined
             }

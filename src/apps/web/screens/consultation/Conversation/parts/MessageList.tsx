@@ -230,7 +230,7 @@ export function MessageList({
       );
     }
 
-    // Deborah text, intake questions, check-in and lab request.
+    // Oracle text, intake questions, check-in and lab request.
     const intake = m.kind === 'intakeQuestion' ? m.intake : undefined;
     const quick = m.quickReplies;
     const quickActive = Boolean(quick) && isLatestDeborah && !busy && !m.meta?.streaming && !quick?.answered;
@@ -295,7 +295,7 @@ export function MessageList({
         i === firstAnswer && !disclaimerSeen && (
           <CareDisclaimer key="care" text={consentDoc.careLine} onDismiss={() => useAppStore.getState().dismissDisclaimer()} />
         ),
-        // A chat that opens with Deborah (first-visit onboarding) shows her orb once, top left.
+        // A chat that opens with the Oracle (first-visit onboarding) shows her orb once, top left.
         i === 0 && m.role === 'deborah' && <DeborahBlob key="orb" size={44} label="The Oracle" className={styles.firstOrb} />,
         renderOne(m, i),
       ])}

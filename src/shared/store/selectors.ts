@@ -128,7 +128,7 @@ export const selectProfileLabs = (s: AppState, profileId = s.activeProfileId): L
     .filter((r) => r.profileId === profileId && r.confirmed)
     .sort((a, b) => (b.collectedAt ?? '').localeCompare(a.collectedAt ?? ''));
 
-/** Next booked consultation with Deborah for the profile (hub "Upcoming"). */
+/** Next booked consultation with the Oracle for the profile (hub "Upcoming"). */
 export const selectUpcomingBooking = (s: AppState, profileId = s.activeProfileId): Booking | undefined => {
   const now = nowFrom(s).toISOString();
   return s.booking.bookings

@@ -1,6 +1,6 @@
 {
   "status": "placeholder",
-  "note": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Banks route on routeSex: the body answers (sexCharacteristics) when given, else sex assigned at birth. Under-13 Myself → M-1.10. Wording placeholder pending Deborah.",
+  "note": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Banks route on routeSex: the body answers (sexCharacteristics) when given, else sex assigned at birth. Under-13 Myself → M-1.10. Wording placeholder pending clinical review.",
   "onboardingKeys": [
     "profileFor",
     "relationship",
@@ -448,26 +448,6 @@
       "showIf": {
         "age": {
           "min": 18
-        }
-      },
-      "status": "placeholder"
-    },
-    {
-      "key": "sexProceduresNote",
-      "kind": "text",
-      "title": "Anything you’d like to add about these?",
-      "titleOther": "Anything you’d like to add about {name}’s procedures?",
-      "placeholder": "Optional",
-      "single": true,
-      "optional": true,
-      "showIf": {
-        "age": {
-          "min": 18
-        },
-        "sexProceduresAny": {
-          "in": [
-            "yes"
-          ]
         }
       },
       "status": "placeholder"

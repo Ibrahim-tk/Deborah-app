@@ -189,7 +189,7 @@ export function EntryView({ entry, active, say, onPick, onAction, renderPrep, re
           }}
         />
       )}
-      {w?.type === 'visit_notes_card' && renderNotesCard?.(w.title ?? 'Your visit notes')}
+      {w?.type === 'visit_notes_card' && renderNotesCard?.(w.title ?? 'My Visit Notes')}
       {w?.type === 'product_card' && !minor && (() => {
         const p = findProduct(w.productId ?? 'genesis-gold');
         if (!p) return null;

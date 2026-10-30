@@ -1,5 +1,5 @@
 /**
- * First-visit greeting on the shared ui/BottomSheet: Deborah's orb says hello, and one clear button
+ * First-visit greeting on the shared ui/BottomSheet: Oracle's orb says hello, and one clear button
  * into a first conversation with her; she asks age and gender before anything else. Drag, scrim tap or Escape dismisses.
  */
 import { BottomSheet, Button, DeborahBlob, TextReveal } from '@mobile/ui';
@@ -13,7 +13,7 @@ export interface GreetingSheetProps {
 }
 
 export function GreetingSheet({ open, name, onDismiss, onOpenChat }: GreetingSheetProps) {
-  // OPEN: greeting copy is placeholder until Deborah approves it.
+  // OPEN: greeting copy is placeholder until clinical review approves it.
   // Hierarchy (designer, 2026-10-29): serif greeting leads, the rest in sans. Oct 26 legal: Oracle is "an AI system".
   const hello = `Hi${name ? ` ${name}` : ''}, I’m Oracle.`;
   const intro = 'I’m an AI system. Tell me how you’re feeling, and we’ll look at what’s going on together, one step at a time.';

@@ -35,7 +35,8 @@ export function CodeStep({ email, onVerified, onChangeEmail }: { email: string; 
   // PDF persona auto-run: fill OTP immediately when the shell sets data-yoc-fast-signup.
   useEffect(() => {
     if (document.documentElement.dataset.yocFastSignup !== '1') return;
-    update('4'.repeat(LENGTH));
+    const id = window.setTimeout(() => update('4'.repeat(LENGTH)), 0);
+    return () => window.clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot on mount for journey pilot
   }, []);
 

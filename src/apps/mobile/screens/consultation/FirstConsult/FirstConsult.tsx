@@ -1,7 +1,7 @@
 /**
  * @screen  M-2.12 · First conversation (scripted)
  * @flow    F02 Core consultation — genesis_first_consult_v1 after onboarding (M-1.9), or with `flow: 'returning'`
- *          the signed-in demo genesis_returning_consult_demo (from Home's Ask Deborah, seed R01)
+ *          the signed-in demo genesis_returning_consult_demo (from Home's Ask Oracle, seed R01)
  * @states  opener · context · clarifier 1–3 · safety (red flag) · thinking · 7-section answer · follow-up ·
  *          visit prep · check-in opt-in · close
  * @figma   —
@@ -11,7 +11,7 @@
  * A prebuilt Q&A, no live LLM: the script lives in JSON and plays through useFlowPlayer, drawn with the
  * chat's own patterns. The first tap asks for health-data consent (as in M-2.1). Leaving the script for
  * free chat opens the normal conversation (M-2.1).
- * OPEN: "DRAFT. All Deborah-voice copy, tests and product guidance need Deborah's clinical sign-off."
+ * OPEN: "DRAFT. All Oracle-voice copy, tests and product guidance need clinical sign-off."
  * OPEN: the script's facts (night sweats, levothyroxine…) are its sample person's, not this user's answers.
  */
 import type { Appointment } from './parts/AppointmentForm';
@@ -67,7 +67,7 @@ export default function FirstConsult() {
     if (chatVisible && needsReconsent) void askConsent();
   }, [chatVisible, needsReconsent, askConsent]);
   const openSwitcher = useProfileSwitcher();
-  // The first consultation reads the sign-up profile so Deborah never re-asks it (docs/ux/F02c).
+  // The first consultation reads the sign-up profile so Oracle never re-asks it (docs/ux/F02c).
   const profileCtx = useProfileContext();
   const proxyCtx = useProxyContext();
   const player = useFlowPlayer(flow, name, !resolved ? profileCtx : resolved === 'proxy' ? proxyCtx : undefined, premade ? resolved : undefined);
@@ -107,7 +107,7 @@ export default function FirstConsult() {
   const pick = async (entryId: string, node: FlowNode, picked: FlowOption[]) => {
     if (picked[0]?.next === 'chat_free') return openAsk({ focus: true });
     if (!asked.current && consent.needed()) {
-      // Her words land first, Deborah answers in a line, and only then the consent card (design direction 2026-10-14).
+      // Her words land first, Oracle answers in a line, and only then the consent card (design direction 2026-10-14).
       asked.current = true;
       player.echo(entryId, picked);
       await player.aside('Thank you for telling me. Before I look at this with you, I’d like to use the health details you shared, so my guidance fits you.');

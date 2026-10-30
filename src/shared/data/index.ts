@@ -179,7 +179,7 @@ const visitNotesAsk: Record<string, FlowNode> = {
   visit_notes: {
     type: 'message',
     bot: 'Done. Here are your visit notes, ready to take with you.',
-    widget: { type: 'visit_notes_card', title: 'Your visit notes' },
+    widget: { type: 'visit_notes_card', title: 'My Visit Notes' },
   },
 };
 
@@ -212,7 +212,7 @@ export interface DocumentReviewCopy {
 }
 export const documentReview = documentReviewJson as DocumentReviewCopy;
 
-/** Clinical healing-plan document shown on M-7.3 (placeholder copy until Deborah approves). */
+/** Clinical healing-plan document shown on M-7.3 (placeholder copy until clinical review approves). */
 export interface HealingPlanDocument {
   status: 'placeholder' | 'approved';
   brand: string;

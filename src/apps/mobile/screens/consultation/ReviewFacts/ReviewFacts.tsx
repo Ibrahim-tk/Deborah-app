@@ -1,5 +1,5 @@
 /**
- * @screen  M-2.13 · Review what Deborah noted
+ * @screen  M-2.13 · Review what Oracle noted
  * @flow    Core experience · Review and Confirm (meeting 2026-10-12 · B, plan C-12, node DN-13)
  * @presentation sheet, large — from Edit on the ReviewFactsCard
  * @states  list · editing one fact (options, or text for facts picked up from a message) · empty (all handled)

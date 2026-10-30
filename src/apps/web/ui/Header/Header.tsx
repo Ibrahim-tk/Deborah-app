@@ -9,7 +9,7 @@
  * header with no explicit `large` shows the large title just under the back button and folds it into the
  * bar by itself once the screen's content scrolls (no per-screen wiring).
  */
-import { useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useLayoutEffect, useRef, type ReactNode, type RefObject } from 'react';
 import { cx } from '@shared/utils';
 import { GlassButton } from '../GlassButton';
 import styles from './Header.module.css';
@@ -29,29 +29,6 @@ export interface HeaderProps {
   collapsed?: boolean;
 }
 
-const COLLAPSE_AT = 12;
-
-/** Large title + scroll collapse for headers on plain screens (see file header). */
-function useAutoLarge(enabled: boolean) {
-  const ref = useRef<HTMLElement>(null);
-  const [state, setState] = useState({ on: false, collapsed: false });
-  useLayoutEffect(() => {
-    const screen = enabled ? ref.current?.closest("[data-bg='plain']") : null;
-    if (!screen) return;
-    setState((s) => ({ ...s, on: true }));
-    const onScroll = (e: Event) => {
-      const t = e.target;
-      // Vertical scrollers only: horizontal rails would otherwise reset the title.
-      if (!(t instanceof HTMLElement) || t.scrollHeight <= t.clientHeight + 1) return;
-      const collapsed = t.scrollTop > COLLAPSE_AT;
-      setState((s) => (s.collapsed === collapsed ? s : { on: true, collapsed }));
-    };
-    screen.addEventListener('scroll', onScroll, true);
-    return () => screen.removeEventListener('scroll', onScroll, true);
-  }, [enabled]);
-  return { ref, ...state };
-}
-
 /**
  * Native iOS bar on plain screens: the scroller right after the header slides up underneath it (negative
  * margin = header height, padding-top raised by the same amount), so content scrolls behind a transparent,
@@ -60,25 +37,31 @@ function useAutoLarge(enabled: boolean) {
 function useUnderlay(ref: RefObject<HTMLElement | null>, enabled: boolean) {
   useLayoutEffect(() => {
     const header = ref.current;
-    const next = header?.nextElementSibling;
-    if (!enabled || !header || !(next instanceof HTMLElement) || !header.closest("[data-bg='plain']")) return;
-    const base = parseFloat(getComputedStyle(next).paddingTop) || 0;
+    const sibling = header?.nextElementSibling;
+    if (!enabled || !header || !(sibling instanceof HTMLElement) || !header.closest("[data-bg='plain']")) return;
+    const surface: HTMLElement = sibling;
+    const base = parseFloat(getComputedStyle(surface).paddingTop) || 0;
     // Tallest height seen (large title open), so folding the title doesn't shift content mid-scroll.
     let tallest = 0;
     const apply = () => {
       const h = (tallest = Math.max(tallest, header.offsetHeight));
-      next.style.marginTop = `${-h}px`;
-      next.style.paddingTop = `${base + h}px`;
-      next.style.scrollPaddingTop = `${h}px`;
+      // DOM underlay sync — not React state; compiler immutability rule does not apply.
+      /* eslint-disable react-hooks/immutability -- intentional style writes on sibling scroller */
+      surface.style.marginTop = `${-h}px`;
+      surface.style.paddingTop = `${base + h}px`;
+      surface.style.scrollPaddingTop = `${h}px`;
+      /* eslint-enable react-hooks/immutability */
     };
     apply();
     const ro = new ResizeObserver(apply);
     ro.observe(header);
     return () => {
       ro.disconnect();
-      next.style.marginTop = '';
-      next.style.paddingTop = '';
-      next.style.scrollPaddingTop = '';
+      /* eslint-disable react-hooks/immutability -- restore sibling styles on unmount */
+      surface.style.marginTop = '';
+      surface.style.paddingTop = '';
+      surface.style.scrollPaddingTop = '';
+      /* eslint-enable react-hooks/immutability */
     };
   }, [ref, enabled]);
 }
@@ -88,8 +71,8 @@ export function Header({ title, left, right, large: largeProp, transparent, onBa
   // `collapsed` are still accepted from screens but ignored; the auto large title is off.
   void largeProp;
   void collapsedProp;
-  const auto = useAutoLarge(false);
-  useUnderlay(auto.ref, !transparent);
+  const headerRef = useRef<HTMLElement>(null);
+  useUnderlay(headerRef, !transparent);
   const large = false;
   const collapsed = false;
   // iOS 26 nav bar: a round Liquid Glass back button with only the chevron; the previous
@@ -98,7 +81,7 @@ export function Header({ title, left, right, large: largeProp, transparent, onBa
   const inlineTitle = title && (!large || collapsed);
   return (
     <header
-      ref={auto.ref}
+      ref={headerRef}
       className={cx(styles.root, transparent && styles.transparent, safeTop && styles.safeTop)}
       data-scrolled={(large && collapsed) || undefined}
     >

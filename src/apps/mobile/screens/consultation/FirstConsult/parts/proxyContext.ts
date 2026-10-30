@@ -2,6 +2,7 @@
 import { SELF_PROFILE_ID, selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom } from '@shared/utils';
 import type { FlowValue } from '@shared/engine';
+import { resolvePronouns } from '@shared/engine';
 import { pronounTokens } from '@mobile/screens/consultation/Conversation/parts/thirdPerson';
 
 export function useProxyContext(): { tokens: Record<string, string>; vars: Record<string, FlowValue> } {
@@ -11,7 +12,7 @@ export function useProxyContext(): { tokens: Record<string, string>; vars: Recor
   const now = nowFrom(useAppStore.getState());
   const age = dob ? Math.floor((now.getTime() - new Date(dob).getTime()) / 31_557_600_000) : 80;
   const name = profile?.name?.trim() || 'Eleanor';
-  const forms = pronounTokens(profile?.intake?.pronouns);
+  const forms = pronounTokens(resolvePronouns(profile));
   return {
     tokens: {
       you: you || 'there',

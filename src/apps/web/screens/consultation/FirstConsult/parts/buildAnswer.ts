@@ -7,7 +7,7 @@ const bullets = (body: FlowSectionBody) =>
 
 export function buildAnswer(node: FlowNode, say: (s?: string) => string): Answer {
   const sections = (node.sections ?? []).map((s, i) => ({
-    // Old 7-section flows: the 7th is the retired "A Word from Deborah".
+    // Old 7-section flows: the 7th is the retired "A Word from the Oracle".
     key: SECTION_ORDER[i] ?? ('word' as const),
     title: s.title,
     body: typeof s.body === 'string' ? say(s.body) : '',

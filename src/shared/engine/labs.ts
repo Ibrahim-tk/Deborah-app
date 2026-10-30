@@ -19,7 +19,7 @@ export function shareLabsSteps(ctx: EngineContext, report: LabReport, direct?: b
   const n = report.values.length;
   const bubble = userBubble(ctx, `Shared lab results (${n} value${n === 1 ? '' : 's'})`);
 
-  // M-9.5 "Ask Deborah about these labs", in-thread upload request, check-in, or mid-consult → answer now.
+  // M-9.5 "Ask Oracle about these labs", in-thread upload request, check-in, or mid-consult → answer now.
   const answerNow =
     Boolean(direct) ||
     Boolean(request) ||

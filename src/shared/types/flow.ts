@@ -90,7 +90,7 @@ export interface FlowNode {
   display?: 'greeting';
   /** Answer only: the visit notes' heading when saved from this answer (M-9.7), e.g. "Night sweats & 2–3 am waking". */
   notesTitle?: string;
-  /** Answer only: what Deborah noted, offered as "Save to my profile" right under the seven cards. */
+  /** Answer only: what Oracle noted, offered as "Save to my profile" right under the seven cards. */
   profileFacts?: { label: string; value: string }[];
 }
 

@@ -67,7 +67,7 @@ export default function ManageProfiles() {
         {invites.map((i) => (
           <p key={i.email} className={styles.note}>Invitation sent · {i.email}</p>
         ))}
-        <p className={styles.note}>Each person has their own private history. Histories never mix.</p>
+        <p className={styles.note}>You manage each family member’s history as their advocate. Invited teens with their own account keep a private history you can’t see.</p>
       </div>
     </div>
   );

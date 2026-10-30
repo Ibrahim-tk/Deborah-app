@@ -7,7 +7,7 @@ import { ProfileForStep } from './ProfileForStep';
 import { ChipPicker } from './ChipPicker';
 
 const THIS_YEAR = new Date().getFullYear();
-// Same units as Deborah's in-chat rulers (patterns/chat IntakeFields): imperial in the US.
+// Same units as the Oracle's in-chat rulers (patterns/chat IntakeFields): imperial in the US.
 const US = /-(US|LR|MM)$/i.test(navigator.language);
 const height = (cm: number) => { const i = Math.round(cm / 2.54); return US ? `${Math.floor(i / 12)} ft ${i % 12} in` : `${cm} cm`; };
 const weight = (kg: number) => (US ? `${Math.round(kg / 0.4536)} lb` : `${kg} kg`);
@@ -16,16 +16,19 @@ export interface StepBodyProps {
   step: Step;
   answers: Answers;
   set: (key: string, value: string) => void;
-  /** Answer and move on. Unused by taps on web — every pick waits for Next. */
+  /** Answer and move on. Default web onboarding waits for Next; Complete Intake passes advanceOnPick. */
   advance: (value: string, extra?: Answers) => void;
+  /** When true, choice / profileFor / None taps call advance (mobile-style). Health Basics leaves this off. */
+  advanceOnPick?: boolean;
 }
 
-export function StepBody({ step, answers, set }: StepBodyProps) {
+export function StepBody({ step, answers, set, advance, advanceOnPick = false }: StepBodyProps) {
   const value = answers[step.key] ?? '';
   // Chips add or remove a name in the comma list, so typing and tapping mix freely.
   const picked = list(value, step.none);
   const toggle = (name: string) =>
     set(step.key, step.single ? (picked.includes(name) ? '' : name) : (picked.includes(name) ? picked.filter((n) => n !== name) : [...picked, name]).join(', '));
+  const commit = (v: string, extra?: Answers) => (advanceOnPick ? advance(v, extra) : set(step.key, v));
 
   switch (step.kind) {
     case 'date':
@@ -48,7 +51,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
         </>
       );
     case 'profileFor':
-      return <ProfileForStep value={value} onPick={(v) => set(step.key, v)} />;
+      return <ProfileForStep value={value} onPick={(v) => commit(v)} />;
     case 'choice': {
       const options = orderedChoices(step, answers).map((c) => ({ id: c.value, label: choiceLabel(step, c.value, c.label, answers) }));
       const describeValue = step.describeValue;
@@ -89,7 +92,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
               onDescribeChange={describeKey ? (text) => set(describeKey, text) : undefined}
               onDescribeConfirm={
                 describeValue
-                  ? () => set(step.key, describeValue)
+                  ? () => commit(describeValue)
                   : undefined
               }
               onPick={(id) => {
@@ -106,7 +109,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
                 }
                 if (describeKey) set(describeKey, '');
                 if (expandKey) set(expandKey, '');
-                set(step.key, id);
+                commit(id);
               }}
             />
             {expanding && (
@@ -120,7 +123,9 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
                   selected={expandSelectedLabel ? [expandSelectedLabel] : undefined}
                   onPick={(_label, index) => {
                     const typeId = expandOpts[index]?.value;
-                    if (typeId) set(expandKey!, typeId);
+                    if (!typeId) return;
+                    if (advanceOnPick) advance(value, { [expandKey!]: typeId });
+                    else set(expandKey!, typeId);
                   }}
                 />
               </div>
@@ -139,7 +144,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
             onSubmit={(ids) => {
               const id = ids[0];
               if (!id) return;
-              set(step.key, id);
+              commit(id);
             }}
           />
         </div>
@@ -164,7 +169,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
             reasonPlaceholder={step.reasonPlaceholder ?? 'Reason'}
             showNone={false}
             onChange={(entries) => set(step.key, encodeNamedReasons(entries))}
-            onNone={() => set(step.key, step.none ?? 'None')}
+            onNone={() => commit(step.none ?? 'None')}
           />
         );
       }
@@ -199,9 +204,12 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
         );
       }
       if (step.single && !step.none && !step.suggestions?.length) {
+        // Screen owns the question as h1 (HealthBasics / CompleteIntake / EditHealthDetail);
+        // keep label for a11y only so it isn’t printed twice.
         return (
           <Input
-            label={step.title}
+            label={titleFor(step, answers)}
+            hideLabel
             placeholder={step.placeholder ?? ''}
             value={value}
             autoComplete="off"
@@ -222,7 +230,7 @@ export function StepBody({ step, answers, set }: StepBodyProps) {
           noneSelected={value === step.none}
           onToggle={toggle}
           onAdd={(name) => set(step.key, step.single ? name : [...picked, name].join(', '))}
-          onNone={() => set(step.key, step.none ?? '')}
+          onNone={() => commit(step.none ?? '')}
         />
       );
   }

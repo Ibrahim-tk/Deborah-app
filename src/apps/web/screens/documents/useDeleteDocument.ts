@@ -1,5 +1,5 @@
 /**
- * F11 Delete (docs/ux/F11-documents.md › Delete): confirm with the "Deborah will no longer use
+ * F11 Delete (docs/ux/F11-documents.md › Delete): confirm with the "Oracle will no longer use
  * this document" warning, soft-delete, then "Document deleted". Shared by M-11.1 and M-11.2.
  */
 import { useAppStore } from '@shared/store';

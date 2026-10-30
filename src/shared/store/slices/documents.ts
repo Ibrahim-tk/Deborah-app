@@ -20,7 +20,7 @@ export const documentsActions: StateCreator<AppState, [], [], Actions> = (set) =
       return {
         documents: {
           byId: { ...s.documents.byId, [id]: { ...d, deletedAt: nowFrom(s).toISOString() } },
-          // A deleted document is never offered to Deborah again.
+          // A deleted document is never offered to the Oracle again.
           pendingChatPromptId: s.documents.pendingChatPromptId === id ? undefined : s.documents.pendingChatPromptId,
         },
       };

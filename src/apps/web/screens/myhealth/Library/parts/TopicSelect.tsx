@@ -1,4 +1,4 @@
-/** M-7.5 "Topic" select row: every topic in Deborah's library, plus All topics. */
+/** M-7.5 "Topic" select row: every topic in the Oracle's library, plus All topics. */
 import { libraryItems } from '@shared/data';
 import { Select } from '@web/ui';
 import { TOPIC_ALL } from './useLibraryResults';

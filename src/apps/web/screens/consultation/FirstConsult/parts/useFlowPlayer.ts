@@ -66,7 +66,7 @@ export function useFlowPlayer(flow: Flow, name: string, ctx?: { tokens: Record<s
         if (node.type === 'answer' && node.layout === 'progressive') {
           const held = heldSafety.current;
           heldSafety.current = null;
-          // The trail already shows one Talk with Deborah card. Keep the safety words on the
+          // The trail already shows one Talk with the Oracle card. Keep the safety words on the
           // answer; a second bot entry would paint that card again under the pills.
           push({ id: uid(), kind: 'answer', nodeId: id, node, ...(held ? { safetyText: say(held.node.bot) } : {}) });
           // F02g: AfterGuidanceTrail owns the follow-up ask + two pills. Do not auto-advance

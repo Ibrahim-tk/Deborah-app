@@ -32,7 +32,7 @@ const composerBase = {
  */
 function useDemoWhenVisible(host: RefObject<HTMLElement | null>, run: () => void) {
   const runRef = useRef(run);
-  runRef.current = run;
+  useEffect(() => { runRef.current = run; }, [run]);
   useEffect(() => {
     const el = host.current;
     if (!el) return;

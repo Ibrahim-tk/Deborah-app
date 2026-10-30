@@ -20,7 +20,7 @@
 .bottom { flex: none; display: grid; gap: var(--space-4); /* breathing room between suggestions and the composer */ padding: var(--space-2) var(--margin-screen) calc(var(--safe-bottom) + var(--space-3)); }
 .widget { display: grid; gap: var(--space-2); margin-top: var(--space-3); }
 .widget[data-done] { pointer-events: none; }
-/* Opening greeting: Deborah's first line in serif, no bubble (design direction 2026-10-14). */
+/* Opening greeting: Oracle's first line in serif, no bubble (design direction 2026-10-14). */
 .greetingLine { font: var(--weight-regular) var(--fs-title-1) / var(--lh-title-1) var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); text-align: center; text-wrap: balance; }
 /* Reduced motion everywhere (design direction 2026-10-14): widgets and greetings only fade in, no movement. */
 .widget, .entry { animation: widget-in 320ms ease-out both; }
@@ -33,3 +33,18 @@
 /* Opening: the starters wait for the greeting's reveal, then fade in (no movement). */
 .starters { animation: widget-in 400ms ease-out 1100ms both; }
 @media (prefers-reduced-motion: reduce) { .starters { animation: none; } }
+
+/* Landing entrance (from M-1.8's welcome): everything arrives in sequence instead of all at once —
+   backdrop header, orb, greeting resolving from blur (as TextReveal), then starters and composer rising in. */
+.root > header { animation: fc-fade 700ms var(--ease-out) both; }
+.column:not([data-started]) .orb { animation: fc-orb 900ms var(--ease-out) 150ms both; }
+.column:not([data-started]) .orb + .entry { animation: fc-reveal 900ms var(--ease-out) 550ms both; }
+.bottom .starters { animation: fc-rise 700ms var(--ease-out) 1100ms both; }
+.bottom > :last-child { animation: fc-rise 700ms var(--ease-out) 1300ms both; }
+@keyframes fc-fade { from { opacity: 0; } }
+@keyframes fc-orb { from { opacity: 0; transform: scale(0.92); filter: blur(8px); } }
+@keyframes fc-reveal { from { opacity: 0; filter: blur(10px); transform: translateY(6px); } }
+@keyframes fc-rise { from { opacity: 0; transform: translateY(16px); } }
+@media (prefers-reduced-motion: reduce) {
+  .orb, .entry, .bottom .starters, .bottom > :last-child, .root > header { animation-name: fc-fade !important; }
+}

@@ -1,7 +1,7 @@
 /**
  * @shell PDF persona runs — every gender × age path from Genesis Health (2).pdf
  * (“Health Intake Logic wrt Age & Gender Clinician”). Auto-run goes through Health Basics
- * to Ask Deborah, or stops at the under-13 family-member gate. Demo-only values.
+ * to Ask Oracle, or stops at the under-13 family-member gate. Demo-only values.
  */
 import type { JourneyRun, ProfileAnswers } from './journeys';
 

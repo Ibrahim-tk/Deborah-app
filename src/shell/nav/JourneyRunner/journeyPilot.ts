@@ -418,7 +418,7 @@ export function journeyTick(run: JourneyRun, st: PilotState): PilotTick {
     return { done: false, acted: false, step: 'Waiting for Start chatting' };
   }
 
-  // After Start chatting: Home can win a tick before M-2.1 mounts — open Ask Deborah (don't run AutoDemo END).
+  // After Start chatting: Home can win a tick before M-2.1 mounts — open Ask Oracle (don't run AutoDemo END).
   if (/^M-2\.0\b/.test(screen) && (run.message || wantsAfterAnswer(run) || run.earlyAnswer)) {
     const openAsk =
       [...phone.querySelectorAll<HTMLButtonElement>('button')].find(
@@ -446,7 +446,7 @@ export function journeyTick(run: JourneyRun, st: PilotState): PilotTick {
     }
   }
 
-  // Onboarding profile from S03 / S01: fill it, then start the chat from Deborah's welcome.
+  // Onboarding profile from S03 / S01: fill it, then start the chat from Oracle's welcome.
   if (run.profile && top && (!inChat || onboardingSheet)) {
     if (/^M-1\.10/.test(screen)) {
       if (run.stopAt === 'gate') return { done: true, acted: false, step: 'Ask adult (under-13 gate)', passed: true };
@@ -563,7 +563,7 @@ export function journeyTick(run: JourneyRun, st: PilotState): PilotTick {
     const ph = box.getAttribute('placeholder') ?? '';
     if (FREE_TEXT_PLACEHOLDER.test(ph)) {
       const key = ph;
-      // Already sent for this placeholder — wait until Deborah advances (placeholder/choices change).
+      // Already sent for this placeholder — wait until clinical review advances (placeholder/choices change).
       if (st.intakeTextKey === `sent:${key}`) {
         return { done: false, acted: false, step: 'Waiting after intake text' };
       }

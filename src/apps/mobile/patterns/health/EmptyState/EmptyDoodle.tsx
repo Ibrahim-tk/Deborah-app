@@ -18,7 +18,7 @@ const Face = () => (
 );
 
 const ART: Record<Kind, JSX.Element> = {
-  // Woman with a speech bubble: "talk with Deborah".
+  // Woman with a speech bubble: "talk with Oracle".
   chat: (<><Face /><path className={styles.line} d="M44 10h20a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H54l-5 5v-5h-5a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4Z" /><path className={styles.fill} d="M54 15c-1.3-2-4.5-1.2-3.8 1.2.6 1.8 3.8 3.3 3.8 3.3s3.2-1.5 3.8-3.3c.7-2.4-2.5-3.2-3.8-1.2Z" /></>),
   // Clipboard with lines and a heart.
   note: (<><path className={styles.line} d="M20 12h32a3 3 0 0 1 3 3v50a3 3 0 0 1-3 3H20a3 3 0 0 1-3-3V15a3 3 0 0 1 3-3Z" /><path className={styles.hair} d="M28 8h16v8H28z" /><path className={styles.line} d="M25 28h22M25 36h22M25 44h14" /><path className={styles.fill} d="M44 52c-1.5-2.5-5.5-1.5-4.5 1.5.8 2.2 4.5 4 4.5 4s3.7-1.8 4.5-4c1-3-3-4-4.5-1.5Z" /><path className={styles.line} d="M62 14v6M59 17h6" /></>),

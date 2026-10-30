@@ -24,7 +24,7 @@ export function IntakeCompletionCard({
   body,
 }: IntakeCompletionCardProps) {
   const pct = Math.round(Math.min(1, Math.max(0, progress)) * 100);
-  const heading = title ?? (complete ? 'Update your intake' : 'Complete your intake');
+  const heading = title ?? (complete ? 'Update your health profile' : 'Complete your health profile');
   const copy =
     body
     ?? (complete

@@ -192,7 +192,7 @@ export default function CreateProfile() {
                 <Input
                   label="Password"
                   type="password"
-                  placeholder={signin ? 'Your password' : `At least ${MIN_LENGTH} characters`}
+                  placeholder={signin ? 'Enter your password' : `At least ${MIN_LENGTH} characters`}
                   value={password}
                   autoComplete={signin ? 'current-password' : 'new-password'}
                   error={errors.password}

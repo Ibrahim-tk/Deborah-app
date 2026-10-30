@@ -45,7 +45,7 @@ export interface SessionSlice {
   consentVersion?: string;
   /** Consent to process health data, asked in chat the first time it asks about health (F01). */
   healthConsentAt?: string;
-  /** Set by M-10.2 revoke. Cleared when the user agrees again. The next chat start asks before Deborah answers. */
+  /** Set by M-10.2 revoke. Cleared when the user agrees again. The next chat start asks before Oracle answers. */
   healthConsentRevoked?: boolean;
   /** "Not a substitute for professional care" line above the first chat; shown once. */
   disclaimerSeenAt?: string;

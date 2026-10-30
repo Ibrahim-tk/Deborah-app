@@ -1,6 +1,6 @@
 /**
  * @pattern VisitNoteCard — Visit Note as a list tile: doodle · date · title · detail; Log visit stays in-tile.
- *          Selected = quiet tint (no thick stroke). Footer: not logged → Log visit; logged → Ask Deborah + Edit.
+ *          Selected = quiet tint (no thick stroke). Footer: not logged → Log visit; logged → Ask Oracle + Edit.
  * @usedBy  M-9.1 (Visit Notes)
  */
 import { Button, Icon, IconButton, type IconName } from '@web/ui';

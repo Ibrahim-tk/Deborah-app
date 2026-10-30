@@ -101,7 +101,7 @@ export function useConversation() {
     },
     /** Composer photos / files (design 2026-10-21): posted as images, then a placeholder reply. */
     shareAttachments: (attachments: { name: string; src?: string }[], text?: string) => run({ kind: 'shareAttachments', attachments, text }),
-    /** F11: Deborah offers an upload saved with "Not now" — once. */
+    /** F11: Oracle offers an upload saved with "Not now" — once. */
     offerDocument: (documentId: string) => {
       const document = selectDocument(useAppStore.getState(), documentId);
       return document ? run({ kind: 'offerDocument', document }) : Promise.resolve(false);

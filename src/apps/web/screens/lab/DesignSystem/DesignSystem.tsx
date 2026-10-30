@@ -7,7 +7,7 @@
  * Living catalog for Version 2 mobile only. Values come from computed CSS on .phone-root;
  * specimens are components imported by product screens (not v1, not unused lab experiments).
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DeborahBlob, OVERLAY_HOST_ID } from '@web/ui';
 import { cx } from '@shared/utils';
 import { LiveRoot } from './parts/live';
@@ -17,13 +17,15 @@ import styles from './DesignSystem.module.css';
 export default function DesignSystem() {
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
+  const scrollerNode = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(SECTIONS[0].id);
 
   // Stay at Overview on mount (hash/deep-link not used); demos must not steal scroll.
   useEffect(() => {
-    if (!scroller) return;
-    scroller.scrollTop = 0;
-    setActive(SECTIONS[0].id);
+    scrollerNode.current = scroller;
+    const el = scrollerNode.current;
+    if (!el) return;
+    el.scrollTop = 0;
   }, [scroller]);
 
   // Highlight the section nearest the top of the scroll area (document order, not callback batch).

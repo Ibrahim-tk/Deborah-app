@@ -1,5 +1,5 @@
 /**
- * @pattern EscalationCard — the human path: Book a consultation with Deborah · Not now
+ * @pattern EscalationCard — the human path: Book a consultation · Not now
  * @usedBy  M-2.1 (F08 8.1), M-2.12, widget lab (/wid)
  * @spec    docs/ux/F03-safety.md#pattern--escalationcard-used-by-f08-81
  * @xref    web: apps/web/patterns/safety/EscalationCard — not built
@@ -7,8 +7,8 @@
  * Presented as a bottom sheet (design direction 2026-10-14: "more important"), with what she'd get up front:
  * why (optional reasons) and what a consultation is (details). The thread keeps a compact inline record
  * that can reopen the sheet, so the human path is never lost. The spec's actions and labels are unchanged:
- * primary "Book a consultation with Deborah", secondary "Not now".
- * OPEN: the spec places this inline in the thread; confirm the sheet presentation with Deborah.
+ * primary "Book a consultation", secondary "Not now".
+ * OPEN: the spec places this inline in the thread; confirm the sheet presentation with the Oracle.
  */
 import { useState } from 'react';
 import { BottomSheet, Button, Icon } from '@mobile/ui';
@@ -29,9 +29,9 @@ export interface EscalationCardProps {
 }
 
 export function EscalationCard({ dismissed, onDismiss, sheet = true }: EscalationCardProps) {
-  // Request-sent confirmation (designer, 2026-10-21): no booking screen. The sheet confirms that Deborah's team
+  // Request-sent confirmation (designer, 2026-10-21): no booking screen. The sheet confirms that the support team
   // has been emailed and will reach out; its only action is Done, which lets the conversation carry on.
-  // OPEN: docs/ux/F03-safety.md still specifies "Book a consultation with Deborah · Not now" — update the spec.
+  // OPEN: docs/ux/F03-safety.md still specifies "Book a consultation · Not now" — update the spec.
   const [open, setOpen] = useState(sheet && !dismissed);
   const [sent, setSent] = useState(false);
   // The card's own sheet confirms the request; onBook is not called so M-8.2 never opens on top of it.

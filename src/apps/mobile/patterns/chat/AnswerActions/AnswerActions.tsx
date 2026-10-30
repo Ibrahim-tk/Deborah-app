@@ -18,7 +18,7 @@ export interface AnswerActionsProps {
   onListen: () => void;
   /** Kept for API compatibility; feedback controls were removed. */
   onFeedback?: (helpful: boolean) => void;
-  /** Lab-informed answers add "Book Deborah" (docs/ux/F05-followup-labs.md#m-54). */
+  /** Lab-informed answers add "Book a consultation" (docs/ux/F05-followup-labs.md#m-54). */
   onBook?: () => void;
 }
 
@@ -51,7 +51,7 @@ export function AnswerActions({ onVisitNotes, onCopy, onListen, onBook }: Answer
       </div>
       <div className={styles.actions}>
         {onBook && <Action icon="calendar" label="Book" onPress={onBook} />}
-        <Action icon="note" label="Visit Notes" onPress={onVisitNotes} />
+        <Action icon="note" label="My Visit Notes" onPress={onVisitNotes} />
       </div>
     </div>
   );

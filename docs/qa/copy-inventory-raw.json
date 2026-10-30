@@ -1,0 +1,780 @@
+{
+  "total": 1437,
+  "byFileCounts": {
+    "src/shared/data/commerce/plans.json": 2,
+    "src/shared/data/commerce/products.json": 4,
+    "src/shared/data/content/library.json": 19,
+    "src/shared/data/conversation/chatIntake.json": 213,
+    "src/shared/data/conversation/checkin.json": 6,
+    "src/shared/data/conversation/debrief.json": 16,
+    "src/shared/data/conversation/flows/firstConsult.json": 164,
+    "src/shared/data/conversation/flows/proxyConsult.json": 43,
+    "src/shared/data/conversation/flows/returningConsult.json": 62,
+    "src/shared/data/conversation/flows/sandraConsult.json": 117,
+    "src/shared/data/conversation/guardrails.json": 11,
+    "src/shared/data/conversation/intake.json": 255,
+    "src/shared/data/conversation/provider-review.json": 7,
+    "src/shared/data/conversation/scripts/after-provider.json": 10,
+    "src/shared/data/conversation/scripts/anxious-parent.json": 11,
+    "src/shared/data/conversation/scripts/endo-daughter.json": 9,
+    "src/shared/data/conversation/scripts/family-fatigue.json": 6,
+    "src/shared/data/conversation/scripts/gas-bloating.json": 9,
+    "src/shared/data/conversation/scripts/generic.json": 10,
+    "src/shared/data/conversation/scripts/hot-flashes-sleep.json": 10,
+    "src/shared/data/conversation/scripts/lab-review.json": 10,
+    "src/shared/data/conversation/scripts/out-of-scope-ankle.json": 10,
+    "src/shared/data/conversation/scripts/pms-gen-pro.json": 10,
+    "src/shared/data/conversation/scripts/sleep-3am.json": 10,
+    "src/shared/data/conversation/scripts/sleep-night.json": 9,
+    "src/shared/data/conversation/scripts/teen-irregular-periods.json": 10,
+    "src/shared/data/conversation/scripts/thyroid-fatigue.json": 10,
+    "src/shared/data/conversation/suggestions.json": 21,
+    "src/shared/data/documents/extractions.json": 14,
+    "src/shared/data/documents/review.json": 2,
+    "src/shared/data/documents/types.json": 9,
+    "src/shared/data/health/healing-plan-document.json": 30,
+    "src/shared/data/intake/healthBasics.json": 165,
+    "src/shared/data/intake/healthkit.json": 2,
+    "src/shared/data/intake/medicines.json": 1,
+    "src/shared/data/intake/scans.json": 3,
+    "src/shared/data/intake/symptoms.json": 9,
+    "src/shared/data/labs/sample-reports.json": 1,
+    "src/shared/data/legal/consent.json": 16,
+    "src/shared/data/legal/teenAccount.json": 16,
+    "src/shared/data/persona/deborah.json": 3,
+    "src/shared/data/screen-notes.json": 86,
+    "src/shared/data/visit/specialties.json": 6
+  },
+  "brandHits": [
+    {
+      "file": "src/shared/data/commerce/products.json",
+      "path": "[0].description",
+      "text": "A blend of whole-food ingredients the Oracle formulated to support the hypothalamus \u2014 the gland that conducts your hormones. Placeholder description."
+    },
+    {
+      "file": "src/shared/data/commerce/products.json",
+      "path": "[1].description",
+      "text": "An adaptogen blend the Oracle formulated to complement Genesis Gold\u00ae. Placeholder description."
+    },
+    {
+      "file": "src/shared/data/content/library.json",
+      "path": "[2].body[0]",
+      "text": "Sleep, nourishment, movement, stress and connection \u2014 the Five Pillars are where the Oracle starts with everyone."
+    },
+    {
+      "file": "src/shared/data/conversation/chatIntake.json",
+      "path": "journeys[4].note",
+      "text": "Asks the last period, saves the stage through Review and Confirm, then re-plans on the stage it found (F02b 3e)."
+    },
+    {
+      "file": "src/shared/data/conversation/chatIntake.json",
+      "path": "questions[15].options[3].label",
+      "text": "Implant or injection"
+    },
+    {
+      "file": "src/shared/data/conversation/checkin.json",
+      "path": "notYetOptions[0].label",
+      "text": "Restart my 90-day plan"
+    },
+    {
+      "file": "src/shared/data/conversation/debrief.json",
+      "path": "openingOptions[0].label",
+      "text": "Tell the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/debrief.json",
+      "path": "offerOptions[0].label",
+      "text": "Log my visit"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "description",
+      "text": "Scripted first consultation after sign-up (docs/ux/F02c). Reads the health basics as context and never re-asks them: mood check-in -> what she already knows -> topic -> 3 clarifiers (symptoms, impact, duration) -> safety screen -> 7-section answer -> follow-up -> visit prep -> labs -> booking -> check-in reminder. {tokens} come from the profile and earlier answers. Prebuilt Q&A, no live LLM."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "carriedFromIntake.note",
+      "text": "Never re-ask any of these. Use them to personalize."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.answer_1.sections[3].title",
+      "text": "Questions to Ask Your Provider"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.answer_1.sections[5].productCard.label",
+      "text": "From Genesis Health Products"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.answer_1.sections[5].productCard.actions[1].label",
+      "text": "Ask about my thyroid medicine"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.answer_1.sections[6].title",
+      "text": "A word from the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.save_visit_prep.widget.actions[1].label",
+      "text": "Save to My Health"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.confirm_booking.widget.title",
+      "text": "The Oracle \u00b7 30 min"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.m_answer.sections[5].body[5]",
+      "text": "Book a visit to ask for the fuller panel, and seek a second opinion if needed. Reassess in 60\u201390 days. I'll check in with you in about two weeks."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "nodes.m_answer.sections[6].title",
+      "text": "A word from the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/firstConsult.json",
+      "path": "testScenarios[0].name",
+      "text": "Happy path (profile known)"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/proxyConsult.json",
+      "path": "nodes.p_answer.sections[2].body",
+      "text": "A urinary tract infection is the most likely explanation, with a risk of urosepsis. Only an in-person assessment and tests can confirm it."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/proxyConsult.json",
+      "path": "nodes.p_answer.sections[6].title",
+      "text": "A word from the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/returningConsult.json",
+      "path": "description",
+      "text": "Returning user (seed R01, Maria, 48, perimenopausal, on HRT), docs/ux/F02c \u203a Returning. Unlike the first consult, the Oracle opens from memory: welcome back, how last time's plan went, a sleep score, then the new concern. She never re-asks the profile: safety check first, 4 new questions (one free text), then Maria decides when to see the 7-section answer. Ends with booking and a check-in."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/returningConsult.json",
+      "path": "carriedFromIntake.note",
+      "text": "From the returning profile (seed R01). Never re-asked."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/returningConsult.json",
+      "path": "nodes.answer.sections[5].body[3]",
+      "text": "Log each episode in Visit Notes: time, how long, and what came before."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/returningConsult.json",
+      "path": "nodes.answer.sections[6].title",
+      "text": "A word from the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/returningConsult.json",
+      "path": "nodes.saved.widget.text",
+      "text": "Saved to Visit Notes"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/returningConsult.json",
+      "path": "nodes.confirm_booking.widget.title",
+      "text": "The Oracle \u00b7 30 min"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.intake_banner.widget.text",
+      "text": "Your health intake is available whenever you\u2019re ready. Completing it may help personalize future conversations."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.answer_1.sections[1].body",
+      "text": "The hypothalamus helps regulate temperature and sleep. The Oracle calls it the \u201cmaestro\u201d of the hormonal symphony. Your symptoms alone can\u2019t tell us exactly what is happening with it."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.answer_1.sections[3].body",
+      "text": "Ask whether your thyroid treatment needs review and whether any testing would help. Your provider can decide which tests are useful for you."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.answer_1.sections[5].body",
+      "text": "Book a provider visit to review these symptoms. Keep taking levothyroxine as prescribed unless your prescriber changes it."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.answer_1.sections[6].title",
+      "text": "A word from the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.handoff.widget.options[1].label",
+      "text": "Create visit notes"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.visit_notes.widget.title",
+      "text": "Your visit notes"
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.s_answer.sections[5].body[3]",
+      "text": "Ask about taking levothyroxine with water on an empty stomach, 30\u201360 minutes before coffee."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.s_answer.sections[5].body[6]",
+      "text": "Next steps: start upstream hypothalamic support and get your baseline labs; book a visit with your primary care provider or gynaecologist; reassess together in 60\u201390 days."
+    },
+    {
+      "file": "src/shared/data/conversation/flows/sandraConsult.json",
+      "path": "nodes.s_answer.sections[6].title",
+      "text": "A word from the Oracle"
+    },
+    {
+      "file": "src/shared/data/conversation/guardrails.json",
+      "path": "outOfScope.body",
+      "text": "That's outside what I can help with \u2014 I focus on hormonal and whole-body health from my clinical work. Your provider is the right person for this."
+    },
+    {
+      "file": "src/shared/data/conversation/guardrails.json",
+      "path": "uncovered.body",
+      "text": "This sits outside the health education I can offer. I can send a short summary to the support team so they can follow up (usually within one business day), or you can book time with her."
+    },
+    {
+      "file": "src/shared/data/conversation/guardrails.json",
+      "path": "identity.body",
+      "text": "I'm Oracle, an AI system. I'm not a person, nurse or doctor, and I can't diagnose, treat or prescribe."
+    },
+    {
+      "file": "src/shared/data/conversation/guardrails.json",
+      "path": "appHelp.body",
+      "text": "Your past conversations and saved notes are in Records \u2014 open My Health, then Records. Your Wellness Plan is on Home and in My Health. Settings, notifications and your subscription are in the menu under Settings."
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[0].prompt",
+      "text": "Hi {name}, before we start: who is this profile for?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[1].prompt",
+      "text": "Can I use the health details you share to personalise my answers, {name}? My guidance is education, not a diagnosis."
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[15].prompt",
+      "text": "Just to confirm \u2014 your main health concern today is: {concern}. Does that sound right?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[16].prompt",
+      "text": "Are there any other health issues you'd like me to keep in mind?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[17].prompt",
+      "text": "What's one health goal for this year \u2014 and what's gotten in the way so far?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[18].prompt",
+      "text": "Any new medications since your last visit?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[49].prompt",
+      "text": "Oh, I'm sorry you're still dealing with that. How did your provider visit go?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[49].options[1].label",
+      "text": "They gave me a plan, still symptoms"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[51].prompt",
+      "text": "Can I still take my Genesis Gold? \u2014 yes, ask me that if you're wondering. Are you still on Genesis Gold right now?"
+    },
+    {
+      "file": "src/shared/data/conversation/intake.json",
+      "path": "questions[53].prompt",
+      "text": "Let me ask you a few questions, because when your child isn't doing well, it can affect your health too. Have you been able to sleep?"
+    },
+    {
+      "file": "src/shared/data/conversation/provider-review.json",
+      "path": "note",
+      "text": "Provider-review ending for a reported non-emergency red flag. Educational draft pending Deborah\u2019s review. Not a diagnosis or a hormone-only explanation; no products or automatic wellness plan."
+    },
+    {
+      "file": "src/shared/data/conversation/provider-review.json",
+      "path": "sections[0].body",
+      "text": "You reported: {concerns}. I hear your concern, and it is worth bringing directly to a healthcare professional."
+    },
+    {
+      "file": "src/shared/data/conversation/provider-review.json",
+      "path": "sections[2].body",
+      "text": "There can be different explanations. A provider can assess your history and the symptom itself; a general hormone-focused answer would not settle that question."
+    },
+    {
+      "file": "src/shared/data/conversation/provider-review.json",
+      "path": "sections[4].body",
+      "text": "Ask your provider whether an examination or any tests are appropriate. The choice depends on their assessment; this chat is not recommending a routine hormone panel for this concern."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/after-provider.json",
+      "path": "answer.sections[0].body",
+      "text": "{name}, you're still bloated after your visit. Your provider ordered a SIBO breath test \u2014 you've taken it and you're waiting \u2014 and they suggested Pepcid in the meantime. You're wondering about Genesis Gold."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/after-provider.json",
+      "path": "answer.sections[1].body",
+      "text": "Pepcid (famotidine) reduces stomach acid and is sometimes used for stomach distress. I don't want to contradict your healthcare provider, but I don't usually start with H2 blockers for possible SIBO. We want to protect your ability to digest and absorb nutrients, and stomach acid is part of that. What we need is to learn what's going on in the small intestine. Pepcid may ease symptoms until results return, but it isn't necessarily a treatment for overgrowth."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/anxious-parent.json",
+      "path": "answer.sections[0].body",
+      "text": "{name}, you've been trying to get a pediatrician visit and an education evaluation while your child struggles in school. You're not even sure of the diagnosis yet, and meanwhile you're sad for him and frustrated you can't get help. You're sleeping poorly and stress eating \u2014 and you haven't been practicing CALM."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/endo-daughter.json",
+      "path": "answer.sections[4].body",
+      "text": "Imaging and surgical planning belong with her specialist \u2014 bring the questions above to that visit."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/gas-bloating.json",
+      "path": "answer.sections[2].body",
+      "text": "This pattern fits what we often see with SIBO, but only a breath test with your provider can show whether overgrowth is there and what type. I'm recommending you bring these concerns to your healthcare provider and ask about a SIBO breath test."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/gas-bloating.json",
+      "path": "answer.sections[5].body",
+      "text": "Here's what you can do for yourself before you see your healthcare provider:"
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/out-of-scope-ankle.json",
+      "path": "answer.sections[2].body",
+      "text": "I'm here to provide educational information and support, but this is an orthopedic injury, and you need to see your healthcare provider to be evaluated. You may need imaging to see if there's damage to the ankle."
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/out-of-scope-ankle.json",
+      "path": "answer.sections[5].body",
+      "text": "In the meantime, simple safe self-care until the visit:"
+    },
+    {
+      "file": "src/shared/data/conversation/scripts/sleep-night.json",
+      "path": "answer.sections[5].body",
+      "text": "I'm so glad you asked about wine sometimes. It's important to have a plan when you do drink alcohol."
+    },
+    {
+      "file": "src/shared/data/conversation/suggestions.json",
+      "path": "returning[0].text",
+      "text": "Still bloated after my provider visit"
+    },
+    {
+      "file": "src/shared/data/documents/extractions.json",
+      "path": "visit-note.fields[1].label",
+      "text": "Visit date"
+    },
+    {
+      "file": "src/shared/data/documents/types.json",
+      "path": "types[3].label",
+      "text": "Visit note"
+    },
+    {
+      "file": "src/shared/data/health/healing-plan-document.json",
+      "path": "pillarsIntro.title",
+      "text": "The Five Pillars of Hypothalamic Health"
+    },
+    {
+      "file": "src/shared/data/health/healing-plan-document.json",
+      "path": "signature.name",
+      "text": "Genesis Health Products"
+    },
+    {
+      "file": "src/shared/data/health/healing-plan-document.json",
+      "path": "signature.title",
+      "text": "Genesis Health"
+    },
+    {
+      "file": "src/shared/data/intake/healthBasics.json",
+      "path": "note",
+      "text": "Onboarding (M-1.8) is only the keys in onboardingKeys. Every other step is the optional Health Profile (M-2.14). Banks route on routeSex: the body answers (sexCharacteristics) when given, else sex assigned at birth. Under-13 Myself \u2192 M-1.10. Wording placeholder pending Deborah."
+    },
+    {
+      "file": "src/shared/data/intake/healthBasics.json",
+      "path": "steps[0].title",
+      "text": "Who is this profile for?"
+    },
+    {
+      "file": "src/shared/data/intake/healthBasics.json",
+      "path": "steps[4].title",
+      "text": "Before we set up {name}\u2019s profile"
+    },
+    {
+      "file": "src/shared/data/intake/healthBasics.json",
+      "path": "steps[11].note",
+      "text": "Answers are optional, used only to tailor your health education, never sold or shared with advertisers, encrypted, and editable or deletable anytime."
+    },
+    {
+      "file": "src/shared/data/intake/healthBasics.json",
+      "path": "steps[15].suggestions[5].label",
+      "text": "Testicular prosthesis implantation"
+    },
+    {
+      "file": "src/shared/data/intake/healthkit.json",
+      "path": "note",
+      "text": "Simulated Apple Health / Health Connect read: DOB, biological sex, height, weight and clinical records."
+    },
+    {
+      "file": "src/shared/data/intake/symptoms.json",
+      "path": "note",
+      "text": "Hypothalamus Symptom Check list for the composer SymptomPicker (M-2.1, M-2.12). From YOC App developer PDF. `id` links a group to chatIntake journey groups when present. Needs the Oracle's review."
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "terms.body[0]",
+      "text": "Your Oracle provides general health education. It is not medical advice, diagnosis or treatment."
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "terms.body[1]",
+      "text": "Always talk with a qualified provider before making decisions about your health, medications or treatment. Never ignore professional advice or delay seeking it because of something you read here."
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "privacy.title",
+      "text": "How your health data is protected"
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "privacy.body[0]",
+      "text": "We treat everything you share as protected health information under HIPAA, CCPA and CMIA."
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "profileConsent.title",
+      "text": "Before we set up {name}\u2019s profile"
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "profileConsent.body",
+      "text": "As {name}\u2019s medical advocate, you\u2019ll manage their profile and talk with the Oracle on their behalf. We just need to confirm you have their permission or the authority to do this."
+    },
+    {
+      "file": "src/shared/data/legal/consent.json",
+      "path": "profileConsent.options[2].label",
+      "text": "{name} can\u2019t make this decision themselves, and I\u2019m authorised to act for them (for example, as their healthcare proxy or power of attorney)"
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "disclaimer.body[0]",
+      "text": "By continuing, you understand that your teen will receive their own private Your Oracle account. You will not be able to view their conversations, health information, or activity within their account."
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "sent.body",
+      "text": "We\u2019ve emailed {email} with instructions to create their Oracle account."
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "email.body[0]",
+      "text": "You\u2019ve been invited to create your own Your Oracle account as part of a Family Plan."
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "email.body[1]",
+      "text": "Set up your account to start using Oracle."
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "setup.lede",
+      "text": "Your parent or guardian invited you ({email}) to your own private Your Oracle account. Let\u2019s set it up."
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "welcome.title",
+      "text": "Your Oracle for teens"
+    },
+    {
+      "file": "src/shared/data/legal/teenAccount.json",
+      "path": "welcome.body",
+      "text": "Your account gives you access to health education through Oracle. Some features available to adults, such as product recommendations and Your Wellness Plan, are not available on teen accounts."
+    },
+    {
+      "file": "src/shared/data/persona/deborah.json",
+      "path": "name",
+      "text": "Oracle"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-2.0.note",
+      "text": "The three suggestion chips under \u201cHow are you feeling today?\u201d are different demo stories \u2014 tap them one by one to walk a real chat, then follow into Visit Notes after an answer. Typing free text works too. From here you can also open My Health, My Notes, labs, or the Wellness Plan card when one exists."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-1.1.note",
+      "text": "A first-time user has just opened the app. This is a short brand moment, about 3 seconds, while the app 'loads'. It should feel calm and trustworthy. It fades into Welcome. Returning users who already consented skip it and land in Main."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-1.2.title",
+      "text": "Welcome"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-1.2.note",
+      "text": "Maria meets the Oracle for the first time. The aim is a warm, human first contact that asks only for her first name and makes clear she is talking to an AI. Get started accepts the terms and opens her first conversation. Sign in is there for returning users."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-1.3.note",
+      "text": "This is a calm, easy-to-scan summary of what the app is and isn't, plus the AI disclosure and the agreement checkbox. It was merged into Welcome on 2026-10-08, so it stays in the code but is no longer part of the flow. Agreeing opens the empty Conversation."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-2.1.note",
+      "text": "This is the consultation. Suggestions and replies drive a scripted flow: light intake, then the Oracle\u2019s answer, then What\u2019s next. From What\u2019s next you can open the Wellness Plan, upload labs, or move into Visit Notes. Try one Home suggestion all the way through to see the full path."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-2.7.note",
+      "text": "Maria tapped a product from an answer, her 90-day plan or a piece of content. A mock Genesis Gold page opens in an in-app browser, labelled 'Formulated by Genesis Health Products', with ?ref=app. Shopping is a demo and checkout happens on the real site. Done takes her back to exactly where she was."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-2.8.note",
+      "text": "This sheet appears right after Maria's first completed answer. The Oracle offers to check in later so they can build on today. Maria picks a reminder interval. Our own friendly prompt always comes before the system permission alert. Not now dismisses it without any pressure."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.1.note",
+      "text": "Maria has used her 3 free consultations and is trying to start a new one. The sheet tells her that her answers are saved and invites her to choose a plan. It should never feel like a trap: safety features keep working. It leads to Choose plan, or Maybe later."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.2.title",
+      "text": "Choose plan"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.2.note",
+      "text": "Maria compares the Individual and Family plans, either monthly or annually. One plan is always preselected based on where she came from (for example, Family when she came from the upgrade sheet). Continue takes her to account creation if she has no account yet, or straight to payment."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.3.note",
+      "text": "The account is created only at conversion, framed as 'Save your health history'. Maria can sign up with Apple, Google or email plus a verification code, and her trial history moves with her. In sign-in mode, opened from Welcome, it greets a returning user and takes them back to Main."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.5.title",
+      "text": "Plan success"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.5.note",
+      "text": "The purchase is done. 'You're all set': unlimited consultations are unlocked and the trial counter disappears. Continue my conversation sends any message she had held back. Family plan users can go straight to adding a family member."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-4.4.note",
+      "text": "This is a mock of the App Store subscription sheet that confirms the plan, price and auto-renewal. It should feel familiar and trustworthy. Subscribe shows a short spinner, then Done, and moves on to the success screen. Cancel returns to Choose plan."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-5.1.note",
+      "text": "Weeks later, the Oracle reaches out with a generic nudge: 'How are you feeling this week?'. The lock screen never shows health details. Tapping it unlocks the phone and deep-links into a check-in conversation for the right profile. It is the moment that brings Maria back."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-5.3.note",
+      "text": "Upload or enter labs here (photo, PDF, or typed values). You\u2019ll confirm the numbers on the next screen; the Oracle can then use them in chat. This is simulated reading \u2014 not real OCR."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.1.title",
+      "text": "Profile switcher"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.1.note",
+      "text": "'Who is this for?' Maria can switch between herself and her family members, and each person keeps their own private history. Switching resets Ask and My Health to that person. From here she can add a member (or see the upgrade sheet if she isn't on the Family plan) or manage profiles."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.2.note",
+      "text": "Maria adds someone, for example her teen daughter, with their name, relationship, date of birth, sex at birth and a consent confirmation. Children under 13 are blocked for now. Create profile switches to the new person and opens an empty conversation with teen-appropriate suggestions."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.3.note",
+      "text": "Maria tried to add a family member but isn't on the Family plan. This light sheet explains that the plan covers up to 5 people, each with their own private history. Upgrade opens Choose plan with Family preselected, then returns her to adding the member. Not now dismisses it."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.5.title",
+      "text": "Profile details"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.5.note",
+      "text": "This shows one person's basics and the health info gathered from intake, all editable, with links to their consultations, Visit Notes and labs. For profiles other than Maria's own, there is also a clearly destructive delete option. It reassures her that each profile's data is separate and under her control."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.6.title",
+      "text": "Manage profiles"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-6.6.note",
+      "text": "This is a simple list of every profile with a count out of 5, reached from the switcher or from Account. Each row opens Profile details, and there is a row to add a family member. It isn't in the wireframes; this is the minimal version from the spec."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.1.title",
+      "text": "My Health (empty)"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.1.note",
+      "text": "The active profile hasn't completed a consultation yet. The hub is never blank: it explains that her health picture builds as she talks with the Oracle and offers popular starting points. Start my first conversation opens the Ask tab. The hub fills in automatically after her first answer."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.2.title",
+      "text": "My Health hub"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.2.note",
+      "text": "This person\u2019s health home between chats. The Wellness Plan card opens the living plan. Check-in and health profile sit underneath. Tap the plan card to see concerns, actions, and the Oracle\u2019s letter."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.3.title",
+      "text": "Your Wellness Plan"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.3.note",
+      "text": "This is the living Wellness Plan. Newest concern stays open at the top; earlier ones stay collapsed underneath. Check off actions in the wells \u2014 that only tracks progress, it does not close the concern. Tap \u201cThis concern is resolved\u201d and confirm when that topic is done; the name stays under Resolved. The clinical letter below is the Oracle\u2019s standing reference."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.4.note",
+      "text": "Maria opens a video or article the Oracle picked for her, with a line explaining why she is seeing it. Ask Oracle about this takes her into chat with the composer already filled in, so learning turns into conversation. A related product, if there is one, opens the shop."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.5.title",
+      "text": "The Oracle's library"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.5.note",
+      "text": "Maria can browse all of the Oracle's content: search it, filter by For you, All or New, or by topic. Empty results gently send her to ask the Oracle directly. This screen also links to the Facebook community and to About the Oracle."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.6.title",
+      "text": "About the Oracle"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-7.6.note",
+      "text": "This screen explains what Oracle is: an AI system for health education and encouragement, what it can and can\u2019t do, and who makes it. No person, portrait, books or credentials (legal change requests, Oct 26). Copy is placeholder until legal approves it."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-8.2.note",
+      "text": "When the app isn't enough, Maria can reach the support team herself. This screen explains what to expect from the 50-minute video visit, asks which state she lives in (for licensing) and offers an opt-in to share her app history. Choose a time leads to the scheduler. The price is still to be decided."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-8.4.note",
+      "text": "'Booked with the Oracle', with the date, time and a promise of a reminder the day before. Maria should feel looked after. She can add the visit to her calendar, view details (with a cancel option) or go back to chat. The booking also appears in her hub."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.1.note",
+      "text": "Saved consultations, Visit Notes, and labs for this person. Open an old visit note to reread it, or start logging what changed after a provider visit. Labs here can be opened or asked about in chat."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.2.note",
+      "text": "Maria rereads a past consultation: the transcript, the collapsed intake summary and the Oracle's full 7-section answer. She can download a PDF to bring to her provider, share it, or continue the chat, which reopens that conversation and the Oracle remembers it."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.4.note",
+      "text": "Maria writes down questions before a visit, notes after a visit, or a saved answer. Question notes render as a checklist. Notes save automatically, so nothing gets lost. It isn't in the wireframes, and it's still open whether the Oracle may read these notes later."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.5.note",
+      "text": "A saved lab report. Ask Oracle about these labs to pull them into a conversation so she has the numbers as context. You can also edit or delete from the menu."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.6.note",
+      "text": "Printable summary for a clinician. When the conversation has enough detail (Miro Step 5), this shows the full My Visit Notes brief; otherwise a shorter questions-and-tests page. Share and Print are simulated. Plan gating is still open; the prototype allows it for everyone."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.7.title",
+      "text": "My Visit Notes"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.7.note",
+      "text": "A note to take to a clinician. Save a copy into Visit Notes, or download the PDF preview. After a real appointment, come back here or log what changed on the after-visit form."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.8.title",
+      "text": "Log your visit"
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-9.8.note",
+      "text": "Log what the provider said, tests ordered, and medication changes. Kind of provider is required before Save \u2014 leave it blank to see the gate. Open an older visit note from My Notes to reread what was already logged."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-10.1.note",
+      "text": "This is one calm place for Maria's plan, family profiles, notifications, privacy, legal and About the Oracle. Trial users see a Choose a plan card at the top. Sign out keeps her data in her account and returns her to Welcome."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-10.2.note",
+      "text": "This is where Maria exercises her data rights: download her data, read how it is used (never for training without consent), delete a profile, or delete her account. Deleting the account takes deliberate steps, including typing DELETE, and then resets the app. It should feel transparent and respectful."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-10.3.note",
+      "text": "This shows Maria's current plan, price and renewal date. She can change plan, manage it in the App Store, or cancel; the plan stays active until the renewal date. It isn't in the wireframes."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-10.4.note",
+      "text": "Maria controls check-in reminders (and how often they come) and booking reminders. A note reassures her that health details never show on her lock screen. If system permission is off, a banner offers a way to fix it. It isn't in the wireframes."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-10.5.note",
+      "text": "This is a read-only view of the Terms & Disclaimer, the privacy notice and the AI disclosure, showing which version Maria accepted and when. It opens from Welcome, from the (i) menu and from Account. All the copy is placeholder until the attorney drafts it."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-11.1.note",
+      "text": "Upload documents and reports here, or open one you already saved. You can bring a document into chat later so the Oracle has that context when she answers."
+    },
+    {
+      "file": "src/shared/data/screen-notes.json",
+      "path": "M-11.3.note",
+      "text": "Add a document now. It lands in Documents; from there you can ask the Oracle about it in chat so she answers with that file in mind. Upload is simulated in the prototype."
+    }
+  ]
+}

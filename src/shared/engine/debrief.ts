@@ -1,6 +1,6 @@
 /**
  * Visit debrief in chat (docs/ux/F09c-log-visit.md › M-2.1 state · Visit debrief).
- * opening → listening → probe (≤ 3, each skippable) → summary → saved → documents from the visit? → Discuss this with Deborah?
+ * opening → listening → probe (≤ 3, each skippable) → summary → saved → documents from the visit? → Discuss this with the Oracle?
  * Guardrails run before any of this in handleText; debrief turns are never counted.
  * OPEN: "medication card on plain reports" and "out-of-scope on specialty words" in a debrief
  * (docs/ux/F09c-log-visit.md › Safety) — F03 is left exactly as specified.

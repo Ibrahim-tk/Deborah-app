@@ -1,5 +1,5 @@
 /**
- * Family chat perspective: Deborah's copy is written to the owner ("you"). When the chat is about another
+ * Family chat perspective: Oracle's copy is written to the owner ("you"). When the chat is about another
  * profile, every Deborah string is rewritten to third person with that member's pronouns, so the whole
  * conversation is about them ("Why is Emma waking at 3am?", "her sleep", "she feels…").
  *
@@ -26,9 +26,29 @@ const FORMS: Record<'she' | 'he' | 'they', PronounForms> = {
 
 /** Stored pronouns ("she/her", "he-him", "she/they"…) → forms. Anything else → they/them. */
 export const pronounForms = (pronouns = ''): PronounForms => {
-  const p = pronouns.toLowerCase();
+  const p = pronouns.toLowerCase().replace(/\s+/g, '');
   return p.startsWith('she') ? FORMS.she : p.startsWith('he') ? FORMS.he : FORMS.they;
 };
+
+/**
+ * Resolve pronouns for chat wording. Prefer saved pronouns; if missing, fall back to gender identity
+ * then sex at birth (wording only — never drives body-question routing).
+ */
+export function resolvePronouns(profile?: {
+  intake?: { pronouns?: string; genderIdentity?: string };
+  sexAtBirth?: string;
+  health?: { genderIdentity?: { value?: string }; sexAtBirth?: { value?: string } };
+}): string {
+  const raw = profile?.intake?.pronouns?.trim();
+  if (raw && raw.toLowerCase() !== 'describe') return raw;
+  const g = (profile?.intake?.genderIdentity ?? profile?.health?.genderIdentity?.value ?? '').toLowerCase();
+  if (g === 'woman' || g === 'girl') return 'she/her';
+  if (g === 'man' || g === 'boy') return 'he/him';
+  const sex = (profile?.sexAtBirth ?? profile?.health?.sexAtBirth?.value ?? '').toLowerCase();
+  if (sex === 'female') return 'she/her';
+  if (sex === 'male') return 'he/him';
+  return 'they/them';
+}
 
 /** Words after which "you" is an object (→ her/him/them) rather than a subject. */
 const OBJECT_AFTER = new Set(
@@ -82,7 +102,7 @@ export function toThirdPerson(text: string, name: string, f: PronounForms): stri
       const verb = after.trim();
       return `${before}${like(you, f.they)}${verb ? after.replace(verb, agree(verb)) : ''}`;
     });
-  s = s.replace(/\u0000/g, 'you');
+  s = s.split('\0').join('you');
   return s;
 }
 
@@ -103,7 +123,7 @@ export function firstToThirdPerson(text: string, name: string, f: PronounForms):
     .replace(/^(\w)/, (c) => c.toUpperCase());
 }
 
-/** Message fields that carry Deborah's copy; everything else (ids, kinds, values) is left alone. */
+/** Message fields that carry Oracle's copy; everything else (ids, kinds, values) is left alone. */
 const COPY_KEYS = new Set(['text', 'title', 'body', 'bullets', 'prompt', 'label', 'question', 'suggestions', 'line', 'placeholder', 'description', 'helper', 'note']);
 
 type Rewrite = { you: (s: string) => string; mine: (s: string) => string };
@@ -115,7 +135,7 @@ function walk(value: unknown, r: Rewrite, key?: string): unknown {
   return value;
 }
 
-/** Rewrites every Deborah-facing string in a plan to third person (user messages stay as typed). */
+/** Rewrites every Oracle-facing string in a plan to third person (user messages stay as typed). */
 export function forFamilyMember(plan: EnginePlan, name: string, pronouns?: string): EnginePlan {
   const f = pronounForms(pronouns);
   const r: Rewrite = { you: (s) => toThirdPerson(s, name, f), mine: (s) => firstToThirdPerson(s, name, f) };

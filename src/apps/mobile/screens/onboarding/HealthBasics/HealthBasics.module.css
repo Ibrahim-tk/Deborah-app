@@ -113,9 +113,9 @@
   -webkit-mask-image: linear-gradient(to bottom, transparent var(--from), #000 var(--to));
   mask-image: linear-gradient(to bottom, transparent var(--from), #000 var(--to));
 }
-.fade > i:nth-child(1) { --b: 4px; --wash: 0; --from: 0px; --to: calc(var(--feather) * 0.6); }
-.fade > i:nth-child(2) { --b: 12px; --wash: 0.15; --from: calc(var(--feather) * 0.25); --to: var(--feather); }
-.fade > i:nth-child(3) { --b: 24px; --wash: 0.25; --from: calc(var(--feather) * 0.5); --to: calc(var(--feather) + 24px); }
+.fade > i:nth-child(1) { --b: 2px; --wash: 0; --from: 0px; --to: calc(var(--feather) * 0.6); }
+.fade > i:nth-child(2) { --b: 5px; --wash: 0.06; --from: calc(var(--feather) * 0.25); --to: var(--feather); }
+.fade > i:nth-child(3) { --b: 10px; --wash: 0.1; --from: calc(var(--feather) * 0.5); --to: calc(var(--feather) + 24px); }
 
 /* Choice steps: shared QuestionChoices widget; describe opens an inline field under the pills. */
 .choiceWidget { display: grid; gap: var(--space-3); }
@@ -160,3 +160,9 @@
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
 }
+
+/* Finish: the question and answers blow away to the right with the tree's wind, before Oracle's welcome reveals. */
+.blowAway { animation: blow-away 1200ms cubic-bezier(.2, .6, .3, 1) forwards; /* BLOW_MS: then unmounted */ pointer-events: none; }
+@keyframes blow-away { to { opacity: 0; transform: translateY(-32px); filter: blur(4px); } }
+@media (prefers-reduced-motion: reduce) { .blowAway { animation-name: blow-fade; } @keyframes blow-fade { to { opacity: 0; } } }
+.fadeOff { opacity: 0; transition: opacity 800ms var(--ease-out); }

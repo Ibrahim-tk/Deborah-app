@@ -8,7 +8,7 @@ export interface PanelProps {
   children: ReactNode;
   tone?: 'linen' | 'lilac' | 'danger' | 'success' | 'warning';
   icon?: IconName;
-  /** 2 px Signature Gold rule on top (A Word from Deborah). */
+  /** 2 px Signature Gold rule on top (A Word from the Oracle). */
   goldRule?: boolean;
   className?: string;
 }

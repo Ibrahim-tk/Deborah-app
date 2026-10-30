@@ -207,7 +207,7 @@ export const SCREEN_GROUPS: { title: string; screens: ScreenEntry[] }[] = [
   },
   {
     title: 'Knowledge-driven experience',
-    // OPEN: books / protocols / blogs / website have no separate screens; they open Deborah's library.
+    // OPEN: books / protocols / blogs / website have no separate screens; they open the Oracle's library.
     screens: [
       { id: 'M-2.1', name: 'Oracle uses approved the Oracle content', ...ASK, as: 'push' },
       { id: 'M-7.5', name: 'Books', ...HEALTH, as: 'push' },

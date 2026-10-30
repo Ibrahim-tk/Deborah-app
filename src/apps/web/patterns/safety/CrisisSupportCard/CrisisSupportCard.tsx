@@ -5,7 +5,7 @@
  * @spec    docs/ux/F03-safety.md#pattern--crisissupportcard-figma-33
  * @xref    web: apps/web/patterns/safety/CrisisSupportCard — not built
  */
-// OPEN: "exact behaviour and copy with Deborah + attorney (SOW requires crisis safeguards)".
+// OPEN: "exact behaviour and copy with the Oracle + attorney (SOW requires crisis safeguards)".
 import { useState } from 'react';
 import { BottomSheet, Button, Icon } from '@web/ui';
 import styles from './CrisisSupportCard.module.css';

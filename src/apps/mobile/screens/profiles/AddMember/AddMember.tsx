@@ -103,7 +103,7 @@ export default function AddMember() {
           {fields.map(field)}
           {/* Under 13 (Oct 26 legal): parent or guardian records and asks; the child never chats. Mirrors web. */}
           {age !== undefined && age < 13 && <p className={styles.hint}>Profiles for children under 13 are for parents and guardians only. You’ll ask questions on their behalf.</p>}
-          <p className={styles.hint}>Each person has their own private history. Nothing is shared between profiles.</p>
+          <p className={styles.hint}>You’ll manage this profile as their medical advocate. Their history stays on this profile — separate from yours.</p>
         </form>
       </Modal>
       <ConsentSheet

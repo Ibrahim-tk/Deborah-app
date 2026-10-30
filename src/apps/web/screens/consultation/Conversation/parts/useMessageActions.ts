@@ -33,7 +33,7 @@ export function useMessageActions(profileId: string | undefined, onGateFail?: ()
     toast('Saved to Visit Notes');
   };
 
-  /** Miro Step 5 gate, shared by Visit Notes, Save PDF and Discuss with provider: enough detail → `onPass`; otherwise “Let’s talk first”, stay on Ask Deborah. */
+  /** Miro Step 5 gate, shared by Visit Notes, Save PDF and Discuss with provider: enough detail → `onPass`; otherwise “Let’s talk first”, stay on Ask Oracle. */
   const withVisitBriefGate = (m: Message, onPass: (conversationId: string) => void) => {
     const conv = conversationForMessage(m.id);
     if (conv && hasEnoughDetailForVisitBrief(conv)) {

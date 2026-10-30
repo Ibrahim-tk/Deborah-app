@@ -48,7 +48,7 @@ export default function PlanSuccess() {
             />
           </svg>
         </span>
-        <h1 className={styles.title}>You are all set.</h1>
+        <h1 className={styles.title}>You’re all set.</h1>
       </div>
       <div className={styles.actions}>
         {addFirst ? (
