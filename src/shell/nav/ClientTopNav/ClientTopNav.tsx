@@ -1,8 +1,9 @@
-/** Client-facing top bar: brand · Mobile | Web tabs · Home · Chat · Reset. No prototype tooling. */
+/** Client-facing top bar: brand · Mobile | Web tabs · Home · Chat · Teen invite · Reset. No prototype tooling. */
 import { useLocation, useNavigate } from 'react-router-dom';
 import { requestClientNav } from '../../clientNav';
 import tabs from '../PlatformTabs/PlatformTabs.module.css';
 import { ResetButton } from '../ResetButton';
+import { TeenFlowButton } from '../TeenFlowButton';
 import styles from './ClientTopNav.module.css';
 
 export function ClientTopNav() {
@@ -23,6 +24,7 @@ export function ClientTopNav() {
         <button type="button" className={styles.link} onClick={() => requestClientNav('chat')}>
           Chat
         </button>
+        <TeenFlowButton />
         <ResetButton />
       </nav>
     </header>

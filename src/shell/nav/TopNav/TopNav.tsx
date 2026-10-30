@@ -1,7 +1,8 @@
-/** @shell TopNav — fixed 56 px bar: brand · platform tabs · auto demo · journeys · state menu · reset · toggles. */
+/** @shell TopNav — fixed 56 px bar: brand · platform tabs · auto demo · journeys · state menu · teen invite · reset · toggles. */
 import { PlatformTabs } from '../PlatformTabs';
 import { StateMenu } from '../StateMenu';
 import { ResetButton } from '../ResetButton';
+import { TeenFlowButton } from '../TeenFlowButton';
 import { DevToggles } from '../DevToggles';
 import { AutoDemo } from '../AutoDemo';
 import { JourneyRunner } from '../JourneyRunner';
@@ -23,6 +24,7 @@ export function TopNav() {
         <AutoDemo />
         <JourneyRunner />
         <StateMenu />
+        <TeenFlowButton />
         <ResetButton />
         <DevToggles />
       </div>
