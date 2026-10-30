@@ -38,11 +38,8 @@ export function buildAnswer(script: Script, profile: Profile, labs?: LabReport):
   const usesLabs = Boolean(report && (script.usesLabs || script.variants?.withLabs));
   const values = { name: profile.name, ageLabel: ageLabel(profile) ?? 'this stage of life', ...(usesLabs && report ? labValues(report) : {}) };
 
-  const base = SECTION_ORDER.map((key) => {
-    const s = script.answer.sections.find((x) => x.key === key);
-    if (!s) throw new Error(`Script ${script.id} is missing section ${key}`);
-    return s;
-  });
+  // Sections in the fixed order; a script may leave some out (e.g. family-fatigue has no tests section).
+  const base = SECTION_ORDER.flatMap((key) => script.answer.sections.find((x) => x.key === key) ?? []);
   const sections = (usesLabs ? withLabsVariant(script, base) : base).map((s) => ({
     ...s,
     body: interpolate(s.body, values),
@@ -70,10 +67,10 @@ export function emptyAnswer(answer: Answer): Answer {
 export function buildProviderReview(script: Script, concerns: string[]): Answer {
   const values = { concerns: concerns.join(', ') || 'a concern that needs a provider’s assessment' };
   return {
-    sections: SECTION_ORDER.map((key) => {
-      const content = providerReview.sections.find((s) => s.key === key)!;
-      const title = script.answer.sections.find((s) => s.key === key)!.title;
-      return { key, title, body: interpolate(content.body, values), bullets: content.bullets };
+    sections: SECTION_ORDER.flatMap((key) => {
+      const content = providerReview.sections.find((s) => s.key === key);
+      const title = script.answer.sections.find((s) => s.key === key)?.title;
+      return content && title ? [{ key, title, body: interpolate(content.body, values), bullets: content.bullets }] : [];
     }),
     closingLine: providerReview.closingLine,
     status: 'placeholder',

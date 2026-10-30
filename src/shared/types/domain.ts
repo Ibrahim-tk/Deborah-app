@@ -215,7 +215,7 @@ export const SECTION_ORDER: SectionKey[] = [
   'providerQuestions',
   'tests',
   'doNow',
-  'word',
+  // 'word' ("A Word from Deborah") was removed from answers on Oct 26; requiring it broke every answer.
 ];
 
 export interface AnswerSection {

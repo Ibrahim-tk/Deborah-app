@@ -167,13 +167,28 @@ export async function runPlan(source: EnginePlan, conversationId: string, handle
           break;
       }
     }
+  } catch (err) {
+    console.error('[conversationRunner] plan failed', err);
   } finally {
     if (tokens.get(cid) === token) {
       tokens.delete(cid);
       setBusy(cid, false);
+      // A run that ended early (cancelled or threw) must not leave a message "still writing":
+      // MessageList hides an intake question's answers while it streams, which strands the chat.
+      settleStreaming(cid);
     }
   }
   return true;
+}
+
+/** Clears leftover `streaming` flags once nothing is running for the conversation (answers keep Stop semantics). */
+function settleStreaming(cid: string) {
+  const s = useAppStore.getState();
+  const c = s.conversations.byId[cid];
+  if (!c) return;
+  for (const m of c.messages) {
+    if (m.meta?.streaming && m.kind !== 'answer') s.patchMessage(cid, m.id, { meta: { ...m.meta, streaming: false } });
+  }
 }
 
 /** Stop: cancel remaining steps; a partial answer is marked stopped and is not counted. */

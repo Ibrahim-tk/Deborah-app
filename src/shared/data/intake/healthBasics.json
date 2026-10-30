@@ -117,12 +117,12 @@
       "titleOther": "How would you describe {name}’s gender?",
       "choices": [
         {
-          "value": "woman",
-          "label": "Woman"
-        },
-        {
           "value": "man",
           "label": "Man"
+        },
+        {
+          "value": "woman",
+          "label": "Woman"
         },
         {
           "value": "non-binary",

@@ -69,7 +69,7 @@
 /* Symptoms trigger (design 2026-10-21): quiet "stethoscope Symptoms ⌄" beside +. Picked → soft accent tint with
    a count; open → chevron flips. Same height as the tool row. */
 .symptomsBtn {
-  display: inline-flex; align-items: center; gap: 6px; height: 30px; margin-left: -2px; padding: 0 var(--space-2) 0 var(--space-3);
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; margin-left: var(--space-2); padding: 0 var(--space-2) 0 var(--space-3);
   border-radius: var(--radius-full); font: var(--weight-regular) var(--fs-subhead) / 1 var(--font-body); color: var(--color-ink);
   transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
   -webkit-tap-highlight-color: transparent;

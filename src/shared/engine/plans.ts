@@ -134,7 +134,9 @@ export function nextIntakeOrReady(ctx: EngineContext, rawConv: Conversation, pro
   }
   if (!q) {
     if (!conv.profileOnly && isUncoveredConcern(conv)) return [...pre, ...uncoveredGuidanceSteps(ctx, conv)];
-    return [...pre, ...readySteps(ctx, conv, profile)];
+    // Intake done: the guidance follows automatically, no "ready when you are" pause (designer, 2026-10-31).
+    // Profile-only chats still wait for a topic.
+    return [...pre, ...(conv.profileOnly ? readySteps(ctx, conv, profile) : answerSteps(ctx, conv, profile))];
   }
 
   // Consent and the country check aren't numbered steps.

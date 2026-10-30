@@ -25,9 +25,12 @@ export interface DateFieldProps {
   defaultYear?: number;
   placeholder?: string;
   error?: string;
+  /** Earliest selectable day (yyyy-mm-dd), e.g. today for an upcoming appointment. Overrides `minYear`. */
+  min?: string;
+  disabled?: boolean;
 }
 
-export function DateField({ label, value, onChange, minYear, maxYear, defaultYear, placeholder = 'Select a date', error }: DateFieldProps) {
+export function DateField({ label, value, onChange, minYear, maxYear, defaultYear, placeholder = 'Select a date', error, min, disabled }: DateFieldProps) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const today = todayKey();
@@ -37,7 +40,7 @@ export function DateField({ label, value, onChange, minYear, maxYear, defaultYea
   const openTo = !value && Math.abs((defaultYear ?? maxYear) - Number(today.slice(0, 4))) > 1 ? 'year' : 'day';
   const pick = (iso: string) => { onChange(iso); setOpen(false); };
   const calendar = (
-    <CalendarGrid value={value || undefined} today={today} min={`${minYear}-01-01`} max={max} openTo={openTo} initialFocus={`${defaultYear ?? maxYear}-06-15`} onChange={pick} />
+    <CalendarGrid value={value || undefined} today={today} min={min ?? `${minYear}-01-01`} max={max} openTo={openTo} initialFocus={`${defaultYear ?? maxYear}-06-15`} onChange={pick} />
   );
   return (
     <div className={styles.root}>
@@ -45,7 +48,7 @@ export function DateField({ label, value, onChange, minYear, maxYear, defaultYea
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger
           render={
-            <button type="button" className={styles.field} data-invalid={error ? '' : undefined} aria-labelledby={id}>
+            <button type="button" className={styles.field} data-invalid={error ? '' : undefined} aria-labelledby={id} disabled={disabled}>
               <span data-empty={!value || undefined}>{value ? formatShortDate(value) : placeholder}</span>
               <Icon name="calendar" size={20} className={styles.icon} />
             </button>
