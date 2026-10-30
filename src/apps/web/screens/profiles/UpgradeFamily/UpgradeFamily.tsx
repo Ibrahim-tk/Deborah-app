@@ -7,22 +7,26 @@
  * @xref    web: W-6.3 (apps/web/screens/profiles/UpgradeFamily) — not built
  */
 import { Button, Sheet } from '@web/ui';
-import { useNav } from '@web/navigation';
+import { teenAccountCopy } from '@shared/data';
+import { useNav, useScreenParams } from '@web/navigation';
 import styles from './UpgradeFamily.module.css';
 
 export default function UpgradeFamily() {
   const { dismissSheet, open } = useNav();
+  // `reason: 'teen'`: a parent off the Family plan chose Invite your teen (story 1.5); no invite is sent.
+  const { reason } = useScreenParams<{ reason?: 'teen' }>();
+  const teen = reason === 'teen';
 
   const upgrade = () => {
     dismissSheet();
     // M-4.2 preselects Family; returnTo makes M-4.5 lead back into M-6.2 on success.
-    open('M-4.2', { preselect: 'family', returnTo: 'M-6.2' });
+    open('M-4.2', { preselect: 'family', returnTo: teen ? 'M-6.6' : 'M-6.2' });
   };
 
   return (
     <div data-xref="M-6.3 · Upgrade to Family">
       <Sheet
-        title="Family profiles are part of the Family plan"
+        title={teen ? teenAccountCopy.errors.upgradeTitle : 'Family profiles are part of the Family plan'}
         footer={
           <>
             <Button fullWidth onClick={upgrade}>Upgrade to Family</Button>
@@ -30,7 +34,7 @@ export default function UpgradeFamily() {
           </>
         }
       >
-        <p className={styles.text}>1 primary plus 3 family profiles, each with their own private history.</p>
+        <p className={styles.text}>{teen ? teenAccountCopy.errors.upgradeBody : '1 primary plus 3 family profiles, each with their own private history.'}</p>
       </Sheet>
     </div>
   );

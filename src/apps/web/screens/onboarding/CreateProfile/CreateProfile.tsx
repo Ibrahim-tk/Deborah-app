@@ -14,8 +14,8 @@
  * under the password. See parts/ForgotPassword.
  */
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { consentDoc } from '@shared/data';
-import { loadScenario, useAppStore } from '@shared/store';
+import { consentDoc, teenAccountCopy } from '@shared/data';
+import { loadScenario, selectIsUnderAge, useAppStore } from '@shared/store';
 import { cx } from '@shared/utils';
 import { Button, Input, TextReveal } from '@web/ui';
 import type { PhoneValue } from '@web/patterns/widgets';
@@ -35,7 +35,7 @@ const SKIP_AUTH_VALIDATION = true;
 /** PDF persona auto-run: shorter “You’re in” hold (still readable at ~0.5× normal step pace). */
 const fastDoneMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 700 : DONE_MS);
 
-type Stage = 'email' | 'password' | 'phone' | 'code' | 'forgot' | 'done';
+type Stage = 'email' | 'password' | 'phone' | 'code' | 'forgot' | 'done' | 'teen';
 
 /** "maria.lopez@…" → "Maria". */
 const nameFromEmail = (email: string) => {
@@ -58,9 +58,11 @@ function restoreReturning(email: string) {
 
 export default function CreateProfile() {
   // `stage` lets the internal Screens menu open straight on 2FA or forgot password.
-  const { first = '', mode, stage: initialStage = 'email' } = useScreenParams<{
+  const { first = '', mode, invite, stage: initialStage = 'email' } = useScreenParams<{
     first: string;
     mode: 'signin';
+    /** Teen invitation (W-1.12): email prefilled and locked, no code step. */
+    invite?: string;
     /** Legacy Screens-menu value `form` maps to email. */
     stage: Stage | 'form';
   }>();
@@ -69,7 +71,7 @@ export default function CreateProfile() {
   const [stage, setStage] = useState<Stage>(initialStage === 'form' || initialStage === 'password' || initialStage === 'phone' ? 'email' : initialStage);
   const [view, setView] = useState(stage);
   const leaving = view !== stage;
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(invite ?? '');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [phone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
@@ -98,7 +100,8 @@ export default function CreateProfile() {
       phone: signin || !phone.number.trim() || isValidPhone(countryFor(phone.country, phone.countryCode).iso as CountryCode, phone.number) ? undefined : 'Enter a valid phone number for that country.',
     };
     setErrors(next);
-    if (!next.email && !next.password && !next.confirm && !next.phone) setStage('code');
+    // The invitation link already proved the email: no code step.
+    if (!next.email && !next.password && !next.confirm && !next.phone) return invite ? verified() : setStage('code');
   };
 
   // Returning: restore the account; onboarding and the in-chat intake are already behind her.
@@ -114,11 +117,14 @@ export default function CreateProfile() {
     const s = useAppStore.getState();
     if (signin) return signIn(email.trim());
     s.setName(first);
-    s.createAccount(email.trim());
+    if (invite) s.acceptTeenInvite(email.trim());
+    else s.createAccount(email.trim());
     if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
     s.acceptConsent(consentDoc.version);
     s.acceptTerms();
-    setStage('done');
+    // "Your Oracle for teens" only when the age check puts them in the teen category.
+    // OPEN: an invited adult (18+) — the story doesn't say; they continue as a teen account without the notice.
+    setStage(invite && selectIsUnderAge(s) ? 'teen' : 'done');
   };
 
   // "You're in" holds briefly, then the health questions take over the full screen.
@@ -140,14 +146,18 @@ export default function CreateProfile() {
           : 'Welcome'
       : view === 'code'
         ? 'Check your email'
-        : undefined;
+        : view === 'teen'
+          ? teenAccountCopy.welcome.title
+          : undefined;
 
   const lede =
     view === 'email'
       ? signin
         ? 'Sign in to pick up where you left off.'
         : 'It’s lovely to have you here. Create your account to keep your conversations in one place.'
-      : undefined;
+      : view === 'teen'
+        ? teenAccountCopy.welcome.body
+        : undefined;
 
   return (
     <div className={styles.root} data-xref="M-1.4 · Create your profile">
@@ -171,7 +181,8 @@ export default function CreateProfile() {
                   value={email}
                   autoComplete="email"
                   inputMode="email"
-                  autoFocus
+                  readOnly={Boolean(invite)}
+                  autoFocus={!invite}
                   error={errors.email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -215,6 +226,11 @@ export default function CreateProfile() {
                   Continue
                 </Button>
               </form>
+            )}
+            {view === 'teen' && (
+              <div className={styles.fields} data-placeholder>
+                <Button fullWidth onClick={() => replace('M-1.8', undefined, 'fade')}>{teenAccountCopy.welcome.cta}</Button>
+              </div>
             )}
             {view === 'code' && (
               <div className={styles.code}>

@@ -9,6 +9,9 @@ import type { AppState, SessionSlice } from '../types';
 type Actions = Pick<
   SessionSlice,
   | 'setName'
+  | 'setAccountAge'
+  | 'inviteTeen'
+  | 'acceptTeenInvite'
   | 'acceptConsent'
   | 'acceptHealthConsent'
   | 'revokeHealthConsent'
@@ -54,6 +57,17 @@ export const sessionActions: StateCreator<AppState, [], [], Actions> = (set, get
         },
       };
     }),
+  setAccountAge: (accountDob, accountCountry, accountState, accountCity) => set({ accountDob, accountCountry, accountState, accountCity }),
+  inviteTeen: (email) =>
+    set((s) => ({
+      teenInvites: [
+        ...(s.teenInvites ?? []).filter((i) => i.email !== email),
+        { email, sentAt: nowFrom(s).toISOString(), status: 'sent' as const },
+      ],
+    })),
+  // The teen is a derivative beneficiary of the parent's Family Plan: nothing to buy or cancel.
+  acceptTeenInvite: (email) =>
+    set({ accountId: uid('acct'), accountEmail: email, accountKind: 'teen', authFlow: 'signup', plan: 'family', limitReachedPending: false }),
   acceptConsent: (version) => set((s) => ({ consentAcceptedAt: nowFrom(s).toISOString(), consentVersion: version })),
   acceptHealthConsent: () => set((s) => ({
     healthConsentAt: s.healthConsentAt ?? nowFrom(s).toISOString(),

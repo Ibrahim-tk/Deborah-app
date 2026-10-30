@@ -23,6 +23,12 @@ import type {
 import type { HealthProfile, IntakeProgress } from '../types/health';
 import type { ScenarioStart } from '../types/scenario';
 
+export interface TeenInvite {
+  email: string;
+  sentAt: string;
+  status: 'sent' | 'joined';
+}
+
 export interface SessionSlice {
   userName: string;
   accountId?: string;
@@ -48,6 +54,16 @@ export interface SessionSlice {
   /** Welcome "Get started": agreeing to Terms and Privacy Policy. */
   termsAcceptedAt?: string;
   isGenesisGoldCustomer?: boolean;
+  /** Teen accounts (F06 teen invite) join a parent's Family Plan: no billing, products or consent revoke. */
+  accountKind?: 'standard' | 'teen';
+  /** Date of birth (yyyy-mm-dd) from the age step right after the name. */
+  accountDob?: string;
+  /** Country / state from the age step — the age of majority depends on them. */
+  accountCountry?: string;
+  accountState?: string;
+  accountCity?: string;
+  /** Parent side: teens invited to their own account. */
+  teenInvites?: TeenInvite[];
   activeProfileId: ID;
   isLocked: boolean;
   simulatedNow: string;
@@ -56,6 +72,11 @@ export interface SessionSlice {
   /** M-2.8 is offered when the answered count reaches this (1 = first answer; "Not now" adds 3). */
   followUpSnoozeUntil: number;
   setName: (name: string) => void;
+  setAccountAge: (dob: string, country: string, state?: string, city?: string) => void;
+  /** Parent sends a teen invitation (simulated email). */
+  inviteTeen: (email: string) => void;
+  /** Teen finishes sign-up from the invitation link: a dependent account on the Family Plan. */
+  acceptTeenInvite: (email: string) => void;
   acceptConsent: (version: string) => void;
   acceptHealthConsent: () => void;
   /** M-10.2: clears health-data consent. The next chat start asks again. */

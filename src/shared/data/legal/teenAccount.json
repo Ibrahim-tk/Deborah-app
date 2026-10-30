@@ -1,0 +1,41 @@
+{
+  "status": "placeholder",
+  "errors": {
+    "upgradeTitle": "Inviting your teen to their own account is part of the Family plan.",
+    "upgradeBody": "Upgrade to invite your teen.",
+    "email": "Please enter a valid email address for your teen.",
+    "required": "Please complete this field."
+  },
+  "disclaimer": {
+    "title": "Teen account privacy",
+    "body": [
+      "By continuing, you understand that your teen will receive their own private Your Oracle account. You will not be able to view their conversations, health information, or activity within their account.",
+      "Your authorization will allow them to use the account while they are below the applicable legal age of majority. Once they reach that age, they will be able to manage their account independently."
+    ],
+    "cta": "I understand & continue"
+  },
+  "invite": {
+    "title": "Invite your teen",
+    "intro": "Enter your teen’s email address. We’ll send them an invitation to create their own Oracle account linked to your Family Plan.",
+    "after": "Your teen will complete their own account setup and access Oracle using their own login.",
+    "cta": "Send invitation"
+  },
+  "sent": {
+    "title": "Invitation sent",
+    "body": "We’ve emailed {email} with instructions to create their Oracle account."
+  },
+  "email": {
+    "from": "Your Oracle",
+    "subject": "You’ve been invited to join Your Oracle",
+    "body": [
+      "You’ve been invited to create your own Your Oracle account as part of a Family Plan.",
+      "Set up your account to start using Oracle."
+    ],
+    "cta": "Finish Sign Up"
+  },
+  "welcome": {
+    "title": "Your Oracle for teens",
+    "body": "Your account gives you access to health education through Oracle. Some features available to adults, such as product recommendations and Your Wellness Plan, are not available on teen accounts.",
+    "cta": "Continue"
+  }
+}

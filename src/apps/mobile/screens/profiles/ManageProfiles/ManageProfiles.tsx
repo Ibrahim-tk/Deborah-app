@@ -1,7 +1,7 @@
 /**
  * @screen  M-6.6 · Manage profiles
  * @flow    F06 Family profiles
- * @states  self only · family list · add available · add locked (other plans) · add full (5 of 5)
+ * @states  self only · [family: invite your teen → M-6.7 · invitation sent rows] · family list · add available · add locked (other plans) · add full (5 of 5)
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F06-family-profiles.md#m-66--manage-profiles-not-in-wireframes
  * @xref    web: W-6.6 (apps/web/screens/profiles/ManageProfiles) — not built
@@ -16,10 +16,11 @@ import { maxProfilesFor, useAddMember } from '../useAddMember';
 import styles from './ManageProfiles.module.css';
 
 export default function ManageProfiles() {
-  const { pop, push } = useNav();
+  const { pop, push, presentSheet } = useNav();
   const { previousTitle, canGoBack } = useRoute();
   const { addState, add } = useAddMember();
   const plan = useAppStore((s) => s.plan);
+  const invites = useAppStore(useShallow((s) => s.teenInvites ?? []));
   const profiles = useAppStore(useShallow((s) => s.profiles.order.map((id) => s.profiles.byId[id]).filter(Boolean)));
 
   return (
@@ -54,6 +55,18 @@ export default function ManageProfiles() {
             </span>
           )}
         </button>
+        {/* Teen with their own login (F06 teen invite): Family plan only (others get the upgrade prompt); it doesn't use a profile slot. */}
+        {(
+          <button type="button" className={styles.add} onClick={() => presentSheet(plan === 'family' ? 'M-6.7' : 'M-6.3', plan === 'family' ? undefined : { reason: 'teen' })}>
+            <span className={styles.addIcon} aria-hidden="true">
+              <Icon name="mail" size={22} />
+            </span>
+            <span className={styles.addLabel}>Invite your teen to their own account</span>
+          </button>
+        )}
+        {invites.map((i) => (
+          <p key={i.email} className={styles.note}>Invitation sent · {i.email}</p>
+        ))}
         <p className={styles.note}>Each person has their own private history. Histories never mix.</p>
       </div>
     </div>

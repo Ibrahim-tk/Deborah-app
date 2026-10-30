@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { selectVisitToLog, useAppStore } from '@shared/store';
+import { selectIsTeenAccount, selectVisitToLog, useAppStore } from '@shared/store';
 import { Aura, GradientShift, ScrollEdge } from '@mobile/ui';
 
 import { ChatLauncher, ConversationHeader } from '@mobile/patterns/chat';
@@ -87,6 +87,8 @@ export default function Home() {
     onAction: () => { closeSheet(); completeIntake(); },
   };
   const visitToLog = useAppStore((s) => selectVisitToLog(s));
+  // Teen accounts have no Wellness Plan (F06 teen invite).
+  const teen = useAppStore(selectIsTeenAccount);
   const destinations: [{ title: string; meta: string; onPress: () => void }, { title: string; meta: string; onPress: () => void }] = [
     { title: 'My Health', meta: FLAGS.intakeV2 ? `Profile ${pct}%` : 'Your plan & library', onPress: go('M-7.2') },
     { title: 'Add Family Member', meta: `${d.profileCount} profile${d.profileCount === 1 ? '' : 's'}`, onPress: go('M-6.6') },
@@ -148,7 +150,7 @@ export default function Home() {
             onContinue={resume}
             steps={steps.slice(0, 3)}
             intakeCard={intakeCard}
-            journey={d.planCard ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
+            journey={d.planCard && !teen ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
             onNotes={go('M-9.1')}
             destinations={destinations}
             recommendations={d.recommendations}

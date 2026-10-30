@@ -8,7 +8,7 @@
  */
 import { Fragment, useState, type ReactNode } from 'react';
 import { findPlan } from '@shared/data';
-import { useAppStore } from '@shared/store';
+import { selectIsTeenAccount, useAppStore } from '@shared/store';
 import { Divider, Icon, ListRow, useAlert, type IconName } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useNav } from '@web/navigation';
@@ -42,6 +42,7 @@ export default function Account() {
   const email = useAppStore((s) => s.accountEmail);
   const plan = useAppStore((s) => s.plan);
   const trial = plan === 'trial';
+  const teen = useAppStore(selectIsTeenAccount);
   const planName = findPlan(plan)?.name;
   const [sheet, setSheet] = useState<'name' | 'email' | null>(null);
   const [sheetKey, setSheetKey] = useState(0);
@@ -71,8 +72,11 @@ export default function Account() {
         { title: 'Name', value: [name, lastName].filter(Boolean).join(' ') || 'Not added', icon: 'account', onPress: () => openSheet('name') },
         { title: 'Email', value: email || 'Not added', icon: 'mail', onPress: () => openSheet('email') },
         { title: 'Change password', icon: 'lock', onPress: () => nav.push('M-10.7') },
-        { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') },
-        { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') },
+        // Teen accounts are part of a parent's Family Plan: no subscription or family management.
+        ...(teen ? [] : [
+          { title: 'Subscription', value: trial ? 'Free trial' : planName, icon: 'shop', onPress: () => nav.push('M-10.3') } as SettingsRow,
+          { title: 'Family profiles', icon: 'family', onPress: () => nav.push('M-6.6') } as SettingsRow,
+        ]),
       ],
     },
     {

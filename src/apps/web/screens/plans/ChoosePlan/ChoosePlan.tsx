@@ -14,11 +14,12 @@ import { createPortal } from 'react-dom';
 import { findPlan, planList } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import type { Billing } from '@shared/types/domain';
-import { Button, Icon, OVERLAY_HOST_ID, Spinner } from '@web/ui';
+import { Button, Icon, OVERLAY_HOST_ID } from '@web/ui';
 import { simMs } from '@web/hooks/simTiming';
 import { PlanCard, planPrice } from '@web/patterns/commerce';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useNavStore, useScreenParams } from '@web/navigation';
+import { MockCheckout } from './parts/MockCheckout';
 import styles from './ChoosePlan.module.css';
 
 type PaidPlan = (typeof planList)[number]['id'];
@@ -82,7 +83,6 @@ export default function ChoosePlan() {
   };
 
   const amount = billing === 'annual' ? plan.annual : plan.monthly;
-  const period = billing === 'annual' ? 'year' : 'month';
 
   const page = (
     <div className={styles.page} data-xref="M-4.2 · Choose plan">
@@ -120,21 +120,9 @@ export default function ChoosePlan() {
           </div>
         )}
 
+        {/* Mock card checkout (designer, 2026-10-29), then our own "You're all set". Simulated, nothing is charged. */}
         {(phase === 'confirm' || phase === 'processing') && (
-          <div className={styles.body}>
-            <div className={styles.intro}>
-              <h1 className={styles.title}>Confirm your plan</h1>
-              <p className={styles.subtitle}>{plan.name} · {billing === 'annual' ? 'Annual' : 'Monthly'}</p>
-            </div>
-            <dl className={styles.summary}>
-              <div><dt>Price</dt><dd>${amount.toFixed(2)} per {period}</dd></div>
-              <div><dt>Account</dt><dd>{email ?? 'maria@icloud.com'}</dd></div>
-            </dl>
-            <p className={styles.note}>Renews automatically until cancelled. Cancel anytime in Settings at least a day before each renewal.</p>
-            <Button fullWidth onClick={() => setPhase('processing')} disabled={phase === 'processing'} aria-live="polite">
-              {phase === 'processing' ? <><Spinner size={18} label="Processing" /> Processing</> : `Subscribe — ${price}`}
-            </Button>
-          </div>
+          <MockCheckout planName={plan.name} amount={amount} email={email ?? 'maria@icloud.com'} processing={phase === 'processing'} onPay={() => setPhase('processing')} />
         )}
 
         {phase === 'done' && (

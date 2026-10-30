@@ -1,0 +1,40 @@
+.root {
+  position: relative;
+  height: 100%;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-canvas) 50%, transparent), color-mix(in srgb, var(--color-canvas) 50%, transparent)),
+    var(--color-canvas) url("/images/health-basics-bg.webp") center / cover no-repeat;
+}
+.stage {
+  width: min(100%, var(--form-width));
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-8);
+  height: 100%;
+  overflow-y: auto;
+  padding: calc(var(--safe-top) + var(--space-6)) var(--margin-screen) calc(var(--safe-bottom) + var(--space-6));
+  text-align: center;
+}
+.header { display: grid; justify-items: center; gap: var(--space-3); width: 100%; }
+.prompt {
+  margin: 0;
+  font: var(--weight-regular) calc(40px * var(--type-scale)) / calc(44px * var(--type-scale)) var(--font-artistic, var(--font-display));
+  letter-spacing: -0.005em;
+  color: var(--color-ink);
+  text-wrap: pretty;
+  max-width: 18ch;
+}
+.lede {
+  margin: 0;
+  font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
+  color: var(--color-ink-body);
+  text-wrap: pretty;
+  max-width: 36ch;
+}
+.fields { display: grid; gap: var(--space-4); width: 100%; text-align: start; }
+.small { margin: 0; font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body); color: var(--color-ink-secondary); }

@@ -12,12 +12,13 @@
  * "You're in" that moves on by itself to the full-screen health questions (M-1.8).
  * `mode: 'signin'` (Welcome's "Sign in"): the same sheet, without confirm password, ending on
  * "Welcome back" and Home (M-2.0). Any email and password sign in (simulated).
+ * `invite` (teen invitation, M-1.12): email prefilled and locked, no code step, then "Your Oracle for teens" → M-1.8.
  * Sign-in has "Forgot password?" under the password: email → code → new password → "Your password is set"
  * → signed in automatically ("Welcome back" → Home). See parts/ForgotPassword.
  */
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { consentDoc } from '@shared/data';
-import { loadScenario, useAppStore } from '@shared/store';
+import { consentDoc, teenAccountCopy } from '@shared/data';
+import { loadScenario, selectIsUnderAge, useAppStore } from '@shared/store';
 import { Button, Input, Sheet } from '@mobile/ui';
 import type { PhoneValue } from '@mobile/patterns/widgets';
 import { useNav, useScreenParams } from '@mobile/navigation';
@@ -33,7 +34,7 @@ const SKIP_AUTH_VALIDATION = false;
 /** PDF persona auto-run: shorter “You’re in” hold (still readable at ~0.5× normal step pace). */
 const fastDoneMs = () => (document.documentElement.dataset.yocFastSignup === '1' ? 700 : DONE_MS);
 
-type Stage = 'form' | 'code' | 'forgot' | 'done';
+type Stage = 'form' | 'code' | 'forgot' | 'done' | 'teen';
 
 /** "maria.lopez@…" → "Maria". */
 const nameFromEmail = (email: string) => {
@@ -56,12 +57,13 @@ function restoreReturning(email: string) {
 
 export default function CreateProfile() {
   // `stage` lets the internal Screens menu open straight on 2FA or forgot password.
-  const { first = '', mode, stage: initialStage = 'form' } = useScreenParams<{ first: string; mode: 'signin'; stage: Stage }>();
+  const { first = '', mode, invite, stage: initialStage = 'form' } = useScreenParams<{ first: string; mode: 'signin'; invite?: string; stage: Stage }>();
   const signin = mode === 'signin';
   const { dismissSheet, push } = useNav();
   const [stage, setStage] = useState<Stage>(initialStage);
   const [forgotHeader, setForgotHeader] = useState<{ title?: string; subtitle?: string }>({});
-  const [email, setEmail] = useState('');
+  // Teen invite (M-1.12): the email comes from the invitation link and cannot be changed.
+  const [email, setEmail] = useState(invite ?? '');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [phone] = useState<PhoneValue>({ countryCode: '+1', number: '' });
@@ -80,7 +82,8 @@ export default function CreateProfile() {
       confirm: signin || password === confirm ? undefined : 'Those passwords don’t match.',
     };
     setErrors(next);
-    if (!next.email && !next.password && !next.confirm) setStage('code');
+    // The invitation link already proved the email: no code step.
+    if (!next.email && !next.password && !next.confirm) return invite ? verified() : setStage('code');
   };
 
   // Returning: restore the account; onboarding and the in-chat intake are already behind her.
@@ -96,11 +99,14 @@ export default function CreateProfile() {
     const s = useAppStore.getState();
     if (signin) return signIn(email.trim());
     s.setName(first);
-    s.createAccount(email.trim());
+    if (invite) s.acceptTeenInvite(email.trim());
+    else s.createAccount(email.trim());
     if (phone.number.trim()) s.setContactPhone(phone.countryCode, phone.number);
     s.acceptConsent(consentDoc.version);
     s.acceptTerms();
-    setStage('done');
+    // "Your Oracle for teens" only when the age check puts them in the teen category.
+    // OPEN: an invited adult (18+) — the story doesn't say; they continue as a teen account without the notice.
+    setStage(invite && selectIsUnderAge(s) ? 'teen' : 'done');
   };
 
   // "You're in" holds briefly, then the health questions take over the full screen.
@@ -120,10 +126,17 @@ export default function CreateProfile() {
         title={stage === 'form' ? (signin ? 'Welcome back' : `Welcome${first ? `, ${first}` : ''}`) : stage === 'code' ? 'Check your email' : stage === 'forgot' ? forgotHeader.title : undefined}
         subtitle={stage === 'form' ? (signin ? 'Sign in to pick up where you left off.' : 'Create your account so the Oracle remembers your story.') : stage === 'forgot' ? forgotHeader.subtitle : undefined}
       >
+        {stage === 'teen' && (
+          <div key="teen" className={styles.stage} data-placeholder>
+            <h2 className={styles.title}>{teenAccountCopy.welcome.title}</h2>
+            <p className={styles.sub}>{teenAccountCopy.welcome.body}</p>
+            <Button fullWidth onClick={() => { dismissSheet(); push('M-1.8'); }}>{teenAccountCopy.welcome.cta}</Button>
+          </div>
+        )}
         {stage === 'form' && (
           <form key="form" className={styles.stage} onSubmit={submit} noValidate>
             {/* OPEN: placeholder UX copy until reviewed. Heading + subtitle live in the sheet header. */}
-            <Input label="Email" type="email" placeholder="Your email" value={email} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors((x) => ({ ...x, email: undefined })); }} />
+            <Input label="Email" type="email" placeholder="Your email" value={email} readOnly={Boolean(invite)} autoComplete="email" inputMode="email" error={errors.email} onChange={(e) => { setEmail(e.target.value); setErrors((x) => ({ ...x, email: undefined })); }} />
             <Input label="Password" type="password" placeholder="Enter your password" value={password} autoComplete={signin ? 'current-password' : 'new-password'} error={errors.password} onChange={(e) => { setPassword(e.target.value); setErrors((x) => ({ ...x, password: undefined })); }} />
             {signin && <button type="button" className={styles.forgot} onClick={() => setStage('forgot')}>Forgot password?</button>}
             {!signin && <Input label="Confirm password" type="password" placeholder="Confirm your password" value={confirm} autoComplete="new-password" enterKeyHint="go" error={errors.confirm} onChange={(e) => { setConfirm(e.target.value); setErrors((x) => ({ ...x, confirm: undefined })); }} />}

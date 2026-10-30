@@ -1,6 +1,7 @@
 /** M-7.2 — populated hub (Home hierarchy, 2026-10-21): healing plan (Home dot card) · check-in · health profile. */
 import { CheckInCard } from '@mobile/patterns/health';
 import { HealingPlanCard } from '@mobile/patterns/widgets';
+import { selectIsTeenAccount, useAppStore } from '@shared/store';
 import { useNav } from '@mobile/navigation';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import { HealthDetails } from './HealthDetails';
@@ -10,12 +11,14 @@ export function HubPopulated() {
   const { push, openAsk } = useNav();
   const gate = useAccountGate();
   const { plan, checkIn, upcoming } = useHubData();
+  // Teen accounts have no Wellness Plan (F06 teen invite).
+  const teen = useAppStore(selectIsTeenAccount);
 
 
   return (
     <>
       {/* Focus card removed from My Health (designer, 2026-10-21); the last conversation lives on Home. */}
-      {plan && (
+      {plan && !teen && (
         <HealingPlanCard
           concern={plan.concern}
           done={plan.done}

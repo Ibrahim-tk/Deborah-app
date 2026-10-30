@@ -31,6 +31,8 @@ export function useAccountGate() {
   const { presentSheet } = useNav();
   return useCallback(
     (reason: GateReason, action: () => void) => {
+      // Teen accounts (F06 teen invite): no Wellness Plan and no family management.
+      if (useAppStore.getState().accountKind === 'teen' && (reason === 'journey' || reason === 'family')) return;
       // Free trial is conversations only (Oracle Change Requests, Oct 26): plan features open the plan sheet.
       if (useAppStore.getState().plan === 'trial' && (reason === 'journey' || reason === 'family' || reason === 'documents')) {
         return presentSheet('M-4.1', { reason });

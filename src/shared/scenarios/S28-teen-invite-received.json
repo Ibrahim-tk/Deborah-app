@@ -1,0 +1,17 @@
+{
+  "id": "S28",
+  "now": "2026-11-03T16:20:00-08:00",
+  "start": {
+    "kind": "screen",
+    "root": "preauth",
+    "stack": [
+      "M-1.12"
+    ],
+    "params": {
+      "M-1.12": {
+        "email": "maya@icloud.com"
+      }
+    }
+  },
+  "state": {}
+}

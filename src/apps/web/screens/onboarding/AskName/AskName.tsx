@@ -27,7 +27,8 @@ export default function AskName() {
     if (!NAME_PATTERN.test(first)) return setError('Letters only, please.');
     useAppStore.getState().setName(first);
     dismissSheet();
-    push('M-1.8', { returnTo: 'chat' });
+    // Age step (W-1.13) before the health basics.
+    push('M-1.13', { first, next: 'health' });
   };
 
   return (

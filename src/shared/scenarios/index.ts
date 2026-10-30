@@ -36,9 +36,11 @@ import s25b from './S25b-visit-log-anytime.json';
 import s25c from './S25c-visit-logged.json';
 import s25d from './S25d-visit-safety.json';
 import s26c from './S26c-documents-chat-prompt.json';
+import s27 from './S27-teen-invite-parent.json';
+import s28 from './S28-teen-invite-received.json';
 
 export const SEEDS: Record<string, ScenarioSeed> = Object.fromEntries(
-  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, s25, s25b, s25c, s25d, s26c, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
+  ([s01, s02, s03, s04, s05, s06, s07, s08, s09, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s24b, s24c, s25, s25b, s25c, s25d, s26c, s27, s28, r01] as unknown as ScenarioSeed[]).map((s) => [s.id, s]),
 );
 
 export const SCENARIO_GROUPS: ScenarioGroup[] = [
@@ -57,6 +59,8 @@ export const SCENARIOS: ScenarioMeta[] = [
   { id: 'S22', label: 'Provider review — facts to confirm', group: 'QA', description: 'A non-emergency concern reported. Save, Edit or Don’t save; then a provider-directed seven-section answer. No product or consultation charge.', startsAt: 'M-2.1 Review and Confirm', phase: 7 },
   { id: 'S20', label: 'Emily — teen onboarding', group: 'Family', description: 'Signed up as Emily. Add Maya, 15, through dependent onboarding; no separate teen login or invitation.', startsAt: 'M-1.8 Onboarding profile', phase: 7 },
   { id: 'S21', label: 'Helen — adult partner onboarding', group: 'Family', description: 'Signed up as Helen. Add James, 52, with adult agreement; no separate adult login or invitation.', startsAt: 'M-1.8 Onboarding profile', phase: 7 },
+  { id: 'S27', label: 'Family plan — invite your teen', group: 'Family', description: 'Maria on a Family Plan. Family profiles › Invite your teen to their own account: privacy disclaimer, teen’s email, invitation sent.', startsAt: 'M-6.6 Family profiles', phase: 7 },
+  { id: 'S28', label: 'Teen — invitation received', group: 'Family', description: 'Maya opens the invitation email. Finish sign-up: name, age, password with the email locked, Your Oracle for teens, health basics. No subscription, products, Wellness Plan or consent revoke.', startsAt: 'M-1.12 Invitation email', phase: 7 },
   { id: 'S01', label: 'New user — first launch', group: 'Onboarding', description: 'Someone opening the app for the very first time: Welcome, sign-up sheet, onboarding profile, the Oracle’s welcome, first conversation.', startsAt: 'M-1.1 Splash', phase: 2 },
   { id: 'S03', label: 'Signed up — onboarding profile', group: 'Onboarding', description: 'Account created. The onboarding profile is open: who it’s for (Myself, or someone you care for → relationship, name, consent by age), date of birth, sex at birth, gender identity, then age×gender intake.', startsAt: 'M-1.8 Onboarding profile', phase: 2 },
   { id: 'S02', label: 'Basic details done — the Oracle’s welcome', group: 'Onboarding', description: 'Profile already says perimenopausal. Home with the Oracle’s welcome sheet; Start chatting opens the first conversation.', startsAt: 'M-2.0 + M-1.9 sheet', phase: 2 },

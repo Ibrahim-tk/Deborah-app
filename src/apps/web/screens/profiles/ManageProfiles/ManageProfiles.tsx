@@ -11,6 +11,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '@shared/store';
 import { Avatar, Icon, ListRow } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
+import { useNav } from '@web/navigation';
 import { relationshipLabel } from '@web/patterns/profile';
 import { healthProfileCompletion } from '@web/screens/onboarding/HealthBasics/healthProfile';
 import { DetailHostProvider } from '../../DetailHost';
@@ -22,6 +23,8 @@ const ProfileDetails = lazy(() => import('../ProfileDetails'));
 export default function ManageProfiles() {
   const { addState, add } = useAddMember();
   const plan = useAppStore((s) => s.plan);
+  const { presentSheet } = useNav();
+  const invites = useAppStore(useShallow((s) => s.teenInvites ?? []));
   const profiles = useAppStore(useShallow((s) => s.profiles.order.map((id) => s.profiles.byId[id]).filter(Boolean)));
   // One column like Settings (designer, 2026-10-29): the list, then the picked profile's details underneath.
   // The active profile (usually you) is shown by default.
@@ -61,6 +64,18 @@ export default function ManageProfiles() {
           </span>
         )}
       </button>
+      {/* Teen with their own login (F06 teen invite): Family plan only (others get the upgrade prompt); it doesn't use a profile slot. */}
+      {(
+        <button type="button" className={styles.add} onClick={() => presentSheet(plan === 'family' ? 'M-6.7' : 'M-6.3', plan === 'family' ? undefined : { reason: 'teen' })}>
+          <span className={styles.addIcon} aria-hidden="true">
+            <Icon name="mail" size={22} />
+          </span>
+          <span className={styles.addLabel}>Invite your teen to their own account</span>
+        </button>
+      )}
+      {invites.map((i) => (
+        <p key={i.email} className={styles.note}>Invitation sent · {i.email}</p>
+      ))}
       <p className={styles.note}>Each person has their own private history. Histories never mix.</p>
     </>
   );

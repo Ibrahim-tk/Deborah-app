@@ -40,6 +40,25 @@ export const selectAnsweredCount = (s: AppState, profileId = s.activeProfileId):
 
 export const selectNow = (s: AppState): Date => nowFrom(s);
 
+/** Teen account invited onto a parent's Family Plan (F06 teen invite). */
+export const selectIsTeenAccount = (s: AppState): boolean => s.accountKind === 'teen';
+
+/** Whole years from a yyyy-mm-dd date of birth. */
+export function ageFromDob(dob: string, now: Date): number {
+  const [y, m, d] = dob.split('-').map(Number);
+  let age = now.getFullYear() - y;
+  if (now.getMonth() + 1 < m || (now.getMonth() + 1 === m && now.getDate() < d)) age -= 1;
+  return age;
+}
+
+// OPEN: "DOB + State/Country → applicable age category" — default age of majority is 18 everywhere.
+// OPEN: reminder 2 weeks before a teen reaches legal age; the account ends on that date.
+export const AGE_OF_MAJORITY = 18;
+
+/** Under the age of majority, from the age step's date of birth. */
+export const selectIsUnderAge = (s: AppState): boolean =>
+  !!s.accountDob && ageFromDob(s.accountDob, nowFrom(s)) < AGE_OF_MAJORITY;
+
 /** Family = 4 profiles (1 primary + 3); more members are a paid add-on. */
 export const selectCanAddProfile = (s: AppState): boolean => {
   const max = s.plan === 'family' ? 4 : 1;

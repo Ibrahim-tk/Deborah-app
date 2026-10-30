@@ -42,13 +42,18 @@ export default function HealthBasics() {
   const newTree = useTreeDev((s) => s.useNewTree);
   const Bloom = newTree ? BloomReveal2 : BloomReveal;
   // `start: 'details'` (internal Screens menu): skip "who is this for" as Myself, open on basic details.
-  const [answers, setAnswers] = useState<Answers>(atDetails ? { profileFor: 'self', birthDate: DEFAULT_DOB } : { birthDate: DEFAULT_DOB });
+  // Teen accounts answer only for themselves (story 1.5): skip "Who is this for?".
+  const teen = useAppStore((s) => s.accountKind === 'teen');
+  const [answers, setAnswers] = useState<Answers>(atDetails || teen ? { profileFor: 'self', birthDate: DEFAULT_DOB } : { birthDate: DEFAULT_DOB });
   const answersRef = useRef(answers);
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
-  const [i, setI] = useState(atDetails ? 1 : 0);
-  const steps = visibleSteps(answers);
+  const [i, setI] = useState(atDetails || teen ? 1 : 0);
+  // Date of birth already given on the age step (M-1.13): Myself skips it here.
+  const accountDob = useAppStore((s) => s.accountDob);
+  const steps = visibleSteps(accountDob && !forSomeoneElse(answers) ? { ...answers, birthDate: accountDob } : answers)
+    .filter((s) => !(accountDob && s.key === 'birthDate' && !forSomeoneElse(answers)));
   // Back/edit can shrink the visible tree (e.g. leave peri → drop HRT); clamp for render.
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];
@@ -63,7 +68,7 @@ export default function HealthBasics() {
   const last = at === steps.length - 1;
 
   const finish = (final: Answers) => {
-    const profileId = saveOnboarding(final);
+    const profileId = saveOnboarding(accountDob && !forSomeoneElse(final) ? { ...final, birthDate: accountDob } : final);
     // Deborah's sheet opens over the full bloom; its CTA starts the chat as (or about) this profile.
     presentSheet('M-1.9', { profileId });
   };
@@ -117,7 +122,7 @@ export default function HealthBasics() {
 
   const goBack = () => {
     if (consentOpen) return setI(at - 1);
-    if (at > 0) return setI(at - 1);
+    if (at > (teen ? 1 : 0)) return setI(at - 1);
     pop();
   };
 

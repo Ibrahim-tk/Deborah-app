@@ -15,6 +15,8 @@ export const registry: Record<string, ScreenMeta> = {
   'M-1.4': { title: 'Create profile', component: lazy(() => import('@mobile/screens/onboarding/CreateProfile')), presentation: 'sheet', closeButton: true, detent: 'medium', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.4)' },
   'M-1.5': { title: 'Terms / Privacy', component: lazy(() => import('@mobile/screens/onboarding/LegalSheet')), presentation: 'sheet', detent: 'medium', dismissible: true, stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.5)' },
   'M-1.8': { title: 'Health basics', component: lazy(() => import('@mobile/screens/onboarding/HealthBasics')), presentation: 'push', stack: 'preauth', figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.8)' },
+  'M-1.12': { title: 'Teen invitation email', component: lazy(() => import('@mobile/screens/onboarding/TeenInvite')), presentation: 'root', stack: 'preauth', figma: '', spec: 'FigJam teen-account board (OPEN: add to docs/ux/F06)' },
+  'M-1.13': { title: 'Your age', component: lazy(() => import('@mobile/screens/onboarding/AgeSheet')), presentation: 'sheet', closeButton: true, detent: 'medium', stack: 'preauth', figma: '', spec: 'FigJam teen-account board (OPEN: add M-1.13 to docs/ux/F01)' },
   'M-1.10': { title: 'Ask an adult', component: lazy(() => import('@mobile/screens/onboarding/AskParent')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: '', spec: 'docs/ux/F01-onboarding.md#m-110--ask-a-parent' },
   'M-1.9': { title: "Deborah's welcome", component: lazy(() => import('@mobile/screens/onboarding/DeborahWelcome')), presentation: 'sheet', detent: 'medium', dismissible: false, figma: '', spec: 'docs/ux/F01-onboarding.md (OPEN: add M-1.9)' },
 
@@ -47,6 +49,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-6.2': { title: 'Add family member', component: lazy(() => import('@mobile/screens/profiles/AddMember')), presentation: 'modal', figma: `${FIGMA}50-203`, spec: 'docs/ux/F06-family-profiles.md#m-62--add-family-member' },
   'M-6.3': { title: 'Upgrade to Family', component: lazy(() => import('@mobile/screens/profiles/UpgradeFamily')), presentation: 'sheet', detent: 'medium', dismissible: true, figma: `${FIGMA}50-203`, spec: 'docs/ux/F06-family-profiles.md#m-63--upgrade-to-family' },
   'M-6.5': { title: 'Profile', component: lazy(() => import('@mobile/screens/profiles/ProfileDetails')), presentation: 'push', figma: `${FIGMA}50-203`, spec: 'docs/ux/F06-family-profiles.md#m-65--profile-details' },
+  'M-6.7': { title: 'Invite your teen', component: lazy(() => import('@mobile/screens/profiles/InviteTeen')), presentation: 'sheet', closeButton: true, detent: 'medium', dismissible: true, figma: '', spec: 'FigJam teen-account board (OPEN: add to docs/ux/F06)' },
   'M-6.6': { title: 'Family profiles', component: lazy(() => import('@mobile/screens/profiles/ManageProfiles')), presentation: 'push', figma: '', spec: 'docs/ux/F06-family-profiles.md#m-66--manage-profiles-not-in-wireframes' },
 
   // F07 My Health hub (M-7.1 is the hub's empty state)

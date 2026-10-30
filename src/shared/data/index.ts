@@ -20,6 +20,7 @@ import type {
 } from '../types/content';
 import deborah from './persona/deborah.json';
 import consent from './legal/consent.json';
+import teenAccount from './legal/teenAccount.json';
 import attachments from './attachments.json';
 import suggestions from './conversation/suggestions.json';
 import intake from './conversation/intake.json';
@@ -68,6 +69,8 @@ import type { DocumentExtraction, DocumentFormat, DocumentType } from '../types/
 
 export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
+/** F06 teen invite copy (placeholder until legal review). */
+export const teenAccountCopy = teenAccount;
 /** Seed photos for Records › Attachments (prototype). */
 export const seedAttachments: { id: string; src: string; alt: string; date: string }[] = attachments.items;
 export const suggestionsData = suggestions as SuggestionsData;

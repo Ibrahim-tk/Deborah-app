@@ -9,7 +9,7 @@
  */
 import { useEffect, useState } from 'react';
 import { FLAGS } from '@shared/flags';
-import { selectVisitToLog, useAppStore } from '@shared/store';
+import { selectIsTeenAccount, selectVisitToLog, useAppStore } from '@shared/store';
 
 import { ChatLauncher, ConversationHeader } from '@web/patterns/chat';
 import { IntakeCompletionCard } from '@web/patterns/widgets';
@@ -78,6 +78,8 @@ export default function Home() {
   // The health profile lives on My Health (its Health profile card); M-2.10 was removed (2026-10-20).
   const openProfile = () => push('M-7.2');
   const journey = () => gate('journey', () => push('M-7.3'));
+  // Teen accounts have no Wellness Plan (F06 teen invite).
+  const teen = useAppStore(selectIsTeenAccount);
   const completeIntake = () => push('M-2.14');
   const shop = (productId: string) => open('M-2.7', { productId });
   // Dismissed for this visit only; the card returns on the next Home mount.
@@ -145,7 +147,7 @@ export default function Home() {
               onContinue={resume}
               steps={steps.slice(0, 3)}
               intakeCard={intakeCard}
-              journey={d.planCard ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
+              journey={d.planCard && !teen ? { concern: d.planCard.concern, done: d.planCard.done, total: d.planCard.total, onPress: journey } : undefined}
               onNotes={go('M-9.1')}
               destinations={destinations}
               recommendations={d.recommendations}

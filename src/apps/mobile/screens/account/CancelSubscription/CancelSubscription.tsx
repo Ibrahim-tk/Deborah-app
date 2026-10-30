@@ -1,7 +1,7 @@
 /**
  * @screen  M-10.8 · Cancel subscription
  * @flow    F10 Account, privacy & data — replaces the system alert on M-10.3 (designer, 2026-10-29)
- * @states  default · reason picked · confirmed (consent ticked)
+ * @states  default · confirm sheet
  * @figma   NOT IN WIREFRAMES
  * @spec    docs/ux/F10-account-privacy.md#m-103--subscription-not-in-wireframes
  * @xref    web: W-10.8 — not built
@@ -12,18 +12,10 @@ import { useState } from 'react';
 import { findPlan } from '@shared/data';
 import { useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
-import { Button, Checkbox, Header, TextArea } from '@mobile/ui';
+import { BottomSheet, Button, Header } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useRoute } from '@mobile/navigation';
 import styles from './CancelSubscription.module.css';
-
-const REASONS = [
-  { id: 'price', label: 'It costs too much' },
-  { id: 'usage', label: 'I don’t use it enough' },
-  { id: 'answers', label: 'The answers didn’t help me' },
-  { id: 'other-app', label: 'I’m using something else' },
-  { id: 'other', label: 'Something else' },
-];
 
 export default function CancelSubscription() {
   const { pop } = useNav();
@@ -31,12 +23,12 @@ export default function CancelSubscription() {
   const toast = useToast();
   const plan = findPlan(useAppStore((s) => s.plan));
   const renewsAt = useAppStore((s) => s.renewsAt);
-  const [reason, setReason] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState('');
-  const [agreed, setAgreed] = useState(false);
+  // Confirm in a sheet ("Are you sure?"), no feedback form (designer, 2026-10-29).
+  const [confirming, setConfirming] = useState(false);
   const endDate = renewsAt ? formatShortDate(renewsAt) : 'the end of this billing period';
 
   const confirm = () => {
+    setConfirming(false);
     useAppStore.getState().cancelSubscription();
     toast('Subscription cancelled');
     pop();
@@ -58,34 +50,24 @@ export default function CancelSubscription() {
           </ul>
           <p className={styles.text}>Your conversations and health profile stay in your account.</p>
         </section>
-
-        {/* Small inline checkboxes, no container (single pick: ticking one clears the other). */}
-        <div className={styles.reasons} role="group" aria-label="Why are you cancelling? (optional)">
-          {REASONS.map((r) => (
-            <Checkbox key={r.id} size="sm" checked={reason === r.id} onChange={(on) => setReason(on ? r.id : null)} label={r.label} />
-          ))}
-        </div>
-
-        <TextArea
-          label="Anything we could do better? (optional)"
-          className={styles.field}
-          minRows={3}
-          maxRows={6}
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-        />
-
-        <Checkbox
-          emphasis
-          checked={agreed}
-          onChange={setAgreed}
-          label={`I understand my subscription ends on ${endDate} and won’t renew.`}
-        />
       </div>
       <div className={styles.footer}>
-        <Button fullWidth variant="destructive" disabled={!agreed} onClick={confirm}>Cancel subscription</Button>
+        <Button fullWidth variant="destructive" onClick={() => setConfirming(true)}>Cancel subscription</Button>
         <Button fullWidth variant="secondary" onClick={pop}>Keep my plan</Button>
       </div>
+      <BottomSheet
+        open={confirming}
+        onClose={() => setConfirming(false)}
+        title="Cancel your subscription?"
+        footer={
+          <>
+            <Button fullWidth variant="destructive" onClick={confirm}>Yes, cancel subscription</Button>
+            <Button fullWidth variant="ghost" onClick={() => setConfirming(false)}>Keep my plan</Button>
+          </>
+        }
+      >
+        <p className={styles.text}>Your plan stays active until {endDate} and won’t renew. You can choose a plan again any time.</p>
+      </BottomSheet>
     </div>
   );
 }

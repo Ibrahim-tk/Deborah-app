@@ -9,8 +9,8 @@ import { nowFrom } from '@shared/utils';
 import { isMinor } from '@shared/engine';
 import { useShallow } from 'zustand/react/shallow';
 import { findProduct } from '@shared/data';
-import { selectHistory, useAppStore, selectActiveProfile } from '@shared/store';
-import { ProductCard } from '@mobile/patterns/commerce';
+import { selectHistory, selectIsTeenAccount, useAppStore, selectActiveProfile } from '@shared/store';
+import { UpgradeCard, ProductCard } from '@mobile/patterns/commerce';
 import { AnimatePresence, Avatar, DURATION, EASE_IOS, Icon, MotionDiv, type IconName } from '@mobile/ui';
 import { useNavStore } from '../nav.store';
 import type { TabId } from '../types';
@@ -27,6 +27,9 @@ interface Item {
 
 export function Sidebar() {
   const open = useNavStore((s) => s.sidebarOpen);
+  const trial = useAppStore((s) => s.plan === 'trial');
+  // Teen accounts: no products and nothing to buy (F06 teen invite).
+  const teen = useAppStore(selectIsTeenAccount);
   const nav = useNavStore(
     useShallow((s) => ({ activeTab: s.activeTab, setSidebarOpen: s.setSidebarOpen, switchTab: s.switchTab, push: s.push, popToRoot: s.popToRoot, openAsk: s.openAsk, presentSheet: s.presentSheet, presentModal: s.presentModal })),
   );
@@ -75,7 +78,8 @@ export function Sidebar() {
     onSelect: () => nav.presentSheet('M-4.3', { mode: 'signin', sheet: true }),
   };
   const minor = useAppStore((s) => { const p = selectActiveProfile(s); return p ? isMinor(p, nowFrom(s)) : false; });
-  const gold = minor ? undefined : findProduct('genesis-gold');
+  // No product card for minors, or while on the free trial (designer, 2026-10-29: the upgrade card shows instead).
+  const gold = minor || trial || teen ? undefined : findProduct('genesis-gold');
 
   const row = (it: Item) => (
     <li key={it.label}>
@@ -153,6 +157,8 @@ export function Sidebar() {
                     />
                   </div>
                 )}
+                {/* Free trial: a small Choose a plan card above Settings (designer, 2026-10-29, same as web). */}
+                {trial && <UpgradeCard onPress={run(() => nav.presentModal('M-4.2'))} />}
                 <ul className={styles.list}>{row(settings)}{guest && row(signIn)}</ul>
               </div>
             </MotionDiv>

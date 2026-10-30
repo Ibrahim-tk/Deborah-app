@@ -1,0 +1,41 @@
+/* Hosted-checkout look (neutral system UI, not the app's own type): summary left, card form right. */
+.root {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8);
+  width: min(100%, 920px); margin-inline: auto; padding: var(--space-8); border-radius: 12px;
+  background: #ffffff; box-shadow: 0 0 0 1px #e6e6e6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #1a1a1a;
+}
+@media (max-width: 760px) { .root { grid-template-columns: 1fr; padding: var(--space-5); } }
+
+.summary { display: grid; align-content: start; gap: var(--space-2); }
+.merchant { margin: 0; font-size: 14px; font-weight: 500; color: #4d4d4d; }
+.caption { margin: var(--space-4) 0 0; font-size: 15px; color: #4d4d4d; }
+.total { margin: 0; font-size: 34px; font-weight: 500; letter-spacing: -0.02em; }
+.total span { font-size: 15px; font-weight: 400; color: #4d4d4d; }
+.lines { display: grid; gap: var(--space-3); margin: var(--space-5) 0 0; }
+.lines > div { display: flex; justify-content: space-between; gap: var(--space-4); font-size: 14px; }
+.lines dt { color: #1a1a1a; }
+.lines dd { margin: 0; color: #1a1a1a; }
+.due { padding-top: var(--space-3); border-top: 1px solid #e6e6e6; font-weight: 500; }
+
+.form { display: grid; align-content: start; gap: var(--space-4); }
+.test { margin: 0; padding: 6px 10px; border-radius: 6px; background: #fff4e5; font-size: 13px; color: #7a4a00; justify-self: start; }
+.field { display: grid; gap: 6px; font-size: 13px; color: #4d4d4d; }
+.field input, .cardGroup input {
+  width: 100%; min-width: 0; height: 40px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 6px;
+  background: #ffffff; font: inherit; font-size: 15px; color: #1a1a1a;
+}
+.field input:focus, .cardGroup input:focus { outline: none; border-color: #6b4ea0; box-shadow: 0 0 0 3px rgb(107 78 160 / 0.18); }
+.cardGroup { display: grid; grid-template-columns: 1fr 1fr; }
+.cardGroup .full { grid-column: 1 / -1; border-radius: 6px 6px 0 0; }
+.cardGroup input:nth-child(2) { border-top: 0; border-radius: 0 0 0 6px; }
+.cardGroup input:nth-child(3) { border-top: 0; border-left: 0; border-radius: 0 0 6px 0; }
+
+.pay {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  height: 46px; border: 0; border-radius: 6px; background: var(--color-accent); color: #ffffff;
+  font: inherit; font-size: 16px; font-weight: 500; cursor: pointer;
+}
+.pay:disabled { opacity: 0.8; cursor: progress; }
+.pay:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.fine { margin: 0; font-size: 12px; line-height: 1.5; color: #595959; }

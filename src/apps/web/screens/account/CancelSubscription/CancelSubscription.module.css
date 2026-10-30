@@ -16,3 +16,5 @@
 .footer { display: flex; flex-wrap: wrap; gap: var(--space-3); padding-top: var(--space-4); }
 .footer > * { flex: 1 1 200px; }
 .reasons { display: grid; gap: var(--space-1); }
+/* Desktop: Keep my plan left, Cancel subscription on the right (designer, 2026-10-29). */
+.footer > :first-child { order: 2; }

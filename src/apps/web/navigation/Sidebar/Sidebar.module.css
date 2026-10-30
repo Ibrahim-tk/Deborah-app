@@ -459,3 +459,8 @@
 .menuDivider { margin: 2px 0; }
 .panel:not([data-collapsed]) .profile { min-height: 44px; padding-block: 2px; }
 .panel:not([data-collapsed]) .guestAvatar { width: 32px; height: 32px; }
+
+/* Trial upgrade card, just above the profile button. */
+.upgrade { margin-top: auto; padding-bottom: var(--space-2); }
+.panel[data-collapsed] .upgrade { display: none; } /* icon-only rail: no room for the card */
+.upgrade { padding-inline: var(--space-3); } /* align with the profile button */

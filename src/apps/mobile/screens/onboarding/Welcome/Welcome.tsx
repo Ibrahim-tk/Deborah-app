@@ -16,7 +16,7 @@
 import { useId, useState, type FormEvent, type MouseEvent } from 'react';
 import { persona } from '@shared/data';
 import { Aura, Button, DeborahBlob, GradientShift, Icon, Input, TextReveal } from '@mobile/ui';
-import { useNav } from '@mobile/navigation';
+import { useNav, useScreenParams } from '@mobile/navigation';
 import styles from './Welcome.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
@@ -25,6 +25,8 @@ const SKIP_AUTH_VALIDATION = false;
 
 export default function Welcome() {
   const { presentSheet } = useNav();
+  // Arrived from a teen invitation (M-1.12): the email is already known; no sign-in link.
+  const { invite } = useScreenParams<{ invite?: string }>();
   const legalId = useId();
   const [name, setName] = useState('');
   const [error, setError] = useState<string>();
@@ -35,15 +37,17 @@ export default function Welcome() {
     const first = name.trim();
     if (SKIP_AUTH_VALIDATION) {
       setError(undefined);
-      presentSheet('M-1.4', { first: first || 'Tester' });
+      presentSheet('M-1.13', { first: first || 'Tester', invite });
       return;
     }
-    if (!first || !agreed) return;
+    // Invited teens: the parent gave consent, so no terms checkbox (story 1.5).
+    if (!first || (!agreed && !invite)) return;
     if (!NAME_PATTERN.test(first)) return setError('Letters only, please.');
-    presentSheet('M-1.4', { first });
+    // Age right after the name (teen-account board), then the sign-up sheet.
+    presentSheet('M-1.13', { first, invite });
   };
 
-  const ready = SKIP_AUTH_VALIDATION || Boolean(name.trim() && agreed);
+  const ready = SKIP_AUTH_VALIDATION || Boolean(name.trim() && (agreed || invite));
   const openLegal = (section: 'terms' | 'privacy') => (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -74,7 +78,7 @@ export default function Welcome() {
             error={error}
             onChange={(e) => { setName(e.target.value); setError(undefined); }}
           />
-          <div className={styles.legal}>
+          {!invite && <div className={styles.legal}>
             <input
               id={legalId}
               type="checkbox"
@@ -93,12 +97,12 @@ export default function Welcome() {
                 <button type="button" className={styles.link} onClick={openLegal('privacy')}>Privacy Notice</button>
               </span>
             </label>
-          </div>
+          </div>}
           <Button type="submit" fullWidth disabled={!ready}>Get Started</Button>
-          <p className={styles.signIn}>
+          {!invite && <p className={styles.signIn}>
             Already have an account?{' '}
             <button type="button" className={styles.signInLink} onClick={() => presentSheet('M-1.4', { mode: 'signin' })}>Sign in</button>
-          </p>
+          </p>}
         </div>
       </form>
     </div>

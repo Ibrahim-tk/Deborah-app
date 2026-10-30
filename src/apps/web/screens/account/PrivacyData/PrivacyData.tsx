@@ -7,7 +7,7 @@
  * @xref    web: W-10.2 (apps/web/screens/account/PrivacyData) — not built
  */
 import { useCallback, useState } from 'react';
-import { useAppStore } from '@shared/store';
+import { selectIsTeenAccount, useAppStore } from '@shared/store';
 import { formatShortDate } from '@shared/utils';
 import { Divider, Icon, ListRow, useAlert } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
@@ -23,6 +23,7 @@ export default function PrivacyData() {
   const requestedAt = useAppStore((s) => s.settings.dataExportRequestedAt);
   const [confirming, setConfirming] = useState(false);
   const consentAt = useAppStore((s) => s.healthConsentAt);
+  const teen = useAppStore(selectIsTeenAccount);
   const [revoking, setRevoking] = useState(false);
   const toast = useToast();
   const revoke = () => {
@@ -44,7 +45,9 @@ export default function PrivacyData() {
   const startDelete = async () => {
     const choice = await alert({
       title: 'Delete everything?',
-      message: 'Your account, every profile and all history will be deleted. Deletion is certified within 30 days.',
+      message: teen
+        ? 'We’ll send a request to delete all of your information. It’s processed and certified within 30 days.'
+        : 'Your account, every profile and all history will be deleted. Deletion is certified within 30 days.',
       buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Continue', style: 'destructive' }],
     });
     if (choice === 1) setConfirming(true);
@@ -66,19 +69,20 @@ export default function PrivacyData() {
               subtitle={requestedAt ? `Requested on ${formatShortDate(requestedAt)}` : 'A copy of everything you’ve shared'}
               onPress={download}
             />
-            <Divider />
-            <ListRow title="Delete a profile" subtitle="In Family profiles" onPress={() => nav.push('M-6.6')} />
+            {!teen && <Divider />}
+            {!teen && <ListRow title="Delete a profile" subtitle="In Family profiles" onPress={() => nav.push('M-6.6')} />}
           </div>
 
           {/* Consent (design 2026-10-21): health-data consent can be revoked here; the next chat start asks again. */}
-          <div className={styles.group}>
+          {/* Teen accounts cannot revoke consent; they can delete everything (F06 teen invite). */}
+          {!teen && <div className={styles.group}>
             <ListRow
               title="Health data consent"
               subtitle={consentAt ? `Given on ${formatShortDate(consentAt)}` : 'Not given — the Oracle will ask in chat'}
               onPress={consentAt ? () => setRevoking(true) : undefined}
               trailing={consentAt ? undefined : null}
             />
-          </div>
+          </div>}
 
           {/* Open note on the canvas, no tinted panel (design 2026-10-21). */}
           <div className={styles.info}>
@@ -90,7 +94,7 @@ export default function PrivacyData() {
           </div>
 
           <div className={styles.group}>
-            <ListRow title="Delete my account and all data" destructive trailing={null} onPress={startDelete} />
+            <ListRow title={teen ? 'Request to delete all my information' : 'Delete my account and all data'} destructive trailing={null} onPress={startDelete} />
           </div>
           <p className={styles.note}>Deletion is certified within 30 days.</p>
         </div>

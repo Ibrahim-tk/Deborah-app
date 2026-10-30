@@ -11,6 +11,7 @@ import { Avatar, Button, Icon } from '@web/ui';
 import { useToast } from '@web/hooks/toast.store';
 import { maxProfilesFor, useAddMember } from '@web/screens/profiles/useAddMember';
 import { useNavStore } from '../nav.store';
+import { UpgradeCard } from '@web/patterns/commerce';
 import type { TabId } from '../types';
 import styles from './Sidebar.module.css';
 
@@ -41,6 +42,8 @@ export function Sidebar() {
   const profile = useAppStore((s) => s.profiles.byId[s.activeProfileId]);
   const activeId = useAppStore((s) => s.activeProfileId);
   const plan = useAppStore((s) => s.plan);
+  // Teen accounts (F06 teen invite): nothing to buy and no family management.
+  const teen = useAppStore((s) => s.accountKind === 'teen');
   const profiles = useAppStore(useShallow((s) => s.profiles.order.map((id) => s.profiles.byId[id]).filter(Boolean)));
   const history = useAppStore(useShallow(selectHistory));
 
@@ -176,6 +179,12 @@ export function Sidebar() {
 
       </>
 
+      {/* Free trial: a small Choose a plan card above the profile button (designer, 2026-10-29). */}
+      {plan === 'trial' && !teen && (
+        <div className={styles.upgrade}>
+          <UpgradeCard onPress={() => nav.push('M-4.2')} />
+        </div>
+      )}
       <div className={styles.menuAnchor} ref={menuRef}>
         <button
           type="button"
@@ -242,7 +251,7 @@ export function Sidebar() {
                     );
                   })}
                 </ul>
-                <Button
+                {!teen && <Button
                   variant="ghost"
                   size="md"
                   fullWidth
@@ -264,7 +273,23 @@ export function Sidebar() {
                       </span>
                     )}
                   </span>
-                </Button>
+                </Button>}
+                {plan === 'family' && !teen && (
+                  <Button
+                    variant="ghost"
+                    size="md"
+                    fullWidth
+                    leadingIcon="mail"
+                    className={styles.menuItem}
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      nav.presentSheet('M-6.7');
+                    }}
+                  >
+                    Invite your teen
+                  </Button>
+                )}
                 <div className={styles.menuDivider} role="separator" />
                 <Button
                   variant="ghost"
