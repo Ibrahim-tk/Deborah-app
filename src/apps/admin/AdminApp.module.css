@@ -1,0 +1,2 @@
+.root { position: absolute; inset: 0; overflow: hidden; --safe-top: 0px; --safe-bottom: 0px; }
+.toast { position: absolute; inset-block-end: var(--space-8); inset-inline: 0; display: flex; justify-content: center; z-index: var(--z-overlay); pointer-events: none; }

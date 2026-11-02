@@ -109,8 +109,8 @@
   z-index: 0;
 }
 
-/* Soft blur at the trunk base, masked so it dissolves upward with no hard edge. */
-.art::after {
+/* Old 2D tree's trunk-base blur: off for the 3D tree (it cut the trunk in two). */
+.art::after { display: none;
   content: '';
   position: absolute;
   inset: auto 0 0 0;
@@ -230,7 +230,7 @@
   100% { transform: rotate(0deg); }
 }
 /* Content is carried off with the swarm: drifts left, blurs, dissolves. */
-@keyframes exit-content { to { opacity: 0; filter: blur(24px); transform: translateX(-6vw) scale(0.98); } }
+@keyframes exit-content { to { opacity: 0; filter: blur(8px); /* perf: was 24px */ transform: translateX(-6vw) scale(0.98); } }
 /* The glory: petals melt into a soft bloom of light that fills the screen (Oracle's welcome resolves out of it). */
 .glory {
   position: absolute;
@@ -257,3 +257,9 @@
   font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   color: var(--color-ink-secondary);
 }
+
+/* Finish: the tree (3D wind running) blurs and fades out completely before the hand-off to W-1.9 (EXIT_MS), so the
+   welcome never cuts in over a half-dissolved tree. */
+.treeOut { animation: tree-out 4200ms ease-in forwards; }
+@keyframes tree-out { 35% { opacity: 1; filter: blur(0); } 92%, 100% { opacity: 0; filter: blur(6px); } } /* small blur: a big CSS blur on a live WebGL canvas drops frames */
+@media (prefers-reduced-motion: reduce) { .treeOut { animation: none; } }

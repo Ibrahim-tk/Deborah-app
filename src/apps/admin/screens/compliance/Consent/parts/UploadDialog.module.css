@@ -1,0 +1,2 @@
+.file { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: 1px dashed var(--color-border-hairline); border-radius: var(--radius-sm); }
+.fileName { min-inline-size: 0; overflow-wrap: anywhere; color: var(--color-ink-secondary); font-size: var(--fs-callout); }

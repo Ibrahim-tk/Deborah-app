@@ -1,0 +1,97 @@
+[
+  {
+    "id": "free",
+    "name": "Free",
+    "kind": "individual",
+    "monthly": 0,
+    "yearly": 0,
+    "freeQuestions": 3,
+    "trialDays": 0,
+    "maxProfiles": 1,
+    "features": {
+      "Unlimited questions": false,
+      "Lab review": false,
+      "Family profiles": false,
+      "Visit briefs": false,
+      "Book Deborah": false
+    },
+    "rules": "Three free questions, then prompt to choose a plan.",
+    "active": true
+  },
+  {
+    "id": "individual-monthly",
+    "name": "Individual",
+    "kind": "individual",
+    "monthly": 29,
+    "yearly": 290,
+    "freeQuestions": 3,
+    "trialDays": 7,
+    "maxProfiles": 1,
+    "features": {
+      "Unlimited questions": true,
+      "Lab review": true,
+      "Family profiles": false,
+      "Visit briefs": true,
+      "Book Deborah": true
+    },
+    "rules": "Seven-day trial converts to monthly unless cancelled.",
+    "active": true
+  },
+  {
+    "id": "individual-yearly",
+    "name": "Individual yearly",
+    "kind": "individual",
+    "monthly": 0,
+    "yearly": 290,
+    "freeQuestions": 3,
+    "trialDays": 7,
+    "maxProfiles": 1,
+    "features": {
+      "Unlimited questions": true,
+      "Lab review": true,
+      "Family profiles": false,
+      "Visit briefs": true,
+      "Book Deborah": true
+    },
+    "rules": "Billed once a year. Refund within 14 days.",
+    "active": true
+  },
+  {
+    "id": "family-monthly",
+    "name": "Family",
+    "kind": "family",
+    "monthly": 49,
+    "yearly": 490,
+    "freeQuestions": 3,
+    "trialDays": 7,
+    "maxProfiles": 5,
+    "features": {
+      "Unlimited questions": true,
+      "Lab review": true,
+      "Family profiles": true,
+      "Visit briefs": true,
+      "Book Deborah": true
+    },
+    "rules": "Up to five profiles. Teens 13–17 need a parent account.",
+    "active": true
+  },
+  {
+    "id": "clinic-pilot",
+    "name": "Clinic pilot",
+    "kind": "family",
+    "monthly": 99,
+    "yearly": 990,
+    "freeQuestions": 0,
+    "trialDays": 0,
+    "maxProfiles": 10,
+    "features": {
+      "Unlimited questions": true,
+      "Lab review": true,
+      "Family profiles": true,
+      "Visit briefs": true,
+      "Book Deborah": false
+    },
+    "rules": "Invite only. Not shown in the app.",
+    "active": false
+  }
+]

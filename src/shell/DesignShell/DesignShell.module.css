@@ -1,0 +1,3 @@
+/* Full viewport, no top nav. */
+.root { position: fixed; inset: 0; overflow: auto; }
+.root > * { height: 100%; }

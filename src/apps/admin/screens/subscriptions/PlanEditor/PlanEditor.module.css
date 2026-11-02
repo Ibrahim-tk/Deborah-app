@@ -1,0 +1,4 @@
+.form { all: unset; display: grid; gap: var(--space-10); max-inline-size: var(--reading-max); }
+.fields { display: grid; gap: var(--space-4); max-inline-size: 420px; }
+.row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--space-4); }
+.toggles { display: grid; gap: var(--space-1); max-inline-size: 480px; }

@@ -1,0 +1,2 @@
+.root { display: flex; block-size: 100%; min-block-size: 0; }
+.stage { flex: 1; min-inline-size: 0; overflow-y: auto; background: var(--color-canvas); scroll-padding-block-start: var(--space-6); }

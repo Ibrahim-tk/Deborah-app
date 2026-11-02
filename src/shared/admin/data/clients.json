@@ -1,0 +1,1160 @@
+[
+  {
+    "id": "c001",
+    "name": "Amelia Hart",
+    "email": "amelia.hart@example.com",
+    "phone": "+1 512 555 0100",
+    "location": "Austin, TX",
+    "joined": "2026-07-01",
+    "lastActive": "2026-07-21",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 22,
+    "health": {
+      "age": 38,
+      "stage": "Perimenopause",
+      "concerns": [
+        "Hot flashes",
+        "Weight"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [
+      {
+        "id": "c001-d1",
+        "name": "Karen Hart",
+        "relationship": "Daughter",
+        "age": 15,
+        "conditions": [
+          "Irregular cycles"
+        ],
+        "status": "placeholder"
+      },
+      {
+        "id": "c001-d2",
+        "name": "Olivia Hart",
+        "relationship": "Mother",
+        "age": 68,
+        "conditions": [
+          "Sleep"
+        ],
+        "status": "placeholder"
+      }
+    ],
+    "documents": [
+      {
+        "id": "c001-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-07-11"
+      },
+      {
+        "id": "c001-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-07-13"
+      },
+      {
+        "id": "c001-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-07-15"
+      },
+      {
+        "id": "c001-doc4",
+        "kind": "other",
+        "title": "Insurance letter",
+        "date": "2026-07-17"
+      }
+    ]
+  },
+  {
+    "id": "c002",
+    "name": "Grace Nguyen",
+    "email": "grace.nguyen@example.com",
+    "phone": "+1 512 555 0101",
+    "location": "Denver, CO",
+    "joined": "2026-07-05",
+    "lastActive": "2026-07-25",
+    "planId": "individual-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 43,
+    "health": {
+      "age": 39,
+      "stage": "Menopause",
+      "concerns": [
+        "Sleep",
+        "Thyroid"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c002-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-07-15"
+      },
+      {
+        "id": "c002-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-07-17"
+      }
+    ]
+  },
+  {
+    "id": "c003",
+    "name": "Hannah Patel",
+    "email": "hannah.patel@example.com",
+    "phone": "+1 512 555 0102",
+    "location": "Portland, OR",
+    "joined": "2026-07-09",
+    "lastActive": "2026-07-01",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 54,
+    "health": {
+      "age": 40,
+      "stage": "Postmenopause",
+      "concerns": [
+        "Fatigue",
+        "Hot flashes"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c003-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-07-19"
+      },
+      {
+        "id": "c003-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-07-21"
+      },
+      {
+        "id": "c003-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-07-23"
+      }
+    ]
+  },
+  {
+    "id": "c004",
+    "name": "Isabel Okafor",
+    "email": "isabel.okafor@example.com",
+    "phone": "+1 512 555 0103",
+    "location": "Boston, MA",
+    "joined": "2026-07-13",
+    "lastActive": "2026-08-05",
+    "planId": "individual-yearly",
+    "subscription": "trial",
+    "account": "active",
+    "conversations": 39,
+    "health": {
+      "age": 41,
+      "stage": "Reproductive years",
+      "concerns": [
+        "Sleep",
+        "Mood"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c004-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-07-23"
+      },
+      {
+        "id": "c004-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-07-25"
+      }
+    ]
+  },
+  {
+    "id": "c005",
+    "name": "Julia Bennett",
+    "email": "julia.bennett@example.com",
+    "phone": "+1 512 555 0104",
+    "location": "San Diego, CA",
+    "joined": "2026-07-17",
+    "lastActive": "2026-08-09",
+    "planId": "free",
+    "subscription": "free",
+    "account": "active",
+    "conversations": 15,
+    "health": {
+      "age": 42,
+      "stage": "Not sure",
+      "concerns": [
+        "Sleep",
+        "Thyroid"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [
+      {
+        "id": "c005-d1",
+        "name": "Olivia Bennett",
+        "relationship": "Daughter",
+        "age": 15,
+        "conditions": [
+          "Irregular cycles"
+        ],
+        "status": "placeholder"
+      }
+    ],
+    "documents": [
+      {
+        "id": "c005-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-07-27"
+      },
+      {
+        "id": "c005-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-07-01"
+      },
+      {
+        "id": "c005-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-08-03"
+      }
+    ]
+  },
+  {
+    "id": "c006",
+    "name": "Karen Lopez",
+    "email": "karen.lopez@example.com",
+    "phone": "+1 512 555 0105",
+    "location": "Chicago, IL",
+    "joined": "2026-07-21",
+    "lastActive": "2026-08-13",
+    "planId": "individual-monthly",
+    "subscription": "past_due",
+    "account": "active",
+    "conversations": 29,
+    "health": {
+      "age": 43,
+      "stage": "Perimenopause",
+      "concerns": [
+        "Irregular cycles",
+        "Sleep"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c006-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-03"
+      },
+      {
+        "id": "c006-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-05"
+      },
+      {
+        "id": "c006-doc4",
+        "kind": "other",
+        "title": "Insurance letter",
+        "date": "2026-08-09"
+      }
+    ]
+  },
+  {
+    "id": "c007",
+    "name": "Laura Fischer",
+    "email": "laura.fischer@example.com",
+    "phone": "+1 512 555 0106",
+    "location": "Nashville, TN",
+    "joined": "2026-07-25",
+    "lastActive": "2026-08-17",
+    "planId": "family-monthly",
+    "subscription": "cancelled",
+    "account": "deactivated",
+    "conversations": 17,
+    "health": {
+      "age": 44,
+      "stage": "Menopause",
+      "concerns": [
+        "Fatigue",
+        "Mood"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c007-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-07"
+      },
+      {
+        "id": "c007-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-09"
+      },
+      {
+        "id": "c007-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-08-11"
+      }
+    ]
+  },
+  {
+    "id": "c008",
+    "name": "Maria Moreau",
+    "email": "maria.moreau@example.com",
+    "phone": "+1 512 555 0107",
+    "location": "Seattle, WA",
+    "joined": "2026-07-01",
+    "lastActive": "2026-08-21",
+    "planId": "individual-yearly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 29,
+    "health": {
+      "age": 45,
+      "stage": "Postmenopause",
+      "concerns": [
+        "Sleep",
+        "Irregular cycles"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c008-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-11"
+      },
+      {
+        "id": "c008-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-13"
+      }
+    ]
+  },
+  {
+    "id": "c009",
+    "name": "Nadia Rossi",
+    "email": "nadia.rossi@example.com",
+    "phone": "+1 512 555 0108",
+    "location": "London, UK",
+    "joined": "2026-08-05",
+    "lastActive": "2026-08-25",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 38,
+    "health": {
+      "age": 46,
+      "stage": "Reproductive years",
+      "concerns": [
+        "Fatigue",
+        "Thyroid"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [
+      {
+        "id": "c009-d1",
+        "name": "Tara Rossi",
+        "relationship": "Daughter",
+        "age": 15,
+        "conditions": [
+          "Irregular cycles"
+        ],
+        "status": "placeholder"
+      },
+      {
+        "id": "c009-d2",
+        "name": "Yasmin Rossi",
+        "relationship": "Mother",
+        "age": 68,
+        "conditions": [
+          "Sleep"
+        ],
+        "status": "placeholder"
+      }
+    ],
+    "documents": [
+      {
+        "id": "c009-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-15"
+      },
+      {
+        "id": "c009-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-17"
+      },
+      {
+        "id": "c009-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-08-19"
+      }
+    ]
+  },
+  {
+    "id": "c010",
+    "name": "Olivia Kim",
+    "email": "olivia.kim@example.com",
+    "phone": "+1 512 555 0109",
+    "location": "Toronto, ON",
+    "joined": "2026-08-09",
+    "lastActive": "2026-08-01",
+    "planId": "individual-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 42,
+    "health": {
+      "age": 47,
+      "stage": "Not sure",
+      "concerns": [
+        "Sleep",
+        "Mood"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c010-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-19"
+      },
+      {
+        "id": "c010-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-21"
+      }
+    ]
+  },
+  {
+    "id": "c011",
+    "name": "Priya Silva",
+    "email": "priya.silva@example.com",
+    "phone": "+1 512 555 0110",
+    "location": "Austin, TX",
+    "joined": "2026-08-13",
+    "lastActive": "2026-09-05",
+    "planId": "family-monthly",
+    "subscription": "trial",
+    "account": "active",
+    "conversations": 39,
+    "health": {
+      "age": 48,
+      "stage": "Perimenopause",
+      "concerns": [
+        "Irregular cycles",
+        "Sleep"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c011-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-23"
+      },
+      {
+        "id": "c011-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-25"
+      },
+      {
+        "id": "c011-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-08-27"
+      },
+      {
+        "id": "c011-doc4",
+        "kind": "other",
+        "title": "Insurance letter",
+        "date": "2026-08-01"
+      }
+    ]
+  },
+  {
+    "id": "c012",
+    "name": "Rachel Walsh",
+    "email": "rachel.walsh@example.com",
+    "phone": "+1 512 555 0111",
+    "location": "Denver, CO",
+    "joined": "2026-08-17",
+    "lastActive": "2026-09-09",
+    "planId": "free",
+    "subscription": "free",
+    "account": "active",
+    "conversations": 16,
+    "health": {
+      "age": 49,
+      "stage": "Menopause",
+      "concerns": [
+        "Sleep",
+        "Mood"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c012-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-27"
+      },
+      {
+        "id": "c012-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-08-01"
+      }
+    ]
+  },
+  {
+    "id": "c013",
+    "name": "Sofia Haddad",
+    "email": "sofia.haddad@example.com",
+    "phone": "+1 512 555 0112",
+    "location": "Portland, OR",
+    "joined": "2026-08-21",
+    "lastActive": "2026-09-13",
+    "planId": "family-monthly",
+    "subscription": "past_due",
+    "account": "active",
+    "conversations": 56,
+    "health": {
+      "age": 50,
+      "stage": "Postmenopause",
+      "concerns": [
+        "Hot flashes",
+        "Thyroid"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [
+      {
+        "id": "c013-d1",
+        "name": "Yasmin Haddad",
+        "relationship": "Daughter",
+        "age": 15,
+        "conditions": [
+          "Irregular cycles"
+        ],
+        "status": "placeholder"
+      }
+    ],
+    "documents": [
+      {
+        "id": "c013-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-08-03"
+      },
+      {
+        "id": "c013-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-05"
+      },
+      {
+        "id": "c013-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-09-07"
+      }
+    ]
+  },
+  {
+    "id": "c014",
+    "name": "Tara Ibarra",
+    "email": "tara.ibarra@example.com",
+    "phone": "+1 512 555 0113",
+    "location": "Boston, MA",
+    "joined": "2026-08-25",
+    "lastActive": "2026-09-17",
+    "planId": "individual-monthly",
+    "subscription": "cancelled",
+    "account": "active",
+    "conversations": 28,
+    "health": {
+      "age": 51,
+      "stage": "Reproductive years",
+      "concerns": [
+        "Hot flashes",
+        "Mood"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c014-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-07"
+      },
+      {
+        "id": "c014-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-09"
+      }
+    ]
+  },
+  {
+    "id": "c015",
+    "name": "Uma Novak",
+    "email": "uma.novak@example.com",
+    "phone": "+1 512 555 0114",
+    "location": "San Diego, CA",
+    "joined": "2026-08-01",
+    "lastActive": "2026-09-21",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 9,
+    "health": {
+      "age": 52,
+      "stage": "Not sure",
+      "concerns": [
+        "Mood",
+        "Thyroid"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c015-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-11"
+      },
+      {
+        "id": "c015-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-13"
+      },
+      {
+        "id": "c015-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-09-15"
+      }
+    ]
+  },
+  {
+    "id": "c016",
+    "name": "Vera Reyes",
+    "email": "vera.reyes@example.com",
+    "phone": "+1 512 555 0115",
+    "location": "Chicago, IL",
+    "joined": "2026-09-05",
+    "lastActive": "2026-09-25",
+    "planId": "individual-yearly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 54,
+    "health": {
+      "age": 53,
+      "stage": "Perimenopause",
+      "concerns": [
+        "Hot flashes",
+        "Sleep"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c016-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-15"
+      },
+      {
+        "id": "c016-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-17"
+      },
+      {
+        "id": "c016-doc4",
+        "kind": "other",
+        "title": "Insurance letter",
+        "date": "2026-09-21"
+      }
+    ]
+  },
+  {
+    "id": "c017",
+    "name": "Wendy Sato",
+    "email": "wendy.sato@example.com",
+    "phone": "+1 512 555 0116",
+    "location": "Nashville, TN",
+    "joined": "2026-09-09",
+    "lastActive": "2026-09-01",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 39,
+    "health": {
+      "age": 54,
+      "stage": "Menopause",
+      "concerns": [
+        "Weight",
+        "Hot flashes"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [
+      {
+        "id": "c017-d1",
+        "name": "Diana Sato",
+        "relationship": "Daughter",
+        "age": 15,
+        "conditions": [
+          "Irregular cycles"
+        ],
+        "status": "placeholder"
+      },
+      {
+        "id": "c017-d2",
+        "name": "Grace Sato",
+        "relationship": "Mother",
+        "age": 68,
+        "conditions": [
+          "Sleep"
+        ],
+        "status": "placeholder"
+      }
+    ],
+    "documents": [
+      {
+        "id": "c017-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-19"
+      },
+      {
+        "id": "c017-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-21"
+      },
+      {
+        "id": "c017-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-09-23"
+      }
+    ]
+  },
+  {
+    "id": "c018",
+    "name": "Yasmin Turner",
+    "email": "yasmin.turner@example.com",
+    "phone": "+1 512 555 0117",
+    "location": "Seattle, WA",
+    "joined": "2026-09-13",
+    "lastActive": "2026-09-05",
+    "planId": "individual-monthly",
+    "subscription": "trial",
+    "account": "deactivated",
+    "conversations": 8,
+    "health": {
+      "age": 55,
+      "stage": "Postmenopause",
+      "concerns": [
+        "Fatigue",
+        "Mood"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c018-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-23"
+      },
+      {
+        "id": "c018-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-25"
+      }
+    ]
+  },
+  {
+    "id": "c019",
+    "name": "Zoe Quinn",
+    "email": "zoe.quinn@example.com",
+    "phone": "+1 512 555 0118",
+    "location": "London, UK",
+    "joined": "2026-09-17",
+    "lastActive": "2026-10-09",
+    "planId": "free",
+    "subscription": "free",
+    "account": "active",
+    "conversations": 5,
+    "health": {
+      "age": 56,
+      "stage": "Reproductive years",
+      "concerns": [
+        "Weight",
+        "Thyroid"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c019-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-27"
+      },
+      {
+        "id": "c019-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-01"
+      },
+      {
+        "id": "c019-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-09-03"
+      }
+    ]
+  },
+  {
+    "id": "c020",
+    "name": "Beth Adams",
+    "email": "beth.adams@example.com",
+    "phone": "+1 512 555 0119",
+    "location": "Toronto, ON",
+    "joined": "2026-09-21",
+    "lastActive": "2026-10-13",
+    "planId": "individual-yearly",
+    "subscription": "past_due",
+    "account": "active",
+    "conversations": 45,
+    "health": {
+      "age": 57,
+      "stage": "Not sure",
+      "concerns": [
+        "Irregular cycles",
+        "Thyroid"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c020-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-09-03"
+      },
+      {
+        "id": "c020-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-09-05"
+      }
+    ]
+  },
+  {
+    "id": "c021",
+    "name": "Carla Brooks",
+    "email": "carla.brooks@example.com",
+    "phone": "+1 512 555 0120",
+    "location": "Austin, TX",
+    "joined": "2026-09-25",
+    "lastActive": "2026-10-17",
+    "planId": "family-monthly",
+    "subscription": "cancelled",
+    "account": "active",
+    "conversations": 22,
+    "health": {
+      "age": 38,
+      "stage": "Perimenopause",
+      "concerns": [
+        "Thyroid",
+        "Mood"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [
+      {
+        "id": "c021-d1",
+        "name": "Grace Brooks",
+        "relationship": "Daughter",
+        "age": 15,
+        "conditions": [
+          "Irregular cycles"
+        ],
+        "status": "placeholder"
+      }
+    ],
+    "documents": [
+      {
+        "id": "c021-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-10-07"
+      },
+      {
+        "id": "c021-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-10-09"
+      },
+      {
+        "id": "c021-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-10-11"
+      },
+      {
+        "id": "c021-doc4",
+        "kind": "other",
+        "title": "Insurance letter",
+        "date": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "id": "c022",
+    "name": "Diana Cole",
+    "email": "diana.cole@example.com",
+    "phone": "+1 512 555 0121",
+    "location": "Denver, CO",
+    "joined": "2026-09-01",
+    "lastActive": "2026-10-21",
+    "planId": "individual-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 31,
+    "health": {
+      "age": 39,
+      "stage": "Menopause",
+      "concerns": [
+        "Brain fog",
+        "Hot flashes"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c022-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-10-11"
+      },
+      {
+        "id": "c022-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-10-13"
+      }
+    ]
+  },
+  {
+    "id": "c023",
+    "name": "Elena Dunn",
+    "email": "elena.dunn@example.com",
+    "phone": "+1 512 555 0122",
+    "location": "Portland, OR",
+    "joined": "2026-09-05",
+    "lastActive": "2026-10-25",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 17,
+    "health": {
+      "age": 40,
+      "stage": "Postmenopause",
+      "concerns": [
+        "Hot flashes",
+        "Brain fog"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c023-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-10-15"
+      },
+      {
+        "id": "c023-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-10-17"
+      },
+      {
+        "id": "c023-doc3",
+        "kind": "lab",
+        "title": "Thyroid panel",
+        "date": "2026-10-19"
+      }
+    ]
+  },
+  {
+    "id": "c024",
+    "name": "Fiona Ellis",
+    "email": "fiona.ellis@example.com",
+    "phone": "+1 512 555 0123",
+    "location": "Boston, MA",
+    "joined": "2026-10-09",
+    "lastActive": "2026-10-27",
+    "planId": "individual-yearly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 51,
+    "health": {
+      "age": 41,
+      "stage": "Reproductive years",
+      "concerns": [
+        "Weight",
+        "Sleep"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder"
+    },
+    "dependents": [],
+    "documents": [
+      {
+        "id": "c024-doc1",
+        "kind": "provider_summary",
+        "title": "Provider summary",
+        "date": "2026-10-19"
+      },
+      {
+        "id": "c024-doc2",
+        "kind": "visit_note",
+        "title": "Visit note — annual check",
+        "date": "2026-10-21"
+      }
+    ]
+  }
+]

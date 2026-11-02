@@ -159,3 +159,16 @@ button.plan:focus-visible { outline: 2px solid var(--color-focus); outline-offse
     radial-gradient(50% 60% at 5% 0%, rgb(226 214 250 / 0.8), transparent 70%),
     linear-gradient(160deg, #f4effc 0%, #ece4fa 100%);
 }
+
+/* Locked (design 2026-11-02): the unlocked card under a soft blur, padlock + ghost upgrade centred on top. */
+.locked { position: relative; border-radius: var(--home-radius); overflow: hidden; }
+.lockedCard { filter: blur(6px); transform: scale(1.02); pointer-events: none; user-select: none; }
+.lockedOverlay {
+  position: absolute; inset: 0;
+  display: grid; place-content: center; justify-items: center; gap: var(--space-2);
+  background: rgb(255 255 255 / 0.28);
+}
+.lockIcon {
+  display: grid; place-items: center; width: 48px; height: 48px; border-radius: var(--radius-full);
+  background: rgb(255 255 255 / 0.7); color: var(--color-ink);
+}

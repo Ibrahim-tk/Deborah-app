@@ -39,6 +39,9 @@
       "@web/*": [
         "./src/apps/web/*"
       ],
+      "@admin/*": [
+        "./src/apps/admin/*"
+      ],
       "@flow-v1/*": [
         "./versions/v1/src/*"
       ]

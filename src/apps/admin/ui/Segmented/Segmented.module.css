@@ -1,0 +1,16 @@
+.root { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: var(--color-canvas); border: 1px solid var(--color-border-hairline); border-radius: var(--radius-full); }
+.item {
+  min-block-size: 32px;
+  padding-inline: var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-ink-secondary);
+  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-ui);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--dur-quick) var(--ease-ios);
+}
+.item:hover { color: var(--color-ink); }
+.item[data-pressed] { background: var(--color-surface); border-color: var(--color-border-hairline); color: var(--color-ink); }
+.item:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 1px; }

@@ -6,3 +6,14 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: var(--space-4) var(--space-6);
 }
+.barOut { opacity: 0; transition: opacity 600ms var(--ease-out); pointer-events: none; }
+/* Finish: during the wind the tree itself softens (blur) and fades, gone by the hand-off (WIND_OUT_MS); then the page fades out. */
+.treeOut { animation: tree-out 3500ms ease-in forwards; }
+@keyframes tree-out { 30% { opacity: 1; filter: blur(0); } to { opacity: 0; filter: blur(6px); } } /* small blur: a big CSS blur on a live WebGL canvas drops frames */
+@media (prefers-reduced-motion: reduce) { .treeOut { animation: none; } }
+/* Saved state: revealed in place over the same page after the wind (no navigation). */
+.saved { position: absolute; inset: 0; z-index: 2; pointer-events: auto; /* the template sets pointer-events: none on .root[data-exiting] */ display: grid; place-content: center; justify-items: center; gap: var(--space-4); text-align: center; padding: var(--space-6); }
+.savedTitle { margin: 0; font: var(--weight-regular) var(--fs-title-1, 34px) / 1.15 var(--font-artistic, var(--font-display)); color: var(--color-ink); }
+.savedBody { margin: 0; max-width: 40ch; color: var(--color-ink-body); }
+.savedCta { margin-top: var(--space-4); animation: saved-in 500ms var(--ease-out) 1400ms both; }
+@keyframes saved-in { from { opacity: 0; } }

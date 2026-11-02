@@ -7,7 +7,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import boundaries from 'eslint-plugin-boundaries';
 
-const APPS = ['mobile', 'web'];
+const APPS = ['mobile', 'web', 'admin'];
 
 // Elements are folders (each pattern covers everything below it). Most specific first: first match wins.
 // `<app>-entry` is the app root folder, so it only catches files directly inside it (MobileApp.tsx / WebApp.tsx).
@@ -55,13 +55,15 @@ const appPolicies = APPS.flatMap((app) => {
 
 const policies = [
   allow('root', 'root', 'shell', 'styles', 'shared'),
-  allow('shell', 'shell', 'shared', 'styles', 'mobile-entry', 'web-entry'),
+  allow('shell', 'shell', 'shared', 'styles', 'mobile-entry', 'web-entry', 'admin-entry'),
   allow('shared', 'shared'),
   allow('styles', 'styles'),
   ...appPolicies,
   // Apps may reach the shell only through the device API (useDevice).
   { from: { element: { type: 'mobile-*' } }, allow: deviceApi },
   { from: { element: { type: 'web-*' } }, allow: deviceApi },
+  // Admin is derived from web: it may borrow web primitives and tokens, one way only.
+  { from: { element: { type: 'admin-*' } }, allow: to('web-ui', 'web-styles') },
 ];
 
 export default tseslint.config(

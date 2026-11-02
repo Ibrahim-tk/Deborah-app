@@ -2,7 +2,7 @@
 
 /* Sections */
 .section { display: grid; gap: var(--space-6); padding-block: var(--space-12) var(--space-4); scroll-margin-top: var(--space-6); }
-.section + .section { border-top: 1px solid var(--color-border-hairline); }
+.section + .section { border-top: 1px solid var(--stroke-card); }
 .sectionTitle { font: var(--weight-regular) 40px / 46px var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
 .lede { max-width: 68ch; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); color: var(--color-ink-secondary); }
 .lede code, .groupNote code, .metaNote code { font: 0.92em ui-monospace, 'SF Mono', Menlo, monospace; color: var(--color-ink); }
@@ -15,29 +15,29 @@
 /* Specimens: soft stage + caption strip. Flat (scrolls with the page). */
 .specimen {
   display: grid;
-  border: 1px solid var(--color-border-hairline);
+  border: 1px solid var(--stroke-card);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  background: var(--color-surface);
+  background: var(--white);
 }
 .stage {
   position: relative;
   display: grid;
   justify-items: center;
   padding: var(--space-8) var(--space-6);
-  /* Lab demo stage — lilac → canvas from live tokens (not product screen chrome). */
-  background: var(--color-canvas);
+  /* Flat white demo stage. */
+  background: var(--white);
   overflow: hidden;
 }
-.stage[data-stage='paper'] { background: var(--color-surface); }
+.stage[data-stage='paper'] { background: var(--white); }
 .stage[data-stage='signature'] { background: var(--color-surface-signature); color: var(--color-ink-on-signature); }
 .stageInner { width: 100%; display: grid; gap: var(--space-4); }
 .phoneWidth { max-width: 393px; }
 .meta {
   display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3);
   padding: var(--space-3) var(--space-4);
-  border-top: 1px solid var(--color-border-hairline);
-  background: var(--color-surface);
+  border-top: 1px solid var(--stroke-card);
+  background: var(--white);
 }
 .metaName { font: var(--weight-medium) var(--fs-subhead) / var(--lh-subhead) var(--font-body); color: var(--color-ink); }
 .metaPath { font: 12px / 18px ui-monospace, 'SF Mono', Menlo, monospace; color: var(--color-ink-secondary); }

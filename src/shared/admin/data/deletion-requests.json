@@ -1,0 +1,42 @@
+[
+  {
+    "id": "dr001",
+    "clientId": "c001",
+    "received": "2026-10-20",
+    "regulation": "GDPR",
+    "status": "pending",
+    "decisions": [
+      {
+        "dependentId": "c001-d1",
+        "action": "transfer",
+        "email": "fiona.hart@example.com",
+        "transfer": "invited"
+      },
+      {
+        "dependentId": "c001-d2",
+        "action": "delete"
+      }
+    ]
+  },
+  {
+    "id": "dr002",
+    "clientId": "c010",
+    "received": "2026-10-05",
+    "regulation": "CCPA",
+    "status": "pending",
+    "decisions": []
+  },
+  {
+    "id": "dr003",
+    "clientId": "c013",
+    "received": "2026-10-28",
+    "regulation": "CCPA",
+    "status": "pending",
+    "decisions": [
+      {
+        "dependentId": "c013-d1",
+        "action": "delete"
+      }
+    ]
+  }
+]

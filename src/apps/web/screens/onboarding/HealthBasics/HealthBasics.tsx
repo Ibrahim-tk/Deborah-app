@@ -21,8 +21,7 @@ import { ageFromAnswers, bloomProgress, forSomeoneElse, titleFor, visibleSteps, 
 import { saveOnboarding } from './saveOnboarding';
 import { StepBody } from './parts/StepBody';
 import { ConsentSheet } from './parts/ConsentSheet';
-import { PetalScatter } from './parts/PetalScatter';
-import { BloomReveal } from './parts/BloomReveal';
+import { BloomReveal3 } from './parts/BloomReveal3';
 import { useStepTransition } from './parts/useStepTransition';
 import { namedReasonsComplete } from '@web/patterns/widgets';
 import { PageFooter } from '@web/patterns/shell';
@@ -66,7 +65,7 @@ export default function HealthBasics() {
 
   // Cinematic hand-off to Oracle's welcome: questions fade, the tree un-grows (its growth in reverse) while its blossoms go on the breeze.
   const [exiting, setExiting] = useState(false);
-  const EXIT_MS = 2600;
+  const EXIT_MS = 4200;
 
   const finish = (final: Answers) => {
     const profileId = saveOnboarding(accountDob && !forSomeoneElse(final) ? { ...final, birthDate: accountDob } : final);
@@ -146,6 +145,8 @@ export default function HealthBasics() {
 
   return (
     <form className={styles.root} data-exiting={exiting || undefined} onSubmit={submit} noValidate data-xref="M-1.8 · Onboarding profile">
+      {/* 3D tree (same engine as mobile M-1.8), placed over the whole page; the .art column below keeps the progressbar semantics. */}
+      <BloomReveal3 progress={bloomProgress(at, steps.length)} wind={exiting} className={exiting ? styles.treeOut : undefined} />
       <div className={styles.layout}>
         {/* Left: questions vertically centered. Brand logo lives in shell BrandNav. */}
         <div className={styles.main}>
@@ -180,7 +181,6 @@ export default function HealthBasics() {
         </div>
         {/* Right: tree from the bottom edge up the full column height. */}
         <div className={styles.art} role="progressbar" aria-label="Onboarding profile" aria-valuemin={1} aria-valuemax={steps.length} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-          <BloomReveal className={styles.bloom} progress={exiting ? 0 : bloomProgress(at, steps.length)} rate={exiting ? 2.4 : 7} />
         </div>
       </div>
 
@@ -193,7 +193,6 @@ export default function HealthBasics() {
         onContinue={() => next(answersRef.current)}
       />
       <PageFooter />
-      {exiting && <PetalScatter />}
       {exiting && <div className={styles.glory} aria-hidden data-overlay />}
     </form>
   );

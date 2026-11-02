@@ -6,6 +6,7 @@ import { legacyRedirectTarget } from '@shared/utils/internalPaths';
 import ClientApp from './ClientApp';
 import ClientWebApp from './ClientWebApp';
 import { ClientEmailShell } from '@shell/ClientShell';
+import { DesignShell } from '@shell/DesignShell';
 
 const InternalApp = lazy(() => import('./InternalApp'));
 const InternalV1App = lazy(() => import('./InternalV1App'));
@@ -61,7 +62,11 @@ export default function App() {
       />
       <Route path="/mobile" element={<LegacyRedirect />} />
       <Route path="/wid" element={<LegacyRedirect />} />
-      <Route path="/design-system" element={<LegacyRedirect />} />
+      {/* Public design pages: no top nav, no gate. /internal/… keeps the nav. */}
+      <Route path="/design-system" element={<DesignShell page="design-system" />} />
+      <Route path="/design-system/web" element={<DesignShell page="design-system-web" />} />
+      <Route path="/design-md" element={<DesignShell page="design-md" />} />
+      <Route path="/design.md" element={<DesignShell page="design-md" />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

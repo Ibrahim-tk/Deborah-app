@@ -17,15 +17,14 @@ import styles from './DesignSystem.module.css';
 export default function DesignSystem() {
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
-  const scrollerNode = useRef<HTMLDivElement | null>(null);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(SECTIONS[0].id);
 
   // Stay at Overview on mount (hash/deep-link not used); demos must not steal scroll.
   useEffect(() => {
-    scrollerNode.current = scroller;
-    const el = scrollerNode.current;
-    if (!el) return;
-    el.scrollTop = 0;
+    scrollerRef.current = scroller;
+    if (!scroller) return;
+    scroller.scrollTop = 0;
   }, [scroller]);
 
   // Highlight the section nearest the top of the scroll area (document order, not callback batch).
@@ -59,13 +58,12 @@ export default function DesignSystem() {
           <DeborahBlob size={36} label="The Oracle" />
           <div>
             <p className={styles.brandName}>Your Oracle</p>
-            <p className={styles.brandSub}>Mobile design system</p>
+            <p className={styles.brandSub}>Desktop design system</p>
           </div>
         </div>
         <nav className={styles.nav}>
           {NAV.map((g) => (
             <div key={g.title} className={styles.navGroup}>
-              <p className={styles.navTitle}>{g.title}</p>
               {g.items.map((s) => (
                 <button key={s.id} type="button" className={cx(styles.navItem, active === s.id && styles.navActive)} aria-current={active === s.id ? 'location' : undefined} onClick={() => go(s.id)}>
                   {s.label}

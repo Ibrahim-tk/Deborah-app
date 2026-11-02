@@ -639,7 +639,7 @@ const canopyLight=pointCloud(lightPts,'light');
 const bloomComposer=new EffectComposer(renderer);bloomComposer.renderToScreen=false;
 bloomComposer.addPass(new RenderPass(scene,camera));
 const bloomPass=new UnrealBloomPass(new THREE.Vector2(512,512),.6,.45,.12);bloomComposer.addPass(bloomPass);
-const finalComposer=new EffectComposer(renderer,new THREE.WebGLRenderTarget(4,4,{type:THREE.HalfFloatType,samples:4}));finalComposer.addPass(new RenderPass(scene,camera));
+const finalComposer=new EffectComposer(renderer,new THREE.WebGLRenderTarget(4,4,{type:THREE.HalfFloatType,samples:2/* perf */}));finalComposer.addPass(new RenderPass(scene,camera));
 finalComposer.addPass(new ShaderPass(new THREE.ShaderMaterial({uniforms:{tDiffuse:{value:null},bloomTexture:{value:bloomComposer.renderTarget2.texture}},
   vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
   fragmentShader:'uniform sampler2D tDiffuse,bloomTexture;varying vec2 vUv;void main(){vec4 b=texture2D(tDiffuse,vUv);vec3 bl=texture2D(bloomTexture,vUv).rgb;if(any(isnan(bl))||any(isinf(bl)))bl=vec3(0.);gl_FragColor=vec4(b.rgb+bl,clamp(b.a+max(bl.r,max(bl.g,bl.b)),0.,1.));}'}),'tDiffuse'));
@@ -648,7 +648,7 @@ const black=new THREE.Color(0);
 
 /* ---------- framing, timeline, interaction ---------- */
 let W=1,H=1,ready=false;
-function resize(){const r=canvas.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);renderer.setSize(W,H,false);bloomComposer.setSize(W,H);finalComposer.setSize(W,H);if(ready)render()}
+function resize(){const r=canvas.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);renderer.setSize(W,H,false);bloomComposer.setSize(Math.ceil(W/2),Math.ceil(H/2))/* perf: glow at half res */;finalComposer.setSize(W,H);if(ready)render()}
 {const ro=new ResizeObserver(resize);ro.observe(canvas);CLEANUP.push(()=>ro.disconnect())}resize();
 
 const STAGES=[

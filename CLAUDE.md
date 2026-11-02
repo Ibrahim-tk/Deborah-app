@@ -17,7 +17,7 @@ Read `docs/README.md` first. It indexes every spec. Never guess behaviour that a
 5. **Every screen has an ID** (`M-2.1` mobile, `W-2.1` web) that matches the Figma wireframes and `docs/ux/*.md`. Put the header block from `docs/10-conventions.md` at the top of every screen file.
 6. **States, not screens, in the prototype navbar.** The top navbar switches *platform* (Mobile / Web) and loads *scenarios* (app states). Users move between screens only by using the prototype itself.
 7. **Third-party libraries are always wrapped.** Icons, animation, date pickers, etc. are consumed through a local adapter in each app's `ui/` layer so they can be swapped in one file.
-8. **Design-system bans:** no font weight above 500; no pills, tags, badges or chips (use option rows and plain text); no wave, ripple, shimmer, bounce or pulse animations; no shadows on non-floating elements; all readable text ≥ 7:1.
+8. **Design-system bans:** no body/UI (DM Sans) weight above 500; pills only for tappable choices — no tags, badges or coloured status capsules (use plain text); no wave, ripple, shimmer, bounce or pulse animations; real shadows only on floating chrome, no long clinical prose on glass; all readable text ≥ 7:1 (placeholders excepted); no hardcoded colours in component CSS — use tokens.
 9. **Clinical copy is placeholder.** Any medical/clinical text in JSON carries `"status": "placeholder"` unless Deborah has approved it. Never invent dosing, diagnoses or prescriptions. Safety behaviours (emergency, medication, crisis, out-of-scope) must always work exactly as specified.
 
 ## Where things live (short version)

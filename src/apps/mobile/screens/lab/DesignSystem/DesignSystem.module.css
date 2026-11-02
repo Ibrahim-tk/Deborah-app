@@ -14,8 +14,8 @@
 .sidebar {
   display: flex; flex-direction: column; gap: var(--space-6); min-height: 0; overflow-y: auto;
   padding: var(--space-6) var(--space-4);
-  border-right: 1px solid var(--color-border-hairline);
-  background: rgb(255 255 255 / 0.55);
+  border-right: 1px solid var(--stroke-card);
+  background: var(--color-surface);
   /* Page chrome stays put when the text size control scales the content. */
   --fs-headline: 17px; --lh-headline: 22px; --fs-subhead: 15px; --lh-subhead: 20px; --fs-footnote: 13px; --lh-footnote: 18px;
 }
@@ -42,7 +42,7 @@
 
 @media (max-width: 860px) {
   .root { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
-  .sidebar { flex-direction: row; align-items: center; overflow-x: auto; overflow-y: hidden; padding: var(--space-3) var(--space-4); border-right: 0; border-bottom: 1px solid var(--color-border-hairline); }
+  .sidebar { flex-direction: row; align-items: center; overflow-x: auto; overflow-y: hidden; padding: var(--space-3) var(--space-4); border-right: 0; border-bottom: 1px solid var(--stroke-card); }
   .brand { display: none; }
   .nav { display: flex; gap: var(--space-1); }
   .navGroup { display: flex; gap: var(--space-1); }

@@ -1,0 +1,162 @@
+[
+  {
+    "id": "e001",
+    "clientId": "c002",
+    "type": "emergency",
+    "status": "open",
+    "reason": "Chest pain reported in chat",
+    "summary": "Client described sudden chest pain with shortness of breath. Emergency guidance was shown and the conversation was paused.",
+    "excerpt": [
+      "Client: Chest pain reported in chat.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-05T09:15"
+  },
+  {
+    "id": "e002",
+    "clientId": "c005",
+    "type": "critical",
+    "status": "open",
+    "reason": "Mentioned stopping thyroid medication",
+    "summary": "Client said they stopped prescribed medication without talking to their clinician. Medication safety guidance was shown.",
+    "excerpt": [
+      "Client: Mentioned stopping thyroid medication.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-09T10:15"
+  },
+  {
+    "id": "e003",
+    "clientId": "c008",
+    "type": "critical",
+    "status": "in_review",
+    "reason": "Crisis language detected",
+    "summary": "Client used language suggesting low mood and hopelessness. Crisis resources were shown.",
+    "excerpt": [
+      "Client: Crisis language detected.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-13T11:15"
+  },
+  {
+    "id": "e004",
+    "clientId": "c011",
+    "type": "emergency",
+    "status": "resolved",
+    "reason": "Heavy bleeding after menopause",
+    "summary": "Client reported heavy bleeding twelve months after their last period. Urgent-care guidance was shown.",
+    "excerpt": [
+      "Client: Heavy bleeding after menopause.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-17T12:15",
+    "closed": "2026-09-19T16:40"
+  },
+  {
+    "id": "e005",
+    "clientId": "c014",
+    "type": "critical",
+    "status": "open",
+    "reason": "Asked for a dose change",
+    "summary": "Client asked how much to raise a hormone dose. Out-of-scope reply was shown.",
+    "excerpt": [
+      "Client: Asked for a dose change.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-21T13:15"
+  },
+  {
+    "id": "e006",
+    "clientId": "c017",
+    "type": "emergency",
+    "status": "in_review",
+    "reason": "Chest pain reported in chat",
+    "summary": "Client described sudden chest pain with shortness of breath. Emergency guidance was shown and the conversation was paused.",
+    "excerpt": [
+      "Client: Chest pain reported in chat.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-25T14:15"
+  },
+  {
+    "id": "e007",
+    "clientId": "c020",
+    "type": "critical",
+    "status": "resolved",
+    "reason": "Mentioned stopping thyroid medication",
+    "summary": "Client said they stopped prescribed medication without talking to their clinician. Medication safety guidance was shown.",
+    "excerpt": [
+      "Client: Mentioned stopping thyroid medication.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-01T15:15",
+    "closed": "2026-09-03T16:40"
+  },
+  {
+    "id": "e008",
+    "clientId": "c023",
+    "type": "critical",
+    "status": "resolved",
+    "reason": "Crisis language detected",
+    "summary": "Client used language suggesting low mood and hopelessness. Crisis resources were shown.",
+    "excerpt": [
+      "Client: Crisis language detected.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-09-05T16:15",
+    "closed": "2026-10-07T16:40"
+  },
+  {
+    "id": "e009",
+    "clientId": "c002",
+    "type": "emergency",
+    "status": "open",
+    "reason": "Heavy bleeding after menopause",
+    "summary": "Client reported heavy bleeding twelve months after their last period. Urgent-care guidance was shown.",
+    "excerpt": [
+      "Client: Heavy bleeding after menopause.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-10-09T09:15"
+  },
+  {
+    "id": "e010",
+    "clientId": "c005",
+    "type": "critical",
+    "status": "resolved",
+    "reason": "Asked for a dose change",
+    "summary": "Client asked how much to raise a hormone dose. Out-of-scope reply was shown.",
+    "excerpt": [
+      "Client: Asked for a dose change.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-10-13T10:15",
+    "closed": "2026-10-15T16:40"
+  },
+  {
+    "id": "e011",
+    "clientId": "c008",
+    "type": "emergency",
+    "status": "in_review",
+    "reason": "Chest pain reported in chat",
+    "summary": "Client described sudden chest pain with shortness of breath. Emergency guidance was shown and the conversation was paused.",
+    "excerpt": [
+      "Client: Chest pain reported in chat.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-10-17T11:15"
+  },
+  {
+    "id": "e012",
+    "clientId": "c011",
+    "type": "critical",
+    "status": "open",
+    "reason": "Mentioned stopping thyroid medication",
+    "summary": "Client said they stopped prescribed medication without talking to their clinician. Medication safety guidance was shown.",
+    "excerpt": [
+      "Client: Mentioned stopping thyroid medication.",
+      "Oracle: Safety guidance shown (placeholder)."
+    ],
+    "opened": "2026-10-21T12:15"
+  }
+]

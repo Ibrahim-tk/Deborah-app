@@ -8,7 +8,7 @@ import styles from './parts.module.css';
 
 export interface SpecimenProps {
   name: string;
-  /** Source folder under src/apps/mobile, e.g. `ui/Button`. */
+  /** Source folder under src/apps/web, e.g. `ui/Button`. */
   path: string;
   note?: ReactNode;
   /** `phone`: 393 px column. `wide`: the full stage. */
@@ -18,7 +18,7 @@ export interface SpecimenProps {
   children: ReactNode;
 }
 
-export function Specimen({ name, path, note, width = 'phone', stage = 'canvas', children }: SpecimenProps) {
+export function Specimen({ name, width = 'phone', stage = 'canvas', children }: SpecimenProps) {
   return (
     <figure className={styles.specimen}>
       <div className={styles.stage} data-stage={stage}>
@@ -26,8 +26,6 @@ export function Specimen({ name, path, note, width = 'phone', stage = 'canvas', 
       </div>
       <figcaption className={styles.meta}>
         <span className={styles.metaName}>{name}</span>
-        <code className={styles.metaPath}>src/apps/mobile/{path}</code>
-        {note && <span className={styles.metaNote}>{note}</span>}
       </figcaption>
     </figure>
   );

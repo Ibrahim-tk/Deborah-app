@@ -91,3 +91,26 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | CaptureCamera | `patterns/widgets/CaptureCamera` | — (mobile only) | ux/F05-followup-labs.md · ux/F11-documents.md |
 | InlineConsent / QuestionChoices / ChoicePills / FullChoicePills* / BookDeborah / ConfirmCard / SlotPicker / MoodScale / ScaleCheck / ReminderCard / UploadCard / IntakeCompletionCard / HealingPlanCard / PrimaryIntentCard / PromptStarterList / NextIntentList / TodayHabitsCard / LinkStatusCard / DestinationTilePair / RecommendationCard / HomeMediaHero / SuggestionCarousel / PhotoDestinationPair / GlassCareStrip | `patterns/widgets/*` | not built | Widget lab `/wid` + Design System + Home landing wow (media hero/carousel). See `docs/ui-overhaul-plan.md`. |
 | Design system (every token, ui primitive and pattern, rendered live) | `screens/lab/DesignSystem` | not built | Route `/design-system` (design tool, 2026-10-15); sources DESIGN.md · deborah-design-system.md |
+
+## Super Admin (A-*)
+
+Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec: [admin/README.md](admin/README.md).
+
+| ID | Concept | File | Status |
+|---|---|---|---|
+| A-1.1 | Sign in | `auth/SignIn` | built |
+| A-1.2 | Forgot password | `auth/ForgotPassword` | built |
+| A-1.3 | Two-step verification | `auth/TwoFactor` | built |
+| A-2.1 | Dashboard (KPIs + 4 charts) | `dashboard/Dashboard` | built |
+| A-3.1 | Clients | `clients/Clients` | built |
+| A-3.2 | Client detail | `clients/ClientDetail` | built |
+| A-3.3 | Dependent profile | `clients/DependentProfile` | built |
+| A-4.1 | Escalations | `escalations/Escalations` | built |
+| A-4.2 | Escalation detail | `escalations/EscalationDetail` | built |
+| A-5.1 | Support requests (+ data deletion tab) | `support/Support` | built |
+| A-5.2 | Data deletion request | `support/DeletionRequest` | built |
+| A-6.1 | Admin users | `admins/Admins` | built |
+| A-7.1 | Subscriptions (+ A-7.2 plan list) | `subscriptions/Subscriptions` | built |
+| A-7.3 | Plan editor | `subscriptions/PlanEditor` | built |
+| A-8.1 | Audit log | `audit/AuditLog` | built |
+| A-9.1 | Consent | `compliance/Consent` | built |

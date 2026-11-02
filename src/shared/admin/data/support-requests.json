@@ -1,0 +1,82 @@
+[
+  {
+    "id": "s001",
+    "clientId": "c003",
+    "type": "billing",
+    "subject": "Charged twice this month",
+    "received": "2026-09-25T10:10",
+    "resolved": false
+  },
+  {
+    "id": "s002",
+    "clientId": "c008",
+    "type": "account",
+    "subject": "Can't change my email",
+    "received": "2026-09-28T10:11",
+    "resolved": false
+  },
+  {
+    "id": "s003",
+    "clientId": "c013",
+    "type": "technical",
+    "subject": "Lab upload stuck",
+    "received": "2026-09-03T10:12",
+    "resolved": true
+  },
+  {
+    "id": "s004",
+    "clientId": "c018",
+    "type": "escalate_to_deborah",
+    "subject": "Would like Deborah to review my plan",
+    "received": "2026-09-06T10:13",
+    "resolved": false
+  },
+  {
+    "id": "s005",
+    "clientId": "c023",
+    "type": "billing",
+    "subject": "Charged twice this month",
+    "received": "2026-10-09T10:14",
+    "resolved": false
+  },
+  {
+    "id": "s006",
+    "clientId": "c004",
+    "type": "account",
+    "subject": "Can't change my email",
+    "received": "2026-10-12T10:15",
+    "resolved": true
+  },
+  {
+    "id": "s007",
+    "clientId": "c009",
+    "type": "technical",
+    "subject": "Lab upload stuck",
+    "received": "2026-10-15T10:16",
+    "resolved": false
+  },
+  {
+    "id": "s008",
+    "clientId": "c014",
+    "type": "escalate_to_deborah",
+    "subject": "Would like Deborah to review my plan",
+    "received": "2026-10-18T10:17",
+    "resolved": false
+  },
+  {
+    "id": "s009",
+    "clientId": "c019",
+    "type": "billing",
+    "subject": "Charged twice this month",
+    "received": "2026-10-21T10:18",
+    "resolved": true
+  },
+  {
+    "id": "s010",
+    "clientId": "c024",
+    "type": "account",
+    "subject": "Can't change my email",
+    "received": "2026-10-24T10:19",
+    "resolved": false
+  }
+]

@@ -1,0 +1,37 @@
+/**
+ * @screen  A-5.1 · Support requests
+ * @flow    A5 Support request management
+ * @states  requests tab · data deletion tab · filtered · no results
+ * @spec    docs/admin/README.md#a-51-support-requests
+ * @xref    web: none (admin only)
+ */
+import { useState } from 'react';
+import { Segmented } from '@admin/ui';
+import { AdminPage, FilterBar } from '@admin/patterns';
+import { RequestsTable } from './parts/RequestsTable';
+import { DeletionTable } from './parts/DeletionTable';
+
+type Tab = 'requests' | 'deletion';
+
+export default function Support() {
+  const [tab, setTab] = useState<Tab>('requests');
+  const [query, setQuery] = useState('');
+  return (
+    <AdminPage
+      title="Support requests"
+      subtitle="Replies go out by email. Mark a request resolved once it's answered."
+      toolbar={
+        <FilterBar query={query} onQuery={setQuery} placeholder="Search by client or subject">
+          <Segmented<Tab>
+            label="Request type"
+            value={tab}
+            onChange={setTab}
+            options={[{ value: 'requests', label: 'Requests' }, { value: 'deletion', label: 'Data deletion' }]}
+          />
+        </FilterBar>
+      }
+    >
+      {tab === 'requests' ? <RequestsTable query={query} /> : <DeletionTable query={query} />}
+    </AdminPage>
+  );
+}

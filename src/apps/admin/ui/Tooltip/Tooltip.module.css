@@ -1,0 +1,13 @@
+.positioner { z-index: var(--z-overlay); }
+.popup {
+  max-inline-size: 280px;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-ink);
+  color: var(--color-ink-on-signature);
+  font-size: var(--fs-subhead);
+  line-height: var(--lh-subhead);
+  box-shadow: var(--shadow-float-sm);
+  transition: opacity var(--dur-quick) var(--ease-ios);
+}
+.popup[data-starting-style], .popup[data-ending-style] { opacity: 0; }

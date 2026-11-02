@@ -5,8 +5,8 @@
  *
  * Shows the newest concern and how many actions are done. Opens the plan.
  */
-import { HEALING_PLAN_TITLE, HEALING_PLAN_LOCKED_META, HEALING_PLAN_VIEW_CTA } from '@shared/copy/healingPlan';
-import { Icon } from '@mobile/ui';
+import { HEALING_PLAN_TITLE, HEALING_PLAN_UPGRADE_CTA, HEALING_PLAN_VIEW_CTA } from '@shared/copy/healingPlan';
+import { Button, Icon } from '@mobile/ui';
 import styles from './HealingPlanCard.module.css';
 
 export interface HealingPlanCardProps {
@@ -16,21 +16,22 @@ export interface HealingPlanCardProps {
   done?: number;
   total?: number;
   onPress?: () => void;
+  /** Locked only: the ghost "Upgrade to unlock" action. */
+  onUpgrade?: () => void;
 }
 
-export function HealingPlanCard({ locked = false, concern, done = 0, total = 0, onPress }: HealingPlanCardProps) {
+export function HealingPlanCard({ locked = false, concern, done = 0, total = 0, onPress, onUpgrade }: HealingPlanCardProps) {
+  // Locked (design 2026-11-02): the same plan card, softly blurred, with a padlock and a ghost upgrade button on top.
   if (locked) {
     return (
-      <section className={styles.root} data-placeholder aria-labelledby="healing-plan-title">
-        <div className={styles.head}>
-          <span className={styles.icon} aria-hidden>
-            <Icon name="lock" size={18} />
-          </span>
-          <h2 id="healing-plan-title" className={styles.title}>
-            {HEALING_PLAN_TITLE}
-          </h2>
+      <section className={styles.locked} data-placeholder aria-label={`${HEALING_PLAN_TITLE}, locked`}>
+        <div className={styles.lockedCard} aria-hidden>
+          <HealingPlanCard concern={concern ?? 'Steady sleep'} done={done || 2} total={total || 5} />
         </div>
-        <p className={styles.meta}>{HEALING_PLAN_LOCKED_META}</p>
+        <div className={styles.lockedOverlay}>
+          <span className={styles.lockIcon} aria-hidden><Icon name="lock" size={22} /></span>
+          <Button variant="ghost" size="md" onClick={onUpgrade}>{HEALING_PLAN_UPGRADE_CTA}</Button>
+        </div>
       </section>
     );
   }

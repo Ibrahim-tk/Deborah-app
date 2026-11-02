@@ -1,0 +1,47 @@
+[
+  {
+    "id": "a001",
+    "name": "Deborah Maragopoulos",
+    "email": "deborah@oracleclinician.com",
+    "role": "super",
+    "account": "active",
+    "invite": "accepted",
+    "invitedAt": "2026-05-01T09:00"
+  },
+  {
+    "id": "a002",
+    "name": "Sam Rivera",
+    "email": "sam@oracleclinician.com",
+    "role": "admin",
+    "account": "active",
+    "invite": "accepted",
+    "invitedAt": "2026-06-12T11:00"
+  },
+  {
+    "id": "a003",
+    "name": "Jo Whitfield",
+    "email": "jo@oracleclinician.com",
+    "role": "admin",
+    "account": "active",
+    "invite": "pending",
+    "invitedAt": "2026-11-02T08:30"
+  },
+  {
+    "id": "a004",
+    "name": "Alex Mercer",
+    "email": "alex@oracleclinician.com",
+    "role": "admin",
+    "account": "active",
+    "invite": "expired",
+    "invitedAt": "2026-10-27T14:00"
+  },
+  {
+    "id": "a005",
+    "name": "Lee Carter",
+    "email": "lee@oracleclinician.com",
+    "role": "admin",
+    "account": "deactivated",
+    "invite": "accepted",
+    "invitedAt": "2026-07-03T10:00"
+  }
+]

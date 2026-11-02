@@ -1,0 +1,14 @@
+[
+  {
+    "id": "rv1",
+    "clientId": "c007",
+    "at": "2026-10-12T13:00",
+    "scope": "Sharing data for product improvement"
+  },
+  {
+    "id": "rv2",
+    "clientId": "c018",
+    "at": "2026-10-29T08:20",
+    "scope": "All consent: account deactivated"
+  }
+]

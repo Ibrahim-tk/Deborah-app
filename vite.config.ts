@@ -16,6 +16,7 @@ export default defineConfig({
       '@styles': src('styles'),
       '@mobile': src('apps/mobile'),
       '@web': src('apps/web'),
+      '@admin': src('apps/admin'),
     },
   },
   css: {

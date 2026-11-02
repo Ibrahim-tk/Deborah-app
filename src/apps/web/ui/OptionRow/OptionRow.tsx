@@ -33,7 +33,7 @@ export function OptionRow({ children, selected, multi = false, leadingIcon, chev
     >
       {leadingIcon && <Icon name={leadingIcon} size={22} className={styles.leading} />}
       <span className={styles.label}>{children}</span>
-      {chevron ? <Icon name="chevron" size={20} className={styles.trailing} /> : selected && <Icon name="check" size={22} className={styles.check} />}
+      {chevron ? <Icon name="chevron" size={20} className={styles.trailing} /> : null /* Selected state is the fill + border; no tick (design 2026-11-02). */}
     </button>
   );
 }

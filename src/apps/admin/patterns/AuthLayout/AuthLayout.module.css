@@ -1,0 +1,24 @@
+.root { container-type: inline-size; block-size: 100%; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+.brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-12);
+  background: var(--color-surface-signature);
+  color: var(--color-ink-on-signature);
+}
+.logo { filter: brightness(0) invert(0.96) sepia(0.2); margin-block-end: auto; }
+.brandName { margin: 0; font-family: var(--font-display); font-size: 48px; line-height: 1.05; }
+.brandLine { margin: 0; max-inline-size: 32ch; font-size: var(--fs-callout); line-height: var(--lh-callout); color: rgb(253 249 241 / 0.86); }
+.formCol { display: grid; place-items: center; padding: var(--space-8) var(--space-4); overflow-y: auto; }
+.form { inline-size: min(100%, var(--form-width)); display: grid; gap: var(--space-5); }
+.title { margin: 0; font-family: var(--font-display); font-size: var(--fs-title-1); line-height: var(--lh-title-1); font-weight: var(--weight-regular); color: var(--color-ink); }
+.intro { margin: calc(var(--space-2) * -1) 0 0; color: var(--color-ink-secondary); font-size: var(--fs-callout); line-height: var(--lh-callout); }
+@container (max-width: 760px) {
+  .root { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .brand { padding: var(--space-6) var(--space-4); flex-direction: row; align-items: center; }
+  .logo { margin: 0; inline-size: 32px; block-size: 32px; }
+  .brandName { font-size: 28px; }
+  .brandLine { display: none; }
+}

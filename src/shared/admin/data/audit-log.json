@@ -1,0 +1,50 @@
+[
+  {
+    "id": "l000",
+    "at": "2026-11-01T08:00",
+    "actor": "deborah@oracleclinician.com",
+    "text": "Signed in"
+  },
+  {
+    "id": "l001",
+    "at": "2026-11-02T09:01",
+    "actor": "sam@oracleclinician.com",
+    "text": "Viewed client Grace Nguyen"
+  },
+  {
+    "id": "l002",
+    "at": "2026-11-01T10:02",
+    "actor": "deborah@oracleclinician.com",
+    "text": "Marked escalation e004 as resolved"
+  },
+  {
+    "id": "l003",
+    "at": "2026-11-02T11:03",
+    "actor": "sam@oracleclinician.com",
+    "text": "Sent reminder to Olivia Lopez"
+  },
+  {
+    "id": "l004",
+    "at": "2026-11-01T12:04",
+    "actor": "deborah@oracleclinician.com",
+    "text": "Invited jo@oracleclinician.com as admin"
+  },
+  {
+    "id": "l005",
+    "at": "2026-11-02T13:05",
+    "actor": "sam@oracleclinician.com",
+    "text": "Updated plan Family: price"
+  },
+  {
+    "id": "l006",
+    "at": "2026-11-01T14:00",
+    "actor": "deborah@oracleclinician.com",
+    "text": "Uploaded consent version 2026.3"
+  },
+  {
+    "id": "l007",
+    "at": "2026-11-02T15:01",
+    "actor": "sam@oracleclinician.com",
+    "text": "Deactivated client Hannah Patel"
+  }
+]

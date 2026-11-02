@@ -1,0 +1,3 @@
+.root { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.search { flex: 1 1 280px; min-inline-size: 0; max-inline-size: 480px; }
+.filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }

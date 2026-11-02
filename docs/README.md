@@ -26,6 +26,7 @@ This folder is the single source of truth for the prototype. Claude Code should 
 
 | File | Flow |
 |------|------|
+| [admin/README.md](admin/README.md) | Super Admin panel (A-*): architecture, design direction, every screen |
 | [ux/00-ux-overview.md](ux/00-ux-overview.md) | Navigation map, screen inventory, global behaviours, F00 context |
 | [ux/F01-onboarding.md](ux/F01-onboarding.md) | First launch & onboarding |
 | [ux/F02-consultation.md](ux/F02-consultation.md) | Core consultation (the Conversation screen and all its states) |

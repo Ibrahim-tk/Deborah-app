@@ -1,0 +1,38 @@
+/* Shared field skin for Input, TextArea and Select (Base UI Field parts). */
+.root { display: grid; gap: var(--space-2); min-inline-size: 0; }
+.label { color: var(--color-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); font-weight: var(--weight-medium); }
+.srOnly { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--control-h-lg);
+  padding-inline: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-md);
+  color: var(--color-ink);
+  transition: border-color var(--dur-quick) var(--ease-ios), box-shadow var(--dur-quick) var(--ease-ios);
+}
+.box:hover { border-color: var(--color-border-control); }
+.box:focus-within { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-tint); }
+.box[data-invalid] { border-color: var(--color-danger-border); }
+.box[data-invalid]:focus-within { box-shadow: 0 0 0 3px var(--color-danger-tint); }
+.box[data-shape='pill'] { border-radius: var(--radius-full); }
+.control {
+  flex: 1;
+  min-inline-size: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-ui);
+  padding-block: var(--space-2);
+}
+.control::placeholder { color: var(--color-ink-placeholder); }
+.control[readonly] { color: var(--color-ink-secondary); }
+textarea.control { resize: vertical; padding-block: var(--space-3); }
+.adorn { display: grid; place-items: center; flex: none; color: var(--color-ink-tertiary); }
+.hint { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.error { margin: 0; color: var(--color-danger-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }

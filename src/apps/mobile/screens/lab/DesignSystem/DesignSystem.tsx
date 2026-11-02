@@ -64,7 +64,6 @@ export default function DesignSystem() {
         <nav className={styles.nav}>
           {NAV.map((g) => (
             <div key={g.title} className={styles.navGroup}>
-              <p className={styles.navTitle}>{g.title}</p>
               {g.items.map((s) => (
                 <button key={s.id} type="button" className={cx(styles.navItem, active === s.id && styles.navActive)} aria-current={active === s.id ? 'location' : undefined} onClick={() => go(s.id)}>
                   {s.label}

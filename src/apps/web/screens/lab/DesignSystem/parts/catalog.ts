@@ -1,6 +1,6 @@
 /**
  * Token catalog — names only; values are read live from .phone-root (parts/live.ts).
- * Sourced from what V2 mobile CSS actually uses (mobile.tokens + deborah skin), not DESIGN.md.
+ * Sourced from what V2 web CSS actually uses (mobile.tokens + deborah skin), not DESIGN.md.
  */
 import type { IconName } from '@web/ui';
 
@@ -42,7 +42,6 @@ export const COLOR_GROUPS: { title: string; note?: string; text?: boolean; token
       { name: '--color-ink-tertiary', use: 'Metadata, timestamps' },
       { name: '--color-ink-placeholder', use: 'Placeholders only' },
       { name: '--color-gold-ink', use: 'Answer numerals (gold as text)' },
-      { name: '--color-deborah-rose', use: "The Oracle's sign-off only" },
     ],
   },
   {
@@ -67,6 +66,7 @@ export const COLOR_GROUPS: { title: string; note?: string; text?: boolean; token
       { name: '--field-border', use: 'Text field outline' },
       { name: '--surface-border', use: 'Translucent surface rim' },
       { name: '--color-border-selected', use: 'Selected outline' },
+      { name: '--stroke-card', use: 'The one outline for white cards, tiles, rows' },
     ],
   },
   {
@@ -78,6 +78,18 @@ export const COLOR_GROUPS: { title: string; note?: string; text?: boolean; token
       { name: '--card-tone-rose', use: 'Tonal card' },
       { name: '--card-tone-paper', use: 'Tonal card' },
       { name: '--card-action-bg', use: 'Round card action' },
+    ],
+  },
+  {
+    title: 'Home tones',
+    note: 'Solid pastel fields for Home artifact cards only.',
+    tokens: [
+      { name: '--home-tone-mint', use: 'Home card' },
+      { name: '--home-tone-sky', use: 'Labs card' },
+      { name: '--home-tone-rose', use: 'Habits card' },
+      { name: '--home-tone-lilac', use: 'Home card' },
+      { name: '--home-tone-linen', use: 'Home card' },
+      { name: '--home-tone-gold', use: 'Home card' },
     ],
   },
 ];
@@ -113,6 +125,7 @@ export const RADII: TokenDef[] = [
   { name: '--radius-xl', use: 'Sheets, composer, bubbles' },
   { name: '--radius-card-sm', use: 'Small tonal cards' },
   { name: '--radius-card', use: 'Tonal cards' },
+  { name: '--home-radius', use: 'Home artifact cards' },
   { name: '--radius-full', use: 'Buttons, avatars, switches' },
 ];
 
@@ -132,7 +145,6 @@ export const LAYOUT: TokenDef[] = [
   { name: '--field-h', use: 'Text field height' },
   { name: '--button-h-emergency', use: 'Emergency button' },
   { name: '--header-h', use: 'App bar' },
-  { name: '--tabbar-h', use: 'Floating tab bar' },
 ];
 
 export const DURATIONS: TokenDef[] = [

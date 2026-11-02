@@ -1,0 +1,234 @@
+{
+  "registrationsWeekly": [
+    {
+      "label": "W31",
+      "value": 52
+    },
+    {
+      "label": "W32",
+      "value": 55
+    },
+    {
+      "label": "W33",
+      "value": 65
+    },
+    {
+      "label": "W34",
+      "value": 74
+    },
+    {
+      "label": "W35",
+      "value": 78
+    },
+    {
+      "label": "W36",
+      "value": 95
+    },
+    {
+      "label": "W37",
+      "value": 103
+    },
+    {
+      "label": "W38",
+      "value": 106
+    },
+    {
+      "label": "W39",
+      "value": 119
+    },
+    {
+      "label": "W40",
+      "value": 115
+    },
+    {
+      "label": "W41",
+      "value": 112
+    },
+    {
+      "label": "W42",
+      "value": 122
+    },
+    {
+      "label": "W43",
+      "value": 129
+    },
+    {
+      "label": "W44",
+      "value": 128
+    }
+  ],
+  "registrationsMonthly": [
+    {
+      "label": "Jun",
+      "value": 142
+    },
+    {
+      "label": "Jul",
+      "value": 213
+    },
+    {
+      "label": "Aug",
+      "value": 261
+    },
+    {
+      "label": "Sep",
+      "value": 322
+    },
+    {
+      "label": "Oct",
+      "value": 369
+    },
+    {
+      "label": "Nov",
+      "value": 399
+    }
+  ],
+  "conversationsWeekly": [
+    {
+      "label": "W31",
+      "value": 356
+    },
+    {
+      "label": "W32",
+      "value": 338
+    },
+    {
+      "label": "W33",
+      "value": 349
+    },
+    {
+      "label": "W34",
+      "value": 427
+    },
+    {
+      "label": "W35",
+      "value": 453
+    },
+    {
+      "label": "W36",
+      "value": 440
+    },
+    {
+      "label": "W37",
+      "value": 555
+    },
+    {
+      "label": "W38",
+      "value": 514
+    },
+    {
+      "label": "W39",
+      "value": 637
+    },
+    {
+      "label": "W40",
+      "value": 646
+    },
+    {
+      "label": "W41",
+      "value": 683
+    },
+    {
+      "label": "W42",
+      "value": 685
+    },
+    {
+      "label": "W43",
+      "value": 723
+    },
+    {
+      "label": "W44",
+      "value": 803
+    }
+  ],
+  "conversationsMonthly": [
+    {
+      "label": "Jun",
+      "value": 1123
+    },
+    {
+      "label": "Jul",
+      "value": 1409
+    },
+    {
+      "label": "Aug",
+      "value": 1701
+    },
+    {
+      "label": "Sep",
+      "value": 1836
+    },
+    {
+      "label": "Oct",
+      "value": 2075
+    },
+    {
+      "label": "Nov",
+      "value": 2379
+    }
+  ],
+  "topics": [
+    {
+      "label": "Sleep",
+      "value": 412
+    },
+    {
+      "label": "Fatigue",
+      "value": 356
+    },
+    {
+      "label": "Menopause",
+      "value": 318
+    },
+    {
+      "label": "Weight",
+      "value": 241
+    },
+    {
+      "label": "Hormones",
+      "value": 219
+    },
+    {
+      "label": "Mood",
+      "value": 166
+    },
+    {
+      "label": "Thyroid",
+      "value": 121
+    }
+  ],
+  "subscriptionGrowth": [
+    {
+      "label": "Jun",
+      "added": 74,
+      "churned": 12
+    },
+    {
+      "label": "Jul",
+      "added": 94,
+      "churned": 18
+    },
+    {
+      "label": "Aug",
+      "added": 115,
+      "churned": 8
+    },
+    {
+      "label": "Sep",
+      "added": 140,
+      "churned": 13
+    },
+    {
+      "label": "Oct",
+      "added": 153,
+      "churned": 17
+    },
+    {
+      "label": "Nov",
+      "added": 173,
+      "churned": 15
+    }
+  ],
+  "activeUsers": 1284,
+  "totalConversations": 9632
+}

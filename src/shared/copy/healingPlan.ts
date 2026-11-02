@@ -1,6 +1,8 @@
 /** Your Wellness Plan labels (renamed from My Healing Plan, Oct 27; plan data still uses plan90). */
 export const HEALING_PLAN_TITLE = 'Your Wellness Plan';
 export const HEALING_PLAN_VIEW_CTA = 'View Wellness Plan';
+/** Locked card action. OPEN: final upgrade wording not yet approved. */
+export const HEALING_PLAN_UPGRADE_CTA = 'Upgrade to unlock';
 /** Approved card description (Oct 26). */
 export const HEALING_PLAN_LOCKED_META = 'Small daily steps for sleep, food, movement and mindset — built around your goals.';
 /** Approved wording (Oracle Change Requests, Oct 26). Shown in chat with the plan and in the module. */

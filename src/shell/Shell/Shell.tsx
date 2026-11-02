@@ -6,9 +6,12 @@
 import MobileApp from '@mobile/MobileApp';
 import WidgetLabApp from '@mobile/WidgetLabApp';
 import DesignSystemApp from '@mobile/DesignSystemApp';
+import DesignMdApp from '@mobile/DesignMdApp';
+import WebDesignSystemApp from '@web/DesignSystemApp';
 import SimpleHomeApp from '@mobile/SimpleHomeApp';
 import TreeLabApp from '@mobile/TreeLabApp';
 import WebApp from '@web/WebApp';
+import AdminApp from '@admin/AdminApp';
 import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
 import { IPhoneFrame } from '../device/IPhoneFrame';
@@ -25,7 +28,7 @@ import styles from './Shell.module.css';
 
 export interface ShellProps {
   /** `widgets`: /wid. `design-system`: /design-system. `home-lab`: /home simple layout lab. */
-  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'home-lab' | 'tree-lab' | 'email';
+  platform: 'mobile' | 'web' | 'widgets' | 'design-system' | 'design-system-web' | 'design-md' | 'home-lab' | 'tree-lab' | 'email' | 'admin';
 }
 
 export function Shell({ platform }: ShellProps) {
@@ -39,8 +42,20 @@ export function Shell({ platform }: ShellProps) {
     <div className={styles.root} data-theme={theme}>
       <TopNav />
       <main className={styles.stage}>
-        {platform === 'email' ? (
+        {platform === 'admin' ? (
+          <div className={styles.fullBleed}>
+            <AdminApp />
+          </div>
+        ) : platform === 'email' ? (
           <EmailInbox mobilePath={INTERNAL_MOBILE} webPath={INTERNAL_WEB} />
+        ) : platform === 'design-system-web' ? (
+          <div className={styles.fullBleed}>
+            <WebDesignSystemApp />
+          </div>
+        ) : platform === 'design-md' ? (
+          <div className={styles.fullBleed}>
+            <DesignMdApp />
+          </div>
         ) : platform === 'design-system' ? (
           <div className={styles.fullBleed}>
             <DesignSystemApp />

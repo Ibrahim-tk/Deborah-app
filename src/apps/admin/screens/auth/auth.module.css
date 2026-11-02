@@ -1,0 +1,2 @@
+.form { display: grid; gap: var(--space-4); }
+.note { margin: 0; color: var(--color-ink-secondary); font-size: var(--fs-callout); line-height: var(--lh-callout); }

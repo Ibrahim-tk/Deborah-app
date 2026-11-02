@@ -18,7 +18,7 @@ import { Button, OVERLAY_HOST_ID, TextReveal } from '@web/ui';
 import { PageFooter } from '@web/patterns/shell';
 import { namedReasonsComplete } from '@web/patterns/widgets';
 import { StepBody } from '@web/screens/onboarding/HealthBasics/parts/StepBody';
-import { BloomReveal } from '@web/screens/onboarding/HealthBasics/parts/BloomReveal';
+import { BloomReveal3 } from '@web/screens/onboarding/HealthBasics/parts/BloomReveal3';
 import { answersFromProfile } from '@web/screens/onboarding/HealthBasics/healthProfile';
 import { saveHealthProfile } from '@web/screens/onboarding/HealthBasics/saveOnboarding';
 import { bloomProgress, profileVisibleSteps, titleFor, type Answers } from '@web/screens/onboarding/HealthBasics/steps';
@@ -28,6 +28,10 @@ import styles from './CompleteIntake.module.css';
 
 const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 const CONFIRM_MS = 280;
+
+// Finish timing: content exit (template .root[data-exiting] .main: 500ms delay + 1300ms), then wind before leaving.
+const CONTENT_OUT_MS = 1600;
+const WIND_OUT_MS = 3500;
 
 export default function CompleteIntake() {
   const { pop } = useNav();
@@ -58,6 +62,18 @@ export default function CompleteIntake() {
   const persist = (final: Answers) => {
     if (profile) saveHealthProfile(profile.id, final);
   };
+  // Finish (last answer / Save profile): content fades out first, then the tree's native wind, then back to the app.
+  const [exiting, setExiting] = useState(false);
+  const [wind, setWind] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const finishOut = () => {
+    if (exiting) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return setSaved(true);
+    setExiting(true);
+    window.setTimeout(() => setWind(true), CONTENT_OUT_MS);
+    // No navigation: the saved message reveals on this same screen once the tree has gone.
+    window.setTimeout(() => setSaved(true), CONTENT_OUT_MS + WIND_OUT_MS);
+  };
   const close = () => {
     persist(answersRef.current);
     pop();
@@ -81,7 +97,7 @@ export default function CompleteIntake() {
     const visible = profileVisibleSteps(final);
     const idx = key ? visible.findIndex((s) => s.key === key) : -1;
     // Gone, or answered the last visible question → same as header Done.
-    if (idx < 0 || idx >= visible.length - 1) pop();
+    if (idx < 0 || idx >= visible.length - 1) finishOut();
     else setI(idx + 1);
   };
   const advance = (v: string, extra?: Answers) => {
@@ -133,8 +149,10 @@ export default function CompleteIntake() {
   if (!profile) return null;
 
   const page = (
-    <form className={`${template.root} ${styles.page}`} onSubmit={submit} noValidate data-xref="M-2.14 · Health profile">
-      <div className={styles.bar}>
+    <form className={`${template.root} ${styles.page}`} onSubmit={submit} noValidate data-exiting={exiting || undefined} data-xref="M-2.14 · Health profile">
+      {/* 3D tree (same engine/placement as W-1.8 onboarding). */}
+      <BloomReveal3 progress={bloomProgress(at, Math.max(1, steps.length))} wind={wind} className={wind ? styles.treeOut : undefined} />
+      <div className={`${styles.bar} ${exiting ? styles.barOut : ''}`}>
         <Button type="button" variant="ghost" size="sm" leadingIcon="back" onClick={goBack}>Back</Button>
         <Button type="button" size="sm" onClick={close}>Done</Button>
       </div>
@@ -167,9 +185,16 @@ export default function CompleteIntake() {
           </div>
         </div>
         <div className={template.art} role="progressbar" aria-label="Health profile" aria-valuemin={1} aria-valuemax={Math.max(1, steps.length)} aria-valuenow={at + 1} aria-valuetext={`Question ${at + 1} of ${steps.length}`}>
-          <BloomReveal className={template.bloom} progress={bloomProgress(at, Math.max(1, steps.length))} />
         </div>
       </div>
+      {saved && (
+        // OPEN: saved-state copy is placeholder until Deborah approves it.
+        <div className={styles.saved} data-overlay data-placeholder>
+          <TextReveal as="h1" className={styles.savedTitle} text="Your health profile is saved." delay={200} />
+          <TextReveal as="p" className={styles.savedBody} text="The Oracle will use it to tailor every conversation." delay={700} />
+          <div className={styles.savedCta}><Button type="button" onClick={pop}>Back to home</Button></div>
+        </div>
+      )}
       <PageFooter />
     </form>
   );

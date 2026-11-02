@@ -8,6 +8,7 @@ export type { Params, Route, TabId } from './types';
 export const WidgetLabScreen = lazy(() => import('@mobile/screens/lab/WidgetLab'));
 /** The design system (/design-system): every token and component, rendered live from this app's own code. */
 export const DesignSystemScreen = lazy(() => import('@mobile/screens/lab/DesignSystem'));
+export const DesignMdScreen = lazy(() => import('@mobile/screens/lab/DesignMd'));
 /** Simple Home layout lab (/internal/home). */
 export const SimpleHomeScreen = lazy(() => import('@mobile/screens/lab/SimpleHome'));
 /** Tree sandbox (/internal/tree): onboarding profile with BloomTree2 and a dev panel. */

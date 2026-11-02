@@ -1,9 +1,8 @@
 /** Progress and presence used in V2: spinner, status, bars/rings, Deborah presence, app bar. */
 import { useEffect, useState } from 'react';
-import { Avatar, DeborahBlob, Header, IconButton, ProgressBar, ProgressRing, ProgressStatus, Spinner } from '@web/ui';
+import { Avatar, DeborahBlob, ProgressBar, ProgressRing, ProgressStatus, Spinner } from '@web/ui';
 import { Section } from '../Section';
 import { Grid, Row, Specimen, Variant } from '../Specimen';
-import styles from './sections.module.css';
 
 const STEPS = ['Reading your answers', 'Looking through my Handbook', 'Writing to you'];
 
@@ -25,12 +24,13 @@ export function Feedback() {
         </Specimen>
 
         <Specimen name="ProgressBar · ProgressRing" path="ui/ProgressBar" note="Bar with value text; ring announces percentage.">
-          <Variant label="ProgressBar"><ProgressBar value={12 / 90} label="90-day plan" valueText="Day 12 of 90" /></Variant>
+          {/* Rings first, small to large; the bar sits underneath. */}
           <Row>
-            <Variant label="ProgressRing 44"><ProgressRing value={0.4} label="Profile complete" /></Variant>
-            <Variant label="64"><ProgressRing value={0.75} size={64} label="Profile complete" /></Variant>
             <Variant label="no value"><ProgressRing value={0.25} showValue={false} label="Step 1 of 4" /></Variant>
+            <Variant label="44"><ProgressRing value={0.4} label="Profile complete" /></Variant>
+            <Variant label="64"><ProgressRing value={0.75} size={64} label="Profile complete" /></Variant>
           </Row>
+          <Variant label="ProgressBar"><ProgressBar value={12 / 90} label="90-day plan" valueText="Day 12 of 90" /></Variant>
         </Specimen>
 
         <Specimen name="Avatar · DeborahBlob" path="ui/Avatar" note="Profiles: Cormorant initial on lilac. The Oracle: portrait + gold ring, or glass blob.">
@@ -44,15 +44,6 @@ export function Feedback() {
             <Variant label="Blob 56"><DeborahBlob size={56} label="The Oracle" /></Variant>
             <Variant label="Blob 96"><DeborahBlob size={96} label="The Oracle" /></Variant>
           </Row>
-        </Specimen>
-
-        <Specimen name="Header" path="ui/Header" note="Large title on tab roots; inline title with back on pushed screens.">
-          <Variant label="inline · back">
-            <div className={styles.headerStage}><Header title="Health profile" onBack={() => {}} backLabel="Account" safeTop={false} /></div>
-          </Variant>
-          <Variant label="large">
-            <div className={styles.headerStage}><Header title="My Health" large safeTop={false} right={<IconButton icon="settings" label="Settings" />} /></div>
-          </Variant>
         </Specimen>
       </Grid>
     </Section>

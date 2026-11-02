@@ -1,8 +1,10 @@
-/** @shell PlatformTabs — Mobile | Web | Email | Design system | Components | Home. Keyboard: 1–5. */
+/** @shell PlatformTabs — Mobile | Web | Email | Design system | Components | Home | Admin. Keyboard: 1–6. */
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useShellStore } from '../../shell.store';
 import {
+  INTERNAL_ADMIN,
+  INTERNAL_DESIGN_MD,
   INTERNAL_DESIGN_SYSTEM,
   INTERNAL_EMAIL,
   INTERNAL_HOME,
@@ -20,9 +22,11 @@ export function PlatformTabs() {
   const lastWebPath = useShellStore((s) => s.lastWebPath);
   const isWeb = pathname.startsWith('/internal/web');
   const isSystem = pathname.startsWith(INTERNAL_DESIGN_SYSTEM);
+  const isDesignMd = pathname.startsWith(INTERNAL_DESIGN_MD);
   const isWidgets = pathname.startsWith(INTERNAL_WID);
   const isHome = pathname.startsWith(INTERNAL_HOME);
   const isEmail = pathname.startsWith(INTERNAL_EMAIL);
+  const isAdmin = pathname.startsWith(INTERNAL_ADMIN);
 
   const goProfile = () => navigate(INTERNAL_MOBILE);
   const goWeb = () => navigate(lastWebPath);
@@ -38,6 +42,7 @@ export function PlatformTabs() {
       if (e.key === '3') navigate(INTERNAL_DESIGN_SYSTEM);
       if (e.key === '4') navigate(INTERNAL_WID);
       if (e.key === '5') navigate(INTERNAL_HOME);
+      if (e.key === '6') navigate(INTERNAL_ADMIN);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -45,7 +50,7 @@ export function PlatformTabs() {
 
   return (
     <div className={styles.root} role="tablist" aria-label="Platform">
-      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isWidgets && !isHome && !isEmail} className={styles.tab} onClick={goProfile} title="Mobile (1)">
+      <button type="button" role="tab" aria-selected={!isWeb && !isSystem && !isDesignMd && !isWidgets && !isHome && !isEmail && !isAdmin} className={styles.tab} onClick={goProfile} title="Mobile (1)">
         Mobile
       </button>
       <button type="button" role="tab" aria-selected={isWeb} className={styles.tab} onClick={goWeb} title="Web (2)">
@@ -58,11 +63,17 @@ export function PlatformTabs() {
       <button type="button" role="tab" aria-selected={isSystem} className={styles.tab} onClick={goSystem} title="Design system (3)">
         Design system
       </button>
+      <button type="button" role="tab" aria-selected={isDesignMd} className={styles.tab} onClick={() => navigate(INTERNAL_DESIGN_MD)}>
+        DESIGN.md
+      </button>
       <button type="button" role="tab" aria-selected={isWidgets} className={styles.tab} onClick={goWidgets} title="Components (4)">
         Components
       </button>
       <button type="button" role="tab" aria-selected={isHome} className={styles.tab} onClick={goHome} title="Home lab (5)">
         Home
+      </button>
+      <button type="button" role="tab" aria-selected={isAdmin} className={styles.tab} onClick={() => navigate(INTERNAL_ADMIN)} title="Super admin (6)">
+        Admin
       </button>
     </div>
   );
