@@ -15,7 +15,7 @@ export interface DialogProps {
 
 export function Dialog({ title, onClose, children, footer, width = 'sm' }: DialogProps) {
   return (
-    <Base.Root open onOpenChange={(open) => !open && onClose()}>
+    <Base.Root open modal="trap-focus" onOpenChange={(open) => !open && onClose()}>
       <Base.Portal container={overlayRef}>
         <Base.Backdrop className={styles.scrim} />
         <Base.Popup className={styles.panel} data-width={width}>

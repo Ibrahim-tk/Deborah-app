@@ -1,6 +1,6 @@
 /** A-7.2 plan list: price, limits, subscribers and an active switch. Row opens the editor. */
 import { money, useAdminStore, type Plan } from '@shared/admin';
-import { DataTable, StatusText, Toggle, type Column } from '@admin/ui';
+import { DataTable, Toggle, type Column } from '@admin/ui';
 import { useAdminNav } from '@admin/navigation';
 import { useAdminToast } from '@admin/hooks/toast.store';
 import styles from './PlansTable.module.css';
@@ -21,10 +21,9 @@ export function PlansTable({ subscribers }: { subscribers: (planId: string) => n
     {
       key: 'price',
       header: 'Price',
-      sort: (p) => p.monthly || p.yearly / 12,
-      render: (p) => (p.monthly ? `${money(p.monthly)} / month` : p.yearly ? `${money(p.yearly)} / year` : 'Free'),
+      sort: (p) => p.monthly,
+      render: (p) => (p.monthly ? `${money(p.monthly)} / month` : 'Free'),
     },
-    { key: 'free', muted: true, header: 'Free questions', render: (p) => (p.freeQuestions ? `${p.freeQuestions} questions` : 'None') },
     { key: 'subs', header: 'Subscribers', align: 'end', sort: (p) => subscribers(p.id), render: (p) => (p.id === 'free' ? '—' : subscribers(p.id).toLocaleString('en-US')) },
     {
       key: 'active',
@@ -33,7 +32,6 @@ export function PlansTable({ subscribers }: { subscribers: (planId: string) => n
         // Stop the row click so the switch doesn't also open the editor.
         <span className={styles.toggle} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
           <Toggle checked={p.active} onChange={(v) => setActive(p, v)} label={p.active ? 'Active' : 'Inactive'} />
-          {!p.active && <StatusText tone="neutral">Hidden from the app</StatusText>}
         </span>
       ),
     },

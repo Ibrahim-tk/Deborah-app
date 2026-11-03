@@ -14,7 +14,6 @@ export function StripeCard() {
   const stripe = useAdminStore((s) => s.stripe);
   const canEdit = useAdminStore((s) => s.role === 'super');
   const openDrawer = useAdminNav((s) => s.openDrawer);
-  const connect = useSim();
   const [confirm, setConfirm] = useState<Confirm>(null);
   const check = useSim();
   const act = useSim();
@@ -54,31 +53,8 @@ export function StripeCard() {
   ) : null;
 
   // Not connected: one plain block and Stripe's own branded, pill-shaped Connect button.
-  if (!connected) {
-    return (
-      <>
-        <div className={styles.connect}>
-          <h3 className={styles.connectTitle}>Stripe</h3>
-          <p className={styles.connectText}>
-            Connect your Stripe account to receive payments for plans and subscriptions. Clients can't buy a plan until Stripe is connected.
-          </p>
-          {canEdit && (
-            // The Stripe hand-off (sign in, authorise, return) is assumed; the card simply turns into the connected view.
-            <button
-              type="button"
-              className={styles.stripeBtn}
-              disabled={connect.busy}
-              aria-busy={connect.busy || undefined}
-              onClick={() => connect.run(() => useAdminStore.getState().connectStripe(), 'Stripe connected', 1200)}
-            >
-              <span className={styles.stripeMark} aria-hidden><Icon name="stripe" size={16} /></span>
-              {connect.busy ? 'Connecting…' : 'Connect Stripe'}
-            </button>
-          )}
-        </div>
-      </>
-    );
-  }
+  // Only the connected view lives here; the Connect tile is in the Available grid.
+  if (!connected) return null;
 
   return (
     <>

@@ -95,13 +95,13 @@ KPIs: active subscriptions, free users, paid share, monthly churn. Growth and ch
 price, free limit, subscribers and an active switch. Payments row shows the simulated Stripe connection with "Check connection".
 
 ### A-7.3 Plan editor (side drawer, super admin only)
-Name, individual or family (profiles included), monthly and yearly price, free questions, feature switches, plan rules,
+Name, individual or family (profiles included), monthly price, free questions, feature switches, plan rules,
 active. New plans start inactive.
 
 ### A-8.1 Audit log
 One line per action, newest first. Search, filter by person, clear one entry, Clear all (asks first).
 
-### A-7.4 Stripe integration (Subscriptions → Payments)
+### A-7.4 Stripe integration (now on A-10.1 Integrations)
 Follows the standard Stripe Connect pattern, simulated end to end (no API, no keys; the redirect and webhooks are timers and seed data).
 - **Not connected** (the seed state): "Connect with Stripe" plus "How it works". A notice above Plans says payments are off.
 - **Connect:** a hand-off dialog: "Taking you to Stripe…" → Stripe's authorise step (account, permissions, starts in test mode)
@@ -123,6 +123,18 @@ Version name, uploaded at, uploaded by (copyable), current or previous pill. Act
 ### A-9.1 Consent
 Consent versions: version name, uploaded at, uploaded by (email). Upload a new version (name + PDF, read locally only). Withdrawn consent
 lists clients who revoked consent; a row opens the client.
+
+### A-9.3 Compliance (super admin only)
+Client data rights (withdraw consent, with a link to A-9.1; right to delete with the dependent transfer rules and the GDPR 1 month /
+CPRA 45 days deadlines, with a link to deletion requests) and one card per framework: GDPR (EU), HIPAA (US), CPRA (California),
+PIPEDA + provincial (Canada), Privacy Act/APPs + NDB (Australia), SOC 2 (in progress). Each shows the deletion window, breach notice
+and key obligations. Legal summaries are placeholder until reviewed (`data/compliance.json`).
+
+### A-10.1 Integrations (super admin only)
+Two parts. **Connected:** each connected service as a full-width card with all its details (Stripe: mode, account ID, payouts,
+webhook, ⋮ menu; others: account, connected date, Disconnect). **Available:** one container holding a tile per service not yet
+connected (real brand logo, one line, Connect button), with one column per tile: 1×4, then 1×3 and so on as services connect.
+Stripe (A-7.4) moved here from Subscriptions. Connecting is simulated (the provider's sign-in is assumed).
 
 ## Open questions
 

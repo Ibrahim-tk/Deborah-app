@@ -1,9 +1,9 @@
 [
-  { "id": "evt_1Q8xA2", "type": "invoice.paid", "status": "succeeded", "at": "2026-11-03T11:58", "summary": "Invoice for Family plan paid by Wendy Sato ($49.00)" },
+  { "id": "evt_1Q8xA2", "type": "invoice.paid", "status": "succeeded", "at": "2026-11-03T11:58", "summary": "Invoice for Family plan paid by Wendy Sato ($29.97)" },
   { "id": "evt_1Q8wZ9", "type": "checkout.session.completed", "status": "succeeded", "at": "2026-11-03T11:41", "summary": "New Individual subscription started by Fiona Ellis" },
   { "id": "evt_1Q8wQ4", "type": "customer.subscription.updated", "status": "succeeded", "at": "2026-11-03T10:22", "summary": "Sofia Haddad moved from Individual to Family" },
-  { "id": "evt_1Q8vK7", "type": "invoice.payment_failed", "status": "failed", "at": "2026-11-03T09:05", "summary": "Card declined for Beth Adams (Individual yearly). Stripe will retry in 3 days." },
-  { "id": "evt_1Q8uB1", "type": "invoice.paid", "status": "succeeded", "at": "2026-11-02T18:30", "summary": "Invoice for Individual plan paid by Diana Cole ($29.00)" },
+  { "id": "evt_1Q8vK7", "type": "invoice.payment_failed", "status": "failed", "at": "2026-11-03T09:05", "summary": "Card declined for Beth Adams (Individual). Stripe will retry in 3 days." },
+  { "id": "evt_1Q8uB1", "type": "invoice.paid", "status": "succeeded", "at": "2026-11-02T18:30", "summary": "Invoice for Individual plan paid by Diana Cole ($19.97)" },
   { "id": "evt_1Q8tR3", "type": "customer.subscription.deleted", "status": "succeeded", "at": "2026-11-02T14:12", "summary": "Tara Ibarra cancelled their Individual plan" },
   { "id": "evt_1Q8sP8", "type": "checkout.session.completed", "status": "succeeded", "at": "2026-11-02T09:47", "summary": "New Family subscription started by Amelia Hart" },
   { "id": "evt_1Q8rL2", "type": "invoice.payment_failed", "status": "failed", "at": "2026-11-01T16:20", "summary": "Card expired for Sofia Haddad (Family). Stripe will retry in 3 days." }

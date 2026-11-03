@@ -15,9 +15,18 @@ import { useSim } from '@admin/hooks/useSim';
 import { NumberField } from './parts/NumberField';
 import styles from './PlanDrawer.module.css';
 
-const FEATURES = ['Unlimited questions', 'Lab review', 'Family profiles', 'Visit briefs', 'Book Deborah'];
+// Mirrors what the app offers per plan (shared/data/commerce/plans.json and the free-limit gate in engine/counting.ts).
+const FEATURES = [
+  'Unlimited conversations',
+  'Your Wellness Plan',
+  'Provider-ready notes',
+  'Lab and document review',
+  'Family profiles (up to 3 dependents)',
+  'Advocate for each member',
+  'Invite teens to their own account',
+];
 const blank = (): Plan => ({
-  id: `plan-${Date.now().toString(36)}`, name: '', kind: 'individual', monthly: 0, yearly: 0, freeQuestions: 3,
+  id: `plan-${Date.now().toString(36)}`, name: '', kind: 'individual', monthly: 0, freeQuestions: 3,
   maxProfiles: 1, features: Object.fromEntries(FEATURES.map((f) => [f, false])), rules: '', active: false,
 });
 
@@ -69,8 +78,7 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
         </Section>
         <Section title="Pricing">
           <div className={styles.row}>
-            <NumberField label="Monthly price (USD)" value={plan.monthly} hint="0 hides the monthly option" onChange={(v) => set('monthly', v)} />
-            <NumberField label="Yearly price (USD)" value={plan.yearly} hint="0 hides the yearly option" onChange={(v) => set('yearly', v)} />
+            <NumberField label="Monthly price (USD)" decimals value={plan.monthly} hint="0 makes this a free plan" onChange={(v) => set('monthly', v)} />
           </div>
         </Section>
         <Section title="Free use">

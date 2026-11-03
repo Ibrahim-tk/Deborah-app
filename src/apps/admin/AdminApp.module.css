@@ -1,6 +1,8 @@
 /* The transform makes this box the containing block for position: fixed descendants, so the drawer, dialogs
- * and scrims fill the admin stage instead of the browser window (they no longer slide under the prototype nav). */
-.root { position: absolute; inset: 0; overflow: hidden; transform: translateZ(0); --safe-top: 0px; --safe-bottom: 0px; }
+ * and scrims fill the admin stage instead of the browser window (they no longer slide under the prototype nav).
+ * `clip`, not `hidden`: a hidden box can still be scrolled by the browser when focus lands on the drawer
+ * while it is off-screen mid-slide, which jerked the whole page sideways. */
+.root { position: absolute; inset: 0; overflow: clip; transform: translateZ(0); --safe-top: 0px; --safe-bottom: 0px; }
 .toast { position: absolute; inset-block-end: var(--space-8); inset-inline: 0; display: flex; justify-content: center; z-index: var(--z-overlay); pointer-events: none; }
 /* Admin-only: a quieter canvas. The parchment token mixed toward paper, so long working sessions
  * sit on a near-white ground while tables and panels (white surface) still separate from it.
@@ -12,3 +14,12 @@
   --color-border-hairline: color-mix(in srgb, var(--purple-100) 55%, var(--white));
   --color-border-control: color-mix(in srgb, var(--purple-300) 55%, var(--white));
 }
+
+/* Admin-wide keyboard focus: a thin accent ring. Outranks the web app's global 2px/3px-offset outline,
+ * which drew thick rings around selects, sidebar links and other controls. */
+/* Must outrank `.phone-root :focus-visible:not(input, textarea)` (3px, offset 4px, from the Deborah skin) and
+ * `.web-root :focus-visible` (2px, offset 3px): this selector is (0,4,1) against their (0,2,1) / (0,2,0). */
+:global(.web-root.phone-root).root :focus-visible,
+:global(.web-root.phone-root).root :focus-visible:not(input, textarea) { outline: 1px solid var(--color-accent); outline-offset: 2px; }
+/* Fields and select triggers show their own soft ring instead of any outline. */
+:global(.web-root.phone-root).root :is(input, textarea, [role='combobox']):focus-visible { outline: none; }

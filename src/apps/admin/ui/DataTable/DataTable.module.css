@@ -115,3 +115,10 @@ th .columnMenu button[data-size] { inline-size: 24px; block-size: 24px; color: v
 .empty[data-variant='plain'] { border: 0; background: transparent; padding: 0; justify-items: start; text-align: start; }
 .empty[data-variant='plain'] .emptyIcon { display: none; }
 .empty[data-variant='plain'] .emptyText { color: var(--color-ink-tertiary); }
+
+/* Clickable rows (they open a drawer): pointer cursor on every cell, soft hover and keyboard focus fill. */
+.clickable, .clickable td { cursor: pointer; }
+.clickable td { transition: background var(--dur-quick) var(--ease-ios); }
+.clickable:hover td { background: var(--color-canvas); }
+.clickable:focus-visible { outline: 0; }
+.clickable:focus-visible td { background: var(--color-accent-tint); }

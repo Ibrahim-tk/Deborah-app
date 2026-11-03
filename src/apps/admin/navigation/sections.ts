@@ -8,7 +8,9 @@ export const SECTIONS: { id: SectionId; label: string; icon: IconName; superOnly
   { id: 'escalations', label: 'Escalations', icon: 'alert' },
   { id: 'support', label: 'Support requests', icon: 'support' },
   { id: 'subscriptions', label: 'Subscriptions', icon: 'billing', superOnly: true },
+  { id: 'integrations', label: 'Integrations', icon: 'integrations', superOnly: true },
   { id: 'admins', label: 'Admin users', icon: 'admins', superOnly: true },
   { id: 'audit', label: 'Audit log', icon: 'audit' },
   { id: 'compliance', label: 'Consent', icon: 'consent' },
+  { id: 'regulations', label: 'Compliance', icon: 'compliance', superOnly: true },
 ];

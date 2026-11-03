@@ -12,10 +12,18 @@ export interface IntegrationCardProps {
   description: string;
   status?: ReactNode;
   actions?: ReactNode;
+  /** Shown in the body when there are no details yet (not connected). */
+  features?: string[];
   children?: ReactNode;
 }
 
-export function IntegrationCard({ mark, markColor, name, description, status, actions, children }: IntegrationCardProps) {
+export function IntegrationCard({ mark, markColor, name, description, status, actions, features, children }: IntegrationCardProps) {
+  const body = children ?? (features?.length ? (
+    <>
+      <p className={styles.featuresTitle}>What it does</p>
+      <ul className={styles.features}>{features.map((f) => <li key={f}>{f}</li>)}</ul>
+    </>
+  ) : null);
   return (
     <div className={styles.root}>
       <div className={styles.head}>
@@ -29,7 +37,7 @@ export function IntegrationCard({ mark, markColor, name, description, status, ac
         </div>
         {actions && <div className={styles.actions}>{actions}</div>}
       </div>
-      {children && <div className={styles.body}>{children}</div>}
+      {body && <div className={styles.body}>{body}</div>}
     </div>
   );
 }

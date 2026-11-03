@@ -1,0 +1,34 @@
+.card {
+  block-size: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-8) var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-lg);
+}
+.head { display: flex; align-items: center; gap: var(--space-4); }
+.mark { flex: none; display: grid; place-items: center; inline-size: 48px; block-size: 48px; border-radius: var(--radius-md); background: var(--color-canvas); border: 1px solid var(--color-border-hairline); color: var(--color-accent); }
+.flag { font-size: 28px; line-height: 1; }
+.titles { display: grid; gap: 2px; min-inline-size: 0; }
+.nameRow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+.name { margin: 0; color: var(--color-ink); font-size: var(--fs-title-3); line-height: var(--lh-title-3); font-weight: var(--weight-medium); }
+.region { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.full { margin: 0; color: var(--color-ink-secondary); font-size: var(--fs-callout); line-height: var(--lh-callout); }
+/* Two headline facts side by side on a soft ground. */
+.facts { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+/* Hairline plus a touch more tint, so the fact panels read clearly against the white card. */
+.fact { margin: 0; display: grid; gap: 2px; align-content: start; padding: var(--space-4); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-accent-tint) 45%, var(--color-surface)); border: 1px solid var(--color-border-hairline); }
+.factLabel { color: var(--color-ink-tertiary); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+.factValue { margin: 0; color: var(--color-ink); font-size: var(--fs-headline); line-height: var(--lh-headline); font-weight: var(--weight-medium); }
+.factNote { margin: 0; color: var(--color-ink-secondary); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+.req { display: grid; gap: var(--space-3); align-content: start; }
+.reqTitle { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+.list { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-2); }
+.list li { display: flex; gap: var(--space-2); align-items: flex-start; color: var(--color-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.tick { flex: none; margin-block-start: 2px; color: var(--color-success-ink); }
+@container (max-width: 420px) {
+  .facts { grid-template-columns: minmax(0, 1fr); }
+}

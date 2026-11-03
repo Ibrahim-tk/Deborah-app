@@ -1,7 +1,7 @@
 /** useAdminStore — the Super Admin panel's own client store. Separate from the app store on purpose. */
 import { create } from 'zustand';
 import { seed } from './data';
-import type { AdminRole, AdminUser, AuditEntry, EscalationStatus, Plan } from './types';
+import type { AdminRole, AdminUser, AuditEntry, EscalationStatus, IntegrationId, Plan } from './types';
 
 type Seed = typeof seed;
 
@@ -29,6 +29,7 @@ export interface AdminState extends Seed {
   connectStripe: () => void;
   setStripeMode: (mode: 'test' | 'live') => void;
   disconnectStripe: () => void;
+  setIntegration: (id: IntegrationId, connect: boolean, account?: string) => void;
 }
 
 /** Prototype clock: everything is relative to the seeded "today". */
@@ -122,7 +123,7 @@ export const useAdminStore = create<AdminState>((set, get) => {
           account: { id: 'acct_1PxQe8Gd7Oracle', name: 'Genesis Health LLC', email: 'billing@oracleclinician.com', country: 'US', payoutsEnabled: true, detailsComplete: true },
           webhook: { url: 'https://api.oracleclinician.com/webhooks/stripe', status: 'active', lastEventAt: stamp() },
         },
-        plans: s.plans.map((p) => (p.monthly || p.yearly ? { ...p, stripePriceId: `price_${p.id.replace(/-/g, '_')}_${p.monthly ? 'm' : 'y'}` } : p)),
+        plans: s.plans.map((p) => (p.monthly ? { ...p, stripePriceId: `price_${p.id.replace(/-/g, '_')}` } : p)),
       }));
       log('Connected Stripe account Genesis Health LLC (test mode)');
     },
@@ -133,6 +134,11 @@ export const useAdminStore = create<AdminState>((set, get) => {
     disconnectStripe: () => {
       set((s) => ({ stripe: { status: 'disconnected', mode: 'test', account: null, webhook: null }, plans: s.plans.map(({ stripePriceId: _drop, ...p }) => p) }));
       log('Disconnected Stripe');
+    },
+    setIntegration: (id, connect, account) => {
+      set((s) => ({ integrations: { ...s.integrations, [id]: connect ? { connected: true, account, connectedAt: stamp() } : { connected: false } } }));
+      const name = { dropbox: 'Dropbox', shopify: 'Shopify', googleDocs: 'Google Docs' }[id];
+      log(`${connect ? 'Connected' : 'Disconnected'} ${name}`);
     },
     uploadConsent: (name) => {
       set((s) => ({ consentVersions: [{ id: uid('cv'), name, uploadedAt: stamp(), uploadedBy: s.email }, ...s.consentVersions] }));

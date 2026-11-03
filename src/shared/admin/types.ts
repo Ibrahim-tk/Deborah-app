@@ -124,7 +124,6 @@ export interface Plan {
   name: string;
   kind: 'individual' | 'family';
   monthly: number;
-  yearly: number;
   freeQuestions: number;
   maxProfiles: number;
   features: Record<string, boolean>;
@@ -185,4 +184,31 @@ export interface StripeConnection {
   mode: 'test' | 'live';
   account: { id: string; name: string; email: string; country: string; payoutsEnabled: boolean; detailsComplete: boolean } | null;
   webhook: { url: string; status: 'active' | 'failing'; lastEventAt: string } | null;
+}
+
+export type IntegrationId = 'dropbox' | 'shopify' | 'googleDocs';
+
+/** Simulated OAuth-style connection to a third-party service (no real API). */
+export interface IntegrationConnection {
+  connected: boolean;
+  account?: string;
+  connectedAt?: string;
+}
+
+/** A privacy or security framework the service operates under. Legal summaries are placeholder until reviewed. */
+export interface ComplianceFramework {
+  id: string;
+  region: string;
+  code: string;
+  name: string;
+  fullName: string;
+  state: 'applies' | 'in_progress';
+  /** Region flag emoji; null for standards (SOC 2) that show a shield instead. */
+  flag: string | null;
+  deletionShort: string;
+  deletionWindow: string;
+  breachShort: string;
+  breachNotice: string;
+  obligations: string[];
+  status: 'placeholder';
 }

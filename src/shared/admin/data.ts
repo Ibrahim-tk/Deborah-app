@@ -10,8 +10,9 @@ import consentVersions from './data/consent-versions.json';
 import consentRevocations from './data/consent-revocations.json';
 import metrics from './data/metrics.json';
 import stripeEvents from './data/stripe-events.json';
+import compliance from './data/compliance.json';
 import type {
-  AdminUser, AuditEntry, Client, ConsentRevocation, ConsentVersion, DeletionRequest, Escalation, Metrics, Plan, StripeConnection, StripeEvent,
+  AdminUser, AuditEntry, ComplianceFramework, IntegrationConnection, IntegrationId, Client, ConsentRevocation, ConsentVersion, DeletionRequest, Escalation, Metrics, Plan, StripeConnection, StripeEvent,
   SupportRequest,
 } from './types';
 
@@ -28,6 +29,13 @@ export const seed = {
   stripeEvents: stripeEvents as StripeEvent[],
   /** Starts disconnected so the admin sees the Connect flow. */
   stripe: { status: 'disconnected', mode: 'test', account: null, webhook: null } as StripeConnection,
+  /** Dropbox starts connected so the page shows both states. */
+  integrations: {
+    dropbox: { connected: true, account: 'records@oracleclinician.com', connectedAt: '2026-10-14T10:20' },
+    shopify: { connected: false },
+    googleDocs: { connected: false },
+  } as Record<IntegrationId, IntegrationConnection>,
 };
 
 export const adminMetrics = metrics as Metrics;
+export const complianceFrameworks = compliance as ComplianceFramework[];

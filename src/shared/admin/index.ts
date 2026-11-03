@@ -1,4 +1,4 @@
 export * from './types';
 export * from './store';
-export { adminMetrics } from './data';
+export { adminMetrics, complianceFrameworks } from './data';
 export * from './format';

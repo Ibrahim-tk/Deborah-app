@@ -114,9 +114,11 @@ Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec:
 | A-6.2 | Admin user (side drawer) | `admins/AdminDrawer` | built |
 | A-7.1 | Subscriptions (+ A-7.2 plan list) | `subscriptions/Subscriptions` | built |
 | A-7.3 | Plan editor (side drawer) | `subscriptions/PlanDrawer` | built |
-| A-7.4 | Stripe integration (Payments card) | `subscriptions/Subscriptions/parts/StripeCard` | built (simulated) |
+| A-7.4 | Stripe integration (Payments card) | `integrations/Integrations/parts/StripeCard` | built (simulated) |
 | A-7.5 | Stripe webhook events (side drawer) | `subscriptions/StripeEventsDrawer` | built (simulated) |
 | A-8.1 | Audit log | `audit/AuditLog` | built |
 | A-8.2 | Audit entry (side drawer) | `audit/AuditDrawer` | built |
 | A-9.1 | Consent | `compliance/Consent` | built |
 | A-9.2 | Consent version (side drawer) | `compliance/ConsentDrawer` | built |
+| A-9.3 | Compliance (frameworks + data rights) | `compliance/Compliance` | built (placeholder legal copy) |
+| A-10.1 | Integrations (Stripe, Dropbox, Shopify, Google Docs) | `integrations/Integrations` | built (simulated) |

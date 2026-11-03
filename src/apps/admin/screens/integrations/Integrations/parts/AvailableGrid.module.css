@@ -1,0 +1,41 @@
+/* One container; columns follow how many services are left to connect. */
+.grid {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-lg);
+}
+.tile { position: relative; display: grid; grid-template-rows: auto 1fr auto; gap: var(--space-4); justify-items: start; padding: var(--space-6); min-inline-size: 0; }
+/* Inset divider: stops short of the container's top and bottom edges instead of running end to end. */
+.tile + .tile::before { content: ''; position: absolute; inset-inline-start: 0; inset-block: var(--space-8); inline-size: 1px; background: var(--color-border-hairline); }
+.mark { display: grid; place-items: center; inline-size: 48px; block-size: 48px; border-radius: var(--radius-md); background: var(--mark); color: var(--color-ink-on-accent); }
+.text { display: grid; gap: var(--space-1); }
+.name { margin: 0; color: var(--color-ink); font-size: var(--fs-headline); line-height: var(--lh-headline); font-weight: var(--weight-medium); }
+.blurb { margin: 0; color: var(--color-ink-secondary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+@container (max-width: 720px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile:nth-child(odd)::before { display: none; }
+}
+/* Brand button: provider colour (data, passed as --brand), white logo chip, pill shape. A deliberate
+ * third-party brand exception to our palette, like the provider logos themselves. */
+.brandBtn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 18px 8px 8px;
+  border-radius: var(--radius-full);
+  background: var(--brand);
+  color: var(--color-ink-on-accent);
+  font-size: var(--fs-button);
+  line-height: var(--lh-button);
+  font-weight: var(--weight-medium);
+  transition: background var(--dur-quick) var(--ease-ios);
+}
+.brandBtn:hover:not(:disabled) { background: color-mix(in srgb, var(--brand) 88%, var(--color-ink)); }
+.brandBtn:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.brandBtn:disabled { cursor: progress; opacity: 0.85; }
+.brandChip { display: grid; place-items: center; inline-size: 24px; block-size: 24px; border-radius: var(--radius-full); background: var(--color-surface); color: var(--brand); }

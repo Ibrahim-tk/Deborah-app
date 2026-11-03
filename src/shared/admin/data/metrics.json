@@ -199,6 +199,36 @@
   ],
   "subscriptionGrowth": [
     {
+      "label": "Dec",
+      "added": 22,
+      "churned": 4
+    },
+    {
+      "label": "Jan",
+      "added": 28,
+      "churned": 5
+    },
+    {
+      "label": "Feb",
+      "added": 33,
+      "churned": 6
+    },
+    {
+      "label": "Mar",
+      "added": 41,
+      "churned": 7
+    },
+    {
+      "label": "Apr",
+      "added": 52,
+      "churned": 9
+    },
+    {
+      "label": "May",
+      "added": 63,
+      "churned": 10
+    },
+    {
       "label": "Jun",
       "added": 74,
       "churned": 12

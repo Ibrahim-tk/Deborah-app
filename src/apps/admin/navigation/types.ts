@@ -13,7 +13,7 @@ export type DrawerTarget =
   | { kind: 'consent'; id: string }
   | { kind: 'stripeEvents'; id: null };
 
-export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'subscriptions' | 'admins' | 'audit' | 'compliance';
+export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'subscriptions' | 'integrations' | 'regulations' | 'admins' | 'audit' | 'compliance';
 
 export type AdminRoute = { id: SectionId };
 

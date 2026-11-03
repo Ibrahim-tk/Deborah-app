@@ -1,0 +1,116 @@
+[
+  {
+    "id": "gdpr",
+    "region": "Europe",
+    "code": "EU",
+    "name": "GDPR",
+    "fullName": "General Data Protection Regulation",
+    "state": "applies",
+    "deletionWindow": "Up to 3 months for complex requests",
+    "breachNotice": "To the supervisory authority",
+    "obligations": [
+      "Lawful basis and explicit consent for health data",
+      "Right to access, correct, delete and port data",
+      "Consent can be withdrawn at any time"
+    ],
+    "status": "placeholder",
+    "flag": "🇪🇺",
+    "deletionShort": "1 month",
+    "breachShort": "72 hours"
+  },
+  {
+    "id": "hipaa",
+    "region": "United States",
+    "code": "US",
+    "name": "HIPAA",
+    "fullName": "Health Insurance Portability and Accountability Act",
+    "state": "applies",
+    "deletionWindow": "Records kept for care follow retention law",
+    "breachNotice": "To affected individuals",
+    "obligations": [
+      "Safeguards for protected health information",
+      "Business associate agreements with vendors",
+      "Access logs and audit trail"
+    ],
+    "status": "placeholder",
+    "flag": "🇺🇸",
+    "deletionShort": "Retention rules",
+    "breachShort": "60 days"
+  },
+  {
+    "id": "cpra",
+    "region": "United States (California)",
+    "code": "US",
+    "name": "CPRA",
+    "fullName": "California Privacy Rights Act (amends CCPA)",
+    "state": "applies",
+    "deletionWindow": "Extendable once by 45 days",
+    "breachNotice": "To affected California residents",
+    "obligations": [
+      "Right to know, delete and correct",
+      "Limit use of sensitive personal information",
+      "No selling or sharing without opt-out"
+    ],
+    "status": "placeholder",
+    "flag": "🇺🇸",
+    "deletionShort": "45 days",
+    "breachShort": "Without delay"
+  },
+  {
+    "id": "pipeda",
+    "region": "Canada",
+    "code": "CA",
+    "name": "PIPEDA",
+    "fullName": "PIPEDA plus provincial health privacy laws",
+    "state": "applies",
+    "deletionWindow": "From the date of the request",
+    "breachNotice": "To the Commissioner and individuals",
+    "obligations": [
+      "Meaningful consent for collection and use",
+      "Provincial rules (e.g. PHIPA in Ontario) for health data",
+      "Access and correction on request"
+    ],
+    "status": "placeholder",
+    "flag": "🇨🇦",
+    "deletionShort": "30 days",
+    "breachShort": "As soon as feasible"
+  },
+  {
+    "id": "au-privacy",
+    "region": "Australia",
+    "code": "AU",
+    "name": "Privacy Act",
+    "fullName": "Privacy Act, Australian Privacy Principles and Notifiable Data Breaches",
+    "state": "applies",
+    "deletionWindow": "Destroy or de-identify",
+    "breachNotice": "To the OAIC and individuals",
+    "obligations": [
+      "Follow the 13 Australian Privacy Principles",
+      "Notify eligible data breaches (NDB scheme)",
+      "Cross-border disclosure safeguards"
+    ],
+    "status": "placeholder",
+    "flag": "🇦🇺",
+    "deletionShort": "When no longer needed",
+    "breachShort": "Eligible breaches"
+  },
+  {
+    "id": "soc2",
+    "region": "Security standard",
+    "code": "SOC",
+    "name": "SOC 2",
+    "fullName": "SOC 2 Type II (security, availability, confidentiality)",
+    "state": "in_progress",
+    "deletionWindow": "Follows the data retention policy",
+    "breachNotice": "Under the incident response plan",
+    "obligations": [
+      "Access controls and two-step sign-in for admins",
+      "Audit logging of admin actions",
+      "Annual independent audit"
+    ],
+    "status": "placeholder",
+    "flag": null,
+    "deletionShort": "Per policy",
+    "breachShort": "Per plan"
+  }
+]

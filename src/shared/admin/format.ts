@@ -25,8 +25,8 @@ export function inviteHoursLeft(invitedAt: string, nowIso: string = ADMIN_NOW): 
   return 24 - Math.floor((Date.parse(nowIso) - Date.parse(invitedAt)) / 3_600_000);
 }
 
-export const money = (n: number) => (n === 0 ? 'Free' : `$${n.toLocaleString('en-US')}`);
+export const money = (n: number) => (n === 0 ? 'Free' : `$${n.toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 })}`);
 export const count = (n: number) => n.toLocaleString('en-US');
 
 /** What a client is on, without the billing period: Free, Individual or Family. */
-export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.monthly === 0 && plan.yearly === 0 ? 'Free' : plan.kind === 'family' ? 'Family' : 'Individual');
+export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.monthly === 0 ? 'Free' : plan.kind === 'family' ? 'Family' : 'Individual');
