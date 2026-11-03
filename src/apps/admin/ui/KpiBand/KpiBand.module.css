@@ -8,18 +8,17 @@
 .cell { padding: var(--space-8) var(--space-8) var(--space-8) 0; display: grid; gap: var(--space-3); align-content: start; }
 .cell + .cell { padding-inline-start: var(--space-8); border-inline-start: 1px solid var(--color-border-hairline); }
 .label { display: flex; align-items: center; gap: var(--space-2); color: var(--color-ink-secondary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
-.live { inline-size: 6px; block-size: 6px; border-radius: var(--radius-full); background: var(--color-success-ink); }
 .value {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: 56px;
-  line-height: 1;
-  font-weight: var(--weight-regular);
+  font-family: var(--font-ui);
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: var(--weight-medium);
   color: var(--color-ink);
   font-variant-numeric: tabular-nums lining-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
-.note { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); }
+.note { margin: 0; color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-subhead); }
 @container (max-width: 720px) {
   .root { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cell:nth-child(3) { padding-inline-start: 0; border-inline-start: 0; }

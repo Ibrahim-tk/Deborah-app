@@ -21,7 +21,42 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1988-01-01",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 158,
+        "weightKg": 56,
+        "reproductiveStage": "Perimenopause",
+        "ageAtLastPeriod": "47",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Considering",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [
       {
@@ -94,7 +129,41 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1987-02-04",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 165,
+        "weightKg": 67,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Omega-3"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "Penicillin"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "7–8 hours",
+          "exercise": "Gym 3× a week",
+          "diet": "Vegetarian",
+          "stress": "High",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -134,7 +203,39 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1986-03-07",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 172,
+        "weightKg": 78,
+        "reproductiveStage": "Postmenopause",
+        "ageAtLastPeriod": "50",
+        "hysterectomy": "Yes",
+        "ovariesRemoved": "Yes",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "No",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "PCOS"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -167,7 +268,7 @@
     "joined": "2026-07-13",
     "lastActive": "2026-08-05",
     "planId": "individual-yearly",
-    "subscription": "trial",
+    "subscription": "active",
     "account": "active",
     "conversations": 39,
     "health": {
@@ -180,7 +281,42 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1985-04-10",
+        "sexAtBirth": "Female",
+        "gender": "Prefer not to say",
+        "pronouns": "She/Her",
+        "heightCm": 159,
+        "weightKg": 59,
+        "reproductiveStage": "Reproductive years",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "Irregular cycles",
+        "supplements": [
+          "Iron",
+          "B12"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "Migraine"
+        ],
+        "lifestyle": {
+          "sleep": "Varies a lot",
+          "exercise": "Yoga twice a week",
+          "diet": "No particular diet",
+          "stress": "High",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -220,7 +356,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1984-05-13",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 166,
+        "weightKg": 70,
+        "reproductiveStage": "Not sure",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [
       {
@@ -277,7 +448,41 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1983-06-16",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 173,
+        "weightKg": 81,
+        "reproductiveStage": "Perimenopause",
+        "ageAtLastPeriod": "47",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Considering",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Omega-3"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "Penicillin"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "7–8 hours",
+          "exercise": "Gym 3× a week",
+          "diet": "Vegetarian",
+          "stress": "High",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -323,7 +528,39 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1982-07-19",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 160,
+        "weightKg": 62,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "Yes",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -369,7 +606,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1981-08-22",
+        "sexAtBirth": "Female",
+        "gender": "Prefer not to say",
+        "pronouns": "She/Her",
+        "heightCm": 167,
+        "weightKg": 73,
+        "reproductiveStage": "Postmenopause",
+        "ageAtLastPeriod": "50",
+        "hysterectomy": "Yes",
+        "ovariesRemoved": "Yes",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Iron",
+          "B12"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "PCOS"
+        ],
+        "lifestyle": {
+          "sleep": "Varies a lot",
+          "exercise": "Yoga twice a week",
+          "diet": "No particular diet",
+          "stress": "High",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -409,7 +681,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1980-09-25",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 174,
+        "weightKg": 84,
+        "reproductiveStage": "Reproductive years",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "Migraine"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [
       {
@@ -476,7 +783,41 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1979-10-01",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 161,
+        "weightKg": 65,
+        "reproductiveStage": "Not sure",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Omega-3"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "Penicillin"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "7–8 hours",
+          "exercise": "Gym 3× a week",
+          "diet": "Vegetarian",
+          "stress": "High",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -503,7 +844,7 @@
     "joined": "2026-08-13",
     "lastActive": "2026-09-05",
     "planId": "family-monthly",
-    "subscription": "trial",
+    "subscription": "active",
     "account": "active",
     "conversations": 39,
     "health": {
@@ -516,7 +857,39 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1978-11-04",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 168,
+        "weightKg": 76,
+        "reproductiveStage": "Perimenopause",
+        "ageAtLastPeriod": "47",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Considering",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "No",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -568,7 +941,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1977-12-07",
+        "sexAtBirth": "Female",
+        "gender": "Prefer not to say",
+        "pronouns": "They/Them",
+        "heightCm": 175,
+        "weightKg": 57,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Iron",
+          "B12"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "Varies a lot",
+          "exercise": "Yoga twice a week",
+          "diet": "No particular diet",
+          "stress": "High",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -608,7 +1016,42 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1976-01-10",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 162,
+        "weightKg": 68,
+        "reproductiveStage": "Postmenopause",
+        "ageAtLastPeriod": "50",
+        "hysterectomy": "Yes",
+        "ovariesRemoved": "Yes",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "PCOS"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [
       {
@@ -665,7 +1108,41 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1975-02-13",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 169,
+        "weightKg": 79,
+        "reproductiveStage": "Reproductive years",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Omega-3"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "Penicillin"
+        ],
+        "conditions": [
+          "Migraine"
+        ],
+        "lifestyle": {
+          "sleep": "7–8 hours",
+          "exercise": "Gym 3× a week",
+          "diet": "Vegetarian",
+          "stress": "High",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -705,7 +1182,39 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1974-03-16",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 176,
+        "weightKg": 60,
+        "reproductiveStage": "Not sure",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "Trying to conceive",
+        "supplements": [],
+        "genesisGold": "No",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -751,7 +1260,42 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1973-04-19",
+        "sexAtBirth": "Female",
+        "gender": "Prefer not to say",
+        "pronouns": "She/Her",
+        "heightCm": 163,
+        "weightKg": 71,
+        "reproductiveStage": "Perimenopause",
+        "ageAtLastPeriod": "47",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Considering",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Iron",
+          "B12"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "Varies a lot",
+          "exercise": "Yoga twice a week",
+          "diet": "No particular diet",
+          "stress": "High",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -797,7 +1341,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1972-05-22",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 170,
+        "weightKg": 82,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [
       {
@@ -851,7 +1430,7 @@
     "joined": "2026-09-13",
     "lastActive": "2026-09-05",
     "planId": "individual-monthly",
-    "subscription": "trial",
+    "subscription": "active",
     "account": "deactivated",
     "conversations": 8,
     "health": {
@@ -864,7 +1443,41 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1971-06-25",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 177,
+        "weightKg": 63,
+        "reproductiveStage": "Postmenopause",
+        "ageAtLastPeriod": "50",
+        "hysterectomy": "Yes",
+        "ovariesRemoved": "Yes",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Omega-3"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "Penicillin"
+        ],
+        "conditions": [
+          "PCOS"
+        ],
+        "lifestyle": {
+          "sleep": "7–8 hours",
+          "exercise": "Gym 3× a week",
+          "diet": "Vegetarian",
+          "stress": "High",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -904,7 +1517,39 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1970-07-01",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 164,
+        "weightKg": 74,
+        "reproductiveStage": "Reproductive years",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "Trying to conceive",
+        "supplements": [],
+        "genesisGold": "Yes",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "Migraine"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -950,7 +1595,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1969-08-04",
+        "sexAtBirth": "Female",
+        "gender": "Prefer not to say",
+        "pronouns": "She/Her",
+        "heightCm": 171,
+        "weightKg": 85,
+        "reproductiveStage": "Not sure",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "Irregular cycles",
+        "supplements": [
+          "Iron",
+          "B12"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "Varies a lot",
+          "exercise": "Yoga twice a week",
+          "diet": "No particular diet",
+          "stress": "High",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -990,7 +1670,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1988-09-07",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 158,
+        "weightKg": 66,
+        "reproductiveStage": "Perimenopause",
+        "ageAtLastPeriod": "47",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Considering",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [
       {
@@ -1053,7 +1768,41 @@
       "medications": [
         "Levothyroxine (as reported)"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1987-10-10",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 165,
+        "weightKg": 77,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Omega-3"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "Penicillin"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "7–8 hours",
+          "exercise": "Gym 3× a week",
+          "diet": "Vegetarian",
+          "stress": "High",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -1093,7 +1842,39 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1986-11-13",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 172,
+        "weightKg": 58,
+        "reproductiveStage": "Postmenopause",
+        "ageAtLastPeriod": "50",
+        "hysterectomy": "Yes",
+        "ovariesRemoved": "Yes",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "No",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "PCOS"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "None",
+          "smoking": "Never"
+        }
+      }
     },
     "dependents": [],
     "documents": [
@@ -1139,7 +1920,42 @@
       "medications": [
         "Not provided"
       ],
-      "status": "placeholder"
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1985-12-16",
+        "sexAtBirth": "Female",
+        "gender": "Prefer not to say",
+        "pronouns": "They/Them",
+        "heightCm": 159,
+        "weightKg": 69,
+        "reproductiveStage": "Reproductive years",
+        "ageAtLastPeriod": null,
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "No",
+        "hrtType": null,
+        "fertilityConcerns": "Irregular cycles",
+        "supplements": [
+          "Iron",
+          "B12"
+        ],
+        "genesisGold": "No",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "Migraine"
+        ],
+        "lifestyle": {
+          "sleep": "Varies a lot",
+          "exercise": "Yoga twice a week",
+          "diet": "No particular diet",
+          "stress": "High",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
     },
     "dependents": [],
     "documents": [

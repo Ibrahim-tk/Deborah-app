@@ -1,5 +1,6 @@
 /** Admin formatting helpers (non-visual). */
 import { ADMIN_NOW } from './store';
+import type { Plan } from './types';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -26,3 +27,6 @@ export function inviteHoursLeft(invitedAt: string, nowIso: string = ADMIN_NOW): 
 
 export const money = (n: number) => (n === 0 ? 'Free' : `$${n.toLocaleString('en-US')}`);
 export const count = (n: number) => n.toLocaleString('en-US');
+
+/** What a client is on, without the billing period: Free, Individual or Family. */
+export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.monthly === 0 && plan.yearly === 0 ? 'Free' : plan.kind === 'family' ? 'Family' : 'Individual');

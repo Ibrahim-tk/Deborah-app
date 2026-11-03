@@ -1,5 +1,5 @@
 /** @ui KpiBand — the dashboard's headline figures on one hairline band (not a row of cards).
- *  Large serif numbers; an optional live marker shows the figure is updating. */
+ *  Large sans numbers (no serif inside cards). Live figures update quietly, with no marker. */
 import styles from './KpiBand.module.css';
 
 export interface Kpi {
@@ -17,7 +17,6 @@ export function KpiBand({ items }: { items: Kpi[] }) {
         <div key={k.label} className={styles.cell}>
           <dt className={styles.label}>
             {k.label}
-            {k.live && <span className={styles.live} title="Updates live" aria-label="updates live" />}
           </dt>
           <dd className={styles.value}>{k.value}</dd>
           {k.note && <dd className={styles.note}>{k.note}</dd>}

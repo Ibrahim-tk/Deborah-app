@@ -6,7 +6,6 @@
     "monthly": 0,
     "yearly": 0,
     "freeQuestions": 3,
-    "trialDays": 0,
     "maxProfiles": 1,
     "features": {
       "Unlimited questions": false,
@@ -25,7 +24,6 @@
     "monthly": 29,
     "yearly": 290,
     "freeQuestions": 3,
-    "trialDays": 7,
     "maxProfiles": 1,
     "features": {
       "Unlimited questions": true,
@@ -34,7 +32,7 @@
       "Visit briefs": true,
       "Book Deborah": true
     },
-    "rules": "Seven-day trial converts to monthly unless cancelled.",
+    "rules": "Billed monthly. Cancel any time.",
     "active": true
   },
   {
@@ -44,7 +42,6 @@
     "monthly": 0,
     "yearly": 290,
     "freeQuestions": 3,
-    "trialDays": 7,
     "maxProfiles": 1,
     "features": {
       "Unlimited questions": true,
@@ -63,7 +60,6 @@
     "monthly": 49,
     "yearly": 490,
     "freeQuestions": 3,
-    "trialDays": 7,
     "maxProfiles": 5,
     "features": {
       "Unlimited questions": true,
@@ -82,7 +78,6 @@
     "monthly": 99,
     "yearly": 990,
     "freeQuestions": 0,
-    "trialDays": 0,
     "maxProfiles": 10,
     "features": {
       "Unlimited questions": true,

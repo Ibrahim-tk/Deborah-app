@@ -22,7 +22,7 @@ export default function SignIn() {
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !password) return setError('Enter your email and password.');
+    if (!email.trim() || !password) return setError('Enter your work email and password to continue.');
     setError('');
     // Prototype: any password passes. Real auth is out of scope (CLAUDE.md §1).
     run(() => {
@@ -32,9 +32,9 @@ export default function SignIn() {
   };
 
   return (
-    <AuthLayout title="Sign in">
+    <AuthLayout title="Welcome back" intro="Sign in with the work email your invite was sent to.">
       <form className={styles.form} onSubmit={submit} noValidate>
-        <Input label="Email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input label="Work email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input
           label="Password"
           type="password"
@@ -44,7 +44,7 @@ export default function SignIn() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button type="submit" fullWidth loading={busy}>Sign in</Button>
-        <Button type="button" variant="link" onClick={() => setAuth('forgot')}>Forgot password?</Button>
+        <Button type="button" variant="link" className={styles.link} onClick={() => setAuth('forgot')}>Forgot your password?</Button>
       </form>
     </AuthLayout>
   );

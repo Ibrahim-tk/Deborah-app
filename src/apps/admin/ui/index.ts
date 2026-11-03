@@ -11,6 +11,7 @@ export * from './Segmented';
 export * from './Toggle';
 export * from './Menu';
 export * from './Dialog';
+export * from './Drawer';
 export * from './Tooltip';
 export * from './CodeInput';
 export * from './Toast';

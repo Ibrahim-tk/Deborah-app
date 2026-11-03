@@ -6,11 +6,11 @@
  * @xref    web: none (admin only)
  */
 import { adminMetrics, count, useAdminStore } from '@shared/admin';
-import { Button, DonutChart, KeyValueList, KpiBand, LineChart, StatusText } from '@admin/ui';
+import { Button, DonutChart, KpiBand, LineChart } from '@admin/ui';
 import { AdminPage, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
-import { useSim } from '@admin/hooks/useSim';
 import { PlansTable } from './parts/PlansTable';
+import { StripeCard } from './parts/StripeCard';
 import styles from './Subscriptions.module.css';
 
 const growth = adminMetrics.subscriptionGrowth;
@@ -21,8 +21,8 @@ const churnRate = (growth.at(-1)!.churned / ACTIVE) * 100;
 export default function Subscriptions() {
   const clients = useAdminStore((s) => s.clients);
   const plans = useAdminStore((s) => s.plans);
-  const push = useAdminNav((s) => s.push);
-  const stripe = useSim();
+  const openDrawer = useAdminNav((s) => s.openDrawer);
+  const stripeOn = useAdminStore((s) => s.stripe.status === 'connected');
 
   // Seeded clients set the mix; the headline total scales it.
   const paid = clients.filter((c) => c.planId !== 'free');
@@ -34,7 +34,7 @@ export default function Subscriptions() {
     .filter((d) => d.value > 0);
 
   return (
-    <AdminPage title="Subscriptions" action={<Button leadingIcon="plus" onClick={() => push({ id: 'plan', planId: null })}>New plan</Button>}>
+    <AdminPage title="Subscriptions" action={<Button leadingIcon="plus" onClick={() => openDrawer({ kind: 'plan', id: null })}>New plan</Button>}>
       <KpiBand
         items={[
           { label: 'Active subscriptions', value: count(ACTIVE) },
@@ -59,22 +59,11 @@ export default function Subscriptions() {
         </Section>
       </div>
       <Section title="Plans">
+        {!stripeOn && <p className={styles.notice}>Payments are off until Stripe is connected. Plans show in the app but can't be bought yet.</p>}
         <PlansTable subscribers={share} />
       </Section>
-      <Section title="Payments" surface>
-        <div className={styles.payments}>
-          <KeyValueList
-            items={[
-              { label: 'Provider', value: 'Stripe' },
-              { label: 'Connection', value: <StatusText tone="success">Connected</StatusText> },
-              { label: 'Mode', value: 'Test' },
-              { label: 'Last event received', value: '2 minutes ago' },
-            ]}
-          />
-          <Button variant="secondary" loading={stripe.busy} onClick={() => stripe.run(() => undefined, 'Connection is working', 1200)}>
-            Check connection
-          </Button>
-        </div>
+      <Section title="Payments">
+        <StripeCard />
       </Section>
     </AdminPage>
   );

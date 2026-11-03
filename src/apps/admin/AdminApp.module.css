@@ -1,2 +1,14 @@
-.root { position: absolute; inset: 0; overflow: hidden; --safe-top: 0px; --safe-bottom: 0px; }
+/* The transform makes this box the containing block for position: fixed descendants, so the drawer, dialogs
+ * and scrims fill the admin stage instead of the browser window (they no longer slide under the prototype nav). */
+.root { position: absolute; inset: 0; overflow: hidden; transform: translateZ(0); --safe-top: 0px; --safe-bottom: 0px; }
 .toast { position: absolute; inset-block-end: var(--space-8); inset-inline: 0; display: flex; justify-content: center; z-index: var(--z-overlay); pointer-events: none; }
+/* Admin-only: a quieter canvas. The parchment token mixed toward paper, so long working sessions
+ * sit on a near-white ground while tables and panels (white surface) still separate from it.
+ * Two classes outrank the single `.web-root` rule that defines --color-canvas. */
+:global(.web-root).root {
+  --color-canvas: color-mix(in srgb, var(--gold-50) 40%, var(--white));
+  background: var(--color-canvas);
+  /* Lighter strokes for the whole console: the hairline and control tokens mixed toward paper. */
+  --color-border-hairline: color-mix(in srgb, var(--purple-100) 55%, var(--white));
+  --color-border-control: color-mix(in srgb, var(--purple-300) 55%, var(--white));
+}

@@ -37,10 +37,10 @@ const NAME_PATTERN = /^[\p{L}][\p{L}\s'’-]*$/u;
 const CONFIRM_MS = 280;
 // Finish, three beats on the same screen (no M-1.9 sheet): 1 wind starts and the question blows away with it ·
 // 2 the wind ends and the tree + its particles fade (GenesisTree .gone) · 3 Oracle's welcome reveals on a clean backdrop.
-const WIND_MS = 8000;
-const CLEAR_MS = 400;
+const WIND_MS = 2600; // welcome right after the visible dissolve (~2.2s in): no dead air
+const CLEAR_MS = 200;
 // The question fades up and is removed from the screen at this point of the wind.
-const BLOW_MS = 1200;
+const BLOW_MS = 1400; // matches .blowAway (100ms delay + 1300ms)
 
 export default function HealthBasics() {
   const { presentSheet, pop } = useNav();
@@ -60,7 +60,8 @@ export default function HealthBasics() {
   // Date of birth already given on the age step (M-1.13): Myself skips it here.
   const accountDob = useAppStore((s) => s.accountDob);
   const steps = visibleSteps(accountDob && !forSomeoneElse(answers) ? { ...answers, birthDate: accountDob } : answers)
-    .filter((s) => !(accountDob && s.key === 'birthDate' && !forSomeoneElse(answers)));
+    // DOB is asked before sign-up (age step), so Myself never sees it here; it stays for someone else (their DOB).
+    .filter((s) => !(s.key === 'birthDate' && !forSomeoneElse(answers)));
   // Back/edit can shrink the visible tree (e.g. leave peri → drop HRT); clamp for render.
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];
@@ -156,7 +157,8 @@ export default function HealthBasics() {
       <header className={styles.header}>
         <span className={styles.backSlot}>
           {/* On the first question, back leaves the form for the screen that opened it. */}
-          <GlassButton icon="back" aria-label={at > 0 || consentOpen ? 'Previous question' : 'Back'} onClick={goBack} />
+          {/* No back once the profile is finished (wind → Deborah's welcome). */}
+          {!done && <GlassButton icon="back" aria-label={at > 0 || consentOpen ? 'Previous question' : 'Back'} onClick={goBack} />}
         </span>
       </header>
       {/* The progress indicator: a flowering tree that grows with every answer; its transparent background sits straight on the backdrop. */}
@@ -171,8 +173,8 @@ export default function HealthBasics() {
       {done?.phase === 'welcome' && <WelcomeReveal profileId={done.profileId} />}
       {!consentOpen && (!done || done.phase === 'blow') && (
         <>
-          <div className={`${styles.body} ${done?.phase === 'blow' ? styles.blowAway : ''}`}>
-            <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''}`}>
+          <div className={styles.body}>
+            <div key={shown.key} className={`${styles.step} ${leaving ? styles.stepLeaving : ''} ${done?.phase === 'blow' ? styles.blowAway : ''}`}>
               <h1 ref={titleRef} className={`${styles.title} ${styles.heading}`}>{titleFor(shown, answers)}</h1>
               <StepBody step={shown} answers={answers} set={set} advance={advance} />
             </div>

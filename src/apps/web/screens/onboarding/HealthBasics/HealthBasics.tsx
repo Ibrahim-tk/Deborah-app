@@ -50,7 +50,8 @@ export default function HealthBasics() {
   // Date of birth already given on the age step (W-1.13): Myself skips it here.
   const accountDob = useAppStore((s) => s.accountDob);
   const steps = visibleSteps(accountDob && !forSomeoneElse(answers) ? { ...answers, birthDate: accountDob } : answers)
-    .filter((s) => !(accountDob && s.key === 'birthDate' && !forSomeoneElse(answers)));
+    // DOB is asked before sign-up (age step), so Myself never sees it here; it stays for someone else (their DOB).
+    .filter((s) => !(s.key === 'birthDate' && !forSomeoneElse(answers)));
   // Back/edit can shrink the visible tree (e.g. leave peri → drop HRT); clamp for render.
   const at = Math.min(i, Math.max(0, steps.length - 1));
   const step = steps[at];

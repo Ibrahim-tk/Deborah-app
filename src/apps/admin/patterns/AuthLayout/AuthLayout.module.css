@@ -1,5 +1,8 @@
 .root { container-type: inline-size; block-size: 100%; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
 .brand {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -8,6 +11,32 @@
   background: var(--color-surface-signature);
   color: var(--color-ink-on-signature);
 }
+/* Artwork: the brand's dusk-mountains backdrop, with a plum wash that deepens toward the foot so the
+ * cream wordmark and line keep ≥ 7:1 against it. */
+.brand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: url('/images/backdrops/dusk-mountains.webp') center / cover no-repeat;
+  animation: settle 1.6s var(--ease-ios) both;
+}
+.brand::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-surface-signature) 15%, transparent) 0%,
+    color-mix(in srgb, var(--color-surface-signature) 35%, transparent) 45%,
+    color-mix(in srgb, var(--color-surface-signature) 88%, transparent) 78%,
+    var(--color-surface-signature) 100%
+  );
+}
+/* One slow settle on load: the scene eases from a slight zoom. */
+@keyframes settle { from { transform: scale(1.06); opacity: 0.6; } }
+@media (prefers-reduced-motion: reduce) { .brand::before { animation: none; } }
 .logo { filter: brightness(0) invert(0.96) sepia(0.2); margin-block-end: auto; }
 .brandName { margin: 0; font-family: var(--font-display); font-size: 48px; line-height: 1.05; }
 .brandLine { margin: 0; max-inline-size: 32ch; font-size: var(--fs-callout); line-height: var(--lh-callout); color: rgb(253 249 241 / 0.86); }

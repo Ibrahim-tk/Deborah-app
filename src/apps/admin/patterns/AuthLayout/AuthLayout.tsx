@@ -10,7 +10,7 @@ export function AuthLayout({ title, intro, children }: { title: string; intro?: 
       <div className={styles.brand}>
         <img src={LOGO_SRC} alt="" width={48} height={48} className={styles.logo} />
         <p className={styles.brandName}>Oracle Admin</p>
-        <p className={styles.brandLine}>Deborah's team console for clients, cases and compliance.</p>
+        <p className={styles.brandLine}>Client management, case review and compliance for Your Oracle Clinician.</p>
       </div>
       <main className={styles.formCol}>
         <div className={styles.form}>

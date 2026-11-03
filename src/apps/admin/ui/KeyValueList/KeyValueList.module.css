@@ -1,7 +1,10 @@
 .root { container-type: inline-size; display: grid; gap: var(--space-3); margin: 0; }
-.row { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: var(--space-4); }
-.label { color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
-.value { margin: 0; color: var(--color-ink); font-size: var(--fs-callout); line-height: var(--lh-callout); overflow-wrap: anywhere; }
+/* Every row is the same height and centres label and value, so rows with a pill or copy button line up
+ * with plain-text rows. */
+.row { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); align-items: center; gap: var(--space-4); min-block-size: 28px; }
+/* Labels step back (light purple) so the values carry the row. */
+.label { color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.value { margin: 0; display: flex; align-items: center; min-inline-size: 0; color: var(--color-ink); font-size: var(--fs-callout); line-height: var(--lh-callout); overflow-wrap: anywhere; }
 @container (max-width: 420px) {
   .row { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
 }

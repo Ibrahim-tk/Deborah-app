@@ -62,8 +62,8 @@ const policies = [
   // Apps may reach the shell only through the device API (useDevice).
   { from: { element: { type: 'mobile-*' } }, allow: deviceApi },
   { from: { element: { type: 'web-*' } }, allow: deviceApi },
-  // Admin is derived from web: it may borrow web primitives and tokens, one way only.
-  { from: { element: { type: 'admin-*' } }, allow: to('web-ui', 'web-styles') },
+  // Admin is derived from web: it may borrow web primitives, patterns (e.g. the chat bubble) and tokens, one way only.
+  { from: { element: { type: 'admin-*' } }, allow: to('web-ui', 'web-patterns', 'web-styles') },
 ];
 
 export default tseslint.config(

@@ -59,13 +59,14 @@ const limbPaths=[
   [V(8.4,10.3,.5),V(8.1,11.8,.7),V(7.6,13.0,.6)]
 ];
 const strands=[...Array(NS)].map((_,i)=>({i,top:braidPoint(1,thetaAt(1,i),orbitAt(1))})).sort((a,b)=>a.top.x-b.top.x);
-const G1_END=.2,TRUNK_EXT=5;let braidFracSum=0;
+const G1_END=.2,TRUNK_EXT=0; /* no trunk extension: the tree grows as one natural piece */let braidFracSum=0;
 strands.forEach(({i},rank)=>{
   const pts=[],radii=[];
   const spinePts=[];
   for(let k=0;k<=BRAID_N;k++){const s=k/BRAID_N;pts.push(braidPoint(s,thetaAt(s,i),orbitAt(s)));spinePts.push(spine.getPointAt(s));radii.push(strandRAt(s))}
-  /* Intake: extend the trunk straight down by TRUNK_EXT so the base can sit at the screen bottom. */
-  {const p0=pts[0],s0=spinePts[0],r0=radii[0];for(let k=1;k<=8;k++){const d=TRUNK_EXT*k/8;pts.unshift(V(p0.x,p0.y-d,p0.z));spinePts.unshift(V(s0.x,s0.y-d,s0.z));radii.unshift(r0)}}
+  /* Intake: lengthen the trunk as ONE piece — stretch the braid downward (base lowered by TRUNK_EXT, top fixed), so the
+     strands keep twisting all the way to the ground instead of ending on a straight patched-on stub. */
+  for(let k=0;k<=BRAID_N;k++){const d=TRUNK_EXT*(1-k/BRAID_N);pts[k].y-=d;spinePts[k].y-=d}
   const braidLen=arcLengths(pts).at(-1),top=pts.at(-1),dir=spine.getTangentAt(1).lerp(top.clone().sub(pts.at(-3)).normalize(),.3).normalize(),shift=top.clone().sub(spine.getPointAt(1));
   const limb=new THREE.CatmullRomCurve3([top,top.clone().addScaledVector(dir,.9),...limbPaths[rank]],false,'centripetal');
   const n=Math.ceil(limb.getLength()/.12);
@@ -153,6 +154,12 @@ branches.forEach(b=>{if(!b.parent)return;const P=b.parent,ov=jointOverrides[b.in
   else{b.pts[0]=b.attach.clone().addScaledVector(AWAY,pr*1.75*(ov.sink??1));b.collar=true}
   b.s=arcLengths(b.pts);b.L=b.s.at(-1);
 });
+/* Mobile: a taller trunk, grown as one piece — stretch everything below the crown junction (spine top y≈8.7) by
+   TRUNK_K and lift everything above by the same amount, before leaves/flowers/sand are placed on the skeleton. */
+const TRUNK_Y0=8.7,TRUNK_B=-.8,TRUNK_K=1.5,TRUNK_ADD=(TRUNK_Y0-TRUNK_B)*(TRUNK_K-1);
+const TRUNK_F=y=>y<TRUNK_Y0?TRUNK_B+(y-TRUNK_B)*TRUNK_K:y+TRUNK_ADD,TRUNK_M=q=>{if(q)q.y=TRUNK_F(q.y);return q};
+{const m=TRUNK_M;
+ branches.forEach(b=>{b.pts.forEach(m);b.spinePts?.forEach(m);m(b.attach);b.s=arcLengths(b.pts);b.L=b.s.at(-1);b.spineB=null})}
 /* Keep the whole skeleton finished by the end of fine branching */
 const lastEnd=Math.max(...branches.map(b=>b.end)),SCALE=lastEnd>.62?(.62-.12)/(lastEnd-.12):1;
 branches.forEach(b=>{if(!b.braid){b.start=.12+(b.start-.12)*SCALE;b.end=.12+(b.end-.12)*SCALE}});
@@ -209,9 +216,9 @@ function addCollars(){branches.forEach(b=>{if(!b.collar)return;const ov=jointOve
   wood.add(pts,radii,{bi:b.index,sides:Math.max(6,b.sides+2),start:b.start,end:b.start+(b.end-b.start)*.25,taper:.05,thickEnd:b.subEnd,braid:false})})}
 addCollars();
 branches.forEach(b=>wood.add(b.pts,b.radii,{twig:b.gen>=5,cont:!!b.continues,bi:b.index,spinePts:b.spinePts,sides:b.sides,start:b.start,end:b.end,taper:b.taper,thickEnd:b.subEnd,braid:b.braid}));
-{const pts=[],radii=[];for(let k=0;k<=80;k++){const s=k/80;pts.push(spine.getPointAt(s));radii.push(Math.max(.01,.56*(1+.35*Math.exp(-s*12))*(1-.2*s)*(1-.6*smooth((s-.95)/.05))))}
+{const pts=[],radii=[];for(let k=0;k<=80;k++){const s=k/80;pts.push(TRUNK_M(spine.getPointAt(s)));radii.push(Math.max(.01,.56*(1+.35*Math.exp(-s*12))*(1-.2*s)*(1-.6*smooth((s-.95)/.05))))}
  wood.add(pts,radii,{sides:14,start:0,end:G1_END,taper:.6,thickEnd:.62,braid:true,arcMap:u=>u*BRAID_FRAC*.97});}
-for(let i=0;i<NS;i++){const pts=[],radii=[],sps=[];for(let k=0;k<=BRAID_N;k++){const s=k/BRAID_N*.96;pts.push(braidPoint(s,thetaAt(s,i)+Math.PI/NS,orbitAt(s)*(1.06-.22*s)));sps.push(spine.getPointAt(s));radii.push(.04*(1+.4*Math.exp(-s*9)))}
+for(let i=0;i<NS;i++){const pts=[],radii=[],sps=[];for(let k=0;k<=BRAID_N;k++){const s=k/BRAID_N*.96;pts.push(TRUNK_M(braidPoint(s,thetaAt(s,i)+Math.PI/NS,orbitAt(s)*(1.06-.22*s))));sps.push(TRUNK_M(spine.getPointAt(s)));radii.push(.04*(1+.4*Math.exp(-s*9)))}
  veins.add(pts,radii,{spinePts:sps,sides:6,start:0,end:G1_END,taper:.4,thickEnd:.62,braid:true,arcMap:u=>u*BRAID_FRAC*.96});}
 
 /* ---------- renderer & scene ---------- */
@@ -234,6 +241,8 @@ uniform sampler2D uBT;uniform vec3 uMerge,uCap;uniform float uSettle,uTreeH,uLea
 vec3 sway(vec3 p){float hs=clamp(p.y/max(uTreeH,1.),0.,1.);vec3 st=vec3(uSettle*hs*hs*uTreeH*.025-uLean*hs*hs*uTreeH*.034,-uLean*hs*hs*hs*uTreeH*.012,uSettle*hs*hs*uTreeH*.01+uLean*hs*hs*uTreeH*.012);float h=max(p.y-4.5,0.)/11.;float a=uSway*h*h;
  return st+vec3(sin(uClock*1.05+p.x*.33+p.y*.17)*a*.34+sin(uClock*2.4+p.x*1.6+p.z)*a*.05,sin(uClock*1.6+p.x*.5)*a*.07,cos(uClock*.85+p.y*.3)*a*.16);}
 float windSec(float tt){return (tt-.86)/.0175;}
+/* intake: one top-down front for wood dissolve, sand and petals (starts 1.4s into the wind, sweeps down in 3.5s) */
+#define WIND_FRONT(y) (1.4+3.5*clamp((${(18+TRUNK_ADD).toFixed(2)}-(y))/${(20+TRUNK_ADD).toFixed(2)},0.,1.))
 float gust(float s){float w=s/8.;return .22*smoothstep(0.,.15,w)+exp(-pow((w-.36)/.11,2.))+.45*exp(-pow((w-.64)/.09,2.))+.12*smoothstep(.72,1.,w);}
 float gustInt(float a,float b){float acc=0.;for(int i=0;i<10;i++){acc+=gust(mix(a,b,(float(i)+.5)/10.));}return acc*(b-a)/10.;}
 vec3 curlF(vec3 p,float tm){
@@ -251,10 +260,11 @@ vec3 windMotion(vec3 p0,float relSec,float m,float seed,float life,out float alp
  float k=1.5*light,ty=tau-(1.-exp(-k*tau))/max(k,.05);
  d.y+=(.75*light*(.35+gust(now))-1.05*m)*ty*.55;
  vec3 q=p0*.3+d*.25+vec3(seed*7.,seed*3.,seed*5.);
- d+=curlF(q,tau*.8+seed*3.)*min(tau,3.5)*.85*(.45+.55*light);
+ d+=curlF(q,tau*.8+seed*3.)*min(tau,2.)*.3*(.45+.55*light);/* intake: less whirl so blossoms don't pool mid-screen */
+ d.x-=tau*tau*1.5*(.6+.4*light);/* intake: steady, accelerating carry off the left edge */
  alpha=1.-smoothstep(life*.6,life,tau);
  return d;}
-float dissolveFront(){return 18.-20.*clamp((windSec(uT)-4.4)/3.,0.,1.);}
+float dissolveFront(){return ${(18+TRUNK_ADD).toFixed(2)}-${(20+TRUNK_ADD).toFixed(2)}*clamp((windSec(uT)-1.4)/3.5,0.,1.);}
 float litAt(float y){return uGlow*(1.-smoothstep(uFront-.9,uFront+.35,y));}
 float hash3(vec3 p){return fract(sin(dot(p,vec3(12.9898,78.233,37.719)))*43758.5453);}
 float vnoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -362,7 +372,7 @@ vOpen=open;vInner=aData.z;vPetal=uv.y;vPetalU=uv.x;
 ${kind==='flower'?'float r=length(position.xy);transformed.xy*=mix(.25,1.,open);transformed.z+=(1.-open)*r*1.1;':''}
 vec3 ip=(instanceMatrix*vec4(0.,0.,0.,1.)).xyz;ip=xf.xyz+xf.w*ip;
 float score=clamp(ip.y/17.,0.,1.)*.7+clamp((ip.x+1.)/11.,0.,1.)*.3;
-float relSec=1.4+(1.-score)*3.6+fract(aData.w*7.13)*1.2;
+float relSec=WIND_FRONT(ip.y)+fract(aData.w*7.13)*.25;/* intake: petals leave with the sand, top-down */
 float mass=mix(${kind==='leaf'?'.7,1.9':'.3,1.5'},fract(aData.w*13.7)),life=mix(2.4,5.2,fract(aData.w*29.3));
 float alpha,tau;vec3 wd=windMotion(ip,relSec,mass,aData.w,life,alpha,tau);
 float flut=uFlutter*(1.-step(.0001,tau));
@@ -394,7 +404,7 @@ function pointsMaterial(kind){
   return new THREE.ShaderMaterial({uniforms:{...U,uPx:{value:100}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
     vertexShader:`attribute vec2 aRnd;varying float vA;uniform float uPx;${SWAY}
 void main(){vec3 p=position;float lit=litAt(p.y)*step(p.y,dissolveFront());
- ${kind==='spark'?`float tw=.5+.5*sin(uClock*(2.+aRnd.x*5.)+aRnd.y*30.);p.y+=fract(uClock*.08+aRnd.x)*.5;vA=lit*tw;float size=(.05+aRnd.y*.09);`
+ ${kind==='spark'?`float tw=.5+.5*sin(uClock*(2.+aRnd.x*5.)+aRnd.y*30.);p.y+=fract(uClock*.08+aRnd.x)*.5;vA=lit*tw;float size=(.0269+aRnd.y*.0504);/* mobile: fine sparks (1.4x of 1/3 original) */`
  :`vA=uCanopyGlow*(1.-smoothstep(uFront-1.5,uFront+.5,p.y))*.022*step(p.y,dissolveFront()-1.);float size=1.1+aRnd.y*1.4;`}
  vec4 mv=modelViewMatrix*vec4(p+sway(p),1.);gl_Position=projectionMatrix*mv;gl_PointSize=size*uPx;}`,
     fragmentShader:`varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=${kind==='spark'?'smoothstep(.5,.05,d)':'pow(smoothstep(.5,0.,d),2.2)'};
@@ -431,7 +441,7 @@ function segD(p,sg,xy){const ax=sg.a.x,ay=sg.a.y,az=xy?0:sg.a.z,bx=sg.b.x-ax,by=
 /* 3-5 openings in the lower and middle crown where main limbs read as clean wood */
 const OPEN=[];
 {const cands=MAINSEG.filter(sg=>sg.b.y>7&&sg.b.y<11.6&&sg.r<.5).map(sg=>sg.b).sort(()=>rnd()-.5);
- for(const c of cands){if(OPEN.length>=2)break;if(Math.hypot(c.x-8.7,c.y-8.8)>3.4&&OPEN.every(o=>Math.hypot(o.x-c.x,o.y-c.y)>2.2))OPEN.push(c)}}
+ for(const c of cands){if(OPEN.length>=0)break;/* intake: no forced bare 'openings' in the central crown */if(Math.hypot(c.x-8.7,c.y-8.8)>3.4&&OPEN.every(o=>Math.hypot(o.x-c.x,o.y-c.y)>2.2))OPEN.push(c)}}
 const OPENSEG=MAINSEG.filter(sg=>OPEN.some(o=>Math.hypot(sg.b.x-o.x,sg.b.y-o.y)<1.1));
 function blocked(p,pad){
   for(const sg of MAINSEG){if(Math.abs(sg.b.y-p.y)>2||Math.abs(sg.b.x-p.x)>2)continue;if(segD(p,sg,false)<1.5*sg.r+pad)return true}
@@ -454,20 +464,29 @@ function stalk(from,to,b,birth){PENDING_STALKS.push({from,to,b,birth,pid:PUFFS.l
 function buildStalk(from,to,b,birth){const pts=[],radii=[];for(let i=0;i<=3;i++){pts.push(from.clone().lerp(to,i/3));radii.push(lerp(.022,.012,i/3))}
   stalks.add(pts,radii,{bi:b.index,sides:4,start:birth-.035,end:birth-.005,taper:.02,thickEnd:birth,braid:false,twig:true})}
 /* second order: alternating upper / outer clusters along the branch, sparse at the base, full toward the end */
-for(const b of branches.filter(b=>b.gen===3||b.gen===4)){
-  let d=.15*b.L,k=0;
+/* Intake: gen 2 (the central limbs) also gets second-order clusters — sparser, smaller and kept through the lobe
+   filter (fill), so the middle of the crown is clothed while wood still shows between clumps. */
+for(const b of branches.filter(b=>b.gen>=2&&b.gen<=4)){
+  const g2=b.gen===2;let d=(g2?.25:.15)*b.L,k=0;
   while(d<b.L*.97){
     const u=d/b.L,Rc=rr(.2,.27)*(.85+.3*u),sm=sampleAt(b,u),t=sm.t;
-    if(rnd()<lerp(.7,1,u)*Math.min(1,clumpNoise(sm.p)+.2)){
+    if(rnd()<lerp(.7,1,u)*Math.min(1,clumpNoise(sm.p)+.2)*(g2?.85:1)){
       const up=V(0,1,0).addScaledVector(t,-t.y).normalize(),outw=sm.p.clone().sub(V(5.6,10.6,0));outw.addScaledVector(t,-outw.dot(t));outw.normalize();
       const side=(k%2?up.clone().lerp(outw,.3):outw.clone().lerp(up,.35));side.z=Math.min(side.z,.12);if(side.y<.05)side.y=.05;side.normalize();
       const stalkLen=Rc*rr(.5,1),base=sm.p.clone().addScaledVector(side,sm.r*.6),tipS=sm.p.clone().addScaledVector(side,sm.r+stalkLen),c=tipS.clone().addScaledVector(side,Rc*.55);
       if(!blocked(c,Rc*.6)){const birth=Math.min(.7,Math.max(b.end+.04,.6)+rr(0,.06));
-        if(puff(c,side,Rc,Math.round(rr(18,24)*clumpNoise(c)),birth,b,tipS)>3){stalk(base,tipS,b,birth);k++}}
+        if(puff(c,side,Rc,Math.round((g2?rr(14,20):rr(18,24))*clumpNoise(c)),birth,b,tipS)>3){if(g2)PUFFS[PUFFS.length-1].fill=true;stalk(base,tipS,b,birth);k++}}
     }
-    d+=2*Rc*(1+lerp(1.1,.55,u));
+    d+=2*Rc*(1+lerp(1.1,.55,u))*(g2?1.2:1);
   }
 }
+/* Intake: soft fill for the bare 'triangle' above the main fork — scan the region and drop a small, low-density puff
+   only where no blossom sits within reach, so it closes the hole without hiding the limbs. */
+{const oy=TRUNK_ADD,gb=branches.find(b=>b.gen===2)||branches[0],R0=.5;
+  for(let y=9.4;y<=14.2;y+=.32)/* taller, denser fill (as web) */for(let x=3.6;x<=9.6;x+=.32){
+    const c=V(x+rr(-.15,.15),y+oy+rr(-.15,.15),rr(-.2,.4));if(Math.hypot((c.x-6.7)/1.45,(c.y-oy-11.6)/1.45)>2.6/* reaches further into the central-left */)continue;
+    if(flowers.some(f=>(f.p.x-c.x)**2+(f.p.y-c.y)**2<.06)||blocked(c,.04))continue;/* screen-space (x,y) gap test */
+    if(puff(c,V(rr(-.3,.3),.6,.6).normalize(),R0,Math.round(rr(55,65))/* 2x centre fill */,.64+rr(0,.05),gb,c)>0)PUFFS[PUFFS.length-1].fill=true}}
 /* junction spurs: a few short stalks with blossom clumps off the main limbs, so the fork area isn't bald */
 for(const b of branches.filter(b=>b.gen<=3)){
   const a0=b.braid?b.braidFrac+.02:.05,a1=b.braid?1:(b.gen===3?.6:.85);
@@ -550,7 +569,7 @@ const stalkMesh=new THREE.Mesh(stalks.geometry(),woodMat);stalkMesh.frustumCulle
 /* Leaves: one ruffled purple leaf rides every growing tip, then folds away as the tip divides */
 const LEAF=[0,.62,.55,.5,.44,.38,.33].map(v=>v*1.15);let PUMP=0,MALL=1,TWON=1;
 /* twirl: new growth above the shoot height is braided; the shoot itself stays a single stem */
-const H0=(()=>{const gs=smooth(.05/G1_END);return spine.getPointAt(Math.min(1,gs/BRAID_FRAC)).y})();
+const H0=(()=>{const gs=smooth(.05/G1_END);const y=spine.getPointAt(Math.min(1,gs/BRAID_FRAC)).y;return y<TRUNK_Y0?TRUNK_B+(y-TRUNK_B)*TRUNK_K:y+TRUNK_ADD})();/* taller-trunk remap */
 const mergeAt=(y,ay,a,bf)=>Math.max(MALL,TWON*smooth((y-H0)/.6))*lerp(lerp(.62,1,Math.sqrt(ay)),1,smooth((a-bf*.88)/(bf*.12)));
 const CC=V(5.6,10.6,0);
 const leaves=[];
@@ -561,15 +580,21 @@ branches.forEach(b=>{
   let foldAt=b.kids.length?Math.min(...b.kids.map(k=>k.start)):b.start+(b.end-b.start)*inverse(b,.9)+.02;
   if(b.gen>=5)foldAt=Math.max(foldAt,.635+rr(0,.02));
   const tip=b.pts.at(-1),outer=clamp01((Math.sqrt(envelope(tip))-.45)/.5),outDir=tip.clone().sub(CC).setZ(tip.z*1.5).normalize();
-  const base=b.gen===1?2:b.gen<=3?4:b.gen===4?4:8,per=b.gen===1?2:Math.max(1,Math.round(base*lerp(.6,1.4,outer)));
+  const base=b.gen===1?2:b.gen<=3?4:b.gen===4?4:11,per=b.gen===1?2:Math.max(1,Math.round(base*lerp(1.,1.4,outer)));/* mobile: denser foliage, inner crown no longer thinned */
   const seg=2/Math.max(2,b.pts.length-1);
   for(let j=0;j<per;j++){const az=b.azimuth+j*2.39996,rand=V(Math.cos(az),rr(-.2,.4),Math.sin(az)).normalize();
-    const back=j===0?0:rr(0,seg),lp0=sampleAt(b,1-back).p,keep=b.gen>=5&&j%4===1&&back<=.25&&!blocked(lp0,.1)&&!inGap(lp0);
+    const back=j===0?0:rr(0,seg),lp0=sampleAt(b,1-back).p,keep=b.gen>=5&&j%2===1&&back<=.35&&!blocked(lp0,.1)&&!inGap(lp0);
     leaves.push({b,foldAt:keep?9:foldAt,back,size:LEAF[b.gen]*rr(.82,1.08)*(j?.9:1),roll:rr(-.6,.6),tilt:b.braid?rr(.85,1.0):rr(.45,.95),
       side:b.braid?V(Math.cos(b.azimuth),.05,Math.sin(b.azimuth)*.35).normalize():rand.lerp(outDir,.55).normalize()});}
+  /* Intake: fill bald inner limbs — a random number of persistent leaf clusters (sometimes none) along gen 2–4
+     wood, each at a random spot with a random size, so the fill reads natural rather than uniform. */
+  if(b.gen>=2&&b.gen<=4&&rnd()<.75){const n=1+Math.floor(rnd()*rnd()*7);
+    for(let c=0;c<n;c++){const back=rr(.12,.85),lp=sampleAt(b,1-back).p;if(blocked(lp,.1))continue;
+      const cl=2+Math.floor(rnd()*4),az0=rr(0,6.283);
+      for(let q=0;q<cl;q++){const az=az0+q*2.39996;leaves.push({b,gold:rnd()<.3,foldAt:9,back:Math.min(.95,back+rr(-.04,.04)),size:LEAF[b.gen]*rr(.6,1.),roll:rr(-.6,.6),tilt:rr(.45,.95),side:V(Math.cos(az),rr(-.2,.45),Math.sin(az)).normalize()})}}}
 });
 const leafMat=new THREE.MeshStandardMaterial({map:petalTex,side:THREE.DoubleSide,roughness:.5,color:0xffffff});bloomShader(leafMat,'leaf');
-const leafMesh=bloomMesh(leaves.map(l=>({p:V(),q:new THREE.Quaternion(),size:1,birth:-1,inner:0,drift:1,col:new THREE.Color().setHSL(rr(.74,.79),.62,.55)})),leafGeometry(),leafMat);
+const leafMesh=bloomMesh(leaves.map(l=>({p:V(),q:new THREE.Quaternion(),size:1,birth:-1,inner:0,drift:1,col:l.gold?new THREE.Color().setHSL(rr(.1,.13),.8,rr(.55,.65))/* mobile: ~30% of the inner-limb leaves are gold */:new THREE.Color().setHSL(rr(.74,.79),.62,.55)})),leafGeometry(),leafMat);
 tree.add(leafMesh);
 /* Subtle fluff: small, muted grey-violet leaflets along second- and third-order wood so it isn't bare */
 {const fluff=[],Yv=V(0,1,0);
@@ -615,14 +640,14 @@ function pointCloud(list,kind){const g=new THREE.BufferGeometry(),pos=[],rn=[];l
   g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('aRnd',new THREE.Float32BufferAttribute(rn,2));
   const pts=new THREE.Points(g,pointsMaterial(kind));pts.frustumCulled=false;tree.add(pts);return pts}
 const sparkPts=[];
-for(let i=0;i<220;i++){const s=rnd()*.95,k=i%NS;sparkPts.push(braidPoint(s,thetaAt(s,k)+Math.PI/NS+rr(-.12,.12),orbitAt(s)*(1.12-.22*s)))}
-branches.filter(b=>b.gen<=3).forEach(b=>{for(let i=0;i<(b.gen===1?24:b.gen===2?5:1);i++){const s=sampleAt(b,rr(b.braid?b.braidFrac:0,.95));sparkPts.push(s.p.add(V(rr(-1,1),rr(-1,1),rr(-1,1)).normalize().multiplyScalar(s.r*1.05)))}});
+for(let i=0;i<300;i++){const s=rnd()*.95,k=i%NS;/* mobile: trunk sparks 300 */sparkPts.push(braidPoint(s,thetaAt(s,k)+Math.PI/NS+rr(-.12,.12),orbitAt(s)*(1.12-.22*s)))}
+branches.filter(b=>b.gen<=3).forEach(b=>{for(let i=0;i<(b.gen===1?24:b.gen===2?5:6);i++)/* mobile: 6x gold on third-tier branches */{const s=sampleAt(b,rr(b.braid?b.braidFrac:0,.95));sparkPts.push(s.p.add(V(rr(-1,1),rr(-1,1),rr(-1,1)).normalize().multiplyScalar(s.r*1.05)))}});
 const sparks=pointCloud(sparkPts,'spark');
 const sandPts=[];
 branches.forEach(b=>{const n=Math.max(2,Math.ceil(b.L*b.radii[0]*130));for(let i=0;i<n;i++){const s=sampleAt(b,rnd()),r=V(rr(-1,1),rr(-1,1),rr(-1,1)).normalize();sandPts.push(s.p.addScaledVector(r,s.r*(b.braid?1.05:1)))}});
 const sandMat=new THREE.ShaderMaterial({uniforms:{...U,uPx:{value:100}},transparent:true,depthWrite:false,
   vertexShader:`attribute vec2 aRnd;varying float vA;varying vec3 vCol;uniform float uPx;${SWAY}
-void main(){vec3 p=position;float relSec=4.4+3.*clamp((18.-p.y)/20.,0.,1.)+aRnd.x*.25;
+void main(){vec3 p=position;float relSec=WIND_FRONT(p.y)+aRnd.x*.25;
  float mass=mix(.8,2.2,aRnd.y),life=mix(1.8,3.4,fract(aRnd.x*31.7)),alpha,tau;
  vec3 wd=windMotion(p,relSec,mass,aRnd.x,life,alpha,tau);
  vA=step(.0001,tau)*alpha;p+=wd;
@@ -648,7 +673,10 @@ const black=new THREE.Color(0);
 
 /* ---------- framing, timeline, interaction ---------- */
 let W=1,H=1,ready=false;
-function resize(){const r=canvas.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);renderer.setSize(W,H,false);bloomComposer.setSize(Math.ceil(W/2),Math.ceil(H/2))/* perf: glow at half res */;finalComposer.setSize(W,H);if(ready)render()}
+function resize(){const r=canvas.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);
+  /* Sharp on Retina within a pixel budget: the canvas is ~4x the screen wide, so cap the backing store at ~4M px. */
+  {const pr=Math.min(devicePixelRatio,2,Math.sqrt(4e6/(W*H)));renderer.setPixelRatio(pr);bloomComposer.setPixelRatio(pr);finalComposer.setPixelRatio(pr)}
+  renderer.setSize(W,H,false);bloomComposer.setSize(Math.ceil(W/2),Math.ceil(H/2))/* perf: glow at half res */;finalComposer.setSize(W,H);if(ready)render()}
 {const ro=new ResizeObserver(resize);ro.observe(canvas);CLEANUP.push(()=>ro.disconnect())}resize();
 
 const STAGES=[
@@ -708,7 +736,7 @@ function frame(now){
   if(DISPOSED)return;
   const raw=(now-last)/1000,dt=Math.min(.05,raw);last=now;
   if(!document.hidden){
-    if(anim){const p=clamp01((now-anim.start)/anim.dur),e=1-Math.pow(1-p,3)*(1-.0*p);t=lerp(anim.from,anim.to,e);if(p>=1){anim=null;t=STAGES[stage][1];holdLeft=HOLD;if(stage<=6)settleAt=now}sync()}
+    if(anim){const p=clamp01((now-anim.start)/anim.dur),e=1-Math.pow(1-p,3)*(1-.0*p);t=lerp(anim.from,anim.to,e);    if(p>=1){anim=null;t=STAGES[stage][1];holdLeft=HOLD;if(stage<=6)settleAt=now}sync()}
     else if(autoplay){holdLeft-=Math.min(raw,.5);if(holdLeft<=0){if(stage<STAGES.length-1)goTo(stage+1);else{autoplay=false;sync()}}}
     camDt=dt;if(settleAt>=0){const tau=(now-settleAt)/1000;U.uSettle.value=reduce.matches?0:Math.exp(-tau*2.6)*Math.sin(tau*6.5);if(tau>3){settleAt=-1;U.uSettle.value=0}}
     if(!reduce.matches)clock+=dt;
@@ -717,7 +745,7 @@ function frame(now){
   RAF=requestAnimationFrame(frame);
 }
 /* Story time → growth time: hold the sapling, then let divisions continue */
-const KEYS=[[0,.036],[.06,.05],[.1,.071],[.16,.1],[.2,.1],[.3,.235],[.35,.235],[.46,.43],[.5,.43],[.62,.645],[.72,.72]];
+const KEYS=[[0,.036],[.06,.072]/* intake: shoot = 2x the sprout height */,[.1,.076]/* twirl nudged up from .071 so it still grows past shoot */,[.16,.1],[.2,.1],[.3,.235],[.35,.235],[.46,.43],[.5,.43],[.62,.645],[.72,.72]];
 const AGEK=[[0,0],[.06,.05],[.1,.1],[.16,.16],[.2,.24],[.3,.3],[.35,.42],[.46,.48],[.5,.62],[.62,.72],[.72,.86],[.86,1]];
 const GROWK=[[0,0],[.237,0],[.3,1/3],[.388,1/3],[.46,2/3],[.548,2/3],[.62,1],[.72,1]];
 const SKEYS=[[0,.3],[.06,.33],[.12,.38],[.28,.5],[.44,.66],[.62,.86],[.72,1]];
@@ -752,7 +780,7 @@ function render(){
   U.uSway.value=reduce.matches?0:.2+.75*gw;
   U.uLean.value=ws<=0?0:(.35*smooth(ws/1.4)+.65*gw)*(1-smooth((ws-4.4)/3));
   U.uFlutter.value=reduce.matches?0:smooth(ws/1.)*(.5+.5*gw);
-  U.uGlow.value=smooth((t-.73)/.05);U.uFront.value=lerp(-1.5,18,smooth((t-.73)/.11));U.uCanopyGlow.value=smooth((t-.79)/.06);
+  U.uGlow.value=smooth((t-.73)/.05);U.uFront.value=lerp(-1.5,18+TRUNK_ADD,smooth((t-.73)/.11));U.uCanopyGlow.value=smooth((t-.79)/.06);
   updateLeaves(u,S);
   const aspect=W/H;if(FIT_H===null)FIT_H=Math.max(FIT.h,FIT.w/aspect)*1.1;
   const viewH=FIT_H,viewW=viewH*aspect;

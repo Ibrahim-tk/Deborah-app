@@ -1,7 +1,8 @@
-/** @ui DataTable — roomy surface table: canvas header, hairline rows, icon sort, chevron on clickable rows,
- *  optional footer. Wide tables scroll inline inside their own container; the header stays sticky. */
+/** @ui DataTable — roomy surface table: canvas header, hairline rows, icon sort,
+ *  optional footer. Clickable rows highlight on hover. Wide tables scroll inline inside their own container; the header stays sticky. */
 import { useMemo, useState, type ReactNode } from 'react';
 import { Icon, type IconName } from '../Icon';
+import { HeaderCell } from './parts/HeaderCell';
 import styles from './DataTable.module.css';
 
 export interface Column<T> {
@@ -15,6 +16,8 @@ export interface Column<T> {
   grow?: boolean;
   /** The row's identifying column: ink, medium weight. Others read secondary. */
   primary?: boolean;
+  /** Supporting detail (dates, who, counts): lighter and slightly smaller so the row's main facts lead. */
+  muted?: boolean;
 }
 
 export interface DataTableProps<T> {
@@ -28,9 +31,16 @@ export interface DataTableProps<T> {
   initialSort?: { key: string; dir: 'asc' | 'desc' };
   /** Shown under the rows, e.g. "Showing 8 of 24". */
   footer?: ReactNode;
+  /** `plain`: no box, no header fill; rows sit straight on the page (used inside drawers). */
+  variant?: 'boxed' | 'plain';
 }
 
-export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer }: DataTableProps<T>) {
+/** Puts several bits of content in one cell on a shared centre line (e.g. a name and a status pill). */
+export function CellRow({ children }: { children: ReactNode }) {
+  return <span className={styles.inline}>{children}</span>;
+}
+
+export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed' }: DataTableProps<T>) {
   const [sort, setSort] = useState(initialSort);
   const sorted = useMemo(() => {
     const by = columns.find((c) => c.key === sort?.key)?.sort;
@@ -42,12 +52,11 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
     });
   }, [rows, columns, sort]);
 
-  const toggle = (key: string) =>
-    setSort((s) => (s?.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' }));
+  const sortBy = (key: string, dir: 'asc' | 'desc' | undefined) => setSort(dir ? { key, dir } : undefined);
 
   if (rows.length === 0) {
     return (
-      <div className={styles.empty}>
+      <div className={styles.empty} data-variant={variant}>
         <span className={styles.emptyIcon}><Icon name={emptyIcon} size={22} /></span>
         <p className={styles.emptyText}>{empty ?? 'Nothing here yet.'}</p>
       </div>
@@ -55,7 +64,7 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-variant={variant}>
       <div className={styles.scroll}>
         <table className={styles.table} aria-label={label}>
           <thead>
@@ -71,19 +80,13 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
                     aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : undefined}
                   >
                     {c.sort ? (
-                      <button type="button" className={styles.sortBtn} data-active={active || undefined} onClick={() => toggle(c.key)}>
-                        {c.header}
-                        <span className={styles.arrow} data-dir={active ? sort.dir : undefined} aria-hidden>
-                          <Icon name="chevron" size={14} />
-                        </span>
-                      </button>
+                      <HeaderCell header={c.header} dir={active ? sort.dir : undefined} onSort={(dir) => sortBy(c.key, dir)} />
                     ) : (
-                      c.header
+                      <span className={styles.headCell}>{c.header}</span>
                     )}
                   </th>
                 );
               })}
-              {onRowClick && <th aria-hidden className={styles.chevCol} />}
             </tr>
           </thead>
           <tbody>
@@ -96,13 +99,8 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
                 tabIndex={onRowClick ? 0 : undefined}
               >
                 {columns.map((c) => (
-                  <td key={c.key} data-align={c.align} data-primary={c.primary || undefined}>{c.render(row)}</td>
+                  <td key={c.key} data-align={c.align} data-grow={c.grow || undefined} data-primary={c.primary || undefined} data-muted={c.muted || undefined}>{c.render(row)}</td>
                 ))}
-                {onRowClick && (
-                  <td className={styles.chevCol} aria-hidden>
-                    <Icon name="chevron" size={16} className={styles.chev} />
-                  </td>
-                )}
               </tr>
             ))}
           </tbody>

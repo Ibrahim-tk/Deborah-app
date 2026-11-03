@@ -10,10 +10,12 @@ import { formatDate, useAdminStore, type AuditEntry } from '@shared/admin';
 import { Button, DataTable, IconButton, Select, type Column } from '@admin/ui';
 import { AdminPage, ConfirmDialog, FilterBar, matches } from '@admin/patterns';
 import { useAdminToast } from '@admin/hooks/toast.store';
+import { useAdminNav } from '@admin/navigation';
 
 export default function AuditLog() {
   const log = useAdminStore((s) => s.auditLog);
   const toast = useAdminToast();
+  const openDrawer = useAdminNav((s) => s.openDrawer);
   const [query, setQuery] = useState('');
   const [actor, setActor] = useState('all');
   const [confirming, setConfirming] = useState(false);
@@ -21,15 +23,16 @@ export default function AuditLog() {
   const rows = log.filter((e) => matches(query, e.text, e.actor) && (actor === 'all' || e.actor === actor));
 
   const columns: Column<AuditEntry>[] = [
-    { key: 'at', header: 'When', sort: (e) => e.at, render: (e) => formatDate(e.at) },
+    { key: 'at', muted: true, header: 'When', sort: (e) => e.at, render: (e) => formatDate(e.at) },
     { key: 'text', header: 'Action', grow: true, primary: true, render: (e) => e.text },
-    { key: 'actor', header: 'By', sort: (e) => e.actor, render: (e) => e.actor },
+    { key: 'actor', muted: true, header: 'By', sort: (e) => e.actor, render: (e) => e.actor },
     {
       key: 'clear',
+      muted: true,
       header: '',
       align: 'end',
       render: (e) => (
-        <IconButton icon="close" size="sm" label="Clear entry" onClick={() => { useAdminStore.getState().clearLogEntry(e.id); toast('Entry cleared'); }} />
+        <IconButton icon="close" size="sm" label="Clear entry" onClick={(ev) => { ev.stopPropagation(); useAdminStore.getState().clearLogEntry(e.id); toast('Entry cleared'); }} />
       ),
     },
   ];
@@ -50,6 +53,7 @@ export default function AuditLog() {
         columns={columns}
         rows={rows}
         rowKey={(e) => e.id}
+        onRowClick={(e) => openDrawer({ kind: 'audit', id: e.id })}
         initialSort={{ key: 'at', dir: 'desc' }}
         footer={`Showing ${rows.length} of ${log.length} entries`}
         empty={log.length === 0 ? 'The log is empty. New actions are recorded as they happen.' : 'No entries match.'}

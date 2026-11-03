@@ -3,7 +3,7 @@
  *      on the signature plum ground so the console reads as its own place. Counts are plain text.
  */
 import { useAdminStore } from '@shared/admin';
-import { Icon, Menu, Tooltip } from '@admin/ui';
+import { Icon, IconButton, Menu, Tooltip } from '@admin/ui';
 import { useAdminNav, useAdminSection } from '../nav.store';
 import { SECTIONS } from '../sections';
 import styles from './AdminSidebar.module.css';
@@ -31,15 +31,23 @@ export function AdminSidebar() {
   return (
     <aside className={styles.panel} data-collapsed={collapsed || undefined} aria-label="Admin navigation">
       <div className={styles.brandRow}>
-        <button
-          type="button"
-          className={styles.brand}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          <img src={LOGO_SRC} alt="" className={styles.logo} width={28} height={28} />
-          {!collapsed && <span className={styles.brandName}>Oracle Admin</span>}
-        </button>
+        {collapsed ? (
+          // Collapsed: the logo is the way back out; on hover it turns into the sidebar icon.
+          <Tooltip label="Expand sidebar" side="right">
+            <button type="button" className={styles.expand} aria-label="Expand sidebar" onClick={() => setCollapsed(false)}>
+              <img src={LOGO_SRC} alt="" className={styles.logo} width={28} height={28} />
+              <Icon name="sidebar" size={20} className={styles.expandIcon} />
+            </button>
+          </Tooltip>
+        ) : (
+          <>
+            <span className={styles.brand}>
+              <img src={LOGO_SRC} alt="" className={styles.logo} width={28} height={28} />
+              <span className={styles.brandName}>Oracle Admin</span>
+            </span>
+            <IconButton icon="sidebar" size="sm" label="Collapse sidebar" onClick={() => setCollapsed(true)} />
+          </>
+        )}
       </div>
 
       <nav className={styles.links}>

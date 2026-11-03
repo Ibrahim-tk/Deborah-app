@@ -1,0 +1,13 @@
+/* Chat sits in its own soft panel, like a transcript card, so it reads apart from the summary. */
+.thread {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-lg);
+}
+.turn { display: grid; gap: var(--space-1); }
+.turn[data-from='client'] { justify-items: end; }
+.turn[data-from='client'] > :last-child { inline-size: 100%; }
+.flag { color: var(--color-danger-ink); font-size: var(--fs-footnote); line-height: var(--lh-footnote); font-weight: var(--weight-medium); }

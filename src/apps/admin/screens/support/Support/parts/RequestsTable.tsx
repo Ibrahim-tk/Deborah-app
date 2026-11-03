@@ -1,8 +1,8 @@
 /** Support requests (handled over email). "Escalate to Deborah" requests sort first. */
-import { useState } from 'react';
 import { formatDate, useAdminStore, type SupportRequest, type SupportType } from '@shared/admin';
-import { Button, DataTable, Select, StatusText, type Column } from '@admin/ui';
+import { Button, DataTable, StatusText, type Column } from '@admin/ui';
 import { matches } from '@admin/patterns';
+import { useAdminNav } from '@admin/navigation';
 import { useAdminToast } from '@admin/hooks/toast.store';
 
 const TYPE: Record<SupportType, string> = {
@@ -11,13 +11,13 @@ const TYPE: Record<SupportType, string> = {
   account: 'Account',
   technical: 'Technical',
 };
-type Show = 'open' | 'resolved' | 'all';
+export type Show = 'open' | 'resolved' | 'all';
 
-export function RequestsTable({ query }: { query: string }) {
+export function RequestsTable({ query, show }: { query: string; show: Show }) {
   const requests = useAdminStore((s) => s.supportRequests);
   const clients = useAdminStore((s) => s.clients);
   const toast = useAdminToast();
-  const [show, setShow] = useState<Show>('open');
+  const openDrawer = useAdminNav((s) => s.openDrawer);
   const nameOf = (id: string) => clients.find((c) => c.id === id)?.name ?? 'Unknown client';
 
   const rows = requests.filter(
@@ -37,32 +37,24 @@ export function RequestsTable({ query }: { query: string }) {
       sort: (r) => (r.type === 'escalate_to_deborah' ? '0' : TYPE[r.type]),
       render: (r) => (r.type === 'escalate_to_deborah' ? <StatusText tone="accent">{TYPE[r.type]}</StatusText> : TYPE[r.type]),
     },
-    { key: 'received', header: 'Received', sort: (r) => r.received, render: (r) => formatDate(r.received) },
+    { key: 'received', muted: true, header: 'Received', sort: (r) => r.received, render: (r) => formatDate(r.received) },
     {
       key: 'action',
       header: 'Status',
       align: 'end',
       render: (r) =>
-        r.resolved ? <StatusText tone="success">Resolved</StatusText> : <Button size="sm" variant="secondary" onClick={() => resolve(r)}>Mark resolved</Button>,
+        r.resolved ? <StatusText tone="success">Resolved</StatusText> : <Button size="sm" variant="secondary" onClick={(e) => { e.stopPropagation(); resolve(r); }}>Mark resolved</Button>,
     },
   ];
 
   return (
     <>
-      <div>
-        <Select<Show>
-          label="Show"
-          hideLabel
-          value={show}
-          onChange={setShow}
-          options={[{ value: 'open', label: 'Open requests' }, { value: 'resolved', label: 'Resolved' }, { value: 'all', label: 'All requests' }]}
-        />
-      </div>
       <DataTable
         label="Support requests"
         columns={columns}
         rows={rows}
         rowKey={(r) => r.id}
+        onRowClick={(r) => openDrawer({ kind: 'support', id: r.id })}
         initialSort={{ key: 'type', dir: 'asc' }}
         empty={show === 'open' ? 'All caught up. New requests arrive from the support inbox.' : 'No requests match.'}
       />

@@ -7,7 +7,7 @@ import styles from './PlansTable.module.css';
 
 export function PlansTable({ subscribers }: { subscribers: (planId: string) => number }) {
   const plans = useAdminStore((s) => s.plans);
-  const push = useAdminNav((s) => s.push);
+  const openDrawer = useAdminNav((s) => s.openDrawer);
   const toast = useAdminToast();
 
   const setActive = (p: Plan, active: boolean) => {
@@ -17,14 +17,14 @@ export function PlansTable({ subscribers }: { subscribers: (planId: string) => n
 
   const columns: Column<Plan>[] = [
     { key: 'name', header: 'Plan', grow: true, primary: true, sort: (p) => p.name, render: (p) => p.name },
-    { key: 'kind', header: 'Type', render: (p) => (p.kind === 'family' ? `Family, up to ${p.maxProfiles}` : 'Individual') },
+    { key: 'kind', muted: true, header: 'Type', render: (p) => (p.kind === 'family' ? `Family, up to ${p.maxProfiles}` : 'Individual') },
     {
       key: 'price',
       header: 'Price',
       sort: (p) => p.monthly || p.yearly / 12,
       render: (p) => (p.monthly ? `${money(p.monthly)} / month` : p.yearly ? `${money(p.yearly)} / year` : 'Free'),
     },
-    { key: 'trial', header: 'Free limit', render: (p) => (p.trialDays ? `${p.trialDays}-day trial` : `${p.freeQuestions} questions`) },
+    { key: 'free', muted: true, header: 'Free questions', render: (p) => (p.freeQuestions ? `${p.freeQuestions} questions` : 'None') },
     { key: 'subs', header: 'Subscribers', align: 'end', sort: (p) => subscribers(p.id), render: (p) => (p.id === 'free' ? '—' : subscribers(p.id).toLocaleString('en-US')) },
     {
       key: 'active',
@@ -39,5 +39,5 @@ export function PlansTable({ subscribers }: { subscribers: (planId: string) => n
     },
   ];
 
-  return <DataTable label="Plans" columns={columns} rows={plans} rowKey={(p) => p.id} onRowClick={(p) => push({ id: 'plan', planId: p.id })} />;
+  return <DataTable label="Plans" columns={columns} rows={plans} rowKey={(p) => p.id} onRowClick={(p) => openDrawer({ kind: 'plan', id: p.id })} />;
 }

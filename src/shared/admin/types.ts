@@ -2,7 +2,7 @@
 
 export type AdminRole = 'super' | 'admin';
 export type AccountStatus = 'active' | 'deactivated';
-export type SubscriptionStatus = 'trial' | 'active' | 'past_due' | 'cancelled' | 'free';
+export type SubscriptionStatus = 'active' | 'past_due' | 'cancelled' | 'free';
 export type EscalationType = 'critical' | 'emergency';
 export type EscalationStatus = 'open' | 'in_review' | 'resolved';
 export type InviteStatus = 'pending' | 'accepted' | 'expired';
@@ -25,6 +25,29 @@ export interface ClientDocument {
   date: string;
 }
 
+/** Everything onboarding and intake can ask (docs: data/intake/healthBasics.json). Placeholder clinical copy. */
+export interface HealthDetails {
+  status: 'placeholder';
+  dob: string;
+  sexAtBirth: string;
+  gender: string;
+  pronouns: string;
+  heightCm: number;
+  weightKg: number;
+  reproductiveStage: string;
+  ageAtLastPeriod: string | null;
+  hysterectomy: string;
+  ovariesRemoved: string;
+  hrt: string;
+  hrtType: string | null;
+  fertilityConcerns: string;
+  supplements: string[];
+  genesisGold: string;
+  allergies: string[];
+  conditions: string[];
+  lifestyle: { sleep: string; exercise: string; diet: string; stress: string; alcohol: string; smoking: string };
+}
+
 export interface Client {
   id: string;
   name: string;
@@ -37,9 +60,16 @@ export interface Client {
   subscription: SubscriptionStatus;
   account: AccountStatus;
   conversations: number;
-  health: { age: number; stage: string; concerns: string[]; medications: string[]; status: 'placeholder' };
+  health: { age: number; stage: string; concerns: string[]; medications: string[]; status: 'placeholder'; details: HealthDetails };
   dependents: Dependent[];
   documents: ClientDocument[];
+}
+
+export interface EscalationMessage {
+  from: 'client' | 'oracle';
+  text: string;
+  at: string;
+  trigger: boolean;
 }
 
 export interface Escalation {
@@ -48,8 +78,11 @@ export interface Escalation {
   type: EscalationType;
   status: EscalationStatus;
   reason: string;
-  summary: string;
-  excerpt: string[];
+  /** What happened, what the Oracle did, what the team should do. Placeholder clinical copy. */
+  summary: string[];
+  /** The exchange around the flag; `trigger` marks the client message that raised it. */
+  messages: EscalationMessage[];
+  status_copy: 'placeholder';
   opened: string;
   closed?: string;
 }
@@ -93,11 +126,12 @@ export interface Plan {
   monthly: number;
   yearly: number;
   freeQuestions: number;
-  trialDays: number;
   maxProfiles: number;
   features: Record<string, boolean>;
   rules: string;
   active: boolean;
+  /** Set once Stripe is connected and the plan's price is synced. */
+  stripePriceId?: string;
 }
 
 export interface AuditEntry {
@@ -135,4 +169,20 @@ export interface Metrics {
   subscriptionGrowth: { label: string; added: number; churned: number }[];
   activeUsers: number;
   totalConversations: number;
+}
+
+export interface StripeEvent {
+  id: string;
+  type: string;
+  status: 'succeeded' | 'failed';
+  at: string;
+  summary: string;
+}
+
+/** Simulated Stripe Connect state (no real API: the redirect and webhooks are timers and seed data). */
+export interface StripeConnection {
+  status: 'disconnected' | 'connecting' | 'connected';
+  mode: 'test' | 'live';
+  account: { id: string; name: string; email: string; country: string; payoutsEnabled: boolean; detailsComplete: boolean } | null;
+  webhook: { url: string; status: 'active' | 'failing'; lastEventAt: string } | null;
 }

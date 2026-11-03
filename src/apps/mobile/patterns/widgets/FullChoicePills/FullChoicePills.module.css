@@ -6,7 +6,7 @@
 /* Stable slot per option — morph swaps content in place; no step remount. */
 .slot {
   min-width: 0;
-  animation: option-in 500ms ease-out calc(var(--i, 0) * 70ms) both;
+  /* No opacity animation here: an animating opacity ancestor turns the pill's blur off until it ends (the load lag). */
 }
 .slot[data-describing] { animation: none; }
 
@@ -21,8 +21,8 @@
   position: relative;
   isolation: isolate;
   /* Glass tile: light tint so the tree reads through; edge highlight instead of a fill. */
-  background: rgb(255 255 255 / 0.22);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.55), inset 0 1px 0 rgb(255 255 255 / 0.7);
+  background: rgb(255 255 255 / 0.45); /* whiter frost: light tint, heavy blur — colour reads through, detail does not */
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-ink) 9%, transparent), inset 0 1px 0 rgb(255 255 255 / 0.7); /* visible hairline on cream + lit top edge */
   font: var(--weight-regular) var(--fs-body) / var(--lh-body) var(--font-body);
   letter-spacing: -0.015em;
   color: var(--color-ink);
@@ -39,8 +39,8 @@
   inset: 0;
   z-index: -2;
   border-radius: inherit;
-  -webkit-backdrop-filter: blur(4px) saturate(140%);
-  backdrop-filter: blur(4px) saturate(140%);
+  -webkit-backdrop-filter: blur(36px) saturate(90%);
+  backdrop-filter: blur(36px) saturate(90%);
 }
 /* Frosted halo hugging the label: heavy blur fading at its edges keeps text ≥ 7:1 over busy foliage. */
 .label { position: relative; }
@@ -50,9 +50,8 @@
   inset: -8px -16px;
   z-index: -1;
   border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 0.5);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
+  background: rgb(255 255 255 / 0.28);
+  /* perf: no second backdrop blur — the pill's own 50px frost already softens the tree */
   -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
   mask-image: radial-gradient(closest-side, #000 55%, transparent);
 }
@@ -72,3 +71,16 @@
 @media (prefers-reduced-motion: reduce) {
   .slot, .option { animation: none; transition: none; }
 }
+
+/* Staggered entrance without breaking the frost: fade the frost itself (backdrop blur 0 → full), the glass tint and
+   the label — never opacity on an ancestor of the blur layer. */
+.option { animation: glass-in 500ms ease-out calc(var(--i, 0) * 70ms) backwards; }
+.option::before { animation: frost-in 500ms ease-out calc(var(--i, 0) * 70ms) backwards; }
+.label { animation: option-in 500ms ease-out calc(var(--i, 0) * 70ms) backwards; }
+@keyframes glass-in { from { background-color: transparent; box-shadow: none; } }
+@keyframes frost-in { from { -webkit-backdrop-filter: blur(0) saturate(100%); backdrop-filter: blur(0) saturate(100%); } }
+@media (prefers-reduced-motion: reduce) { .option, .option::before, .label { animation: none; } }
+
+/* The frost layer (::before, z-index -2) paints OVER this element's own inset box-shadow, hiding the stroke.
+   Redraw the stroke (incl. the selected ring) on top in ::after. */
+.option::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inherit; transition: box-shadow 300ms ease-out; }

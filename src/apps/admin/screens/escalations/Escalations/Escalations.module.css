@@ -1,2 +1,3 @@
-.reason { display: grid; gap: 2px; min-inline-size: 24ch; }
-.client { color: var(--color-ink-tertiary); font-size: var(--fs-subhead); font-weight: var(--weight-regular); }
+.reason { display: flex; align-items: center; gap: var(--space-3); min-inline-size: 0; overflow: hidden; }
+.reason > :first-child { overflow: hidden; text-overflow: ellipsis; }
+.client { flex: none; color: var(--color-ink-tertiary); font-weight: var(--weight-regular); }

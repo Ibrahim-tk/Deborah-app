@@ -1,6 +1,7 @@
 .root {
   container-type: inline-size;
-  max-inline-size: var(--page-max);
+  /* TEMP (2026-11-02, designer): full width, edge to edge. Restore `max-inline-size: var(--page-max);` to cap it again. */
+  max-inline-size: none;
   margin-inline: auto;
   padding: var(--space-12) var(--space-10) var(--space-16);
   display: grid;
@@ -19,7 +20,7 @@
   overflow-wrap: anywhere;
 }
 .subtitle { margin: 0; color: var(--color-ink-secondary); font-size: var(--fs-callout); line-height: var(--lh-callout); overflow-wrap: anywhere; }
-.action { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.action { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .toolbar { margin-block-start: calc(var(--space-5) * -1); }
 .body { display: grid; gap: var(--space-12); }
 .body[data-aside] { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-10); align-items: start; }

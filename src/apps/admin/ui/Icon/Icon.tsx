@@ -2,7 +2,7 @@
  *  The only admin file that imports the icon library (CLAUDE.md §7). */
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  CreditCardIcon, CustomerSupportIcon, DashboardSquare01Icon, LicenseIcon, Logout01Icon, Shield01Icon,
+  ArrowUp02Icon, CreditCardIcon, CustomerSupportIcon, DashboardSquare01Icon, LicenseIcon, Logout01Icon, MoreVerticalIcon, Shield01Icon, StripeIcon,
   UserMultipleIcon, UserSettings01Icon, WorkHistoryIcon,
 } from '@hugeicons/core-free-icons';
 import { Icon as WebIcon, type IconName as WebIconName } from '@web/ui';
@@ -17,6 +17,9 @@ const own = {
   shield: Shield01Icon,
   consent: LicenseIcon,
   signOut: Logout01Icon,
+  sortArrow: ArrowUp02Icon,
+  columnMenu: MoreVerticalIcon,
+  stripe: StripeIcon,
 };
 
 export type IconName = WebIconName | keyof typeof own;

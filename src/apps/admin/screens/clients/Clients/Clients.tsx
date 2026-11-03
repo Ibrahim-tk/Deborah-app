@@ -6,7 +6,7 @@
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
-import { formatDate, useAdminStore, type Client } from '@shared/admin';
+import { formatDate, planLabel, useAdminStore, type Client } from '@shared/admin';
 import { DataTable, Select, type Column } from '@admin/ui';
 import {
   AccountStatusText, AdminPage, FilterBar, SUBSCRIPTION_OPTIONS, SubscriptionStatusText, matches,
@@ -19,12 +19,12 @@ type AccountFilter = 'all' | 'active' | 'deactivated';
 export default function Clients() {
   const clients = useAdminStore((s) => s.clients);
   const plans = useAdminStore((s) => s.plans);
-  const push = useAdminNav((s) => s.push);
+  const openClient = useAdminNav((s) => s.openClient);
   const [query, setQuery] = useState('');
   const [sub, setSub] = useState<string>('all');
   const [account, setAccount] = useState<AccountFilter>('all');
 
-  const planName = (id: string) => plans.find((p) => p.id === id)?.name ?? '—';
+  const planName = (id: string) => planLabel(plans.find((p) => p.id === id));
   const rows = clients.filter(
     (c) => matches(query, c.name, c.email, c.location) && (sub === 'all' || c.subscription === sub) && (account === 'all' || c.account === account),
   );
@@ -46,8 +46,8 @@ export default function Clients() {
     { key: 'plan', header: 'Plan', sort: (c) => planName(c.planId), render: (c) => planName(c.planId) },
     { key: 'sub', header: 'Subscription', sort: (c) => c.subscription, render: (c) => <SubscriptionStatusText status={c.subscription} /> },
     { key: 'account', header: 'Account', sort: (c) => c.account, render: (c) => <AccountStatusText status={c.account} /> },
-    { key: 'dependents', header: 'Dependents', align: 'end', sort: (c) => c.dependents.length, render: (c) => c.dependents.length || '—' },
-    { key: 'joined', header: 'Joined', sort: (c) => c.joined, render: (c) => formatDate(c.joined) },
+    { key: 'dependents', muted: true, header: 'Dependents', align: 'end', sort: (c) => c.dependents.length, render: (c) => c.dependents.length || '—' },
+    { key: 'joined', muted: true, header: 'Joined', sort: (c) => c.joined, render: (c) => formatDate(c.joined) },
   ];
 
   return (
@@ -74,7 +74,7 @@ export default function Clients() {
         rowKey={(c) => c.id}
         initialSort={{ key: 'joined', dir: 'desc' }}
         footer={`Showing ${rows.length} of ${clients.length} clients`}
-        onRowClick={(c) => push({ id: 'client', clientId: c.id })}
+        onRowClick={(c) => openClient(c.id)}
         empty="No clients match. Try a different name or clear the filters."
       />
     </AdminPage>

@@ -7,6 +7,8 @@ import TwoFactor from '@admin/screens/auth/TwoFactor';
 import { AdminSidebar } from '../AdminSidebar';
 import { useAdminNav, useAdminRoute } from '../nav.store';
 import { REGISTRY } from '../registry';
+import { DRAWERS } from '../drawers';
+import { DrawerPresence } from '@admin/ui';
 import styles from './AdminNavigator.module.css';
 
 const AUTH = { signIn: SignIn, forgot: ForgotPassword, twoFactor: TwoFactor };
@@ -16,6 +18,9 @@ export function AdminNavigator() {
   const auth = useAdminNav((s) => s.auth);
   const route = useAdminRoute();
   const depth = useAdminNav((s) => s.stack.length);
+  const drawer = useAdminNav((s) => s.drawer);
+  const closing = useAdminNav((s) => s.drawerClosing);
+  const finishClose = useAdminNav((s) => s.finishDrawerClose);
   const scroller = useRef<HTMLDivElement>(null);
 
   // A new page starts at the top.
@@ -33,6 +38,16 @@ export function AdminNavigator() {
       <div ref={scroller} className={styles.stage} data-screen-id={screenId}>
         <Screen key={JSON.stringify(route)} {...route} />
       </div>
+      {drawer && (
+        <DrawerPresence.Provider value={{ open: !closing, onExited: finishClose }}>
+          <ActiveDrawer key={`${drawer.kind}:${drawer.id}`} kind={drawer.kind} id={drawer.id} />
+        </DrawerPresence.Provider>
+      )}
     </div>
   );
+}
+
+function ActiveDrawer({ kind, id }: { kind: keyof typeof DRAWERS; id: string | null }) {
+  const Drawer = DRAWERS[kind];
+  return <Drawer id={id} />;
 }

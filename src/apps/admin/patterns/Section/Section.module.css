@@ -1,6 +1,9 @@
-.root { display: grid; gap: var(--space-5); min-inline-size: 0; }
-.head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); }
-.title { margin: 0; font-size: var(--fs-title-3); line-height: var(--lh-title-3); font-weight: var(--weight-medium); color: var(--color-ink); }
+/* Head row is fixed, the body takes the rest, so sections side by side in a grid end up as equal-height
+ * cards with their tops aligned (the grid stretches the section, not the gap between rows). */
+.root { display: grid; grid-template-rows: auto 1fr; gap: var(--space-5); min-inline-size: 0; }
+/* Fixed head height so cards line up even when one head carries a control (e.g. Weekly / Monthly). */
+.head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); min-block-size: 40px; }
+.title { margin: 0; font-family: var(--font-display); font-size: 26px; line-height: 32px; font-weight: var(--weight-regular); color: var(--color-ink); }
 .surface {
   container-type: inline-size;
   padding: var(--space-8);
@@ -8,4 +11,9 @@
   border: 1px solid var(--color-border-hairline);
   border-radius: var(--radius-lg);
   min-inline-size: 0;
+  block-size: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

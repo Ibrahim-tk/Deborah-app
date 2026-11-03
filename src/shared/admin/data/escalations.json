@@ -5,12 +5,37 @@
     "type": "emergency",
     "status": "open",
     "reason": "Chest pain reported in chat",
-    "summary": "Client described sudden chest pain with shortness of breath. Emergency guidance was shown and the conversation was paused.",
-    "excerpt": [
-      "Client: Chest pain reported in chat.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Chest pain spreading to the left arm, with shortness of breath. Emergency guidance shown; check they got help."
     ],
-    "opened": "2026-09-05T09:15"
+    "opened": "2026-09-05T09:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I've been feeling off since lunch. Mostly tired.",
+        "at": "2026-09-05T09:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Thanks for telling me. Can you say a bit more about how you're feeling right now?",
+        "at": "2026-09-05T09:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "My chest feels really tight and it's going down my left arm. It's hard to catch my breath.",
+        "at": "2026-09-05T09:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "This could be serious. Please call 911 now or have someone take you to the nearest emergency room. Don't drive yourself. I've paused our conversation so you can get help.",
+        "at": "2026-09-05T09:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e002",
@@ -18,12 +43,37 @@
     "type": "critical",
     "status": "open",
     "reason": "Mentioned stopping thyroid medication",
-    "summary": "Client said they stopped prescribed medication without talking to their clinician. Medication safety guidance was shown.",
-    "excerpt": [
-      "Client: Mentioned stopping thyroid medication.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Stopped thyroid medication two weeks ago without their prescriber; now more tired and low. Advised to contact their prescriber."
     ],
-    "opened": "2026-09-09T10:15"
+    "opened": "2026-09-09T10:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "Why am I so exhausted lately? I can barely get through the afternoon.",
+        "at": "2026-09-09T10:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Fatigue can have a lot of causes. Has anything changed recently, like sleep, stress or any medicines?",
+        "at": "2026-09-09T10:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "I stopped my thyroid pills about two weeks ago. They didn't seem to be doing anything so I just quit.",
+        "at": "2026-09-09T10:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I can't advise on starting or stopping a prescription, but stopping thyroid medication suddenly can affect how you feel. Please talk to the doctor who prescribed it as soon as you can.",
+        "at": "2026-09-09T10:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e003",
@@ -31,12 +81,37 @@
     "type": "critical",
     "status": "in_review",
     "reason": "Crisis language detected",
-    "summary": "Client used language suggesting low mood and hopelessness. Crisis resources were shown.",
-    "excerpt": [
-      "Client: Crisis language detected.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Said they feel hopeless and others would be better off without them. 988 shared; no reply since. Reach out soon."
     ],
-    "opened": "2026-09-13T11:15"
+    "opened": "2026-09-13T11:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I haven't slept properly in weeks.",
+        "at": "2026-09-13T11:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "That sounds exhausting. What usually happens when you try to sleep?",
+        "at": "2026-09-13T11:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "Honestly I don't see the point anymore. Everyone would be better off without me.",
+        "at": "2026-09-13T11:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I'm really glad you told me. You don't have to go through this alone. You can call or text 988 any time to talk to someone right now. Are you safe at the moment?",
+        "at": "2026-09-13T11:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e004",
@@ -44,13 +119,38 @@
     "type": "emergency",
     "status": "resolved",
     "reason": "Heavy bleeding after menopause",
-    "summary": "Client reported heavy bleeding twelve months after their last period. Urgent-care guidance was shown.",
-    "excerpt": [
-      "Client: Heavy bleeding after menopause.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Heavy bleeding a year after their last period, with dizziness. Advised same-day care; check they were seen."
     ],
     "opened": "2026-09-17T12:15",
-    "closed": "2026-09-19T16:40"
+    "closed": "2026-09-19T16:40",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I thought my periods had stopped for good. It's been a year.",
+        "at": "2026-09-17T12:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Has something changed recently?",
+        "at": "2026-09-17T12:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "Started bleeding two days ago and it's really heavy. I'm going through a pad an hour and I feel dizzy when I stand up.",
+        "at": "2026-09-17T12:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "Bleeding after menopause should always be checked, and heavy bleeding with dizziness needs care today. Please go to urgent care or the emergency room now.",
+        "at": "2026-09-17T12:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e005",
@@ -58,12 +158,37 @@
     "type": "critical",
     "status": "open",
     "reason": "Asked for a dose change",
-    "summary": "Client asked how much to raise a hormone dose. Out-of-scope reply was shown.",
-    "excerpt": [
-      "Client: Asked for a dose change.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Asked how much to raise their estradiol dose as hot flashes returned. Pointed to their prescriber or Deborah."
     ],
-    "opened": "2026-09-21T13:15"
+    "opened": "2026-09-21T13:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "My hot flashes are back, worse than before.",
+        "at": "2026-09-21T13:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "I'm sorry, that's frustrating. When did you notice them coming back?",
+        "at": "2026-09-21T13:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "About a month ago. Should I just double my estradiol patch? How much should I go up?",
+        "at": "2026-09-21T13:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I can't recommend a dose or a change to your prescription. Your prescriber can review this safely with you. You could also book a session with Deborah to talk through your symptoms.",
+        "at": "2026-09-21T13:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e006",
@@ -71,12 +196,37 @@
     "type": "emergency",
     "status": "in_review",
     "reason": "Chest pain reported in chat",
-    "summary": "Client described sudden chest pain with shortness of breath. Emergency guidance was shown and the conversation was paused.",
-    "excerpt": [
-      "Client: Chest pain reported in chat.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Chest pain spreading to the left arm, with shortness of breath. Emergency guidance shown; check they got help."
     ],
-    "opened": "2026-09-25T14:15"
+    "opened": "2026-09-25T14:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I've been feeling off since lunch. Mostly tired.",
+        "at": "2026-09-25T14:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Thanks for telling me. Can you say a bit more about how you're feeling right now?",
+        "at": "2026-09-25T14:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "My chest feels really tight and it's going down my left arm. It's hard to catch my breath.",
+        "at": "2026-09-25T14:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "This could be serious. Please call 911 now or have someone take you to the nearest emergency room. Don't drive yourself. I've paused our conversation so you can get help.",
+        "at": "2026-09-25T14:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e007",
@@ -84,13 +234,38 @@
     "type": "critical",
     "status": "resolved",
     "reason": "Mentioned stopping thyroid medication",
-    "summary": "Client said they stopped prescribed medication without talking to their clinician. Medication safety guidance was shown.",
-    "excerpt": [
-      "Client: Mentioned stopping thyroid medication.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Stopped thyroid medication two weeks ago without their prescriber; now more tired and low. Advised to contact their prescriber."
     ],
     "opened": "2026-09-01T15:15",
-    "closed": "2026-09-03T16:40"
+    "closed": "2026-09-03T16:40",
+    "messages": [
+      {
+        "from": "client",
+        "text": "Why am I so exhausted lately? I can barely get through the afternoon.",
+        "at": "2026-09-01T15:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Fatigue can have a lot of causes. Has anything changed recently, like sleep, stress or any medicines?",
+        "at": "2026-09-01T15:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "I stopped my thyroid pills about two weeks ago. They didn't seem to be doing anything so I just quit.",
+        "at": "2026-09-01T15:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I can't advise on starting or stopping a prescription, but stopping thyroid medication suddenly can affect how you feel. Please talk to the doctor who prescribed it as soon as you can.",
+        "at": "2026-09-01T15:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e008",
@@ -98,13 +273,38 @@
     "type": "critical",
     "status": "resolved",
     "reason": "Crisis language detected",
-    "summary": "Client used language suggesting low mood and hopelessness. Crisis resources were shown.",
-    "excerpt": [
-      "Client: Crisis language detected.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Said they feel hopeless and others would be better off without them. 988 shared; no reply since. Reach out soon."
     ],
     "opened": "2026-09-05T16:15",
-    "closed": "2026-10-07T16:40"
+    "closed": "2026-10-07T16:40",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I haven't slept properly in weeks.",
+        "at": "2026-09-05T16:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "That sounds exhausting. What usually happens when you try to sleep?",
+        "at": "2026-09-05T16:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "Honestly I don't see the point anymore. Everyone would be better off without me.",
+        "at": "2026-09-05T16:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I'm really glad you told me. You don't have to go through this alone. You can call or text 988 any time to talk to someone right now. Are you safe at the moment?",
+        "at": "2026-09-05T16:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e009",
@@ -112,12 +312,37 @@
     "type": "emergency",
     "status": "open",
     "reason": "Heavy bleeding after menopause",
-    "summary": "Client reported heavy bleeding twelve months after their last period. Urgent-care guidance was shown.",
-    "excerpt": [
-      "Client: Heavy bleeding after menopause.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Heavy bleeding a year after their last period, with dizziness. Advised same-day care; check they were seen."
     ],
-    "opened": "2026-10-09T09:15"
+    "opened": "2026-10-09T09:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I thought my periods had stopped for good. It's been a year.",
+        "at": "2026-10-09T09:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Has something changed recently?",
+        "at": "2026-10-09T09:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "Started bleeding two days ago and it's really heavy. I'm going through a pad an hour and I feel dizzy when I stand up.",
+        "at": "2026-10-09T09:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "Bleeding after menopause should always be checked, and heavy bleeding with dizziness needs care today. Please go to urgent care or the emergency room now.",
+        "at": "2026-10-09T09:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e010",
@@ -125,13 +350,38 @@
     "type": "critical",
     "status": "resolved",
     "reason": "Asked for a dose change",
-    "summary": "Client asked how much to raise a hormone dose. Out-of-scope reply was shown.",
-    "excerpt": [
-      "Client: Asked for a dose change.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Asked how much to raise their estradiol dose as hot flashes returned. Pointed to their prescriber or Deborah."
     ],
     "opened": "2026-10-13T10:15",
-    "closed": "2026-10-15T16:40"
+    "closed": "2026-10-15T16:40",
+    "messages": [
+      {
+        "from": "client",
+        "text": "My hot flashes are back, worse than before.",
+        "at": "2026-10-13T10:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "I'm sorry, that's frustrating. When did you notice them coming back?",
+        "at": "2026-10-13T10:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "About a month ago. Should I just double my estradiol patch? How much should I go up?",
+        "at": "2026-10-13T10:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I can't recommend a dose or a change to your prescription. Your prescriber can review this safely with you. You could also book a session with Deborah to talk through your symptoms.",
+        "at": "2026-10-13T10:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e011",
@@ -139,12 +389,37 @@
     "type": "emergency",
     "status": "in_review",
     "reason": "Chest pain reported in chat",
-    "summary": "Client described sudden chest pain with shortness of breath. Emergency guidance was shown and the conversation was paused.",
-    "excerpt": [
-      "Client: Chest pain reported in chat.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Chest pain spreading to the left arm, with shortness of breath. Emergency guidance shown; check they got help."
     ],
-    "opened": "2026-10-17T11:15"
+    "opened": "2026-10-17T11:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "I've been feeling off since lunch. Mostly tired.",
+        "at": "2026-10-17T11:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Thanks for telling me. Can you say a bit more about how you're feeling right now?",
+        "at": "2026-10-17T11:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "My chest feels really tight and it's going down my left arm. It's hard to catch my breath.",
+        "at": "2026-10-17T11:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "This could be serious. Please call 911 now or have someone take you to the nearest emergency room. Don't drive yourself. I've paused our conversation so you can get help.",
+        "at": "2026-10-17T11:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   },
   {
     "id": "e012",
@@ -152,11 +427,36 @@
     "type": "critical",
     "status": "open",
     "reason": "Mentioned stopping thyroid medication",
-    "summary": "Client said they stopped prescribed medication without talking to their clinician. Medication safety guidance was shown.",
-    "excerpt": [
-      "Client: Mentioned stopping thyroid medication.",
-      "Oracle: Safety guidance shown (placeholder)."
+    "summary": [
+      "Stopped thyroid medication two weeks ago without their prescriber; now more tired and low. Advised to contact their prescriber."
     ],
-    "opened": "2026-10-21T12:15"
+    "opened": "2026-10-21T12:15",
+    "messages": [
+      {
+        "from": "client",
+        "text": "Why am I so exhausted lately? I can barely get through the afternoon.",
+        "at": "2026-10-21T12:09",
+        "trigger": false
+      },
+      {
+        "from": "oracle",
+        "text": "Fatigue can have a lot of causes. Has anything changed recently, like sleep, stress or any medicines?",
+        "at": "2026-10-21T12:11",
+        "trigger": false
+      },
+      {
+        "from": "client",
+        "text": "I stopped my thyroid pills about two weeks ago. They didn't seem to be doing anything so I just quit.",
+        "at": "2026-10-21T12:13",
+        "trigger": true
+      },
+      {
+        "from": "oracle",
+        "text": "I can't advise on starting or stopping a prescription, but stopping thyroid medication suddenly can affect how you feel. Please talk to the doctor who prescribed it as soon as you can.",
+        "at": "2026-10-21T12:15",
+        "trigger": false
+      }
+    ],
+    "status_copy": "placeholder"
   }
 ]

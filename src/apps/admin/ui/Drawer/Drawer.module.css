@@ -1,0 +1,35 @@
+.scrim { position: fixed; inset: 0; z-index: var(--z-overlay); background: color-mix(in srgb, var(--color-scrim) 60%, transparent); transition: opacity 320ms cubic-bezier(0.32, 0.72, 0, 1); }
+.scrim[data-starting-style], .scrim[data-ending-style] { opacity: 0; }
+.panel {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: var(--z-overlay);
+  inline-size: min(100%, 640px);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-inline-start: 1px solid var(--color-border-hairline);
+  box-shadow: var(--shadow-float-lg);
+  outline: 0;
+  /* Slide in from the right and back out: a smooth ease-in-out, a touch quicker on the way out. */
+  transition: transform 420ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+.panel[data-starting-style], .panel[data-ending-style] { transform: translateX(100%); }
+.panel[data-ending-style] { transition-duration: 320ms; transition-timing-function: cubic-bezier(0.4, 0, 0.6, 1); }
+:dir(rtl) .panel[data-starting-style], :dir(rtl) .panel[data-ending-style] { transform: translateX(-100%); }
+.head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); padding: var(--space-8) var(--space-6) var(--space-5) var(--space-8); }
+.titles { display: grid; gap: var(--space-1); min-inline-size: 0; }
+.title { margin: 0; font-family: var(--font-display); font-size: var(--fs-title-2); line-height: var(--lh-title-2); font-weight: var(--weight-regular); color: var(--color-ink); overflow-wrap: anywhere; }
+.subtitle { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); overflow-wrap: anywhere; }
+/* Tight line box on the serif title so centring matches the letters, not the font's extra top room. */
+.titleRow { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+.titleRow .title { line-height: 1.1; padding-block-start: 2px; }
+.meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: 0 var(--space-8) var(--space-5); border-block-end: 1px solid var(--color-border-hairline); }
+/* Extra room at the foot so the last section never ends flush against the screen edge. */
+.body { flex: 1; overflow-y: auto; padding: var(--space-8) var(--space-8) var(--space-16); display: grid; align-content: start; gap: var(--space-10); }
+@media (prefers-reduced-motion: reduce) { .panel { transition: none; } }
+/* Hairline under the header when there's no action row (the action row draws its own). */
+.head:not(:has(+ .actions)) { border-block-end: 1px solid var(--color-border-hairline); }
+.controls { display: flex; align-items: center; gap: var(--space-1); flex: none; }

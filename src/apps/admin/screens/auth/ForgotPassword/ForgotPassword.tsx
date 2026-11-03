@@ -20,15 +20,23 @@ export default function ForgotPassword() {
 
   if (sent) {
     return (
-      <AuthLayout title="Check your email">
-        <p className={styles.note}>If {email} has an admin account, a reset link is on its way. The link works for 1 hour.</p>
-        <Button fullWidth onClick={() => setAuth('signIn')}>Back to sign in</Button>
+      <AuthLayout title="Check your inbox">
+        <div className={styles.form}>
+          <p className={styles.note}>
+            We've sent a password reset link to {email}. It expires in 1 hour.
+          </p>
+          <p className={styles.footer}>
+            <span>Didn't get it?</span>
+            <Button variant="link" className={styles.link} onClick={() => run(() => undefined, 'Link resent')}>Resend link</Button>
+          </p>
+          <Button fullWidth onClick={() => setAuth('signIn')}>Back to sign in</Button>
+        </div>
       </AuthLayout>
     );
   }
 
   return (
-    <AuthLayout title="Reset your password" intro="Enter the email you sign in with and we'll send you a reset link.">
+    <AuthLayout title="Reset your password" intro="Enter your work email and we'll send you a link to set a new password.">
       <form
         className={styles.form}
         noValidate
@@ -37,9 +45,9 @@ export default function ForgotPassword() {
           if (email.trim()) run(() => setSent(true));
         }}
       >
-        <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input label="Work email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Button type="submit" fullWidth loading={busy} disabled={!email.trim()}>Send reset link</Button>
-        <Button type="button" variant="link" onClick={() => setAuth('signIn')}>Back to sign in</Button>
+        <Button type="button" variant="link" className={styles.link} onClick={() => setAuth('signIn')}>Back to sign in</Button>
       </form>
     </AuthLayout>
   );

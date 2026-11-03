@@ -1,14 +1,20 @@
+/* Soft status pill (admin-only exception to CLAUDE.md §8): light tint ground, tone ink, no border, no shadow. */
 .root {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: var(--fs-subhead);
-  line-height: var(--lh-subhead);
+  gap: 6px;
+  padding: 1px 10px;
+  /* Centre on the row's text instead of sitting on its baseline (the pill is taller than a line of text). */
+  vertical-align: middle;
+  border-radius: var(--radius-full);
+  /* Neutral (Free, Deactivated…): a light grey wash of the ink token, quieter than every tinted tone. */
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--color-surface));
   color: var(--color-ink-secondary);
+  font-size: var(--fs-subhead);
+  line-height: 20px;
   white-space: nowrap;
 }
-.dot { inline-size: 6px; block-size: 6px; border-radius: var(--radius-full); background: currentColor; flex: none; }
-.root[data-tone='accent'] { color: var(--color-accent); }
-.root[data-tone='success'] { color: var(--color-success-ink); }
-.root[data-tone='warning'] { color: var(--color-warning-ink); }
-.root[data-tone='danger'] { color: var(--color-danger-ink); }
+.root[data-tone='accent'] { background: var(--color-accent-tint); color: var(--color-accent); }
+.root[data-tone='success'] { background: var(--color-success-tint); color: var(--color-success-ink); }
+.root[data-tone='warning'] { background: var(--color-warning-tint); color: var(--color-warning-ink); }
+.root[data-tone='danger'] { background: var(--color-danger-tint); color: var(--color-danger-ink); }

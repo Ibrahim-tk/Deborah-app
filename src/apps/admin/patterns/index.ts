@@ -6,3 +6,4 @@ export * from './ContactDialog';
 export * from './AuthLayout';
 export * from './DateRangeFilter';
 export * from './statusLabels';
+export * from './IntegrationCard';

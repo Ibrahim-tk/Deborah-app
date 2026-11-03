@@ -28,12 +28,18 @@ export default function TwoFactor() {
   }, undefined, 900);
 
   return (
-    <AuthLayout title="Enter your code" intro={`We sent a 6-digit code to ${email}.`}>
+    <AuthLayout title="Check your email" intro={`Enter the 6-digit code we sent to ${email}. It works for 10 minutes.`}>
       <div className={styles.form}>
-        <CodeInput value={code} onChange={setCode} onComplete={verify} disabled={busy} autoFocus />
+        {/* Standard order: code → resend line → primary action → way back. */}
+        <div className={styles.codeGroup}>
+          <CodeInput className={styles.code} value={code} onChange={setCode} onComplete={verify} verifying={busy} autoFocus />
+          <p className={styles.footer}>
+            <span>Didn't get it?</span>
+            <Button variant="link" className={styles.link} onClick={() => toast('New code sent')}>Send a new code</Button>
+          </p>
+        </div>
         <Button fullWidth loading={busy} disabled={code.length < 6} onClick={verify}>Verify</Button>
-        <Button variant="link" onClick={() => toast('Code sent')}>Send a new code</Button>
-        <p className={styles.note}>Codes expire after 10 minutes.</p>
+        <Button variant="ghost" fullWidth onClick={() => setAuth('signIn')}>Back to sign in</Button>
       </div>
     </AuthLayout>
   );

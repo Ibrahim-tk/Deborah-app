@@ -10,6 +10,7 @@ import { formatDate, inviteHoursLeft, useAdminStore, type AdminUser, type Invite
 import { Button, DataTable, IconButton, Menu, type Column } from '@admin/ui';
 import { AccountStatusText, AdminPage, FilterBar, InviteStatusText, matches } from '@admin/patterns';
 import { useAdminToast } from '@admin/hooks/toast.store';
+import { useAdminNav } from '@admin/navigation';
 import { InviteDialog } from './parts/InviteDialog';
 import styles from './Admins.module.css';
 
@@ -20,6 +21,7 @@ export default function Admins() {
   const admins = useAdminStore((s) => s.admins);
   const me = useAdminStore((s) => s.email);
   const toast = useAdminToast();
+  const openDrawer = useAdminNav((s) => s.openDrawer);
   const [query, setQuery] = useState('');
   const [inviting, setInviting] = useState(false);
   const rows = admins.filter((a) => matches(query, a.name, a.email));
@@ -45,18 +47,19 @@ export default function Admins() {
         </span>
       ),
     },
-    { key: 'role', header: 'Role', sort: (a) => a.role, render: (a) => (a.role === 'super' ? 'Super admin' : 'Admin') },
+    { key: 'role', muted: true, header: 'Role', sort: (a) => a.role, render: (a) => (a.role === 'super' ? 'Super admin' : 'Admin') },
     {
       key: 'invite',
       header: 'Invitation',
       sort: (a) => inviteOf(a),
       render: (a) => {
         const status = inviteOf(a);
+        // Accepted is the normal state: plain date, no pill. Pills only for invites that need attention.
+        if (status === 'accepted') return <span className={styles.quiet}>Joined {formatDate(a.invitedAt.slice(0, 10))}</span>;
         return (
-          <span className={styles.who}>
+          <span className={styles.invite}>
             <InviteStatusText status={status} />
-            {status === 'pending' && <span className={styles.email}>Expires in {inviteHoursLeft(a.invitedAt)} h</span>}
-            {status === 'accepted' && <span className={styles.email}>Since {formatDate(a.invitedAt.slice(0, 10))}</span>}
+            {status === 'pending' && <span className={styles.quiet}>Expires in {inviteHoursLeft(a.invitedAt)} h</span>}
           </span>
         );
       },
@@ -68,6 +71,8 @@ export default function Admins() {
       align: 'end',
       render: (a) =>
         a.email === me ? null : (
+          // Keep menu clicks from also opening the row's drawer.
+          <span onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
           <Menu
             side="bottom"
             align="end"
@@ -80,6 +85,7 @@ export default function Admins() {
             ]}
             trigger={<IconButton icon="more" label={`Actions for ${a.name}`} />}
           />
+          </span>
         ),
     },
   ];
@@ -91,7 +97,7 @@ export default function Admins() {
       action={<Button leadingIcon="plus" onClick={() => setInviting(true)}>Invite admin</Button>}
       toolbar={<FilterBar query={query} onQuery={setQuery} placeholder="Search by name or email" />}
     >
-      <DataTable label="Admin users" columns={columns} rows={rows} rowKey={(a) => a.id} empty="No admins match." footer={`Showing ${rows.length} of ${admins.length} admins`} />
+      <DataTable label="Admin users" columns={columns} rows={rows} rowKey={(a) => a.id} onRowClick={(a) => openDrawer({ kind: 'admin', id: a.id })} empty="No admins match." footer={`Showing ${rows.length} of ${admins.length} admins`} />
       {inviting && <InviteDialog onClose={() => setInviting(false)} />}
     </AdminPage>
   );

@@ -10,6 +10,8 @@ export interface DonutSlice {
 }
 
 const R = 52, C = 2 * Math.PI * R;
+/** Round caps reach half the stroke past each dash end, so each slice is shortened by a full stroke plus a small gap. */
+const STROKE = 11, GAP = 4;
 
 export function DonutChart({ data, label, totalLabel }: { data: DonutSlice[]; label: string; totalLabel: string }) {
   const total = data.reduce((s, d) => s + d.value, 0) || 1;
@@ -18,7 +20,6 @@ export function DonutChart({ data, label, totalLabel }: { data: DonutSlice[]; la
     <div className={styles.wrap}>
     <div className={styles.root}>
       <svg viewBox="0 0 140 140" className={styles.svg} role="img" aria-label={label}>
-        <circle cx={70} cy={70} r={R} className={styles.base} />
         {data.map((d) => {
           const len = (d.value / total) * C;
           const el = (
@@ -29,8 +30,8 @@ export function DonutChart({ data, label, totalLabel }: { data: DonutSlice[]; la
               r={R}
               className={styles.slice}
               data-tone={d.tone}
-              strokeDasharray={`${Math.max(len - 2, 0)} ${C}`}
-              strokeDashoffset={-offset}
+              strokeDasharray={`${Math.max(len - STROKE - GAP, 0.01)} ${C}`}
+              strokeDashoffset={-(offset + (STROKE + GAP) / 2)}
             >
               <title>{`${d.label}: ${d.value}`}</title>
             </circle>

@@ -1,12 +1,20 @@
-/** Admin routes: a section root plus at most one detail page on top. */
+/** Admin routes: one section page at a time. Every record (client, case, request, plan, admin, log entry,
+ *  consent version) opens in the side drawer over that page instead of a route. */
+
+/** What the side drawer is showing. `plan` with a null id is a new plan. */
+export type DrawerTarget =
+  | { kind: 'client'; id: string }
+  | { kind: 'escalation'; id: string }
+  | { kind: 'support'; id: string }
+  | { kind: 'deletion'; id: string }
+  | { kind: 'admin'; id: string }
+  | { kind: 'plan'; id: string | null }
+  | { kind: 'audit'; id: string }
+  | { kind: 'consent'; id: string }
+  | { kind: 'stripeEvents'; id: null };
+
 export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'subscriptions' | 'admins' | 'audit' | 'compliance';
 
-export type AdminRoute =
-  | { id: SectionId }
-  | { id: 'client'; clientId: string }
-  | { id: 'dependent'; clientId: string; dependentId: string }
-  | { id: 'escalation'; escalationId: string }
-  | { id: 'deletion'; requestId: string }
-  | { id: 'plan'; planId: string | null };
+export type AdminRoute = { id: SectionId };
 
 export type AuthStep = 'signIn' | 'forgot' | 'twoFactor';

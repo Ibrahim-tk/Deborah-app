@@ -18,7 +18,7 @@ type StatusFilter = 'active' | EscalationStatus | 'all';
 export default function Escalations() {
   const escalations = useAdminStore((s) => s.escalations);
   const clients = useAdminStore((s) => s.clients);
-  const push = useAdminNav((s) => s.push);
+  const openEscalation = useAdminNav((s) => s.openEscalation);
   const [query, setQuery] = useState('');
   const [type, setType] = useState<TypeFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('active');
@@ -46,7 +46,7 @@ export default function Escalations() {
       ),
     },
     { key: 'status', header: 'Status', sort: (e) => e.status, render: (e) => <EscalationStatusText status={e.status} /> },
-    { key: 'opened', header: 'Opened', sort: (e) => e.opened, render: (e) => formatDate(e.opened) },
+    { key: 'opened', muted: true, header: 'Opened', sort: (e) => e.opened, render: (e) => formatDate(e.opened) },
   ];
 
   return (
@@ -84,7 +84,7 @@ export default function Escalations() {
         rowKey={(e) => e.id}
         initialSort={{ key: 'type', dir: 'asc' }}
         footer={`Showing ${rows.length} of ${escalations.length} cases`}
-        onRowClick={(e) => push({ id: 'escalation', escalationId: e.id })}
+        onRowClick={(e) => openEscalation(e.id)}
         empty={status === 'active' ? 'No open cases. New escalations appear here as they come in.' : 'No cases match these filters.'}
       />
     </AdminPage>

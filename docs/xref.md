@@ -103,14 +103,20 @@ Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec:
 | A-1.3 | Two-step verification | `auth/TwoFactor` | built |
 | A-2.1 | Dashboard (KPIs + 4 charts) | `dashboard/Dashboard` | built |
 | A-3.1 | Clients | `clients/Clients` | built |
-| A-3.2 | Client detail | `clients/ClientDetail` | built |
-| A-3.3 | Dependent profile | `clients/DependentProfile` | built |
+| A-3.2 | Client detail (side drawer, dependents inline) | `clients/ClientDrawer` | built |
+| A-3.3 | Dependent profile | — merged into the A-3.2 drawer | removed |
 | A-4.1 | Escalations | `escalations/Escalations` | built |
-| A-4.2 | Escalation detail | `escalations/EscalationDetail` | built |
+| A-4.2 | Escalation detail (side drawer) | `escalations/EscalationDrawer` | built |
 | A-5.1 | Support requests (+ data deletion tab) | `support/Support` | built |
-| A-5.2 | Data deletion request | `support/DeletionRequest` | built |
+| A-5.2 | Data deletion request (side drawer) | `support/DeletionDrawer` | built |
+| A-5.3 | Support request (side drawer) | `support/SupportDrawer` | built |
 | A-6.1 | Admin users | `admins/Admins` | built |
+| A-6.2 | Admin user (side drawer) | `admins/AdminDrawer` | built |
 | A-7.1 | Subscriptions (+ A-7.2 plan list) | `subscriptions/Subscriptions` | built |
-| A-7.3 | Plan editor | `subscriptions/PlanEditor` | built |
+| A-7.3 | Plan editor (side drawer) | `subscriptions/PlanDrawer` | built |
+| A-7.4 | Stripe integration (Payments card) | `subscriptions/Subscriptions/parts/StripeCard` | built (simulated) |
+| A-7.5 | Stripe webhook events (side drawer) | `subscriptions/StripeEventsDrawer` | built (simulated) |
 | A-8.1 | Audit log | `audit/AuditLog` | built |
+| A-8.2 | Audit entry (side drawer) | `audit/AuditDrawer` | built |
 | A-9.1 | Consent | `compliance/Consent` | built |
+| A-9.2 | Consent version (side drawer) | `compliance/ConsentDrawer` | built |

@@ -9,8 +9,10 @@ import auditLog from './data/audit-log.json';
 import consentVersions from './data/consent-versions.json';
 import consentRevocations from './data/consent-revocations.json';
 import metrics from './data/metrics.json';
+import stripeEvents from './data/stripe-events.json';
 import type {
-  AdminUser, AuditEntry, Client, ConsentRevocation, ConsentVersion, DeletionRequest, Escalation, Metrics, Plan, SupportRequest,
+  AdminUser, AuditEntry, Client, ConsentRevocation, ConsentVersion, DeletionRequest, Escalation, Metrics, Plan, StripeConnection, StripeEvent,
+  SupportRequest,
 } from './types';
 
 export const seed = {
@@ -23,6 +25,9 @@ export const seed = {
   auditLog: auditLog as AuditEntry[],
   consentVersions: consentVersions as ConsentVersion[],
   consentRevocations: consentRevocations as ConsentRevocation[],
+  stripeEvents: stripeEvents as StripeEvent[],
+  /** Starts disconnected so the admin sees the Connect flow. */
+  stripe: { status: 'disconnected', mode: 'test', account: null, webhook: null } as StripeConnection,
 };
 
 export const adminMetrics = metrics as Metrics;

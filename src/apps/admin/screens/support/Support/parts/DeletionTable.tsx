@@ -16,15 +16,15 @@ export function DeadlineText({ request }: { request: DeletionRequest }) {
 export function DeletionTable({ query }: { query: string }) {
   const requests = useAdminStore((s) => s.deletionRequests);
   const clients = useAdminStore((s) => s.clients);
-  const push = useAdminNav((s) => s.push);
+  const openDrawer = useAdminNav((s) => s.openDrawer);
   const nameOf = (id: string) => clients.find((c) => c.id === id)?.name ?? 'Deleted account';
   const rows = requests.filter((r) => matches(query, nameOf(r.clientId), r.regulation));
 
   const columns: Column<DeletionRequest>[] = [
     { key: 'client', header: 'Client', grow: true, primary: true, sort: (r) => nameOf(r.clientId), render: (r) => nameOf(r.clientId) },
-    { key: 'law', header: 'Regulation', render: (r) => r.regulation },
-    { key: 'deps', header: 'Dependents', align: 'end', render: (r) => r.decisions.length || '—' },
-    { key: 'received', header: 'Received', sort: (r) => r.received, render: (r) => formatDate(r.received) },
+    { key: 'law', muted: true, header: 'Regulation', render: (r) => r.regulation },
+    { key: 'deps', muted: true, header: 'Dependents', align: 'end', render: (r) => r.decisions.length || '—' },
+    { key: 'received', muted: true, header: 'Received', sort: (r) => r.received, render: (r) => formatDate(r.received) },
     { key: 'deadline', header: 'Deadline', sort: (r) => deletionDaysLeft(r.received, r.regulation), render: (r) => <DeadlineText request={r} /> },
   ];
 
@@ -35,7 +35,7 @@ export function DeletionTable({ query }: { query: string }) {
       rows={rows}
       rowKey={(r) => r.id}
       initialSort={{ key: 'deadline', dir: 'asc' }}
-      onRowClick={(r) => push({ id: 'deletion', requestId: r.id })}
+      onRowClick={(r) => openDrawer({ kind: 'deletion', id: r.id })}
       empty="No deletion requests."
     />
   );
