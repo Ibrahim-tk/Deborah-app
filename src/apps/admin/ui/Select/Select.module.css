@@ -31,3 +31,6 @@
 .item[data-highlighted] { background: var(--color-accent-tint); }
 .item[data-selected] { color: var(--color-accent); }
 .check { color: var(--color-accent); }
+@container admin (max-width: 640px) {
+  .trigger { min-inline-size: 0; inline-size: 100%; }
+}

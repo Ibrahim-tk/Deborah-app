@@ -1,0 +1,284 @@
+[
+  {
+    "id": "n01",
+    "category": "safety",
+    "kind": "emergency_escalation",
+    "title": "Emergency: chest pain reported",
+    "body": "Grace Nguyen described chest pain spreading to the left arm. Emergency guidance shown.",
+    "at": "2026-11-04T09:12",
+    "read": false,
+    "audience": "all",
+    "severity": "emergency",
+    "target": {
+      "kind": "escalation",
+      "id": "e001"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n02",
+    "category": "support",
+    "kind": "escalate_to_deborah",
+    "title": "Escalate to Deborah",
+    "body": "A client asked for Deborah to review their plan.",
+    "at": "2026-11-04T08:40",
+    "read": false,
+    "audience": "all",
+    "severity": "normal",
+    "target": {
+      "kind": "support",
+      "id": "s004"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n03",
+    "category": "billing",
+    "kind": "payment_failed",
+    "title": "3 payments failed",
+    "body": "Cards declined or expired in the last hour. Stripe will retry in 3 days.",
+    "at": "2026-11-04T08:05",
+    "read": false,
+    "audience": "super",
+    "severity": "high",
+    "target": {
+      "section": "subscriptions"
+    },
+    "status": "placeholder",
+    "groupCount": 3
+  },
+  {
+    "id": "n04",
+    "category": "data",
+    "kind": "deletion_due",
+    "title": "Deletion request due in 7 days",
+    "body": "GDPR request from Amelia Hart. One dependent transfer is still waiting.",
+    "at": "2026-11-04T07:30",
+    "read": false,
+    "audience": "all",
+    "severity": "high",
+    "target": {
+      "kind": "deletion",
+      "id": "dr001"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n05",
+    "category": "security",
+    "kind": "new_device",
+    "title": "New sign-in to your account",
+    "body": "Chrome on Windows, Denver, CO. If this wasn't you, change your password.",
+    "at": "2026-11-04T07:02",
+    "read": false,
+    "audience": "all",
+    "severity": "high",
+    "target": {
+      "section": "settings"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n06",
+    "category": "safety",
+    "kind": "critical_escalation",
+    "title": "Critical: stopped thyroid medication",
+    "body": "Julia Bennett stopped prescribed medication without their prescriber.",
+    "at": "2026-11-03T18:22",
+    "read": true,
+    "audience": "all",
+    "severity": "high",
+    "target": {
+      "kind": "escalation",
+      "id": "e002"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n07",
+    "category": "billing",
+    "kind": "daily_summary",
+    "title": "Yesterday in billing",
+    "body": "14 new subscriptions, 3 cancelled, 2 payment failures. Churn 1.2% this month.",
+    "at": "2026-11-03T08:00",
+    "read": true,
+    "audience": "super",
+    "severity": "normal",
+    "target": {
+      "section": "subscriptions"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n08",
+    "category": "team",
+    "kind": "invite_accepted",
+    "title": "Sam Rivera joined as admin",
+    "body": "They accepted the invite you sent on 12 Jun.",
+    "at": "2026-11-03T15:10",
+    "read": true,
+    "audience": "super",
+    "severity": "normal",
+    "target": {
+      "kind": "admin",
+      "id": "a002"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n09",
+    "category": "team",
+    "kind": "invite_expired",
+    "title": "Invite to alex@oracleclinician.com expired",
+    "body": "Invites last 24 hours. Resend it to give them a new link.",
+    "at": "2026-11-03T14:00",
+    "read": false,
+    "audience": "super",
+    "severity": "normal",
+    "target": {
+      "kind": "admin",
+      "id": "a004"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n10",
+    "category": "clients",
+    "kind": "consent_withdrawn",
+    "title": "A client withdrew consent",
+    "body": "Sharing for product improvement was turned off.",
+    "at": "2026-11-03T11:45",
+    "read": true,
+    "audience": "all",
+    "severity": "normal",
+    "target": {
+      "section": "compliance"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n11",
+    "category": "support",
+    "kind": "support_request",
+    "title": "New support request",
+    "body": "\"Charged twice this month\" (billing).",
+    "at": "2026-11-03T10:15",
+    "read": true,
+    "audience": "all",
+    "severity": "normal",
+    "target": {
+      "kind": "support",
+      "id": "s001"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n12",
+    "category": "security",
+    "kind": "failed_signins",
+    "title": "5 failed sign-ins on an admin account",
+    "body": "jo@oracleclinician.com, from an unknown device. The account is locked for 15 minutes.",
+    "at": "2026-11-02T22:40",
+    "read": false,
+    "audience": "super",
+    "severity": "high",
+    "target": {
+      "kind": "admin",
+      "id": "a003"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n13",
+    "category": "compliance",
+    "kind": "consent_version",
+    "title": "Consent 2026.3 uploaded",
+    "body": "Clients will be asked to agree again the next time they open the app.",
+    "at": "2026-11-02T09:05",
+    "read": true,
+    "audience": "super",
+    "severity": "normal",
+    "target": {
+      "section": "compliance"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n14",
+    "category": "data",
+    "kind": "deletion_received",
+    "title": "New data deletion request",
+    "body": "CCPA request. Due in 45 days.",
+    "at": "2026-11-02T08:20",
+    "read": true,
+    "audience": "all",
+    "severity": "normal",
+    "target": {
+      "kind": "deletion",
+      "id": "dr003"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n15",
+    "category": "safety",
+    "kind": "case_reopened",
+    "title": "Case reopened",
+    "body": "Crisis language detected, Maria Moreau. Reopened by Sam Rivera.",
+    "at": "2026-11-01T16:30",
+    "read": true,
+    "audience": "all",
+    "severity": "high",
+    "target": {
+      "kind": "escalation",
+      "id": "e003"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n16",
+    "category": "billing",
+    "kind": "stripe_webhook",
+    "title": "Stripe webhook recovered",
+    "body": "Events are arriving again after a 12-minute gap.",
+    "at": "2026-11-01T12:10",
+    "read": true,
+    "audience": "super",
+    "severity": "normal",
+    "target": {
+      "section": "integrations"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n17",
+    "category": "compliance",
+    "kind": "framework_review",
+    "title": "HIPAA item needs review",
+    "body": "Annual risk assessment is due by 30 Nov.",
+    "at": "2026-10-31T09:00",
+    "read": true,
+    "audience": "super",
+    "severity": "normal",
+    "target": {
+      "section": "regulations"
+    },
+    "status": "placeholder"
+  },
+  {
+    "id": "n18",
+    "category": "data",
+    "kind": "transfer_accepted",
+    "title": "Dependent transfer accepted",
+    "body": "Fiona Hart accepted ownership of a dependent profile.",
+    "at": "2026-10-30T13:25",
+    "read": true,
+    "audience": "all",
+    "severity": "normal",
+    "target": {
+      "kind": "deletion",
+      "id": "dr001"
+    },
+    "status": "placeholder"
+  }
+]

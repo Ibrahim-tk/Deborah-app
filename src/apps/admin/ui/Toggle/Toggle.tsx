@@ -9,19 +9,23 @@ export interface ToggleProps {
   label: string;
   description?: string;
   disabled?: boolean;
+  /** Switch only; the label is kept for screen readers (e.g. under a column heading). */
+  hideLabel?: boolean;
 }
 
-export function Toggle({ checked, onChange, label, description, disabled }: ToggleProps) {
+export function Toggle({ checked, onChange, label, description, disabled, hideLabel }: ToggleProps) {
   const id = useId();
   return (
-    <div className={styles.root}>
-      <Switch.Root id={id} checked={checked} disabled={disabled} onCheckedChange={(v) => onChange(v)} className={styles.switch}>
+    <div className={styles.root} data-bare={hideLabel || undefined}>
+      <Switch.Root id={id} checked={checked} disabled={disabled} aria-label={hideLabel ? label : undefined} onCheckedChange={(v) => onChange(v)} className={styles.switch}>
         <Switch.Thumb className={styles.thumb} />
       </Switch.Root>
-      <label htmlFor={id} className={styles.text}>
-        <span className={styles.label}>{label}</span>
-        {description && <span className={styles.description}>{description}</span>}
-      </label>
+      {!hideLabel && (
+        <label htmlFor={id} className={styles.text}>
+          <span className={styles.label}>{label}</span>
+          {description && <span className={styles.description}>{description}</span>}
+        </label>
+      )}
     </div>
   );
 }

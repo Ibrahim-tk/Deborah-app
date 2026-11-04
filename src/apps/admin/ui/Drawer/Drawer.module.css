@@ -33,3 +33,14 @@
 /* Hairline under the header when there's no action row (the action row draws its own). */
 .head:not(:has(+ .actions)) { border-block-end: 1px solid var(--color-border-hairline); }
 .controls { display: flex; align-items: center; gap: var(--space-1); flex: none; }
+
+/* Phone: the drawer is a full-screen sheet that still slides in from the right. Header controls stay in reach,
+ * actions scroll sideways if they don't fit, safe areas respected. */
+@container admin (max-width: 640px) {
+  .panel { inline-size: 100%; border-inline-start: 0; box-shadow: none; padding-block-start: env(safe-area-inset-top); }
+  .head { padding: var(--space-5) var(--space-2) var(--space-4) var(--space-4); }
+  .title { font-size: 22px; line-height: 28px; }
+  .actions { padding: 0 var(--space-4) var(--space-4); flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .actions > * { flex: none; }
+  .body { padding: var(--space-6) var(--space-4) calc(var(--space-12) + env(safe-area-inset-bottom)); gap: var(--space-8); }
+}

@@ -37,6 +37,16 @@ Source: the "Super Admin – Panel" FigJam board plus the client brief of 2026-1
 - **Exception to CLAUDE.md §8 (designer request, 2026-11-02):** statuses (Emergency, Critical, Open, Resolved…) are soft round pills (`StatusText`): a light tint ground with tone ink and a small dot, no border. Admin panel only. The client apps still ban pills.
 - One primary action per page, at the title's trailing edge. Layout uses logical properties, `minmax(0, 1fr)` tracks and container queries.
 
+## Responsive behaviour
+Sized against the admin stage, not the window: the root is a named container (`container: admin`) and AdminNavigator measures it.
+- **Desktop (> 1024px):** unchanged.
+- **Tablet (≤ 1024px):** the sidebar is the icon rail (tooltips for labels); tables pin their first column.
+- **Phone (≤ 640px):** a sticky top bar (☰, section title, account initial → Settings) replaces the sidebar; ☰ opens the navigation
+  in a left sheet (`ui/Sheet`). Pages use 16px gutters; header actions drop under the title; filter bars put search on its own row and
+  filters two up. Tables keep their own sideways scroll with a pinned first column (the page never scrolls sideways). Drawers become
+  full-screen; dialogs become bottom sheets with stacked buttons. Fields use 16px text (no iOS zoom); tap targets are 44px.
+- Touch screens show hover-only controls (column ⋮, sort hints). Safe-area insets and reduced motion are respected.
+
 ## Screens
 
 Every table row opens its record in a right-hand side drawer over the page (`navigation/drawers.tsx`); there are no detail
@@ -125,6 +135,7 @@ Consent versions: version name, uploaded at, uploaded by (email). Upload a new v
 lists clients who revoked consent; a row opens the client.
 
 ### A-9.3 Compliance (super admin only)
+Reached from the Frameworks card at the end of Settings (A-11.1) › Compliance, not the sidebar. Breadcrumb: Settings › Compliance.
 Client data rights (withdraw consent, with a link to A-9.1; right to delete with the dependent transfer rules and the GDPR 1 month /
 CPRA 45 days deadlines, with a link to deletion requests) and one card per framework: GDPR (EU), HIPAA (US), CPRA (California),
 PIPEDA + provincial (Canada), Privacy Act/APPs + NDB (Australia), SOC 2 (in progress). Each shows the deletion window, breach notice
@@ -135,6 +146,43 @@ Two parts. **Connected:** each connected service as a full-width card with all i
 webhook, ⋮ menu; others: account, connected date, Disconnect). **Available:** one container holding a tile per service not yet
 connected (real brand logo, one line, Connect button), with one column per tile: 1×4, then 1×3 and so on as services connect.
 Stripe (A-7.4) moved here from Subscriptions. Connecting is simulated (the provider's sign-in is assumed).
+
+### A-11.1 Settings (admin and super admin)
+Opens from the sidebar (last item) or the account menu. One column of cards:
+- **Profile:** edit your full name; email (copyable) and role are read only, changed by a super admin.
+- **Password:** current, new and confirm, with live rules (12+ characters, a number, a symbol, upper and lower case). Changing it
+  signs out your other sessions. Simulated; nothing is stored.
+- **Sign-in security:** two-step verification is on and can't be turned off (required for admins); list of signed-in devices with
+  "Sign out of other sessions".
+- **Notifications:** per-category In-app / Email preferences (see A-12.1).
+- **Compliance:** training and confidentiality status, a note that everything is audit-logged, links to Compliance (super admins)
+  and the audit log.
+State lives in `src/shared/admin/settings.ts` (`useAdminSettings`); every change is written to the audit log.
+
+### A-12.1 Notifications (admin and super admin)
+**Principle:** notify when someone needs to act or should know soon. Routine billing is rolled into a daily summary, never one
+notification per subscription; repeats within an hour are grouped ("3 payments failed").
+
+| Category | Who | Examples | Locked |
+|---|---|---|---|
+| Safety escalations | All | Emergency, critical, case reopened | Yes |
+| Support requests | All | New request, "Escalate to Deborah" | |
+| Data requests | All | Deletion received, due in 7 days, overdue, transfer accepted | |
+| Client consent | All | Consent withdrawn | |
+| Billing | Super admin | Failed payments (grouped), daily summary, Stripe disconnected/webhook failing | |
+| Team | Super admin | Invite accepted or expired, admin deactivated | |
+| Security | Super admin | New-device sign-in, repeated failed sign-ins | Yes |
+| Compliance | Super admin | New consent version, framework review due | |
+
+- **Bell** (`patterns/NotificationBell`): trailing in every page header (in the top bar on phone), with a red dot when anything is
+  unread. Its panel shows the latest 8 (Today / Earlier), Mark all as read, View all, Preferences. A row marks it read and opens
+  the record's drawer or section.
+- **Page** (route `notifications`, also in the account menu): All / Unread, category filter, grouped by Today / Yesterday /
+  Earlier, a ⋮ menu per row (Open, Mark as read or unread), Mark all as read, Preferences.
+- **Settings › Notifications:** per category, In-app and Email switches, with "As it happens / Daily summary" for Support and
+  Billing. Locked categories stay on. Plain admins only see their categories.
+- **Simulated:** seed feed `data/notifications.json`; a support request arrives 40s after sign-in; reopening a case, an invite being
+  accepted and disconnecting Stripe also post notifications. Store: `src/shared/admin/notifications.ts`.
 
 ## Open questions
 

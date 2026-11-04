@@ -1,4 +1,4 @@
-/** Sidebar destinations, in rail order. `superOnly` sections are hidden from plain admins. */
+/** Sidebar destinations (Compliance lives under Settings, A-9.3 opens from its card), in rail order. `superOnly` sections are hidden from plain admins. */
 import type { IconName } from '@admin/ui';
 import type { SectionId } from './types';
 
@@ -12,5 +12,5 @@ export const SECTIONS: { id: SectionId; label: string; icon: IconName; superOnly
   { id: 'admins', label: 'Admin users', icon: 'admins', superOnly: true },
   { id: 'audit', label: 'Audit log', icon: 'audit' },
   { id: 'compliance', label: 'Consent', icon: 'consent' },
-  { id: 'regulations', label: 'Compliance', icon: 'compliance', superOnly: true },
+  { id: 'settings', label: 'Settings', icon: 'settings' },
 ];

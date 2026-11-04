@@ -2,7 +2,8 @@
  * and scrims fill the admin stage instead of the browser window (they no longer slide under the prototype nav).
  * `clip`, not `hidden`: a hidden box can still be scrolled by the browser when focus lands on the drawer
  * while it is off-screen mid-slide, which jerked the whole page sideways. */
-.root { position: absolute; inset: 0; overflow: clip; transform: translateZ(0); --safe-top: 0px; --safe-bottom: 0px; }
+/* Named container: admin components size against the admin stage (`@container admin`), not the window. */
+.root { position: absolute; inset: 0; overflow: clip; transform: translateZ(0); container: admin / inline-size; --safe-top: 0px; --safe-bottom: 0px; }
 .toast { position: absolute; inset-block-end: var(--space-8); inset-inline: 0; display: flex; justify-content: center; z-index: var(--z-overlay); pointer-events: none; }
 /* Admin-only: a quieter canvas. The parchment token mixed toward paper, so long working sessions
  * sit on a near-white ground while tables and panels (white surface) still separate from it.

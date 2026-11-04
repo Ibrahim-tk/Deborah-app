@@ -10,6 +10,8 @@ import Integrations from '@admin/screens/integrations/Integrations';
 import AuditLog from '@admin/screens/audit/AuditLog';
 import Consent from '@admin/screens/compliance/Consent';
 import Compliance from '@admin/screens/compliance/Compliance';
+import Settings from '@admin/screens/settings/Settings';
+import Notifications from '@admin/screens/notifications/Notifications';
 import type { AdminRoute } from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,4 +28,6 @@ export const REGISTRY: Record<AdminRoute['id'], Screen> = {
   audit: { screenId: 'A-8.1', component: AuditLog },
   compliance: { screenId: 'A-9.1', component: Consent },
   regulations: { screenId: 'A-9.3', component: Compliance },
+  settings: { screenId: 'A-11.1', component: Settings },
+  notifications: { screenId: 'A-12.1', component: Notifications },
 };

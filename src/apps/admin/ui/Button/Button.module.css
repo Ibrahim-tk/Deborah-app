@@ -38,3 +38,9 @@
 }
 @keyframes spin { to { transform: rotate(1turn); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+
+/* Phone: 44px tap targets. */
+@container admin (max-width: 640px) {
+  .root { min-block-size: 44px; }
+  .root[data-size='sm'] { min-block-size: 40px; }
+}

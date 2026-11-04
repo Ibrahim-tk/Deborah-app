@@ -6,9 +6,20 @@ interface AdminNavState {
   stack: AdminRoute[];
   auth: AuthStep;
   railCollapsed: boolean;
+  /** Width class of the admin stage: phone ≤ 640, tablet ≤ 1024 (measured by AdminNavigator). */
+  layout: 'desktop' | 'tablet' | 'phone';
+  setLayout: (layout: 'desktop' | 'tablet' | 'phone') => void;
+  /** Phone only: the navigation sheet is open. */
+  navOpen: boolean;
+  /** Which Settings tab shows; links like the bell's "Preferences" open a specific one. */
+  settingsTab: 'profile' | 'security' | 'notifications' | 'compliance';
+  openSettings: (tab: 'profile' | 'security' | 'notifications' | 'compliance') => void;
+  setNavOpen: (open: boolean) => void;
   /** Side drawer over the current page (one at a time): any record a table row opens. */
   drawer: DrawerTarget | null;
   openDrawer: (target: DrawerTarget) => void;
+  /** Opens a notification's record (drawer) or section page. */
+  openTarget: (target: { kind: string; id: string } | { section: string }) => void;
   openClient: (id: string) => void;
   openEscalation: (id: string) => void;
   closeDrawer: () => void;
@@ -35,14 +46,24 @@ export const useAdminNav = create<AdminNavState>((set) => ({
   stack: [{ id: 'dashboard' }],
   auth: 'signIn',
   railCollapsed: readCollapsed(),
+  layout: 'desktop',
+  setLayout: (layout) => set({ layout }),
+  navOpen: false,
+  settingsTab: 'profile',
+  openSettings: (settingsTab) => set({ settingsTab, stack: [{ id: 'settings' }], drawer: null, navOpen: false }),
+  setNavOpen: (navOpen) => set({ navOpen }),
   drawer: null,
   openDrawer: (drawer) => set({ drawer, drawerClosing: false }),
+  openTarget: (target) =>
+    'section' in target
+      ? set({ stack: [{ id: target.section as SectionId }], drawer: null, navOpen: false })
+      : set({ drawer: target as DrawerTarget, drawerClosing: false, navOpen: false }),
   drawerClosing: false,
   finishDrawerClose: () => set({ drawer: null, drawerClosing: false }),
   openClient: (id) => set({ drawer: { kind: 'client', id }, drawerClosing: false }),
   openEscalation: (id) => set({ drawer: { kind: 'escalation', id }, drawerClosing: false }),
   closeDrawer: () => set((s) => (s.drawer ? { drawerClosing: true } : {})),
-  go: (section) => set({ stack: [{ id: section }], drawer: null }),
+  go: (section) => set({ stack: [{ id: section }], drawer: null, navOpen: false }),
   push: (route) => set((s) => ({ stack: [...s.stack, route], drawer: null })),
   pop: () => set((s) => ({ stack: s.stack.length > 1 ? s.stack.slice(0, -1) : s.stack })),
   setAuth: (auth) => set({ auth }),

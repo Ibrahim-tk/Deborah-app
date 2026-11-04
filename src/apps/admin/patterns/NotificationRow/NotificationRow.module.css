@@ -1,0 +1,16 @@
+.row { display: flex; align-items: center; gap: var(--space-1); border-radius: var(--radius-md); transition: background var(--dur-quick) var(--ease-ios); }
+.row:hover { background: color-mix(in srgb, var(--pink-50) 45%, var(--color-surface)); }
+.main { all: unset; cursor: pointer; flex: 1; min-inline-size: 0; display: flex; align-items: baseline; gap: var(--space-3); padding: var(--space-3); border-radius: inherit; }
+.main:focus-visible { outline: 1px solid var(--color-accent); outline-offset: -1px; }
+/* Space is always reserved so read and unread rows line up. */
+.dot { flex: none; inline-size: 7px; block-size: 7px; border-radius: var(--radius-full); background: transparent; transform: translateY(-1px); }
+.row[data-unread] .dot { background: var(--color-accent); }
+.row[data-unread][data-severity='emergency'] .dot { background: var(--color-danger-fill); }
+.text { flex: 1; min-inline-size: 0; display: grid; gap: 2px; }
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.title { min-inline-size: 0; color: var(--color-ink-secondary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row[data-unread] .title { color: var(--color-ink); font-weight: var(--weight-medium); }
+.time { flex: none; color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+.body { color: var(--color-ink-tertiary); font-size: var(--fs-footnote); line-height: var(--lh-footnote); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row:not([data-compact]) .body { white-space: normal; }
+.trailing { flex: none; }

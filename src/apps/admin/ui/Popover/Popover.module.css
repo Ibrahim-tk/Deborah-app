@@ -1,0 +1,16 @@
+.positioner { z-index: var(--z-overlay); outline: 0; }
+.popup {
+  inline-size: min(360px, calc(100vw - 24px));
+  max-block-size: min(var(--available-height), 560px);
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float-md);
+  outline: 0;
+  overflow: hidden;
+  transform-origin: var(--transform-origin);
+  transition: opacity var(--dur-quick) var(--ease-ios), transform var(--dur-quick) var(--ease-ios);
+}
+.popup[data-starting-style], .popup[data-ending-style] { opacity: 0; transform: translateY(-4px); }

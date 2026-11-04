@@ -30,3 +30,20 @@ export const count = (n: number) => n.toLocaleString('en-US');
 
 /** What a client is on, without the billing period: Free, Individual or Family. */
 export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.monthly === 0 ? 'Free' : plan.kind === 'family' ? 'Family' : 'Individual');
+
+/** "Just now", "12 min ago", "3 h ago", "Yesterday", or "2 Nov" (relative to the prototype clock). */
+export function timeAgo(iso: string, nowIso: string = new Date().toISOString().slice(0, 16)): string {
+  const mins = Math.round((Date.parse(nowIso) - Date.parse(iso)) / 60_000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins} min ago`;
+  const hours = Math.round(mins / 60);
+  if (hours < 24) return `${hours} h ago`;
+  if (hours < 48) return 'Yesterday';
+  return formatDate(iso).split(',')[0];
+}
+
+/** Today / Yesterday / Earlier bucket for grouping a feed. */
+export function dayBucket(iso: string, nowIso: string = new Date().toISOString().slice(0, 10)): 'Today' | 'Yesterday' | 'Earlier' {
+  const days = Math.round((Date.parse(nowIso.slice(0, 10)) - Date.parse(iso.slice(0, 10))) / 86_400_000);
+  return days <= 0 ? 'Today' : days === 1 ? 'Yesterday' : 'Earlier';
+}

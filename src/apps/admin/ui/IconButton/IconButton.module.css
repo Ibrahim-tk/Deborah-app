@@ -13,3 +13,8 @@
 .root[data-size='sm'] { inline-size: 32px; block-size: 32px; }
 .root:hover, .root[data-popup-open] { background: var(--color-canvas); color: var(--color-ink); }
 .root:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 1px; box-shadow: 0 0 0 4px var(--color-accent-tint); }
+
+/* Phone: 44px tap targets. */
+@container admin (max-width: 640px) {
+  .root { inline-size: 44px; block-size: 44px; }
+}

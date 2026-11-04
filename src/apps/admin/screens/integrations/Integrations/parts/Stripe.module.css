@@ -41,3 +41,9 @@
 .stripeBtn:focus-visible { outline: 2px solid #635bff; outline-offset: 3px; }
 .stripeMark { display: grid; place-items: center; inline-size: 24px; block-size: 24px; border-radius: var(--radius-full); background: #ffffff; color: #635bff; font-size: 14px; font-weight: var(--weight-medium); }
 .stripeBtn:disabled { cursor: progress; opacity: 0.85; }
+
+/* Phone: tighter padding; the connect button spans the card. */
+@container admin (max-width: 640px) {
+  .connect { padding: var(--space-5); }
+  .stripeBtn { box-sizing: border-box; inline-size: 100%; justify-content: center; }
+}

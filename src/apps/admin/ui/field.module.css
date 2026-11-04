@@ -36,3 +36,9 @@ textarea.control { resize: vertical; padding-block: var(--space-3); }
 .adorn { display: grid; place-items: center; flex: none; color: var(--color-ink-tertiary); }
 .hint { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
 .error { margin: 0; color: var(--color-danger-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+
+/* Phone: 16px text in fields so iOS doesn't zoom on focus; 44px tall controls. */
+@container admin (max-width: 640px) {
+  .control { font-size: 16px; }
+  .box { min-block-size: 44px; }
+}

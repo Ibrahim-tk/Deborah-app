@@ -39,3 +39,9 @@
 .brandBtn:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
 .brandBtn:disabled { cursor: progress; opacity: 0.85; }
 .brandChip { display: grid; place-items: center; inline-size: 24px; block-size: 24px; border-radius: var(--radius-full); background: var(--color-surface); color: var(--brand); }
+
+/* Phone: one tile per row. */
+@container admin (max-width: 640px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .tile { padding: var(--space-5); }
+}

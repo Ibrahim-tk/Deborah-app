@@ -98,3 +98,12 @@
 .panel[data-collapsed] .link { inline-size: 40px; block-size: 40px; min-block-size: 0; padding: 0; justify-content: center; }
 .panel[data-collapsed] .foot { display: flex; justify-content: center; padding-inline: 0; }
 .panel[data-collapsed] .account { inline-size: 40px; block-size: 40px; padding: 0; justify-content: center; }
+
+/* Phone sheet: full width of the sheet, no edge, roomier tap targets. */
+.panel[data-sheet] { inline-size: 100%; border-inline-end: 0; padding-block-end: env(safe-area-inset-bottom); }
+.panel[data-sheet] .link { min-block-size: 44px; }
+.panel[data-sheet] .account { min-block-size: 44px; }
+.expand:disabled { cursor: default; }
+.expand:disabled:hover { background: none; }
+.expand:disabled:hover .logo { opacity: 1; }
+.expand:disabled:hover .expandIcon { opacity: 0; }

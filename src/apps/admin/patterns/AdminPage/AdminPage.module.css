@@ -20,7 +20,9 @@
   overflow-wrap: anywhere;
 }
 .subtitle { margin: 0; color: var(--color-ink-secondary); font-size: var(--fs-callout); line-height: var(--lh-callout); overflow-wrap: anywhere; }
+.trail { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-3); margin-inline-start: auto; }
 .action { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.bell { display: inline-flex; }
 .toolbar { margin-block-start: calc(var(--space-5) * -1); }
 .body { display: grid; gap: var(--space-12); }
 .body[data-aside] { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-10); align-items: start; }
@@ -32,4 +34,26 @@
 }
 @container (max-width: 480px) {
   .root { padding-inline: var(--space-4); padding-block-start: var(--space-6); }
+}
+
+.crumbs { margin-block-end: calc(var(--space-8) * -1); }
+.crumbs ol { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.crumbs li { display: inline-flex; align-items: center; gap: var(--space-1); }
+.crumbs button { padding: 0; border: 0; background: none; font: inherit; color: var(--color-ink-tertiary); cursor: pointer; }
+.crumbs button:hover { color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+.crumbs [aria-current] { color: var(--color-ink); }
+.sep { color: var(--color-ink-tertiary); }
+
+/* Phone (admin stage ≤ 640px): 16px gutters, tighter rhythm, header actions drop under the title. */
+@container admin (max-width: 640px) {
+  .root { padding: var(--space-6) var(--space-4) var(--space-12); gap: var(--space-8); }
+  .title { font-size: var(--fs-title-2); line-height: var(--lh-title-2); }
+  .head { flex-direction: column; align-items: stretch; }
+  .trail { inline-size: 100%; margin-inline-start: 0; }
+  .action { inline-size: 100%; }
+  .action > * { flex: 1 1 auto; }
+  .bell { display: none; }
+  .trail:not(:has(.action)) { display: none; }
+  .toolbar { margin-block-start: calc(var(--space-3) * -1); }
+  .body, .main { gap: var(--space-8); }
 }

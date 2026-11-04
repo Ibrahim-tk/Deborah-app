@@ -32,3 +32,8 @@
 @container (max-width: 420px) {
   .facts { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Phone: tighter card padding. */
+@container admin (max-width: 640px) {
+  .card { padding: var(--space-5); }
+}

@@ -1,5 +1,6 @@
 /** useAdminStore — the Super Admin panel's own client store. Separate from the app store on purpose. */
 import { create } from 'zustand';
+import { useAdminNotifications } from './notifications';
 import { seed } from './data';
 import type { AdminRole, AdminUser, AuditEntry, EscalationStatus, IntegrationId, Plan } from './types';
 
@@ -68,6 +69,10 @@ export const useAdminStore = create<AdminState>((set, get) => {
         ),
       }));
       log(status === 'resolved' ? `Closed case ${id}` : `Reopened case ${id}`);
+      if (status === 'open') {
+        const e = get().escalations.find((x) => x.id === id);
+        useAdminNotifications.getState().post({ category: 'safety', kind: 'case_reopened', title: 'Case reopened', body: `${e?.reason ?? id}. Reopened by you.`, audience: 'all', severity: 'high', target: { kind: 'escalation', id } });
+      }
     },
     resolveSupport: (id) => {
       set((s) => ({ supportRequests: s.supportRequests.map((r) => (r.id === id ? { ...r, resolved: true } : r)) }));
@@ -98,6 +103,11 @@ export const useAdminStore = create<AdminState>((set, get) => {
       const admin: AdminUser = { id: uid('a'), name, email, role, account: 'active', invite: 'pending', invitedAt: stamp() };
       set((s) => ({ admins: [...s.admins, admin] }));
       log(`Invited ${email} as ${role === 'super' ? 'super admin' : 'admin'}`);
+      // Simulated: the invitee accepts a little later.
+      setTimeout(() => {
+        set((s) => ({ admins: s.admins.map((a) => (a.id === admin.id && a.invite === 'pending' ? { ...a, invite: 'accepted' } : a)) }));
+        useAdminNotifications.getState().post({ category: 'team', kind: 'invite_accepted', title: `${name} joined as ${role === 'super' ? 'super admin' : 'admin'}`, body: `${email} accepted your invite.`, audience: 'super', severity: 'normal', target: { kind: 'admin', id: admin.id } });
+      }, 20_000);
     },
     resendInvite: (id) => {
       set((s) => ({ admins: s.admins.map((a) => (a.id === id ? { ...a, invite: 'pending', invitedAt: stamp() } : a)) }));
@@ -134,6 +144,7 @@ export const useAdminStore = create<AdminState>((set, get) => {
     disconnectStripe: () => {
       set((s) => ({ stripe: { status: 'disconnected', mode: 'test', account: null, webhook: null }, plans: s.plans.map(({ stripePriceId: _drop, ...p }) => p) }));
       log('Disconnected Stripe');
+      useAdminNotifications.getState().post({ category: 'billing', kind: 'stripe_disconnected', title: 'Stripe disconnected', body: 'New checkouts and renewals are paused until Stripe is connected again.', audience: 'super', severity: 'high', target: { section: 'integrations' } });
     },
     setIntegration: (id, connect, account) => {
       set((s) => ({ integrations: { ...s.integrations, [id]: connect ? { connected: true, account, connectedAt: stamp() } : { connected: false } } }));

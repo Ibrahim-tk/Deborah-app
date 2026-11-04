@@ -2,3 +2,13 @@
 .search { flex: 1 1 280px; min-inline-size: 0; max-inline-size: 480px; }
 /* Filters sit on the trailing edge; search keeps the leading edge. */
 .filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-inline-start: auto; }
+
+/* Phone: search gets its own full-width row; filters share the row below, two up. */
+@container admin (max-width: 640px) {
+  .root { flex-direction: column; align-items: stretch; }
+  .search { flex-basis: auto; max-inline-size: none; }
+  .filters { margin-inline-start: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .filters > * { min-inline-size: 0; }
+  /* A segmented control that can't fit scrolls sideways instead of overflowing the page. */
+  .filters > :has([role='tablist']) { grid-column: 1 / -1; overflow-x: auto; scrollbar-width: none; }
+}

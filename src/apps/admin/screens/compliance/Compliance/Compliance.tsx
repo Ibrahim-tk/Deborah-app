@@ -7,13 +7,17 @@
  */
 import { complianceFrameworks } from '@shared/admin';
 import { AdminPage, Section } from '@admin/patterns';
+import { useAdminNav } from '@admin/navigation';
 import { DataRights } from './parts/DataRights';
 import { FrameworkCard } from './parts/FrameworkCard';
 import styles from './Compliance.module.css';
 
 export default function Compliance() {
+  const pop = useAdminNav((s) => s.pop);
   return (
-    <AdminPage title="Compliance" subtitle="The privacy and security rules the service follows, and how client data rights are handled.">
+    <AdminPage
+      crumbs={[{ label: 'Settings', onClick: pop }, { label: 'Compliance' }]}
+      title="Compliance" subtitle="The privacy and security rules the service follows, and how client data rights are handled.">
       <Section title="Client data rights">
         <DataRights />
       </Section>

@@ -120,5 +120,7 @@ Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec:
 | A-8.2 | Audit entry (side drawer) | `audit/AuditDrawer` | built |
 | A-9.1 | Consent | `compliance/Consent` | built |
 | A-9.2 | Consent version (side drawer) | `compliance/ConsentDrawer` | built |
-| A-9.3 | Compliance (frameworks + data rights) | `compliance/Compliance` | built (placeholder legal copy) |
+| A-9.3 | Compliance (frameworks + data rights), opened from Settings › Compliance card | `compliance/Compliance` | built (placeholder legal copy) |
 | A-10.1 | Integrations (Stripe, Dropbox, Shopify, Google Docs) | `integrations/Integrations` | built (simulated) |
+| A-11.1 | Settings (profile, password, security, notifications, compliance) | `settings/Settings` | built |
+| A-12.1 | Notifications (bell panel, full page, preferences in Settings) | `notifications/Notifications` | built (simulated) |

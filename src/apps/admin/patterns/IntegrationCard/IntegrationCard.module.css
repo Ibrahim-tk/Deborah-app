@@ -25,3 +25,10 @@
 .features li { display: flex; gap: var(--space-3); align-items: baseline; color: var(--color-ink-secondary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
 .features li::before { content: ''; flex: none; inline-size: 6px; block-size: 6px; border-radius: var(--radius-full); background: var(--color-border-control); transform: translateY(-1px); }
 .featuresTitle { margin: 0 0 var(--space-3); color: var(--color-ink-tertiary); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+
+/* Phone: tighter padding; actions take their own row. */
+@container admin (max-width: 640px) {
+  .head { padding: var(--space-5); }
+  .body { padding: var(--space-5); }
+  .actions { margin-inline-start: 0; inline-size: 100%; }
+}

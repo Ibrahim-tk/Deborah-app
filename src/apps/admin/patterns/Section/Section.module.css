@@ -17,3 +17,10 @@
   flex-direction: column;
   justify-content: center;
 }
+
+/* Phone: smaller heading, a trailing control wraps under it, tighter card padding. */
+@container admin (max-width: 640px) {
+  .title { font-size: 22px; line-height: 28px; }
+  .head { min-block-size: 0; }
+  .surface { padding: var(--space-5); }
+}

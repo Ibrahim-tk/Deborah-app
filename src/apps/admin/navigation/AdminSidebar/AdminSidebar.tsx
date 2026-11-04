@@ -10,10 +10,15 @@ import styles from './AdminSidebar.module.css';
 
 const LOGO_SRC = '/images/splash/tree-of-life.svg';
 
-export function AdminSidebar() {
+/** `inSheet`: rendered inside the phone navigation sheet (always expanded, no collapse control). */
+export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
   const section = useAdminSection();
   const go = useAdminNav((s) => s.go);
-  const collapsed = useAdminNav((s) => s.railCollapsed);
+  const railCollapsed = useAdminNav((s) => s.railCollapsed);
+  const layout = useAdminNav((s) => s.layout);
+  // Tablet keeps the icon rail; the phone sheet always shows labels.
+  const collapsed = inSheet ? false : layout === 'tablet' || railCollapsed;
+  const canToggle = !inSheet && layout === 'desktop';
   const setCollapsed = useAdminNav((s) => s.setRailCollapsed);
   const role = useAdminStore((s) => s.role);
   const email = useAdminStore((s) => s.email);
@@ -23,18 +28,20 @@ export function AdminSidebar() {
 
   const onMenu = (id: string) => {
     const s = useAdminStore.getState();
+    if (id === 'settings') go('settings');
+    if (id === 'notifications') go('notifications');
     if (id === 'signOut') s.signOut();
     if (id === 'role') s.setRole(role === 'super' ? 'admin' : 'super');
     if (id === 'role' && role === 'super' && SECTIONS.find((x) => x.id === section)?.superOnly) go('dashboard');
   };
 
   return (
-    <aside className={styles.panel} data-collapsed={collapsed || undefined} aria-label="Admin navigation">
+    <aside className={styles.panel} data-collapsed={collapsed || undefined} data-sheet={inSheet || undefined} aria-label="Admin navigation">
       <div className={styles.brandRow}>
         {collapsed ? (
           // Collapsed: the logo is the way back out; on hover it turns into the sidebar icon.
-          <Tooltip label="Expand sidebar" side="right">
-            <button type="button" className={styles.expand} aria-label="Expand sidebar" onClick={() => setCollapsed(false)}>
+          <Tooltip label="Expand sidebar" side="right" disabled={!canToggle}>
+            <button type="button" className={styles.expand} aria-label="Expand sidebar" disabled={!canToggle} onClick={() => setCollapsed(false)}>
               <img src={LOGO_SRC} alt="" className={styles.logo} width={28} height={28} />
               <Icon name="sidebar" size={20} className={styles.expandIcon} />
             </button>
@@ -45,7 +52,7 @@ export function AdminSidebar() {
               <img src={LOGO_SRC} alt="" className={styles.logo} width={28} height={28} />
               <span className={styles.brandName}>Oracle Admin</span>
             </span>
-            <IconButton icon="sidebar" size="sm" label="Collapse sidebar" onClick={() => setCollapsed(true)} />
+            {canToggle && <IconButton icon="sidebar" size="sm" label="Collapse sidebar" onClick={() => setCollapsed(true)} />}
           </>
         )}
       </div>
@@ -74,6 +81,8 @@ export function AdminSidebar() {
           align="start"
           onSelect={onMenu}
           items={[
+            { id: 'notifications', label: 'Notifications', icon: 'bell' },
+            { id: 'settings', label: 'Settings', icon: 'settings' },
             { id: 'role', label: role === 'super' ? 'Preview as admin' : 'Back to super admin', icon: 'account' },
             { id: 'signOut', label: 'Sign out', icon: 'back' },
           ]}
