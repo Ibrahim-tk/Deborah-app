@@ -15,7 +15,7 @@
 .root[data-size='sm'] { min-block-size: 32px; padding-inline: var(--space-3); font-size: var(--fs-subhead); }
 .root[data-full] { inline-size: 100%; }
 .root:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 2px; box-shadow: 0 0 0 4px var(--color-accent-tint); }
-.root[data-disabled] { cursor: not-allowed; opacity: 0.55; }
+.root[data-disabled] { cursor: not-allowed; opacity: 0.38; }
 .root[aria-busy] { opacity: 1; cursor: progress; }
 
 .root[data-variant='primary'] { background: var(--color-accent); color: var(--color-ink-on-accent); }
