@@ -28,9 +28,9 @@ export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
 
   const onMenu = (id: string) => {
     const s = useAdminStore.getState();
-    if (id === 'settings') go('settings');
+    if (id === 'profile') useAdminNav.getState().openSettings('profile');
     if (id === 'notifications') go('notifications');
-    if (id === 'signOut') s.signOut();
+    if (id === 'signOut') useAdminNav.getState().setConfirmingSignOut(true);
     if (id === 'role') s.setRole(role === 'super' ? 'admin' : 'super');
     if (id === 'role' && role === 'super' && SECTIONS.find((x) => x.id === section)?.superOnly) go('dashboard');
   };
@@ -82,7 +82,7 @@ export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
           onSelect={onMenu}
           items={[
             { id: 'notifications', label: 'Notifications', icon: 'bell' },
-            { id: 'settings', label: 'Settings', icon: 'settings' },
+            { id: 'profile', label: 'My profile', icon: 'account' },
             { id: 'role', label: role === 'super' ? 'Preview as admin' : 'Back to super admin', icon: 'account' },
             { id: 'signOut', label: 'Sign out', icon: 'back' },
           ]}

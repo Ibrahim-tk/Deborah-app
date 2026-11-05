@@ -42,6 +42,7 @@
   --color-danger-ink: var(--red-ink); --color-danger-tint: var(--red-tint);
   --color-danger-border: var(--red-border); --color-danger-fill: var(--red-fill);
   --color-success-ink: var(--green-ink); --color-success-tint: var(--green-tint);
+  --color-info-ink: var(--blue-ink); --color-info-tint: var(--blue-tint);
   --color-warning-ink: var(--amber-ink); --color-warning-tint: var(--amber-tint);
 
   /* Desktop type scale (DESIGN.web.md › Typography). Browser zoom replaces the in-app text size. */

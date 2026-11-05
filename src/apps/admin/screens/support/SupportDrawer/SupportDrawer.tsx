@@ -6,7 +6,7 @@
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
-import { formatDate, useAdminStore } from '@shared/admin';
+import { formatDate, gapForQuestion, useAdminStore, useKnowledge } from '@shared/admin';
 import { Button, Drawer, KeyValueList, StatusText, TextArea } from '@admin/ui';
 import { Section, SUPPORT_TYPE } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
@@ -18,6 +18,8 @@ import s from '@admin/screens/common/drawer/drawer.module.css';
 /** Replies go out by email outside the app; there's no phone contact and no in-app reply (Session 9). */
 export default function SupportDrawer({ id }: { id: string | null }) {
   const req = useAdminStore((st) => st.supportRequests.find((r) => r.id === id));
+  const gaps = useKnowledge((k) => k.gaps);
+  const gap = gapForQuestion(gaps, req?.question);
   const client = useAdminStore((st) => st.clients.find((c) => c.id === req?.clientId));
   const { closeDrawer, openClient } = useAdminNav.getState();
   const toast = useAdminToast();
@@ -60,7 +62,7 @@ export default function SupportDrawer({ id }: { id: string | null }) {
         <p className={s.message}>{req.message}</p>
         <p className={s.note}>
           {req.type === 'knowledge_gap'
-            ? 'This question was also sent to Knowledge Base as a knowledge gap.'
+            ? <>This question was also sent to Knowledge Base as a knowledge gap.{gap && <> <button type="button" className={s.link} onClick={() => useAdminNav.getState().openDrawer({ kind: 'gap', id: gap.id })}>Open the gap</button></>}</>
             : req.type === 'consultation'
               ? 'Contact the Client by email to decide whether a consultation is right for them. Booking and payment happen outside the app.'
               : 'Replies go out by email, outside the app. Mark the request resolved once you’ve replied.'}
@@ -72,6 +74,7 @@ export default function SupportDrawer({ id }: { id: string | null }) {
             items={[
               { label: 'Name', value: <button type="button" className={s.link} onClick={() => openClient(client.id)}>{client.name}</button> },
               { label: 'Email', value: <CopyEmail email={client.email} /> },
+              { label: 'Account type', value: client.accountType === 'teen' ? 'Teen (own account)' : 'Adult' },
             ]}
           />
         </Section>

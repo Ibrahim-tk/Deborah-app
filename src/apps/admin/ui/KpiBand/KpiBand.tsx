@@ -23,10 +23,11 @@ function Trend({ delta, against, lowerIsBetter }: NonNullable<Kpi['trend']>) {
   );
 }
 
-export function KpiBand({ items }: { items: Kpi[] }) {
+/** `compact`: secondary numbers — smaller figures and less padding, so they don't compete with the main band. */
+export function KpiBand({ items, compact }: { items: Kpi[]; compact?: boolean }) {
   return (
     <div className={styles.wrap}>
-    <dl className={styles.root} style={{ '--cols': items.length } as React.CSSProperties}>
+    <dl className={styles.root} data-compact={compact || undefined} style={{ '--cols': items.length } as React.CSSProperties}>
       {items.map((k) => (
         <div key={k.label} className={styles.cell}>
           <dt className={styles.label}>

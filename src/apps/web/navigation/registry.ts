@@ -62,6 +62,7 @@ export const registry: Record<string, ScreenMeta> = {
   'M-7.4': { title: 'For you', component: lazy(() => import('@web/screens/myhealth/ContentDetail')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-74--for-you-content-detail' },
   'M-7.5': { title: 'The Oracle’s library', component: lazy(() => import('@web/screens/myhealth/Library')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-75--deborahs-library' },
   'M-7.6': { title: 'About the Oracle', component: lazy(() => import('@web/screens/myhealth/AboutDeborah')), presentation: 'push', figma: `${FIGMA}52-280`, spec: 'docs/ux/F07-my-health-hub.md#m-76--about-deborah' },
+  'M-7.9': { title: 'Symptoms map', component: lazy(() => import('@web/screens/myhealth/SymptomMap')), presentation: 'push', figma: '', spec: 'Design request 2026-11-04 (OPEN: add to docs/ux/F07)' },
   'M-7.8': { title: 'Edit health profile', component: lazy(() => import('@web/screens/myhealth/EditHealthSection')), presentation: 'push', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
   'M-7.7': { title: 'Edit health detail', component: lazy(() => import('@web/screens/myhealth/EditHealthDetail')), presentation: 'push', figma: '', spec: 'Design request 2026-10-20 (OPEN: add to docs/ux/F07)' },
 

@@ -23,8 +23,7 @@ export function NotificationsSection() {
     }, 'Your notification preferences have been updated.');
 
   return (
-    <Section title="Email notifications">
-      <p className={s.note}>Everything always appears in the notification centre. Choose which types are also emailed to you.</p>
+    <Section title="Email notifications" description="Everything always appears in the notification centre. Choose which types are also emailed to you.">
       <ul className={s.list}>
         {cats.map((c) => (
           <li key={c} className={s.item}>

@@ -1,7 +1,7 @@
 /** Needs Attention strip (story 2.1): what's open right now, whatever the date range. Each tile opens its screen.
  *  Escalations have no overdue count: they're recorded for review only (Session 9). */
 import { businessDaysLeft, useAdminStore, useKnowledge } from '@shared/admin';
-import { Icon, type IconName } from '@admin/ui';
+import type { IconName } from '@admin/ui';
 import { ESCALATION_LEVEL, SUPPORT_TYPE } from '@admin/patterns';
 import { useAdminNav, type SectionId } from '@admin/navigation';
 import styles from './NeedsAttention.module.css';
@@ -36,17 +36,19 @@ export function NeedsAttention() {
   if (tiles.every((t) => t.total === 0)) return <p className={styles.clear}>You&rsquo;re all caught up.</p>;
 
   return (
-    <section className={styles.strip} aria-label="Needs attention">
+    <section className={styles.wrap} aria-label="Needs attention">
+      <h2 className={styles.heading}>Needs attention</h2>
+      <div className={styles.strip}>
       {tiles.map((t) => (
-        <button key={t.id} type="button" className={styles.tile} onClick={() => go(t.section)}>
-          <span className={styles.head}>
-            <Icon name={t.icon} size={18} />
-            <span>{t.label}</span>
-          </span>
+        <button key={t.id} type="button" className={styles.tile} onClick={() => go(t.section)} title={t.detail}>
           <span className={styles.total}>{t.total}</span>
-          <span className={styles.detail}>{t.detail}</span>
+          <span className={styles.text}>
+            <span className={styles.head}>{t.label}</span>
+            <span className={styles.detail}>{t.detail}</span>
+          </span>
         </button>
       ))}
+      </div>
     </section>
   );
 }

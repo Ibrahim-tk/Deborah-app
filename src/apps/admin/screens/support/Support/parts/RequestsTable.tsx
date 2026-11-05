@@ -1,16 +1,17 @@
 /** Support requests (story 5.1): replies go out by email outside the app. Open first, then by date. */
 import { formatDate, useAdminStore, type SupportRequest, type SupportType } from '@shared/admin';
 import { Button, DataTable, StatusText, type Column } from '@admin/ui';
-import { matches, SUPPORT_TYPE } from '@admin/patterns';
+import { applySort, matches, rangePhrase, showing, SUPPORT_TYPE, type SortValue } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useAdminToast } from '@admin/hooks/toast.store';
-import type { Order } from './order';
 import styles from './tables.module.css';
 
 export type Show = 'open' | 'resolved' | 'all';
 export type TypeFilter = 'all' | SupportType;
 
-export function RequestsTable({ query, show, type, order }: { query: string; show: Show; type: TypeFilter; order: Order }) {
+export type AccountFilter = 'all' | 'adult' | 'teen';
+
+export function RequestsTable({ query, show, type, account, sort }: { query: string; show: Show; type: TypeFilter; account: AccountFilter; sort: SortValue }) {
   const requests = useAdminStore((s) => s.supportRequests);
   const clients = useAdminStore((s) => s.clients);
   const toast = useAdminToast();
@@ -18,15 +19,24 @@ export function RequestsTable({ query, show, type, order }: { query: string; sho
   const clientOf = (id: string) => clients.find((c) => c.id === id);
   const nameOf = (id: string) => clientOf(id)?.name ?? 'Unknown client';
 
-  const rows = requests.filter(
-    (r) =>
-      matches(query, nameOf(r.clientId), clientOf(r.clientId)?.email ?? '') &&
-      (show === 'all' || r.resolved === (show === 'resolved')) &&
-      (type === 'all' || r.type === type),
-  ).sort((a, b) => {
-    if (a.resolved !== b.resolved) return a.resolved ? 1 : -1;
-    return order === 'latest' ? b.received.localeCompare(a.received) : a.received.localeCompare(b.received);
-  });
+  // Open requests always come first; the sort orders by date received within each group.
+  const rows = applySort(
+    requests.filter(
+      (r) =>
+        matches(query, nameOf(r.clientId), clientOf(r.clientId)?.email ?? '') &&
+        (show === 'all' || r.resolved === (show === 'resolved')) &&
+        (type === 'all' || r.type === type) &&
+        (account === 'all' || clientOf(r.clientId)?.accountType === account),
+    ),
+    sort,
+    (r) => r.received,
+  ).sort((a, b) => (a.resolved === b.resolved ? 0 : a.resolved ? 1 : -1));
+  const summary = showing(rows.length, ['request', 'requests'], [
+    show !== 'all' && (show === 'open' ? 'open' : 'resolved'),
+    type !== 'all' && `of type ${SUPPORT_TYPE[type]}`,
+    rangePhrase(sort, 'received'),
+    query.trim() && `matching \u201c${query.trim()}\u201d`,
+  ]);
   const resolve = (r: SupportRequest) => {
     useAdminStore.getState().setSupportResolved(r.id, true);
     toast('This request has been marked as resolved.');
@@ -66,6 +76,8 @@ export function RequestsTable({ query, show, type, order }: { query: string; sho
   return (
     <>
       <DataTable
+        footer={summary}
+        pager="outside"
         label="Support requests"
         columns={columns}
         rows={rows}

@@ -26,6 +26,9 @@
 .root[data-variant='ghost']:hover:not([data-disabled]) { background: var(--color-accent-tint); }
 .root[data-variant='destructive'] { background: var(--color-danger-fill); color: var(--color-ink-on-accent); }
 .root[data-variant='destructive']:hover:not([data-disabled]) { background: var(--color-danger-ink); }
+/* Outline in red: a serious but non-final action, e.g. Sign out. */
+.root[data-variant='destructiveOutline'] { background: transparent; border-color: var(--color-danger-border); color: var(--color-danger-ink); }
+.root[data-variant='destructiveOutline']:hover:not([data-disabled]) { background: var(--color-danger-tint); }
 .root[data-variant='link'] { background: none; padding-inline: var(--space-1); color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; }
 
 .spinner {

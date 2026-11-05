@@ -2,7 +2,7 @@
  *  address registered to their account. The deadline runs from the date the email was received. */
 import { useState } from 'react';
 import { ADMIN_NOW, deletionDueDate, formatDate, useAdminStore } from '@shared/admin';
-import { Button, Checkbox, Dialog, Input, Select, TextArea } from '@admin/ui';
+import { Button, Checkbox, DateField, Dialog, Select, TextArea } from '@admin/ui';
 import { useSim } from '@admin/hooks/useSim';
 import { useAdminNav } from '@admin/navigation';
 import styles from './tables.module.css';
@@ -45,7 +45,7 @@ export function CreateDeletionDialog({ onClose }: { onClose: () => void }) {
           <Select label="Teen's account" placeholder="Choose the teen's account" value={teenId || undefined} onChange={setTeenId} options={teens.map((t) => ({ value: t.id, label: `${t.name} · ${t.email}` }))} />
           {touched && !teenId && <p className={styles.error}>Please select the teen&rsquo;s account.</p>}
         </div>
-        <Input label="Date the email was received" type="date" max={ADMIN_NOW.slice(0, 10)} value={received} error={touched && !received ? 'Please add the date the email was received.' : undefined} onChange={(e) => setReceived(e.target.value)} />
+        <DateField label="Date the email was received" today={ADMIN_NOW.slice(0, 10)} max={ADMIN_NOW.slice(0, 10)} value={received} error={touched && !received ? 'Please add the date the email was received.' : undefined} onChange={setReceived} />
         <TextArea label="Note (optional)" value={note} onChange={(e) => setNote(e.target.value)} placeholder="For example, where the email came from" />
         <Checkbox
           label={teen ? `The email came from ${teen.email}, the address registered to this account` : 'The email came from the address registered to the teen’s account'}

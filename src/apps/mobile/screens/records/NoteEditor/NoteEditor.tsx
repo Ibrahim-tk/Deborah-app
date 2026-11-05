@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { selectMessage, useAppStore } from '@shared/store';
 import type { NoteKind } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { ActionSheet, IconButton, Input, Modal, Segmented, TextArea, useAlert, type IconName } from '@mobile/ui';
+import { IconButton, Input, Menu, Modal, Segmented, TextArea, type IconName } from '@mobile/ui';
 import { useToast } from '@mobile/hooks/toast.store';
 import { useNav, useScreenParams } from '@mobile/navigation';
 import { ChecklistPreview } from './parts/ChecklistPreview';
@@ -31,7 +31,6 @@ export default function NoteEditor() {
   const params = useScreenParams<{ noteId: string; kind: NoteKind; profileId: string }>();
   const { dismissModal } = useNav();
   const toast = useToast();
-  const alert = useAlert();
   // Read once: the editor owns the draft while open.
   const [note] = useState(() => (params.noteId ? useAppStore.getState().notes.byId[params.noteId] : undefined));
   const profileId = useAppStore((s) => note?.profileId ?? params.profileId ?? s.activeProfileId);
@@ -39,7 +38,6 @@ export default function NoteEditor() {
   const [title, setTitle] = useState(note?.title ?? '');
   const [kind, setKind] = useState<NoteKind>(note?.kind ?? params.kind ?? 'questions');
   const [body, setBody] = useState(note?.body ?? '');
-  const [menu, setMenu] = useState(false);
   const autosave = useNoteAutosave({ title, kind, body }, profileId, note?.id);
 
   const close = () => {
@@ -49,14 +47,7 @@ export default function NoteEditor() {
     if (autosave.didSave) toast('Saved');
   };
 
-  const remove = async () => {
-    setMenu(false);
-    const choice = await alert({
-      title: 'Delete this note?',
-      message: 'This can’t be undone.',
-      buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Delete', style: 'destructive' }],
-    });
-    if (choice !== 1) return;
+  const remove = () => {
     autosave.cancel();
     const id = autosave.noteId;
     if (id) useAppStore.getState().deleteNote(id);
@@ -68,7 +59,17 @@ export default function NoteEditor() {
     <div className={styles.root} data-xref="M-9.4 · Note editor">
       <Modal
         title={note ? 'Note' : 'New note'}
-        left={<IconButton icon="more" label="More options" onClick={() => setMenu(true)} />}
+        left={
+          note ? (
+            <Menu
+              side="bottom"
+              align="start"
+              trigger={<IconButton icon="more" label="More options" />}
+              items={[{ id: 'delete', label: 'Delete note', destructive: true }]}
+              onSelect={(id) => { if (id === 'delete') remove(); }}
+            />
+          ) : undefined
+        }
         right={<IconButton icon="close" label="Close" onClick={close} />}
       >
         <div className={styles.body}>
@@ -99,7 +100,6 @@ export default function NoteEditor() {
           {kind === 'questions' && <ChecklistPreview body={body} />}
         </div>
       </Modal>
-      <ActionSheet open={menu} actions={[{ label: 'Delete note', destructive: true, onSelect: remove }]} onClose={() => setMenu(false)} />
     </div>
   );
 }

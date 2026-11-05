@@ -215,6 +215,48 @@
           "title": "Questions for my next visit",
           "body": "• Could my thyroid explain the fatigue?\n• Should we recheck free T3 in three months?",
           "updatedAt": "2026-11-02T18:20:00-08:00"
+        },
+        "n-002": {
+          "id": "n-002",
+          "profileId": "p-self",
+          "kind": "questions",
+          "title": "Night sweats and 3am waking",
+          "body": "• Could this be perimenopause?\n• Is magnesium still a good idea while we wait for labs?",
+          "updatedAt": "2026-10-18T11:00:00-07:00",
+          "visitLog": {
+            "visitDate": "2026-10-22",
+            "chiefComplaint": "Night sweats and waking hot around 3am.",
+            "duration": "About 12 months",
+            "providerName": "Dr. Patel",
+            "specialty": "Gynecology",
+            "clinic": "Bay Women’s Health",
+            "followUp": "6 weeks, after labs",
+            "diagnosis": "Likely perimenopause; hormone labs before deciding on treatment.",
+            "understanding": "Night waking may be linked to shifting progesterone.",
+            "unaddressed": "Didn’t get to ask about sleep hygiene.",
+            "labs": [
+              { "test": "FSH", "orderedBy": "Provider", "status": "Drawn" },
+              { "test": "Estradiol", "orderedBy": "Provider", "status": "Pending" }
+            ],
+            "labNotes": "Results in 5–7 days.",
+            "changes": [
+              { "name": "Magnesium glycinate", "change": "Continued", "dose": "200 mg at night" }
+            ],
+            "nextSteps": [
+              { "priority": "Routine", "text": "Get FSH and estradiol drawn this week" },
+              { "priority": "Schedule", "text": "Book follow-up in 6 weeks" }
+            ],
+            "ownNotes": "",
+            "loggedAt": "2026-10-22T18:00:00-07:00"
+          }
+        },
+        "n-003": {
+          "id": "n-003",
+          "profileId": "p-self",
+          "kind": "saved-answer",
+          "title": "Thyroid and afternoon fatigue",
+          "body": "Saved from our chat: checking free T3 and antibodies can add context beyond TSH alone.",
+          "updatedAt": "2026-10-26T16:40:00-07:00"
         }
       }
     },

@@ -22,7 +22,8 @@ export function windows(series: SeriesPoint[], days: number) {
 export const pct = (now: number, before: number) => (before === 0 ? 0 : ((now - before) / before) * 100);
 
 export function rangeLabel(r: DateRange) {
-  return r.preset === 'custom' ? 'previous period' : `previous ${r.preset} days`;
+  if (r.preset === 'custom') return 'previous period';
+  return r.preset === '365' ? 'previous 12 months' : `previous ${r.preset} days`;
 }
 
 export function trend(now: number, before: number, r: DateRange, lowerIsBetter = false): Kpi['trend'] {

@@ -1,8 +1,8 @@
 /** Renders the conversation's messages by kind, plus the thinking line; ready → guidance (no CTA). */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavStore } from '@web/navigation';
 import { consentDoc, DEBRIEF_SCRIPT_ID, findProduct, productList } from '@shared/data';
-import { isMinor, pendingFacts } from '@shared/engine';
+import { chatSymptomsFrom, isMinor, pendingFacts, shouldOfferSymptomMap } from '@shared/engine';
 import { FLAGS } from '@shared/flags';
 import { selectActiveProfile, useAppStore } from '@shared/store';
 import { nowFrom, formatShortDate } from '@shared/utils';
@@ -21,6 +21,7 @@ import {
   MessageBubble,
   QuickReplies,
   ReviewFactsCard,
+  SymptomMapTile,
   ThinkingIndicator,
   VisitSummaryCard,
   SourceTrace,
@@ -47,6 +48,7 @@ export interface MessageListProps {
   onRestartPlan: () => void;
   onVisitNotes: () => void;
   onOpenPlan: () => void;
+  onOpenSymptomMap: () => void;
   onTeamBook: () => void;
   onLongPress: (m: Message) => void;
   onFocusComposer: () => void;
@@ -67,6 +69,7 @@ export function MessageList({
   onRestartPlan,
   onVisitNotes,
   onOpenPlan: _onOpenPlan,
+  onOpenSymptomMap,
   onTeamBook,
   onLongPress,
   onFocusComposer,
@@ -77,6 +80,22 @@ export function MessageList({
   const goHome = useNavStore((s) => s.goHome);
   const toast = useToast();
   const reports = useAppStore((s) => s.labs.reportsById);
+  const profile = useAppStore(selectActiveProfile);
+  const chatSymptoms = chatSymptomsFrom(conversation);
+  // Symptoms map tile at most once per conversation (locks to first eligible answer).
+  const latestAnswerId = [...messages].reverse().find((x) => x.kind === 'answer' && !x.meta?.streaming)?.id;
+  const guidanceDone = Boolean(conversation.guidanceGivenAt && status === 'answered' && !conversation.redFlag && latestAnswerId);
+  const offerMap = Boolean(profile && shouldOfferSymptomMap(profile, chatSymptoms));
+  const [mapTileLock, setMapTileLock] = useState<{ convId: string; msgId: string | null }>({
+    convId: conversation.id,
+    msgId: null,
+  });
+  if (mapTileLock.convId !== conversation.id) {
+    setMapTileLock({ convId: conversation.id, msgId: null });
+  } else if (mapTileLock.msgId === null && guidanceDone && offerMap && latestAnswerId) {
+    setMapTileLock({ convId: conversation.id, msgId: latestAnswerId });
+  }
+  const mapTileMsgId = mapTileLock.convId === conversation.id ? mapTileLock.msgId : null;
   // Login flow: answered widgets stay visible in the thread (design 2026-10-20).
   const keepAnswered = useAppStore((s) => s.authFlow === 'login');
   // DN-12: no products for anyone under 18, the shop tiles included.
@@ -222,6 +241,7 @@ export function MessageList({
                   onFollowUp={onFocusComposer}
                 />
               )}
+              {showNext && mapTileMsgId === m.id && <SymptomMapTile onPress={onOpenSymptomMap} />}
               {showNext && <GuidanceEnd onHome={goHome} onContinue={onFocusComposer} />}
             </>
           )}

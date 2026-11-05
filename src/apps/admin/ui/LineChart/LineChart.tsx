@@ -17,7 +17,8 @@ export function LineChart({ labels, series, label, height: H = 240 }: { labels: 
   const x = (i: number) => PAD.l + (labels.length < 2 ? iw / 2 : (i / (labels.length - 1)) * iw);
   const y = (v: number) => PAD.t + ih - (v / max) * ih;
   const ticks = (H < 200 ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1]).map((f) => Math.round(max * f));
-  const every = Math.ceil(labels.length / 7);
+  // Every label up to 14 points (e.g. W1–W13); thinned beyond that so they never collide.
+  const every = Math.ceil(labels.length / 14);
 
   return (
     <figure className={styles.root}>

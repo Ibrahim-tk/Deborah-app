@@ -43,7 +43,8 @@
         "at": "2026-08-01T09:00",
         "by": "deborah@oracleclinician.com"
       }
-    ]
+    ],
+    "stripePriceId": "price_individual_monthly"
   },
   {
     "id": "family-monthly",
@@ -67,6 +68,7 @@
         "at": "2026-05-01T09:00",
         "by": "deborah@oracleclinician.com"
       }
-    ]
+    ],
+    "stripePriceId": "price_family_monthly"
   }
 ]

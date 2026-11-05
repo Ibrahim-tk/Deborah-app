@@ -1,4 +1,4 @@
-.text { margin: 0; padding: var(--space-5); border-radius: var(--radius-md); background: var(--color-canvas); color: var(--color-ink); font-size: var(--fs-callout); line-height: var(--lh-callout); white-space: pre-wrap; max-inline-size: 68ch; }
+.text { margin: 0; padding: var(--space-5); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-ink) 5%, var(--color-surface)); color: var(--color-ink); font-size: var(--fs-callout); line-height: var(--lh-callout); white-space: pre-wrap; max-inline-size: 68ch; }
 .history { list-style: none; margin: 0; padding: 0; display: grid; }
 .version { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 2px; inline-size: 100%; padding-block: var(--space-3); border-block-end: 1px solid var(--color-border-hairline); }
 .version:hover .name { color: var(--color-accent); }

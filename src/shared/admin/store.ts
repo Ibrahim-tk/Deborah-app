@@ -9,9 +9,13 @@ type Seed = typeof seed;
 
 export interface AdminState extends Seed {
   signedIn: boolean;
+  /** When this session signed in (shown on My Profile, story 12.1). */
+  lastSignInAt: string;
   role: AdminRole;
   email: string;
   signIn: (email: string) => void;
+  /** Stops the simulated auto-accept so a walkthrough of the invite email can finish the setup. */
+  holdInvite: (id: string) => void;
   signOut: () => void;
   setRole: (role: AdminRole) => void;
   log: (text: string) => void;
@@ -37,6 +41,8 @@ export interface AdminState extends Seed {
   resendInvite: (id: string) => void;
   /** Story 7.1: the link stops working and the Admin is removed from the listing. */
   cancelInvite: (id: string) => void;
+  /** Story 7.2: the invitee set a password and verified their email; the super admin is notified. */
+  completeAdminSetup: (id: string) => void;
   /** Names only; the email can't be edited because it's used to sign in. */
   editAdmin: (id: string, firstName: string, lastName: string) => void;
   setAdminAccount: (id: string, active: boolean, reason?: string) => void;
@@ -54,6 +60,12 @@ export const ADMIN_NOW = '2026-11-02T12:00';
 const stamp = () => new Date().toISOString().slice(0, 16);
 let n = 0;
 const uid = (p: string) => `${p}${Date.now().toString(36)}${n++}`;
+const inviteTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const clearInviteTimer = (id: string) => {
+  const timer = inviteTimers.get(id);
+  if (timer) clearTimeout(timer);
+  inviteTimers.delete(id);
+};
 const nameOf = (s: Seed, id: string) => s.clients.find((c) => c.id === id)?.name ?? id;
 
 export const useAdminStore = create<AdminState>((set, get) => {
@@ -62,12 +74,16 @@ export const useAdminStore = create<AdminState>((set, get) => {
   return {
     ...seed,
     signedIn: false,
+    lastSignInAt: '2026-11-02T08:00',
     role: 'super',
     email: 'deborah@oracleclinician.com',
     signIn: (email) => {
-      set({ signedIn: true, email: email || get().email });
+      const next = email || get().email;
+      const match = get().admins.find((a) => a.email.toLowerCase() === next.toLowerCase());
+      set({ signedIn: true, email: next, role: match?.role ?? get().role, lastSignInAt: stamp() });
       log('Signed in');
     },
+    holdInvite: (id) => clearInviteTimer(id),
     signOut: () => {
       log('Signed out');
       set({ signedIn: false });
@@ -82,7 +98,7 @@ export const useAdminStore = create<AdminState>((set, get) => {
           clients: s.clients.map((c) => {
             if (c.id === id) return { ...c, account: active ? 'active' : 'deactivated' };
             // Teens linked to this parent: paused on deactivation; back on reactivation if the Family plan is still active.
-            if (c.parentId === id && c.teenStatus !== 'invite_sent') return { ...c, teenStatus: !active ? 'paused' : familyOn ? 'joined' : c.teenStatus };
+            if (c.parentId === id && c.teenStatus !== 'invite_sent' && c.teenStatus !== 'turned_off') return { ...c, teenStatus: !active ? 'paused' : familyOn ? 'joined' : c.teenStatus };
             return c;
           }),
         };
@@ -178,11 +194,17 @@ export const useAdminStore = create<AdminState>((set, get) => {
       const admin: AdminUser = { id: uid('a'), firstName, lastName, email, role: 'admin', account: 'active', invite: 'pending', invitedAt: stamp(), addedBy: get().email };
       set((s) => ({ admins: [admin, ...s.admins] }));
       log(`Invited ${email} as admin`);
-      // Simulated: the invitee sets up their account a little later.
-      setTimeout(() => {
-        set((s) => ({ admins: s.admins.map((a) => (a.id === admin.id && a.invite === 'pending' ? { ...a, invite: 'accepted', lastActive: stamp() } : a)) }));
-        useAdminNotifications.getState().post({ category: 'admins', kind: 'admin_setup', title: `${firstName} ${lastName} set up their account`, body: 'A new admin has set up their account.', audience: 'super', severity: 'normal', target: { kind: 'admin', id: admin.id } });
-      }, 20_000);
+      // Simulated: the invitee sets up their account a little later, unless the email link is opened first.
+      clearInviteTimer(admin.id);
+      inviteTimers.set(admin.id, setTimeout(() => get().completeAdminSetup(admin.id), 20_000));
+    },
+    completeAdminSetup: (id) => {
+      clearInviteTimer(id);
+      const admin = get().admins.find((a) => a.id === id);
+      if (!admin || admin.invite !== 'pending') return;
+      set((s) => ({ admins: s.admins.map((a) => (a.id === id ? { ...a, invite: 'accepted', lastActive: stamp() } : a)) }));
+      log(`${admin.email} set up their admin account`);
+      useAdminNotifications.getState().post({ category: 'admins', kind: 'admin_setup', title: `${admin.firstName} ${admin.lastName} set up their account`, body: 'A new admin has set up their account.', audience: 'super', severity: 'normal', target: { kind: 'admin', id } });
     },
     resendInvite: (id) => {
       set((s) => ({ admins: s.admins.map((a) => (a.id === id ? { ...a, invite: 'pending', invitedAt: stamp() } : a)) }));

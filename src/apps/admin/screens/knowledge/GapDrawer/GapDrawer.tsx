@@ -7,10 +7,11 @@
  */
 import { useState } from 'react';
 import { GAP_STATUS, formatDate, useKnowledge } from '@shared/admin';
-import { Button, Drawer, KeyValueList, TextArea } from '@admin/ui';
-import { ConfirmDialog, Section } from '@admin/patterns';
+import { Button, Drawer, KeyValueList, StatusText, TextArea } from '@admin/ui';
+import { ConfirmDialog, GAP_TONE, ResultBanner, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useSim } from '@admin/hooks/useSim';
+import { openEditor } from '../ContentEditor/open';
 import s from '@admin/screens/common/drawer/drawer.module.css';
 
 /** Only the question shows; the Client's details live in the linked support request (story 5.1). */
@@ -22,6 +23,7 @@ export default function GapDrawer({ id }: { id: string }) {
   const [reason, setReason] = useState('');
   const [touched, setTouched] = useState(false);
   const sim = useSim();
+  const notice = useKnowledge((st) => st.notice);
   if (!gap) return null;
   const kb = useKnowledge.getState();
 
@@ -29,19 +31,21 @@ export default function GapDrawer({ id }: { id: string }) {
     <Drawer
       title={gap.question}
       subtitle={`${gap.topic} · asked ${gap.timesAsked} times`}
-      onClose={closeDrawer}
+      meta={<StatusText tone={GAP_TONE[gap.status]}>{GAP_STATUS[gap.status]}</StatusText>}
+      onClose={() => { kb.setNotice(''); closeDrawer(); }}
       actions={
         gap.status === 'new' ? (
           <>
-            <Button size="sm" onClick={() => openDrawer({ kind: 'content', id: `new:${gap.id}` })}>Add answer</Button>
-            <Button size="sm" variant="secondary" onClick={() => setDismissing(true)}>Dismiss</Button>
+            <Button size="sm" variant="ghost" onClick={() => setDismissing(true)}>Dismiss</Button>
+            <Button size="sm" onClick={() => openEditor(`new:${gap.id}`)}>Answer</Button>
           </>
         ) : (
-          <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => sim.run(() => kb.reopenGap(gap.id), 'This gap has been reopened.')}>Reopen</Button>
+          <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => sim.run(() => { kb.reopenGap(gap.id); kb.setNotice('This question is open again.'); })}>Reopen</Button>
         )
       }
     >
-      <Section title="Gap">
+      <ResultBanner message={notice} onDismiss={() => kb.setNotice('')} />
+      <Section title="Question">
         <KeyValueList
           items={[
             { label: 'Status', value: GAP_STATUS[gap.status] },
@@ -61,7 +65,7 @@ export default function GapDrawer({ id }: { id: string }) {
           body={<TextArea label="Reason" placeholder="For example, Outside the scope of Your Oracle" value={reason} hint={touched && !reason.trim() ? 'Please add a reason for dismissing this gap.' : undefined} onChange={(e) => setReason(e.target.value)} />}
           confirm="Dismiss"
           busy={sim.busy}
-          onConfirm={() => (reason.trim() ? sim.run(() => { kb.dismissGap(gap.id, reason.trim()); setDismissing(false); }, 'This gap has been dismissed.') : setTouched(true))}
+          onConfirm={() => (reason.trim() ? sim.run(() => { kb.dismissGap(gap.id, reason.trim()); kb.setNotice('This question was dismissed. You can reopen it at any time.'); setDismissing(false); }) : setTouched(true))}
           onClose={() => setDismissing(false)}
         />
       )}

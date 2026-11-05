@@ -5,9 +5,10 @@
  * @spec    docs/admin/stories.md#91---view--edit-policy-versions
  * @xref    web: none (admin only)
  */
+import { useState } from 'react';
 import { formatDate, liveVersion, useAdminStore, usePolicies, type ConsentRevocation, type Policy } from '@shared/admin';
 import { DataTable, type Column } from '@admin/ui';
-import { AdminPage, Section } from '@admin/patterns';
+import { AdminPage, DEFAULT_SORT, FilterBar, Section, SortRange, applySort, matches, rangePhrase, showing, type SortValue } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 
 export default function Consent() {
@@ -25,6 +26,12 @@ export default function Consent() {
     { key: 'notYet', header: 'Not yet', align: 'end', render: (p) => p.notYet.toLocaleString('en-US') },
     { key: 'draft', muted: true, header: 'Draft', render: (p) => (p.draft ? 'Draft ready' : '—') },
   ];
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<SortValue>(DEFAULT_SORT);
+  const nameOf = (id: string) => clients.find((c) => c.id === id)?.name ?? 'Deleted account';
+  const revoked = applySort(revocations.filter((r) => matches(query, nameOf(r.clientId), clients.find((c) => c.id === r.clientId)?.email ?? '')), sort, (r) => r.at);
+  const revokedSummary = showing(revoked.length, ['withdrawal', 'withdrawals'], [rangePhrase(sort, 'from'), query.trim() && `matching \u201c${query.trim()}\u201d`]);
+
   const revokeCols: Column<ConsentRevocation>[] = [
     { key: 'client', header: 'Client', grow: true, primary: true, render: (r) => clients.find((c) => c.id === r.clientId)?.name ?? 'Deleted account' },
     { key: 'scope', header: 'Consent withdrawn', render: (r) => r.scope },
@@ -39,11 +46,16 @@ export default function Consent() {
       <Section title="Policies">
         <DataTable paginate={false} label="Policies" columns={policyCols} rows={policies} rowKey={(p) => p.id} onRowClick={(p) => openDrawer({ kind: 'consent', id: p.id })} />
       </Section>
-      <Section title="Withdrawn consent">
+      <Section title={`Withdrawn consent · ${revocations.length} in total`}>
+        <FilterBar query={query} onQuery={setQuery} placeholder="Search by first name or email">
+          <SortRange value={sort} onChange={setSort} rangeLabel="Withdrawn between" />
+        </FilterBar>
         <DataTable
           label="Withdrawn consent"
           columns={revokeCols}
-          rows={revocations}
+          rows={revoked}
+          footer={revokedSummary}
+          pager="outside"
           rowKey={(r) => r.id}
           onRowClick={(r) => clients.some((c) => c.id === r.clientId) && openClient(r.clientId)}
           empty="No one has withdrawn consent."

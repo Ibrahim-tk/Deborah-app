@@ -6,7 +6,6 @@ import Escalations from '@admin/screens/escalations/Escalations';
 import Support from '@admin/screens/support/Support';
 import Subscriptions from '@admin/screens/subscriptions/Subscriptions';
 import Admins from '@admin/screens/admins/Admins';
-import Integrations from '@admin/screens/integrations/Integrations';
 import AuditLog from '@admin/screens/audit/AuditLog';
 import Consent from '@admin/screens/compliance/Consent';
 import Compliance from '@admin/screens/compliance/Compliance';
@@ -24,7 +23,6 @@ export const REGISTRY: Record<AdminRoute['id'], Screen> = {
   escalations: { screenId: 'A-4.1', component: Escalations },
   support: { screenId: 'A-5.1', component: Support },
   subscriptions: { screenId: 'A-7.1', component: Subscriptions },
-  integrations: { screenId: 'A-10.1', component: Integrations },
   admins: { screenId: 'A-6.1', component: Admins },
   audit: { screenId: 'A-8.1', component: AuditLog },
   compliance: { screenId: 'A-9.1', component: Consent },

@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { formatDate, money, useAdminStore, type Plan } from '@shared/admin';
 import { Button, Drawer, Input, KeyValueList, Segmented, StatusText, TextArea } from '@admin/ui';
 import { CopyText } from '@admin/screens/common/CopyEmail';
-import { ConfirmDialog, Section } from '@admin/patterns';
+import { ConfirmDialog, Section, UnsavedChangesDialog } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useSim } from '@admin/hooks/useSim';
 import { NumberField } from './parts/NumberField';
@@ -33,6 +33,10 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
   const [touched, setTouched] = useState(false);
   const [confirm, setConfirm] = useState<Confirm>(null);
   const { busy, run } = useSim();
+  const [start] = useState(() => JSON.stringify({ plan, featuresText }));
+  const dirty = canEdit && JSON.stringify({ plan, featuresText }) !== start;
+  const [leaving, setLeaving] = useState(false);
+  const tryClose = () => (dirty ? setLeaving(true) : close());
   const set = <K extends keyof Plan>(k: K, v: Plan[K]) => setPlan((p) => ({ ...p, [k]: v }));
 
   const trial = plan.kind === 'trial';
@@ -65,7 +69,7 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
     <Drawer
       title={existing ? existing.name : 'New plan'}
       subtitle={canEdit ? undefined : 'Only the Super Admin can change plans.'}
-      onClose={close}
+      onClose={tryClose}
       actions={
         canEdit && (
           existing ? (
@@ -78,7 +82,7 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
             <>
               <Button size="sm" loading={busy} onClick={() => save('active')}>Publish</Button>
               <Button size="sm" variant="secondary" onClick={() => save('draft')}>Save as draft</Button>
-              <Button size="sm" variant="ghost" onClick={close}>Cancel</Button>
+              <Button size="sm" variant="ghost" onClick={tryClose}>Cancel</Button>
             </>
           )
         )
@@ -140,7 +144,7 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
                 ]}
               />
             ) : (
-              <p className={styles.muted}>{stripeOn ? 'This plan syncs to Stripe, the App Store and Google Play when you publish it.' : 'Connect Stripe in Integrations to sync this plan’s price.'}</p>
+              <p className={styles.muted}>{stripeOn ? 'This plan syncs to Stripe, the App Store and Google Play when you publish it.' : 'Stripe isn’t connected yet, so this plan’s price isn’t synced.'}</p>
             )}
           </Section>
         )}
@@ -175,6 +179,7 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
           onClose={() => setConfirm(null)}
         />
       )}
+      {leaving && <UnsavedChangesDialog onLeave={close} onStay={() => setLeaving(false)} />}
     </Drawer>
   );
 }

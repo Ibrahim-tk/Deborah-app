@@ -23,7 +23,8 @@
 .trail { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-3); margin-inline-start: auto; }
 .action { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .bell { display: inline-flex; }
-.toolbar { margin-block-start: calc(var(--space-5) * -1); }
+/* Filters sit tight to both the header above and the table below. */
+.toolbar { margin-block: calc(var(--space-5) * -1); }
 .body { display: grid; gap: var(--space-12); }
 .body[data-aside] { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-10); align-items: start; }
 .main { display: grid; gap: var(--space-12); min-inline-size: 0; }

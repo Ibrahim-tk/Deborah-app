@@ -21,3 +21,11 @@
 .marks { display: flex; gap: var(--space-1); color: var(--color-ink-tertiary); }
 .mark { display: inline-grid; place-items: center; inline-size: 28px; block-size: 28px; border: 1px solid var(--color-border-hairline); border-radius: var(--radius-sm); font-size: 15px; }
 .chev { color: var(--color-ink-tertiary); }
+.link { all: unset; cursor: pointer; color: var(--color-accent); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--color-accent) 35%, transparent); text-underline-offset: 3px; }
+.link:hover { text-decoration-color: currentColor; }
+.link:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 2px; }
+/* Password rules panel (matches Reset password): warm beige box above the new-password field. */
+.rulesBox { display: grid; gap: var(--space-2); padding: var(--space-4) var(--space-5); border-radius: var(--radius-md); background: color-mix(in srgb, var(--color-gold) 16%, var(--color-canvas)); border: 1px solid color-mix(in srgb, var(--color-gold) 30%, var(--color-canvas)); }
+.rulesTitle { margin: 0; color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.signOutRow { display: flex; justify-content: flex-end; }
+.itemEnd { display: inline-flex; align-items: center; gap: var(--space-3); flex: none; }

@@ -16,7 +16,7 @@ import { useShellStore } from '../shell.store';
 import { TopNav } from '../nav/TopNav';
 import { IPhoneFrame } from '../device/IPhoneFrame';
 import { WebDeviceHost } from '../browser/WebDeviceHost';
-import { EmailInbox } from '../inbox/EmailInbox';
+import { EmailRoute } from '../inbox/EmailInbox/EmailRoute';
 import { INTERNAL_MOBILE, INTERNAL_WEB } from '@shared/utils/internalPaths';
 import { ScreenCaption } from './parts/ScreenCaption';
 import { ShellToast } from './parts/ShellToast';
@@ -47,7 +47,7 @@ export function Shell({ platform }: ShellProps) {
             <AdminApp />
           </div>
         ) : platform === 'email' ? (
-          <EmailInbox mobilePath={INTERNAL_MOBILE} webPath={INTERNAL_WEB} />
+          <EmailRoute mobilePath={INTERNAL_MOBILE} webPath={INTERNAL_WEB} />
         ) : platform === 'design-system-web' ? (
           <div className={styles.fullBleed}>
             <WebDesignSystemApp />

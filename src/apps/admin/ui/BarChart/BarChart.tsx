@@ -38,7 +38,8 @@ export function BarChart({ data, label, orientation = 'vertical' }: BarChartProp
   const iw = W - PAD.l - PAD.r, ih = H - PAD.t - PAD.b;
   const slot = iw / data.length, bw = Math.min(28, slot * 0.6);
   const y = (v: number) => PAD.t + ih - (v / max) * ih;
-  const every = Math.ceil(data.length / 7);
+  // Every label up to 14 bars; thinned beyond that so they never collide.
+  const every = Math.ceil(data.length / 14);
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className={styles.svg} role="img" aria-label={label}>
       {[0, 0.5, 1].map((f) => (

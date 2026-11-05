@@ -138,6 +138,8 @@ th .columnMenu svg { inline-size: 14px; block-size: 14px; }
 /* Pager sits above the rows on the trailing edge, Gmail-style. */
 .pager {
   display: flex;
+  /* Same tint as the column header row below it. */
+  background: var(--color-canvas);
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2);
@@ -157,5 +159,11 @@ th .columnMenu svg { inline-size: 14px; block-size: 14px; }
 @container admin (max-width: 640px) { .pagerSummary { display: none; } }
 /* Pager arrows and the rows-per-page value follow the light pager tone. */
 .pager button { color: inherit; }
+/* Arrows you can press read in full ink; disabled ones stay faded (IconButton opacity), so the two never look alike. */
+.pager button[aria-label$="page"]:not(:disabled):not([data-disabled]) { color: var(--color-ink); }
 /* A right-aligned number column hugs whatever comes next; give the following column clear air. */
 th[data-align='end'] + th, td[data-align='end'] + td { padding-inline-start: var(--space-16); }
+
+/* pager="outside": one row under the box, summary on the left and pager on the right, no bar chrome. */
+.outside { display: grid; gap: var(--space-4); }
+.pager[data-outside] { background: transparent; border: 0; padding: 0; }

@@ -263,8 +263,9 @@
 .root[data-tone='hero'] .when { color: rgb(255 255 255 / 0.9); }
 .root[data-tone='hero'] .arrow { width: 48px; height: 48px; background: var(--purple-900, var(--color-ink)); color: var(--white); }
 
-/* Player pill, ported from mobile (designer, 2026-10-29): soft plum with diffuse lavender light, bare tree avatar,
-   eyebrow + title, white chevron disc. Desktop scale: 56 avatar, 40 chevron. White copy on the deep band (≥ 7:1). */
+/* Continue hero, ported from mobile (designer, 2026-10-29): soft plum with diffuse lavender light, bare tree avatar,
+   eyebrow + title, white chevron disc. Desktop scale: 56 avatar, 40 chevron. White copy on the deep band (≥ 7:1).
+   Corner radius matches other Home cards (Wellness Plan) via --home-radius. */
 .root[data-tone='hero'] {
   display: flex;
   flex-direction: row;
@@ -274,7 +275,7 @@
   min-height: 0;
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--home-radius);
   background:
     radial-gradient(60% 160% at 100% 0%, rgb(196 168 226 / 0.28), transparent 70%),
     radial-gradient(50% 140% at 0% 100%, rgb(150 110 190 / 0.22), transparent 70%),

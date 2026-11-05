@@ -9,7 +9,6 @@ import { useMemo, useState } from 'react';
 import { adminMetrics, count, useAdminStore } from '@shared/admin';
 import { BarChart, DonutChart, KpiBand, LineChart, Segmented } from '@admin/ui';
 import { AdminPage, DateRangeFilter, Section, presetRange, type DateRange } from '@admin/patterns';
-import { useLiveMetrics } from '@admin/hooks/useLiveMetrics';
 import { daysIn, trend, windows } from './parts/kpis';
 import { NeedsAttention } from './parts/NeedsAttention';
 import { useBusinessKpis } from './parts/business';
@@ -21,7 +20,6 @@ const weeksFor = (r: DateRange) => Math.max(4, Math.ceil((Date.parse(r.to) - Dat
 export default function Dashboard() {
   const [range, setRange] = useState<DateRange>(presetRange('90'));
   const [period, setPeriod] = useState<'week' | 'month'>('week');
-  const live = useLiveMetrics();
   const clients = useAdminStore((s) => s.clients.length);
   const escalations = useAdminStore((s) => s.escalations);
 
@@ -49,28 +47,24 @@ export default function Dashboard() {
   const days = daysIn(range);
   const regs = windows(adminMetrics.registrationsWeekly, days);
   const convs = windows(adminMetrics.conversationsWeekly, days);
-  const span = Date.parse(range.to) - Date.parse(range.from);
   const openedIn = (from: number, to: number) => escalations.filter((e) => { const t = Date.parse(e.opened); return t > from && t <= to; }).length;
   const escNow = openedIn(Date.parse(range.from), Date.parse(range.to));
-  const escBefore = openedIn(Date.parse(range.from) - span, Date.parse(range.from));
-  // Active users in the window scale with how busy conversations were; the 30-day figure is the live anchor.
-  const active = Math.round(live.active * Math.min(1.6, convs.now / windows(adminMetrics.conversationsWeekly, 30).now));
 
   return (
     <AdminPage title="Dashboard" action={<DateRangeFilter value={range} onChange={setRange} />}>
       <NeedsAttention />
+      {/* One quiet band of four numbers; escalations live in Needs attention and the status chart. */}
       <KpiBand
         items={[
-          { label: 'Total registered clients', value: count(registered), trend: trend(regs.now, regs.before, range) },
-          { label: 'Active clients', value: count(active), live: true, trend: trend(convs.now, convs.before, range) },
-          { label: 'Total conversations', value: count(Math.round(convs.now)), trend: trend(convs.now, convs.before, range) },
-          { label: 'Escalations', value: count(escNow), note: `${notReviewed} not yet reviewed`, trend: trend(escNow, escBefore, range, true) },
+          { label: 'Clients', value: count(registered), trend: trend(regs.now, regs.before, range) },
+          { label: 'Conversations', value: count(Math.round(convs.now)), trend: trend(convs.now, convs.before, range) },
+          biz.subscribersKpi ?? { label: 'Escalations', value: count(escNow), note: `${notReviewed} not yet reviewed` },
+          biz.teensKpi,
         ]}
       />
-      <KpiBand items={biz.kpis} />
       <div className={styles.grid}>
         <Section
-          title="User growth"
+          title="Client growth"
           surface
           trailing={
             <Segmented
@@ -92,22 +86,6 @@ export default function Dashboard() {
         <Section title="Top health topics" surface>
           <BarChart label="Top health topics" orientation="horizontal" data={[...adminMetrics.topics].sort((a, b) => b.value - a.value)} />
         </Section>
-        <Section title="Teen accounts over time" surface>
-          <LineChart label="Teens with their own account (joined)" height={180} labels={biz.teenSeries.map((p) => p.label)} series={[{ name: 'Joined', values: biz.teenSeries.map((p) => p.value) }]} />
-        </Section>
-        {biz.subscribers && (
-          <Section title="Subscribers over time" surface>
-            <LineChart
-              label="Active subscribers by plan"
-              height={180}
-              labels={biz.subscribers.map((p) => p.label)}
-              series={[
-                { name: 'Individual', values: biz.subscribers.map((p) => p.individual) },
-                { name: 'Family', values: biz.subscribers.map((p) => p.family), tone: 'gold' },
-              ]}
-            />
-          </Section>
-        )}
       </div>
     </AdminPage>
   );

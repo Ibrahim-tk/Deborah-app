@@ -12,10 +12,11 @@ import { useState } from 'react';
 import { selectMessage, useAppStore } from '@shared/store';
 import type { NoteKind } from '@shared/types/domain';
 import { formatShortDate } from '@shared/utils';
-import { ActionSheet, IconButton, Input, Segmented, TextArea, useAlert, type IconName } from '@web/ui';
+import { IconButton, Input, Menu, Segmented, TextArea, type IconName } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useToast } from '@web/hooks/toast.store';
 import { useNav, useScreenParams } from '@web/navigation';
+import { useDetailHost } from '../../DetailHost';
 import { ChecklistPreview } from './parts/ChecklistPreview';
 import { DEFAULT_TITLE, useNoteAutosave } from './parts/useNoteAutosave';
 import styles from './NoteEditor.module.css';
@@ -30,8 +31,8 @@ const KINDS: { value: EditableKind; label: string; icon: IconName }[] = [
 export default function NoteEditor() {
   const params = useScreenParams<{ noteId: string; kind: NoteKind; profileId: string }>();
   const { pop } = useNav();
+  const detailHost = useDetailHost();
   const toast = useToast();
-  const alert = useAlert();
   // Read once: the editor owns the draft while open.
   const [note] = useState(() => (params.noteId ? useAppStore.getState().notes.byId[params.noteId] : undefined));
   const profileId = useAppStore((s) => note?.profileId ?? params.profileId ?? s.activeProfileId);
@@ -39,69 +40,73 @@ export default function NoteEditor() {
   const [title, setTitle] = useState(note?.title ?? '');
   const [kind, setKind] = useState<NoteKind>(note?.kind ?? params.kind ?? 'questions');
   const [body, setBody] = useState(note?.body ?? '');
-  const [menu, setMenu] = useState(false);
   const autosave = useNoteAutosave({ title, kind, body }, profileId, note?.id);
+
+  const leave = () => {
+    if (detailHost) detailHost.clear();
+    else pop();
+  };
 
   const close = () => {
     autosave.flush();
-    pop();
+    leave();
     // Back on an untouched new note discards silently.
     if (autosave.didSave) toast('Saved');
   };
 
-  const remove = async () => {
-    setMenu(false);
-    const choice = await alert({
-      title: 'Delete this note?',
-      message: 'This can’t be undone.',
-      buttons: [{ label: 'Cancel', style: 'cancel' }, { label: 'Delete', style: 'destructive' }],
-    });
-    if (choice !== 1) return;
+  const remove = () => {
     autosave.cancel();
     const id = autosave.noteId;
     if (id) useAppStore.getState().deleteNote(id);
-    pop();
+    leave();
     if (id) toast('Note deleted');
   };
 
   return (
-    <>
-      <DerivedPage
-        title={note ? 'Note' : 'New note'}
-        composerPlaceholder="Ask Oracle about this note…"
-        onBack={close}
-        showBack
-        trailing={note ? <IconButton icon="more" label="More options" onClick={() => setMenu(true)} /> : undefined}
-      >
-        <div className={styles.body} data-xref="M-9.4 · Note editor">
-          <Input label="Title" placeholder={DEFAULT_TITLE[kind]} value={title} onChange={(e) => setTitle(e.target.value)} />
+    <DerivedPage
+      title={note ? 'Note' : 'New note'}
+      composerPlaceholder="Ask Oracle about this note…"
+      onBack={close}
+      showBack
+      trailing={
+        note ? (
+          <Menu
+            side="bottom"
+            align="end"
+            trigger={<IconButton icon="more" label="More options" />}
+            items={[{ id: 'delete', label: 'Delete note', destructive: true }]}
+            onSelect={(id) => { if (id === 'delete') remove(); }}
+          />
+        ) : undefined
+      }
+    >
+      <div className={styles.body} data-xref="M-9.4 · Note editor">
+        <Input label="Title" placeholder={DEFAULT_TITLE[kind]} value={title} onChange={(e) => setTitle(e.target.value)} />
 
-          {kind === 'saved-answer' ? (
-            <p className={styles.kindText}>Saved answer from the Oracle</p>
-          ) : (
-            <Segmented label="Note type" options={KINDS} value={kind} onChange={setKind} />
-          )}
+        {kind === 'saved-answer' ? (
+          <p className={styles.kindText}>Saved answer from the Oracle</p>
+        ) : (
+          <Segmented label="Note type" options={KINDS} value={kind} onChange={setKind} />
+        )}
 
-          {source && (
-            <p className={styles.source}>{`From the Oracle’s answer on ${formatShortDate(source.message.createdAt)}`}</p>
-          )}
+        {source && (
+          <p className={styles.source}>{`From the Oracle’s answer on ${formatShortDate(source.message.createdAt)}`}</p>
+        )}
 
-          <label className={styles.field}>
-            <span className={styles.label}>{kind === 'questions' ? 'One question per line' : 'Note'}</span>
-            <TextArea
-              label="Note text"
-              minRows={6}
-              maxRows={40}
-              placeholder={kind === 'questions' ? 'What should I ask about my sleep?' : 'Write anything you want to remember.'}
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-            />
-          </label>
+        <label className={styles.field}>
+          <span className={styles.label}>{kind === 'questions' ? 'One question per line' : 'Note'}</span>
+          <TextArea
+            label="Note text"
+            minRows={6}
+            maxRows={40}
+            placeholder={kind === 'questions' ? 'What should I ask about my sleep?' : 'Write anything you want to remember.'}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          />
+        </label>
 
-          {kind === 'questions' && <ChecklistPreview body={body} />}
-        </div>
-      </DerivedPage>
-      <ActionSheet open={menu} actions={[{ label: 'Delete note', destructive: true, onSelect: remove }]} onClose={() => setMenu(false)} />
-    </>
+        {kind === 'questions' && <ChecklistPreview body={body} />}
+      </div>
+    </DerivedPage>
   );
 }

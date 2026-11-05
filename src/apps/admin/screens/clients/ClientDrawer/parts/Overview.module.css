@@ -1,0 +1,3 @@
+/* Consent rows: version and date accepted as two even columns after the policy name. */
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); inline-size: 100%; }
+.muted { color: var(--color-ink-secondary); }

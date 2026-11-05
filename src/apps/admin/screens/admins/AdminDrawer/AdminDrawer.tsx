@@ -1,12 +1,14 @@
 /**
  * @screen  A-6.2 · Admin user (side drawer)
  * @flow    A6 Admin management (super admin only; story 7.1)
- * @states  invite pending · invite expired · active · deactivated · editing names · deactivate (reason) · self (read only)
+ * @states  open invite link → email → set password → that admin's dashboard · invite pending · invite expired · active · deactivated · editing names · deactivate (reason) · self (read only)
  * @spec    docs/admin/stories.md#71---view--edit-admins
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { adminName, formatDate, inviteHoursLeft, useAdminStore } from '@shared/admin';
+import { INTERNAL_EMAIL } from '@shared/utils/internalPaths';
 import { Button, Dialog, Drawer, Input, KeyValueList, TextArea } from '@admin/ui';
 import { AccountStatusText, InviteStatusText, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
@@ -31,6 +33,7 @@ export default function AdminDrawer({ id }: { id: string | null }) {
   const [last, setLast] = useState(admin?.lastName ?? '');
   const [deactivating, setDeactivating] = useState(false);
   const [reason, setReason] = useState('');
+  const navigate = useNavigate();
   const [touched, setTouched] = useState(false);
   if (!admin) return null;
 
@@ -62,12 +65,14 @@ export default function AdminDrawer({ id }: { id: string | null }) {
               <>
                 <Button size="sm" leadingIcon="mail" loading={sim.busy} onClick={() => sim.run(() => store.resendInvite(admin.id), `We’ve sent ${admin.firstName} a new invite.`)}>Resend invite</Button>
                 <Button size="sm" variant="ghost" onClick={() => sim.run(() => { store.cancelInvite(admin.id); close(); }, `The invite for ${admin.firstName} has been cancelled.`)}>Cancel invite</Button>
+                {/* Prototype: the invite lives in the same inbox as the teen login email. */}
+                <Button size="sm" variant="ghost" onClick={() => navigate(`${INTERNAL_EMAIL}?invite=${admin.id}`)}>Open invite link (prototype)</Button>
               </>
             )}
             {active ? (
-              <Button size="sm" variant="ghost" className={`${s.end} ${s.danger}`} onClick={() => setDeactivating(true)}>Deactivate</Button>
+              <Button size="sm" variant="ghost" className={s.danger} onClick={() => setDeactivating(true)}>Deactivate</Button>
             ) : (
-              <Button size="sm" variant="ghost" className={s.end} onClick={() => sim.run(() => store.setAdminAccount(admin.id, true), `${admin.firstName} has been reactivated.`)}>Reactivate</Button>
+              <Button size="sm" variant="ghost" onClick={() => sim.run(() => store.setAdminAccount(admin.id, true), `${admin.firstName} has been reactivated.`)}>Reactivate</Button>
             )}
           </>
         )

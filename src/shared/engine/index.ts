@@ -53,6 +53,7 @@ export { replayScript, streamInto } from './replay';
 export { beginGuidance, needsMoreDetails, isUncoveredConcern } from './guidance';
 export { matchesUncovered } from './guidanceGates';
 export { asksForAnswer } from './classifier';
+export { resolveSymptomMap, reportedInDomain, shouldOfferSymptomMap, chatSymptomsFrom, type SymptomMapResult } from './symptomMap';
 export {
   assembleVisitBrief,
   briefFromAnswer,

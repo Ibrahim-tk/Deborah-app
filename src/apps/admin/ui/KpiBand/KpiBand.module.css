@@ -39,3 +39,11 @@
 .delta { font-weight: var(--weight-medium); font-variant-numeric: tabular-nums; color: var(--color-ink-secondary); }
 .delta[data-good='true'] { color: var(--color-success-ink); }
 .delta[data-good='false'] { color: var(--color-danger-ink); }
+
+/* Compact band: secondary figures, quieter than the headline band above. */
+.root[data-compact] { border-block-start: 0; }
+.root[data-compact] .cell { padding-block: var(--space-5); gap: var(--space-1); }
+.root[data-compact] .value { font-size: 26px; }
+/* Calmer headline figures. */
+.value { font-size: 34px; }
+.cell { padding-block: var(--space-6); }

@@ -23,4 +23,4 @@ export function clientStatus(c: Client, deletions: DeletionRequest[]): ClientSta
 /** Teens with their own account linked to this parent. */
 export const teensOf = (parentId: string, clients: Client[]) => clients.filter((c) => c.parentId === parentId);
 
-export const TEEN_STATUS_LABEL = { joined: 'Joined', invite_sent: 'Invite sent', paused: 'Access paused' } as const;
+export const TEEN_STATUS_LABEL = { joined: 'Joined', invite_sent: 'Invite sent', paused: 'Access paused', turned_off: 'Turned off' } as const;

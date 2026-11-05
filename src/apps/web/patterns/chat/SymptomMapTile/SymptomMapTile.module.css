@@ -1,0 +1,16 @@
+.root {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  color: var(--color-ink);
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.root:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.label { font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-body); letter-spacing: -0.015em; }
+.chevron { flex: none; color: var(--color-ink-secondary); }

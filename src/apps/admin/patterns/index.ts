@@ -9,3 +9,7 @@ export * from './statusLabels';
 export * from './IntegrationCard';
 export * from './NotificationRow';
 export * from './NotificationBell';
+export * from './SortRange';
+export * from './FiltersPopover';
+export * from './ResultBanner';
+export * from './UnsavedChangesDialog';

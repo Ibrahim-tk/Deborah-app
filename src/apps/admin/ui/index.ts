@@ -26,3 +26,5 @@ export * from './LineChart';
 export * from './BarChart';
 export * from './DonutChart';
 export * from './KpiBand';
+export * from './FileDrop';
+export * from './DateField';

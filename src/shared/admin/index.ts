@@ -9,4 +9,5 @@ export * from './clients';
 export * from './audit';
 export * from './policies';
 export * from './authSecurity';
+export * from './inviteLink';
 export * from './knowledge';

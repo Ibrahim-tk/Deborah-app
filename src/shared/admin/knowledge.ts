@@ -41,13 +41,33 @@ export interface KnowledgeGap {
   dismissReason?: string;
 }
 
-export const CONTENT_STATUS: Record<ContentStatus, string> = { draft: 'Draft', pending: 'Pending approval', published: 'Published', rejected: 'Rejected', archived: 'Archived' };
+/** Plain words for a 60+ reader: what the state means for the Oracle, not workflow jargon. */
+export const CONTENT_STATUS: Record<ContentStatus, string> = { draft: 'Draft (not live)', pending: 'Waiting for approval', published: 'Live', rejected: 'Sent back', archived: 'Archived (not used)' };
 export const GAP_STATUS: Record<GapStatus, string> = { new: 'New', answered: 'Answered', dismissed: 'Dismissed' };
 export const contentText = (c: ContentItem) => c.history.find((h) => h.version === c.version)?.text ?? '';
+
+/** What the content is stored as: the uploaded file's type, or typed text. */
+export function fileType(c: ContentItem): string {
+  const m = contentText(c).match(/^Uploaded file: .*\.(\w+)$/);
+  if (!m) return 'Text';
+  return ({ pdf: 'PDF', docx: 'DOCX', txt: 'Text file' } as Record<string, string>)[m[1].toLowerCase()] ?? m[1].toUpperCase();
+}
+
+/** A file picked or dropped, waiting to be saved (simulated: name and size only). */
+export interface PickedFile { name: string; size: number }
 
 interface KnowledgeState {
   items: ContentItem[];
   gaps: KnowledgeGap[];
+  /** What just happened, in one sentence; stays on screen until dismissed or the next action. */
+  notice: string;
+  setNotice: (notice: string) => void;
+  /** A file dropped on the page, handed to the upload form. */
+  droppedFile: PickedFile | null;
+  setDroppedFile: (file: PickedFile | null) => void;
+  /** The upload / edit modal: 'new', 'new:<gapId>', a content id, or closed. */
+  editor: string | null;
+  setEditor: (param: string | null) => void;
   /** New content or a new version. `publish` false saves a draft. Returns the item id. */
   save: (input: { id?: string; title: string; type: ContentType; text: string; gapId?: string }, publish: boolean) => string;
   approve: (id: string) => void;
@@ -60,6 +80,22 @@ interface KnowledgeState {
 }
 
 const stamp = () => new Date().toISOString().slice(0, 16);
+const sameQuestion = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+
+/** Story 6.3: every Knowledge Gap support request also lives here as a gap. Seeded requests whose question has no
+ *  gap yet get one (topic unsorted until someone reviews it). */
+function gapsWithRequests(gaps: KnowledgeGap[]): KnowledgeGap[] {
+  const extra: KnowledgeGap[] = [];
+  for (const r of useAdminStore.getState().supportRequests) {
+    if (r.type !== 'knowledge_gap' || !r.question) continue;
+    if ([...gaps, ...extra].some((g) => sameQuestion(g.question, r.question!))) continue;
+    extra.push({ id: `gap-${r.id}`, question: r.question, topic: 'Unsorted', timesAsked: 1, status: 'new', firstAsked: r.received, lastAsked: r.received });
+  }
+  return [...extra, ...gaps];
+}
+
+/** The gap a Knowledge Gap support request belongs to, matched on the question. */
+export const gapForQuestion = (gaps: KnowledgeGap[], question?: string) => (question ? gaps.find((g) => sameQuestion(g.question, question)) : undefined);
 const me = () => useAdminStore.getState();
 const log = (text: string) => me().log(text);
 let n = 0;
@@ -70,7 +106,13 @@ export const useKnowledge = create<KnowledgeState>((set, get) => {
 
   return {
     items: seed.items as ContentItem[],
-    gaps: seed.gaps as KnowledgeGap[],
+    gaps: gapsWithRequests(seed.gaps as KnowledgeGap[]),
+    notice: '',
+    setNotice: (notice) => set({ notice }),
+    droppedFile: null,
+    setDroppedFile: (droppedFile) => set({ droppedFile }),
+    editor: null,
+    setEditor: (editor) => set({ editor }),
     save: ({ id, title, type, text, gapId }, publish) => {
       const superAdmin = me().role === 'super';
       // Publishing as an Admin sends it for approval instead.

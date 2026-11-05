@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { adminName, formatDate, inviteHoursLeft, useAdminStore, type AdminUser, type InviteStatus } from '@shared/admin';
 import { Button, DataTable, IconButton, Menu, Select, StatusText, type Column } from '@admin/ui';
-import { AdminPage, FilterBar, matches } from '@admin/patterns';
+import { AdminPage, DEFAULT_SORT, FilterBar, SortRange, applySort, matches, rangePhrase, showing, type SortValue } from '@admin/patterns';
 import { useAdminToast } from '@admin/hooks/toast.store';
 import { useAdminNav } from '@admin/navigation';
 import { InviteDialog } from './parts/InviteDialog';
@@ -22,15 +22,6 @@ const statusOf = (a: AdminUser): AdminStatus => (a.account === 'deactivated' ? '
 
 const inviteOf = (a: AdminUser): InviteStatus => (a.invite === 'pending' && inviteHoursLeft(a.invitedAt) <= 0 ? 'expired' : a.invite);
 
-type Order = 'latest' | 'oldest';
-const ORDER_OPTIONS: { value: Order; label: string }[] = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'oldest', label: 'Oldest' },
-];
-const ORDERS: Record<Order, (a: AdminUser, b: AdminUser) => number> = {
-  latest: (a, b) => b.invitedAt.localeCompare(a.invitedAt),
-  oldest: (a, b) => a.invitedAt.localeCompare(b.invitedAt),
-};
 
 export default function Admins() {
   const admins = useAdminStore((s) => s.admins);
@@ -39,9 +30,14 @@ export default function Admins() {
   const openDrawer = useAdminNav((s) => s.openDrawer);
   const [query, setQuery] = useState('');
   const [inviting, setInviting] = useState(false);
-  const [order, setOrder] = useState<Order>('latest');
+  const [sort, setSort] = useState<SortValue>(DEFAULT_SORT);
   const [status, setStatus] = useState<'all' | AdminStatus>('all');
-  const rows = admins.filter((a) => matches(query, adminName(a), a.email) && (status === 'all' || statusOf(a) === status)).sort(ORDERS[order]);
+  const rows = applySort(admins.filter((a) => matches(query, adminName(a), a.email) && (status === 'all' || statusOf(a) === status)), sort, (a) => a.invitedAt);
+  const summary = showing(rows.length, ['admin', 'admins'], [
+    status !== 'all' && `with status ${STATUS_LABEL[status]}`,
+    rangePhrase(sort, 'added'),
+    query.trim() && `matching \u201c${query.trim()}\u201d`,
+  ]);
 
   const onAction = (a: AdminUser, id: string) => {
     const s = useAdminStore.getState();
@@ -96,7 +92,7 @@ export default function Admins() {
   return (
     <AdminPage
       title="Admin users"
-      subtitle="People who can sign in to this console. Invites expire after 24 hours."
+      subtitle={`${admins.length} admins in total`}
       action={<Button leadingIcon="plus" onClick={() => setInviting(true)}>Add admin</Button>}
       toolbar={
         <FilterBar query={query} onQuery={setQuery} placeholder="Search by name or email">
@@ -107,11 +103,11 @@ export default function Admins() {
             onChange={setStatus}
             options={[{ value: 'all', label: 'All statuses' }, ...(Object.keys(STATUS_LABEL) as AdminStatus[]).map((k) => ({ value: k, label: STATUS_LABEL[k] }))]}
           />
-          <Select<Order> label="Sort" hideLabel value={order} onChange={setOrder} options={ORDER_OPTIONS} />
+          <SortRange value={sort} onChange={setSort} rangeLabel="Added between" />
         </FilterBar>
       }
     >
-      <DataTable label="Admin users" columns={columns} rows={rows} rowKey={(a) => a.id} onRowClick={(a) => openDrawer({ kind: 'admin', id: a.id })} empty="No admins match your search." footer={`Showing ${rows.length} of ${admins.length} admins`} />
+      <DataTable label="Admin users" columns={columns} rows={rows} rowKey={(a) => a.id} onRowClick={(a) => openDrawer({ kind: 'admin', id: a.id })} empty="No admins match your search." footer={summary} pager="outside" />
       {inviting && <InviteDialog onClose={() => setInviting(false)} />}
     </AdminPage>
   );

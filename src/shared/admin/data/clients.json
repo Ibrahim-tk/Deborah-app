@@ -2598,5 +2598,68 @@
     },
     "dependents": [],
     "documents": []
+  },
+  {
+    "id": "t004",
+    "name": "Mia",
+    "email": "mia.teen@example.com",
+    "state": "TN",
+    "joined": "2026-07-25",
+    "lastActive": "2026-08-17",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 5,
+    "accountType": "teen",
+    "parentId": "c007",
+    "teenStatus": "turned_off",
+    "consentRevoked": false,
+    "consents": [],
+    "health": {
+      "age": 44,
+      "stage": "Menopause",
+      "concerns": [
+        "Fatigue",
+        "Mood"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1982-07-19",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 160,
+        "weightKg": 62,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "Yes",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
+    },
+    "dependents": [],
+    "documents": []
   }
 ]

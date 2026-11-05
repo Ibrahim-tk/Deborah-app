@@ -1,7 +1,7 @@
 .root { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
 .search { flex: 1 1 280px; min-inline-size: 0; max-inline-size: 480px; }
-/* Filters sit on the trailing edge; search keeps the leading edge. */
-.filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-inline-start: auto; }
+/* Search keeps the leading edge; filters sit on the trailing edge, away from it, on every page. */
+.filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-3); margin-inline-start: auto; }
 .filters[data-inline] { margin-inline-start: 0; }
 
 /* Phone: search gets its own full-width row; filters share the row below, two up. */

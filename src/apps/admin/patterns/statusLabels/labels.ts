@@ -1,4 +1,6 @@
 /** Plain-text labels for admin record types (no JSX, so components can stay fast-refresh friendly). */
+import type { ContentStatus, GapStatus } from '@shared/admin';
+import type { StatusTone } from '@admin/ui';
 import type { DeletionRequest, DeletionStatus, DeletionType, EscalationType, SupportType } from '@shared/admin';
 
 export const ESCALATION_LEVEL: Record<EscalationType, string> = { emergency: 'Emergency', crisis: 'Crisis', urgent: 'Urgent' };
@@ -25,3 +27,7 @@ export const DELETION_OPTION: Record<NonNullable<DeletionRequest['option']>, str
   advocate_only: 'Advocate only: delete only their own health information',
   transfer: 'Transfer profiles to family members, then delete the account',
 };
+
+/** Knowledge Base pills: colour only for meaning (story 6.1, Dropbox-style "always show the state"). */
+export const CONTENT_TONE: Record<ContentStatus, StatusTone> = { published: 'success', pending: 'warning', draft: 'neutral', rejected: 'danger', archived: 'neutral' };
+export const GAP_TONE: Record<GapStatus, StatusTone> = { new: 'info', answered: 'success', dismissed: 'neutral' };

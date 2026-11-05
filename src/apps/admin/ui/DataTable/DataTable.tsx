@@ -38,6 +38,8 @@ export interface DataTableProps<T> {
   pageSize?: number;
   /** false: no pager bar, every row shows (short fixed lists such as plans). */
   paginate?: boolean;
+  /** `outside`: the summary (leading edge) and the pager (trailing edge) share one row under the table box. `compact` (default): both share one bar inside the box. */
+  pager?: 'compact' | 'outside';
 }
 
 /** Puts several bits of content in one cell on a shared centre line (e.g. a name and a status pill). */
@@ -45,7 +47,7 @@ export function CellRow({ children }: { children: ReactNode }) {
   return <span className={styles.inline}>{children}</span>;
 }
 
-export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed', pageSize = 25, paginate = true }: DataTableProps<T>) {
+export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed', pageSize = 25, paginate = true, pager = 'compact' }: DataTableProps<T>) {
   const [sort, setSort] = useState(initialSort);
   const sorted = useMemo(() => {
     const by = columns.find((c) => c.key === sort?.key)?.sort;
@@ -57,7 +59,8 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
     });
   }, [rows, columns, sort]);
 
-  const paged = variant === 'boxed' && paginate;
+  // Five rows or fewer fit at a glance: no pager at all (the summary line still shows).
+  const paged = variant === 'boxed' && paginate && rows.length > 5;
   const [size, setSize] = useState(pageSize);
   const [pageWanted, setPage] = useState(0);
   // Filtering can shrink the list under the current page; show the last one that exists.
@@ -77,9 +80,10 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
     );
   }
 
-  return (
+  const outside = paged && pager === 'outside';
+  const box = (
     <div className={styles.container} data-variant={variant}>
-      {paged && <Pager page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={footer} />}
+      {paged && !outside && <Pager page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={footer} />}
       <div className={styles.scroll}>
         <table className={styles.table} aria-label={label}>
           <thead>
@@ -124,6 +128,13 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
         </table>
       </div>
       {footer && !paged && <div className={styles.footer}>{footer}</div>}
+    </div>
+  );
+  if (!outside) return box;
+  return (
+    <div className={styles.outside}>
+      {box}
+      <Pager outside page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={footer} />
     </div>
   );
 }

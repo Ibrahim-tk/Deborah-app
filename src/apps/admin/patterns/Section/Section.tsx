@@ -2,14 +2,18 @@
 import type { ReactNode } from 'react';
 import styles from './Section.module.css';
 
-export function Section({ title, trailing, children, surface }: { title: string; trailing?: ReactNode; children: ReactNode; surface?: boolean }) {
+/** `description`: one supporting line set tight under the title. */
+export function Section({ title, description, trailing, children, surface }: { title: string; description?: ReactNode; trailing?: ReactNode; children: ReactNode; surface?: boolean }) {
   return (
-    <section className={styles.root}>
+    <section className={styles.root} data-section="">
       <div className={styles.head}>
-        <h2 className={styles.title}>{title}</h2>
+        <div className={styles.titles}>
+          <h2 className={styles.title}>{title}</h2>
+          {description && <p className={styles.description}>{description}</p>}
+        </div>
         {trailing}
       </div>
-      <div className={surface ? styles.surface : undefined}>{children}</div>
+      <div className={surface ? styles.surface : styles.body}>{children}</div>
     </section>
   );
 }

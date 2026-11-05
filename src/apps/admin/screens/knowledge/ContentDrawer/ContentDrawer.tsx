@@ -1,120 +1,147 @@
 /**
  * @screen  A-13.2 · Knowledge Base content (side drawer)
  * @flow    A13 Knowledge Base management (stories 6.1 and 6.2)
- * @states  draft · pending (approve / reject — Super Admin only) · published · rejected · archived · editing · new · answer to a gap
+ * @states  draft · waiting for approval (approve / send back — Super Admin only) · live · sent back · archived · result banner
  * @spec    docs/admin/stories.md#61---view--edit-knowledge-base-content
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
 import { CONTENT_STATUS, contentText, formatDate, useAdminStore, useKnowledge } from '@shared/admin';
-import { Button, Drawer, KeyValueList, TextArea } from '@admin/ui';
-import { ConfirmDialog, Section } from '@admin/patterns';
+import { Button, Drawer, FileTile, IconButton, KeyValueList, StatusText, TextArea } from '@admin/ui';
+import { useAdminToast } from '@admin/hooks/toast.store';
+import { CONTENT_TONE, ConfirmDialog, ResultBanner, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useSim } from '@admin/hooks/useSim';
-import { ContentForm } from './ContentForm';
+import { openEditor } from '../ContentEditor/open';
 import styles from './ContentDrawer.module.css';
 
 type Confirm = null | 'reject' | 'archive' | { rollBack: number };
 
+/** One plain line on what this means for the Oracle right now. */
+function whereItStands(status: string, updated: string) {
+  if (status === 'published') return `Live since ${formatDate(updated)}. The Oracle uses it to answer Clients.`;
+  if (status === 'pending') return 'Not live yet. It’s waiting for the Super Admin’s approval.';
+  if (status === 'draft') return 'Not live yet. It’s a draft only you can see here.';
+  if (status === 'rejected') return 'Not live. It was sent back with a reason below.';
+  return 'Archived. The Oracle doesn’t use it, but you can restore it at any time.';
+}
+
 export default function ContentDrawer({ id }: { id: string | null }) {
-  const gapId = id?.startsWith('new:') ? id.slice(4) : undefined;
   const item = useKnowledge((s) => s.items.find((c) => c.id === id));
-  const gap = useKnowledge((s) => s.gaps.find((g) => g.id === (gapId ?? item?.gapId)));
+  const gap = useKnowledge((s) => s.gaps.find((g) => g.id === item?.gapId));
+  const notice = useKnowledge((s) => s.notice);
   const isSuper = useAdminStore((s) => s.role === 'super');
   const close = useAdminNav((s) => s.closeDrawer);
-  const [editing, setEditing] = useState(false);
   const [confirm, setConfirm] = useState<Confirm>(null);
+  const [showHistory, setShowHistory] = useState(false);
   const [reason, setReason] = useState('');
   const [touched, setTouched] = useState(false);
   const sim = useSim();
+  const toast = useAdminToast();
 
-  if (!item) return <ContentForm gap={gapId ? gap : undefined} onCancel={close} />;
-  if (editing) return <ContentForm item={item} onCancel={() => setEditing(false)} />;
+  if (!item) return null;
 
   const kb = useKnowledge.getState();
-  const reject = () => {
-    if (!reason.trim()) return setTouched(true);
-    sim.run(() => { kb.reject(item.id, reason.trim()); setConfirm(null); }, 'This content has been rejected.');
-  };
+  const name = `“${item.title}”`;
+  // Every action ends with a sentence that stays on screen (not a vanishing toast).
+  const act = (fn: () => void, message: string) => sim.run(() => { fn(); kb.setNotice(message); setConfirm(null); });
+  const sendBack = () => (reason.trim() ? act(() => kb.reject(item.id, reason.trim()), `${name} was sent back. It isn’t live.`) : setTouched(true));
+  const earlier = item.history.filter((h) => h.version !== item.version).reverse();
 
   return (
     <Drawer
       title={item.title}
-      subtitle={`${item.type} · version ${item.version} · ${CONTENT_STATUS[item.status]}`}
-      onClose={close}
+      subtitle={item.type}
+      meta={<StatusText tone={CONTENT_TONE[item.status]}>{CONTENT_STATUS[item.status]}</StatusText>}
+      onClose={() => { kb.setNotice(''); close(); }}
+      headerControls={<IconButton icon="edit" label="Edit" onClick={() => openEditor(item.id)} />}
       actions={
         <>
-          {item.status === 'pending' && isSuper && (
-            <>
-              <Button size="sm" loading={sim.busy} onClick={() => sim.run(() => kb.approve(item.id), 'This content has been published. The Oracle will start using it shortly.')}>Approve &amp; publish</Button>
-              <Button size="sm" variant="secondary" onClick={() => setConfirm('reject')}>Reject</Button>
-            </>
-          )}
-          <Button size="sm" variant={item.status === 'pending' && isSuper ? 'ghost' : 'secondary'} onClick={() => setEditing(true)}>Edit</Button>
           {item.status === 'archived' ? (
-            <Button size="sm" variant="ghost" onClick={() => sim.run(() => kb.restore(item.id), 'This content has been restored.')}>Restore</Button>
+            <Button size="sm" variant="ghost" onClick={() => act(() => kb.restore(item.id), `${name} is restored and live again.`)}>Restore</Button>
           ) : (
             <Button size="sm" variant="ghost" onClick={() => setConfirm('archive')}>Archive</Button>
+          )}
+          {item.status === 'pending' && isSuper && <Button size="sm" variant="secondary" onClick={() => setConfirm('reject')}>Send back</Button>}
+          {item.status === 'pending' && isSuper && (
+            <Button size="sm" loading={sim.busy} onClick={() => act(() => kb.approve(item.id), `${name} is now live. The Oracle will start using it shortly.`)}>Approve and make live</Button>
           )}
         </>
       }
     >
+      <ResultBanner message={notice} onDismiss={() => kb.setNotice('')} />
+      <p className={styles.stands}>{whereItStands(item.status, item.updated)}</p>
       <Section title="Details">
         <KeyValueList
           items={[
-            { label: 'Status', value: CONTENT_STATUS[item.status] },
-            { label: 'Source', value: item.source },
-            { label: 'Last updated', value: formatDate(item.updated) },
-            ...(item.rejectReason && item.status === 'rejected' ? [{ label: 'Rejected because', value: item.rejectReason }] : []),
-            ...(gap ? [{ label: 'Answers the gap', value: gap.question }] : []),
-            ...(item.wellness ? [{ label: 'Wellness Plan', value: 'Shown to Clients as a Wellness Protocol' }] : []),
+            { label: 'Last changed', value: formatDate(item.updated) },
+            { label: 'Edits', value: item.version === 1 ? 'Original' : `${item.version - 1}` },
+            ...(item.rejectReason && item.status === 'rejected' ? [{ label: 'Sent back because', value: item.rejectReason }] : []),
+            ...(gap ? [{ label: 'Answers the question', value: gap.question }] : []),
+            ...(item.wellness ? [{ label: 'Wellness Plan', value: 'Also shown to Clients in their Wellness Plan' }] : []),
           ]}
         />
-        {item.status === 'pending' && !isSuper && <p className={styles.note}>Waiting for the Super Admin to approve it. The Oracle doesn&rsquo;t use it yet.</p>}
       </Section>
       <Section title="Content">
-        <p className={styles.text}>{contentText(item)}</p>
+        {/* Uploaded content shows as a file tile; typed content shows as text. */}
+        {contentText(item).startsWith('Uploaded file: ') ? (
+          <FileTile
+            name={contentText(item).slice('Uploaded file: '.length)}
+            detail={`Uploaded ${formatDate(item.updated)}`}
+            onDownload={() => toast('Download started')}
+            onOpen={() => toast('Opening the file in a new tab')}
+          />
+        ) : (
+          <p className={styles.text}>{contentText(item)}</p>
+        )}
       </Section>
-      <Section title="Version history">
-        <ul className={styles.history}>
-          {[...item.history].reverse().map((h) => (
-            <li key={h.version} className={styles.version}>
-              <span className={styles.vName}>Version {h.version}{h.version === item.version ? ' · current' : ''}</span>
-              <span className={styles.meta}>{h.by} · {formatDate(h.at)}</span>
-              {h.version !== item.version && <Button size="sm" variant="ghost" onClick={() => setConfirm({ rollBack: h.version })}>Roll back</Button>}
-            </li>
-          ))}
-        </ul>
-      </Section>
+      {earlier.length > 0 && (
+        <Section title="Earlier versions">
+          <Button variant="link" className={styles.linkBtn} aria-expanded={showHistory} onClick={() => setShowHistory((v) => !v)}>
+            {showHistory ? 'Hide earlier versions' : `Show earlier versions (${earlier.length})`}
+          </Button>
+          {showHistory && (
+            <ul className={styles.history}>
+              {earlier.map((h) => (
+                <li key={h.version} className={styles.version}>
+                  <span className={styles.vName}>{h.version === 1 ? 'Original' : `Edit ${h.version - 1}`}</span>
+                  <span className={styles.meta}>{h.by} · {formatDate(h.at)}</span>
+                  <Button size="sm" variant="ghost" onClick={() => setConfirm({ rollBack: h.version })}>Restore this version</Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Section>
+      )}
 
       {confirm === 'reject' && (
         <ConfirmDialog
-          title="Reject this content?"
-          body={<TextArea label="Reason" value={reason} hint={touched && !reason.trim() ? 'Please add a reason for rejecting this content.' : undefined} onChange={(e) => setReason(e.target.value)} />}
-          confirm="Reject"
+          title={`Send back ${name}?`}
+          body={<TextArea label="Why is it being sent back?" value={reason} hint={touched && !reason.trim() ? 'Please add a reason for rejecting this content.' : undefined} onChange={(e) => setReason(e.target.value)} />}
+          confirm="Send back"
           destructive
           busy={sim.busy}
-          onConfirm={reject}
+          onConfirm={sendBack}
           onClose={() => setConfirm(null)}
         />
       )}
       {confirm === 'archive' && (
         <ConfirmDialog
-          title="Archive this content?"
-          body="Archive this content? The Oracle will stop using it, but you can restore it later."
+          title={`Archive ${name}?`}
+          body="The Oracle will stop using it. You can restore it later."
           confirm="Archive"
           busy={sim.busy}
-          onConfirm={() => sim.run(() => { kb.archive(item.id); setConfirm(null); }, 'This content has been archived.')}
+          onConfirm={() => act(() => kb.archive(item.id), `${name} is archived. The Oracle no longer uses it.`)}
           onClose={() => setConfirm(null)}
         />
       )}
       {confirm && typeof confirm === 'object' && (
         <ConfirmDialog
-          title="Roll back?"
-          body={`Publish version ${confirm.rollBack} instead of the current version?`}
-          confirm="Roll back"
+          title="Restore this version?"
+          body={`Use ${confirm.rollBack === 1 ? 'the original' : `edit ${confirm.rollBack - 1}`} of ${name} instead of the current text?`}
+          confirm="Restore this version"
           busy={sim.busy}
-          onConfirm={() => sim.run(() => { kb.rollBack(item.id, confirm.rollBack); setConfirm(null); }, isSuper ? 'This content has been published.' : 'Your content has been sent to the Super Admin for approval.')}
+          onConfirm={() => act(() => kb.rollBack(item.id, confirm.rollBack), isSuper ? `${name} is back to the earlier version and live.` : `${name}’s earlier version was sent for approval.`)}
           onClose={() => setConfirm(null)}
         />
       )}

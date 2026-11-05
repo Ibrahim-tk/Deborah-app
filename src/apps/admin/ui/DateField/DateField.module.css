@@ -1,0 +1,18 @@
+.trigger { cursor: pointer; justify-content: space-between; text-align: start; font: var(--weight-regular) var(--fs-callout) / var(--lh-callout) var(--font-ui); }
+.trigger:focus-visible { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-accent-tint); outline: 0; }
+.value { color: var(--color-ink); }
+.placeholder { color: var(--color-ink-placeholder); }
+/* Floating calendar: a real shadow is allowed on floating chrome (DESIGN.md). MUI picker width. */
+.positioner { z-index: var(--z-overlay); outline: 0; inline-size: 344px; max-inline-size: calc(100vw - 32px); }
+.panel {
+  display: grid;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-float-lg);
+  transform-origin: var(--transform-origin);
+  outline: 0;
+  transition: opacity var(--dur-quick) var(--ease-ios), transform var(--dur-quick) var(--ease-ios);
+}
+.panel[data-starting-style], .panel[data-ending-style] { opacity: 0; transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) { .panel { transition: none; } }

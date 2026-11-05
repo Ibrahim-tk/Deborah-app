@@ -1,4 +1,4 @@
-/** @ui Toggle — iOS switch geometry; on = Deborah Purple, off = purple-100 track. */
+/** @ui Toggle — iOS switch geometry; on = Deborah Purple, off = light grey track. */
 import { useId } from 'react';
 import styles from './Toggle.module.css';
 

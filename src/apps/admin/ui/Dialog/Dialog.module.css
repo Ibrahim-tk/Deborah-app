@@ -18,16 +18,18 @@
 }
 .panel[data-starting-style], .panel[data-ending-style] { opacity: 0; scale: 0.98; }
 .panel[data-width='md'] { inline-size: min(calc(100% - var(--space-8)), 600px); }
+.panel[data-width='lg'] { inline-size: min(calc(100% - var(--space-8)), 760px); }
 .head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-5) var(--space-5) var(--space-2) var(--space-6); }
 .title { margin: 0; font-size: var(--fs-title-3); line-height: var(--lh-title-3); font-weight: var(--weight-medium); color: var(--color-ink); }
 .body { padding: var(--space-2) var(--space-6) var(--space-6); overflow-y: auto; display: grid; gap: var(--space-4); color: var(--color-ink-secondary); font-size: var(--fs-callout); line-height: var(--lh-callout); }
 .body p { margin: 0; }
-.foot { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4) var(--space-6) var(--space-5); border-block-start: 1px solid var(--color-border-hairline); }
+.foot { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4) var(--space-6) var(--space-5); border-block-start: 1px solid var(--color-border-hairline); }
 
 /* Phone: dialogs become bottom sheets: full width, rounded top, slide up, buttons stacked full width. */
 @container admin (max-width: 640px) {
   .panel,
-  .panel[data-width='md'] {
+  .panel[data-width='md'],
+  .panel[data-width='lg'] {
     inset-block: auto 0;
     inset-inline: 0;
     translate: none;
@@ -44,3 +46,8 @@
   .foot { flex-direction: column-reverse; align-items: stretch; padding: var(--space-4) var(--space-5) var(--space-5); }
   .foot > * { inline-size: 100%; }
 }
+/* Button order everywhere: [ghost]  ……  [secondary][primary]. A flexible spacer between them pushes the group right. */
+.foot::before { content: ""; order: 1; flex: 1 1 0; }
+.foot > [data-variant="ghost"], .foot > [data-variant="link"] { order: 0; }
+.foot > [data-variant="secondary"] { order: 2; }
+.foot > [data-variant="primary"], .foot > [data-variant="destructive"] { order: 3; }

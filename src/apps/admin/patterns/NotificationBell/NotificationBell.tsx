@@ -1,4 +1,4 @@
-/** @pattern NotificationBell — bell with an unread dot; opens a panel of the latest notifications.
+/** @pattern NotificationBell — bell with an unread dot; opens a quiet, enterprise-style panel of the latest notifications.
  *  Rows open their record; footer goes to the full page or to preferences. */
 import { useState } from 'react';
 import { dayBucket, useAdminNotifications, useAdminStore, visibleFor } from '@shared/admin';
@@ -6,6 +6,8 @@ import { IconButton, Popover } from '@admin/ui';
 import { useAdminNav } from '@admin/navigation';
 import { NotificationRow } from '../NotificationRow';
 import styles from './NotificationBell.module.css';
+
+const group = (at: string) => (dayBucket(at) === 'Today' ? 'Today' : 'Earlier');
 
 export function NotificationBell() {
   const [open, setOpen] = useState(false);
@@ -38,7 +40,8 @@ export function NotificationBell() {
         ) : (
           latest.map((n, i) => (
             <div key={n.id}>
-              {(i === 0 || dayBucket(latest[i - 1].at) !== dayBucket(n.at)) && <p className={styles.bucket}>{dayBucket(n.at) === 'Today' ? 'Today' : 'Earlier'}</p>}
+              {/* Two groups only, each labelled once. */}
+              {(i === 0 || group(latest[i - 1].at) !== group(n.at)) && <p className={styles.bucket}>{group(n.at)}</p>}
               <NotificationRow
                 compact
                 item={n}
@@ -49,8 +52,7 @@ export function NotificationBell() {
         )}
       </div>
       <div className={styles.foot}>
-        <button type="button" className={styles.link} onClick={() => leave(() => go('notifications'))}>View all</button>
-        
+        <button type="button" className={styles.footLink} onClick={() => leave(() => go('notifications'))}>View all notifications</button>
       </div>
     </Popover>
     {unread > 0 && <span className={styles.dot} aria-hidden />}

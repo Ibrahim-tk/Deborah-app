@@ -3,7 +3,7 @@
  * no "Open" hop to a full page. Used by My Visit Notes (M-9.1) and the chat side panel (M-2.1).
  * `mode`: 'view' shows the note's own screen (brief / log / note); 'edit' the editor; 'log' the visit log form.
  */
-import { Suspense, useState } from 'react';
+import { Suspense, useLayoutEffect, useState } from 'react';
 import { useAppStore } from '@shared/store';
 import { Button, IconButton, Input } from '@web/ui';
 import { meta } from '@web/navigation';
@@ -19,14 +19,12 @@ export function NotePreview({ noteId, mode: initial = 'view', onClear }: { noteI
   const [mode, setMode] = useState<NotePaneMode>(initial);
   const [renaming, setRenaming] = useState<string | null>(null);
 
-  if (!note) {
-    return (
-      <div className={styles.root}>
-        <p className={styles.empty}>This note is no longer available.</p>
-        <Button variant="ghost" onClick={onClear}>Close</Button>
-      </div>
-    );
-  }
+  // Deleted (or otherwise gone) while open — dismiss the floating pane; don't leave an empty "Close" card.
+  useLayoutEffect(() => {
+    if (!note) onClear();
+  }, [note, onClear]);
+
+  if (!note) return null;
 
   const screenId = mode === 'log' ? 'M-9.9' : mode === 'edit' && note.kind !== 'provider-brief' ? 'M-9.4' : note.kind === 'provider-brief' ? 'M-9.7' : note.visit ? 'M-9.8' : 'M-9.4';
   const Screen = meta(screenId)?.component;

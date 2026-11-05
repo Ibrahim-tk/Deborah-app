@@ -8,15 +8,10 @@
 import { useState } from 'react';
 import { formatDate, useAdminStore, type Escalation, type EscalationStatus, type EscalationType } from '@shared/admin';
 import { DataTable, Select, type Column } from '@admin/ui';
-import { AdminPage, EscalationStatusText, EscalationTypeText, FilterBar, matches } from '@admin/patterns';
+import { AdminPage, DEFAULT_SORT, ESCALATION_LEVEL, SortRange, applySort, rangePhrase, showing, type SortValue, EscalationStatusText, EscalationTypeText, FilterBar, matches } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 
 type TypeFilter = 'all' | EscalationType;
-type Order = 'latest' | 'oldest';
-const ORDER_OPTIONS: { value: Order; label: string }[] = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'oldest', label: 'Oldest' },
-];
 type StatusFilter = EscalationStatus | 'all';
 type ProfileFilter = 'all' | Escalation['profile']['kind'];
 const PROFILE: Record<Escalation['profile']['kind'], string> = { client: 'Client', family: 'Family member', teen: 'Teen' };
@@ -29,21 +24,26 @@ export default function Escalations() {
   const [type, setType] = useState<TypeFilter>('all');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [profile, setProfile] = useState<ProfileFilter>('all');
-  const [order, setOrder] = useState<Order>('latest');
+  const [sort, setSort] = useState<SortValue>(DEFAULT_SORT);
 
   const nameOf = (id: string) => clients.find((c) => c.id === id)?.name ?? 'Unknown client';
   const emailOf = (id: string) => clients.find((c) => c.id === id)?.email ?? '';
-  const rows = escalations.filter(
+  const filtered = escalations.filter(
     (e) =>
       matches(query, nameOf(e.clientId), emailOf(e.clientId), e.reason) &&
       (type === 'all' || e.type === type) &&
       (status === 'all' || e.status === status) &&
       (profile === 'all' || e.profile.kind === profile),
-  ).sort((a, b) => {
-    // Not yet reviewed always comes first; the sort dropdown orders by date within each group.
-    if (a.status !== b.status) return a.status === 'not_reviewed' ? -1 : 1;
-    return order === 'latest' ? b.opened.localeCompare(a.opened) : a.opened.localeCompare(b.opened);
-  });
+  );
+  // Not yet reviewed always comes first; the sort orders by date within each group (stable sort keeps it).
+  const rows = applySort(filtered, sort, (e) => e.opened).sort((a, b) => (a.status === b.status ? 0 : a.status === 'not_reviewed' ? -1 : 1));
+  const summary = showing(rows.length, ['escalation', 'escalations'], [
+    type !== 'all' && `at ${ESCALATION_LEVEL[type]} level`,
+    status !== 'all' && (status === 'reviewed' ? 'reviewed' : 'not yet reviewed'),
+    profile !== 'all' && `about a ${PROFILE[profile].toLowerCase()}`,
+    rangePhrase(sort, 'opened'),
+    query.trim() && `matching \u201c${query.trim()}\u201d`,
+  ]);
 
   const columns: Column<Escalation>[] = [
     { key: 'client', header: 'Client', primary: true, render: (e) => nameOf(e.clientId) },
@@ -58,7 +58,7 @@ export default function Escalations() {
   return (
     <AdminPage
       title="Escalations"
-      subtitle="Emergencies, crises and urgent concerns the Oracle recorded, for review only."
+      subtitle={`${escalations.length} escalations in total`}
       toolbar={
         <FilterBar query={query} onQuery={setQuery} placeholder="Search by first name or email">
           <Select<TypeFilter>
@@ -82,13 +82,7 @@ export default function Escalations() {
             onChange={setProfile}
             options={[{ value: 'all', label: 'All profiles' }, { value: 'client', label: 'Client' }, { value: 'family', label: 'Family member' }, { value: 'teen', label: 'Teen' }]}
           />
-          <Select<Order>
-            label="Sort"
-            hideLabel
-            value={order}
-            onChange={setOrder}
-            options={ORDER_OPTIONS}
-          />
+          <SortRange value={sort} onChange={setSort} rangeLabel="Opened between" />
         </FilterBar>
       }
     >
@@ -97,7 +91,8 @@ export default function Escalations() {
         columns={columns}
         rows={rows}
         rowKey={(e) => e.id}
-        footer={`Showing ${rows.length} of ${escalations.length} cases`}
+        footer={summary}
+        pager="outside"
         onRowClick={(e) => openEscalation(e.id)}
         empty={escalations.length === 0 ? 'There are no escalations to review.' : 'No escalations match these filters.'}
       />

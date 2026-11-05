@@ -15,6 +15,9 @@ interface AdminNavState {
   settingsTab: 'profile' | 'security' | 'notifications';
   openSettings: (tab: 'profile' | 'security' | 'notifications') => void;
   setNavOpen: (open: boolean) => void;
+  /** Sign-out asks first (story 12.1): true while the confirm is showing. */
+  confirmingSignOut: boolean;
+  setConfirmingSignOut: (open: boolean) => void;
   /** Side drawer over the current page (one at a time): any record a table row opens. */
   drawer: DrawerTarget | null;
   openDrawer: (target: DrawerTarget) => void;
@@ -50,6 +53,8 @@ export const useAdminNav = create<AdminNavState>((set) => ({
   setLayout: (layout) => set({ layout }),
   navOpen: false,
   settingsTab: 'profile',
+  confirmingSignOut: false,
+  setConfirmingSignOut: (confirmingSignOut) => set({ confirmingSignOut, navOpen: false }),
   openSettings: (settingsTab) => set({ settingsTab, stack: [{ id: 'settings' }], drawer: null, navOpen: false }),
   setNavOpen: (navOpen) => set({ navOpen }),
   drawer: null,

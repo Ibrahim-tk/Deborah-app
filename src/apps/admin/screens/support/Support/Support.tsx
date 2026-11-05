@@ -7,9 +7,9 @@
  */
 import { useState } from 'react';
 import { Button, Select } from '@admin/ui';
-import { AdminPage, FilterBar, SUPPORT_TYPE } from '@admin/patterns';
-import { RequestsTable, type Show, type TypeFilter } from './parts/RequestsTable';
-import { ORDER_OPTIONS, type Order } from './parts/order';
+import { AdminPage, DEFAULT_SORT, FilterBar, SUPPORT_TYPE, SortRange, type SortValue } from '@admin/patterns';
+import { useAdminStore } from '@shared/admin';
+import { RequestsTable, type AccountFilter, type Show, type TypeFilter } from './parts/RequestsTable';
 import { DeletionTable } from './parts/DeletionTable';
 import { CreateDeletionDialog } from './parts/CreateDeletionDialog';
 
@@ -20,13 +20,16 @@ export default function Support() {
   const [query, setQuery] = useState('');
   const [show, setShow] = useState<Show>('open');
   const [type, setType] = useState<TypeFilter>('all');
+  const [account, setAccount] = useState<AccountFilter>('all');
   // Story 5.1: open requests first, oldest first.
-  const [order, setOrder] = useState<Order>('oldest');
+  const [sort, setSort] = useState<SortValue>({ ...DEFAULT_SORT, order: 'oldest' });
+  const supportTotal = useAdminStore((s) => s.supportRequests.length);
+  const deletionTotal = useAdminStore((s) => s.deletionRequests.length);
   const [creating, setCreating] = useState(false);
   return (
     <AdminPage
       title="Support requests"
-      subtitle="Replies go out by email. Mark a request resolved once it's answered."
+      subtitle={tab === 'requests' ? `${supportTotal} support requests in total` : `${deletionTotal} deletion requests in total`}
       action={tab === 'deletion' && <Button leadingIcon="plus" onClick={() => setCreating(true)}>Create deletion request</Button>}
       toolbar={
         <FilterBar query={query} onQuery={setQuery} placeholder="Search by first name or email">
@@ -47,6 +50,15 @@ export default function Support() {
             />
           )}
           {tab === 'requests' && (
+            <Select<AccountFilter>
+              label="Account type"
+              hideLabel
+              value={account}
+              onChange={setAccount}
+              options={[{ value: 'all', label: 'All accounts' }, { value: 'adult', label: 'Adult' }, { value: 'teen', label: 'Teen' }]}
+            />
+          )}
+          {tab === 'requests' && (
             <Select<Show>
               label="Show"
               hideLabel
@@ -55,17 +67,11 @@ export default function Support() {
               options={[{ value: 'open', label: 'Open requests' }, { value: 'resolved', label: 'Resolved' }, { value: 'all', label: 'All requests' }]}
             />
           )}
-          <Select<Order>
-            label="Sort"
-            hideLabel
-            value={order}
-            onChange={setOrder}
-            options={ORDER_OPTIONS}
-          />
+          <SortRange value={sort} onChange={setSort} rangeLabel="Received between" />
         </FilterBar>
       }
     >
-      {tab === 'requests' ? <RequestsTable query={query} show={show} type={type} order={order} /> : <DeletionTable query={query} order={order} />}
+      {tab === 'requests' ? <RequestsTable query={query} show={show} type={type} account={account} sort={sort} /> : <DeletionTable query={query} sort={sort} />}
       {creating && <CreateDeletionDialog onClose={() => setCreating(false)} />}
     </AdminPage>
   );

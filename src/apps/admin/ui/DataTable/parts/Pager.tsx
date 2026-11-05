@@ -14,14 +14,16 @@ interface PagerProps {
   onSize: (s: number) => void;
   /** The table's summary line (e.g. "Showing 9 of 9 entries"), shown on the leading edge. */
   summary?: ReactNode;
+  /** Sits under the table box instead of inside it. */
+  outside?: boolean;
 }
 
-export function Pager({ page, size, total, onPage, onSize, summary }: PagerProps) {
+export function Pager({ page, size, total, onPage, onSize, summary, outside }: PagerProps) {
   const pages = Math.max(1, Math.ceil(total / size));
   const from = total === 0 ? 0 : page * size + 1;
   const to = Math.min(total, (page + 1) * size);
   return (
-    <div className={styles.pager}>
+    <div className={styles.pager} data-outside={outside || undefined}>
       {summary && <span className={styles.pagerSummary}>{summary}</span>}
       <span className={styles.pagerLabel}>Rows per page</span>
       <Select

@@ -27,7 +27,6 @@ export default function Subscriptions() {
   const clients = useAdminStore((s) => s.clients);
   const plans = useAdminStore((s) => s.plans);
   const openDrawer = useAdminNav((s) => s.openDrawer);
-  const stripeOn = useAdminStore((s) => s.stripe.status === 'connected');
   const [planFilter, setPlanFilter] = useState<PlanFilter>('all');
   const [period, setPeriod] = useState<Period>('6');
 
@@ -130,7 +129,6 @@ export default function Subscriptions() {
         </KpiCard>
       </div>
       <Section title="Plans">
-        {!stripeOn && <p className={styles.notice}>Payments are off until Stripe is connected in Integrations. Plans show in the app but can't be bought yet.</p>}
         <PlansTable subscribers={share} />
       </Section>
     </AdminPage>

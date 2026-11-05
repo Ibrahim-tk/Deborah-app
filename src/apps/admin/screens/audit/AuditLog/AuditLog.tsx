@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { AUDIT_CATEGORY, AUDIT_ROLE, adminName, formatDate, useAdminStore, type AuditCategory, type AuditEntry, type AuditRole } from '@shared/admin';
 import { Button, DataTable, Select, type Column } from '@admin/ui';
-import { AdminPage, DateRangeFilter, FilterBar, matches, presetRange, type DateRange } from '@admin/patterns';
+import { AdminPage, DEFAULT_SORT, FilterBar, SortRange, applySort, matches, rangePhrase, showing, type SortValue } from '@admin/patterns';
 import { useAdminToast } from '@admin/hooks/toast.store';
 import { useAdminNav } from '@admin/navigation';
 import { downloadCsv } from './parts/csv';
@@ -24,25 +24,24 @@ export default function AuditLog() {
   const [query, setQuery] = useState('');
   const [role, setRole] = useState<'all' | AuditRole>('all');
   const [category, setCategory] = useState<'all' | AuditCategory>('all');
-  const [range, setRange] = useState<DateRange>(presetRange('90'));
-  const [order, setOrder] = useState<'newest' | 'oldest'>('newest');
+  const [sort, setSort] = useState<SortValue>(DEFAULT_SORT);
 
   const nameOf = (e: AuditEntry) => {
     if (e.role === 'system') return 'System';
     const a = admins.find((x) => x.email === e.actor);
     return a ? adminName(a) : clients.find((c) => c.email === e.actor)?.name ?? e.actor.split('@')[0];
   };
-  const day = (e: AuditEntry) => e.at.slice(0, 10);
-  const rows = log
-    .filter(
-      (e) =>
-        matches(query, nameOf(e), e.actor) &&
-        (role === 'all' || e.role === role) &&
-        (category === 'all' || e.category === category) &&
-        // Presets run up to now, so entries recorded this session always show.
-        day(e) >= range.from && (range.preset !== 'custom' || day(e) <= range.to),
-    )
-    .sort((a, b) => (order === 'newest' ? b.at.localeCompare(a.at) : a.at.localeCompare(b.at)));
+  const rows = applySort(
+    log.filter((e) => matches(query, nameOf(e), e.actor) && (role === 'all' || e.role === role) && (category === 'all' || e.category === category)),
+    sort,
+    (e) => e.at,
+  );
+  const summary = showing(rows.length, ['entry', 'entries'], [
+    role !== 'all' && `by ${AUDIT_ROLE[role]}`,
+    category !== 'all' && `in ${AUDIT_CATEGORY[category]}`,
+    rangePhrase(sort, 'from'),
+    query.trim() && `matching \u201c${query.trim()}\u201d`,
+  ]);
 
   const exportCsv = () => {
     downloadCsv(
@@ -75,10 +74,10 @@ export default function AuditLog() {
   return (
     <AdminPage
       title="Audit log"
-      subtitle="A record of key actions on the platform. Entries can't be edited or deleted, and are kept for six years."
+      subtitle={`${log.length} entries in total`}
       action={<Button variant="secondary" leadingIcon="download" disabled={rows.length === 0} onClick={exportCsv}>Export</Button>}
       toolbar={
-        <FilterBar inline query={query} onQuery={setQuery} placeholder="Search by name or email">
+        <FilterBar query={query} onQuery={setQuery} placeholder="Search by name or email">
           <Select<'all' | AuditRole> label="Role" hideLabel value={role} onChange={setRole} options={[{ value: 'all', label: 'All roles' }, ...(Object.keys(AUDIT_ROLE) as AuditRole[]).map((r) => ({ value: r, label: AUDIT_ROLE[r] }))]} />
           <Select<'all' | AuditCategory>
             label="Category"
@@ -87,8 +86,7 @@ export default function AuditLog() {
             onChange={setCategory}
             options={[{ value: 'all', label: 'All categories' }, ...(Object.keys(AUDIT_CATEGORY) as AuditCategory[]).map((c) => ({ value: c, label: AUDIT_CATEGORY[c] }))]}
           />
-          <DateRangeFilter value={range} onChange={setRange} />
-          <Select<'newest' | 'oldest'> label="Sort" hideLabel value={order} onChange={setOrder} options={[{ value: 'newest', label: 'Latest' }, { value: 'oldest', label: 'Oldest' }]} />
+          <SortRange value={sort} onChange={setSort} rangeLabel="Entries between" />
         </FilterBar>
       }
     >
@@ -98,7 +96,8 @@ export default function AuditLog() {
         rows={rows}
         rowKey={(e) => e.id}
         onRowClick={(e) => openDrawer({ kind: 'audit', id: e.id })}
-        footer={`Showing ${rows.length} of ${log.length} entries`}
+        footer={summary}
+        pager="outside"
         empty="No entries match your filters."
       />
     </AdminPage>

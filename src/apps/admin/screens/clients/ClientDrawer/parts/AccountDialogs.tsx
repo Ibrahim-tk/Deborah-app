@@ -36,7 +36,8 @@ export function ChangeEmailDialog({ client, onClose }: { client: Client; onClose
 }
 
 export function DeactivateDialog({ client, onClose }: { client: Client; onClose: () => void }) {
-  const teens = useAdminStore((s) => teensOf(client.id, s.clients).filter((t) => t.teenStatus !== 'invite_sent').length);
+  const teens = useAdminStore((s) => teensOf(client.id, s.clients)
+    .filter((t) => t.teenStatus !== 'invite_sent' && t.teenStatus !== 'turned_off').length);
   const [reason, setReason] = useState('');
   const [touched, setTouched] = useState(false);
   const sim = useSim();

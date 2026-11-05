@@ -2,6 +2,7 @@
 import { CheckInCard } from '@mobile/patterns/health';
 import { HealingPlanCard } from '@mobile/patterns/widgets';
 import { selectIsTeenAccount, useAppStore } from '@shared/store';
+import { ListRow } from '@mobile/ui';
 import { useNav } from '@mobile/navigation';
 import { useHubData } from '@mobile/screens/myhealth/useHubData';
 import { HealthDetails } from './HealthDetails';
@@ -30,6 +31,7 @@ export function HubPopulated() {
       {/* History and Visit Notes live on My Notes (M-9.1), not here (design 2026-10-20). */}
       {/* Design request 2026-10-20: the health profile lives here (lab reports removed 2026-10-28). */}
       <HealthDetails />
+      <ListRow title="Symptoms map" onPress={() => push('M-7.9')} />
       {/* "For you from the Oracle" and the library link removed from My Health (designer, 2026-10-21). */}
     </>
   );

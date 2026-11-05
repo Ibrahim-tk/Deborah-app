@@ -1,2 +1,0 @@
-/* Connected services stack as full-width cards. */
-.stack { display: grid; gap: var(--space-5); }

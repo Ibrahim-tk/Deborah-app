@@ -10,7 +10,8 @@ export interface DialogProps {
   onClose: () => void;
   children: ReactNode;
   footer?: ReactNode;
-  width?: 'sm' | 'md';
+  /** `lg`: forms with a drop zone or long text, e.g. Upload content. */
+  width?: 'sm' | 'md' | 'lg';
 }
 
 export function Dialog({ title, onClose, children, footer, width = 'sm' }: DialogProps) {

@@ -55,6 +55,8 @@ Every table row opens its record in a right-hand side drawer over the page (`nav
 pages. One drawer shows at a time; switching sidebar sections closes it.
 
 ### A-1.1 Sign in · A-1.2 Forgot password · A-1.3 Two-step verification
+Locked after 3 failures: Sign in is replaced by "Reset password" (→ Forget password). Reset links last 60 minutes, work once, and "Send a new link" cancels the earlier one (prototype: "Open the earlier link" shows "This link has expired."). A reset can't reuse the current password and ends other sessions. The password step is audit-logged.
+
 Email and password, then a 6-digit code. Any values pass. Forgot password confirms with "Check your email".
 
 ### A-2.1 Dashboard
@@ -97,6 +99,9 @@ Approve asks first, then deletes and deactivates the account. Reject keeps the a
 ### A-6.2 Admin user (side drawer)
 Name, copyable email, account pill. Actions: Resend invite (until accepted), Deactivate / Reactivate (red, at the end). Shows role,
 invitation status, invited or joined date and time left on a pending invite. Your own account is read only.
+
+### A-6.3 Admin account setup
+Opened from the invite link. Prototype: "Open invite link (prototype)" in the admin drawer opens the same inbox as the teen login, with this invite in it. The link opens the admin sign-in frame: email locked, password + confirm (8+ characters, upper, lower, number, special). On success that admin is signed in and lands on their own dashboard (a plain admin does not see subscriptions or admin users). The super admin is notified and the setup is audit-logged. An expired invite shows "This invite has expired. Please ask the Super Admin to send a new one."
 
 ### A-6.1 Admin users (super admin only)
 Invite by email with a role. Invites expire after **24 hours** (shown as "Expires in N h", then "Invite expired"). Resend invite,
@@ -150,6 +155,8 @@ connected (real brand logo, one line, Connect button), with one column per tile:
 Stripe (A-7.4) moved here from Subscriptions. Connecting is simulated (the provider's sign-in is assumed).
 
 ### A-11.1 Settings (admin and super admin)
+**My profile tab (story 12.1):** opened from the account menu ("My profile") or the phone top bar initial. Shows name, email (locked), role, last sign-in, two-step verification (always on), links to Reset password and Notification preferences, Edit (names only; Cancel with edits asks "You have unsaved changes") and Sign out. Every sign-out, including the account menu's, asks "Are you sure you want to sign out?". Change password checks the current password, has a "Forgot your password?" link (signs out → Forget password) and confirms "Your password has been changed."
+
 Opens from the sidebar (last item) or the account menu. One column of cards:
 - **Profile:** edit your full name; email (copyable) and role are read only, changed by a super admin.
 - **Password:** current, new and confirm, with live rules (12+ characters, a number, a symbol, upper and lower case). Changing it
@@ -184,7 +191,10 @@ notification per subscription; repeats within an hour are grouped ("3 payments f
   accepted and disconnecting Stripe also post notifications. Store: `src/shared/admin/notifications.ts`.
 
 ### A-13.1 Knowledge Base · A-13.2 Content · A-13.4 Knowledge gap
+Content list adds Source and Version columns and a Source filter; a third tab, Content sources, shows the app library (Azure) with counts by kind. Every Knowledge Gap support request has a matching gap (created if missing), linked from the request drawer. The upload/edit form, plan drawer, new policy version and profile edit ask before discarding unsaved changes.
+
 Content tab (pending approval first, then newest; search titles and text; filters type, status) and Knowledge gaps tab (new first, most asked first; only the question shows). Add content: title, type, file or text, Save as draft / Publish (Admins: Send for approval). Content drawer: Approve & publish / Reject with a reason (Super Admin only), Edit (new version), Archive / Restore, Roll back. Gap drawer: Add answer (prefilled), Dismiss with a reason, Reopen. State in `src/shared/admin/knowledge.ts`.
+UX for a 60+ reader (Dropbox-style principles): plain status words (Live, Waiting for approval, Draft (not live), Sent back, Archived (not used)) shown as pills; "Edits" instead of version numbers; one **Upload content** button; a big drop zone *and* a "Choose a file" button, with a preview card (name, size, Remove) and Uploading → Uploaded state before anything is saved; drop a file anywhere on the page to start an upload; the gap link under "More options"; earlier versions collapsed; every action ends with a `ResultBanner` sentence that stays until dismissed; content kind sits behind a **Filters** button; new gaps have a one-click **Answer**.
 
 ## Alignment with the client stories (Nov 2026)
 - Escalations: levels Emergency / Crisis / Urgent, status Not yet reviewed / Reviewed with review notes; the drawer shows only the triggering message; no contact actions and no escalation notifications.

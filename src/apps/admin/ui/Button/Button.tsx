@@ -4,7 +4,7 @@ import { Button as Base } from '@base-ui/react/button';
 import { Icon, type IconName } from '../Icon';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'link';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'destructiveOutline' | 'link';
 
 export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'color'> {
   children: ReactNode;

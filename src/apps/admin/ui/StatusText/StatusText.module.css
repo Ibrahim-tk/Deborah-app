@@ -18,3 +18,4 @@
 .root[data-tone='success'] { background: var(--color-success-tint); color: var(--color-success-ink); }
 .root[data-tone='warning'] { background: var(--color-warning-tint); color: var(--color-warning-ink); }
 .root[data-tone='danger'] { background: var(--color-danger-tint); color: var(--color-danger-ink); }
+.root[data-tone='info'] { background: var(--color-info-tint); color: var(--color-info-ink); }

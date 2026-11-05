@@ -71,3 +71,31 @@ export interface Extraction {
   conditions: Condition[];
   confidence: Partial<Record<'birthYear' | 'sexAtBirth' | 'heightCm' | 'weightKg' | 'medications' | 'allergies' | 'conditions', number>>;
 }
+
+/** M-7.9 Symptoms map — one ring area around the hypothalamic core. */
+export interface SymptomMapDomain {
+  id: string;
+  /** Ring label (short). */
+  short: string;
+  title: string;
+  /** Glyph key; each app maps it to its own icon adapter. */
+  icon: string;
+  symptoms: string[];
+}
+
+/** The hypothalamic core shown at the map's centre. */
+export interface SymptomMapCore {
+  title: string;
+  label: string;
+  mechanism: string[];
+}
+
+/** Where a mapped symptom label came from. */
+export type SymptomMapSource = 'profile' | 'chat' | 'seed';
+
+/** A symptom placed on the map, with the domains its label matched. */
+export interface MappedSymptom {
+  label: string;
+  source: SymptomMapSource;
+  domainIds: string[];
+}

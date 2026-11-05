@@ -44,3 +44,12 @@
   .actions > * { flex: none; }
   .body { padding: var(--space-6) var(--space-4) calc(var(--space-12) + env(safe-area-inset-bottom)); gap: var(--space-8); }
 }
+/* Button order everywhere: [ghost]  ……  [secondary][primary]. A flexible spacer between them pushes the group right. */
+.actions::before { content: ""; order: 1; flex: 1 1 0; }
+.actions > [data-variant="ghost"], .actions > [data-variant="link"] { order: 0; }
+.actions > [data-variant="secondary"] { order: 2; }
+.actions > [data-variant="primary"], .actions > [data-variant="destructive"] { order: 3; }
+/* Sections stacked in a drawer get a hairline and even air between them, wherever they sit (tabs included). */
+.body [data-section] + [data-section] { margin-block-start: var(--space-8); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-border-hairline); }
+/* Direct children already get the body's grid gap, so they need only the rule, not extra margin. */
+.body > [data-section] + [data-section] { margin-block-start: 0; }

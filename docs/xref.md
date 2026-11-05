@@ -46,6 +46,7 @@ Keep this table in sync with `apps/mobile/navigation/registry.ts`. Every screen 
 | M-7.4 | Content detail | F07 | `myhealth/ContentDetail` | W-7.4 · `myhealth/ContentDetail` (web twin) | [F07](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=52-280) | [ux/F07-my-health-hub.md](ux/F07-my-health-hub.md) | built (phase 6) |
 | M-7.5 | Deborah's library | F07 | `myhealth/Library` | W-7.5 · `myhealth/Library` (web twin) | [F07](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=52-280) | [ux/F07-my-health-hub.md](ux/F07-my-health-hub.md) | built (phase 6) |
 | M-7.6 | About Deborah | F07 | `myhealth/AboutDeborah` | W-7.6 · `myhealth/AboutDeborah` (web twin) | [F07](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=52-280) | [ux/F07-my-health-hub.md](ux/F07-my-health-hub.md) | built (phase 6) |
+| M-7.9 | Symptoms map | F07 | `myhealth/SymptomMap` | W-7.9 · `myhealth/SymptomMap` (web twin) | — | Design request 2026-11-04 (OPEN: add to docs/ux/F07) | blank shell · routing + seed data |
 | M-7.7 | Edit health detail | F07 | `myhealth/EditHealthDetail` | not built | — | design request 2026-10-20 (OPEN: add to ux/F07) | built |
 | M-8.2 | Booking info | F08 | `booking/BookingInfo` | W-8.2 · `booking/BookingInfo` (web twin) | [F08](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470) | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | built (phase 6) |
 | M-8.3 | Scheduler | F08 | `booking/Scheduler` | W-8.3 · `booking/Scheduler` (web twin) | [F08](https://www.figma.com/design/PoXOGNXuOaq3xIEnBpBT7f/Genesis?node-id=50-470) | [ux/F08-book-deborah.md](ux/F08-book-deborah.md) | built (phase 6) |
@@ -112,18 +113,18 @@ Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec:
 | A-5.3 | Support request (side drawer) | `support/SupportDrawer` | built |
 | A-6.1 | Admin users | `admins/Admins` | built |
 | A-6.2 | Admin user (side drawer) | `admins/AdminDrawer` | built |
+| A-6.3 | Admin account setup (invite email, then set password and open that admin's dashboard) | `auth/AcceptInvite` | built (simulated) |
 | A-7.1 | Subscriptions (+ A-7.2 plan list) | `subscriptions/Subscriptions` | built |
 | A-7.3 | Plan editor (side drawer) | `subscriptions/PlanDrawer` | built |
-| A-7.4 | Stripe integration (Payments card) | `integrations/Integrations/parts/StripeCard` | built (simulated) |
 | A-7.5 | Stripe webhook events (side drawer) | `subscriptions/StripeEventsDrawer` | built (simulated) |
 | A-8.1 | Audit log | `audit/AuditLog` | built |
 | A-8.2 | Audit entry (side drawer) | `audit/AuditDrawer` | built |
 | A-9.1 | Consent | `compliance/Consent` | built |
 | A-9.2 | Policy (side drawer: live text, versions, new version form) | `compliance/ConsentDrawer` | built |
 | A-9.3 | Compliance (frameworks + data rights), opened from Settings › Compliance card | `compliance/Compliance` | built (placeholder legal copy) |
-| A-10.1 | Integrations (Stripe, Dropbox, Shopify, Google Docs) | `integrations/Integrations` | built (simulated) |
-| A-11.1 | Settings (profile, password and security, notifications) | `settings/Settings` | built |
+| A-11.1 | Settings (my profile, password and security, notifications) | `settings/Settings` | built |
 | A-12.1 | Notifications (bell panel, full page, preferences in Settings) | `notifications/Notifications` | built (simulated) |
-| A-13.1 | Knowledge Base (content + knowledge gaps tabs) | `knowledge/KnowledgeBase` | built (simulated) |
-| A-13.2 | Knowledge Base content (side drawer: read, edit, approve/reject, archive, roll back; add content form) | `knowledge/ContentDrawer` | built (simulated) |
+| A-13.1 | Knowledge Base (content, knowledge gaps and content sources tabs) | `knowledge/KnowledgeBase` | built (simulated) |
+| A-13.2 | Knowledge Base content (side drawer: read, approve / send back, archive, restore a version) | `knowledge/ContentDrawer` | built (simulated) |
+| A-13.3 | Upload or edit content (centred modal) | `knowledge/ContentEditor` | built (simulated) |
 | A-13.4 | Knowledge gap (side drawer) | `knowledge/GapDrawer` | built (simulated) |

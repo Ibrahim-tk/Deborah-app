@@ -1,0 +1,75 @@
+{
+  "status": "placeholder",
+  "note": "Hypothalamus common-denominator map (M-7.9). Eight areas and labels from the supplied map (source spelling “PMOS” kept). Needs clinical review.",
+  "core": {
+    "title": "The Common Denominator",
+    "label": "Hypothalamic dysfunction",
+    "mechanism": [
+      "Neuroendocrine dysregulation",
+      "Autonomic imbalance",
+      "Immune activation",
+      "Circadian disruption",
+      "Thermoregulatory dysfunction",
+      "HPA axis dysregulation"
+    ]
+  },
+  "domains": [
+    {
+      "id": "circadian",
+      "short": "Sleep & energy",
+      "title": "Circadian & Mitochondrial Dysfunction",
+      "icon": "moon",
+      "symptoms": ["Unrefreshing sleep", "Low energy", "Exercise intolerance", "Runs cold, low body temp", "Brain fog", "Delayed sleep phase"]
+    },
+    {
+      "id": "neuroendocrine",
+      "short": "Hormone signals",
+      "title": "Neuroendocrine Signaling",
+      "icon": "sun",
+      "symptoms": ["Wired but tired", "Feeling cold, sluggish", "Weight that won’t budge", "Hot flashes & night sweats", "Low libido", "Menstrual irregularity / PMOS", "Infertility"]
+    },
+    {
+      "id": "autoimmunity",
+      "short": "Autoimmunity",
+      "title": "Autoimmunity",
+      "icon": "shield",
+      "symptoms": ["Joint pain, swelling", "Chronic inflammation", "Rashes, flares", "Fatigue", "Positive antibody markers", "Organ-specific symptoms"]
+    },
+    {
+      "id": "mood",
+      "short": "Mood & memory",
+      "title": "Neurodivergence, Mood & Memory",
+      "icon": "brain",
+      "symptoms": ["Brain fog", "Anxiety, depression", "Memory lapses", "Sensory overload", "Executive dysfunction", "ADHD-type symptoms"]
+    },
+    {
+      "id": "aging",
+      "short": "Aging",
+      "title": "Premature Aging",
+      "icon": "hourglass",
+      "symptoms": ["Sarcopenia", "Slowed metabolism", "Thinning skin", "Bone loss", "Cognitive decline", "Poor recovery", "Reduced resilience"]
+    },
+    {
+      "id": "pain",
+      "short": "Chronic pain",
+      "title": "Chronic Pain",
+      "icon": "pain",
+      "symptoms": ["Widespread pain", "Migraines, headaches", "Central sensitization", "Muscle spasms", "Fatigue", "Poor sleep"]
+    },
+    {
+      "id": "autonomic",
+      "short": "Autonomic",
+      "title": "Dysautonomia",
+      "icon": "pulse",
+      "symptoms": ["Tachycardia", "Dizziness, lightheadedness", "Blood pressure instability", "Heat intolerance, sweating", "GI dysmotility", "Fatigue"]
+    },
+    {
+      "id": "metabolic",
+      "short": "Metabolic",
+      "title": "Metabolic Syndromes",
+      "icon": "metabolic",
+      "symptoms": ["Insulin resistance", "Weight gain", "Elevated blood sugar", "Dyslipidemia", "Fatty liver", "Hypertension"]
+    }
+  ],
+  "seedSymptoms": ["Unrefreshing sleep", "Exercise intolerance", "Delayed sleep phase"]
+}

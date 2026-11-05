@@ -52,7 +52,8 @@ export interface HealthDetails {
 }
 
 /** Teen with their own account (Client story 1.5): their access is covered by the parent's Family plan. */
-export type TeenStatus = 'joined' | 'invite_sent' | 'paused';
+/** turned_off: the parent turned the teen's profile off (story 3.1). */
+export type TeenStatus = 'joined' | 'invite_sent' | 'paused' | 'turned_off';
 
 export interface ConsentAcceptance {
   policy: 'Terms of Service' | 'Privacy Policy' | 'Health Consent';

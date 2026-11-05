@@ -208,7 +208,8 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55);
 }
 
-/* Continue hero as a player pill (ref 2026-10-28): deep plum, tree avatar left, eyebrow + title, big chevron right. */
+/* Continue hero (ref 2026-10-28): deep plum, tree avatar left, eyebrow + title, big chevron right.
+   Corner radius matches other Home cards (Wellness Plan) via --home-radius. */
 .root[data-tone='hero'] {
   display: flex;
   flex-direction: row;
@@ -218,7 +219,7 @@
   min-height: 0;
   padding: var(--space-3) var(--space-3) var(--space-3) var(--space-3);
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--home-radius);
   background: linear-gradient(110deg, #2f1740 0%, #46225a 60%, #57306c 100%);
   color: var(--white);
   text-align: left;

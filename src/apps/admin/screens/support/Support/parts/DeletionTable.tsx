@@ -1,9 +1,8 @@
 /** Data deletion requests (story 5.2): 10-business-day deadline, closest first; due within 2 business days is highlighted. */
 import { businessDaysLeft, deletionDueDate, formatDate, useAdminStore, type DeletionRequest } from '@shared/admin';
 import { DataTable, StatusText, type Column } from '@admin/ui';
-import { DELETION_STATUS, DELETION_TYPE, matches } from '@admin/patterns';
+import { DELETION_STATUS, DELETION_TYPE, applySort, matches, rangePhrase, showing, type SortValue } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
-import type { Order } from './order';
 import styles from './tables.module.css';
 
 export function DeadlineText({ request }: { request: DeletionRequest }) {
@@ -14,7 +13,7 @@ export function DeadlineText({ request }: { request: DeletionRequest }) {
   return <StatusText tone={left <= 2 ? 'warning' : 'accent'}>{`${left} business days left`}</StatusText>;
 }
 
-export function DeletionTable({ query, order }: { query: string; order: Order }) {
+export function DeletionTable({ query, sort }: { query: string; sort: SortValue }) {
   const requests = useAdminStore((s) => s.deletionRequests);
   const clients = useAdminStore((s) => s.clients);
   const openDrawer = useAdminNav((s) => s.openDrawer);
@@ -25,13 +24,13 @@ export function DeletionTable({ query, order }: { query: string; order: Order })
     if (r.type === 'family_member') return c?.dependents.find((d) => d.id === r.aboutProfile)?.name ?? 'Family member';
     return r.type === 'teen' ? 'Teen (own account)' : 'Their own account';
   };
-  // Closest deadlines first; completed requests go to the bottom. The sort dropdown flips the order.
-  const rows = requests
-    .filter((r) => matches(query, nameOf(r.clientId), clientOf(r.clientId)?.email ?? ''))
-    .sort((a, b) => {
-      if ((a.status === 'completed') !== (b.status === 'completed')) return a.status === 'completed' ? 1 : -1;
-      return order === 'oldest' ? a.received.localeCompare(b.received) : b.received.localeCompare(a.received);
-    });
+  // Completed requests go to the bottom; oldest received first means the closest deadline first.
+  const rows = applySort(
+    requests.filter((r) => matches(query, nameOf(r.clientId), clientOf(r.clientId)?.email ?? '')),
+    sort,
+    (r) => r.received,
+  ).sort((a, b) => ((a.status === 'completed') === (b.status === 'completed') ? 0 : a.status === 'completed' ? 1 : -1));
+  const summary = showing(rows.length, ['request', 'requests'], [rangePhrase(sort, 'received'), query.trim() && `matching \u201c${query.trim()}\u201d`]);
 
   const columns: Column<DeletionRequest>[] = [
     {
@@ -63,6 +62,8 @@ export function DeletionTable({ query, order }: { query: string; order: Order })
 
   return (
     <DataTable
+      footer={summary}
+      pager="outside"
       label="Data deletion requests"
       columns={columns}
       rows={rows}

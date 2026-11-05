@@ -1,2 +1,4 @@
 /* One readable column of settings cards. */
 .column { display: grid; gap: var(--space-10); max-inline-size: 760px; }
+/* Tabs sit closer to the page subtitle than the standard page gap. */
+.tabs { margin-block-start: calc(var(--space-5) * -1); }

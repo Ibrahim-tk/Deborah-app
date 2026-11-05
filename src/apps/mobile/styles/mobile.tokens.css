@@ -144,6 +144,30 @@
   line-height: var(--lh-body);
   font-weight: var(--weight-regular);
   -webkit-font-smoothing: antialiased;
+
+  /* M-7.9 Symptoms map — disc fields around the hypothalamic core (proposed design 2026-11-05). */
+  --symptom-map-disc:
+    radial-gradient(circle, transparent 0 25%, rgb(255 255 255 / 0.44) 25.5% 26%, transparent 26.5% 44%, rgb(255 255 255 / 0.4) 44.5% 45%, transparent 45.5% 66%, rgb(255 255 255 / 0.38) 66.5% 67%, transparent 67.5%),
+    radial-gradient(ellipse at 20% 10%, #e2d5ed 0%, #f3edf5 55%, #e4d9eb 100%);
+  --symptom-map-disc-matched:
+    radial-gradient(circle, transparent 0 25%, rgb(255 255 255 / 0.5) 25.5% 26%, transparent 26.5% 44%, rgb(255 255 255 / 0.4) 44.5% 45%, transparent 45.5% 66%, rgb(255 255 255 / 0.44) 66.5% 67%, transparent 67.5%),
+    radial-gradient(ellipse at 20% 10%, #c4a5e1 0%, #f1e5f5 55%, #dfbdd8 100%);
+  --symptom-map-art:
+    radial-gradient(ellipse at 14% 12%, #c1a0df 0%, transparent 62%),
+    radial-gradient(ellipse at 95% 95%, #e6bed5 0%, transparent 65%),
+    linear-gradient(145deg, #ecdef4, #f8f0f7 52%, #d6c0e9);
+  --symptom-map-art-grooves: repeating-radial-gradient(circle, transparent 0 12px, rgb(255 255 255 / 0.21) 12.5px 13px, transparent 13.5px 25px);
+  --symptom-map-art-rim: rgb(255 255 255 / 0.63);
+  --symptom-map-core:
+    radial-gradient(ellipse at 12% 4%, #684776 0%, transparent 64%),
+    radial-gradient(ellipse at 95% 95%, #54344e 0%, transparent 65%),
+    linear-gradient(145deg, #392044, #25152f);
+  --symptom-map-core-ink: #efdfed;
+  --symptom-map-core-label: #e6c776;
+  --symptom-map-ring-start: #bfa2e1;
+  --symptom-map-ring-mid: #dfc9ef;
+  --symptom-map-ring-end: #e9bfd8;
+  --symptom-map-dot: #804a8a;
 }
 .phone-root ::selection { background: var(--purple-100); color: var(--purple-900); }
 .phone-root :focus-visible:not(input, textarea) { outline: 2px solid var(--color-focus); outline-offset: 3px; }

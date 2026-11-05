@@ -28,7 +28,13 @@ export const seed = {
   consentRevocations: consentRevocations as ConsentRevocation[],
   stripeEvents: stripeEvents as StripeEvent[],
   /** Starts disconnected so the admin sees the Connect flow. */
-  stripe: { status: 'disconnected', mode: 'test', account: null, webhook: null } as StripeConnection,
+  // Stripe is assumed connected from launch (there's no Integrations page to connect it).
+  stripe: {
+    status: 'connected',
+    mode: 'live',
+    account: { id: 'acct_1PxQe8Gd7Oracle', name: 'Genesis Health LLC', email: 'billing@oracleclinician.com', country: 'US', payoutsEnabled: true, detailsComplete: true },
+    webhook: { url: 'https://api.oracleclinician.com/webhooks/stripe', status: 'active', lastEventAt: '2026-11-02T11:58' },
+  } as StripeConnection,
   /** Dropbox starts connected so the page shows both states. */
   integrations: {
     dropbox: { connected: true, account: 'records@oracleclinician.com', connectedAt: '2026-10-14T10:20' },

@@ -65,6 +65,15 @@ import {
   VolumeHighIcon,
   ViewIcon,
   ViewOffSlashIcon,
+  Sun03Icon,
+  Shield01Icon,
+  Brain02Icon,
+  HourglassIcon,
+  ZapIcon,
+  PulseRectangle01Icon,
+  CubeIcon,
+  Target02Icon,
+  HelpCircleIcon,
 } from '@hugeicons/core-free-icons';
 
 const map = {
@@ -129,6 +138,16 @@ const map = {
   aiSearch: AiSearch02Icon,
   family: UserGroupIcon,
   symptoms: StethoscopeIcon,
+  // M-7.9 Symptoms map areas
+  sun: Sun03Icon,
+  shield: Shield01Icon,
+  brain: Brain02Icon,
+  hourglass: HourglassIcon,
+  pain: ZapIcon,
+  pulse: PulseRectangle01Icon,
+  metabolic: CubeIcon,
+  target: Target02Icon,
+  help: HelpCircleIcon,
 } as const;
 
 /** `deborah` is not a glyph: it renders the small Deborah orb wherever an action means "Ask Oracle". */

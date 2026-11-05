@@ -2,7 +2,7 @@
  * @shell EmailInbox — webmail look-alike holding the teen's invitation (story 1.5). Prototype chrome, not the app;
  *     fictional senders and a neutral logo. "Finish Sign Up" loads S28 and opens the teen setup on Mobile or Web.
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { teenAccountCopy as copy } from '@shared/data';
 import { clearSignup } from '@shared/store';
@@ -23,15 +23,44 @@ const FOLDERS = [
   { icon: 'chevronDown', label: 'More' },
 ] as const;
 
+/** A second letter in the same inbox chrome (admin invite). The teen invitation stays the default. */
+export interface WorkLetter {
+  id: string;
+  from: string;
+  address: string;
+  to: string;
+  subject: string;
+  preview: string;
+  time: string;
+  body: string[];
+  cta: string;
+  note: string;
+  foot: string[];
+  initial: string;
+  onOpen: () => void;
+}
+
 export interface EmailInboxProps {
   /** Where the app routes live: `/` + `/web` (client) or `/internal/mobile` + `/internal/web`. */
   mobilePath: string;
   webPath: string;
+  /** Standing admin invite (internal Email tab). The teen invitation stays in the list too. */
+  letter?: WorkLetter | null;
+  /** Open the admin letter on arrival (used by "Open invite link (prototype)"). */
+  openLetter?: boolean;
 }
 
-export function EmailInbox({ mobilePath, webPath }: EmailInboxProps) {
+type OpenMail = 'teen' | 'work' | null;
+
+export function EmailInbox({ mobilePath, webPath, letter, openLetter = false }: EmailInboxProps) {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const focusKey = openLetter && letter ? letter.id : null;
+  const [open, setOpen] = useState<OpenMail>(focusKey ? 'work' : null);
+  const seen = useRef(focusKey);
+  if (seen.current !== focusKey) {
+    seen.current = focusKey;
+    setOpen(focusKey ? 'work' : null);
+  }
   const invite = MAILS[0];
 
   // A fresh S28 every time: drop any saved teen sign-up so the link always opens setup.
@@ -78,7 +107,7 @@ export function EmailInbox({ mobilePath, webPath }: EmailInboxProps) {
       <aside className={styles.side} aria-label="Folders">
         <button type="button" className={styles.compose}><MailIcon name="pencil" size={22} />Compose</button>
         {FOLDERS.map((f) => (
-          <button key={f.label} type="button" className={styles.nav} data-active={'active' in f || undefined} onClick={() => setOpen(false)}>
+          <button key={f.label} type="button" className={styles.nav} data-active={'active' in f || undefined} onClick={() => setOpen(null)}>
             <MailIcon name={f.icon} />
             <span className={styles.navLabel}>{f.label}</span>
             {'count' in f && <span>{f.count}</span>}
@@ -91,21 +120,34 @@ export function EmailInbox({ mobilePath, webPath }: EmailInboxProps) {
         {open ? (
           <>
             <div className={styles.toolbar}>
-              <button type="button" className={styles.icon} aria-label="Back to Inbox" onClick={() => setOpen(false)}><MailIcon name="back" /></button>
+              <button type="button" className={styles.icon} aria-label="Back to Inbox" onClick={() => setOpen(null)}><MailIcon name="back" /></button>
               <span className={styles.icon}><MailIcon name="archive" /></span>
               <span className={styles.icon}><MailIcon name="trash" /></span>
               <span className={styles.icon}><MailIcon name="more" /></span>
             </div>
             <article className={styles.reader}>
-              <h1 className={styles.readSubject}>{invite.subject}</h1>
+              <h1 className={styles.readSubject}>{open === 'work' && letter ? letter.subject : invite.subject}</h1>
               <div className={styles.sender}>
                 <OracleMark size={40} />
                 <span className={styles.senderMeta}>
-                  <span className={styles.senderName}>{copy.email.from} <span className={styles.fine}>&lt;invites@yourOracle.example&gt;</span></span>
-                  <span>to {TEEN_EMAIL}</span>
+                  {open === 'work' && letter ? (
+                    <>
+                      <span className={styles.senderName}>{letter.from} <span className={styles.fine}>&lt;{letter.address}&gt;</span></span>
+                      <span>to {letter.to}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className={styles.senderName}>{copy.email.from} <span className={styles.fine}>&lt;invites@yourOracle.example&gt;</span></span>
+                      <span>to {TEEN_EMAIL}</span>
+                    </>
+                  )}
                 </span>
               </div>
-              <InviteLetter onFinish={() => finish(mobilePath)} onFinishWeb={() => finish(webPath)} />
+              {open === 'work' && letter ? (
+                <InviteLetter subject={letter.subject} body={letter.body} cta={letter.cta} note={letter.note} foot={letter.foot} onFinish={letter.onOpen} />
+              ) : (
+                <InviteLetter onFinish={() => finish(mobilePath)} onFinishWeb={() => finish(webPath)} />
+              )}
             </article>
           </>
         ) : (
@@ -122,6 +164,28 @@ export function EmailInbox({ mobilePath, webPath }: EmailInboxProps) {
               </span>
             </div>
             <div className={styles.list} role="list" aria-label="Inbox">
+              {letter && (
+                <div
+                  key={letter.id}
+                  role="listitem"
+                  tabIndex={0}
+                  className={styles.row}
+                  data-unread
+                  onClick={() => setOpen('work')}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setOpen('work'); }}
+                >
+                  <span className={styles.check} />
+                  <span className={styles.starred}><MailIcon name="star" size={18} /></span>
+                  <span className={styles.from}>{letter.from}</span>
+                  <span className={styles.subject}>
+                    <span className={styles.subj}>{letter.subject}</span>
+                    <span className={styles.preview}> - {letter.preview}</span>
+                  </span>
+                  <span className={styles.end}>
+                    <span className={styles.time}>{letter.time}</span>
+                  </span>
+                </div>
+              )}
               {MAILS.map((m) => {
                 const isInvite = m.id === INVITE_ID;
                 // Only the invite reads as new (bold) so it's easy to find in demos.
@@ -134,8 +198,8 @@ export function EmailInbox({ mobilePath, webPath }: EmailInboxProps) {
                     className={styles.row}
                     data-unread={unread || undefined}
                     data-read={!unread || undefined}
-                    onClick={isInvite ? () => setOpen(true) : undefined}
-                    onKeyDown={isInvite ? (e) => { if (e.key === 'Enter') setOpen(true); } : undefined}
+                    onClick={isInvite ? () => setOpen('teen') : undefined}
+                    onKeyDown={isInvite ? (e) => { if (e.key === 'Enter') setOpen('teen'); } : undefined}
                   >
                     <span className={styles.check} />
                     <span className={styles.starred}><MailIcon name="star" size={18} /></span>

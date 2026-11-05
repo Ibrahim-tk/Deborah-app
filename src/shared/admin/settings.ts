@@ -17,6 +17,8 @@ interface SettingsState {
   setName: (firstName: string, lastName: string) => void;
   changePassword: () => void;
   signOutOthers: () => void;
+  /** Ends one other session (the ⋮ menu on a signed-in device). */
+  signOutSession: (id: string) => void;
 }
 
 const log = (text: string) => useAdminStore.getState().log(text);
@@ -40,5 +42,10 @@ export const useAdminSettings = create<SettingsState>((set) => ({
   signOutOthers: () => {
     set((s) => ({ sessions: s.sessions.filter((x) => x.current) }));
     log('Signed out of all other sessions');
+  },
+  signOutSession: (id) => {
+    const device = useAdminSettings.getState().sessions.find((x) => x.id === id)?.device;
+    set((s) => ({ sessions: s.sessions.filter((x) => x.id !== id) }));
+    log(`Signed out of ${device}`);
   },
 }));

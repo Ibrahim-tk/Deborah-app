@@ -12,14 +12,13 @@
   flex: 1 1 0;
   min-width: 0;
   min-height: 44px;
-  padding: 0 var(--space-2);
+  padding: 0 var(--space-1);
   border: 0;
   background: transparent;
   color: var(--color-ink-secondary);
-  font: var(--weight-regular) var(--fs-subhead) / var(--lh-subhead) var(--font-body);
+  font: var(--weight-regular) var(--fs-footnote) / var(--lh-footnote) var(--font-body);
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background-color var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out);
@@ -34,7 +33,7 @@
 .item:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-radius: var(--radius-full); }
 @media (prefers-reduced-motion: reduce) { .item { transition: none; } }
 
-/* No dividers; pill-shaped inner options inset in the outlined track (designer, 2026-10-28). */
-.root { padding: 3px; gap: 2px; }
-.item { min-height: 38px; border-radius: var(--radius-full); }
+/* Compact track: smaller type + height so “Every 2 weeks” fits without ellipsis. */
+.root { padding: 2px; gap: 1px; }
+.item { min-height: 32px; border-radius: var(--radius-full); }
 .item + .item { box-shadow: none; }

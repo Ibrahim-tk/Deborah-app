@@ -274,6 +274,10 @@ export default function Conversation() {
                     switchTab('health');
                     push('M-7.3');
                   }}
+                  onOpenSymptomMap={() => {
+                    switchTab('health');
+                    push('M-7.9');
+                  }}
                   onTeamBook={() => {
                     toast('Summary sent to the support team (demo)');
                     open('M-8.2');

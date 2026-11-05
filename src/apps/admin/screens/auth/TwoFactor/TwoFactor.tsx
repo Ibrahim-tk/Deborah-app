@@ -60,7 +60,6 @@ export default function TwoFactor() {
         </div>
         <Button fullWidth loading={busy} onClick={() => verify()}>Verify</Button>
         <Button variant="ghost" fullWidth onClick={() => setAuth('signIn')}>Back to sign in</Button>
-        <p className={styles.hint}>Prototype: any 6 digits work; 000000 is a wrong code (5 wrong codes expire it).</p>
       </div>
     </AuthLayout>
   );

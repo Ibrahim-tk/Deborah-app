@@ -8,10 +8,11 @@
 import { useState } from 'react';
 import { useAdminStore } from '@shared/admin';
 import { Drawer, IconButton, Menu, Tabs } from '@admin/ui';
-import { AccountStatusText, ContactDialog } from '@admin/patterns';
+import { AccountStatusText, ConfirmDialog, ContactDialog } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useContact } from '@admin/hooks/useContact';
 import { useSim } from '@admin/hooks/useSim';
+import { useViewLog } from '@admin/hooks/useViewLog';
 import { ClientTables } from './parts/ClientTables';
 import { Dependents } from './parts/Dependents';
 import { CopyEmail } from '@admin/screens/common/CopyEmail';
@@ -30,8 +31,10 @@ export default function ClientDrawer({ clientId }: { clientId: string }) {
   const contact = useContact(client?.name ?? '');
   const reminder = useSim();
   const toggle = useSim();
-  const [dialog, setDialog] = useState<'email' | 'deactivate' | null>(null);
+  const [dialog, setDialog] = useState<'email' | 'deactivate' | 'reactivate' | null>(null);
   const [tab, setTab] = useState<Tab>('overview');
+
+  useViewLog(client?.id, `Viewed client ${client?.name ?? ''}`);
 
   if (!client) return null;
   const active = client.account === 'active';
@@ -39,7 +42,11 @@ export default function ClientDrawer({ clientId }: { clientId: string }) {
   const sendReminder = () =>
     reminder.run(() => useAdminStore.getState().log(`Sent reminder to ${client.name}: "${REMINDER_TEXT}"`), 'Reminder sent');
   // Reactivation needs no reason; deactivation goes through DeactivateDialog.
-  const setAccount = () => toggle.run(() => useAdminStore.getState().setClientAccount(client.id, true), `${client.name}\u2019s account has been reactivated.`);
+  const reactivate = () =>
+    toggle.run(() => {
+      useAdminStore.getState().setClientAccount(client.id, true);
+      setDialog(null);
+    }, `${client.name}\u2019s account has been reactivated.`);
 
   return (
     <Drawer
@@ -60,7 +67,7 @@ export default function ClientDrawer({ clientId }: { clientId: string }) {
             if (action === 'change-email') setDialog('email');
             if (action === 'account') {
               if (active) setDialog('deactivate');
-              else setAccount();
+              else setDialog('reactivate');
             }
           }}
           items={[
@@ -94,6 +101,16 @@ export default function ClientDrawer({ clientId }: { clientId: string }) {
       )}
       {dialog === 'email' && <ChangeEmailDialog client={client} onClose={() => setDialog(null)} />}
       {dialog === 'deactivate' && <DeactivateDialog client={client} onClose={() => setDialog(null)} />}
+      {dialog === 'reactivate' && (
+        <ConfirmDialog
+          title={`Reactivate ${client.name}\u2019s account?`}
+          body="They\u2019ll be able to sign in again."
+          confirm="Reactivate"
+          busy={toggle.busy}
+          onConfirm={reactivate}
+          onClose={() => setDialog(null)}
+        />
+      )}
     </Drawer>
   );
 }

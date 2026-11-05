@@ -20,7 +20,6 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<{ email?: string; password?: string; form?: string }>({});
   const locked = useAuthSecurity((s) => s.locked);
-  const notice = useAuthSecurity((s) => s.notice);
   const setAuth = useAdminNav((s) => s.setAuth);
   const { busy, run } = useSim();
 
@@ -45,13 +44,16 @@ export default function SignIn() {
   return (
     <AuthLayout title="Welcome back" intro="Sign in with the work email your invite was sent to.">
       <form className={styles.form} onSubmit={submit} noValidate>
-        {notice && <p className={styles.notice}>{notice}</p>}
         {(errors.form || locked) && <p className={styles.alert} role="alert">{locked ? AUTH_COPY.locked : errors.form}</p>}
         <Input label="Email" type="email" autoComplete="username" value={email} error={errors.email} onChange={(e) => setEmail(e.target.value)} />
         <Input label="Password" type="password" autoComplete="current-password" value={password} error={errors.password} onChange={(e) => setPassword(e.target.value)} />
-        <Button type="submit" fullWidth loading={busy} disabled={locked}>Sign in</Button>
-        <Button type="button" variant="link" className={styles.link} onClick={() => setAuth('forgot')}>Forgot your password?</Button>
-        <p className={styles.hint}>Prototype: any password signs in; type &ldquo;wrong&rdquo; to see the error and the lock after 3 tries.</p>
+        {/* Locked: the way forward is a password reset (story 1.1). */}
+        {locked ? (
+          <Button type="button" fullWidth onClick={() => setAuth('forgot')}>Reset password</Button>
+        ) : (
+          <Button type="submit" fullWidth loading={busy}>Sign in</Button>
+        )}
+        <Button type="button" variant="link" className={styles.link} onClick={() => setAuth('forgot')}>Forget password</Button>
       </form>
     </AuthLayout>
   );

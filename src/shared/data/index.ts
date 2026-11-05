@@ -64,8 +64,10 @@ import documentTypes from './documents/types.json';
 import extractionsByType from './documents/extractions.json';
 import documentReviewJson from './documents/review.json';
 import healingPlanDocumentJson from './health/healing-plan-document.json';
+import symptomMapJson from './health/symptom-map.json';
 import type { Flow, FlowNode } from '../types/flow';
 import type { DocumentExtraction, DocumentFormat, DocumentType } from '../types/domain';
+import type { SymptomMapCore, SymptomMapDomain } from '../types/health';
 
 export const persona = deborah as Persona;
 export const consentDoc = consent as Consent;
@@ -152,6 +154,18 @@ export const healthBasicsData = healthBasics as HealthBasicsData;
 export const symptomGroups: { id?: string; title: string; items: string[] }[] = symptoms.groups;
 /** Composer one-tap symptom shortcuts (placeholder). */
 export const quickSymptoms: string[] = symptoms.quick;
+/** M-7.9 Symptoms map — hypothalamic core, 8 areas, demo seed (placeholder). */
+export const symptomMap: {
+  status: string;
+  core: SymptomMapCore;
+  domains: SymptomMapDomain[];
+  seedSymptoms: string[];
+} = symptomMapJson as {
+  status: string;
+  core: SymptomMapCore;
+  domains: SymptomMapDomain[];
+  seedSymptoms: string[];
+};
 /**
  * Create visit notes in chat: appointment yes/no, then the small provider form, then the notes card.
  * Sandra already defines these nodes; other scripts get the same path so the pill can start it.

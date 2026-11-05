@@ -1,10 +1,11 @@
 /** @nav AdminNavigator — signed out: the auth step. Signed in: navigation + the current page.
  *  Desktop: sidebar. Tablet (≤ 1024px): icon rail. Phone (≤ 640px): top bar + navigation sheet. */
 import { useEffect, useRef } from 'react';
-import { IDLE_MS, useAdminNotifications, useAdminStore, useAuthSecurity } from '@shared/admin';
+import { IDLE_MS, useAdminNotifications, useAdminStore, useAuthSecurity, useInviteLink } from '@shared/admin';
 import SignIn from '@admin/screens/auth/SignIn';
 import ForgotPassword from '@admin/screens/auth/ForgotPassword';
 import TwoFactor from '@admin/screens/auth/TwoFactor';
+import AcceptInvite from '@admin/screens/auth/AcceptInvite';
 import { AdminSidebar } from '../AdminSidebar';
 import { AdminTopBar } from '../AdminTopBar';
 import { NavSheet } from '../NavSheet';
@@ -12,12 +13,15 @@ import { useAdminNav, useAdminRoute } from '../nav.store';
 import { REGISTRY } from '../registry';
 import { DRAWERS } from '../drawers';
 import { DrawerPresence } from '@admin/ui';
+import { ConfirmDialog } from '@admin/patterns';
 import styles from './AdminNavigator.module.css';
 
 const AUTH = { signIn: SignIn, forgot: ForgotPassword, twoFactor: TwoFactor };
 
 export function AdminNavigator() {
   const signedIn = useAdminStore((s) => s.signedIn);
+  const inviteId = useInviteLink((s) => s.adminId);
+  const confirmingSignOut = useAdminNav((s) => s.confirmingSignOut);
   const auth = useAdminNav((s) => s.auth);
   const route = useAdminRoute();
   const depth = useAdminNav((s) => s.stack.length);
@@ -74,6 +78,8 @@ export function AdminNavigator() {
     };
   }, [signedIn]);
 
+  if (inviteId) return <AcceptInvite adminId={inviteId} />;
+
   if (!signedIn) {
     const Auth = AUTH[auth];
     return <Auth />;
@@ -97,6 +103,15 @@ export function AdminNavigator() {
         <DrawerPresence.Provider value={{ open: !closing, onExited: finishClose }}>
           <ActiveDrawer key={`${drawer.kind}:${drawer.id}`} kind={drawer.kind} id={drawer.id} />
         </DrawerPresence.Provider>
+      )}
+      {confirmingSignOut && (
+        <ConfirmDialog
+          title="Are you sure you want to sign out?"
+          body="You’ll need your password and a new verification code to sign back in."
+          confirm="Sign out"
+          onConfirm={() => { useAdminNav.getState().setConfirmingSignOut(false); useAdminStore.getState().signOut(); }}
+          onClose={() => useAdminNav.getState().setConfirmingSignOut(false)}
+        />
       )}
     </div>
   );

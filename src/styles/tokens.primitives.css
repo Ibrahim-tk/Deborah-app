@@ -15,6 +15,7 @@
   /* Semantic additions (tuned to palette, all ≥7:1 on canvas) */
   --red-ink:#862323; --red-tint:#fbeae7; --red-border:#a3302a; --red-fill:#8f2a25;
   --green-ink:#245a37; --green-tint:#e8f2ea;
+  --blue-ink:#264a6e; --blue-tint:#e6eef6;
   --amber-ink:#6a4200; --amber-tint:#fbefd6;
   --white:#ffffff;
 

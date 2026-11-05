@@ -22,16 +22,18 @@ export default function Settings() {
 
   return (
     <AdminPage title="Settings" subtitle="Your profile, sign-in security and email notifications.">
-      <Tabs<Tab>
-        label="Settings"
-        value={tab}
-        onChange={setTab}
-        tabs={[
-          { value: 'profile', label: 'Profile', content: <div className={styles.column}><ProfileSection /></div> },
-          { value: 'security', label: 'Password and security', content: <div className={styles.column}><PasswordSection /><SecuritySection /></div> },
-          { value: 'notifications', label: 'Notifications', content: <div className={styles.column}><NotificationsSection /></div> },
-        ]}
-      />
+      <div className={styles.tabs}>
+        <Tabs<Tab>
+          label="Settings"
+          value={tab}
+          onChange={setTab}
+          tabs={[
+            { value: 'profile', label: 'My profile', content: <div className={styles.column}><ProfileSection /></div> },
+            { value: 'security', label: 'Password and security', content: <div className={styles.column}><PasswordSection /><SecuritySection /></div> },
+            { value: 'notifications', label: 'Notifications', content: <div className={styles.column}><NotificationsSection /></div> },
+          ]}
+        />
+      </div>
     </AdminPage>
   );
 }

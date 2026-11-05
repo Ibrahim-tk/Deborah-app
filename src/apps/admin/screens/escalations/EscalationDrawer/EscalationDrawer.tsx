@@ -10,6 +10,7 @@ import { formatDate, useAdminStore } from '@shared/admin';
 import { Button, Drawer, KeyValueList, TextArea } from '@admin/ui';
 import { EscalationStatusText, EscalationTypeText, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
+import { useViewLog } from '@admin/hooks/useViewLog';
 import { useSim } from '@admin/hooks/useSim';
 import { CopyEmail } from '@admin/screens/common/CopyEmail';
 import { Conversation } from './parts/Conversation';
@@ -24,6 +25,7 @@ export default function EscalationDrawer({ escalationId }: { escalationId: strin
   const sim = useSim();
   const [notes, setNotes] = useState(esc?.reviewNotes ?? '');
 
+  useViewLog(esc?.id, `Viewed escalation ${escalationId}`);
   if (!esc) return null;
   const reviewed = esc.status === 'reviewed';
   const review = (next: boolean) =>

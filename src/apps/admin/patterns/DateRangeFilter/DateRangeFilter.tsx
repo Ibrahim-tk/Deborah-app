@@ -1,6 +1,6 @@
 /** @pattern DateRangeFilter — preset ranges in a Select; "Custom range" opens a dialog with from / to dates. */
 import { useState } from 'react';
-import { Button, Dialog, Input, Select } from '@admin/ui';
+import { Button, DateField, Dialog, Select } from '@admin/ui';
 import { formatDate } from '@shared/admin';
 import { TODAY, presetRange, type DateRange } from './range';
 import styles from './DateRangeFilter.module.css';
@@ -25,9 +25,11 @@ export function DateRangeFilter({ value, onChange }: { value: DateRange; onChang
         value={value.preset}
         onChange={pick}
         options={[
+          // Weekly, monthly, quarterly and yearly views (story 2.1), plus a custom range.
           { value: '7', label: 'Last 7 days' },
           { value: '30', label: 'Last 30 days' },
           { value: '90', label: 'Last 90 days' },
+          { value: '365', label: 'Last 12 months' },
           { value: 'custom', label: value.preset === 'custom' ? `${formatDate(value.from)} to ${formatDate(value.to)}` : 'Custom range' },
         ]}
       />
@@ -43,16 +45,8 @@ export function DateRangeFilter({ value, onChange }: { value: DateRange; onChang
           }
         >
           <div className={styles.fields}>
-            <Input label="From" type="date" max={draft.to || TODAY} value={draft.from} onChange={(e) => setDraft((d) => ({ ...d, from: e.target.value }))} />
-            <Input
-              label="To"
-              type="date"
-              min={draft.from}
-              max={TODAY}
-              value={draft.to}
-              error={draft.from && draft.to && draft.from > draft.to ? 'Pick a date after the start date.' : undefined}
-              onChange={(e) => setDraft((d) => ({ ...d, to: e.target.value }))}
-            />
+            <DateField label="From" today={TODAY} max={draft.to || TODAY} value={draft.from} onChange={(from) => setDraft((d) => ({ ...d, from }))} />
+            <DateField label="To" today={TODAY} min={draft.from} max={TODAY} value={draft.to} error={draft.from && draft.to && draft.from > draft.to ? 'Pick a date after the start date.' : undefined} onChange={(to) => setDraft((d) => ({ ...d, to }))} />
           </div>
         </Dialog>
       )}

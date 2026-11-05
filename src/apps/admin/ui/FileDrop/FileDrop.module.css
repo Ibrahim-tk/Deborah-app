@@ -1,0 +1,20 @@
+/* Big, forgiving target: a dashed zone with a real button inside it. */
+.zone { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-8) var(--space-6); border: 2px dashed var(--color-border-control); border-radius: var(--radius-lg); background: var(--color-canvas); color: var(--color-ink-secondary); text-align: center; transition: border-color var(--dur-quick) var(--ease-ios), background-color var(--dur-quick) var(--ease-ios); }
+.zone[data-over] { border-color: var(--color-accent); background: var(--color-accent-tint); }
+.zone[data-error] { border-color: var(--color-danger-ink); }
+.title { margin: 0; color: var(--color-ink); font-size: var(--fs-headline); line-height: var(--lh-headline); font-weight: var(--weight-medium); }
+.sub { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.choose.choose { margin-block-start: var(--space-2); min-block-size: 44px; }
+.error { margin: var(--space-1) 0 0; color: var(--color-danger-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+/* Preview card: what will be uploaded, before it's saved. */
+.card { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-5); border: 1px solid var(--color-border-hairline); border-radius: var(--radius-lg); background: var(--color-surface); }
+.card[data-error] { border-color: var(--color-danger-ink); }
+.card[data-error] .sub { color: var(--color-danger-ink); }
+.fileIcon { display: grid; place-items: center; inline-size: 48px; block-size: 48px; flex: none; border-radius: var(--radius-md); background: var(--color-canvas); color: var(--color-ink-secondary); }
+.meta { flex: 1; display: grid; gap: 2px; min-inline-size: 0; }
+.name { color: var(--color-ink); font-size: var(--fs-callout); line-height: var(--lh-callout); overflow-wrap: anywhere; }
+/* Uploaded file tile (read view). */
+.tile { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-5); border: 1px solid var(--color-border-hairline); border-radius: var(--radius-lg); background: var(--color-surface); }
+.tileIcon { display: grid; place-items: center; inline-size: 56px; block-size: 64px; flex: none; border-radius: var(--radius-md); background: var(--color-accent-tint); color: var(--color-accent); }
+.tileIcon[data-ext='pdf'] { background: var(--color-danger-tint); color: var(--color-danger-ink); }
+.tileActions { display: flex; gap: var(--space-2); margin-inline-start: auto; }

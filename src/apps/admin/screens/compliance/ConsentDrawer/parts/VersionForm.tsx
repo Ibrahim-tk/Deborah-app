@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { liveVersion, nextVersion, usePolicies, type Policy } from '@shared/admin';
 import { Button, Dialog, Drawer, Input, TextArea } from '@admin/ui';
-import { ConfirmDialog } from '@admin/patterns';
+import { ConfirmDialog, UnsavedChangesDialog } from '@admin/patterns';
 import { useSim } from '@admin/hooks/useSim';
 import styles from '../ConsentDrawer.module.css';
 
@@ -13,6 +13,9 @@ export function VersionForm({ policy, onDone }: { policy: Policy; onDone: () => 
   const [touched, setTouched] = useState(false);
   const [mode, setMode] = useState<null | 'preview' | 'publish'>(null);
   const sim = useSim();
+  const [start] = useState(() => ({ text, summary }));
+  const dirty = text !== start.text || summary !== start.summary;
+  const [leaving, setLeaving] = useState(false);
   const version = nextVersion(policy);
   const errors = { text: !text.trim() ? 'Please add the policy text.' : undefined, summary: !summary.trim() ? 'Please add a short summary of what’s changed.' : undefined };
   const store = usePolicies.getState();
@@ -24,7 +27,7 @@ export function VersionForm({ policy, onDone }: { policy: Policy; onDone: () => 
     <Drawer
       title={`${policy.name} · version ${version}`}
       subtitle={policy.draft ? 'Draft' : 'New version'}
-      onClose={onDone}
+      onClose={() => (dirty ? setLeaving(true) : onDone())}
       actions={
         <>
           <Button size="sm" onClick={() => { setTouched(true); if (!errors.text && !errors.summary) setMode('publish'); }}>Publish</Button>
@@ -58,6 +61,7 @@ export function VersionForm({ policy, onDone }: { policy: Policy; onDone: () => 
           onClose={() => setMode(null)}
         />
       )}
+      {leaving && <UnsavedChangesDialog onLeave={onDone} onStay={() => setLeaving(false)} />}
     </Drawer>
   );
 }
