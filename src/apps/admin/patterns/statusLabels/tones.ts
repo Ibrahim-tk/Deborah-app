@@ -1,8 +1,8 @@
 import type { SubscriptionStatus } from '@shared/admin';
 
 export const SUB: Record<SubscriptionStatus, [string, 'success' | 'accent' | 'neutral' | 'warning' | 'danger']> = {
+  trial: ['Trial', 'neutral'],
   active: ['Active', 'success'],
-  free: ['Free', 'neutral'],
-  past_due: ['Payment failed', 'warning'],
+  payment_issue: ['Payment issue', 'warning'],
   cancelled: ['Cancelled', 'danger'],
 };

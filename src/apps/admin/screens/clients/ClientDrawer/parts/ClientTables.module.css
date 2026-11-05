@@ -1,0 +1,2 @@
+/* Clear air between the Documents and Escalation history tables. */
+.root { display: grid; gap: var(--space-12); }

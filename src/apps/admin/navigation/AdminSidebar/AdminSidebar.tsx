@@ -22,7 +22,7 @@ export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
   const setCollapsed = useAdminNav((s) => s.setRailCollapsed);
   const role = useAdminStore((s) => s.role);
   const email = useAdminStore((s) => s.email);
-  const openCases = useAdminStore((s) => s.escalations.filter((e) => e.status !== 'resolved').length);
+  const openCases = useAdminStore((s) => s.escalations.filter((e) => e.status === 'not_reviewed').length);
   const pendingSupport = useAdminStore((s) => s.supportRequests.filter((r) => !r.resolved).length);
   const counts: Partial<Record<string, number>> = { escalations: openCases, support: pendingSupport };
 

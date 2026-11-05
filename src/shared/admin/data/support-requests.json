@@ -2,81 +2,114 @@
   {
     "id": "s001",
     "clientId": "c003",
-    "type": "billing",
-    "subject": "Charged twice this month",
+    "type": "talk_to_support",
+    "subject": "I was charged twice this month",
     "received": "2026-09-25T10:10",
-    "resolved": false
+    "resolved": false,
+    "message": "Hi, I think I was charged twice this month for my plan. Can someone check?",
+    "notes": ""
   },
   {
     "id": "s002",
     "clientId": "c008",
-    "type": "account",
-    "subject": "Can't change my email",
+    "type": "email_change",
+    "subject": "Please change my email address",
     "received": "2026-09-28T10:11",
-    "resolved": false
+    "resolved": false,
+    "message": "I’ve moved to a new email and can’t sign in with the old one.",
+    "newEmail": "new.address@example.com",
+    "notes": ""
   },
   {
     "id": "s003",
     "clientId": "c013",
-    "type": "technical",
-    "subject": "Lab upload stuck",
+    "type": "knowledge_gap",
+    "subject": "Question the Oracle couldn’t answer",
     "received": "2026-09-03T10:12",
-    "resolved": true
+    "resolved": true,
+    "message": "Is it safe to take ashwagandha with thyroid medication?",
+    "question": "Is it safe to take ashwagandha with thyroid medication?",
+    "notes": "Emailed on 2 Nov.",
+    "resolvedBy": "sam@oracleclinician.com",
+    "resolvedAt": "2026-09-03T10:12"
   },
   {
     "id": "s004",
     "clientId": "c018",
-    "type": "escalate_to_deborah",
-    "subject": "Would like Deborah to review my plan",
+    "type": "consultation",
+    "subject": "Would like a consultation",
     "received": "2026-09-06T10:13",
-    "resolved": false
+    "resolved": false,
+    "message": "I’d like help understanding my wellness plan and whether a consultation is right for me.",
+    "helpWith": "Understanding their wellness plan",
+    "notes": ""
   },
   {
     "id": "s005",
     "clientId": "c023",
-    "type": "billing",
-    "subject": "Charged twice this month",
+    "type": "talk_to_support",
+    "subject": "Lab upload is stuck",
     "received": "2026-10-09T10:14",
-    "resolved": false
+    "resolved": false,
+    "message": "My lab results upload has been stuck at 90% since yesterday.",
+    "notes": ""
   },
   {
     "id": "s006",
     "clientId": "c004",
-    "type": "account",
-    "subject": "Can't change my email",
+    "type": "email_change",
+    "subject": "Update my email",
     "received": "2026-10-12T10:15",
-    "resolved": true
+    "resolved": true,
+    "message": "Please update my account email to my work address.",
+    "newEmail": "work.address@example.com",
+    "notes": "Emailed on 2 Nov.",
+    "resolvedBy": "sam@oracleclinician.com",
+    "resolvedAt": "2026-10-12T10:15"
   },
   {
     "id": "s007",
     "clientId": "c009",
-    "type": "technical",
-    "subject": "Lab upload stuck",
+    "type": "knowledge_gap",
+    "subject": "Question the Oracle couldn’t answer",
     "received": "2026-10-15T10:16",
-    "resolved": false
+    "resolved": false,
+    "message": "Can I do intermittent fasting during perimenopause?",
+    "question": "Can I do intermittent fasting during perimenopause?",
+    "notes": ""
   },
   {
     "id": "s008",
     "clientId": "c014",
-    "type": "escalate_to_deborah",
-    "subject": "Would like Deborah to review my plan",
+    "type": "consultation",
+    "subject": "Consultation for my daughter",
     "received": "2026-10-18T10:17",
-    "resolved": false
+    "resolved": false,
+    "message": "I’d like to talk to someone about my daughter’s cycle symptoms.",
+    "helpWith": "Their daughter’s cycle symptoms",
+    "aboutProfile": "Azka",
+    "notes": ""
   },
   {
     "id": "s009",
     "clientId": "c019",
-    "type": "billing",
-    "subject": "Charged twice this month",
+    "type": "talk_to_support",
+    "subject": "Can’t open my wellness plan",
     "received": "2026-10-21T10:18",
-    "resolved": true
+    "resolved": true,
+    "message": "The wellness plan screen shows a blank page on my phone.",
+    "notes": "Emailed on 2 Nov.",
+    "resolvedBy": "sam@oracleclinician.com",
+    "resolvedAt": "2026-10-21T10:18"
   },
   {
     "id": "s010",
     "clientId": "c024",
-    "type": "account",
-    "subject": "Can't change my email",
+    "type": "talk_to_support",
+    "subject": "Question about family plan",
     "received": "2026-10-24T10:19",
-    "resolved": false
+    "resolved": false,
+    "message": "How many family members can I add on the Family plan?",
+    "notes": ""
   }
 ]

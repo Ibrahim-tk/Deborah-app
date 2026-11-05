@@ -1,59 +1,72 @@
 [
   {
-    "id": "free",
-    "name": "Free",
-    "kind": "individual",
+    "id": "trial",
+    "name": "Free trial",
+    "kind": "trial",
     "monthly": 0,
-    "freeQuestions": 3,
-    "maxProfiles": 1,
-    "features": {
-      "Unlimited conversations": false,
-      "Your Wellness Plan": false,
-      "Provider-ready notes": false,
-      "Lab and document review": false,
-      "Family profiles (up to 3 dependents)": false,
-      "Advocate for each member": false,
-      "Invite teens to their own account": false
-    },
-    "rules": "Three free conversations, then the client is asked to choose a plan. Lab and document review stay locked.",
-    "active": true
+    "trialDays": 14,
+    "features": [
+      "Your own profile only",
+      "Conversations with the Oracle",
+      "Everything else is greyed out"
+    ],
+    "status": "active",
+    "priceHistory": [
+      {
+        "price": "14 days",
+        "at": "2026-05-01T09:00",
+        "by": "deborah@oracleclinician.com"
+      }
+    ]
   },
   {
     "id": "individual-monthly",
     "name": "Individual",
     "kind": "individual",
     "monthly": 19.97,
-    "freeQuestions": 3,
-    "maxProfiles": 1,
-    "features": {
-      "Unlimited conversations": true,
-      "Your Wellness Plan": true,
-      "Provider-ready notes": true,
-      "Lab and document review": true,
-      "Family profiles (up to 3 dependents)": false,
-      "Advocate for each member": false,
-      "Invite teens to their own account": false
-    },
-    "rules": "Myself only. Renews monthly, cancel anytime online.",
-    "active": true
+    "features": [
+      "Your own profile",
+      "Unlimited conversations",
+      "Your Wellness Plan",
+      "Provider-ready notes",
+      "Lab and document review"
+    ],
+    "status": "active",
+    "priceHistory": [
+      {
+        "price": "$17.97",
+        "at": "2026-05-01T09:00",
+        "by": "deborah@oracleclinician.com"
+      },
+      {
+        "price": "$19.97",
+        "at": "2026-08-01T09:00",
+        "by": "deborah@oracleclinician.com"
+      }
+    ]
   },
   {
     "id": "family-monthly",
     "name": "Family",
     "kind": "family",
     "monthly": 29.97,
-    "freeQuestions": 3,
-    "maxProfiles": 4,
-    "features": {
-      "Unlimited conversations": true,
-      "Your Wellness Plan": true,
-      "Provider-ready notes": true,
-      "Lab and document review": true,
-      "Family profiles (up to 3 dependents)": true,
-      "Advocate for each member": true,
-      "Invite teens to their own account": true
-    },
-    "rules": "Myself plus up to 3 dependents. Renews monthly, cancel anytime online.",
-    "active": true
+    "familyIncluded": 3,
+    "addOnPrice": 7.97,
+    "features": [
+      "You plus 3 family members",
+      "Unlimited conversations",
+      "Your Wellness Plan for each member",
+      "Provider-ready notes",
+      "Lab and document review",
+      "Invite teens to their own account"
+    ],
+    "status": "active",
+    "priceHistory": [
+      {
+        "price": "$29.97",
+        "at": "2026-05-01T09:00",
+        "by": "deborah@oracleclinician.com"
+      }
+    ]
   }
 ]

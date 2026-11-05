@@ -1,5 +1,7 @@
 .wrap { container-type: inline-size; }
-.root { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); align-items: center; gap: var(--space-6); }
+.root { display: grid; grid-template-columns: minmax(0, 180px);
+  justify-content: center; align-items: center; gap: var(--space-6); }
+.root[data-legend] { grid-template-columns: minmax(0, 180px) minmax(0, 1fr); justify-content: stretch; }
 .svg { inline-size: 100%; block-size: auto; transform: rotate(-90deg); }
 .svg text { transform: rotate(90deg); transform-origin: 70px 70px; }
 .slice { fill: none; stroke-width: 11; stroke: var(--tone); stroke-linecap: round; }

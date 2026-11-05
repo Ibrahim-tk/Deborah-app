@@ -69,17 +69,12 @@ th[data-align='end'] .headCell { flex-direction: row-reverse; justify-content: f
 }
 .sortBtn:hover, .sortBtn[data-active] { color: var(--color-ink-secondary); }
 .sortBtn:focus-visible { outline: 1px solid var(--color-accent); outline-offset: 3px; }
-/* MUI-style arrow: hidden until hover (faint), solid when sorted; points down for descending. */
-.arrow { display: inline-grid; opacity: 0; transition: opacity var(--dur-quick) var(--ease-ios), transform var(--dur-quick) var(--ease-ios); }
-.sortBtn:hover .arrow { opacity: 0.45; }
-.arrow[data-dir] { opacity: 1; color: var(--color-ink-secondary); }
-.arrow[data-dir='desc'] { transform: rotate(180deg); }
-/* Column menu (⋮): appears on header hover or keyboard focus, stays while open. */
-.columnMenu { display: inline-flex; align-items: center; block-size: 24px; opacity: 0; transition: opacity var(--dur-quick) var(--ease-ios); }
-th:hover .columnMenu, .columnMenu:focus-within, .columnMenu:has([data-popup-open]) { opacity: 1; }
+/* Table sort menu (⋮): one per table, after the last header label; sized to the 12px header text. */
+.columnMenu { display: inline-flex; align-items: center; block-size: 20px; }
 /* Must outrank IconButton's own [data-size] rule (32px), or the hidden button stretches the header row
  * and pushes every label off centre. */
-th .columnMenu button[data-size] { inline-size: 24px; block-size: 24px; color: var(--color-ink-tertiary); }
+th .columnMenu button[data-size] { inline-size: 20px; block-size: 20px; color: var(--color-ink-tertiary); }
+th .columnMenu svg { inline-size: 14px; block-size: 14px; }
 
 .footer {
   padding: var(--space-3) var(--space-6);
@@ -139,8 +134,28 @@ th .columnMenu button[data-size] { inline-size: 24px; block-size: 24px; color: v
   th:first-child, td:first-child { padding-inline-start: var(--space-4); }
   .footer { padding-inline: var(--space-4); }
 }
-/* Touch screens have no hover: show the column ⋮ menu so it can be reached. */
-@media (hover: none) {
-  .columnMenu { opacity: 1; }
-  .arrow { opacity: 0.45; }
+
+/* Pager sits above the rows on the trailing edge, Gmail-style. */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-6);
+  border-block-end: 1px solid var(--color-border-hairline);
+  color: color-mix(in srgb, var(--color-ink-tertiary) 55%, var(--color-surface));
+  font-size: var(--fs-subhead);
+  line-height: var(--lh-subhead);
 }
+.pagerLabel { margin-inline-end: var(--space-1); }
+.pagerRange { margin-inline: var(--space-3); font-variant-numeric: tabular-nums; }
+@container admin (max-width: 640px) {
+  .pager { padding-inline: var(--space-4); }
+  .pagerLabel { display: none; }
+}
+.pagerSummary { margin-inline-end: auto; color: color-mix(in srgb, var(--color-ink-tertiary) 55%, var(--color-surface)); }
+@container admin (max-width: 640px) { .pagerSummary { display: none; } }
+/* Pager arrows and the rows-per-page value follow the light pager tone. */
+.pager button { color: inherit; }
+/* A right-aligned number column hugs whatever comes next; give the following column clear air. */
+th[data-align='end'] + th, td[data-align='end'] + td { padding-inline-start: var(--space-16); }

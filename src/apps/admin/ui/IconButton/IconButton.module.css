@@ -18,3 +18,5 @@
 @container admin (max-width: 640px) {
   .root { inline-size: 44px; block-size: 44px; }
 }
+/* Disabled (e.g. "Previous page" on the first page): faded, no hover, not clickable. */
+.root:disabled, .root[data-disabled] { opacity: 0.3; cursor: not-allowed; background: transparent; }

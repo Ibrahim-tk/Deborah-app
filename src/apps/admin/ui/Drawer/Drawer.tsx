@@ -16,11 +16,13 @@ export interface DrawerProps {
   actions?: ReactNode;
   /** Sits just before the close button, e.g. a ⋮ menu of actions. */
   headerControls?: ReactNode;
+  /** `wide`: half the screen (never under 640px), for records with a lot to read. */
+  size?: 'md' | 'wide';
   onClose: () => void;
   children: ReactNode;
 }
 
-export function Drawer({ title, subtitle, meta, actions, headerControls, onClose, children }: DrawerProps) {
+export function Drawer({ title, subtitle, meta, actions, headerControls, size = 'md', onClose, children }: DrawerProps) {
   const presence = useContext(DrawerPresence);
   // Mount closed, open on the next frame, so the slide-in transition actually runs.
   const [entered, setEntered] = useState(false);
@@ -43,7 +45,7 @@ export function Drawer({ title, subtitle, meta, actions, headerControls, onClose
         <Base.Backdrop className={styles.scrim} />
         {/* Focus the panel itself (Base UI focuses it without scrolling) rather than its first button, which is
             still off-screen mid-slide and would make the browser scroll the page to reach it. */}
-        <Base.Popup ref={panelRef} initialFocus={panelRef} className={styles.panel}>
+        <Base.Popup ref={panelRef} initialFocus={panelRef} className={styles.panel} data-size={size}>
           <header className={styles.head}>
             <div className={styles.titles}>
               <div className={styles.titleRow}>

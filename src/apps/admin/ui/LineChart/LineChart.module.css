@@ -4,10 +4,15 @@
 .tick { fill: var(--color-ink-tertiary); font-size: 12px; font-variant-numeric: tabular-nums; }
 .series { color: var(--color-accent); }
 .series[data-tone='gold'] { color: var(--color-gold-ink); }
+.series[data-tone='success'] { color: var(--color-success-ink); }
+.series[data-tone='danger'] { color: var(--color-danger-ink); }
 .line { fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .point { fill: var(--color-surface); stroke: currentColor; stroke-width: 2; }
 .point:hover { fill: currentColor; }
 .legend { display: flex; flex-wrap: wrap; gap: var(--space-5); font-size: var(--fs-subhead); color: var(--color-ink-secondary); }
 .key { display: inline-flex; align-items: center; gap: var(--space-2); }
-.key::before { content: ''; inline-size: 14px; block-size: 2px; background: var(--color-accent); }
+/* Legend keys are dots in the series colour. */
+.key::before { content: ''; inline-size: 8px; block-size: 8px; border-radius: var(--radius-full); background: var(--color-accent); }
 .key[data-tone='gold']::before { background: var(--color-gold-ink); }
+.key[data-tone='success']::before { background: var(--color-success-ink); }
+.key[data-tone='danger']::before { background: var(--color-danger-ink); }

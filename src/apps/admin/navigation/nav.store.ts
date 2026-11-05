@@ -11,9 +11,9 @@ interface AdminNavState {
   setLayout: (layout: 'desktop' | 'tablet' | 'phone') => void;
   /** Phone only: the navigation sheet is open. */
   navOpen: boolean;
-  /** Which Settings tab shows; links like the bell's "Preferences" open a specific one. */
-  settingsTab: 'profile' | 'security' | 'notifications' | 'compliance';
-  openSettings: (tab: 'profile' | 'security' | 'notifications' | 'compliance') => void;
+  /** Which Settings tab shows. */
+  settingsTab: 'profile' | 'security' | 'notifications';
+  openSettings: (tab: 'profile' | 'security' | 'notifications') => void;
   setNavOpen: (open: boolean) => void;
   /** Side drawer over the current page (one at a time): any record a table row opens. */
   drawer: DrawerTarget | null;

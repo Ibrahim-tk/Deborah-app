@@ -1,11 +1,11 @@
-/** Shared by the client and escalation drawers. An email with a copy button that appears on hover or keyboard focus. After copying, the button
+/** Shared by the client and escalation drawers. An email with an always-visible copy button. After copying, the button
  *  turns into a green check with "Copied" beside it for two seconds. */
 import { useEffect, useState } from 'react';
 import { IconButton } from '@admin/ui';
 import { useAdminToast } from '@admin/hooks/toast.store';
 import styles from './CopyEmail.module.css';
 
-/** Any short value with a hover copy button (emails, Stripe IDs). */
+/** Any short value with a copy button (emails, Stripe IDs). */
 export function CopyText({ value, label = 'value' }: { value: string; label?: string }) {
   const toast = useAdminToast();
   const [copied, setCopied] = useState(false);

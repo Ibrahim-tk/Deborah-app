@@ -1,6 +1,6 @@
 /** The two client rights the console acts on: withdrawing consent and deleting their data (with dependent
  *  transfer rules). Each card links to the page where the team handles them. */
-import { deletionDaysLeft, useAdminStore } from '@shared/admin';
+import { businessDaysLeft, useAdminStore } from '@shared/admin';
 import { Button } from '@admin/ui';
 import { useAdminNav } from '@admin/navigation';
 import styles from './DataRights.module.css';
@@ -9,8 +9,8 @@ export function DataRights() {
   const revocations = useAdminStore((s) => s.consentRevocations.length);
   const requests = useAdminStore((s) => s.deletionRequests);
   const go = useAdminNav((s) => s.go);
-  const pending = requests.filter((r) => r.status === 'pending');
-  const soonest = pending.length ? Math.min(...pending.map((r) => deletionDaysLeft(r.received, r.regulation))) : null;
+  const pending = requests.filter((r) => r.status !== 'completed');
+  const soonest = pending.length ? Math.min(...pending.map((r) => businessDaysLeft(r.received))) : null;
 
   return (
     <div className={styles.grid}>

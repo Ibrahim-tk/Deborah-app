@@ -11,19 +11,22 @@ export function ProfileSection() {
   const email = useAdminStore((st) => st.email);
   const role = useAdminStore((st) => st.role);
   const me = useAdminStore((st) => st.admins.find((a) => a.email === st.email));
-  const [name, setName] = useState(me?.name ?? '');
+  const [first, setFirst] = useState(me?.firstName ?? '');
+  const [last, setLast] = useState(me?.lastName ?? '');
   const sim = useSim();
-  const dirty = name.trim() !== (me?.name ?? '') && name.trim().length > 0;
+  const empty = !first.trim() || !last.trim();
+  const dirty = (first.trim() !== (me?.firstName ?? '') || last.trim() !== (me?.lastName ?? '')) && !empty;
 
   return (
     <Section title="Profile" surface>
       <div className={s.group}>
         <div className={s.form}>
-          <Input label="Full name" value={name} error={!name.trim() ? 'Enter your name.' : undefined} onChange={(e) => setName(e.target.value)} />
+          <Input label="First name" value={first} onChange={(e) => setFirst(e.target.value)} />
+          <Input label="Last name" value={last} error={empty ? 'Please enter your first and last name.' : undefined} onChange={(e) => setLast(e.target.value)} />
           {dirty && (
             <div className={s.actions}>
-              <Button size="sm" loading={sim.busy} onClick={() => sim.run(() => useAdminSettings.getState().setName(name.trim()), 'Name saved')}>Save name</Button>
-              <Button size="sm" variant="ghost" onClick={() => setName(me?.name ?? '')}>Cancel</Button>
+              <Button size="sm" loading={sim.busy} onClick={() => sim.run(() => useAdminSettings.getState().setName(first.trim(), last.trim()), 'Your profile has been updated.')}>Save</Button>
+              <Button size="sm" variant="ghost" onClick={() => { setFirst(me?.firstName ?? ''); setLast(me?.lastName ?? ''); }}>Cancel</Button>
             </div>
           )}
         </div>

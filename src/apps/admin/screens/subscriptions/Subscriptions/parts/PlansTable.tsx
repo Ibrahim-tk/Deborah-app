@@ -1,41 +1,33 @@
-/** A-7.2 plan list: price, limits, subscribers and an active switch. Row opens the editor. */
+/** A-7.2 plan list (story 8.1): name, type, price, family limits, status and Clients on the plan. Row opens the editor.
+ *  Plans are never deleted, only made inactive. */
 import { money, useAdminStore, type Plan } from '@shared/admin';
-import { DataTable, Toggle, type Column } from '@admin/ui';
+import { DataTable, StatusText, type Column } from '@admin/ui';
 import { useAdminNav } from '@admin/navigation';
-import { useAdminToast } from '@admin/hooks/toast.store';
-import styles from './PlansTable.module.css';
+
+const KIND: Record<Plan['kind'], string> = { trial: 'Free trial', individual: 'Individual', family: 'Family' };
+const STATUS: Record<Plan['status'], [string, 'success' | 'neutral' | 'accent']> = {
+  active: ['Active', 'success'],
+  draft: ['Draft', 'accent'],
+  inactive: ['Inactive', 'neutral'],
+};
 
 export function PlansTable({ subscribers }: { subscribers: (planId: string) => number }) {
   const plans = useAdminStore((s) => s.plans);
   const openDrawer = useAdminNav((s) => s.openDrawer);
-  const toast = useAdminToast();
-
-  const setActive = (p: Plan, active: boolean) => {
-    useAdminStore.getState().savePlan({ ...p, active });
-    toast(active ? 'Plan activated' : 'Plan deactivated');
-  };
 
   const columns: Column<Plan>[] = [
-    { key: 'name', header: 'Plan', grow: true, primary: true, sort: (p) => p.name, render: (p) => p.name },
-    { key: 'kind', muted: true, header: 'Type', render: (p) => (p.kind === 'family' ? `Family, up to ${p.maxProfiles}` : 'Individual') },
+    { key: 'name', header: 'Plan', grow: true, primary: true, render: (p) => p.name },
+    { key: 'kind', muted: true, header: 'Type', render: (p) => KIND[p.kind] },
+    { key: 'price', header: 'Price', render: (p) => (p.kind === 'trial' ? `${p.trialDays} days` : `${money(p.monthly)} / month`) },
     {
-      key: 'price',
-      header: 'Price',
-      sort: (p) => p.monthly,
-      render: (p) => (p.monthly ? `${money(p.monthly)} / month` : 'Free'),
+      key: 'family',
+      muted: true,
+      header: 'Family',
+      render: (p) => (p.kind === 'family' ? `${p.familyIncluded} members · ${money(p.addOnPrice ?? 0)} per add-on` : '—'),
     },
-    { key: 'subs', header: 'Subscribers', align: 'end', sort: (p) => subscribers(p.id), render: (p) => (p.id === 'free' ? '—' : subscribers(p.id).toLocaleString('en-US')) },
-    {
-      key: 'active',
-      header: 'Status',
-      render: (p) => (
-        // Stop the row click so the switch doesn't also open the editor.
-        <span className={styles.toggle} onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <Toggle checked={p.active} onChange={(v) => setActive(p, v)} label={p.active ? 'Active' : 'Inactive'} />
-        </span>
-      ),
-    },
+    { key: 'status', header: 'Status', render: (p) => <StatusText tone={STATUS[p.status][1]}>{STATUS[p.status][0]}</StatusText> },
+    { key: 'subs', header: 'Clients', align: 'end', render: (p) => subscribers(p.id).toLocaleString('en-US') },
   ];
 
-  return <DataTable label="Plans" columns={columns} rows={plans} rowKey={(p) => p.id} onRowClick={(p) => openDrawer({ kind: 'plan', id: p.id })} />;
+  return <DataTable paginate={false} label="Plans" columns={columns} rows={plans} rowKey={(p) => p.id} onRowClick={(p) => openDrawer({ kind: 'plan', id: p.id })} />;
 }

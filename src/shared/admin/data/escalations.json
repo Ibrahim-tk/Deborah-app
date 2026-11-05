@@ -3,7 +3,6 @@
     "id": "e001",
     "clientId": "c002",
     "type": "emergency",
-    "status": "open",
     "reason": "Chest pain reported in chat",
     "summary": [
       "Chest pain spreading to the left arm, with shortness of breath. Emergency guidance shown; check they got help."
@@ -35,13 +34,20 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "iPhone app",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "911 emergency instructions",
+    "clientChose": "I’ve called for help",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e002",
     "clientId": "c005",
-    "type": "critical",
-    "status": "open",
+    "type": "urgent",
     "reason": "Mentioned stopping thyroid medication",
     "summary": [
       "Stopped thyroid medication two weeks ago without their prescriber; now more tired and low. Advised to contact their prescriber."
@@ -73,13 +79,20 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Android app",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "Advice to contact their provider today",
+    "clientChose": "I’ve reached out for help",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e003",
     "clientId": "c008",
-    "type": "critical",
-    "status": "in_review",
+    "type": "crisis",
     "reason": "Crisis language detected",
     "summary": [
       "Said they feel hopeless and others would be better off without them. 988 shared; no reply since. Reach out soon."
@@ -111,19 +124,27 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Web browser",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "988 Suicide & Crisis Lifeline",
+    "clientChose": "I’m safe now",
+    "profile": {
+      "kind": "family",
+      "name": "Azka",
+      "advocate": "Sarah"
+    }
   },
   {
     "id": "e004",
     "clientId": "c011",
     "type": "emergency",
-    "status": "resolved",
     "reason": "Heavy bleeding after menopause",
     "summary": [
       "Heavy bleeding a year after their last period, with dizziness. Advised same-day care; check they were seen."
     ],
     "opened": "2026-09-17T12:15",
-    "closed": "2026-09-19T16:40",
     "messages": [
       {
         "from": "client",
@@ -150,13 +171,22 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "iPhone app",
+    "status": "reviewed",
+    "reviewedBy": "deborah@oracleclinician.com",
+    "reviewedAt": "2026-09-19T16:40",
+    "reviewNotes": "Handled as expected. No further action.",
+    "oracleShowed": "911 emergency instructions",
+    "clientChose": "No response",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e005",
     "clientId": "c014",
-    "type": "critical",
-    "status": "open",
+    "type": "crisis",
     "reason": "Asked for a dose change",
     "summary": [
       "Asked how much to raise their estradiol dose as hot flashes returned. Pointed to their prescriber or Deborah."
@@ -188,13 +218,22 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Web browser",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "988 Suicide & Crisis Lifeline",
+    "clientChose": "I’ve called for help",
+    "profile": {
+      "kind": "teen",
+      "name": "Mia"
+    },
+    "parentToldAt": "2026-09-21T13:15"
   },
   {
     "id": "e006",
     "clientId": "c017",
     "type": "emergency",
-    "status": "in_review",
     "reason": "Chest pain reported in chat",
     "summary": [
       "Chest pain spreading to the left arm, with shortness of breath. Emergency guidance shown; check they got help."
@@ -226,19 +265,25 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Android app",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "911 emergency instructions",
+    "clientChose": "I’ve reached out for help",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e007",
     "clientId": "c020",
-    "type": "critical",
-    "status": "resolved",
+    "type": "crisis",
     "reason": "Mentioned stopping thyroid medication",
     "summary": [
       "Stopped thyroid medication two weeks ago without their prescriber; now more tired and low. Advised to contact their prescriber."
     ],
     "opened": "2026-09-01T15:15",
-    "closed": "2026-09-03T16:40",
     "messages": [
       {
         "from": "client",
@@ -265,19 +310,27 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "iPhone app",
+    "status": "reviewed",
+    "reviewedBy": "deborah@oracleclinician.com",
+    "reviewedAt": "2026-09-03T16:40",
+    "reviewNotes": "Handled as expected. No further action.",
+    "oracleShowed": "988 Suicide & Crisis Lifeline",
+    "clientChose": "I’m safe now",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e008",
     "clientId": "c023",
-    "type": "critical",
-    "status": "resolved",
+    "type": "crisis",
     "reason": "Crisis language detected",
     "summary": [
       "Said they feel hopeless and others would be better off without them. 988 shared; no reply since. Reach out soon."
     ],
     "opened": "2026-09-05T16:15",
-    "closed": "2026-10-07T16:40",
     "messages": [
       {
         "from": "client",
@@ -304,13 +357,22 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Android app",
+    "status": "reviewed",
+    "reviewedBy": "deborah@oracleclinician.com",
+    "reviewedAt": "2026-10-07T16:40",
+    "reviewNotes": "Handled as expected. No further action.",
+    "oracleShowed": "988 Suicide & Crisis Lifeline",
+    "clientChose": "No response",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e009",
     "clientId": "c002",
     "type": "emergency",
-    "status": "open",
     "reason": "Heavy bleeding after menopause",
     "summary": [
       "Heavy bleeding a year after their last period, with dizziness. Advised same-day care; check they were seen."
@@ -342,19 +404,27 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Web browser",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "911 emergency instructions",
+    "clientChose": "I’ve called for help",
+    "profile": {
+      "kind": "family",
+      "name": "Azka",
+      "advocate": "Sarah"
+    }
   },
   {
     "id": "e010",
     "clientId": "c005",
-    "type": "critical",
-    "status": "resolved",
+    "type": "urgent",
     "reason": "Asked for a dose change",
     "summary": [
       "Asked how much to raise their estradiol dose as hot flashes returned. Pointed to their prescriber or Deborah."
     ],
     "opened": "2026-10-13T10:15",
-    "closed": "2026-10-15T16:40",
     "messages": [
       {
         "from": "client",
@@ -381,13 +451,22 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "iPhone app",
+    "status": "reviewed",
+    "reviewedBy": "deborah@oracleclinician.com",
+    "reviewedAt": "2026-10-15T16:40",
+    "reviewNotes": "Handled as expected. No further action.",
+    "oracleShowed": "Advice to contact their provider today",
+    "clientChose": "I’ve reached out for help",
+    "profile": {
+      "kind": "client"
+    }
   },
   {
     "id": "e011",
     "clientId": "c008",
     "type": "emergency",
-    "status": "in_review",
     "reason": "Chest pain reported in chat",
     "summary": [
       "Chest pain spreading to the left arm, with shortness of breath. Emergency guidance shown; check they got help."
@@ -419,13 +498,22 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Web browser",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "911 emergency instructions",
+    "clientChose": "I’m safe now",
+    "profile": {
+      "kind": "teen",
+      "name": "Mia"
+    },
+    "parentToldAt": "2026-10-17T11:15"
   },
   {
     "id": "e012",
     "clientId": "c011",
-    "type": "critical",
-    "status": "open",
+    "type": "urgent",
     "reason": "Mentioned stopping thyroid medication",
     "summary": [
       "Stopped thyroid medication two weeks ago without their prescriber; now more tired and low. Advised to contact their prescriber."
@@ -457,6 +545,14 @@
         "trigger": false
       }
     ],
-    "status_copy": "placeholder"
+    "status_copy": "placeholder",
+    "device": "Android app",
+    "status": "not_reviewed",
+    "reviewNotes": "",
+    "oracleShowed": "Advice to contact their provider today",
+    "clientChose": "No response",
+    "profile": {
+      "kind": "client"
+    }
   }
 ]

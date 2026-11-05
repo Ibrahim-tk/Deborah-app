@@ -1,50 +1,106 @@
 [
   {
+    "id": "l101",
+    "at": "2026-11-02T07:58",
+    "actor": "system",
+    "role": "system",
+    "category": "security",
+    "text": "Failed sign-in (wrong password)",
+    "target": "sam@oracleclinician.com",
+    "device": "Safari on iPhone · 98.10.4.212"
+  },
+  {
+    "id": "l102",
+    "at": "2026-11-01T19:12",
+    "actor": "amelia.hart@example.com",
+    "role": "client",
+    "category": "data",
+    "text": "Export downloaded",
+    "target": "Own account"
+  },
+  {
+    "id": "l103",
+    "at": "2026-10-31T16:40",
+    "actor": "grace.nguyen@example.com",
+    "role": "client",
+    "category": "consent",
+    "text": "Accepted Privacy Policy 2026.3",
+    "target": "Own account"
+  },
+  {
+    "id": "l104",
+    "at": "2026-10-30T10:05",
+    "actor": "mia.hart@example.com",
+    "role": "teen",
+    "category": "security",
+    "text": "Signed in",
+    "device": "Safari on iPhone · 98.10.4.18"
+  },
+  {
     "id": "l000",
     "at": "2026-11-01T08:00",
     "actor": "deborah@oracleclinician.com",
-    "text": "Signed in"
+    "text": "Signed in",
+    "role": "super",
+    "category": "security",
+    "device": "Chrome on macOS · 73.42.118.20"
   },
   {
     "id": "l001",
     "at": "2026-11-02T09:01",
     "actor": "sam@oracleclinician.com",
-    "text": "Viewed client Grace Nguyen"
+    "text": "Viewed client Grace Nguyen",
+    "role": "admin",
+    "category": "views",
+    "target": "Client account"
   },
   {
     "id": "l002",
     "at": "2026-11-01T10:02",
     "actor": "deborah@oracleclinician.com",
-    "text": "Marked escalation e004 as resolved"
+    "text": "Marked escalation e004 as resolved",
+    "role": "super",
+    "category": "escalations"
   },
   {
     "id": "l003",
     "at": "2026-11-02T11:03",
     "actor": "sam@oracleclinician.com",
-    "text": "Sent reminder to Olivia Lopez"
+    "text": "Sent reminder to Olivia Lopez",
+    "role": "admin",
+    "category": "clients"
   },
   {
     "id": "l004",
     "at": "2026-11-01T12:04",
     "actor": "deborah@oracleclinician.com",
-    "text": "Invited jo@oracleclinician.com as admin"
+    "text": "Invited jo@oracleclinician.com as admin",
+    "role": "super",
+    "category": "admins"
   },
   {
     "id": "l005",
     "at": "2026-11-02T13:05",
     "actor": "sam@oracleclinician.com",
-    "text": "Updated plan Family: price"
+    "text": "Updated plan Family: price",
+    "role": "admin",
+    "category": "plans"
   },
   {
     "id": "l006",
     "at": "2026-11-01T14:00",
     "actor": "deborah@oracleclinician.com",
-    "text": "Uploaded consent version 2026.3"
+    "text": "Uploaded consent version 2026.3",
+    "role": "super",
+    "category": "consent"
   },
   {
     "id": "l007",
     "at": "2026-11-02T15:01",
     "actor": "sam@oracleclinician.com",
-    "text": "Deactivated client Hannah Patel"
+    "text": "Deactivated client Hannah Patel",
+    "role": "admin",
+    "category": "clients",
+    "target": "Client account"
   }
 ]

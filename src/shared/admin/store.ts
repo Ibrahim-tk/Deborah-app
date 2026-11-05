@@ -1,8 +1,9 @@
 /** useAdminStore — the Super Admin panel's own client store. Separate from the app store on purpose. */
 import { create } from 'zustand';
 import { useAdminNotifications } from './notifications';
+import { categorize } from './audit';
 import { seed } from './data';
-import type { AdminRole, AdminUser, AuditEntry, EscalationStatus, IntegrationId, Plan } from './types';
+import type { AdminRole, AdminUser, IntegrationId, Plan } from './types';
 
 type Seed = typeof seed;
 
@@ -14,18 +15,33 @@ export interface AdminState extends Seed {
   signOut: () => void;
   setRole: (role: AdminRole) => void;
   log: (text: string) => void;
-  setClientAccount: (id: string, active: boolean) => void;
-  setEscalationStatus: (id: string, status: EscalationStatus) => void;
-  resolveSupport: (id: string) => void;
+  /** Story 3.2: a reason is required to deactivate; a parent's invited teens are paused (and restored on reactivation). */
+  setClientAccount: (id: string, active: boolean, reason?: string) => void;
+  /** Mark reviewed (with the reviewer's notes) or back to not yet reviewed. Story 4.1. */
+  reviewEscalation: (id: string, reviewed: boolean, notes: string) => void;
+  /** Resolve or reopen a support request (story 5.1). */
+  setSupportResolved: (id: string, resolved: boolean) => void;
+  /** Story 3.1: change a Client's email; resolves their open Email Change Request. */
+  changeClientEmail: (clientId: string, email: string) => void;
+  saveSupportNote: (id: string, notes: string) => void;
   acceptTransfer: (requestId: string, dependentId: string) => void;
-  decideDeletion: (id: string, approve: boolean) => void;
-  inviteAdmin: (name: string, email: string, role: AdminRole) => void;
+  /** Story 5.2 deletion workflow. */
+  setDeletionCheck: (id: string, key: 'identity' | 'legalHold', value: boolean) => void;
+  completeDeletion: (id: string) => void;
+  setLegalHold: (id: string, on: boolean, note: string) => void;
+  /** For a teen who can't sign in and emailed from their registered address. Returns the new id. */
+  createDeletion: (teenId: string, received: string, note: string) => string;
+  saveDeletionNote: (id: string, notes: string) => void;
+  /** Story 7.2: invites are always for the Admin role; there's one Super Admin. */
+  inviteAdmin: (firstName: string, lastName: string, email: string) => void;
   resendInvite: (id: string) => void;
-  setAdminAccount: (id: string, active: boolean) => void;
+  /** Story 7.1: the link stops working and the Admin is removed from the listing. */
+  cancelInvite: (id: string) => void;
+  /** Names only; the email can't be edited because it's used to sign in. */
+  editAdmin: (id: string, firstName: string, lastName: string) => void;
+  setAdminAccount: (id: string, active: boolean, reason?: string) => void;
   savePlan: (plan: Plan) => void;
-  clearLogEntry: (id: string) => void;
-  clearLog: () => void;
-  uploadConsent: (name: string) => void;
+  /** Audit logs are append-only: no edit, clear or delete (story 10.1). */
   setStripeConnecting: () => void;
   connectStripe: () => void;
   setStripeMode: (mode: 'test' | 'live') => void;
@@ -42,7 +58,7 @@ const nameOf = (s: Seed, id: string) => s.clients.find((c) => c.id === id)?.name
 
 export const useAdminStore = create<AdminState>((set, get) => {
   const log = (text: string) =>
-    set((s) => ({ auditLog: [{ id: uid('l'), at: stamp(), actor: s.email, text } as AuditEntry, ...s.auditLog] }));
+    set((s) => ({ auditLog: [{ id: uid('l'), at: stamp(), actor: s.email, role: s.role, category: categorize(text), text }, ...s.auditLog] }));
   return {
     ...seed,
     signedIn: false,
@@ -58,72 +74,142 @@ export const useAdminStore = create<AdminState>((set, get) => {
     },
     setRole: (role) => set({ role }),
     log,
-    setClientAccount: (id, active) => {
-      set((s) => ({ clients: s.clients.map((c) => (c.id === id ? { ...c, account: active ? 'active' : 'deactivated' } : c)) }));
-      log(`${active ? 'Reactivated' : 'Deactivated'} client ${nameOf(get(), id)}`);
+    setClientAccount: (id, active, reason) => {
+      set((s) => {
+        const parent = s.clients.find((c) => c.id === id);
+        const familyOn = parent?.planId === 'family-monthly' && !parent.consentRevoked;
+        return {
+          clients: s.clients.map((c) => {
+            if (c.id === id) return { ...c, account: active ? 'active' : 'deactivated' };
+            // Teens linked to this parent: paused on deactivation; back on reactivation if the Family plan is still active.
+            if (c.parentId === id && c.teenStatus !== 'invite_sent') return { ...c, teenStatus: !active ? 'paused' : familyOn ? 'joined' : c.teenStatus };
+            return c;
+          }),
+        };
+      });
+      log(`${active ? 'Reactivated' : 'Deactivated'} client ${nameOf(get(), id)}${reason ? `. Reason: ${reason}` : ''}`);
     },
-    setEscalationStatus: (id, status) => {
+    reviewEscalation: (id, reviewed, notes) => {
+      const by = get().email;
       set((s) => ({
         escalations: s.escalations.map((e) =>
-          e.id === id ? { ...e, status, closed: status === 'resolved' ? stamp() : undefined } : e,
+          e.id === id
+            ? { ...e, status: reviewed ? 'reviewed' : 'not_reviewed', reviewNotes: notes, reviewedBy: reviewed ? by : undefined, reviewedAt: reviewed ? stamp() : undefined }
+            : e,
         ),
       }));
-      log(status === 'resolved' ? `Closed case ${id}` : `Reopened case ${id}`);
-      if (status === 'open') {
-        const e = get().escalations.find((x) => x.id === id);
-        useAdminNotifications.getState().post({ category: 'safety', kind: 'case_reopened', title: 'Case reopened', body: `${e?.reason ?? id}. Reopened by you.`, audience: 'all', severity: 'high', target: { kind: 'escalation', id } });
-      }
+      log(reviewed ? `Marked escalation ${id} as reviewed` : `Marked escalation ${id} as not yet reviewed`);
     },
-    resolveSupport: (id) => {
-      set((s) => ({ supportRequests: s.supportRequests.map((r) => (r.id === id ? { ...r, resolved: true } : r)) }));
-      log(`Resolved support request ${id}`);
+    setSupportResolved: (id, resolved) => {
+      const by = get().email;
+      set((s) => ({
+        supportRequests: s.supportRequests.map((r) =>
+          r.id === id ? { ...r, resolved, resolvedBy: resolved ? by : undefined, resolvedAt: resolved ? stamp() : undefined } : r,
+        ),
+      }));
+      log(`${resolved ? 'Resolved' : 'Reopened'} support request ${id}`);
+    },
+    changeClientEmail: (clientId, email) => {
+      const by = get().email;
+      set((s) => ({
+        clients: s.clients.map((c) => (c.id === clientId ? { ...c, email } : c)),
+        supportRequests: s.supportRequests.map((r) =>
+          r.clientId === clientId && r.type === 'email_change' && !r.resolved ? { ...r, resolved: true, resolvedBy: by, resolvedAt: stamp() } : r,
+        ),
+      }));
+      log(`Changed the email address for client ${nameOf(get(), clientId)}`);
+    },
+    saveSupportNote: (id, notes) => {
+      set((s) => ({ supportRequests: s.supportRequests.map((r) => (r.id === id ? { ...r, notes } : r)) }));
+      log(`Added a note to support request ${id}`);
     },
     acceptTransfer: (requestId, dependentId) => {
       set((s) => ({
+        deletionRequests: s.deletionRequests.map((r) => {
+          if (r.id !== requestId) return r;
+          const decisions = r.decisions.map((d) =>
+            d.dependentId === dependentId && d.action === 'transfer' ? { ...d, transfer: 'accepted' as const } : d,
+          );
+          const waiting = decisions.some((d) => d.action === 'transfer' && d.transfer !== 'accepted');
+          return { ...r, decisions, status: r.status === 'waiting_transfer' && !waiting ? 'pending_review' : r.status };
+        }),
+      }));
+      log(`Family member transfer accepted for ${dependentId}`);
+    },
+    setDeletionCheck: (id, key, value) =>
+      set((s) => ({ deletionRequests: s.deletionRequests.map((r) => (r.id === id ? { ...r, checklist: { ...r.checklist, [key]: value } } : r)) })),
+    completeDeletion: (id) => {
+      const req = get().deletionRequests.find((r) => r.id === id);
+      const by = get().email;
+      set((s) => ({
+        deletionRequests: s.deletionRequests.map((r) => (r.id === id ? { ...r, status: 'completed', completedBy: by, completedAt: stamp() } : r)),
+        // Account and teen deletions remove the account; advocate-only and family member deletions keep it.
+        clients: req && (req.type === 'teen' || req.option === 'everything' || req.option === 'transfer')
+          ? s.clients.map((c) => (c.id === req.clientId ? { ...c, account: 'deactivated' } : c))
+          : s.clients,
+      }));
+      log(`Deletion completed for ${nameOf(get(), req?.clientId ?? '')}`);
+    },
+    setLegalHold: (id, on, note) => {
+      set((s) => ({
         deletionRequests: s.deletionRequests.map((r) =>
-          r.id !== requestId ? r : {
-            ...r,
-            decisions: r.decisions.map((d) =>
-              d.dependentId === dependentId && d.action === 'transfer' ? { ...d, transfer: 'accepted' as const } : d,
-            ),
-          },
+          r.id === id ? { ...r, status: on ? 'legal_hold' : 'in_progress', notes: note ? [r.notes, note].filter(Boolean).join('\n') : r.notes } : r,
         ),
       }));
-      log(`Dependent transfer accepted for ${dependentId}`);
+      log(on ? `Placed deletion request ${id} on legal hold` : `Lifted the legal hold on deletion request ${id}`);
     },
-    decideDeletion: (id, approve) => {
-      const req = get().deletionRequests.find((r) => r.id === id);
+    createDeletion: (teenId, received, note) => {
+      const id = uid('dr');
+      const by = get().email;
       set((s) => ({
-        deletionRequests: s.deletionRequests.map((r) => (r.id === id ? { ...r, status: approve ? 'deleted' : 'rejected' } : r)),
-        clients: approve && req ? s.clients.map((c) => (c.id === req.clientId ? { ...c, account: 'deactivated' } : c)) : s.clients,
+        deletionRequests: [
+          { id, clientId: teenId, type: 'teen', source: 'email', received, status: 'pending_review', decisions: [], checklist: { identity: true, legalHold: false }, notes: note, createdBy: by },
+          ...s.deletionRequests,
+        ],
       }));
-      log(`${approve ? 'Approved and deleted' : 'Rejected'} data request ${id}`);
+      log(`Created a teen deletion request for ${nameOf(get(), teenId)} (by email)`);
+      return id;
     },
-    inviteAdmin: (name, email, role) => {
-      const admin: AdminUser = { id: uid('a'), name, email, role, account: 'active', invite: 'pending', invitedAt: stamp() };
-      set((s) => ({ admins: [...s.admins, admin] }));
-      log(`Invited ${email} as ${role === 'super' ? 'super admin' : 'admin'}`);
-      // Simulated: the invitee accepts a little later.
+    saveDeletionNote: (id, notes) => {
+      set((s) => ({ deletionRequests: s.deletionRequests.map((r) => (r.id === id ? { ...r, notes } : r)) }));
+      log(`Added a note to deletion request ${id}`);
+    },
+    inviteAdmin: (firstName, lastName, email) => {
+      const admin: AdminUser = { id: uid('a'), firstName, lastName, email, role: 'admin', account: 'active', invite: 'pending', invitedAt: stamp(), addedBy: get().email };
+      set((s) => ({ admins: [admin, ...s.admins] }));
+      log(`Invited ${email} as admin`);
+      // Simulated: the invitee sets up their account a little later.
       setTimeout(() => {
-        set((s) => ({ admins: s.admins.map((a) => (a.id === admin.id && a.invite === 'pending' ? { ...a, invite: 'accepted' } : a)) }));
-        useAdminNotifications.getState().post({ category: 'team', kind: 'invite_accepted', title: `${name} joined as ${role === 'super' ? 'super admin' : 'admin'}`, body: `${email} accepted your invite.`, audience: 'super', severity: 'normal', target: { kind: 'admin', id: admin.id } });
+        set((s) => ({ admins: s.admins.map((a) => (a.id === admin.id && a.invite === 'pending' ? { ...a, invite: 'accepted', lastActive: stamp() } : a)) }));
+        useAdminNotifications.getState().post({ category: 'admins', kind: 'admin_setup', title: `${firstName} ${lastName} set up their account`, body: 'A new admin has set up their account.', audience: 'super', severity: 'normal', target: { kind: 'admin', id: admin.id } });
       }, 20_000);
     },
     resendInvite: (id) => {
       set((s) => ({ admins: s.admins.map((a) => (a.id === id ? { ...a, invite: 'pending', invitedAt: stamp() } : a)) }));
       log(`Resent invite to ${get().admins.find((a) => a.id === id)?.email}`);
     },
-    setAdminAccount: (id, active) => {
+    cancelInvite: (id) => {
+      const email = get().admins.find((a) => a.id === id)?.email;
+      set((s) => ({ admins: s.admins.filter((a) => a.id !== id) }));
+      log(`Cancelled the invite for ${email}`);
+    },
+    editAdmin: (id, firstName, lastName) => {
+      set((s) => ({ admins: s.admins.map((a) => (a.id === id ? { ...a, firstName, lastName } : a)) }));
+      log(`Edited admin ${firstName} ${lastName}`);
+    },
+    setAdminAccount: (id, active, reason) => {
       set((s) => ({ admins: s.admins.map((a) => (a.id === id ? { ...a, account: active ? 'active' : 'deactivated' } : a)) }));
-      log(`${active ? 'Reactivated' : 'Deactivated'} admin ${get().admins.find((a) => a.id === id)?.email}`);
+      log(`${active ? 'Reactivated' : 'Deactivated'} admin ${get().admins.find((a) => a.id === id)?.email}${reason ? `. Reason: ${reason}` : ''}`);
     },
     savePlan: (plan) => {
-      const exists = get().plans.some((p) => p.id === plan.id);
-      set((s) => ({ plans: exists ? s.plans.map((p) => (p.id === plan.id ? plan : p)) : [...s.plans, plan] }));
-      log(`${exists ? 'Updated' : 'Created'} plan ${plan.name}`);
+      const before = get().plans.find((p) => p.id === plan.id);
+      // Price history: a new entry whenever the price (or the trial length) changes.
+      const label = plan.kind === 'trial' ? `${plan.trialDays ?? 0} days` : `$${plan.monthly.toFixed(2)}`;
+      const priceChanged = !before || before.monthly !== plan.monthly || before.trialDays !== plan.trialDays;
+      const next = priceChanged ? { ...plan, priceHistory: [...plan.priceHistory, { price: label, at: stamp(), by: get().email }] } : plan;
+      set((s) => ({ plans: before ? s.plans.map((p) => (p.id === plan.id ? next : p)) : [...s.plans, next] }));
+      log(`${before ? 'Updated' : 'Created'} plan ${plan.name}${priceChanged && before ? `: price ${label}` : ''}`);
     },
-    clearLogEntry: (id) => set((s) => ({ auditLog: s.auditLog.filter((e) => e.id !== id) })),
-    clearLog: () => set({ auditLog: [] }),
     setStripeConnecting: () => set((s) => ({ stripe: { ...s.stripe, status: 'connecting' } })),
     connectStripe: () => {
       set((s) => ({
@@ -144,16 +230,11 @@ export const useAdminStore = create<AdminState>((set, get) => {
     disconnectStripe: () => {
       set((s) => ({ stripe: { status: 'disconnected', mode: 'test', account: null, webhook: null }, plans: s.plans.map(({ stripePriceId: _drop, ...p }) => p) }));
       log('Disconnected Stripe');
-      useAdminNotifications.getState().post({ category: 'billing', kind: 'stripe_disconnected', title: 'Stripe disconnected', body: 'New checkouts and renewals are paused until Stripe is connected again.', audience: 'super', severity: 'high', target: { section: 'integrations' } });
     },
     setIntegration: (id, connect, account) => {
       set((s) => ({ integrations: { ...s.integrations, [id]: connect ? { connected: true, account, connectedAt: stamp() } : { connected: false } } }));
       const name = { dropbox: 'Dropbox', shopify: 'Shopify', googleDocs: 'Google Docs' }[id];
       log(`${connect ? 'Connected' : 'Disconnected'} ${name}`);
-    },
-    uploadConsent: (name) => {
-      set((s) => ({ consentVersions: [{ id: uid('cv'), name, uploadedAt: stamp(), uploadedBy: s.email }, ...s.consentVersions] }));
-      log(`Uploaded consent version ${name}`);
     },
   };
 });

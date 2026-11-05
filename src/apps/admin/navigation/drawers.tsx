@@ -9,6 +9,8 @@ import PlanDrawer from '@admin/screens/subscriptions/PlanDrawer';
 import AuditDrawer from '@admin/screens/audit/AuditDrawer';
 import ConsentDrawer from '@admin/screens/compliance/ConsentDrawer';
 import StripeEventsDrawer from '@admin/screens/subscriptions/StripeEventsDrawer';
+import ContentDrawer from '@admin/screens/knowledge/ContentDrawer';
+import GapDrawer from '@admin/screens/knowledge/GapDrawer';
 import type { DrawerTarget } from './types';
 
 export const DRAWERS: Record<DrawerTarget['kind'], ComponentType<{ id: string | null }>> = {
@@ -21,4 +23,6 @@ export const DRAWERS: Record<DrawerTarget['kind'], ComponentType<{ id: string | 
   audit: AuditDrawer,
   consent: ConsentDrawer,
   stripeEvents: StripeEventsDrawer,
+  content: ContentDrawer,
+  gap: ({ id }) => <GapDrawer id={id!} />,
 };

@@ -13,12 +13,13 @@ const R = 52, C = 2 * Math.PI * R;
 /** Round caps reach half the stroke past each dash end, so each slice is shortened by a full stroke plus a small gap. */
 const STROKE = 11, GAP = 4;
 
-export function DonutChart({ data, label, totalLabel }: { data: DonutSlice[]; label: string; totalLabel: string }) {
+/** `legend={false}`: just the ring, for layouts that list the slices elsewhere. */
+export function DonutChart({ data, label, totalLabel, legend = true }: { data: DonutSlice[]; label: string; totalLabel: string; legend?: boolean }) {
   const total = data.reduce((s, d) => s + d.value, 0) || 1;
   let offset = 0;
   return (
     <div className={styles.wrap}>
-    <div className={styles.root}>
+    <div className={styles.root} data-legend={legend || undefined}>
       <svg viewBox="0 0 140 140" className={styles.svg} role="img" aria-label={label}>
         {data.map((d) => {
           const len = (d.value / total) * C;
@@ -42,6 +43,7 @@ export function DonutChart({ data, label, totalLabel }: { data: DonutSlice[]; la
         <text x={70} y={68} textAnchor="middle" className={styles.total}>{total.toLocaleString('en-US')}</text>
         <text x={70} y={88} textAnchor="middle" className={styles.totalLabel}>{totalLabel}</text>
       </svg>
+      {legend && (
       <ul className={styles.legend}>
         {data.map((d) => (
           <li key={d.label} className={styles.item} data-tone={d.tone}>
@@ -51,6 +53,7 @@ export function DonutChart({ data, label, totalLabel }: { data: DonutSlice[]; la
           </li>
         ))}
       </ul>
+      )}
     </div>
     </div>
   );

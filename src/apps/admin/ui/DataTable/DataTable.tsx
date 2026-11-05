@@ -2,7 +2,8 @@
  *  optional footer. Clickable rows highlight on hover. Wide tables scroll inline inside their own container; the header stays sticky. */
 import { useMemo, useState, type ReactNode } from 'react';
 import { Icon, type IconName } from '../Icon';
-import { HeaderCell } from './parts/HeaderCell';
+import { HeaderCell, TableMenu } from './parts/HeaderCell';
+import { Pager } from './parts/Pager';
 import styles from './DataTable.module.css';
 
 export interface Column<T> {
@@ -33,6 +34,10 @@ export interface DataTableProps<T> {
   footer?: ReactNode;
   /** `plain`: no box, no header fill; rows sit straight on the page (used inside drawers). */
   variant?: 'boxed' | 'plain';
+  /** Rows per page to start with (boxed tables only). Plain tables in drawers never page. */
+  pageSize?: number;
+  /** false: no pager bar, every row shows (short fixed lists such as plans). */
+  paginate?: boolean;
 }
 
 /** Puts several bits of content in one cell on a shared centre line (e.g. a name and a status pill). */
@@ -40,7 +45,7 @@ export function CellRow({ children }: { children: ReactNode }) {
   return <span className={styles.inline}>{children}</span>;
 }
 
-export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed' }: DataTableProps<T>) {
+export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed', pageSize = 25, paginate = true }: DataTableProps<T>) {
   const [sort, setSort] = useState(initialSort);
   const sorted = useMemo(() => {
     const by = columns.find((c) => c.key === sort?.key)?.sort;
@@ -52,6 +57,15 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
     });
   }, [rows, columns, sort]);
 
+  const paged = variant === 'boxed' && paginate;
+  const [size, setSize] = useState(pageSize);
+  const [pageWanted, setPage] = useState(0);
+  // Filtering can shrink the list under the current page; show the last one that exists.
+  const lastPage = Math.max(0, Math.ceil(rows.length / size) - 1);
+  const page = Math.min(pageWanted, lastPage);
+  const visible = paged ? sorted.slice(page * size, (page + 1) * size) : sorted;
+
+  const sortable = columns.filter((c) => c.sort);
   const sortBy = (key: string, dir: 'asc' | 'desc' | undefined) => setSort(dir ? { key, dir } : undefined);
 
   if (rows.length === 0) {
@@ -65,11 +79,13 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
 
   return (
     <div className={styles.container} data-variant={variant}>
+      {paged && <Pager page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={footer} />}
       <div className={styles.scroll}>
         <table className={styles.table} aria-label={label}>
           <thead>
             <tr>
-              {columns.map((c) => {
+              {columns.map((c, i) => {
+                const last = i === columns.length - 1;
                 const active = sort?.key === c.key;
                 return (
                   <th
@@ -79,18 +95,19 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
                     data-grow={c.grow || undefined}
                     aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : undefined}
                   >
-                    {c.sort ? (
-                      <HeaderCell header={c.header} dir={active ? sort.dir : undefined} onSort={(dir) => sortBy(c.key, dir)} />
-                    ) : (
-                      <span className={styles.headCell}>{c.header}</span>
-                    )}
+                    <span className={styles.headCell}>
+                      {c.sort ? <HeaderCell header={c.header} dir={active ? sort.dir : undefined} onSort={(dir) => sortBy(c.key, dir)} /> : c.header}
+                      {last && sortable.length > 0 && (
+                        <TableMenu columns={sortable} sort={sort} onSort={(key, dir) => setSort(key && dir ? { key, dir } : undefined)} />
+                      )}
+                    </span>
                   </th>
                 );
               })}
             </tr>
           </thead>
           <tbody>
-            {sorted.map((row) => (
+            {visible.map((row) => (
               <tr
                 key={rowKey(row)}
                 className={onRowClick ? styles.clickable : undefined}
@@ -106,7 +123,7 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
           </tbody>
         </table>
       </div>
-      {footer && <div className={styles.footer}>{footer}</div>}
+      {footer && !paged && <div className={styles.footer}>{footer}</div>}
     </div>
   );
 }

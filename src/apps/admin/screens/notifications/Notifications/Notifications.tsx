@@ -35,8 +35,8 @@ export default function Notifications() {
       subtitle={unread ? `${unread} unread` : "You're all caught up."}
       action={
         <>
-          <Button variant="ghost" onClick={() => useAdminNav.getState().openSettings('notifications')}>Preferences</Button>
           <Button variant="secondary" disabled={!unread} onClick={() => store.markAllRead(role)}>Mark all as read</Button>
+          <Button variant="ghost" onClick={() => useAdminNav.getState().openSettings('notifications')}>Preferences</Button>
         </>
       }
       toolbar={

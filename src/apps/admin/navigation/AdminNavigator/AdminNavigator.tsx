@@ -1,7 +1,7 @@
 /** @nav AdminNavigator — signed out: the auth step. Signed in: navigation + the current page.
  *  Desktop: sidebar. Tablet (≤ 1024px): icon rail. Phone (≤ 640px): top bar + navigation sheet. */
 import { useEffect, useRef } from 'react';
-import { useAdminNotifications, useAdminStore } from '@shared/admin';
+import { IDLE_MS, useAdminNotifications, useAdminStore, useAuthSecurity } from '@shared/admin';
 import SignIn from '@admin/screens/auth/SignIn';
 import ForgotPassword from '@admin/screens/auth/ForgotPassword';
 import TwoFactor from '@admin/screens/auth/TwoFactor';
@@ -49,9 +49,29 @@ export function AdminNavigator() {
   useEffect(() => {
     if (!signedIn) return;
     const t = setTimeout(() => {
-      useAdminNotifications.getState().post({ category: 'support', kind: 'support_request', title: 'New support request', body: '"Can I change my plan to yearly?" (billing).', audience: 'all', severity: 'normal', target: { section: 'support' } });
+      useAdminNotifications.getState().post({ category: 'support', kind: 'support_request', title: 'New support request', body: 'You have a new support request to review.', audience: 'all', severity: 'normal', target: { section: 'support' } });
     }, 40_000);
     return () => clearTimeout(t);
+  }, [signedIn]);
+
+  // Story 1.1: sign out after 15 minutes without activity (`?idle=<seconds>` shortens it for demos).
+  useEffect(() => {
+    if (!signedIn) return;
+    let t = setTimeout(expire, IDLE_MS);
+    function expire() {
+      useAuthSecurity.getState().signOutIdle();
+      useAdminNav.getState().setAuth('signIn');
+    }
+    const reset = () => {
+      clearTimeout(t);
+      t = setTimeout(expire, IDLE_MS);
+    };
+    const events = ['pointerdown', 'keydown', 'wheel', 'touchstart'] as const;
+    events.forEach((e) => window.addEventListener(e, reset, { passive: true }));
+    return () => {
+      clearTimeout(t);
+      events.forEach((e) => window.removeEventListener(e, reset));
+    };
   }, [signedIn]);
 
   if (!signedIn) {

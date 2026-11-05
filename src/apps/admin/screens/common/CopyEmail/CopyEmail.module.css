@@ -1,8 +1,6 @@
 .root { display: inline-flex; align-items: center; gap: var(--space-1); max-inline-size: 100%; }
 .text { min-inline-size: 0; overflow-wrap: anywhere; }
-.copy { inline-size: 28px; block-size: 28px; opacity: 0; transition: opacity var(--dur-quick) var(--ease-ios); }
-.root:hover .copy, .copy:focus-visible, .root[data-copied] .copy { opacity: 1; }
+.copy { inline-size: 28px; block-size: 28px; }
 .root[data-copied] .copy { color: var(--color-success-ink); }
 .done { color: var(--color-success-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); animation: fade var(--dur-quick) var(--ease-ios); }
 @keyframes fade { from { opacity: 0; } }
-@media (hover: none) { .copy { opacity: 1; } }

@@ -5,17 +5,18 @@ import styles from './LineChart.module.css';
 export interface LineSeries {
   name: string;
   values: number[];
-  tone?: 'accent' | 'gold';
+  tone?: 'accent' | 'gold' | 'success' | 'danger';
 }
 
-const W = 640, H = 240, PAD = { t: 12, r: 12, b: 28, l: 40 };
+const W = 640, PAD = { t: 12, r: 12, b: 28, l: 40 };
 
-export function LineChart({ labels, series, label }: { labels: string[]; series: LineSeries[]; label: string }) {
+/** `height`: drawing height in chart units (default 240 at 640 wide); lower it for a flatter chart in compact cards. */
+export function LineChart({ labels, series, label, height: H = 240 }: { labels: string[]; series: LineSeries[]; label: string; height?: number }) {
   const max = niceMax(Math.max(...series.flatMap((s) => s.values)));
   const iw = W - PAD.l - PAD.r, ih = H - PAD.t - PAD.b;
   const x = (i: number) => PAD.l + (labels.length < 2 ? iw / 2 : (i / (labels.length - 1)) * iw);
   const y = (v: number) => PAD.t + ih - (v / max) * ih;
-  const ticks = [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(max * f));
+  const ticks = (H < 200 ? [0, 0.5, 1] : [0, 0.25, 0.5, 0.75, 1]).map((f) => Math.round(max * f));
   const every = Math.ceil(labels.length / 7);
 
   return (

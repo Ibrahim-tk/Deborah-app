@@ -16,8 +16,27 @@ export function daysBetween(fromIso: string, toIso: string = ADMIN_NOW): number 
 }
 
 /** GDPR: 30 days. CCPA/CPRA: 45 days. Returns days left (negative when overdue). */
-export function deletionDaysLeft(received: string, regulation: 'GDPR' | 'CCPA'): number {
-  return (regulation === 'GDPR' ? 30 : 45) - daysBetween(received);
+/** Deletion deadline: 10 business days from the date received (story 5.2). */
+export function deletionDueDate(received: string): string {
+  const d = new Date(`${received.slice(0, 10)}T12:00:00`);
+  for (let added = 0; added < 10; ) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) added++;
+  }
+  return d.toISOString().slice(0, 10);
+}
+
+/** Business days left until the deadline (negative when overdue). */
+export function businessDaysLeft(received: string, nowIso: string = ADMIN_NOW): number {
+  const due = Date.parse(`${deletionDueDate(received)}T12:00:00`);
+  const d = new Date(`${nowIso.slice(0, 10)}T12:00:00`);
+  const sign = d.getTime() <= due ? 1 : -1;
+  let n = 0;
+  while (sign > 0 ? d.getTime() < due : d.getTime() > due) {
+    d.setDate(d.getDate() + sign);
+    if (d.getDay() !== 0 && d.getDay() !== 6) n += sign;
+  }
+  return n;
 }
 
 /** Invites expire 24 hours after they're sent. */
@@ -29,7 +48,7 @@ export const money = (n: number) => (n === 0 ? 'Free' : `$${n.toLocaleString('en
 export const count = (n: number) => n.toLocaleString('en-US');
 
 /** What a client is on, without the billing period: Free, Individual or Family. */
-export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.monthly === 0 ? 'Free' : plan.kind === 'family' ? 'Family' : 'Individual');
+export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.kind === 'trial' ? 'Free trial' : plan.kind === 'family' ? 'Family' : 'Individual');
 
 /** "Just now", "12 min ago", "3 h ago", "Yesterday", or "2 Nov" (relative to the prototype clock). */
 export function timeAgo(iso: string, nowIso: string = new Date().toISOString().slice(0, 16)): string {
@@ -47,3 +66,6 @@ export function dayBucket(iso: string, nowIso: string = new Date().toISOString()
   const days = Math.round((Date.parse(nowIso.slice(0, 10)) - Date.parse(iso.slice(0, 10))) / 86_400_000);
   return days <= 0 ? 'Today' : days === 1 ? 'Yesterday' : 'Earlier';
 }
+
+/** An admin's full name. */
+export const adminName = (a: { firstName: string; lastName: string }) => `${a.firstName} ${a.lastName}`;

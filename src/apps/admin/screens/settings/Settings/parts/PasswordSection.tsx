@@ -1,17 +1,10 @@
 /** Change password: current, new (with live rules), confirm. Simulated; nothing is stored. */
 import { useState } from 'react';
-import { formatDate, useAdminSettings } from '@shared/admin';
+import { PASSWORD_RULES as RULES, formatDate, useAdminSettings } from '@shared/admin';
 import { Button, Icon, Input } from '@admin/ui';
 import { Section } from '@admin/patterns';
 import { useSim } from '@admin/hooks/useSim';
 import s from './settings.module.css';
-
-const RULES = [
-  { id: 'len', label: 'At least 12 characters', test: (p: string) => p.length >= 12 },
-  { id: 'num', label: 'A number', test: (p: string) => /\d/.test(p) },
-  { id: 'sym', label: 'A symbol', test: (p: string) => /[^A-Za-z0-9]/.test(p) },
-  { id: 'case', label: 'Upper and lower case letters', test: (p: string) => /[a-z]/.test(p) && /[A-Z]/.test(p) },
-];
 
 export function PasswordSection() {
   const changedAt = useAdminSettings((st) => st.passwordChangedAt);

@@ -1,0 +1,2 @@
+.who { display: grid; gap: 1px; min-inline-size: 0; }
+.sub { color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-footnote); line-height: var(--lh-footnote); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

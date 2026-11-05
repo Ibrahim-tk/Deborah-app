@@ -50,7 +50,7 @@ export function NotificationBell() {
       </div>
       <div className={styles.foot}>
         <button type="button" className={styles.link} onClick={() => leave(() => go('notifications'))}>View all</button>
-        <button type="button" className={styles.link} onClick={() => leave(() => useAdminNav.getState().openSettings('notifications'))}>Preferences</button>
+        
       </div>
     </Popover>
     {unread > 0 && <span className={styles.dot} aria-hidden />}

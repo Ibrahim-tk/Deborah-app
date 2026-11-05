@@ -1,37 +1,47 @@
 /**
  * @screen  A-4.2 · Escalation detail (side drawer)
- * @flow    A4 Escalation & support management
- * @states  open · in review · resolved · emailing
- * @spec    docs/admin/README.md#a-42-escalation-detail
+ * @flow    A4 Escalation management (story 4.1)
+ * @states  not yet reviewed · reviewed · teen (parent told) · family member · no response
+ * @spec    docs/admin/stories.md#41---manage-escalations
  * @xref    web: none (admin only)
  */
+import { useState } from 'react';
 import { formatDate, useAdminStore } from '@shared/admin';
-import { Button, Drawer, KeyValueList } from '@admin/ui';
-import { ContactDialog, EscalationStatusText, EscalationTypeText, Section } from '@admin/patterns';
+import { Button, Drawer, KeyValueList, TextArea } from '@admin/ui';
+import { EscalationStatusText, EscalationTypeText, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
-import { useContact } from '@admin/hooks/useContact';
 import { useSim } from '@admin/hooks/useSim';
 import { CopyEmail } from '@admin/screens/common/CopyEmail';
 import { Conversation } from './parts/Conversation';
 import styles from './EscalationDrawer.module.css';
 
+/** Recorded for review only: the team doesn't contact the Client, so there's no email, overdue or close/reopen. */
 export default function EscalationDrawer({ escalationId }: { escalationId: string }) {
   const esc = useAdminStore((s) => s.escalations.find((e) => e.id === escalationId));
   const client = useAdminStore((s) => s.clients.find((c) => c.id === esc?.clientId));
   const openClient = useAdminNav((s) => s.openClient);
   const close = useAdminNav((s) => s.closeDrawer);
-  const contact = useContact(client?.name ?? '');
   const sim = useSim();
+  const [notes, setNotes] = useState(esc?.reviewNotes ?? '');
 
   if (!esc) return null;
-  const resolved = esc.status === 'resolved';
-  const set = (status: 'resolved' | 'open' | 'in_review', done: string) =>
-    sim.run(() => useAdminStore.getState().setEscalationStatus(esc.id, status), done);
+  const reviewed = esc.status === 'reviewed';
+  const review = (next: boolean) =>
+    sim.run(
+      () => useAdminStore.getState().reviewEscalation(esc.id, next, notes),
+      next ? 'This escalation has been marked as reviewed.' : 'Marked as not yet reviewed',
+    );
+  const profile =
+    esc.profile.kind === 'family' ? `Family member ${esc.profile.name}, advocate ${esc.profile.advocate}`
+    : esc.profile.kind === 'teen' ? `Teen with their own account (${esc.profile.name})`
+    : 'The Client';
+  // Minimum necessary: only the message that triggered the escalation, never the rest of the conversation.
+  const trigger = { ...esc, messages: esc.messages.filter((m) => m.trigger) };
 
   return (
     <Drawer
       title={esc.reason}
-      subtitle={`Opened ${formatDate(esc.opened)}${esc.closed ? ` · Closed ${formatDate(esc.closed)}` : ''}`}
+      subtitle={formatDate(esc.opened)}
       onClose={close}
       meta={
         <>
@@ -40,35 +50,39 @@ export default function EscalationDrawer({ escalationId }: { escalationId: strin
         </>
       }
       actions={
-        <>
-          {resolved ? (
-            <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => set('open', 'Case reopened')}>Reopen case</Button>
-          ) : (
-            <Button size="sm" loading={sim.busy} onClick={() => set('resolved', 'Case closed')}>Close case</Button>
-          )}
-          {esc.status === 'open' && (
-            <Button size="sm" variant="secondary" onClick={() => set('in_review', 'Marked as in review')}>Mark as in review</Button>
-          )}
-          {client && (
-            <Button size="sm" variant="ghost" leadingIcon="mail" className={styles.end} onClick={() => contact.setOpen(true)}>Email client</Button>
-          )}
-        </>
+        reviewed ? (
+          <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => review(false)}>Mark not yet reviewed</Button>
+        ) : (
+          <Button size="sm" loading={sim.busy} onClick={() => review(true)}>Mark as reviewed</Button>
+        )
       }
     >
-      <Section title="Summary">
+      <Section title="Why it escalated">
         <div className={styles.summary}>
           {esc.summary.map((para) => <p key={para} className={styles.text}>{para}</p>)}
         </div>
       </Section>
-      <Section title="Conversation">
-        <Conversation esc={esc} />
+      <Section title="Triggering message">
+        <Conversation esc={trigger} />
+      </Section>
+      <Section title="What happened">
+        <KeyValueList
+          items={[
+            { label: 'Profile', value: profile },
+            { label: 'Oracle showed', value: esc.oracleShowed },
+            { label: 'Client chose', value: esc.clientChose },
+            ...(esc.profile.kind === 'teen' ? [{ label: 'Parent told', value: esc.parentToldAt ? formatDate(esc.parentToldAt) : 'Not told' }] : []),
+            { label: 'Device', value: esc.device },
+            ...(reviewed ? [{ label: 'Reviewed', value: `${esc.reviewedBy ?? ''} · ${esc.reviewedAt ? formatDate(esc.reviewedAt) : ''}` }] : []),
+          ]}
+        />
       </Section>
       {client && (
-        <Section title="Client">
+        <Section title="Account">
           <KeyValueList
             items={[
               {
-                label: 'Name',
+                label: 'Client',
                 value: (
                   <button type="button" className={styles.clientLink} onClick={() => openClient(client.id)}>
                     {client.name}
@@ -76,23 +90,13 @@ export default function EscalationDrawer({ escalationId }: { escalationId: strin
                 ),
               },
               { label: 'Email', value: <CopyEmail email={client.email} /> },
-              { label: 'Location', value: client.location },
-              { label: 'Hormonal stage', value: client.health.stage },
-              { label: 'Main concerns', value: client.health.concerns.join(', ') },
             ]}
           />
         </Section>
       )}
-      {contact.open && client && (
-        <ContactDialog
-          name={client.name}
-          email={client.email}
-          subject="Following up on your conversation"
-          busy={contact.busy}
-          onSend={contact.send}
-          onClose={() => contact.setOpen(false)}
-        />
-      )}
+      <Section title="Review notes">
+        <TextArea label="Review notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="For example, a possible false alarm" />
+      </Section>
     </Drawer>
   );
 }

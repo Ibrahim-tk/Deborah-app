@@ -1,50 +1,94 @@
 /**
  * @screen  A-8.1 · Audit log
- * @flow    A8 Audit logging
- * @states  default · filtered by person · empty · confirm clear all
- * @spec    docs/admin/README.md#a-81-audit-log
+ * @flow    A8 Audit logging (story 10.1)
+ * @states  default · filtered by role / category / date range · sorted · exported · empty
+ * @spec    docs/admin/stories.md#101---view--export-audit-logs
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
-import { formatDate, useAdminStore, type AuditEntry } from '@shared/admin';
-import { Button, DataTable, IconButton, Select, type Column } from '@admin/ui';
-import { AdminPage, ConfirmDialog, FilterBar, matches } from '@admin/patterns';
+import { AUDIT_CATEGORY, AUDIT_ROLE, adminName, formatDate, useAdminStore, type AuditCategory, type AuditEntry, type AuditRole } from '@shared/admin';
+import { Button, DataTable, Select, type Column } from '@admin/ui';
+import { AdminPage, DateRangeFilter, FilterBar, matches, presetRange, type DateRange } from '@admin/patterns';
 import { useAdminToast } from '@admin/hooks/toast.store';
 import { useAdminNav } from '@admin/navigation';
+import { downloadCsv } from './parts/csv';
+import styles from './AuditLog.module.css';
 
+/** Entries can't be edited or deleted by anyone (story 10.1), so there's no clear action. */
 export default function AuditLog() {
   const log = useAdminStore((s) => s.auditLog);
+  const admins = useAdminStore((s) => s.admins);
+  const clients = useAdminStore((s) => s.clients);
   const toast = useAdminToast();
   const openDrawer = useAdminNav((s) => s.openDrawer);
   const [query, setQuery] = useState('');
-  const [actor, setActor] = useState('all');
-  const [confirming, setConfirming] = useState(false);
-  const actors = [...new Set(log.map((e) => e.actor))];
-  const rows = log.filter((e) => matches(query, e.text, e.actor) && (actor === 'all' || e.actor === actor));
+  const [role, setRole] = useState<'all' | AuditRole>('all');
+  const [category, setCategory] = useState<'all' | AuditCategory>('all');
+  const [range, setRange] = useState<DateRange>(presetRange('90'));
+  const [order, setOrder] = useState<'newest' | 'oldest'>('newest');
+
+  const nameOf = (e: AuditEntry) => {
+    if (e.role === 'system') return 'System';
+    const a = admins.find((x) => x.email === e.actor);
+    return a ? adminName(a) : clients.find((c) => c.email === e.actor)?.name ?? e.actor.split('@')[0];
+  };
+  const day = (e: AuditEntry) => e.at.slice(0, 10);
+  const rows = log
+    .filter(
+      (e) =>
+        matches(query, nameOf(e), e.actor) &&
+        (role === 'all' || e.role === role) &&
+        (category === 'all' || e.category === category) &&
+        // Presets run up to now, so entries recorded this session always show.
+        day(e) >= range.from && (range.preset !== 'custom' || day(e) <= range.to),
+    )
+    .sort((a, b) => (order === 'newest' ? b.at.localeCompare(a.at) : a.at.localeCompare(b.at)));
+
+  const exportCsv = () => {
+    downloadCsv(
+      'audit-log.csv',
+      ['When', 'Who', 'Email', 'Role', 'Category', 'Action', 'Affected', 'Device or IP'],
+      rows.map((e) => [e.at.replace('T', ' '), nameOf(e), e.actor, AUDIT_ROLE[e.role], AUDIT_CATEGORY[e.category], e.text, e.target ?? '', e.device ?? '']),
+    );
+    useAdminStore.getState().log(`Exported ${rows.length} audit log entries`);
+    toast('Your audit log export has downloaded.');
+  };
 
   const columns: Column<AuditEntry>[] = [
-    { key: 'at', muted: true, header: 'When', sort: (e) => e.at, render: (e) => formatDate(e.at) },
     { key: 'text', header: 'Action', grow: true, primary: true, render: (e) => e.text },
-    { key: 'actor', muted: true, header: 'By', sort: (e) => e.actor, render: (e) => e.actor },
     {
-      key: 'clear',
-      muted: true,
-      header: '',
-      align: 'end',
+      key: 'who',
+      header: 'Who',
       render: (e) => (
-        <IconButton icon="close" size="sm" label="Clear entry" onClick={(ev) => { ev.stopPropagation(); useAdminStore.getState().clearLogEntry(e.id); toast('Entry cleared'); }} />
+        <span className={styles.who}>
+          <span>{nameOf(e)}</span>
+          <span className={styles.sub}>{AUDIT_ROLE[e.role]}{e.role !== 'system' ? ` · ${e.actor}` : ''}</span>
+        </span>
       ),
     },
+    { key: 'category', muted: true, header: 'Category', render: (e) => AUDIT_CATEGORY[e.category] },
+    { key: 'target', muted: true, header: 'Affected', render: (e) => e.target ?? '—' },
+    { key: 'device', muted: true, header: 'Device or IP', render: (e) => e.device ?? '—' },
+    { key: 'at', muted: true, header: 'When', render: (e) => formatDate(e.at) },
   ];
 
   return (
     <AdminPage
       title="Audit log"
-      subtitle="Every change made in this console, newest first."
-      action={<Button variant="secondary" disabled={log.length === 0} onClick={() => setConfirming(true)}>Clear all</Button>}
+      subtitle="A record of key actions on the platform. Entries can't be edited or deleted, and are kept for six years."
+      action={<Button variant="secondary" leadingIcon="download" disabled={rows.length === 0} onClick={exportCsv}>Export</Button>}
       toolbar={
-        <FilterBar query={query} onQuery={setQuery} placeholder="Search actions">
-          <Select label="Person" hideLabel value={actor} onChange={setActor} options={[{ value: 'all', label: 'Everyone' }, ...actors.map((a) => ({ value: a, label: a }))]} />
+        <FilterBar inline query={query} onQuery={setQuery} placeholder="Search by name or email">
+          <Select<'all' | AuditRole> label="Role" hideLabel value={role} onChange={setRole} options={[{ value: 'all', label: 'All roles' }, ...(Object.keys(AUDIT_ROLE) as AuditRole[]).map((r) => ({ value: r, label: AUDIT_ROLE[r] }))]} />
+          <Select<'all' | AuditCategory>
+            label="Category"
+            hideLabel
+            value={category}
+            onChange={setCategory}
+            options={[{ value: 'all', label: 'All categories' }, ...(Object.keys(AUDIT_CATEGORY) as AuditCategory[]).map((c) => ({ value: c, label: AUDIT_CATEGORY[c] }))]}
+          />
+          <DateRangeFilter value={range} onChange={setRange} />
+          <Select<'newest' | 'oldest'> label="Sort" hideLabel value={order} onChange={setOrder} options={[{ value: 'newest', label: 'Latest' }, { value: 'oldest', label: 'Oldest' }]} />
         </FilterBar>
       }
     >
@@ -54,20 +98,9 @@ export default function AuditLog() {
         rows={rows}
         rowKey={(e) => e.id}
         onRowClick={(e) => openDrawer({ kind: 'audit', id: e.id })}
-        initialSort={{ key: 'at', dir: 'desc' }}
         footer={`Showing ${rows.length} of ${log.length} entries`}
-        empty={log.length === 0 ? 'The log is empty. New actions are recorded as they happen.' : 'No entries match.'}
+        empty="No entries match your filters."
       />
-      {confirming && (
-        <ConfirmDialog
-          title="Clear the whole log?"
-          body={`All ${log.length} entries are removed. This can't be undone.`}
-          confirm="Clear all"
-          destructive
-          onConfirm={() => { useAdminStore.getState().clearLog(); setConfirming(false); toast('Log cleared'); }}
-          onClose={() => setConfirming(false)}
-        />
-      )}
     </AdminPage>
   );
 }

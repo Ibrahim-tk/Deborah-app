@@ -1,4 +1,5 @@
 /** @pattern statusLabels — one wording + tone per status, used by every table and detail page. */
+import { ESCALATION_LEVEL } from './labels';
 import type { AccountStatus, EscalationStatus, EscalationType, InviteStatus, SubscriptionStatus } from '@shared/admin';
 import { StatusText } from '@admin/ui';
 import { SUB } from './tones';
@@ -13,13 +14,11 @@ export const AccountStatusText = ({ status }: { status: AccountStatus }) => (
 );
 
 export const EscalationStatusText = ({ status }: { status: EscalationStatus }) => (
-  <StatusText tone={status === 'open' ? 'accent' : status === 'in_review' ? 'warning' : 'success'}>
-    {status === 'open' ? 'Open' : status === 'in_review' ? 'In review' : 'Resolved'}
-  </StatusText>
+  <StatusText tone={status === 'not_reviewed' ? 'accent' : 'success'}>{status === 'not_reviewed' ? 'Not yet reviewed' : 'Reviewed'}</StatusText>
 );
 
 export const EscalationTypeText = ({ type }: { type: EscalationType }) => (
-  <StatusText tone={type === 'emergency' ? 'danger' : 'warning'}>{type === 'emergency' ? 'Emergency' : 'Critical'}</StatusText>
+  <StatusText tone={type === 'emergency' ? 'danger' : type === 'crisis' ? 'warning' : 'accent'}>{ESCALATION_LEVEL[type]}</StatusText>
 );
 
 export const InviteStatusText = ({ status }: { status: InviteStatus }) => (

@@ -1,4 +1,5 @@
 /** Documents and escalation history for one client (A-3.2 drawer). */
+import styles from './ClientTables.module.css';
 import { useMemo } from 'react';
 import { formatDate, useAdminStore, type Client, type ClientDocument, type Escalation } from '@shared/admin';
 import { DataTable, type Column } from '@admin/ui';
@@ -32,7 +33,7 @@ export function ClientTables({ client }: { client: Client }) {
   ];
 
   return (
-    <>
+    <div className={styles.root}>
       <Section title="Documents">
         <DataTable variant="plain" label="Documents" columns={docCols} rows={client.documents} rowKey={(d) => d.id} initialSort={{ key: 'date', dir: 'desc' }} empty="No documents uploaded yet." />
       </Section>
@@ -48,6 +49,6 @@ export function ClientTables({ client }: { client: Client }) {
           empty="No escalations for this client."
         />
       </Section>
-    </>
+    </div>
   );
 }

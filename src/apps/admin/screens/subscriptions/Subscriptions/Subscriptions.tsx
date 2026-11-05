@@ -6,11 +6,14 @@
  * @xref    web: none (admin only)
  */
 import { adminMetrics, count, useAdminStore } from '@shared/admin';
-import { useState } from 'react';
-import { Button, DonutChart, KpiBand, LineChart, Segmented, Select } from '@admin/ui';
+import { useState, type ReactNode } from 'react';
+import { Button, DonutChart, LineChart, Select } from '@admin/ui';
 import { AdminPage, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { PlansTable } from './parts/PlansTable';
+import { KpiCard, MiniStats } from './parts/KpiCard';
+import { Breakdown } from './parts/Breakdown';
+import { PaidFreeSplit } from './parts/PaidFreeVisuals';
 import styles from './Subscriptions.module.css';
 
 const growth = adminMetrics.subscriptionGrowth;
@@ -29,11 +32,11 @@ export default function Subscriptions() {
   const [period, setPeriod] = useState<Period>('6');
 
   // Seeded clients set the mix; the headline total scales it.
-  const paid = clients.filter((c) => c.planId !== 'free');
+  const paid = clients.filter((c) => c.planId !== 'trial' && c.accountType === 'adult');
   const share = (id: string) => Math.round((paid.filter((c) => c.planId === id).length / (paid.length || 1)) * ACTIVE);
   const tones = ['accent', 'gold', 'success', 'muted'] as const;
   const distribution = plans
-    .filter((p) => p.id !== 'free')
+    .filter((p) => p.kind !== 'trial')
     .map((p, i) => ({ label: p.name, value: share(p.id), tone: tones[i % tones.length] }))
     .filter((d) => d.value > 0);
 
@@ -49,8 +52,30 @@ export default function Subscriptions() {
   const churned = months.reduce((n, m) => n + m.churned, 0);
   const active = Math.round(ACTIVE * kindShare);
   const last = months.at(-1)!;
+  // The equal-length period before this one, for trends (none when the range already starts at launch).
+  const prior = period === 'all' ? [] : growth.slice(0, -Number(period)).slice(-Number(period));
+  const addedBefore = prior.length === months.length ? Math.round(prior.reduce((n, g) => n + g.added, 0) * kindShare) : 0;
+  // Free accounts at the same scale as the paid headline, from the seeded free/paid mix.
+  const freeUsers = Math.round(((clients.length - paid.length) / (paid.length || 1)) * ACTIVE);
   const churnRate = active ? (last.churned / active) * 100 : 0;
-  const periodLabel = { '3': 'last 3 months', '6': 'last 6 months', '12': 'last 12 months', all: `time since launch (${growth[0].label})` }[period];
+
+  // Active subscriptions card; the left-side visual for free vs paid users is the free vs paid split.
+  const activeCard = (visual: ReactNode) => (
+    <KpiCard
+      label="Total users"
+      layout="split"
+      value={count(active + freeUsers)}
+      aside={
+        // The ring and its plan legend sit together on the right.
+        <div className={styles.ring}>
+          <DonutChart label="Plan distribution" totalLabel="subscribers" data={distribution} legend={false} />
+          <Breakdown rows={distribution.map((d) => ({ label: d.label, value: d.value, pct: Math.round((d.value / (active || 1)) * 100), tone: d.tone === 'gold' ? 'gold' : 'accent' }))} />
+        </div>
+      }
+    >
+      {visual}
+    </KpiCard>
+  );
 
   return (
     <AdminPage
@@ -59,8 +84,9 @@ export default function Subscriptions() {
       toolbar={
         // Trend controls: which plans and how far back. They drive the figures and the growth chart.
         <div className={styles.filters}>
-          <Segmented<PlanFilter>
+          <Select<PlanFilter>
             label="Plan type"
+            hideLabel
             value={planFilter}
             onChange={setPlanFilter}
             options={[{ value: 'all', label: 'All plans' }, { value: 'individual', label: 'Individual' }, { value: 'family', label: 'Family' }]}
@@ -75,28 +101,33 @@ export default function Subscriptions() {
         </div>
       }
     >
-      <KpiBand
-        items={[
-          { label: 'Active subscriptions', value: count(active) },
-          { label: 'New subscriptions', value: count(added), note: period === 'all' ? `Since launch in ${growth[0].label}` : `In the ${periodLabel}` },
-          { label: 'Net growth', value: `${added - churned >= 0 ? '+' : ''}${count(added - churned)}`, note: `${count(churned)} cancelled` },
-          { label: 'Monthly churn', value: `${churnRate.toFixed(1)}%`, note: `${last.churned} cancelled in ${last.label}` },
-        ]}
-      />
+      {/* Two cards cover the four stats: subscribers (active, plan mix, free vs paid) and growth and churn. */}
       <div className={styles.grid}>
-        <Section title="Growth and churn" surface>
+        {activeCard(<PaidFreeSplit paid={active} free={freeUsers} />)}
+        <KpiCard
+          label="New subscriptions"
+          value={count(added)}
+          trend={addedBefore ? { delta: ((added - addedBefore) / addedBefore) * 100, against: `previous ${months.length} months` } : undefined}
+          aside={
+            <MiniStats
+              items={[
+                { label: 'Cancelled', value: count(churned) },
+                { label: 'Net growth', value: `${added - churned >= 0 ? '+' : ''}${count(added - churned)}` },
+                { label: 'Monthly churn', value: `${churnRate.toFixed(1)}%` },
+              ]}
+            />
+          }
+        >
           <LineChart
-            label="New and cancelled subscriptions by month"
+            label="Subscription growth and churn by month"
+            height={150}
             labels={months.map((g) => g.label)}
             series={[
-              { name: 'New', values: months.map((g) => g.added) },
-              { name: 'Cancelled', values: months.map((g) => g.churned), tone: 'gold' },
+              { name: 'New', values: months.map((g) => g.added), tone: 'success' },
+              { name: 'Cancelled', values: months.map((g) => g.churned), tone: 'danger' },
             ]}
           />
-        </Section>
-        <Section title="Plan distribution" surface>
-          <DonutChart label="Subscriptions by plan" totalLabel="subscribers" data={distribution} />
-        </Section>
+        </KpiCard>
       </div>
       <Section title="Plans">
         {!stripeOn && <p className={styles.notice}>Payments are off until Stripe is connected in Integrations. Plans show in the app but can't be bought yet.</p>}

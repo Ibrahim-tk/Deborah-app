@@ -12,6 +12,7 @@ import Consent from '@admin/screens/compliance/Consent';
 import Compliance from '@admin/screens/compliance/Compliance';
 import Settings from '@admin/screens/settings/Settings';
 import Notifications from '@admin/screens/notifications/Notifications';
+import KnowledgeBase from '@admin/screens/knowledge/KnowledgeBase';
 import type { AdminRoute } from './types';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,4 +31,5 @@ export const REGISTRY: Record<AdminRoute['id'], Screen> = {
   regulations: { screenId: 'A-9.3', component: Compliance },
   settings: { screenId: 'A-11.1', component: Settings },
   notifications: { screenId: 'A-12.1', component: Notifications },
+  knowledge: { screenId: 'A-13.1', component: KnowledgeBase },
 };

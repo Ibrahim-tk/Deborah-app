@@ -1,10 +1,8 @@
 [
   {
     "id": "c001",
-    "name": "Amelia Hart",
+    "name": "Amelia",
     "email": "amelia.hart@example.com",
-    "phone": "+1 512 555 0100",
-    "location": "Austin, TX",
     "joined": "2026-07-01",
     "lastActive": "2026-07-21",
     "planId": "family-monthly",
@@ -105,14 +103,33 @@
         "title": "Insurance letter",
         "date": "2026-07-17"
       }
-    ]
+    ],
+    "state": "TX",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-01"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-01"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-01"
+      }
+    ],
+    "nextBilling": "2026-11-10"
   },
   {
     "id": "c002",
-    "name": "Grace Nguyen",
+    "name": "Grace",
     "email": "grace.nguyen@example.com",
-    "phone": "+1 512 555 0101",
-    "location": "Denver, CO",
     "joined": "2026-07-05",
     "lastActive": "2026-07-25",
     "planId": "individual-monthly",
@@ -179,14 +196,33 @@
         "title": "Visit note — annual check",
         "date": "2026-07-17"
       }
-    ]
+    ],
+    "state": "CO",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-05"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-07-05"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-05"
+      }
+    ],
+    "nextBilling": "2026-11-11"
   },
   {
     "id": "c003",
-    "name": "Hannah Patel",
+    "name": "Hannah",
     "email": "hannah.patel@example.com",
-    "phone": "+1 512 555 0102",
-    "location": "Portland, OR",
     "joined": "2026-07-09",
     "lastActive": "2026-07-01",
     "planId": "family-monthly",
@@ -257,14 +293,33 @@
         "title": "Thyroid panel",
         "date": "2026-07-23"
       }
-    ]
+    ],
+    "state": "OR",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-09"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-07-09"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-09"
+      }
+    ],
+    "nextBilling": "2026-11-12"
   },
   {
     "id": "c004",
-    "name": "Isabel Okafor",
+    "name": "Isabel",
     "email": "isabel.okafor@example.com",
-    "phone": "+1 512 555 0103",
-    "location": "Boston, MA",
     "joined": "2026-07-13",
     "lastActive": "2026-08-05",
     "planId": "individual-monthly",
@@ -332,18 +387,37 @@
         "title": "Visit note — annual check",
         "date": "2026-07-25"
       }
-    ]
+    ],
+    "state": "MA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-13"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-13"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-13"
+      }
+    ],
+    "nextBilling": "2026-11-13"
   },
   {
     "id": "c005",
-    "name": "Julia Bennett",
+    "name": "Julia",
     "email": "julia.bennett@example.com",
-    "phone": "+1 512 555 0104",
-    "location": "San Diego, CA",
     "joined": "2026-07-17",
     "lastActive": "2026-08-09",
-    "planId": "free",
-    "subscription": "free",
+    "planId": "trial",
+    "subscription": "trial",
     "account": "active",
     "conversations": 15,
     "health": {
@@ -424,18 +498,36 @@
         "title": "Thyroid panel",
         "date": "2026-08-03"
       }
+    ],
+    "state": "CA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-17"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-07-17"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-17"
+      }
     ]
   },
   {
     "id": "c006",
-    "name": "Karen Lopez",
+    "name": "Karen",
     "email": "karen.lopez@example.com",
-    "phone": "+1 512 555 0105",
-    "location": "Chicago, IL",
     "joined": "2026-07-21",
     "lastActive": "2026-08-13",
     "planId": "individual-monthly",
-    "subscription": "past_due",
+    "subscription": "payment_issue",
     "account": "active",
     "conversations": 29,
     "health": {
@@ -504,14 +596,33 @@
         "title": "Insurance letter",
         "date": "2026-08-09"
       }
-    ]
+    ],
+    "state": "IL",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-21"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-07-21"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-21"
+      }
+    ],
+    "nextBilling": "2026-11-15"
   },
   {
     "id": "c007",
-    "name": "Laura Fischer",
+    "name": "Laura",
     "email": "laura.fischer@example.com",
-    "phone": "+1 512 555 0106",
-    "location": "Nashville, TN",
     "joined": "2026-07-25",
     "lastActive": "2026-08-17",
     "planId": "family-monthly",
@@ -582,14 +693,32 @@
         "title": "Thyroid panel",
         "date": "2026-08-11"
       }
+    ],
+    "state": "TN",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-25"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-25"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-25"
+      }
     ]
   },
   {
     "id": "c008",
-    "name": "Maria Moreau",
+    "name": "Maria",
     "email": "maria.moreau@example.com",
-    "phone": "+1 512 555 0107",
-    "location": "Seattle, WA",
     "joined": "2026-07-01",
     "lastActive": "2026-08-21",
     "planId": "individual-monthly",
@@ -657,14 +786,33 @@
         "title": "Visit note — annual check",
         "date": "2026-08-13"
       }
-    ]
+    ],
+    "state": "WA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-07-01"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-07-01"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-07-01"
+      }
+    ],
+    "nextBilling": "2026-11-17"
   },
   {
     "id": "c009",
-    "name": "Nadia Rossi",
+    "name": "Nadia",
     "email": "nadia.rossi@example.com",
-    "phone": "+1 512 555 0108",
-    "location": "London, UK",
     "joined": "2026-08-05",
     "lastActive": "2026-08-25",
     "planId": "family-monthly",
@@ -759,14 +907,33 @@
         "title": "Thyroid panel",
         "date": "2026-08-19"
       }
-    ]
+    ],
+    "state": "UK",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-05"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-08-05"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-08-05"
+      }
+    ],
+    "nextBilling": "2026-11-18"
   },
   {
     "id": "c010",
-    "name": "Olivia Kim",
+    "name": "Olivia",
     "email": "olivia.kim@example.com",
-    "phone": "+1 512 555 0109",
-    "location": "Toronto, ON",
     "joined": "2026-08-09",
     "lastActive": "2026-08-01",
     "planId": "individual-monthly",
@@ -833,14 +1000,17 @@
         "title": "Visit note — annual check",
         "date": "2026-08-21"
       }
-    ]
+    ],
+    "state": "ON",
+    "accountType": "adult",
+    "consentRevoked": true,
+    "consents": [],
+    "nextBilling": "2026-11-19"
   },
   {
     "id": "c011",
-    "name": "Priya Silva",
+    "name": "Priya",
     "email": "priya.silva@example.com",
-    "phone": "+1 512 555 0110",
-    "location": "Austin, TX",
     "joined": "2026-08-13",
     "lastActive": "2026-09-05",
     "planId": "family-monthly",
@@ -917,18 +1087,37 @@
         "title": "Insurance letter",
         "date": "2026-08-01"
       }
-    ]
+    ],
+    "state": "TX",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-13"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-08-13"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-08-13"
+      }
+    ],
+    "nextBilling": "2026-11-20"
   },
   {
     "id": "c012",
-    "name": "Rachel Walsh",
+    "name": "Rachel",
     "email": "rachel.walsh@example.com",
-    "phone": "+1 512 555 0111",
-    "location": "Denver, CO",
     "joined": "2026-08-17",
     "lastActive": "2026-09-09",
-    "planId": "free",
-    "subscription": "free",
+    "planId": "trial",
+    "subscription": "trial",
     "account": "active",
     "conversations": 16,
     "health": {
@@ -992,18 +1181,36 @@
         "title": "Visit note — annual check",
         "date": "2026-08-01"
       }
+    ],
+    "state": "CO",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-17"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-08-17"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-08-17"
+      }
     ]
   },
   {
     "id": "c013",
-    "name": "Sofia Haddad",
+    "name": "Sofia",
     "email": "sofia.haddad@example.com",
-    "phone": "+1 512 555 0112",
-    "location": "Portland, OR",
     "joined": "2026-08-21",
     "lastActive": "2026-09-13",
     "planId": "family-monthly",
-    "subscription": "past_due",
+    "subscription": "payment_issue",
     "account": "active",
     "conversations": 56,
     "health": {
@@ -1084,14 +1291,33 @@
         "title": "Thyroid panel",
         "date": "2026-09-07"
       }
-    ]
+    ],
+    "state": "OR",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-21"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-21"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-08-21"
+      }
+    ],
+    "nextBilling": "2026-11-22"
   },
   {
     "id": "c014",
-    "name": "Tara Ibarra",
+    "name": "Tara",
     "email": "tara.ibarra@example.com",
-    "phone": "+1 512 555 0113",
-    "location": "Boston, MA",
     "joined": "2026-08-25",
     "lastActive": "2026-09-17",
     "planId": "individual-monthly",
@@ -1158,14 +1384,32 @@
         "title": "Visit note — annual check",
         "date": "2026-09-09"
       }
+    ],
+    "state": "MA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-25"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-08-25"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-08-25"
+      }
     ]
   },
   {
     "id": "c015",
-    "name": "Uma Novak",
+    "name": "Uma",
     "email": "uma.novak@example.com",
-    "phone": "+1 512 555 0114",
-    "location": "San Diego, CA",
     "joined": "2026-08-01",
     "lastActive": "2026-09-21",
     "planId": "family-monthly",
@@ -1236,14 +1480,33 @@
         "title": "Thyroid panel",
         "date": "2026-09-15"
       }
-    ]
+    ],
+    "state": "CA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-08-01"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-08-01"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-08-01"
+      }
+    ],
+    "nextBilling": "2026-11-24"
   },
   {
     "id": "c016",
-    "name": "Vera Reyes",
+    "name": "Vera",
     "email": "vera.reyes@example.com",
-    "phone": "+1 512 555 0115",
-    "location": "Chicago, IL",
     "joined": "2026-09-05",
     "lastActive": "2026-09-25",
     "planId": "individual-monthly",
@@ -1317,14 +1580,33 @@
         "title": "Insurance letter",
         "date": "2026-09-21"
       }
-    ]
+    ],
+    "state": "IL",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-05"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-05"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-05"
+      }
+    ],
+    "nextBilling": "2026-11-25"
   },
   {
     "id": "c017",
-    "name": "Wendy Sato",
+    "name": "Wendy",
     "email": "wendy.sato@example.com",
-    "phone": "+1 512 555 0116",
-    "location": "Nashville, TN",
     "joined": "2026-09-09",
     "lastActive": "2026-09-01",
     "planId": "family-monthly",
@@ -1419,14 +1701,33 @@
         "title": "Thyroid panel",
         "date": "2026-09-23"
       }
-    ]
+    ],
+    "state": "TN",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-09"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-09-09"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-09"
+      }
+    ],
+    "nextBilling": "2026-11-26"
   },
   {
     "id": "c018",
-    "name": "Yasmin Turner",
+    "name": "Yasmin",
     "email": "yasmin.turner@example.com",
-    "phone": "+1 512 555 0117",
-    "location": "Seattle, WA",
     "joined": "2026-09-13",
     "lastActive": "2026-09-05",
     "planId": "individual-monthly",
@@ -1493,18 +1794,37 @@
         "title": "Visit note — annual check",
         "date": "2026-09-25"
       }
-    ]
+    ],
+    "state": "WA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-13"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-09-13"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-13"
+      }
+    ],
+    "nextBilling": "2026-11-27"
   },
   {
     "id": "c019",
-    "name": "Zoe Quinn",
+    "name": "Zoe",
     "email": "zoe.quinn@example.com",
-    "phone": "+1 512 555 0118",
-    "location": "London, UK",
     "joined": "2026-09-17",
     "lastActive": "2026-10-09",
-    "planId": "free",
-    "subscription": "free",
+    "planId": "trial",
+    "subscription": "trial",
     "account": "active",
     "conversations": 5,
     "health": {
@@ -1571,18 +1891,36 @@
         "title": "Thyroid panel",
         "date": "2026-09-03"
       }
+    ],
+    "state": "UK",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-17"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-17"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-17"
+      }
     ]
   },
   {
     "id": "c020",
-    "name": "Beth Adams",
+    "name": "Beth",
     "email": "beth.adams@example.com",
-    "phone": "+1 512 555 0119",
-    "location": "Toronto, ON",
     "joined": "2026-09-21",
     "lastActive": "2026-10-13",
     "planId": "individual-monthly",
-    "subscription": "past_due",
+    "subscription": "payment_issue",
     "account": "active",
     "conversations": 45,
     "health": {
@@ -1646,14 +1984,33 @@
         "title": "Visit note — annual check",
         "date": "2026-09-05"
       }
-    ]
+    ],
+    "state": "ON",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-21"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-09-21"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-21"
+      }
+    ],
+    "nextBilling": "2026-11-11"
   },
   {
     "id": "c021",
-    "name": "Carla Brooks",
+    "name": "Carla",
     "email": "carla.brooks@example.com",
-    "phone": "+1 512 555 0120",
-    "location": "Austin, TX",
     "joined": "2026-09-25",
     "lastActive": "2026-10-17",
     "planId": "family-monthly",
@@ -1744,14 +2101,32 @@
         "title": "Insurance letter",
         "date": "2026-10-13"
       }
+    ],
+    "state": "TX",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-25"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-09-25"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-25"
+      }
     ]
   },
   {
     "id": "c022",
-    "name": "Diana Cole",
+    "name": "Diana",
     "email": "diana.cole@example.com",
-    "phone": "+1 512 555 0121",
-    "location": "Denver, CO",
     "joined": "2026-09-01",
     "lastActive": "2026-10-21",
     "planId": "individual-monthly",
@@ -1818,14 +2193,33 @@
         "title": "Visit note — annual check",
         "date": "2026-10-13"
       }
-    ]
+    ],
+    "state": "CO",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-01"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-01"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-01"
+      }
+    ],
+    "nextBilling": "2026-11-13"
   },
   {
     "id": "c023",
-    "name": "Elena Dunn",
+    "name": "Elena",
     "email": "elena.dunn@example.com",
-    "phone": "+1 512 555 0122",
-    "location": "Portland, OR",
     "joined": "2026-09-05",
     "lastActive": "2026-10-25",
     "planId": "family-monthly",
@@ -1896,14 +2290,33 @@
         "title": "Thyroid panel",
         "date": "2026-10-19"
       }
-    ]
+    ],
+    "state": "OR",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-09-05"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-09-05"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-09-05"
+      }
+    ],
+    "nextBilling": "2026-11-14"
   },
   {
     "id": "c024",
-    "name": "Fiona Ellis",
+    "name": "Fiona",
     "email": "fiona.ellis@example.com",
-    "phone": "+1 512 555 0123",
-    "location": "Boston, MA",
     "joined": "2026-10-09",
     "lastActive": "2026-10-27",
     "planId": "individual-monthly",
@@ -1971,6 +2384,219 @@
         "title": "Visit note — annual check",
         "date": "2026-10-21"
       }
-    ]
+    ],
+    "state": "MA",
+    "accountType": "adult",
+    "consentRevoked": false,
+    "consents": [
+      {
+        "policy": "Terms of Service",
+        "version": "2026.2",
+        "acceptedAt": "2026-10-09"
+      },
+      {
+        "policy": "Privacy Policy",
+        "version": "2026.3",
+        "acceptedAt": "2026-10-09"
+      },
+      {
+        "policy": "Health Consent",
+        "version": "2026.1",
+        "acceptedAt": "2026-10-09"
+      }
+    ],
+    "nextBilling": "2026-11-15"
+  },
+  {
+    "id": "t001",
+    "name": "Mia",
+    "email": "mia.hart@example.com",
+    "state": "TX",
+    "joined": "2026-07-01",
+    "lastActive": "2026-07-21",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 14,
+    "accountType": "teen",
+    "parentId": "c001",
+    "teenStatus": "joined",
+    "consentRevoked": false,
+    "consents": [],
+    "health": {
+      "age": 38,
+      "stage": "Perimenopause",
+      "concerns": [
+        "Hot flashes",
+        "Weight"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1988-01-01",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 158,
+        "weightKg": 56,
+        "reproductiveStage": "Perimenopause",
+        "ageAtLastPeriod": "47",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Considering",
+        "hrtType": null,
+        "fertilityConcerns": "None",
+        "supplements": [
+          "Magnesium",
+          "Vitamin D"
+        ],
+        "genesisGold": "Yes",
+        "allergies": [
+          "None known"
+        ],
+        "conditions": [
+          "None reported"
+        ],
+        "lifestyle": {
+          "sleep": "6–7 hours, wakes at night",
+          "exercise": "Walks most days",
+          "diet": "Mostly whole foods",
+          "stress": "Moderate",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
+    },
+    "dependents": [],
+    "documents": []
+  },
+  {
+    "id": "t002",
+    "name": "Lily",
+    "email": "lily.patel@example.com",
+    "state": "OR",
+    "joined": "2026-07-01",
+    "lastActive": "2026-07-01",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 0,
+    "accountType": "teen",
+    "parentId": "c003",
+    "teenStatus": "invite_sent",
+    "consentRevoked": false,
+    "consents": [],
+    "health": {
+      "age": 40,
+      "stage": "Postmenopause",
+      "concerns": [
+        "Fatigue",
+        "Hot flashes"
+      ],
+      "medications": [
+        "Not provided"
+      ],
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1986-03-07",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "They/Them",
+        "heightCm": 172,
+        "weightKg": 78,
+        "reproductiveStage": "Postmenopause",
+        "ageAtLastPeriod": "50",
+        "hysterectomy": "Yes",
+        "ovariesRemoved": "Yes",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "No",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "PCOS"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "Social only",
+          "smoking": "Quit"
+        }
+      }
+    },
+    "dependents": [],
+    "documents": []
+  },
+  {
+    "id": "t003",
+    "name": "Ava",
+    "email": "ava.fischer@example.com",
+    "state": "TN",
+    "joined": "2026-07-25",
+    "lastActive": "2026-08-17",
+    "planId": "family-monthly",
+    "subscription": "active",
+    "account": "active",
+    "conversations": 5,
+    "accountType": "teen",
+    "parentId": "c007",
+    "teenStatus": "paused",
+    "consentRevoked": false,
+    "consents": [],
+    "health": {
+      "age": 44,
+      "stage": "Menopause",
+      "concerns": [
+        "Fatigue",
+        "Mood"
+      ],
+      "medications": [
+        "Levothyroxine (as reported)"
+      ],
+      "status": "placeholder",
+      "details": {
+        "status": "placeholder",
+        "dob": "1982-07-19",
+        "sexAtBirth": "Female",
+        "gender": "Woman",
+        "pronouns": "She/Her",
+        "heightCm": 160,
+        "weightKg": 62,
+        "reproductiveStage": "Menopause",
+        "ageAtLastPeriod": "51",
+        "hysterectomy": "No",
+        "ovariesRemoved": "No",
+        "hrt": "Yes",
+        "hrtType": "Estradiol patch + progesterone (as reported)",
+        "fertilityConcerns": "None",
+        "supplements": [],
+        "genesisGold": "Yes",
+        "allergies": [
+          "Sulfa drugs"
+        ],
+        "conditions": [
+          "Hypothyroidism"
+        ],
+        "lifestyle": {
+          "sleep": "Under 6 hours",
+          "exercise": "Rarely",
+          "diet": "Low-carb",
+          "stress": "Low",
+          "alcohol": "1–2 drinks a week",
+          "smoking": "Never"
+        }
+      }
+    },
+    "dependents": [],
+    "documents": []
   }
 ]

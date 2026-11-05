@@ -101,7 +101,7 @@ Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec:
 | A-1.1 | Sign in | `auth/SignIn` | built |
 | A-1.2 | Forgot password | `auth/ForgotPassword` | built |
 | A-1.3 | Two-step verification | `auth/TwoFactor` | built |
-| A-2.1 | Dashboard (KPIs + 4 charts) | `dashboard/Dashboard` | built |
+| A-2.1 | Dashboard (Needs Attention, KPIs, 6 charts) | `dashboard/Dashboard` | built |
 | A-3.1 | Clients | `clients/Clients` | built |
 | A-3.2 | Client detail (side drawer, dependents inline) | `clients/ClientDrawer` | built |
 | A-3.3 | Dependent profile | — merged into the A-3.2 drawer | removed |
@@ -119,8 +119,11 @@ Admin-only screens under `src/apps/admin/screens/`. No mobile or web twin. Spec:
 | A-8.1 | Audit log | `audit/AuditLog` | built |
 | A-8.2 | Audit entry (side drawer) | `audit/AuditDrawer` | built |
 | A-9.1 | Consent | `compliance/Consent` | built |
-| A-9.2 | Consent version (side drawer) | `compliance/ConsentDrawer` | built |
+| A-9.2 | Policy (side drawer: live text, versions, new version form) | `compliance/ConsentDrawer` | built |
 | A-9.3 | Compliance (frameworks + data rights), opened from Settings › Compliance card | `compliance/Compliance` | built (placeholder legal copy) |
 | A-10.1 | Integrations (Stripe, Dropbox, Shopify, Google Docs) | `integrations/Integrations` | built (simulated) |
-| A-11.1 | Settings (profile, password, security, notifications, compliance) | `settings/Settings` | built |
+| A-11.1 | Settings (profile, password and security, notifications) | `settings/Settings` | built |
 | A-12.1 | Notifications (bell panel, full page, preferences in Settings) | `notifications/Notifications` | built (simulated) |
+| A-13.1 | Knowledge Base (content + knowledge gaps tabs) | `knowledge/KnowledgeBase` | built (simulated) |
+| A-13.2 | Knowledge Base content (side drawer: read, edit, approve/reject, archive, roll back; add content form) | `knowledge/ContentDrawer` | built (simulated) |
+| A-13.4 | Knowledge gap (side drawer) | `knowledge/GapDrawer` | built (simulated) |

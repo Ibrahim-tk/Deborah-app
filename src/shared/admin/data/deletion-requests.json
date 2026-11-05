@@ -2,9 +2,11 @@
   {
     "id": "dr001",
     "clientId": "c001",
-    "received": "2026-10-20",
-    "regulation": "GDPR",
-    "status": "pending",
+    "type": "account",
+    "source": "in_app",
+    "option": "transfer",
+    "received": "2026-10-22",
+    "status": "waiting_transfer",
     "decisions": [
       {
         "dependentId": "c001-d1",
@@ -16,27 +18,87 @@
         "dependentId": "c001-d2",
         "action": "delete"
       }
-    ]
+    ],
+    "notes": "",
+    "checklist": {
+      "identity": false,
+      "legalHold": false
+    }
   },
   {
     "id": "dr002",
-    "clientId": "c010",
-    "received": "2026-10-05",
-    "regulation": "CCPA",
-    "status": "pending",
-    "decisions": []
+    "clientId": "c014",
+    "type": "account",
+    "source": "in_app",
+    "option": "everything",
+    "received": "2026-10-30",
+    "status": "pending_review",
+    "decisions": [],
+    "notes": "",
+    "checklist": {
+      "identity": false,
+      "legalHold": false
+    }
   },
   {
     "id": "dr003",
-    "clientId": "c013",
+    "clientId": "c009",
+    "type": "family_member",
+    "source": "in_app",
+    "aboutProfile": "c009-d1",
+    "received": "2026-10-27",
+    "status": "in_progress",
+    "decisions": [],
+    "notes": "",
+    "checklist": {
+      "identity": true,
+      "legalHold": true
+    }
+  },
+  {
+    "id": "dr004",
+    "clientId": "t001",
+    "type": "teen",
+    "source": "in_app",
     "received": "2026-10-28",
-    "regulation": "CCPA",
-    "status": "pending",
-    "decisions": [
-      {
-        "dependentId": "c013-d1",
-        "action": "delete"
-      }
-    ]
+    "status": "pending_review",
+    "decisions": [],
+    "notes": "",
+    "checklist": {
+      "identity": false,
+      "legalHold": false
+    }
+  },
+  {
+    "id": "dr005",
+    "clientId": "c019",
+    "type": "account",
+    "source": "in_app",
+    "option": "advocate_only",
+    "received": "2026-10-08",
+    "status": "completed",
+    "decisions": [],
+    "completedBy": "sam@oracleclinician.com",
+    "completedAt": "2026-10-17T11:20",
+    "notes": "",
+    "checklist": {
+      "identity": true,
+      "legalHold": true
+    }
+  },
+  {
+    "id": "dr006",
+    "clientId": "c011",
+    "type": "account",
+    "source": "in_app",
+    "option": "everything",
+    "received": "2026-10-15",
+    "status": "legal_hold",
+    "decisions": [],
+    "notes": "Records requested by counsel on 20 Oct.",
+    "checklist": {
+      "identity": true,
+      "legalHold": true
+    }
   }
 ]

@@ -34,3 +34,7 @@
 @container admin (max-width: 640px) {
   .trigger { min-inline-size: 0; inline-size: 100%; }
 }
+
+/* Compact: a short, narrow trigger for inline controls. */
+.trigger[data-size='sm'] { min-inline-size: 0; min-block-size: 0; block-size: 32px; padding-block: 0; padding-inline: var(--space-3) var(--space-2); gap: var(--space-1); font-size: var(--fs-subhead); }
+@container admin (max-width: 640px) { .trigger[data-size='sm'] { inline-size: auto; } }

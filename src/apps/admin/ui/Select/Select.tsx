@@ -13,16 +13,18 @@ export interface SelectProps<T extends string> {
   placeholder?: string;
   hideLabel?: boolean;
   onChange: (value: T) => void;
+  /** `sm`: compact trigger for inline controls such as a table pager. */
+  size?: 'md' | 'sm';
 }
 
-export function Select<T extends string>({ label, options, value, placeholder = 'Choose', hideLabel, onChange }: SelectProps<T>) {
+export function Select<T extends string>({ label, options, value, placeholder = 'Choose', hideLabel, onChange, size = 'md' }: SelectProps<T>) {
   const id = useId();
   const current = options.find((o) => o.value === value);
   return (
     <div className={f.root}>
       <span id={id} className={hideLabel ? f.srOnly : f.label}>{label}</span>
       <Base.Root value={value ?? null} onValueChange={(v) => v != null && onChange(v as T)} items={options}>
-        <Base.Trigger className={[f.box, styles.trigger].join(' ')} aria-labelledby={id}>
+        <Base.Trigger className={[f.box, styles.trigger].join(' ')} aria-labelledby={id} data-size={size}>
           <span className={current ? styles.value : styles.placeholder}>{current?.label ?? placeholder}</span>
           <Base.Icon className={f.adorn}><Icon name="chevronDown" size={18} /></Base.Icon>
         </Base.Trigger>

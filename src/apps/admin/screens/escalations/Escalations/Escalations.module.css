@@ -1,3 +1,0 @@
-.reason { display: flex; align-items: center; gap: var(--space-3); min-inline-size: 0; overflow: hidden; }
-.reason > :first-child { overflow: hidden; text-overflow: ellipsis; }
-.client { flex: none; color: var(--color-ink-tertiary); font-weight: var(--weight-regular); }

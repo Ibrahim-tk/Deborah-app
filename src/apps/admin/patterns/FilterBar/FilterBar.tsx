@@ -8,9 +8,11 @@ export interface FilterBarProps {
   onQuery: (q: string) => void;
   placeholder: string;
   children?: ReactNode;
+  /** Filters sit right after the search instead of on the trailing edge. */
+  inline?: boolean;
 }
 
-export function FilterBar({ query, onQuery, placeholder, children }: FilterBarProps) {
+export function FilterBar({ query, onQuery, placeholder, children, inline }: FilterBarProps) {
   return (
     <div className={styles.root}>
       <div className={styles.search}>
@@ -25,7 +27,7 @@ export function FilterBar({ query, onQuery, placeholder, children }: FilterBarPr
           onChange={(e) => onQuery(e.target.value)}
         />
       </div>
-      {children && <div className={styles.filters}>{children}</div>}
+      {children && <div className={styles.filters} data-inline={inline || undefined}>{children}</div>}
     </div>
   );
 }

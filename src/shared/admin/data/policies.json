@@ -1,0 +1,75 @@
+[
+  {
+    "id": "terms",
+    "name": "Terms of Service",
+    "versions": [
+      {
+        "version": "2026.1",
+        "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Version 2026.1)",
+        "summary": "First version.",
+        "publishedAt": "2026-03-04T10:12",
+        "publishedBy": "deborah@oracleclinician.com"
+      },
+      {
+        "version": "2026.2",
+        "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Version 2026.2)",
+        "summary": "Clearer cancellation terms.",
+        "publishedAt": "2026-06-18T15:40",
+        "publishedBy": "deborah@oracleclinician.com"
+      }
+    ],
+    "accepted": 612,
+    "notYet": 0,
+    "status": "placeholder"
+  },
+  {
+    "id": "privacy",
+    "name": "Privacy Policy",
+    "versions": [
+      {
+        "version": "2026.1",
+        "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Version 2026.1)",
+        "summary": "First version.",
+        "publishedAt": "2026-03-04T10:12",
+        "publishedBy": "deborah@oracleclinician.com"
+      },
+      {
+        "version": "2026.2",
+        "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Version 2026.2)",
+        "summary": "Added data export.",
+        "publishedAt": "2026-06-18T15:40",
+        "publishedBy": "sam@oracleclinician.com"
+      },
+      {
+        "version": "2026.3",
+        "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Version 2026.3)",
+        "summary": "Explains teen accounts and invited teens.",
+        "publishedAt": "2026-10-30T09:05",
+        "publishedBy": "deborah@oracleclinician.com"
+      }
+    ],
+    "accepted": 402,
+    "notYet": 210,
+    "status": "placeholder"
+  },
+  {
+    "id": "health",
+    "name": "Health Consent",
+    "versions": [
+      {
+        "version": "2026.1",
+        "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Version 2026.1)",
+        "summary": "First version.",
+        "publishedAt": "2026-03-04T10:12",
+        "publishedBy": "deborah@oracleclinician.com"
+      }
+    ],
+    "accepted": 598,
+    "notYet": 14,
+    "draft": {
+      "text": "Placeholder policy text. Deborah's approved wording replaces this before launch.\n\n1. What this covers\n2. How we use your information\n3. Your choices\n\n(Draft 2026.2)",
+      "summary": "Adds a family member version for advocates."
+    },
+    "status": "placeholder"
+  }
+]

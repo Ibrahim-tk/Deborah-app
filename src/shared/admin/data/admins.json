@@ -1,47 +1,59 @@
 [
   {
     "id": "a001",
-    "name": "Deborah Maragopoulos",
     "email": "deborah@oracleclinician.com",
     "role": "super",
     "account": "active",
     "invite": "accepted",
-    "invitedAt": "2026-05-01T09:00"
+    "invitedAt": "2026-05-01T09:00",
+    "firstName": "Deborah",
+    "lastName": "Maragopoulos",
+    "lastActive": "2026-05-01T09:00"
   },
   {
     "id": "a002",
-    "name": "Sam Rivera",
     "email": "sam@oracleclinician.com",
     "role": "admin",
     "account": "active",
     "invite": "accepted",
-    "invitedAt": "2026-06-12T11:00"
+    "invitedAt": "2026-06-12T11:00",
+    "firstName": "Sam",
+    "lastName": "Rivera",
+    "addedBy": "deborah@oracleclinician.com",
+    "lastActive": "2026-06-12T11:00"
   },
   {
     "id": "a003",
-    "name": "Jo Whitfield",
     "email": "jo@oracleclinician.com",
     "role": "admin",
     "account": "active",
     "invite": "pending",
-    "invitedAt": "2026-11-02T08:30"
+    "invitedAt": "2026-11-02T08:30",
+    "firstName": "Jo",
+    "lastName": "Whitfield",
+    "addedBy": "deborah@oracleclinician.com"
   },
   {
     "id": "a004",
-    "name": "Alex Mercer",
     "email": "alex@oracleclinician.com",
     "role": "admin",
     "account": "active",
     "invite": "expired",
-    "invitedAt": "2026-10-27T14:00"
+    "invitedAt": "2026-10-27T14:00",
+    "firstName": "Alex",
+    "lastName": "Mercer",
+    "addedBy": "deborah@oracleclinician.com"
   },
   {
     "id": "a005",
-    "name": "Lee Carter",
     "email": "lee@oracleclinician.com",
     "role": "admin",
     "account": "deactivated",
     "invite": "accepted",
-    "invitedAt": "2026-07-03T10:00"
+    "invitedAt": "2026-07-03T10:00",
+    "firstName": "Lee",
+    "lastName": "Carter",
+    "addedBy": "deborah@oracleclinician.com",
+    "lastActive": "2026-07-03T10:00"
   }
 ]

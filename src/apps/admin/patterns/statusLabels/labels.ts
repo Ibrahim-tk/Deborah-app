@@ -1,0 +1,27 @@
+/** Plain-text labels for admin record types (no JSX, so components can stay fast-refresh friendly). */
+import type { DeletionRequest, DeletionStatus, DeletionType, EscalationType, SupportType } from '@shared/admin';
+
+export const ESCALATION_LEVEL: Record<EscalationType, string> = { emergency: 'Emergency', crisis: 'Crisis', urgent: 'Urgent' };
+
+/** Support request types (story 5.1). */
+export const SUPPORT_TYPE: Record<SupportType, string> = {
+  talk_to_support: 'Talk to Support Team',
+  consultation: 'Consultation Request',
+  knowledge_gap: 'Knowledge Gap',
+  email_change: 'Email Change Request',
+};
+
+/** Deletion requests (story 5.2). */
+export const DELETION_TYPE: Record<DeletionType, string> = { account: 'Account Deletion', family_member: 'Family Member Deletion', teen: 'Teen Deletion' };
+export const DELETION_STATUS: Record<DeletionStatus, string> = {
+  pending_review: 'Pending review',
+  in_progress: 'In progress',
+  legal_hold: 'On legal hold',
+  waiting_transfer: 'Waiting for transfer',
+  completed: 'Completed',
+};
+export const DELETION_OPTION: Record<NonNullable<DeletionRequest['option']>, string> = {
+  everything: 'Delete everything, including managed family members',
+  advocate_only: 'Advocate only: delete only their own health information',
+  transfer: 'Transfer profiles to family members, then delete the account',
+};

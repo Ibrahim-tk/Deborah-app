@@ -14,7 +14,7 @@ export interface AdminSession {
 interface SettingsState {
   passwordChangedAt: string;
   sessions: AdminSession[];
-  setName: (name: string) => void;
+  setName: (firstName: string, lastName: string) => void;
   changePassword: () => void;
   signOutOthers: () => void;
 }
@@ -28,10 +28,10 @@ export const useAdminSettings = create<SettingsState>((set) => ({
     { id: 's2', device: 'Safari on iPhone', location: 'Austin, TX', lastActive: '2 hours ago', current: false },
     { id: 's3', device: 'Chrome on Windows', location: 'Denver, CO', lastActive: '3 days ago', current: false },
   ],
-  setName: (name) => {
+  setName: (firstName, lastName) => {
     const email = useAdminStore.getState().email;
-    useAdminStore.setState((s) => ({ admins: s.admins.map((a) => (a.email === email ? { ...a, name } : a)) }));
-    log(`Changed own display name to ${name}`);
+    useAdminStore.setState((s) => ({ admins: s.admins.map((a) => (a.email === email ? { ...a, firstName, lastName } : a)) }));
+    log(`Changed own name to ${firstName} ${lastName}`);
   },
   changePassword: () => {
     set((s) => ({ passwordChangedAt: new Date().toISOString().slice(0, 10), sessions: s.sessions.filter((x) => x.current) }));

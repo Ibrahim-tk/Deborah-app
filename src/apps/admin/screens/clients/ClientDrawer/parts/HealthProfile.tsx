@@ -1,20 +1,26 @@
-/** Full health profile in the client drawer: the key facts first, then everything onboarding and intake can ask,
- *  grouped, behind "Show more". All clinical values are placeholder seed data. */
-import { useState } from 'react';
+/** Full health profile (its own tab in the client drawer): every onboarding and intake field, in titled groups, one column,
+ *  label left and answer right. All clinical values are placeholder seed data. */
 import { formatDate, type Client } from '@shared/admin';
-import { Icon, KeyValueList } from '@admin/ui';
-import { Section } from '@admin/patterns';
+import { KeyValueList } from '@admin/ui';
 import styles from './HealthProfile.module.css';
 
 const list = (items: string[]) => (items.length ? items.join(', ') : 'None');
 const opt = (v: string | null) => v ?? 'Not applicable';
 
 export function HealthProfile({ client }: { client: Client }) {
-  const [open, setOpen] = useState(false);
   const h = client.health;
   const d = h.details;
 
   const groups = [
+    {
+      title: 'Summary',
+      items: [
+        { label: 'Age', value: h.age },
+        { label: 'Hormonal stage', value: h.stage },
+        { label: 'Main concerns', value: list(h.concerns) },
+        { label: 'Conditions', value: list(d.conditions) },
+      ],
+    },
     {
       title: 'About',
       items: [
@@ -60,41 +66,14 @@ export function HealthProfile({ client }: { client: Client }) {
     },
   ];
 
-  const hidden = groups.reduce((n, g) => n + g.items.length, 0);
-
   return (
-    <Section title="Health profile">
-      <div className={styles.root}>
-        <KeyValueList
-          items={[
-            { label: 'Age', value: h.age },
-            { label: 'Hormonal stage', value: h.stage },
-            { label: 'Main concerns', value: list(h.concerns) },
-            { label: 'Conditions', value: list(d.conditions) },
-          ]}
-        />
-        {open && (
-          <div id={`health-more-${client.id}`} className={styles.more}>
-            {groups.map((g) => (
-              <div key={g.title} className={styles.group}>
-                <h3 className={styles.groupTitle}>{g.title}</h3>
-                <KeyValueList items={g.items} />
-              </div>
-            ))}
-          </div>
-        )}
-        {/* Quiet disclosure: chevron plus a count of what's hidden, like a properties list. */}
-        <button
-          type="button"
-          className={styles.toggle}
-          aria-expanded={open}
-          aria-controls={`health-more-${client.id}`}
-          onClick={() => setOpen((o) => !o)}
-        >
-          <Icon name="chevronDown" size={16} className={styles.chevron} />
-          {open ? 'Show less' : `${hidden} more fields`}
-        </button>
-      </div>
-    </Section>
+    <div className={styles.root}>
+      {groups.map((g) => (
+        <section key={g.title} className={styles.group}>
+          <h3 className={styles.groupTitle}>{g.title}</h3>
+          <KeyValueList items={g.items} split="half" />
+        </section>
+      ))}
+    </div>
   );
 }

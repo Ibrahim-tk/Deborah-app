@@ -7,3 +7,14 @@
 /* Code boxes keep the web field's own width (280px max) but sit on the leading edge instead of centred. */
 .codeGroup { display: grid; gap: var(--space-3); }
 .codeGroup .code { margin-inline: 0; }
+.alert { margin: 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--color-danger-tint); color: var(--color-danger-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.notice { margin: 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--color-canvas); color: var(--color-ink-secondary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.hint { margin: 0; color: color-mix(in srgb, var(--color-ink-tertiary) 60%, var(--color-surface)); font-size: var(--fs-footnote); line-height: var(--lh-footnote); }
+/* Password strength: a thin bar that fills as rules are met. */
+.strength { block-size: 4px; border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-ink) 8%, var(--color-surface)); overflow: hidden; }
+.strength span { display: block; block-size: 100%; inline-size: calc(var(--fill, 0) * 20%); background: var(--color-success-ink); transition: inline-size var(--dur-quick) var(--ease-ios); }
+.strength[data-level='1'] { --fill: 1; } .strength[data-level='2'] { --fill: 2; } .strength[data-level='3'] { --fill: 3; } .strength[data-level='4'] { --fill: 4; } .strength[data-level='5'] { --fill: 5; }
+.strength:not([data-level='5']) span { background: var(--color-gold-ink); }
+.rules { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-1); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.rule { display: flex; align-items: center; gap: var(--space-2); color: var(--color-ink-tertiary); }
+.rule[data-met] { color: var(--color-success-ink); }

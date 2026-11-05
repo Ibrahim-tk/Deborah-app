@@ -11,9 +11,12 @@ export type DrawerTarget =
   | { kind: 'plan'; id: string | null }
   | { kind: 'audit'; id: string }
   | { kind: 'consent'; id: string }
-  | { kind: 'stripeEvents'; id: null };
+  | { kind: 'stripeEvents'; id: null }
+  /** Knowledge Base content; a null id is new content, `new:<gapId>` is an answer to that gap. */
+  | { kind: 'content'; id: string | null }
+  | { kind: 'gap'; id: string };
 
-export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'subscriptions' | 'integrations' | 'regulations' | 'admins' | 'audit' | 'compliance' | 'settings' | 'notifications';
+export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'subscriptions' | 'integrations' | 'regulations' | 'admins' | 'audit' | 'compliance' | 'settings' | 'notifications' | 'knowledge';
 
 export type AdminRoute = { id: SectionId };
 

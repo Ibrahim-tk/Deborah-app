@@ -49,6 +49,8 @@ Sized against the admin stage, not the window: the root is a named container (`c
 
 ## Screens
 
+The client's user stories are condensed in [stories.md](stories.md); screen headers link to them with `@spec`, and where this page and the stories disagree, the stories win.
+
 Every table row opens its record in a right-hand side drawer over the page (`navigation/drawers.tsx`); there are no detail
 pages. One drawer shows at a time; switching sidebar sections closes it.
 
@@ -154,9 +156,6 @@ Opens from the sidebar (last item) or the account menu. One column of cards:
   signs out your other sessions. Simulated; nothing is stored.
 - **Sign-in security:** two-step verification is on and can't be turned off (required for admins); list of signed-in devices with
   "Sign out of other sessions".
-- **Notifications:** per-category In-app / Email preferences (see A-12.1).
-- **Compliance:** training and confidentiality status, a note that everything is audit-logged, links to Compliance (super admins)
-  and the audit log.
 State lives in `src/shared/admin/settings.ts` (`useAdminSettings`); every change is written to the audit log.
 
 ### A-12.1 Notifications (admin and super admin)
@@ -175,14 +174,27 @@ notification per subscription; repeats within an hour are grouped ("3 payments f
 | Compliance | Super admin | New consent version, framework review due | |
 
 - **Bell** (`patterns/NotificationBell`): trailing in every page header (in the top bar on phone), with a red dot when anything is
-  unread. Its panel shows the latest 8 (Today / Earlier), Mark all as read, View all, Preferences. A row marks it read and opens
+  unread. Its panel shows the latest 8 (Today / Earlier), Mark all as read, View all. A row marks it read and opens
   the record's drawer or section.
 - **Page** (route `notifications`, also in the account menu): All / Unread, category filter, grouped by Today / Yesterday /
-  Earlier, a ⋮ menu per row (Open, Mark as read or unread), Mark all as read, Preferences.
+  Earlier, a ⋮ menu per row (Open, Mark as read or unread), Mark all as read.
 - **Settings › Notifications:** per category, In-app and Email switches, with "As it happens / Daily summary" for Support and
   Billing. Locked categories stay on. Plain admins only see their categories.
 - **Simulated:** seed feed `data/notifications.json`; a support request arrives 40s after sign-in; reopening a case, an invite being
   accepted and disconnecting Stripe also post notifications. Store: `src/shared/admin/notifications.ts`.
+
+### A-13.1 Knowledge Base · A-13.2 Content · A-13.4 Knowledge gap
+Content tab (pending approval first, then newest; search titles and text; filters type, status) and Knowledge gaps tab (new first, most asked first; only the question shows). Add content: title, type, file or text, Save as draft / Publish (Admins: Send for approval). Content drawer: Approve & publish / Reject with a reason (Super Admin only), Edit (new version), Archive / Restore, Roll back. Gap drawer: Add answer (prefilled), Dismiss with a reason, Reopen. State in `src/shared/admin/knowledge.ts`.
+
+## Alignment with the client stories (Nov 2026)
+- Escalations: levels Emergency / Crisis / Urgent, status Not yet reviewed / Reviewed with review notes; the drawer shows only the triggering message; no contact actions and no escalation notifications.
+- Support: Talk to Support Team, Consultation, Knowledge Gap, Email Change (with Change email address).
+- Clients: first name, state, Adult / Teen, the full status list, consent versions, linked teens; Change email; Deactivate needs a reason and pauses linked teens.
+- Deletion requests: 10-business-day deadline, create a request for a teen by email, review checklist, legal hold, transfers.
+- Plans: Free trial (14 days), family members and add-on price, features, price history, draft / publish / inactive.
+- Consent: three policies, versions, drafts, preview, acceptance counts. Audit log: role, category, device, CSV export, append-only.
+- Sign-in: lock after 3 failed attempts, code expiry and 60 s resend, 15-minute idle sign-out (`?idle=<seconds>` shortens it). Password rules: 8+ characters.
+- Notifications: email on/off per type in Settings › Notifications; deadline reminders locked.
 
 ## Open questions
 
