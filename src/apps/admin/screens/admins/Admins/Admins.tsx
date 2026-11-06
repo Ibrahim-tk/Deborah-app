@@ -7,8 +7,9 @@
  */
 import { useState } from 'react';
 import { adminName, formatDate, inviteHoursLeft, useAdminStore, type AdminUser, type InviteStatus } from '@shared/admin';
-import { Button, DataTable, IconButton, Menu, Select, StatusText, type Column } from '@admin/ui';
-import { AdminPage, DEFAULT_SORT, FilterBar, SortRange, applySort, matches, rangePhrase, showing, type SortValue } from '@admin/patterns';
+import { Button, DataTable, StatusText, type Column } from '@admin/ui';
+import { AdminPage, DEFAULT_SORT, NoMatches, TableFilters, applySort, matches, rangePhrase, showing, type FilterState } from '@admin/patterns';
+import { useTableFilters } from '@admin/hooks/useTableFilters';
 import { useAdminToast } from '@admin/hooks/toast.store';
 import { useAdminNav } from '@admin/navigation';
 import { InviteDialog } from './parts/InviteDialog';
@@ -17,24 +18,33 @@ import styles from './Admins.module.css';
 /** A pending invite older than 24 hours reads as expired. */
 type AdminStatus = 'pending' | 'expired' | 'active' | 'deactivated';
 const STATUS_LABEL: Record<AdminStatus, string> = { pending: 'Invite pending', expired: 'Invite expired', active: 'Active', deactivated: 'Deactivated' };
-const STATUS_TONE: Record<AdminStatus, 'accent' | 'warning' | 'success' | 'neutral'> = { pending: 'accent', expired: 'warning', active: 'success', deactivated: 'neutral' };
+const STATUS_TONE: Record<AdminStatus, 'info' | 'warning' | 'success' | 'neutral'> = { pending: 'info', expired: 'warning', active: 'success', deactivated: 'neutral' };
 const statusOf = (a: AdminUser): AdminStatus => (a.account === 'deactivated' ? 'deactivated' : inviteOf(a) === 'accepted' ? 'active' : (inviteOf(a) as 'pending' | 'expired'));
 
 const inviteOf = (a: AdminUser): InviteStatus => (a.invite === 'pending' && inviteHoursLeft(a.invitedAt) <= 0 ? 'expired' : a.invite);
 
+const INITIAL: FilterState = { query: '', values: {}, quick: null, sort: DEFAULT_SORT };
 
 export default function Admins() {
   const admins = useAdminStore((s) => s.admins);
   const me = useAdminStore((s) => s.email);
   const toast = useAdminToast();
   const openDrawer = useAdminNav((s) => s.openDrawer);
-  const [query, setQuery] = useState('');
   const [inviting, setInviting] = useState(false);
-  const [sort, setSort] = useState<SortValue>(DEFAULT_SORT);
-  const [status, setStatus] = useState<'all' | AdminStatus>('all');
-  const rows = applySort(admins.filter((a) => matches(query, adminName(a), a.email) && (status === 'all' || statusOf(a) === status)), sort, (a) => a.invitedAt);
+  const f = useTableFilters('admins', INITIAL);
+  const { query, values, sort } = f.state;
+  const status = (values.status ?? 'all') as 'all' | AdminStatus;
+  const rows = applySort(
+    admins.filter(
+      (a) =>
+        matches(query, adminName(a), a.email) &&
+        (status === 'all' || statusOf(a) === status),
+    ),
+    sort,
+    (a) => a.invitedAt,
+  );
   const summary = showing(rows.length, ['admin', 'admins'], [
-    status !== 'all' && `with status ${STATUS_LABEL[status]}`,
+    status !== 'all' && `with Status: ${STATUS_LABEL[status]}`,
     rangePhrase(sort, 'added'),
     query.trim() && `matching \u201c${query.trim()}\u201d`,
   ]);
@@ -55,35 +65,41 @@ export default function Admins() {
       grow: true,
       primary: true,
       render: (a) => (
-        <span className={styles.who}>
-          <span>{adminName(a)}</span>
-          <span className={styles.email} title={a.email}>{a.email}</span>
+        // The Super Admin tag sits beside the name-and-email block, centred on both lines.
+        <span className={styles.nameRow}>
+          <span className={styles.who}>
+            <span>{adminName(a)}</span>
+            <span className={styles.email} title={a.email}>{a.email}</span>
+          </span>
+          {a.role === 'super' && <StatusText tone="accent">Super Admin</StatusText>}
         </span>
       ),
     },
     { key: 'status', header: 'Status', render: (a) => <StatusText tone={STATUS_TONE[statusOf(a)]}>{STATUS_LABEL[statusOf(a)]}</StatusText> },
+    {
+      key: 'invitedBy',
+      muted: true,
+      header: 'Invited by',
+      // Who sent the invite (Deborah for everyone today); the Super Admin's own row has no inviter.
+      render: (a) => {
+        const by = admins.find((x) => x.email === a.addedBy);
+        return by ? adminName(by) : a.addedBy ?? '—';
+      },
+    },
     { key: 'added', muted: true, header: 'Date added', render: (a) => formatDate(a.invitedAt.slice(0, 10)) },
-    { key: 'active', muted: true, header: 'Last active', render: (a) => (a.lastActive ? formatDate(a.lastActive.slice(0, 10)) : '—') },
     {
       key: 'more',
       header: '',
       align: 'end',
       render: (a) =>
         a.email === me ? null : (
-          // Keep menu clicks from also opening the row's drawer.
+          // Keep button clicks from also opening the row's drawer.
           <span onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
-          <Menu
-            side="bottom"
-            align="end"
-            onSelect={(id) => onAction(a, id)}
-            items={[
-              ...(inviteOf(a) !== 'accepted' ? [{ id: 'resend', label: 'Resend invite', icon: 'mail' as const }, { id: 'cancel', label: 'Cancel invite' }] : []),
-              a.account === 'active'
-                ? { id: 'deactivate', label: 'Deactivate', destructive: true }
-                : { id: 'reactivate', label: 'Reactivate' },
-            ]}
-            trigger={<IconButton icon="more" label={`Actions for ${adminName(a)}`} />}
-          />
+          {a.account === 'active' ? (
+            <Button size="sm" variant="secondary" className={styles.deactivate} onClick={() => onAction(a, 'deactivate')}>Deactivate</Button>
+          ) : (
+            <Button size="sm" variant="secondary" onClick={() => onAction(a, 'reactivate')}>Reactivate</Button>
+          )}
           </span>
         ),
     },
@@ -95,19 +111,15 @@ export default function Admins() {
       subtitle={`${admins.length} admins in total`}
       action={<Button leadingIcon="plus" onClick={() => setInviting(true)}>Add admin</Button>}
       toolbar={
-        <FilterBar query={query} onQuery={setQuery} placeholder="Search by name or email">
-          <Select<'all' | AdminStatus>
-            label="Status"
-            hideLabel
-            value={status}
-            onChange={setStatus}
-            options={[{ value: 'all', label: 'All statuses' }, ...(Object.keys(STATUS_LABEL) as AdminStatus[]).map((k) => ({ value: k, label: STATUS_LABEL[k] }))]}
-          />
-          <SortRange value={sort} onChange={setSort} rangeLabel="Added between" />
-        </FilterBar>
+        <TableFilters
+          {...f}
+          placeholder="Search by name or email"
+          rangeLabel="Added between"
+          categories={[{ key: 'status', label: 'Status', options: (Object.keys(STATUS_LABEL) as AdminStatus[]).map((k) => ({ value: k, label: STATUS_LABEL[k] })) }]}
+        />
       }
     >
-      <DataTable label="Admin users" columns={columns} rows={rows} rowKey={(a) => a.id} onRowClick={(a) => openDrawer({ kind: 'admin', id: a.id })} empty="No admins match your search." footer={summary} pager="outside" />
+      <DataTable footer={summary} label="Admin users" columns={columns} rows={rows} rowKey={(a) => a.id} onRowClick={(a) => openDrawer({ kind: 'admin', id: a.id })} empty={<NoMatches text="No admins match these filters." onClear={() => f.onChange(INITIAL)} />} pager="outside" />
       {inviting && <InviteDialog onClose={() => setInviting(false)} />}
     </AdminPage>
   );

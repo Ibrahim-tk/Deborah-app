@@ -28,6 +28,9 @@ export default function KnowledgeBase() {
   const [dragging, setDragging] = useState(false);
 
   const upload = () => openEditor('new');
+  // Adding or editing content takes over the section as its own page (with a crumb back), not a modal.
+  if (editor) return <ContentEditor key={editor} param={editor} />;
+
   // Dropping a file anywhere on the page opens the upload form with it attached.
   const hasFiles = (e: DragEvent) => Array.from(e.dataTransfer.types).includes('Files');
   const drop = (e: DragEvent) => {
@@ -49,7 +52,7 @@ export default function KnowledgeBase() {
       <AdminPage
         title="Knowledge Base"
         subtitle={`${total} content items and ${gapTotal} knowledge gaps in total. The Oracle only answers from content that’s live.`}
-        action={<Button leadingIcon="upload" onClick={upload}>Upload content</Button>}
+        action={<Button leadingIcon="plus" onClick={upload}>Add content</Button>}
       >
         <ResultBanner message={notice} onDismiss={() => useKnowledge.getState().setNotice('')} />
         <Tabs<Tab>
@@ -63,7 +66,6 @@ export default function KnowledgeBase() {
           ]}
         />
       </AdminPage>
-      {editor && <ContentEditor key={editor} param={editor} />}
       {dragging && (
         <div className={styles.dropOverlay} aria-hidden>
           <Icon name="upload" size={32} />

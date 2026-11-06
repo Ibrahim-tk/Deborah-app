@@ -87,6 +87,8 @@ export interface SymptomMapDomain {
 export interface SymptomMapCore {
   title: string;
   label: string;
+  /** Plain-language "why one root, many places" line (placeholder). */
+  why: string;
   mechanism: string[];
 }
 
@@ -97,5 +99,7 @@ export type SymptomMapSource = 'profile' | 'chat' | 'seed';
 export interface MappedSymptom {
   label: string;
   source: SymptomMapSource;
+  /** Chat only: when the conversation started (ISO). */
+  date?: string;
   domainIds: string[];
 }

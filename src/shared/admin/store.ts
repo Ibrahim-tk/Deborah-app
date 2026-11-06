@@ -25,7 +25,7 @@ export interface AdminState extends Seed {
   reviewEscalation: (id: string, reviewed: boolean, notes: string) => void;
   /** Resolve or reopen a support request (story 5.1). */
   setSupportResolved: (id: string, resolved: boolean) => void;
-  /** Story 3.1: change a Client's email; resolves their open Email Change Request. */
+  /** Story 3.1: change a Client's email (from the client's actions menu). */
   changeClientEmail: (clientId: string, email: string) => void;
   saveSupportNote: (id: string, notes: string) => void;
   acceptTransfer: (requestId: string, dependentId: string) => void;
@@ -114,7 +114,7 @@ export const useAdminStore = create<AdminState>((set, get) => {
             : e,
         ),
       }));
-      log(reviewed ? `Marked escalation ${id} as reviewed` : `Marked escalation ${id} as not yet reviewed`);
+      log(reviewed ? `Marked escalation ${id} as reviewed` : `Marked escalation ${id} as review pending`);
     },
     setSupportResolved: (id, resolved) => {
       const by = get().email;
@@ -126,13 +126,7 @@ export const useAdminStore = create<AdminState>((set, get) => {
       log(`${resolved ? 'Resolved' : 'Reopened'} support request ${id}`);
     },
     changeClientEmail: (clientId, email) => {
-      const by = get().email;
-      set((s) => ({
-        clients: s.clients.map((c) => (c.id === clientId ? { ...c, email } : c)),
-        supportRequests: s.supportRequests.map((r) =>
-          r.clientId === clientId && r.type === 'email_change' && !r.resolved ? { ...r, resolved: true, resolvedBy: by, resolvedAt: stamp() } : r,
-        ),
-      }));
+      set((s) => ({ clients: s.clients.map((c) => (c.id === clientId ? { ...c, email } : c)) }));
       log(`Changed the email address for client ${nameOf(get(), clientId)}`);
     },
     saveSupportNote: (id, notes) => {

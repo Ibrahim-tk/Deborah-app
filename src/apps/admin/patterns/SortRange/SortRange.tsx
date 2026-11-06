@@ -17,12 +17,13 @@ export function SortRange({ value, onChange, rangeLabel = 'Dates between' }: { v
       <Select<SortValue['order']>
         label="Sort"
         hideLabel
+        category="Sort"
         value={value.order}
         onChange={(o) => (o === 'custom' ? setPicking(true) : onChange({ ...value, order: o }))}
         options={[
-          { value: 'latest', label: 'Latest' },
-          { value: 'oldest', label: 'Oldest' },
-          { value: 'custom', label: value.order === 'custom' ? `${formatDate(value.from)} to ${formatDate(value.to)}` : 'Custom range' },
+          { value: 'latest', label: 'Newest first' },
+          { value: 'oldest', label: 'Oldest first' },
+          { value: 'custom', label: value.order === 'custom' ? `${formatDate(value.from)} to ${formatDate(value.to)}` : 'Custom range…' },
         ]}
       />
       {picking && (

@@ -121,7 +121,7 @@ export interface Escalation {
 }
 
 /** Story 5.1. Export and deletion requests are managed separately (5.2). */
-export type SupportType = 'talk_to_support' | 'consultation' | 'knowledge_gap' | 'email_change';
+export type SupportType = 'talk_to_support' | 'consultation' | 'knowledge_gap';
 
 export interface SupportRequest {
   id: string;

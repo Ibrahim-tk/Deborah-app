@@ -16,7 +16,7 @@ export type DrawerTarget =
   | { kind: 'content'; id: string | null }
   | { kind: 'gap'; id: string };
 
-export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'subscriptions' | 'regulations' | 'admins' | 'audit' | 'compliance' | 'settings' | 'notifications' | 'knowledge';
+export type SectionId = 'dashboard' | 'clients' | 'escalations' | 'support' | 'deletion' | 'subscriptions' | 'regulations' | 'admins' | 'audit' | 'compliance' | 'settings' | 'notifications' | 'knowledge';
 
 /** `param` carries a record for detail pages, e.g. the Knowledge Base editor: 'new', 'new:<gapId>' or a content id. */
 export type AdminRoute = { id: SectionId; param?: string };

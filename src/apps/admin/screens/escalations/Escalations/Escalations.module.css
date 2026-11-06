@@ -1,0 +1,2 @@
+.device { display: inline-flex; align-items: center; color: var(--color-ink-secondary); }
+.date { color: color-mix(in srgb, var(--color-ink-tertiary) 65%, var(--color-surface)); }

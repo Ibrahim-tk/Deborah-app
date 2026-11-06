@@ -124,22 +124,6 @@
     "status": "placeholder"
   },
   {
-    "id": "n09",
-    "category": "support",
-    "kind": "email_change",
-    "title": "New email change request",
-    "body": "A Client asked to change their email address.",
-    "at": "2026-10-30T12:44",
-    "read": true,
-    "audience": "all",
-    "severity": "normal",
-    "target": {
-      "kind": "support",
-      "id": "s002"
-    },
-    "status": "placeholder"
-  },
-  {
     "id": "n10",
     "category": "gaps",
     "kind": "knowledge_gap",

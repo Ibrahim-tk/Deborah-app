@@ -85,11 +85,18 @@ Sections: summary, conversation excerpt, and the client (name and email open the
 
 ### A-5.1 Support requests
 Requests are answered by email outside the system; the console tracks them. Types include "Escalate to Deborah" (the support person acting
-as the client's advocate). Mark resolved. A second tab lists data deletion requests with their deadline.
+as the client's advocate). Mark resolved.
 
 ### A-5.3 Support request (side drawer)
 Subject, received date, open or resolved pill. Actions: Mark resolved, Reply by email. Shows the request type, a note that support
 is answered by email, and the client (name opens the client drawer, email can be copied).
+
+### A-5.4 Deletion requests
+Its own sidebar item, after Support requests (story 5.2), and the target of the Dashboard's pending-deletions card. The sidebar count is
+requests not yet completed. Lists every request with client (name over email), type, profile, source (In app / By email), status,
+received and deadline (10 business days; within 2 business days is highlighted), closest deadline first, completed last. Search by
+first name or email; filter by type, source, status (default: not completed) and received date. "Create deletion request" opens the
+form for a teen who can't sign in and emailed from their registered address.
 
 ### A-5.2 Data deletion request (side drawer)
 GDPR: within 1 month. CCPA/CPRA: within 45 days. Each dependent is either deleted with the account or transferred to a new owner by email
@@ -195,6 +202,29 @@ Content list adds Source and Version columns and a Source filter; a third tab, C
 
 Content tab (pending approval first, then newest; search titles and text; filters type, status) and Knowledge gaps tab (new first, most asked first; only the question shows). Add content: title, type, file or text, Save as draft / Publish (Admins: Send for approval). Content drawer: Approve & publish / Reject with a reason (Super Admin only), Edit (new version), Archive / Restore, Roll back. Gap drawer: Add answer (prefilled), Dismiss with a reason, Reopen. State in `src/shared/admin/knowledge.ts`.
 UX for a 60+ reader (Dropbox-style principles): plain status words (Live, Waiting for approval, Draft (not live), Sent back, Archived (not used)) shown as pills; "Edits" instead of version numbers; one **Upload content** button; a big drop zone *and* a "Choose a file" button, with a preview card (name, size, Remove) and Uploading → Uploaded state before anything is saved; drop a file anywhere on the page to start an upload; the gap link under "More options"; earlier versions collapsed; every action ends with a `ResultBanner` sentence that stays until dismissed; content kind sits behind a **Filters** button; new gaps have a one-click **Answer**.
+
+## Table filters
+Every list uses one pattern, `patterns/TableFilters` (Filter Design Guidelines, Nov 2026), built from the existing pill controls:
+- Row: search (debounced ~300 ms) on the left; up to 3 categories, "More filters (n)" (dialog, Apply / Clear all, closing
+  discards) and Sort grouped on the right ("Sort: Newest first / Oldest first / Custom range…").
+- Category dropdowns read "Status" until set, then "Status: Payment issue"; the first option is "Any". Labels match the
+  column headers.
+- Quick filters (one tap, single choice) under the bar; applied filters as removable chips with "Clear all", shown only while a chip is. The result count ("Showing …") sits under the table, next to the pager.
+- Empty state: "No … match these filters." with "Clear filters".
+- State lives in `useAdminNav().filters` via `hooks/useTableFilters`: kept while drawers open and close, cleared when the
+  admin moves to another section.
+
+| Page | Quick filters | Categories (visible / more) | Default |
+|---|---|---|---|
+| Clients | none | Plan · Status | none |
+| Escalations | none | Status · Level | none (not yet reviewed first) |
+| Support requests | Email change · Consultation | Status · Type · Account type | none (open first, oldest first) |
+| Deletion requests | none | Type · Status | none (oldest first, completed last) |
+| Admin users | none | Status | none |
+| Audit log | Sign-ins · Today · My actions | Category · Role | none |
+| Knowledge Base content | none | Status · Type | none |
+| Knowledge gaps | none | Status | none |
+| Consent (withdrawn) | none | none (search + sort) | none |
 
 ## Alignment with the client stories (Nov 2026)
 - Escalations: levels Emergency / Crisis / Urgent, status Not yet reviewed / Reviewed with review notes; the drawer shows only the triggering message; no contact actions and no escalation notifications.

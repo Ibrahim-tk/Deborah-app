@@ -1,5 +1,6 @@
-/** @pattern FilterBar — search leads, filters trail; wraps on narrow widths. */
-import type { ReactNode } from 'react';
+/** @pattern FilterBar — search leads, category filters follow it, an optional trailing control (Sort) sits on the far
+ *  right; wraps on narrow widths. Search updates after a short pause (about 300 ms) so the table doesn't flicker. */
+import { useRef, useState, type ReactNode } from 'react';
 import { Icon, Input } from '@admin/ui';
 import styles from './FilterBar.module.css';
 
@@ -10,9 +11,25 @@ export interface FilterBarProps {
   children?: ReactNode;
   /** Filters sit right after the search instead of on the trailing edge. */
   inline?: boolean;
+  /** Far-right control, kept apart from the filters (e.g. Sort). */
+  trailing?: ReactNode;
 }
 
-export function FilterBar({ query, onQuery, placeholder, children, inline }: FilterBarProps) {
+export function FilterBar({ query, onQuery, placeholder, children, inline, trailing }: FilterBarProps) {
+  // Local text so typing feels instant; the table follows after the pause. A cleared/reset query resyncs it.
+  const [text, setText] = useState(query);
+  const [synced, setSynced] = useState(query);
+  if (query !== synced) {
+    setSynced(query);
+    setText(query);
+  }
+  const timer = useRef<number | undefined>(undefined);
+  const type = (v: string) => {
+    setText(v);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => onQuery(v), 300);
+  };
+
   return (
     <div className={styles.root}>
       <div className={styles.search}>
@@ -21,13 +38,14 @@ export function FilterBar({ query, onQuery, placeholder, children, inline }: Fil
           hideLabel
           variant="search"
           type="search"
-          value={query}
+          value={text}
           placeholder={placeholder}
           leading={<Icon name="search" size={18} />}
-          onChange={(e) => onQuery(e.target.value)}
+          onChange={(e) => type(e.target.value)}
         />
       </div>
       {children && <div className={styles.filters} data-inline={inline || undefined}>{children}</div>}
+      {trailing && <div className={styles.trailing}>{trailing}</div>}
     </div>
   );
 }

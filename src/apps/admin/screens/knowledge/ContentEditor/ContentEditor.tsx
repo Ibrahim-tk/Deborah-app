@@ -1,23 +1,25 @@
 /**
- * @screen  A-13.3 · Upload or edit content (centred modal)
+ * @screen  A-13.3 · Add or edit content (full page inside Knowledge Base)
  * @flow    A13 Knowledge Base management (story 6.2)
  * @states  new · new from a dropped file · answer to a gap · editing · file error · uploading · uploaded
  * @spec    docs/admin/stories.md#62---add-new-content
  * @xref    web: none (admin only)
  */
-/** Upload content / Edit (story 6.2), in a centred modal over the Knowledge Base: only what's needed up front — title, kind, and a file (big drop zone or
+/** Add content / Edit (story 6.2), as its own page in the Knowledge Base section (not a modal). Two numbered steps —
+ *  1. Upload file, 2. Add details — each with a short explanation on the left; actions along the bottom.
+ *  Originally: only what's needed up front — title, kind, and a file (big drop zone or
  *  button, with a preview before saving) or typed text. The linked gap sits under "More options". Make live (an
  *  Admin's sends it for approval instead) or Save as draft. A banner then says what happened. */
 import { useState } from 'react';
 import { CONTENT_TYPES, contentText, useAdminStore, useKnowledge, type ContentItem, type ContentType, type KnowledgeGap } from '@shared/admin';
-import { Button, Dialog, FileDrop, Input, Select, TextArea, type PickedFile } from '@admin/ui';
+import { Button, FileDrop, Input, Select, TextArea, type PickedFile } from '@admin/ui';
 import { useSim } from '@admin/hooks/useSim';
 import { useAdminNav } from '@admin/navigation';
-import { UnsavedChangesDialog } from '@admin/patterns';
-import styles from '../ContentDrawer/ContentDrawer.module.css';
+import { AdminPage, UnsavedChangesDialog } from '@admin/patterns';
+import styles from './ContentEditor.module.css';
 
 const OK = /\.(pdf|docx|txt)$/i;
-const MAX = 20 * 1024 * 1024;
+const MAX = 200 * 1024 * 1024;
 
 export default function ContentEditor({ param }: { param: string }) {
   const item = useKnowledge((s) => s.items.find((c) => c.id === param));
@@ -36,7 +38,6 @@ function Editor({ item, gap, onCancel }: { item?: ContentItem; gap?: KnowledgeGa
   const [file, setFile] = useState<PickedFile | null>(dropped);
   const [fileError, setFileError] = useState('');
   const [upload, setUpload] = useState<'idle' | 'uploading' | 'done'>('idle');
-  const [more, setMore] = useState(false);
   const [touched, setTouched] = useState(false);
   const sim = useSim();
   // Starting values, to tell whether closing would lose anything.
@@ -71,7 +72,7 @@ function Editor({ item, gap, onCancel }: { item?: ContentItem; gap?: KnowledgeGa
       const id = kb.save({ id: item?.id, title: name, type: type!, text: text.trim() || `Uploaded file: ${file?.name}`, gapId: gap?.id }, live);
       kb.setDroppedFile(null);
       kb.setNotice(notice);
-      // Close the modal and open the saved item, with the result banner showing.
+      // Back to the Knowledge Base list, with the saved item open and the result banner showing.
       kb.setEditor(null);
       useAdminNav.getState().openDrawer({ kind: 'content', id });
     }, undefined, 1200);
@@ -80,49 +81,73 @@ function Editor({ item, gap, onCancel }: { item?: ContentItem; gap?: KnowledgeGa
   const leave = () => { useKnowledge.getState().setDroppedFile(null); onCancel(); };
   const cancel = () => (dirty ? setLeaving(true) : leave());
 
+  const heading = item ? `Edit \u201c${item.title}\u201d` : gap ? 'Answer this question' : 'Add content';
   return (
-    <Dialog
-      title={item ? `Edit “${item.title}”` : gap ? 'Answer this question' : 'Upload content'}
-      width="lg"
-      onClose={cancel}
-      footer={
-        <>
+    <AdminPage
+      title={heading}
+      subtitle={item ? 'Saving keeps the earlier version in its history.' : 'Upload a file, add a few details, then select Publish.'}
+      crumbs={[{ label: 'Knowledge Base', onClick: cancel }, { label: heading }]}
+      onBack={cancel}
+    >
+      <div className={styles.page}>
+        {!item && (
+          <section className={styles.step}>
+            {/* Step 1 switches between uploading a file and typing the text; the switch button names the other way. */}
+            <div className={styles.intro}>
+              <h2 className={styles.stepTitle}>{typing ? '1. Type the text' : '1. Upload file'}</h2>
+              <p className={styles.stepText}>
+                {typing ? 'Write or paste the content you want the Oracle to learn from. You can check it before publishing.' : 'Choose the file you want to share. You can check it before publishing.'}
+              </p>
+            </div>
+            <div className={styles.fields}>
+              {typing ? (
+                <TextArea label="Text" hideLabel placeholder="Type or paste the content here" value={text} minRows={10} hint={touched ? errors.content : undefined} onChange={(e) => setText(e.target.value)} />
+              ) : (
+                <FileDrop
+                  file={file}
+                  accept=".pdf,.docx,.txt"
+                  hint="PDF, Word or text file, up to 200 MB"
+                  error={fileError || (touched ? errors.content : undefined)}
+                  state={upload}
+                  onPick={pick}
+                  onRemove={() => { setFile(null); setFileError(''); setUpload('idle'); }}
+                />
+              )}
+              {!file && (
+                <div className={styles.alt}>
+                  <span className={styles.or}>or</span>
+                  {typing ? (
+                    <Button variant="secondary" leadingIcon="upload" onClick={() => setTyping(false)}>Choose a file</Button>
+                  ) : (
+                    <Button variant="secondary" leadingIcon="edit" onClick={() => setTyping(true)}>Type instead</Button>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+        <section className={styles.step}>
+          <div className={styles.intro}>
+            <h2 className={styles.stepTitle}>{item ? 'Details' : '2. Add details'}</h2>
+            <p className={styles.stepText}>These help the team find the content, and tell the Oracle what it is.</p>
+          </div>
+          <div className={styles.fields}>
+            <Input label="Title" value={title} error={touched ? errors.title : undefined} onChange={(e) => setTitle(e.target.value)} />
+            {item && <TextArea label="Text" value={text} minRows={8} hint={touched && !file ? errors.content : undefined} onChange={(e) => setText(e.target.value)} />}
+            <div>
+              <Select<ContentType> label="Type" placeholder="Choose a type" value={type} onChange={setType} options={CONTENT_TYPES.map((t) => ({ value: t, label: t }))} />
+              {touched && errors.type && <p className={styles.error}>{errors.type}</p>}
+            </div>
+            {gap && <p className={styles.note}>Answers the question &ldquo;{gap.question}&rdquo;. Publishing marks the gap as answered.</p>}
+          </div>
+        </section>
+        <footer className={styles.actions}>
           <Button variant="ghost" onClick={cancel}>Cancel</Button>
           <Button variant="secondary" onClick={() => save(false)}>Save as draft</Button>
-          <Button loading={sim.busy} onClick={() => save(true)}>{isSuper ? 'Make live' : 'Send for approval'}</Button>
-        </>
-      }
-    >
-      <div className={styles.form}>
-        <p className={styles.note}>{item ? 'Saving keeps the earlier version in its history.' : 'The Oracle only answers from content that’s live.'}</p>
-        {!item && (
-          <FileDrop
-            file={file}
-            accept=".pdf,.docx,.txt"
-            hint="PDF, Word or text file, up to 20 MB"
-            error={fileError || (touched && !typing ? errors.content : undefined)}
-            state={upload}
-            onPick={pick}
-            onRemove={() => { setFile(null); setFileError(''); setUpload('idle'); }}
-          />
-        )}
-        {!typing && !file ? (
-          <Button variant="link" className={styles.linkBtn} onClick={() => setTyping(true)}>Or type the text instead</Button>
-        ) : null}
-        {typing && <TextArea label="Text" value={text} minRows={10} hint={touched && !file ? errors.content : undefined} onChange={(e) => setText(e.target.value)} />}
-        <Input label="Title" value={title} error={touched ? errors.title : undefined} onChange={(e) => setTitle(e.target.value)} />
-        <div>
-          <Select<ContentType> label="What kind of content is it?" placeholder="Choose one" value={type} onChange={setType} options={CONTENT_TYPES.map((t) => ({ value: t, label: t }))} />
-          {touched && errors.type && <p className={styles.error}>{errors.type}</p>}
-        </div>
-        {gap && (
-          <div className={styles.more}>
-            <Button variant="link" className={styles.linkBtn} aria-expanded={more} onClick={() => setMore((m) => !m)}>{more ? 'Fewer options' : 'More options'}</Button>
-            {more && <p className={styles.note}>Answers the question &ldquo;{gap.question}&rdquo;. Making it live marks the gap as answered.</p>}
-          </div>
-        )}
+          <Button loading={sim.busy} onClick={() => save(true)}>{isSuper ? 'Publish content' : 'Send for approval'}</Button>
+        </footer>
       </div>
       {leaving && <UnsavedChangesDialog onLeave={leave} onStay={() => setLeaving(false)} />}
-    </Dialog>
+    </AdminPage>
   );
 }

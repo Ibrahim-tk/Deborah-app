@@ -1,15 +1,13 @@
 /**
  * @screen  A-6.2 · Admin user (side drawer)
  * @flow    A6 Admin management (super admin only; story 7.1)
- * @states  open invite link → email → set password → that admin's dashboard · invite pending · invite expired · active · deactivated · editing names · deactivate (reason) · self (read only)
+ * @states  invite pending · invite expired · active · deactivated · edit names (modal) · deactivate (reason) · self (read only)
  * @spec    docs/admin/stories.md#71---view--edit-admins
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { adminName, formatDate, inviteHoursLeft, useAdminStore } from '@shared/admin';
-import { INTERNAL_EMAIL } from '@shared/utils/internalPaths';
-import { Button, Dialog, Drawer, Input, KeyValueList, TextArea } from '@admin/ui';
+import { Button, Dialog, Drawer, IconButton, Input, KeyValueList, TextArea } from '@admin/ui';
 import { AccountStatusText, InviteStatusText, Section } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useSim } from '@admin/hooks/useSim';
@@ -33,7 +31,6 @@ export default function AdminDrawer({ id }: { id: string | null }) {
   const [last, setLast] = useState(admin?.lastName ?? '');
   const [deactivating, setDeactivating] = useState(false);
   const [reason, setReason] = useState('');
-  const navigate = useNavigate();
   const [touched, setTouched] = useState(false);
   if (!admin) return null;
 
@@ -57,40 +54,29 @@ export default function AdminDrawer({ id }: { id: string | null }) {
       subtitle={<CopyEmail email={admin.email} />}
       onClose={close}
       meta={<AccountStatusText status={admin.account} />}
+      // Edit sits in the header, beside close, so the footer keeps to three buttons.
+      headerControls={!self ? <IconButton icon="edit" label={`Edit ${admin.firstName}`} onClick={() => { setFirst(admin.firstName); setLast(admin.lastName); setTouched(false); setEditing(true); }} /> : undefined}
       actions={
         !self && (
+          // Footer, at most three: Deactivate on the left; Cancel invite (secondary) then Resend invite (CTA) on the right.
           <>
-            <Button size="sm" variant="secondary" onClick={() => setEditing(true)}>Edit</Button>
-            {invite !== 'accepted' && (
-              <>
-                <Button size="sm" leadingIcon="mail" loading={sim.busy} onClick={() => sim.run(() => store.resendInvite(admin.id), `We’ve sent ${admin.firstName} a new invite.`)}>Resend invite</Button>
-                <Button size="sm" variant="ghost" onClick={() => sim.run(() => { store.cancelInvite(admin.id); close(); }, `The invite for ${admin.firstName} has been cancelled.`)}>Cancel invite</Button>
-                {/* Prototype: the invite lives in the same inbox as the teen login email. */}
-                <Button size="sm" variant="ghost" onClick={() => navigate(`${INTERNAL_EMAIL}?invite=${admin.id}`)}>Open invite link (prototype)</Button>
-              </>
-            )}
             {active ? (
               <Button size="sm" variant="ghost" className={s.danger} onClick={() => setDeactivating(true)}>Deactivate</Button>
             ) : (
-              <Button size="sm" variant="ghost" onClick={() => sim.run(() => store.setAdminAccount(admin.id, true), `${admin.firstName} has been reactivated.`)}>Reactivate</Button>
+              <Button size="sm" onClick={() => sim.run(() => store.setAdminAccount(admin.id, true), `${admin.firstName} has been reactivated.`)}>Reactivate</Button>
+            )}
+            {invite !== 'accepted' && (
+              <>
+                <Button size="sm" variant="secondary" onClick={() => sim.run(() => { store.cancelInvite(admin.id); close(); }, `The invite for ${admin.firstName} has been cancelled.`)}>Cancel invite</Button>
+                <Button size="sm" leadingIcon="mail" loading={sim.busy} onClick={() => sim.run(() => store.resendInvite(admin.id), `We\u2019ve sent ${admin.firstName} a new invite.`)}>Resend invite</Button>
+              </>
             )}
           </>
         )
       }
     >
       <Section title="Details">
-        {editing ? (
-          <div className={s.form}>
-            <Input label="First name" value={first} onChange={(e) => setFirst(e.target.value)} />
-            <Input label="Last name" value={last} error={touched && (!first.trim() || !last.trim()) ? 'Please enter the admin’s first and last name.' : undefined} onChange={(e) => setLast(e.target.value)} />
-            <p className={s.note}>The email address can&rsquo;t be edited because it&rsquo;s used to sign in. To change it, deactivate this admin and invite them again.</p>
-            <div className={s.row}>
-              <Button size="sm" loading={sim.busy} onClick={saveNames}>Save</Button>
-              <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>Cancel</Button>
-            </div>
-          </div>
-        ) : (
-          <KeyValueList
+        <KeyValueList
             items={[
               { label: 'Role', value: admin.role === 'super' ? 'Super Admin' : 'Admin' },
               { label: 'Invitation', value: <InviteStatusText status={invite} /> },
@@ -100,7 +86,6 @@ export default function AdminDrawer({ id }: { id: string | null }) {
               ...(invite === 'pending' ? [{ label: 'Invite expires', value: `In ${hours} hours` }] : []),
             ]}
           />
-        )}
         {self && <p className={s.note}>This is your account.</p>}
         {invite === 'expired' && <p className={s.note}>Invites last 24 hours. Resend it to give them a new link.</p>}
       </Section>
@@ -108,6 +93,20 @@ export default function AdminDrawer({ id }: { id: string | null }) {
         <Section title="What admins can't do">
           <ul className={s.bullets}>{CANNOT.map((c) => <li key={c}>{c}</li>)}</ul>
         </Section>
+      )}
+      {editing && (
+        // Edit opens a modal with just the editable fields, instead of turning the panel into a form.
+        <Dialog
+          title={`Edit ${admin.firstName}`}
+          onClose={() => setEditing(false)}
+          footer={<><Button variant="secondary" onClick={() => setEditing(false)}>Cancel</Button><Button loading={sim.busy} onClick={saveNames}>Save changes</Button></>}
+        >
+          <div className={s.form}>
+            <Input label="First name" value={first} onChange={(e) => setFirst(e.target.value)} />
+            <Input label="Last name" value={last} error={touched && (!first.trim() || !last.trim()) ? 'Please enter the admin\u2019s first and last name.' : undefined} onChange={(e) => setLast(e.target.value)} />
+            <p className={s.note}>The email address can&rsquo;t be edited because it&rsquo;s used to sign in. To change it, deactivate this admin and invite them again.</p>
+          </div>
+        </Dialog>
       )}
       {deactivating && (
         <Dialog

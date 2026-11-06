@@ -1,2 +1,5 @@
 .who { display: grid; gap: 1px; min-inline-size: 0; max-inline-size: 36ch; }
 .email { color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-footnote); line-height: var(--lh-footnote); font-weight: var(--weight-regular); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Deactivate: a normal secondary button that turns red on hover, as a warning before the drawer asks for a reason. */
+.deactivate.deactivate.deactivate:hover:not([data-disabled]) { color: var(--color-danger-ink); border-color: color-mix(in srgb, var(--color-danger-ink) 35%, var(--color-surface)); background: var(--color-danger-tint); }
+.nameRow { display: inline-flex; align-items: center; gap: var(--space-3); min-inline-size: 0; }

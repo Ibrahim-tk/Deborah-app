@@ -1,78 +1,69 @@
 /**
  * @screen  A-5.1 · Support requests
  * @flow    A5 Support request management
- * @states  requests tab · data deletion tab · filtered · no results
+ * @states  default (open first, oldest first) · quick filter (consultation) · status, type, account type · no matches
  * @spec    docs/admin/README.md#a-51-support-requests
  * @xref    web: none (admin only)
  */
-import { useState } from 'react';
-import { Button, Select } from '@admin/ui';
-import { AdminPage, DEFAULT_SORT, FilterBar, SUPPORT_TYPE, SortRange, type SortValue } from '@admin/patterns';
-import { useAdminStore } from '@shared/admin';
-import { RequestsTable, type AccountFilter, type Show, type TypeFilter } from './parts/RequestsTable';
-import { DeletionTable } from './parts/DeletionTable';
-import { CreateDeletionDialog } from './parts/CreateDeletionDialog';
+import { useAdminStore, type SupportType } from '@shared/admin';
+import { AdminPage, DEFAULT_SORT, NoMatches, SUPPORT_TYPE, TableFilters, applySort, matches, rangePhrase, showing, type FilterState } from '@admin/patterns';
+import { useTableFilters } from '@admin/hooks/useTableFilters';
+import { RequestsTable } from './parts/RequestsTable';
 
-type Tab = 'requests' | 'deletion';
+/** Story 5.1: open requests first, oldest first. */
+const INITIAL: FilterState = { query: '', values: {}, quick: null, sort: { ...DEFAULT_SORT, order: 'oldest' } };
 
 export default function Support() {
-  const [tab, setTab] = useState<Tab>('requests');
-  const [query, setQuery] = useState('');
-  const [show, setShow] = useState<Show>('open');
-  const [type, setType] = useState<TypeFilter>('all');
-  const [account, setAccount] = useState<AccountFilter>('all');
-  // Story 5.1: open requests first, oldest first.
-  const [sort, setSort] = useState<SortValue>({ ...DEFAULT_SORT, order: 'oldest' });
-  const supportTotal = useAdminStore((s) => s.supportRequests.length);
-  const deletionTotal = useAdminStore((s) => s.deletionRequests.length);
-  const [creating, setCreating] = useState(false);
+  const requests = useAdminStore((s) => s.supportRequests);
+  const clients = useAdminStore((s) => s.clients);
+  const f = useTableFilters('support', INITIAL);
+  const { query, values, quick, sort } = f.state;
+  const v = (k: string) => values[k] ?? 'all';
+  const clientOf = (id: string) => clients.find((c) => c.id === id);
+
+  // Open requests always come first; the sort orders by date received within each group.
+  const rows = applySort(
+    requests.filter(
+      (r) =>
+        matches(query, clientOf(r.clientId)?.name ?? '', clientOf(r.clientId)?.email ?? '') &&
+        (quick !== 'consult' || r.type === 'consultation') &&
+        (v('status') === 'all' || r.resolved === (v('status') === 'resolved')) &&
+        (v('type') === 'all' || r.type === v('type')) &&
+        (v('account') === 'all' || clientOf(r.clientId)?.accountType === v('account')),
+    ),
+    sort,
+    (r) => r.received,
+  ).sort((a, b) => (a.resolved === b.resolved ? 0 : a.resolved ? 1 : -1));
+  const summary = showing(rows.length, ['request', 'requests'], [
+    v('status') !== 'all' && (v('status') === 'open' ? 'open' : 'resolved'),
+    v('type') !== 'all' && `of type ${SUPPORT_TYPE[v('type') as SupportType]}`,
+    rangePhrase(sort, 'received'),
+    query.trim() && `matching \u201c${query.trim()}\u201d`,
+  ]);
+
   return (
     <AdminPage
       title="Support requests"
-      subtitle={tab === 'requests' ? `${supportTotal} support requests in total` : `${deletionTotal} deletion requests in total`}
-      action={tab === 'deletion' && <Button leadingIcon="plus" onClick={() => setCreating(true)}>Create deletion request</Button>}
+      subtitle={`${requests.length} support requests in total`}
       toolbar={
-        <FilterBar query={query} onQuery={setQuery} placeholder="Search by first name or email">
-          <Select<Tab>
-            label="Request type"
-            hideLabel
-            value={tab}
-            onChange={setTab}
-            options={[{ value: 'requests', label: 'Support requests' }, { value: 'deletion', label: 'Data deletion requests' }]}
-          />
-          {tab === 'requests' && (
-            <Select<TypeFilter>
-              label="Type"
-              hideLabel
-              value={type}
-              onChange={setType}
-              options={[{ value: 'all', label: 'All types' }, ...(Object.keys(SUPPORT_TYPE) as (keyof typeof SUPPORT_TYPE)[]).map((t) => ({ value: t, label: SUPPORT_TYPE[t] }))]}
-            />
-          )}
-          {tab === 'requests' && (
-            <Select<AccountFilter>
-              label="Account type"
-              hideLabel
-              value={account}
-              onChange={setAccount}
-              options={[{ value: 'all', label: 'All accounts' }, { value: 'adult', label: 'Adult' }, { value: 'teen', label: 'Teen' }]}
-            />
-          )}
-          {tab === 'requests' && (
-            <Select<Show>
-              label="Show"
-              hideLabel
-              value={show}
-              onChange={setShow}
-              options={[{ value: 'open', label: 'Open requests' }, { value: 'resolved', label: 'Resolved' }, { value: 'all', label: 'All requests' }]}
-            />
-          )}
-          <SortRange value={sort} onChange={setSort} rangeLabel="Received between" />
-        </FilterBar>
+        <TableFilters
+          {...f}
+          placeholder="Search by name or email"
+          rangeLabel="Received between"
+          quick={[{ key: 'consult', label: 'Consultation' }]}
+          categories={[
+            { key: 'status', label: 'Status', options: [{ value: 'open', label: 'Open' }, { value: 'resolved', label: 'Resolved' }] },
+            { key: 'type', label: 'Type', options: (Object.keys(SUPPORT_TYPE) as SupportType[]).map((t) => ({ value: t, label: SUPPORT_TYPE[t] })) },
+            { key: 'account', label: 'Account type', options: [{ value: 'adult', label: 'Adult' }, { value: 'teen', label: 'Teen' }] },
+          ]}
+        />
       }
     >
-      {tab === 'requests' ? <RequestsTable query={query} show={show} type={type} account={account} sort={sort} /> : <DeletionTable query={query} sort={sort} />}
-      {creating && <CreateDeletionDialog onClose={() => setCreating(false)} />}
+      <RequestsTable
+        footer={summary}
+        rows={rows}
+        empty={requests.length === 0 ? 'There are no support requests right now.' : <NoMatches text="No requests match these filters." onClear={() => f.onChange(INITIAL)} />}
+      />
     </AdminPage>
   );
 }

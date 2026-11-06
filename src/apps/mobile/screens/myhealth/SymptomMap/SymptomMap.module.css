@@ -1,2 +1,45 @@
-.root { display: flex; flex-direction: column; height: 100%; }
-.body { flex: 1; min-height: 0; }
+.root { position: relative; display: flex; flex-direction: column; height: 100%; background: var(--color-canvas); }
+.scroll { flex: 1; min-height: 0; overflow-x: clip; overflow-y: auto; overscroll-behavior: contain; padding-bottom: calc(var(--tabbar-space) + var(--space-4)); }
+
+.intro { overflow: hidden; padding: 10px var(--margin-screen) 0; text-align: center; }
+.content { display: grid; justify-items: center; gap: var(--space-4); width: 100%; max-width: 380px; margin: 0 auto; padding: var(--space-2) var(--margin-screen) 0; text-align: center; }
+.heading { margin: 0 0 6px; font: var(--weight-regular) 26px / 32px var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.eyebrow {
+  margin: 2px 0 0; font: var(--weight-regular) 13px / 18px var(--font-body);
+  color: var(--color-ink-tertiary);
+}
+.lede { margin: 0; font: var(--weight-regular) 14px / 20px var(--font-body); color: var(--color-ink-secondary); }
+
+.footer { display: grid; justify-items: center; margin-top: var(--space-4); padding: 0 var(--margin-screen); text-align: center; }
+.textButton {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 44px; padding: 0 23px;
+  border: 0; border-radius: var(--radius-full); background: transparent;
+  font: var(--weight-regular) 14px / 1 var(--font-body); color: var(--color-ink-secondary);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.textButton:active { opacity: 0.8; }
+.disclaimer { margin: 8px 0 0; font: var(--weight-regular) 13px / 18px var(--font-body); color: var(--color-ink-secondary); }
+
+@media (max-width: 370px) {
+  .heading { font-size: 28px; }
+}
+
+/* Zoomed: one docked sheet under the wheel (floating chrome → real shadow). Fixed size; its body scrolls. */
+.sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 10;
+  height: calc(100% - 432px); min-height: 280px;
+  display: flex; flex-direction: column;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  background: var(--color-surface); box-shadow: var(--shadow-float-md);
+}
+.sheet::before {
+  content: ''; position: absolute; top: 8px; left: 50%; width: 36px; height: 5px; margin-left: -18px;
+  border-radius: var(--radius-full); background: var(--color-border-control);
+}
+.sheetBody { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-top: var(--space-6); }
+.sheetFoot {
+  display: grid; justify-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--margin-screen) calc(var(--safe-bottom, 0px) + var(--space-3));
+}
+.sheetFoot .disclaimer { margin: 0; font-size: 12px; line-height: 16px; color: var(--color-ink-tertiary); }

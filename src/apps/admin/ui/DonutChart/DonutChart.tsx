@@ -1,7 +1,7 @@
 /** @ui DonutChart — share of a whole, total in the centre, legend with counts and percentages beside it. */
 import styles from './DonutChart.module.css';
 
-export type DonutTone = 'accent' | 'gold' | 'success' | 'danger' | 'muted';
+export type DonutTone = 'accent' | 'gold' | 'success' | 'danger' | 'info' | 'muted';
 
 export interface DonutSlice {
   label: string;
@@ -14,7 +14,8 @@ const R = 52, C = 2 * Math.PI * R;
 const STROKE = 11, GAP = 4;
 
 /** `legend={false}`: just the ring, for layouts that list the slices elsewhere. */
-export function DonutChart({ data, label, totalLabel, legend = true }: { data: DonutSlice[]; label: string; totalLabel: string; legend?: boolean }) {
+/** `centerValue`: show a figure other than the sum in the middle (e.g. the highlighted slice when a filter is on). */
+export function DonutChart({ data, label, totalLabel, legend = true, centerValue }: { data: DonutSlice[]; label: string; totalLabel: string; legend?: boolean; centerValue?: number }) {
   const total = data.reduce((s, d) => s + d.value, 0) || 1;
   let offset = 0;
   return (
@@ -40,7 +41,7 @@ export function DonutChart({ data, label, totalLabel, legend = true }: { data: D
           offset += len;
           return el;
         })}
-        <text x={70} y={68} textAnchor="middle" className={styles.total}>{total.toLocaleString('en-US')}</text>
+        <text x={70} y={68} textAnchor="middle" className={styles.total}>{(centerValue ?? total).toLocaleString('en-US')}</text>
         <text x={70} y={88} textAnchor="middle" className={styles.totalLabel}>{totalLabel}</text>
       </svg>
       {legend && (

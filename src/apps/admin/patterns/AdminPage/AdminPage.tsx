@@ -19,15 +19,19 @@ export interface AdminPageProps {
   aside?: ReactNode;
   /** Trail for pages reached from inside a section (e.g. Settings › Compliance); replaces Back. */
   crumbs?: { label: string; onClick?: () => void }[];
+  /** A Back button at the very top, above the crumbs (pages that take over a section, e.g. Add content). */
+  onBack?: () => void;
 }
 
-export function AdminPage({ title, subtitle, action, toolbar, children, aside, crumbs }: AdminPageProps) {
+export function AdminPage({ title, subtitle, action, toolbar, children, aside, crumbs, onBack }: AdminPageProps) {
   const canBack = useAdminNav((s) => s.stack.length > 1);
   const pop = useAdminNav((s) => s.pop);
   return (
     <div className={styles.root}>
       {crumbs ? (
-        <nav aria-label="Breadcrumb" className={styles.crumbs}>
+        <div className={styles.topNav}>
+        {onBack && <span className={styles.backInline}><Button variant="ghost" size="sm" leadingIcon="back" onClick={onBack}>Back</Button></span>}
+        <nav aria-label="Breadcrumb" className={styles.crumbsNav}>
           <ol>
             {crumbs.map((c, i) => (
               <li key={c.label}>
@@ -37,6 +41,7 @@ export function AdminPage({ title, subtitle, action, toolbar, children, aside, c
             ))}
           </ol>
         </nav>
+        </div>
       ) : canBack && (
         <div className={styles.back}>
           <Button variant="ghost" size="sm" leadingIcon="back" onClick={pop}>Back</Button>

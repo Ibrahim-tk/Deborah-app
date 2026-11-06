@@ -8,7 +8,8 @@ import { useAdminNotifications } from './notifications';
 
 export const CONTENT_TYPES = ['Book', 'Protocol', 'Blog post', 'Q&A answer', 'Symptom chart', 'Diagnostic tree', 'Case study', 'Knowledge gap answer'] as const;
 export type ContentType = (typeof CONTENT_TYPES)[number];
-export type ContentStatus = 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
+/** `processing`: an upload the Oracle is still reading in; it isn't used until it's ready. */
+export type ContentStatus = 'processing' | 'draft' | 'pending' | 'published' | 'rejected' | 'archived';
 export type GapStatus = 'new' | 'answered' | 'dismissed';
 
 export interface ContentVersion { version: number; by: string; at: string; text: string }
@@ -42,7 +43,7 @@ export interface KnowledgeGap {
 }
 
 /** Plain words for a 60+ reader: what the state means for the Oracle, not workflow jargon. */
-export const CONTENT_STATUS: Record<ContentStatus, string> = { draft: 'Draft (not live)', pending: 'Waiting for approval', published: 'Live', rejected: 'Sent back', archived: 'Archived (not used)' };
+export const CONTENT_STATUS: Record<ContentStatus, string> = { processing: 'Processing', draft: 'Draft (not live)', pending: 'Waiting for approval', published: 'Live', rejected: 'Sent back', archived: 'Archived' };
 export const GAP_STATUS: Record<GapStatus, string> = { new: 'New', answered: 'Answered', dismissed: 'Dismissed' };
 export const contentText = (c: ContentItem) => c.history.find((h) => h.version === c.version)?.text ?? '';
 

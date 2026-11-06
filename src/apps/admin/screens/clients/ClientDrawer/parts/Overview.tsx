@@ -1,6 +1,6 @@
 /** Client drawer › Overview (story 3.1): account, subscription (Super Admin only), consent, teen link and activity.
  *  No conversations, summaries, notes or health answers appear here. */
-import { CLIENT_STATUS_LABEL, TEEN_STATUS_LABEL, clientStatus, formatDate, planLabel, teensOf, useAdminStore, type Client } from '@shared/admin';
+import { CLIENT_STATUS_LABEL, SIMPLE_CLIENT_STATUS_LABEL, TEEN_STATUS_LABEL, clientStatus, simpleClientStatus, formatDate, planLabel, teensOf, useAdminStore, type Client } from '@shared/admin';
 import { KeyValueList } from '@admin/ui';
 import { Section, SubscriptionStatusText } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
@@ -31,13 +31,18 @@ export function Overview({ client }: { client: Client }) {
             {
               label: 'Status',
               // "Deletion requested" links straight to the request (story 3.1).
-              value: pendingDeletion ? (
-                <button type="button" className={s.link} onClick={() => openDrawer({ kind: 'deletion', id: pendingDeletion.id })}>
-                  {CLIENT_STATUS_LABEL[clientStatus(client, st.deletionRequests)]}
-                </button>
-              ) : (
-                CLIENT_STATUS_LABEL[clientStatus(client, st.deletionRequests)]
-              ),
+              // Same simple status as the Clients list, plus the reason when it isn't the plain case.
+              value: (() => {
+                const full = clientStatus(client, st.deletionRequests);
+                const simple = SIMPLE_CLIENT_STATUS_LABEL[simpleClientStatus(full)];
+                const reason = CLIENT_STATUS_LABEL[full];
+                const text = reason === simple ? simple : `${simple} · ${reason}`;
+                return pendingDeletion ? (
+                  <button type="button" className={s.link} onClick={() => openDrawer({ kind: 'deletion', id: pendingDeletion.id })}>{text}</button>
+                ) : (
+                  text
+                );
+              })(),
             },
             { label: 'Signed up', value: formatDate(client.joined) },
           ]}

@@ -1,0 +1,66 @@
+/* M-7.9 wheel stage. Discs are 86px DOM nodes centred on (stage centre, 0); motion values move and scale them. */
+.stage {
+  position: relative; isolation: isolate; overflow: clip;
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.stage.zoomed { touch-action: pan-y; cursor: default; }
+.stage.dragging { cursor: grabbing; }
+
+/* Ring-space backdrop: 400×400, centred on the overview ring centre (CENTER_Y 225 → top 25px). */
+.field { position: absolute; left: 50%; top: 25px; width: 400px; height: 400px; margin-left: -200px; pointer-events: none; }
+.field svg { width: 100%; height: 100%; overflow: visible; }
+.wash { fill: none; stroke-width: 30; opacity: 0.16; }
+.ringStart { stop-color: var(--symptom-map-ring-start); }
+.ringMid { stop-color: var(--symptom-map-ring-mid); }
+.ringEnd { stop-color: var(--symptom-map-ring-end); }
+.threads { transition: opacity 0.2s; }
+.threadsHidden { opacity: 0; }
+.thread { stroke: var(--symptom-map-thread); stroke-width: 0.75; opacity: 0.6; }
+.thread.bridge { stroke: var(--symptom-map-thread-strong); stroke-width: 1; opacity: 0.8; }
+
+.disc {
+  position: absolute; left: 50%; top: 0;
+  width: 86px; height: 86px; margin: -43px 0 0 -43px; padding: 9px 6px;
+  border: 0; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  isolation: isolate; background: none; color: var(--color-ink-secondary);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.disc.matched { color: var(--color-accent); }
+/* The global focus ring would scale with the disc into a thick band; the hero is already the focus. */
+.disc:focus-visible, .core:focus-visible { outline: none; }
+/* Same gradient style on every disc, each nudged to its own hue (the glyph keeps its colour). */
+.disc::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 50%;
+  background: var(--symptom-map-disc); filter: hue-rotate(var(--disc-hue, 0deg));
+}
+.disc.matched::before { background: var(--symptom-map-disc-matched); }
+.disc.strong::before { background: var(--symptom-map-disc-strong); }
+.disc[data-hue='0'] { --disc-hue: 0deg; }
+.disc[data-hue='1'] { --disc-hue: -22deg; }
+.disc[data-hue='2'] { --disc-hue: 16deg; }
+.disc[data-hue='3'] { --disc-hue: -34deg; }
+.disc[data-hue='4'] { --disc-hue: 26deg; }
+.disc[data-hue='5'] { --disc-hue: -10deg; }
+.disc[data-hue='6'] { --disc-hue: 36deg; }
+.disc[data-hue='7'] { --disc-hue: -28deg; }
+.glyph { display: grid; flex: none; width: 20px; height: 20px; place-items: center; }
+.glyph > * { flex: none; margin: -26px; } /* 72px glyph centred in its 20px slot */
+.glyph svg, .coreGlyph svg { width: 72px; height: 72px; max-width: none; max-height: none; }
+.label {
+  overflow: hidden;
+  max-width: 100%; text-align: center; text-wrap: balance;
+  font: var(--weight-regular) 12px / 14px var(--font-body); letter-spacing: -0.015em;
+}
+
+.core {
+  position: absolute; left: 50%; top: 0; z-index: 5;
+  width: 116px; height: 116px; margin: -58px 0 0 -58px; padding: var(--space-3);
+  border: 0; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--symptom-map-core); color: var(--symptom-map-core-ink);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.coreWords, .coreGlyph { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.coreGlyph { color: var(--symptom-map-core-label); }
+.coreTitle { font: var(--weight-regular) 15px / 17px var(--font-display); text-align: center; }

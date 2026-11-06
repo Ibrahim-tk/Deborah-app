@@ -48,7 +48,7 @@ export const money = (n: number) => (n === 0 ? 'Free' : `$${n.toLocaleString('en
 export const count = (n: number) => n.toLocaleString('en-US');
 
 /** What a client is on, without the billing period: Free, Individual or Family. */
-export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.kind === 'trial' ? 'Free trial' : plan.kind === 'family' ? 'Family' : 'Individual');
+export const planLabel = (plan?: Plan) => (!plan ? '—' : plan.kind === 'trial' ? 'Free' : plan.kind === 'family' ? 'Family' : 'Individual');
 
 /** "Just now", "12 min ago", "3 h ago", "Yesterday", or "2 Nov" (relative to the prototype clock). */
 export function timeAgo(iso: string, nowIso: string = new Date().toISOString().slice(0, 16)): string {

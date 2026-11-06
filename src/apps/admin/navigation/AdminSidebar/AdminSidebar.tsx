@@ -2,7 +2,8 @@
  * @nav AdminSidebar — derived from the web Sidebar (brand row, collapsible rail, account at the foot)
  *      on the signature plum ground so the console reads as its own place. Counts are plain text.
  */
-import { useAdminStore } from '@shared/admin';
+import { useMemo } from 'react';
+import { useAdminNotifications, useAdminStore, visibleFor } from '@shared/admin';
 import { Icon, IconButton, Menu, Tooltip } from '@admin/ui';
 import { useAdminNav, useAdminSection } from '../nav.store';
 import { SECTIONS } from '../sections';
@@ -24,7 +25,11 @@ export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
   const email = useAdminStore((s) => s.email);
   const openCases = useAdminStore((s) => s.escalations.filter((e) => e.status === 'not_reviewed').length);
   const pendingSupport = useAdminStore((s) => s.supportRequests.filter((r) => !r.resolved).length);
-  const counts: Partial<Record<string, number>> = { escalations: openCases, support: pendingSupport };
+  const openDeletions = useAdminStore((s) => s.deletionRequests.filter((r) => r.status !== 'completed').length);
+  // Unread notifications this role can see, same rule as the bell.
+  const allNotes = useAdminNotifications((s) => s.items);
+  const unread = useMemo(() => visibleFor(allNotes, role).filter((n) => !n.read).length, [allNotes, role]);
+  const counts: Partial<Record<string, number>> = { escalations: openCases, support: pendingSupport, deletion: openDeletions, notifications: unread };
 
   const onMenu = (id: string) => {
     const s = useAdminStore.getState();
@@ -34,6 +39,22 @@ export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
     if (id === 'role') s.setRole(role === 'super' ? 'admin' : 'super');
     if (id === 'role' && role === 'super' && SECTIONS.find((x) => x.id === section)?.superOnly) go('dashboard');
   };
+
+  const link = (s: (typeof SECTIONS)[number]) => (
+    <Tooltip key={s.id} label={s.label} side="right" disabled={!collapsed}>
+      <button
+        type="button"
+        className={styles.link}
+        aria-current={section === s.id ? 'page' : undefined}
+        aria-label={collapsed ? s.label : undefined}
+        onClick={() => go(s.id)}
+      >
+        <Icon name={s.icon} size={18} className={styles.icon} />
+        {!collapsed && <span className={styles.label}>{s.label}</span>}
+        {!collapsed && !!counts[s.id] && <span className={styles.count}>{counts[s.id]}</span>}
+      </button>
+    </Tooltip>
+  );
 
   return (
     <aside className={styles.panel} data-collapsed={collapsed || undefined} data-sheet={inSheet || undefined} aria-label="Admin navigation">
@@ -57,23 +78,8 @@ export function AdminSidebar({ inSheet = false }: { inSheet?: boolean }) {
         )}
       </div>
 
-      <nav className={styles.links}>
-        {SECTIONS.filter((s) => !s.superOnly || role === 'super').map((s) => (
-          <Tooltip key={s.id} label={s.label} side="right" disabled={!collapsed}>
-          <button
-            type="button"
-            className={styles.link}
-            aria-current={section === s.id ? 'page' : undefined}
-            aria-label={collapsed ? s.label : undefined}
-            onClick={() => go(s.id)}
-          >
-            <Icon name={s.icon} size={18} className={styles.icon} />
-            {!collapsed && <span className={styles.label}>{s.label}</span>}
-            {!collapsed && !!counts[s.id] && <span className={styles.count}>{counts[s.id]}</span>}
-          </button>
-          </Tooltip>
-        ))}
-      </nav>
+      <nav className={styles.links}>{SECTIONS.filter((s) => !s.bottom && (!s.superOnly || role === 'super')).map(link)}</nav>
+      <nav className={styles.bottomLinks} aria-label="Notifications and settings">{SECTIONS.filter((s) => s.bottom).map(link)}</nav>
 
       <div className={styles.foot}>
         <Menu

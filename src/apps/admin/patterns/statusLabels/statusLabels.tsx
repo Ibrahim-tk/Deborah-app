@@ -14,15 +14,15 @@ export const AccountStatusText = ({ status }: { status: AccountStatus }) => (
 );
 
 export const EscalationStatusText = ({ status }: { status: EscalationStatus }) => (
-  <StatusText tone={status === 'not_reviewed' ? 'accent' : 'success'}>{status === 'not_reviewed' ? 'Not yet reviewed' : 'Reviewed'}</StatusText>
+  <StatusText tone={status === 'not_reviewed' ? 'warning' : 'success'} icon={status === 'not_reviewed' ? 'clock' : 'check'}>{status === 'not_reviewed' ? 'Review pending' : 'Reviewed'}</StatusText>
 );
 
 export const EscalationTypeText = ({ type }: { type: EscalationType }) => (
-  <StatusText tone={type === 'emergency' ? 'danger' : type === 'crisis' ? 'warning' : 'accent'}>{ESCALATION_LEVEL[type]}</StatusText>
+  <StatusText tone={type === 'emergency' ? 'danger' : type === 'crisis' ? 'warning' : 'info'}>{ESCALATION_LEVEL[type]}</StatusText>
 );
 
 export const InviteStatusText = ({ status }: { status: InviteStatus }) => (
-  <StatusText tone={status === 'accepted' ? 'success' : status === 'pending' ? 'accent' : 'warning'}>
+  <StatusText tone={status === 'accepted' ? 'success' : status === 'pending' ? 'info' : 'warning'}>
     {status === 'accepted' ? 'Accepted' : status === 'pending' ? 'Invite sent' : 'Invite expired'}
   </StatusText>
 );

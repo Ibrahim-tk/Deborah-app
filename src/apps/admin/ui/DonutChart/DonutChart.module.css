@@ -17,6 +17,7 @@
 [data-tone='gold'] { --tone: var(--color-gold); }
 [data-tone='success'] { --tone: var(--color-success-ink); }
 [data-tone='danger'] { --tone: var(--color-danger-ink); }
+[data-tone='info'] { --tone: var(--color-info-ink); }
 [data-tone='muted'] { --tone: var(--color-border-control); }
 @container (max-width: 380px) {
   .root { grid-template-columns: minmax(0, 1fr); justify-items: center; }

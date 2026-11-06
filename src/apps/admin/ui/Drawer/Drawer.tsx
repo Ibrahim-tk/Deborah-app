@@ -12,7 +12,7 @@ export interface DrawerProps {
   subtitle?: ReactNode;
   /** Inline after the title on the same line, e.g. a status pill. */
   meta?: ReactNode;
-  /** Row of actions under the header. */
+  /** The drawer's buttons, pinned to the bottom of the panel (the body scrolls above them). */
   actions?: ReactNode;
   /** Sits just before the close button, e.g. a ⋮ menu of actions. */
   headerControls?: ReactNode;
@@ -59,8 +59,9 @@ export function Drawer({ title, subtitle, meta, actions, headerControls, size = 
               <Base.Close render={<IconButton icon="close" label="Close" />} />
             </div>
           </header>
-          {actions && <div className={styles.actions}>{actions}</div>}
           <div className={styles.body}>{children}</div>
+          {/* Actions sit in a footer pinned to the bottom of the panel; only the body scrolls. */}
+          {actions && <footer className={styles.actions}>{actions}</footer>}
         </Base.Popup>
       </Base.Portal>
     </Base.Root>

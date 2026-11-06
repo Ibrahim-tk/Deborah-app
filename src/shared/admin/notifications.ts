@@ -39,7 +39,7 @@ export interface CategoryMeta {
 }
 
 export const CATEGORIES: Record<NotificationCategory, CategoryMeta> = {
-  support: { label: 'Support requests', description: 'A new Talk to Support Team, Consultation Request or Email Change Request.' },
+  support: { label: 'Support requests', description: 'A new Talk to Support Team or Consultation Request.' },
   gaps: { label: 'Knowledge gaps', description: 'A question the Oracle couldn\u2019t answer.' },
   deletion: { label: 'Deletion requests', description: 'A new deletion request.' },
   deadline: { label: 'Deletion deadlines', description: 'A reminder when a deletion request is 2 business days from its deadline.', locked: true },

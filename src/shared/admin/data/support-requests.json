@@ -10,17 +10,6 @@
     "notes": ""
   },
   {
-    "id": "s002",
-    "clientId": "c008",
-    "type": "email_change",
-    "subject": "Please change my email address",
-    "received": "2026-09-28T10:11",
-    "resolved": false,
-    "message": "I’ve moved to a new email and can’t sign in with the old one.",
-    "newEmail": "new.address@example.com",
-    "notes": ""
-  },
-  {
     "id": "s003",
     "clientId": "c013",
     "type": "knowledge_gap",
@@ -53,19 +42,6 @@
     "resolved": false,
     "message": "My lab results upload has been stuck at 90% since yesterday.",
     "notes": ""
-  },
-  {
-    "id": "s006",
-    "clientId": "c004",
-    "type": "email_change",
-    "subject": "Update my email",
-    "received": "2026-10-12T10:15",
-    "resolved": true,
-    "message": "Please update my account email to my work address.",
-    "newEmail": "work.address@example.com",
-    "notes": "Emailed on 2 Nov.",
-    "resolvedBy": "sam@oracleclinician.com",
-    "resolvedAt": "2026-10-12T10:15"
   },
   {
     "id": "s007",

@@ -14,7 +14,7 @@ export function FrameworkCard({ framework: f }: { framework: ComplianceFramework
         <div className={styles.titles}>
           <div className={styles.nameRow}>
             <h3 className={styles.name}>{f.name}</h3>
-            {f.state === 'applies' ? <StatusText tone="success">Applies</StatusText> : <StatusText tone="accent">In progress</StatusText>}
+            {f.state === 'applies' ? <StatusText tone="success">Applies</StatusText> : <StatusText tone="info">In progress</StatusText>}
           </div>
           <p className={styles.region}>{f.region}</p>
         </div>

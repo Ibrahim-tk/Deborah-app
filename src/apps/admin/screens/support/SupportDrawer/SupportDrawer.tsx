@@ -6,9 +6,9 @@
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
-import { formatDate, gapForQuestion, useAdminStore, useKnowledge } from '@shared/admin';
+import { formatDate, useAdminStore } from '@shared/admin';
 import { Button, Drawer, KeyValueList, StatusText, TextArea } from '@admin/ui';
-import { Section, SUPPORT_TYPE } from '@admin/patterns';
+import { Section, SUPPORT_TONE, SUPPORT_TYPE } from '@admin/patterns';
 import { useAdminNav } from '@admin/navigation';
 import { useSim } from '@admin/hooks/useSim';
 import { useAdminToast } from '@admin/hooks/toast.store';
@@ -18,8 +18,6 @@ import s from '@admin/screens/common/drawer/drawer.module.css';
 /** Replies go out by email outside the app; there's no phone contact and no in-app reply (Session 9). */
 export default function SupportDrawer({ id }: { id: string | null }) {
   const req = useAdminStore((st) => st.supportRequests.find((r) => r.id === id));
-  const gaps = useKnowledge((k) => k.gaps);
-  const gap = gapForQuestion(gaps, req?.question);
   const client = useAdminStore((st) => st.clients.find((c) => c.id === req?.clientId));
   const { closeDrawer, openClient } = useAdminNav.getState();
   const toast = useAdminToast();
@@ -28,24 +26,25 @@ export default function SupportDrawer({ id }: { id: string | null }) {
   if (!req) return null;
 
   const store = useAdminStore.getState();
-  const changeEmail = () =>
-    sim.run(() => client && req.newEmail && store.changeClientEmail(client.id, req.newEmail), `${client?.name.split(' ')[0] ?? 'The Client'}'s email address has been changed.`);
 
   return (
     <Drawer
       title={req.subject}
-      subtitle={`${SUPPORT_TYPE[req.type]} · Received ${formatDate(req.received)}`}
+      subtitle={`Received ${formatDate(req.received)}`}
       onClose={closeDrawer}
-      meta={req.resolved ? <StatusText tone="success">Resolved</StatusText> : <StatusText tone="accent">Open</StatusText>}
+      // The header pill names the request type, in the same colour as the Support requests table.
+      meta={<StatusText tone={SUPPORT_TONE[req.type]}>{SUPPORT_TYPE[req.type]}</StatusText>}
       actions={
-        req.resolved ? (
+        <>
+        <Button size="sm" variant="ghost" disabled={notes === req.notes} onClick={() => { store.saveSupportNote(req.id, notes); toast('Your note has been saved.'); }}>Save note</Button>
+        {req.resolved ? (
           <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => sim.run(() => store.setSupportResolved(req.id, false), 'This request has been reopened.')}>Reopen</Button>
         ) : (
           <>
             <Button size="sm" loading={sim.busy} onClick={() => sim.run(() => store.setSupportResolved(req.id, true), 'This request has been marked as resolved.')}>Mark as resolved</Button>
-            {req.type === 'email_change' && client && <Button size="sm" variant="secondary" onClick={changeEmail}>Change email address</Button>}
           </>
-        )
+        )}
+        </>
       }
     >
       <Section title="Request">
@@ -59,14 +58,6 @@ export default function SupportDrawer({ id }: { id: string | null }) {
             ...(req.resolved && req.resolvedBy ? [{ label: 'Resolved', value: `${req.resolvedBy} · ${req.resolvedAt ? formatDate(req.resolvedAt) : ''}` }] : []),
           ]}
         />
-        <p className={s.message}>{req.message}</p>
-        <p className={s.note}>
-          {req.type === 'knowledge_gap'
-            ? <>This question was also sent to Knowledge Base as a knowledge gap.{gap && <> <button type="button" className={s.link} onClick={() => useAdminNav.getState().openDrawer({ kind: 'gap', id: gap.id })}>Open the gap</button></>}</>
-            : req.type === 'consultation'
-              ? 'Contact the Client by email to decide whether a consultation is right for them. Booking and payment happen outside the app.'
-              : 'Replies go out by email, outside the app. Mark the request resolved once you’ve replied.'}
-        </p>
       </Section>
       {client && (
         <Section title="Client">
@@ -81,9 +72,6 @@ export default function SupportDrawer({ id }: { id: string | null }) {
       )}
       <Section title="Internal notes">
         <TextArea label="Internal notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="For example, Emailed on 2 Nov" />
-        <div>
-          <Button size="sm" variant="secondary" disabled={notes === req.notes} onClick={() => { store.saveSupportNote(req.id, notes); toast('Your note has been saved.'); }}>Save note</Button>
-        </div>
       </Section>
     </Drawer>
   );

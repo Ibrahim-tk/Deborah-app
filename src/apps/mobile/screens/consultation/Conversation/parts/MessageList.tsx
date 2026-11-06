@@ -48,7 +48,8 @@ export interface MessageListProps {
   onRestartPlan: () => void;
   onVisitNotes: () => void;
   onOpenPlan: () => void;
-  onOpenSymptomMap: () => void;
+  /** Opens M-7.9 with the symptoms this chat surfaced. */
+  onOpenSymptomMap: (chatSymptoms: string[]) => void;
   onTeamBook: () => void;
   onLongPress: (m: Message) => void;
   onFocusComposer: () => void;
@@ -241,7 +242,7 @@ export function MessageList({
                   onFollowUp={onFocusComposer}
                 />
               )}
-              {showNext && mapTileMsgId === m.id && <SymptomMapTile onPress={onOpenSymptomMap} />}
+              {showNext && mapTileMsgId === m.id && <SymptomMapTile onPress={() => onOpenSymptomMap(chatSymptoms)} />}
               {showNext && <GuidanceEnd onHome={goHome} onContinue={onFocusComposer} />}
             </>
           )}

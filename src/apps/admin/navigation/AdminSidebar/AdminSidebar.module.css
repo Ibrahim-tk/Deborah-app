@@ -64,6 +64,8 @@
 .label { flex: 1; min-inline-size: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .count { font-size: var(--fs-footnote); font-variant-numeric: tabular-nums; color: var(--color-ink-tertiary); }
 .foot { padding: var(--space-3); border-block-start: 1px solid var(--color-border-hairline); }
+/* Notifications and Settings sit just above the account selector, apart from the main list. */
+.bottomLinks { display: grid; gap: 2px; padding: var(--space-2) var(--space-3); }
 .account {
   all: unset;
   cursor: pointer;
@@ -94,6 +96,7 @@
 
 /* Collapsed rail: everything sits on one centre line. Links become 40px squares (same as the expand
  * button and the avatar's hit area), so the active tint, logo and account initial share one column. */
+.panel[data-collapsed] .bottomLinks { justify-items: center; padding-inline: 0; }
 .panel[data-collapsed] .links { justify-items: center; padding-inline: 0; gap: var(--space-1); }
 .panel[data-collapsed] .link { inline-size: 40px; block-size: 40px; min-block-size: 0; padding: 0; justify-content: center; }
 .panel[data-collapsed] .foot { display: flex; justify-content: center; padding-inline: 0; }

@@ -1,5 +1,5 @@
 /** Plain-text labels for admin record types (no JSX, so components can stay fast-refresh friendly). */
-import type { ContentStatus, GapStatus } from '@shared/admin';
+import type { ContentStatus, GapStatus, SimpleClientStatus } from '@shared/admin';
 import type { StatusTone } from '@admin/ui';
 import type { DeletionRequest, DeletionStatus, DeletionType, EscalationType, SupportType } from '@shared/admin';
 
@@ -10,7 +10,6 @@ export const SUPPORT_TYPE: Record<SupportType, string> = {
   talk_to_support: 'Talk to Support Team',
   consultation: 'Consultation Request',
   knowledge_gap: 'Knowledge Gap',
-  email_change: 'Email Change Request',
 };
 
 /** Deletion requests (story 5.2). */
@@ -29,5 +28,11 @@ export const DELETION_OPTION: Record<NonNullable<DeletionRequest['option']>, str
 };
 
 /** Knowledge Base pills: colour only for meaning (story 6.1, Dropbox-style "always show the state"). */
-export const CONTENT_TONE: Record<ContentStatus, StatusTone> = { published: 'success', pending: 'warning', draft: 'neutral', rejected: 'danger', archived: 'neutral' };
+export const CONTENT_TONE: Record<ContentStatus, StatusTone> = { processing: 'processing', published: 'success', pending: 'warning', draft: 'neutral', rejected: 'danger', archived: 'neutral' };
 export const GAP_TONE: Record<GapStatus, StatusTone> = { new: 'info', answered: 'success', dismissed: 'neutral' };
+
+/** Simple client status pills (Clients list and client drawer): Active green, Cancelled red, Inactive grey. */
+export const CLIENT_SIMPLE_TONE: Record<SimpleClientStatus, StatusTone> = { active: 'success', cancelled: 'danger', inactive: 'neutral' };
+
+/** Support request type pills: talk to support blue, consultation green, knowledge gap red. */
+export const SUPPORT_TONE: Record<SupportType, StatusTone> = { talk_to_support: 'info', consultation: 'success', knowledge_gap: 'danger' };

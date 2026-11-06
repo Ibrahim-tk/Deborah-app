@@ -3,7 +3,7 @@ import type { ComponentType } from 'react';
 import ClientDrawer from '@admin/screens/clients/ClientDrawer';
 import EscalationDrawer from '@admin/screens/escalations/EscalationDrawer';
 import SupportDrawer from '@admin/screens/support/SupportDrawer';
-import DeletionDrawer from '@admin/screens/support/DeletionDrawer';
+import DeletionDrawer from '@admin/screens/deletion/DeletionDrawer';
 import AdminDrawer from '@admin/screens/admins/AdminDrawer';
 import PlanDrawer from '@admin/screens/subscriptions/PlanDrawer';
 import AuditDrawer from '@admin/screens/audit/AuditDrawer';

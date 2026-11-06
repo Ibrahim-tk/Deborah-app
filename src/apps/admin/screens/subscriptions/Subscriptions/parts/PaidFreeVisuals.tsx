@@ -2,10 +2,11 @@
 import { count } from '@shared/admin';
 import styles from './PaidFreeVisuals.module.css';
 
-export function PaidFreeSplit({ paid, free }: { paid: number; free: number }) {
+/** `paidLabel`: "Paid", or the plan type picked in the filter (e.g. "Family"). */
+export function PaidFreeSplit({ paid, free, paidLabel = 'Paid' }: { paid: number; free: number; paidLabel?: string }) {
   const paidPct = Math.round((paid / (paid + free || 1)) * 100);
   const rows = [
-    { key: 'paid', label: `Paid (${paidPct}%)`, value: paid },
+    { key: 'paid', label: `${paidLabel} (${paidPct}%)`, value: paid },
     { key: 'free', label: `Free (${100 - paidPct}%)`, value: free },
   ];
   return (

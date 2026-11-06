@@ -8,7 +8,7 @@
  */
 import { HeldChoiceContext, type HeldChoice } from '@mobile/patterns/chat';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { asksForAnswer, isMinor, pendingFacts } from '@shared/engine';
+import { asksForAnswer, focusAreaFor, isMinor, pendingFacts } from '@shared/engine';
 import { suggestionsData } from '@shared/data';
 import { thirdPerson } from './parts/thirdPerson';
 import { SELF_PROFILE_ID, useAppStore } from '@shared/store';
@@ -274,9 +274,9 @@ export default function Conversation() {
                     switchTab('health');
                     push('M-7.3');
                   }}
-                  onOpenSymptomMap={() => {
+                  onOpenSymptomMap={(highlight) => {
                     switchTab('health');
-                    push('M-7.9');
+                    push('M-7.9', { focus: focusAreaFor(highlight), highlight: highlight.join('|') });
                   }}
                   onTeamBook={() => {
                     toast('Summary sent to the support team (demo)');

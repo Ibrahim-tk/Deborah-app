@@ -1,7 +1,7 @@
 /** Needs Attention strip (story 2.1): what's open right now, whatever the date range. Each tile opens its screen.
  *  Escalations have no overdue count: they're recorded for review only (Session 9). */
 import { businessDaysLeft, useAdminStore, useKnowledge } from '@shared/admin';
-import type { IconName } from '@admin/ui';
+import { Icon, type IconName } from '@admin/ui';
 import { ESCALATION_LEVEL, SUPPORT_TYPE } from '@admin/patterns';
 import { useAdminNav, type SectionId } from '@admin/navigation';
 import styles from './NeedsAttention.module.css';
@@ -29,26 +29,24 @@ export function NeedsAttention() {
   const tiles: Tile[] = [
     { id: 'esc', label: 'Escalations not yet reviewed', icon: 'alert', total: esc.length, detail: byLevel, section: 'escalations' },
     { id: 'sup', label: 'Open support requests', icon: 'support', total: sup.length, detail: byType || 'None open', section: 'support' },
-    { id: 'del', label: 'Pending deletion requests', icon: 'delete', total: del.length, detail: `${close} close to the deadline`, section: 'support' },
+    { id: 'del', label: 'Pending deletion requests', icon: 'delete', total: del.length, detail: `${close} close to the deadline`, section: 'deletion' },
     ...(st.role === 'super' ? [{ id: 'kb', label: 'Content to review', icon: 'book' as IconName, total: pending + newGaps, detail: `${pending} waiting for approval · ${newGaps} new knowledge gaps`, section: 'knowledge' as SectionId }] : []),
   ];
 
   if (tiles.every((t) => t.total === 0)) return <p className={styles.clear}>You&rsquo;re all caught up.</p>;
 
   return (
-    <section className={styles.wrap} aria-label="Needs attention">
-      <h2 className={styles.heading}>Needs attention</h2>
-      <div className={styles.strip}>
+    // Same cell layout as the KPI band underneath, so the two rows read as one block of eight.
+    <section className={styles.strip} aria-label="Needs attention">
       {tiles.map((t) => (
-        <button key={t.id} type="button" className={styles.tile} onClick={() => go(t.section)} title={t.detail}>
-          <span className={styles.total}>{t.total}</span>
-          <span className={styles.text}>
-            <span className={styles.head}>{t.label}</span>
-            <span className={styles.detail}>{t.detail}</span>
+        <button key={t.id} type="button" className={styles.tile} onClick={() => go(t.section)}>
+          <span className={styles.head}>
+            {t.label}
+            <Icon name="chevron" size={18} className={styles.arrow} />
           </span>
+          <span className={styles.total}>{t.total}</span>
         </button>
       ))}
-      </div>
     </section>
   );
 }

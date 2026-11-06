@@ -34,10 +34,13 @@ export default function Subscriptions() {
   const paid = clients.filter((c) => c.planId !== 'trial' && c.accountType === 'adult');
   const share = (id: string) => Math.round((paid.filter((c) => c.planId === id).length / (paid.length || 1)) * ACTIVE);
   const tones = ['accent', 'gold', 'success', 'muted'] as const;
+  // Plan mix of all subscribers. With a plan type picked, that plan keeps its colour and the rest fade to grey,
+  // and the ring's centre shows the picked plan's subscribers, so the ring answers "how big is this plan".
   const distribution = plans
     .filter((p) => p.kind !== 'trial')
-    .map((p, i) => ({ label: p.name, value: share(p.id), tone: tones[i % tones.length] }))
-    .filter((d) => d.value > 0);
+    .map((p, i) => ({ label: p.name, kind: p.kind, value: share(p.id), tone: tones[i % tones.length] }))
+    .filter((d) => d.value > 0)
+    .map((d) => ({ ...d, tone: planFilter === 'all' || d.kind === planFilter ? d.tone : ('muted' as const) }));
 
   // Filters: the plan type scales the trend by that plan's share; the period picks the last N months.
   const kindShare =
@@ -57,6 +60,9 @@ export default function Subscriptions() {
   // Free accounts at the same scale as the paid headline, from the seeded free/paid mix.
   const freeUsers = Math.round(((clients.length - paid.length) / (paid.length || 1)) * ACTIVE);
   const churnRate = active ? (last.churned / active) * 100 : 0;
+  // Left card follows both filters: the plan type narrows paid users to that plan (free users have no plan, so they
+  // always count).
+  const kindName = planFilter === 'family' ? 'Family' : planFilter === 'individual' ? 'Individual' : 'Paid';
 
   // Active subscriptions card; the left-side visual for free vs paid users is the free vs paid split.
   const activeCard = (visual: ReactNode) => (
@@ -67,8 +73,14 @@ export default function Subscriptions() {
       aside={
         // The ring and its plan legend sit together on the right.
         <div className={styles.ring}>
-          <DonutChart label="Plan distribution" totalLabel="subscribers" data={distribution} legend={false} />
-          <Breakdown rows={distribution.map((d) => ({ label: d.label, value: d.value, pct: Math.round((d.value / (active || 1)) * 100), tone: d.tone === 'gold' ? 'gold' : 'accent' }))} />
+          <DonutChart
+                label="Plan distribution"
+                totalLabel={planFilter === 'all' ? 'subscribers' : `${planFilter === 'family' ? 'Family' : 'Individual'} of ${count(ACTIVE)}`}
+                centerValue={planFilter === 'all' ? undefined : active}
+                data={distribution}
+                legend={false}
+              />
+          <Breakdown rows={distribution.map((d) => ({ label: d.label, value: d.value, pct: Math.round((d.value / (ACTIVE || 1)) * 100), tone: d.tone === 'muted' ? 'muted' : d.tone === 'gold' ? 'gold' : 'accent' }))} />
         </div>
       }
     >
@@ -79,9 +91,8 @@ export default function Subscriptions() {
   return (
     <AdminPage
       title="Subscriptions"
-      action={<Button leadingIcon="plus" onClick={() => openDrawer({ kind: 'plan', id: null })}>New plan</Button>}
-      toolbar={
-        // Trend controls: which plans and how far back. They drive the figures and the growth chart.
+      action={
+        // Trend controls (which plans, how far back) sit beside New plan; they drive the figures and the chart.
         <div className={styles.filters}>
           <Select<PlanFilter>
             label="Plan type"
@@ -97,12 +108,13 @@ export default function Subscriptions() {
             onChange={setPeriod}
             options={[{ value: '3', label: 'Last 3 months' }, { value: '6', label: 'Last 6 months' }, { value: '12', label: 'Last 12 months' }, { value: 'all', label: 'All time' }]}
           />
+          <Button leadingIcon="plus" onClick={() => openDrawer({ kind: 'plan', id: null })}>New plan</Button>
         </div>
       }
     >
       {/* Two cards cover the four stats: subscribers (active, plan mix, free vs paid) and growth and churn. */}
       <div className={styles.grid}>
-        {activeCard(<PaidFreeSplit paid={active} free={freeUsers} />)}
+        {activeCard(<PaidFreeSplit paid={active} free={freeUsers} paidLabel={kindName} />)}
         <KpiCard
           label="New subscriptions"
           value={count(added)}

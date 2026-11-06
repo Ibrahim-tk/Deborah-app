@@ -21,7 +21,7 @@ export function SourcesPanel({ onAdd }: { onAdd: () => void }) {
           ]}
         />
       </Section>
-      <Section title="By kind of content" surface>
+      <Section title="By type of content" surface>
         <KeyValueList items={byType.map((r) => ({ label: r.label, value: r.value }))} />
       </Section>
     </div>

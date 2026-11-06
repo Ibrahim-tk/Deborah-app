@@ -9,7 +9,10 @@ export function FileTile({ name, detail, onOpen, onDownload }: { name: string; d
   const ext = name.split('.').pop()?.toLowerCase() ?? '';
   return (
     <div className={styles.tile}>
-      <span className={styles.tileIcon} data-ext={ext}><Icon name={ext === 'pdf' ? 'pdf' : 'file'} size={28} /></span>
+      <span className={styles.tileIcon} data-ext={ext}>
+        {/* Word files get a blue "W" mark, the way PDFs get their red PDF icon. */}
+        {ext === 'docx' || ext === 'doc' ? <span className={styles.wordMark} aria-hidden>W</span> : <Icon name={ext === 'pdf' ? 'pdf' : 'file'} size={28} />}
+      </span>
       <span className={styles.meta}>
         <span className={styles.name}>{name}</span>
         <span className={styles.sub}>{[KIND[ext] ?? 'File', detail].filter(Boolean).join(' · ')}</span>

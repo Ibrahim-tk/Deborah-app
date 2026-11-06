@@ -3,6 +3,7 @@
 /* Search keeps the leading edge; filters sit on the trailing edge, away from it, on every page. */
 .filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-3); margin-inline-start: auto; }
 .filters[data-inline] { margin-inline-start: 0; }
+.trailing { margin-inline-start: auto; }
 
 /* Phone: search gets its own full-width row; filters share the row below, two up. */
 @container admin (max-width: 640px) {
@@ -10,6 +11,7 @@
   .search { flex-basis: auto; max-inline-size: none; }
   .filters { margin-inline-start: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .filters > * { min-inline-size: 0; }
+  .trailing { margin-inline-start: 0; }
   /* A segmented control that can't fit scrolls sideways instead of overflowing the page. */
   .filters > :has([role='tablist']) { grid-column: 1 / -1; overflow-x: auto; scrollbar-width: none; }
 }

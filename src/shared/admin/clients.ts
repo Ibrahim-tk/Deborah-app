@@ -20,6 +20,13 @@ export function clientStatus(c: Client, deletions: DeletionRequest[]): ClientSta
   return c.subscription;
 }
 
+/** The simple status the Clients list, its filter and the client drawer all show. Active covers trial and payment
+ *  issues (they can still sign in); Inactive covers deactivated, consent revoked and deletion requested. */
+export type SimpleClientStatus = 'active' | 'cancelled' | 'inactive';
+export const SIMPLE_CLIENT_STATUS_LABEL: Record<SimpleClientStatus, string> = { active: 'Active', cancelled: 'Cancelled', inactive: 'Inactive' };
+export const simpleClientStatus = (st: ClientStatus): SimpleClientStatus =>
+  st === 'active' || st === 'trial' || st === 'payment_issue' ? 'active' : st === 'cancelled' ? 'cancelled' : 'inactive';
+
 /** Teens with their own account linked to this parent. */
 export const teensOf = (parentId: string, clients: Client[]) => clients.filter((c) => c.parentId === parentId);
 

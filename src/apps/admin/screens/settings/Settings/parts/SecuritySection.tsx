@@ -42,7 +42,7 @@ export function SecuritySection() {
                   <span className={s.itemMeta}>{x.location}, {x.lastActive.toLowerCase()}</span>
                 </span>
                 <span className={s.itemEnd}>
-                  {x.current && <StatusText tone="accent">This device</StatusText>}
+                  {x.current && <StatusText tone="info">This device</StatusText>}
                   <Menu
                     side="bottom"
                     align="end"

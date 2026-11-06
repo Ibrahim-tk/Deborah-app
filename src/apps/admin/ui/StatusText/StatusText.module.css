@@ -19,3 +19,10 @@
 .root[data-tone='warning'] { background: var(--color-warning-tint); color: var(--color-warning-ink); }
 .root[data-tone='danger'] { background: var(--color-danger-tint); color: var(--color-danger-ink); }
 .root[data-tone='info'] { background: var(--color-info-tint); color: var(--color-info-ink); }
+/* Processing: the info (blue) pill like the other tones, with a small static progress ring after the text:
+ * filled arc = how far along, pale track = what's left. No spin. */
+.root[data-tone='processing'] { background: var(--color-info-tint); color: var(--color-info-ink); }
+.ring { inline-size: 14px; block-size: 14px; flex: none; }
+.track, .arc { fill: none; stroke-width: 2; }
+.track { stroke: color-mix(in srgb, var(--color-info-ink) 22%, var(--color-info-tint)); }
+.arc { stroke: var(--color-info-ink); stroke-linecap: round; }

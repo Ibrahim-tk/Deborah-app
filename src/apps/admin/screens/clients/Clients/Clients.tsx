@@ -1,52 +1,48 @@
 /**
  * @screen  A-3.1 · Clients
  * @flow    A3 Client management (story 3.1)
- * @states  default · filtered by plan / status · latest / oldest / custom sign-up range · no results
+ * @states  default · filtered by plan / status · sort / custom range · no matches
  * @spec    docs/admin/stories.md#31---view-client-listings--details
  * @xref    web: none (admin only)
  */
-import { useState } from 'react';
-import { CLIENT_STATUS_LABEL, clientStatus, formatDate, planLabel, useAdminStore, type Client, type ClientStatus } from '@shared/admin';
-import { DataTable, Select, StatusText, type Column, type StatusTone } from '@admin/ui';
-import { AdminPage, DEFAULT_SORT, FilterBar, SortRange, applySort, matches, rangePhrase, showing, type SortValue } from '@admin/patterns';
+import { SIMPLE_CLIENT_STATUS_LABEL, clientStatus, simpleClientStatus, type SimpleClientStatus, formatDate, planLabel, useAdminStore, type Client } from '@shared/admin';
+import { DataTable, StatusText, type Column, type StatusTone } from '@admin/ui';
+import { AdminPage, CLIENT_SIMPLE_TONE, DEFAULT_SORT, NoMatches, TableFilters, applySort, matches, rangePhrase, showing, type FilterState } from '@admin/patterns';
+import { useTableFilters } from '@admin/hooks/useTableFilters';
 import { useAdminNav } from '@admin/navigation';
+import { ClientActions } from '../ClientActions';
 import styles from './Clients.module.css';
 
-const all = (label: string) => ({ value: 'all', label });
+const INITIAL: FilterState = { query: '', values: {}, quick: null, sort: DEFAULT_SORT };
 
-/** Status pills: the label always shows, the tint only supports it. */
-const STATUS_TONE: Record<ClientStatus, StatusTone> = {
-  active: 'success',
-  trial: 'info',
-  payment_issue: 'warning',
-  deletion_requested: 'danger',
-  consent_revoked: 'warning',
-  cancelled: 'neutral',
-  deactivated: 'neutral',
-};
+/** Plan pills: Individual purple, Family blue, Free grey. */
+const PLAN_TONE: Record<string, StatusTone> = { individual: 'accent', family: 'info', trial: 'neutral' };
 
 export default function Clients() {
   const clients = useAdminStore((s) => s.clients);
   const plans = useAdminStore((s) => s.plans);
   const openClient = useAdminNav((s) => s.openClient);
-  const [query, setQuery] = useState('');
   const deletions = useAdminStore((s) => s.deletionRequests);
-  const [plan, setPlan] = useState('all');
-  const [status, setStatus] = useState<'all' | ClientStatus>('all');
+  const f = useTableFilters('clients', INITIAL);
+  const { query, values, sort } = f.state;
+  const v = (k: string) => values[k] ?? 'all';
 
   const planName = (id: string) => planLabel(plans.find((p) => p.id === id));
-  const [sort, setSort] = useState<SortValue>(DEFAULT_SORT);
-  const rows = applySort(
-    clients.filter((c) => matches(query, c.name, c.email) && (plan === 'all' || c.planId === plan) && (status === 'all' || clientStatus(c, deletions) === status)),
-    sort,
-    (c) => c.joined,
-  );
-
+  const passes = (c: Client) => {
+    const st = simpleClientStatus(clientStatus(c, deletions));
+    return (
+      matches(query, c.name, c.email) &&
+      (v('status') === 'all' || st === v('status')) &&
+      (v('plan') === 'all' || c.planId === v('plan'))
+    );
+  };
+  const rows = applySort(clients.filter(passes), sort, (c) => c.joined);
+  const filtered = rows.length !== clients.length;
   // The screen's only live count: it always describes exactly what the table shows.
   const summary = showing(rows.length, ['client', 'clients'], [
-    plan !== 'all' && `on ${plans.find((p) => p.id === plan)?.name ?? ''}`,
-    status !== 'all' && `with ${CLIENT_STATUS_LABEL[status]}`,
-    rangePhrase(sort, 'who signed up'),
+    v('status') !== 'all' && `with Status: ${SIMPLE_CLIENT_STATUS_LABEL[v('status') as SimpleClientStatus]}`,
+    v('plan') !== 'all' && `on ${plans.find((p) => p.id === v('plan'))?.name ?? ''}`,
+    rangePhrase(sort, 'who joined'),
     query.trim() && `matching \u201c${query.trim()}\u201d`,
   ]);
 
@@ -63,40 +59,55 @@ export default function Clients() {
         </span>
       ),
     },
-    { key: 'plan', header: 'Plan', render: (c) => (c.accountType === 'teen' ? 'Parent\u2019s Family plan' : planName(c.planId)) },
-    { key: 'status', header: 'Status', render: (c) => { const st = clientStatus(c, deletions); return <StatusText tone={STATUS_TONE[st]}>{CLIENT_STATUS_LABEL[st]}</StatusText>; } },
-    { key: 'family', muted: true, header: 'Family', align: 'end', render: (c) => (c.accountType === 'adult' ? c.dependents.length || '—' : '—') },
-    { key: 'joined', muted: true, header: 'Signed up', render: (c) => formatDate(c.joined) },
-    { key: 'active', muted: true, header: 'Last active', render: (c) => formatDate(c.lastActive) },
+    {
+      key: 'plan',
+      header: 'Plan',
+      // Plan as a pill: one person for Individual, a group for Family (and teens on a parent's Family plan), no icon for the free trial.
+      render: (c) => {
+        const kind = c.accountType === 'teen' ? 'family' : plans.find((p) => p.id === c.planId)?.kind;
+        const label = c.accountType === 'teen' ? 'Parent\u2019s Family plan' : planName(c.planId);
+        return <StatusText tone={PLAN_TONE[kind ?? 'trial']} icon={kind === 'family' ? 'group' : kind === 'individual' ? 'person' : undefined}>{label}</StatusText>;
+      },
+    },
+    { key: 'account', muted: true, header: 'Account type', render: (c) => (c.accountType === 'teen' ? 'Teen' : 'Adult') },
+    { key: 'status', header: 'Status', render: (c) => { const st = simpleClientStatus(clientStatus(c, deletions)); return <StatusText tone={CLIENT_SIMPLE_TONE[st]}>{SIMPLE_CLIENT_STATUS_LABEL[st]}</StatusText>; } },
+    { key: 'joined', muted: true, header: 'Joined', render: (c) => formatDate(c.joined) },
+    {
+      key: 'actions',
+      header: '',
+      align: 'end',
+      // Keep menu and dialog clicks from also opening the row's drawer (portalled dialogs still bubble here in React).
+      render: (c) => (
+        <span onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
+          <ClientActions client={c} />
+        </span>
+      ),
+    },
   ];
 
   return (
     <AdminPage
       title="Clients"
-      subtitle={`${clients.length} clients in total`}
       toolbar={
-        <FilterBar query={query} onQuery={setQuery} placeholder="Search by first name or email">
-          <Select label="Plan" hideLabel value={plan} onChange={setPlan} options={[all('All plans'), ...plans.map((p) => ({ value: p.id, label: p.name }))]} />
-          <Select<'all' | ClientStatus>
-            label="Status"
-            hideLabel
-            value={status}
-            onChange={setStatus}
-            options={[all('All statuses') as { value: 'all'; label: string }, ...(Object.keys(CLIENT_STATUS_LABEL) as ClientStatus[]).map((k) => ({ value: k, label: CLIENT_STATUS_LABEL[k] }))]}
-          />
-          <SortRange value={sort} onChange={setSort} rangeLabel="Signed up between" />
-        </FilterBar>
+        <TableFilters
+          {...f}
+          placeholder="Search by name or email"
+          rangeLabel="Joined between"
+          categories={[
+            { key: 'plan', label: 'Plan', options: plans.map((p) => ({ value: p.id, label: p.name })) },
+            { key: 'status', label: 'Status', options: (Object.keys(SIMPLE_CLIENT_STATUS_LABEL) as SimpleClientStatus[]).map((k) => ({ value: k, label: SIMPLE_CLIENT_STATUS_LABEL[k] })) },
+          ]}
+        />
       }
     >
-      <DataTable
+      <DataTable footer={summary}
         label="Clients"
         columns={columns}
         rows={rows}
         rowKey={(c) => c.id}
-        footer={summary}
         pager="outside"
         onRowClick={(c) => openClient(c.id)}
-        empty="No clients match your search."
+        empty={<NoMatches text="No clients match these filters." onClear={filtered ? () => f.onChange(INITIAL) : undefined} />}
       />
     </AdminPage>
   );

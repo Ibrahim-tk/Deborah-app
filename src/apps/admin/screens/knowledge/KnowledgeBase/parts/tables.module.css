@@ -1,1 +1,3 @@
 .stack { display: grid; gap: var(--space-6); }
+/* Dates read as supporting detail: a lighter purple, like the Escalations date column. */
+.date { color: color-mix(in srgb, var(--color-ink-tertiary) 65%, var(--color-surface)); }

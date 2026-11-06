@@ -1,0 +1,62 @@
+.root { display: grid; gap: var(--space-3); }
+
+/* Quick filters: pill toggles, 44 px, text labels; on = accent tint + border + check (never colour alone). */
+.quick { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.quickBtn {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 44px;
+  padding-inline: var(--space-5);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: var(--fs-callout);
+  line-height: var(--lh-callout);
+  transition: background-color var(--dur-quick) var(--ease-ios), border-color var(--dur-quick) var(--ease-ios);
+}
+.quickBtn:hover { border-color: var(--color-border-control); }
+.quickBtn[aria-pressed='true'] { background: var(--color-accent-tint); border-color: var(--color-accent); color: var(--color-accent); }
+.quickBtn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* Applied filters: removable chips that wrap, then Clear all. */
+.chips { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.chip {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 28px;
+  padding-inline: var(--space-3) var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-accent-tint);
+  color: var(--color-ink);
+  font-size: var(--fs-subhead);
+  line-height: var(--lh-subhead);
+}
+.chip:hover { background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface)); }
+.chip:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.clear {
+  all: unset;
+  cursor: pointer;
+  min-block-size: 28px;
+  padding-inline: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-accent);
+  font-size: var(--fs-subhead);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.clear:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+
+/* More filters dialog body. */
+.panel { display: grid; gap: var(--space-5); }
+.panelNote { margin: 0; color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }

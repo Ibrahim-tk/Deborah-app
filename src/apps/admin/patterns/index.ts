@@ -10,6 +10,7 @@ export * from './IntegrationCard';
 export * from './NotificationRow';
 export * from './NotificationBell';
 export * from './SortRange';
-export * from './FiltersPopover';
 export * from './ResultBanner';
 export * from './UnsavedChangesDialog';
+export * from './TableFilters';
+export * from './ChecklistFilter';

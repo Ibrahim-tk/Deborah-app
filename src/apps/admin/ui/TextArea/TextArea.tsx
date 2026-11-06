@@ -8,12 +8,14 @@ export interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaE
   minRows?: number;
   value: string;
   hint?: string;
+  /** Keeps the label for screen readers only (when a section heading already names the field). */
+  hideLabel?: boolean;
 }
 
-export function TextArea({ label, minRows = 3, hint, value, onChange, ...rest }: TextAreaProps) {
+export function TextArea({ label, minRows = 3, hint, hideLabel, value, onChange, ...rest }: TextAreaProps) {
   return (
     <Field.Root className={f.root}>
-      <Field.Label className={f.label}>{label}</Field.Label>
+      <Field.Label className={hideLabel ? f.srOnly : f.label}>{label}</Field.Label>
       <div className={f.box}>
         <Field.Control render={<textarea {...rest} rows={minRows} value={value} onChange={onChange} />} className={f.control} />
       </div>

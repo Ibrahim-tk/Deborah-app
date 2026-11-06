@@ -28,7 +28,7 @@ export function FileDrop({ file, onPick, onRemove, accept, hint, error, state = 
   if (file) {
     return (
       <div className={styles.card} data-error={error ? '' : undefined}>
-        <span className={styles.fileIcon}><Icon name={/\.pdf$/i.test(file.name) ? 'pdf' : 'file'} size={24} /></span>
+        <span className={styles.fileIcon}>{/\.docx?$/i.test(file.name) ? <span className={styles.wordMark} aria-hidden>W</span> : <Icon name={/\.pdf$/i.test(file.name) ? 'pdf' : 'file'} size={24} />}</span>
         <span className={styles.meta}>
           <span className={styles.name}>{file.name}</span>
           <span className={styles.sub}>

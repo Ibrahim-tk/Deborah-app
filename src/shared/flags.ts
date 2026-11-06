@@ -8,4 +8,6 @@
 export const FLAGS = {
   intakeV2: import.meta.env.VITE_INTAKE_V2 !== 'off' && (import.meta.env.DEV || import.meta.env.VITE_INTAKE_V2 === 'on'),
   skipHealthConsent: true,
+  /** M-7.9: show the seeded demo symptoms when the profile has none. Flip to false to see the empty state. */
+  symptomMapDemo: true,
 } as const;

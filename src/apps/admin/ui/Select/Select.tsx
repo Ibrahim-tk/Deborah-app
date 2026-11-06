@@ -15,17 +15,20 @@ export interface SelectProps<T extends string> {
   onChange: (value: T) => void;
   /** `sm`: compact trigger for inline controls such as a table pager. */
   size?: 'md' | 'sm';
+  /** Filter mode: the trigger reads "Status" while the value is 'all', and "Status: Payment issue" once one is picked. */
+  category?: string;
 }
 
-export function Select<T extends string>({ label, options, value, placeholder = 'Choose', hideLabel, onChange, size = 'md' }: SelectProps<T>) {
+export function Select<T extends string>({ label, options, value, placeholder = 'Choose', hideLabel, onChange, size = 'md', category }: SelectProps<T>) {
   const id = useId();
   const current = options.find((o) => o.value === value);
+  const shown = category ? (!current || current.value === 'all' ? category : `${category}: ${current.label}`) : current?.label;
   return (
     <div className={f.root}>
       <span id={id} className={hideLabel ? f.srOnly : f.label}>{label}</span>
       <Base.Root value={value ?? null} onValueChange={(v) => v != null && onChange(v as T)} items={options}>
-        <Base.Trigger className={[f.box, styles.trigger].join(' ')} aria-labelledby={id} data-size={size}>
-          <span className={current ? styles.value : styles.placeholder}>{current?.label ?? placeholder}</span>
+        <Base.Trigger className={[f.box, styles.trigger].join(' ')} aria-labelledby={id} data-size={size} data-shape="pill">
+          <span className={shown ? styles.value : styles.placeholder}>{shown ?? placeholder}</span>
           <Base.Icon className={f.adorn}><Icon name="chevronDown" size={18} /></Base.Icon>
         </Base.Trigger>
         <Base.Portal container={overlayRef}>

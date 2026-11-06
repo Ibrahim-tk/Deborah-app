@@ -4,10 +4,10 @@ import { money, useAdminStore, type Plan } from '@shared/admin';
 import { DataTable, StatusText, type Column } from '@admin/ui';
 import { useAdminNav } from '@admin/navigation';
 
-const KIND: Record<Plan['kind'], string> = { trial: 'Free trial', individual: 'Individual', family: 'Family' };
-const STATUS: Record<Plan['status'], [string, 'success' | 'neutral' | 'accent']> = {
+const KIND: Record<Plan['kind'], string> = { trial: 'Free', individual: 'Individual', family: 'Family' };
+const STATUS: Record<Plan['status'], [string, 'success' | 'neutral' | 'info']> = {
   active: ['Active', 'success'],
-  draft: ['Draft', 'accent'],
+  draft: ['Draft', 'info'],
   inactive: ['Inactive', 'neutral'],
 };
 

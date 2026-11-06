@@ -157,11 +157,13 @@ export const quickSymptoms: string[] = symptoms.quick;
 /** M-7.9 Symptoms map — hypothalamic core, 8 areas, demo seed (placeholder). */
 export const symptomMap: {
   status: string;
+  gut: string;
   core: SymptomMapCore;
   domains: SymptomMapDomain[];
   seedSymptoms: string[];
 } = symptomMapJson as {
   status: string;
+  gut: string;
   core: SymptomMapCore;
   domains: SymptomMapDomain[];
   seedSymptoms: string[];

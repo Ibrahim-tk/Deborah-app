@@ -1,9 +1,11 @@
 {
   "status": "placeholder",
+  "gut": "The gut · your second brain · the hidden side of every circle",
   "note": "Hypothalamus common-denominator map (M-7.9). Eight areas and labels from the supplied map (source spelling “PMOS” kept). Needs clinical review.",
   "core": {
     "title": "The Common Denominator",
     "label": "Hypothalamic dysfunction",
+    "why": "Your hypothalamus coordinates hormones, sleep, temperature, stress and immunity. When it is under strain, one root can show up in many places at once.",
     "mechanism": [
       "Neuroendocrine dysregulation",
       "Autonomic imbalance",
@@ -71,5 +73,5 @@
       "symptoms": ["Insulin resistance", "Weight gain", "Elevated blood sugar", "Dyslipidemia", "Fatty liver", "Hypertension"]
     }
   ],
-  "seedSymptoms": ["Unrefreshing sleep", "Exercise intolerance", "Delayed sleep phase"]
+  "seedSymptoms": ["Unrefreshing sleep", "Exercise intolerance", "Delayed sleep phase", "Fatigue", "Brain fog", "Hot flashes & night sweats"]
 }

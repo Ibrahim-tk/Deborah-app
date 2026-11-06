@@ -31,7 +31,7 @@ export default function EscalationDrawer({ escalationId }: { escalationId: strin
   const review = (next: boolean) =>
     sim.run(
       () => useAdminStore.getState().reviewEscalation(esc.id, next, notes),
-      next ? 'This escalation has been marked as reviewed.' : 'Marked as not yet reviewed',
+      next ? 'This escalation has been marked as reviewed.' : 'Marked as review pending',
     );
   const profile =
     esc.profile.kind === 'family' ? `Family member ${esc.profile.name}, advocate ${esc.profile.advocate}`
@@ -43,17 +43,18 @@ export default function EscalationDrawer({ escalationId }: { escalationId: strin
   return (
     <Drawer
       title={esc.reason}
-      subtitle={formatDate(esc.opened)}
-      onClose={close}
-      meta={
-        <>
+      // Two lines only: the reason, then the tags and the time together (they wrap together if space runs out).
+      subtitle={
+        <span className={styles.subline}>
           <EscalationTypeText type={esc.type} />
           <EscalationStatusText status={esc.status} />
-        </>
+          <span>{formatDate(esc.opened)}</span>
+        </span>
       }
+      onClose={close}
       actions={
         reviewed ? (
-          <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => review(false)}>Mark not yet reviewed</Button>
+          <Button size="sm" variant="secondary" loading={sim.busy} onClick={() => review(false)}>Mark as review pending</Button>
         ) : (
           <Button size="sm" loading={sim.busy} onClick={() => review(true)}>Mark as reviewed</Button>
         )

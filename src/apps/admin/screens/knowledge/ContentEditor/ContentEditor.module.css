@@ -1,0 +1,22 @@
+/* Add / edit content page: numbered steps, each with its explanation on the left and the fields on the right,
+ * hairlines between them, and the actions along the bottom right. */
+/* Same width as the Notifications page (820px). */
+.page { display: grid; max-inline-size: 820px; }
+.step { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: var(--space-8); padding-block: var(--space-8); border-block-start: 1px solid var(--color-border-hairline); }
+.intro { display: grid; gap: var(--space-2); align-content: start; }
+.stepTitle { margin: 0; color: var(--color-ink); font-family: var(--font-ui); font-size: var(--fs-headline); line-height: var(--lh-headline); font-weight: var(--weight-medium); }
+.stepText { margin: 0; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); max-inline-size: 32ch; }
+.fields { display: grid; gap: var(--space-5); min-inline-size: 0; }
+.actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: var(--space-3); padding-block-start: var(--space-6); border-block-start: 1px solid var(--color-border-hairline); }
+.note { margin: 0; color: color-mix(in srgb, var(--color-ink-tertiary) 70%, var(--color-surface)); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.error { margin: var(--space-1) 0 0; color: var(--color-danger-ink); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.linkBtn.linkBtn { justify-self: start; padding-inline: 0; }
+@container admin (max-width: 768px) {
+  .step { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); }
+}
+.alt { display: grid; justify-items: center; gap: var(--space-4); }
+/* "or" sits on a hairline, like a divider between the two ways to add content. */
+.or { display: flex; align-items: center; gap: var(--space-4); inline-size: 100%; color: var(--color-ink-tertiary); font-size: var(--fs-subhead); line-height: var(--lh-subhead); }
+.or::before, .or::after { content: ''; flex: 1; block-size: 1px; background: var(--color-border-hairline); }
+/* Cancel sits on the far left; Save as draft and Publish stay on the right. */
+.actions > :first-child { margin-inline-end: auto; }

@@ -15,6 +15,8 @@ export interface Column<T> {
   align?: 'start' | 'end';
   /** Lets this column take the spare width. */
   grow?: boolean;
+  /** Shrinks the column to its content (e.g. a ⋮ actions column), so no spare width lands here. */
+  fit?: boolean;
   /** The row's identifying column: ink, medium weight. Others read secondary. */
   primary?: boolean;
   /** Supporting detail (dates, who, counts): lighter and slightly smaller so the row's main facts lead. */
@@ -47,7 +49,7 @@ export function CellRow({ children }: { children: ReactNode }) {
   return <span className={styles.inline}>{children}</span>;
 }
 
-export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed', pageSize = 25, paginate = true, pager = 'compact' }: DataTableProps<T>) {
+export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, emptyIcon = 'search', initialSort, footer, variant = 'boxed', pageSize = 10, paginate = true, pager = 'compact' }: DataTableProps<T>) {
   const [sort, setSort] = useState(initialSort);
   const sorted = useMemo(() => {
     const by = columns.find((c) => c.key === sort?.key)?.sort;
@@ -67,6 +69,8 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
   const lastPage = Math.max(0, Math.ceil(rows.length / size) - 1);
   const page = Math.min(pageWanted, lastPage);
   const visible = paged ? sorted.slice(page * size, (page + 1) * size) : sorted;
+  // "Showing 28 clients" names what's on screen: across pages it becomes "Showing 10 of 28 clients".
+  const summary = paged && typeof footer === 'string' && visible.length < rows.length ? footer.replace(/^Showing (\d+) /, `Showing ${visible.length} of $1 `) : footer;
 
   const sortable = columns.filter((c) => c.sort);
   const sortBy = (key: string, dir: 'asc' | 'desc' | undefined) => setSort(dir ? { key, dir } : undefined);
@@ -81,9 +85,11 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
   }
 
   const outside = paged && pager === 'outside';
+  // Outside tables keep their summary under the box even when there's no pager (five rows or fewer).
+  const summaryOutside = !paged && pager === 'outside' && !!footer;
   const box = (
     <div className={styles.container} data-variant={variant}>
-      {paged && !outside && <Pager page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={footer} />}
+      {paged && !outside && <Pager page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={summary} />}
       <div className={styles.scroll}>
         <table className={styles.table} aria-label={label}>
           <thead>
@@ -96,7 +102,7 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
                     key={c.key}
                     scope="col"
                     data-align={c.align}
-                    data-grow={c.grow || undefined}
+                    data-grow={c.grow || undefined} data-fit={c.fit || undefined}
                     aria-sort={active ? (sort.dir === 'asc' ? 'ascending' : 'descending') : undefined}
                   >
                     <span className={styles.headCell}>
@@ -120,21 +126,29 @@ export function DataTable<T>({ label, columns, rows, rowKey, onRowClick, empty, 
                 tabIndex={onRowClick ? 0 : undefined}
               >
                 {columns.map((c) => (
-                  <td key={c.key} data-align={c.align} data-grow={c.grow || undefined} data-primary={c.primary || undefined} data-muted={c.muted || undefined}>{c.render(row)}</td>
+                  <td key={c.key} data-align={c.align} data-grow={c.grow || undefined} data-fit={c.fit || undefined} data-primary={c.primary || undefined} data-muted={c.muted || undefined}>{c.render(row)}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {footer && !paged && <div className={styles.footer}>{footer}</div>}
+      {footer && !paged && !summaryOutside && <div className={styles.footer}>{footer}</div>}
     </div>
   );
+  if (summaryOutside) {
+    return (
+      <div className={styles.outside}>
+        {box}
+        <p className={styles.summaryOutside}>{footer}</p>
+      </div>
+    );
+  }
   if (!outside) return box;
   return (
     <div className={styles.outside}>
       {box}
-      <Pager outside page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={footer} />
+      <Pager outside page={page} size={size} total={rows.length} onPage={setPage} onSize={(n) => { setSize(n); setPage(0); }} summary={summary} />
     </div>
   );
 }

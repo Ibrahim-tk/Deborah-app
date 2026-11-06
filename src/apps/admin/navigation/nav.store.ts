@@ -29,6 +29,10 @@ interface AdminNavState {
   /** True while the drawer plays its slide-out; `finishDrawerClose` removes it after. */
   drawerClosing: boolean;
   finishDrawerClose: () => void;
+  /** Table filter state per list (search, filters, quick filter, sort), kept while drawers open and close;
+   *  cleared when the admin moves to another section. */
+  filters: Record<string, unknown>;
+  setFilters: (key: string, value: unknown) => void;
   go: (section: SectionId) => void;
   push: (route: AdminRoute) => void;
   pop: () => void;
@@ -55,20 +59,22 @@ export const useAdminNav = create<AdminNavState>((set) => ({
   settingsTab: 'profile',
   confirmingSignOut: false,
   setConfirmingSignOut: (confirmingSignOut) => set({ confirmingSignOut, navOpen: false }),
-  openSettings: (settingsTab) => set({ settingsTab, stack: [{ id: 'settings' }], drawer: null, navOpen: false }),
+  openSettings: (settingsTab) => set({ settingsTab, stack: [{ id: 'settings' }], drawer: null, navOpen: false, filters: {} }),
   setNavOpen: (navOpen) => set({ navOpen }),
   drawer: null,
   openDrawer: (drawer) => set({ drawer, drawerClosing: false }),
   openTarget: (target) =>
     'section' in target
-      ? set({ stack: [{ id: target.section as SectionId }], drawer: null, navOpen: false })
+      ? set({ stack: [{ id: target.section as SectionId }], drawer: null, navOpen: false, filters: {} })
       : set({ drawer: target as DrawerTarget, drawerClosing: false, navOpen: false }),
   drawerClosing: false,
   finishDrawerClose: () => set({ drawer: null, drawerClosing: false }),
   openClient: (id) => set({ drawer: { kind: 'client', id }, drawerClosing: false }),
   openEscalation: (id) => set({ drawer: { kind: 'escalation', id }, drawerClosing: false }),
   closeDrawer: () => set((s) => (s.drawer ? { drawerClosing: true } : {})),
-  go: (section) => set({ stack: [{ id: section }], drawer: null, navOpen: false }),
+  filters: {},
+  setFilters: (key, value) => set((s) => ({ filters: { ...s.filters, [key]: value } })),
+  go: (section) => set({ stack: [{ id: section }], drawer: null, navOpen: false, filters: {} }),
   push: (route) => set((s) => ({ stack: [...s.stack, route], drawer: null })),
   pop: () => set((s) => ({ stack: s.stack.length > 1 ? s.stack.slice(0, -1) : s.stack })),
   setAuth: (auth) => set({ auth }),

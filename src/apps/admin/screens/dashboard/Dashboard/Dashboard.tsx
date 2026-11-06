@@ -38,7 +38,7 @@ export default function Dashboard() {
     return [
       { label: 'Emergency, not reviewed', value: open.filter((e) => e.type === 'emergency').length, tone: 'danger' as const },
       { label: 'Crisis, not reviewed', value: open.filter((e) => e.type === 'crisis').length, tone: 'gold' as const },
-      { label: 'Urgent, not reviewed', value: open.filter((e) => e.type === 'urgent').length, tone: 'accent' as const },
+      { label: 'Urgent, not reviewed', value: open.filter((e) => e.type === 'urgent').length, tone: 'info' as const },
       { label: 'Reviewed', value: escalations.filter((e) => e.status === 'reviewed').length, tone: 'success' as const },
     ];
   }, [escalations]);
@@ -52,8 +52,9 @@ export default function Dashboard() {
 
   return (
     <AdminPage title="Dashboard" action={<DateRangeFilter value={range} onChange={setRange} />}>
+      {/* Two rows of four: what needs attention now, then the KPIs for the date range. One block of eight. */}
+      <div className={styles.band}>
       <NeedsAttention />
-      {/* One quiet band of four numbers; escalations live in Needs attention and the status chart. */}
       <KpiBand
         items={[
           { label: 'Clients', value: count(registered), trend: trend(regs.now, regs.before, range) },
@@ -62,6 +63,7 @@ export default function Dashboard() {
           biz.teensKpi,
         ]}
       />
+      </div>
       <div className={styles.grid}>
         <Section
           title="Client growth"

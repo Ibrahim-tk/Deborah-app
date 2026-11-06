@@ -3,7 +3,7 @@
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
   ArrowUp02Icon, CreditCardIcon, CustomerSupportIcon, DashboardSquare01Icon, LicenseIcon, Logout01Icon, MoreVerticalIcon, Shield01Icon, StripeIcon, DropboxIcon, ShopifyIcon, GoogleDocIcon, Plug01Icon, JusticeScale01Icon, ArrowUpRight01Icon,
-  UserMultipleIcon, UserSettings01Icon, WorkHistoryIcon,
+  UserMultipleIcon, UserIcon, UserGroupIcon, SmartPhone01Icon, LaptopIcon, Clock01Icon, UserSettings01Icon, WorkHistoryIcon,
 } from '@hugeicons/core-free-icons';
 import { Icon as WebIcon, type IconName as WebIconName } from '@web/ui';
 
@@ -26,6 +26,11 @@ const own = {
   integrations: Plug01Icon,
   compliance: JusticeScale01Icon,
   arrowUpRight: ArrowUpRight01Icon,
+  person: UserIcon,
+  group: UserGroupIcon,
+  mobile: SmartPhone01Icon,
+  laptop: LaptopIcon,
+  clock: Clock01Icon,
 };
 
 export type IconName = WebIconName | keyof typeof own;

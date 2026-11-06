@@ -1,7 +1,7 @@
 [
   {
     "id": "trial",
-    "name": "Free trial",
+    "name": "Free",
     "kind": "trial",
     "monthly": 0,
     "trialDays": 14,

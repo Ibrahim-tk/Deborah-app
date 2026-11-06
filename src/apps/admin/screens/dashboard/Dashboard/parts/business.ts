@@ -11,9 +11,6 @@ export function useBusinessKpis(range: DateRange) {
   const months = Math.max(2, Math.ceil(daysIn(range) / 30));
 
   const teens = clients.filter((c) => c.accountType === 'teen');
-  const joined = teens.filter((t) => t.teenStatus === 'joined').length;
-  const invited = teens.filter((t) => t.teenStatus === 'invite_sent').length;
-  const paused = teens.filter((t) => t.teenStatus === 'paused').length;
 
   const growth = adminMetrics.subscriptionGrowth.slice(-months);
   const adults = clients.filter((c) => c.accountType === 'adult');
@@ -32,8 +29,6 @@ export function useBusinessKpis(range: DateRange) {
     role === 'super'
       ? { label: 'Active subscribers', value: count(last.individual + last.family), trend: trend(last.individual + last.family, startTotal, range) }
       : null;
-  // One short line instead of a trend: with so few teens, a percentage swing means nothing.
-  const off = teens.filter((t) => t.teenStatus === 'turned_off').length;
-  const teensKpi: Kpi = { label: 'Teen accounts', value: count(teens.length), note: `${joined} joined · ${invited} invited · ${paused + off} paused or off` };
+  const teensKpi: Kpi = { label: 'Teen accounts', value: count(teens.length) };
   return { subscribersKpi, teensKpi };
 }

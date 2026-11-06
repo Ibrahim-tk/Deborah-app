@@ -6,7 +6,7 @@
  * @xref    web: none (admin only)
  */
 import { useState } from 'react';
-import { formatDate, money, useAdminStore, type Plan } from '@shared/admin';
+import { money, useAdminStore, type Plan } from '@shared/admin';
 import { Button, Drawer, Input, KeyValueList, Segmented, StatusText, TextArea } from '@admin/ui';
 import { CopyText } from '@admin/screens/common/CopyEmail';
 import { ConfirmDialog, Section, UnsavedChangesDialog } from '@admin/patterns';
@@ -129,11 +129,6 @@ export default function PlanDrawer({ id: planId }: { id: string | null }) {
           />
           <p className={styles.muted}>Consultations and the member discount aren't sold through plans.</p>
         </Section>
-        {existing && existing.priceHistory.length > 0 && (
-          <Section title="Price history">
-            <KeyValueList items={[...existing.priceHistory].reverse().map((h) => ({ label: formatDate(h.at), value: `${h.price} · ${h.by}` }))} />
-          </Section>
-        )}
         {!trial && (
           <Section title="Stripe">
             {stripeOn && plan.stripePriceId ? (
