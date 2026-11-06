@@ -1,6 +1,7 @@
 /**
- * Sheet content for an area: title, the person's symptoms as small pills (where they came
- * from · other areas they touch), then the rest of the area as quieter pills.
+ * Sheet content for an area, written around the person (designer, 2026-11-06: "nothing relevant with me").
+ * Reads top-down as three answers: what is this area · which of my symptoms point here · how they connect.
+ * The area's other signs follow, always shown. Left-aligned throughout (designer, 2026-11-07).
  */
 import { cx } from '@shared/utils';
 import { sourceOf, type SymptomMapResult } from '@shared/engine';
@@ -8,66 +9,49 @@ import type { SymptomMapDomain } from '@shared/types/health';
 import styles from './Content.module.css';
 
 interface Props {
-  domains: SymptomMapDomain[];
   domain: SymptomMapDomain;
   result: SymptomMapResult;
   reported: string[];
   highlight: string[];
-  onJump: (domainId: string) => void;
 }
 
-function sourceLine(sources: Set<string>, isNew: boolean): string {
-  if (isNew) return 'New from this chat';
-  const parts = [sources.has('profile') && 'your health profile', sources.has('chat') && 'your chats'].filter(Boolean);
-  if (parts.length) return `From ${parts.join(' and ')}`;
+function sourceText(sources: Set<string>, isNew: boolean): string {
+  if (isNew) return ' · new from this chat';
+  if (sources.has('profile') && sources.has('chat')) return ' · from your health profile and chats';
+  if (sources.has('profile')) return ' · from your health profile';
+  if (sources.has('chat')) return ' · from your chats';
   return '';
 }
 
-export function AreaContent({ domains, domain, result, reported, highlight, onJump }: Props) {
+export function AreaContent({ domain, result, reported, highlight }: Props) {
   const others = domain.symptoms.filter((s) => !reported.includes(s));
-  const mapped = reported.map((s) => sourceOf(s, result));
-  const sources = new Set(mapped.map((m) => m?.source ?? 'seed'));
+  const mapped = reported.map((s) => ({ label: s, src: sourceOf(s, result) }));
+  const sources = new Set(mapped.map((m) => m.src?.source ?? 'seed'));
   const isNew = reported.some((s) => highlight.some((h) => h.toLowerCase() === s.toLowerCase()));
-  const alsoIds = new Set(mapped.flatMap((m) => m?.domainIds ?? []).filter((id) => id !== domain.id));
-  const also = domains.filter((d) => alsoIds.has(d.id));
-  // Seeded demo symptoms carry no source line.
-  const source = sourceLine(sources, isNew);
+  const n = reported.length;
 
   return (
     <>
-      <h2 className={styles.title}>{domain.title}</h2>
-      <section className={styles.sections} aria-label={`${domain.title} symptoms`}>
+      {/* The area's name sits on the disc; the sheet leads with what it means (designer, 2026-11-07). */}
+      <h2 className={styles.question}>{domain.plain}</h2>
+
+      <section className={styles.sections} aria-label={`Your symptoms in ${domain.short}`}>
         <div className={styles.block}>
-          <p className={styles.eyebrow}>Yours</p>
-          {reported.length > 0 ? (
-            <>
-              <ul className={styles.pills}>
-                {reported.map((s) => <li key={s} className={cx(styles.pill, styles.pillYours)}>{s}</li>)}
-              </ul>
-              {(source || also.length > 0) && (
-              <p className={styles.meta}>
-                {source}
-                {also.length > 0 && (
-                  <>
-                    {source ? ' · Also in ' : 'Also in '}
-                    {also.map((d, i) => (
-                      <span key={d.id}>
-                        {i > 0 && ', '}
-                        <button type="button" className={styles.inlineLink} onClick={() => onJump(d.id)}>{d.short}</button>
-                      </span>
-                    ))}
-                  </>
-                )}
-              </p>
-              )}
-            </>
-          ) : (
-            <p className={styles.none}>None of your symptoms sit here yet.</p>
+          <p className={styles.statement}>
+            Your symptoms
+            {n > 0 && <span className={styles.statementSource}>{sourceText(sources, isNew)}</span>}
+          </p>
+          {n === 0 && <p className={styles.none}>None here yet</p>}
+          {n > 0 && (
+            <ul className={styles.pills}>
+              {reported.map((s) => <li key={s} className={cx(styles.pill, styles.pillYours)}>{s}</li>)}
+            </ul>
           )}
         </div>
+
         {others.length > 0 && (
           <div className={styles.block}>
-            <p className={styles.eyebrow}>Also part of this area</p>
+            <p className={styles.eyebrow}>Other signs in this area</p>
             <ul className={styles.pills}>
               {others.map((s) => <li key={s} className={styles.pill}>{s}</li>)}
             </ul>

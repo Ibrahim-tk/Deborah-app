@@ -86,6 +86,40 @@
   /* Layering inside the web root */
   --z-sticky: 10;
   --z-overlay: 100;
+
+  /* M-7.9 Symptoms map — mirrored from mobile.tokens.css (keep in sync). */
+  --symptom-map-disc:
+    radial-gradient(ellipse at 20% 10%, #e2d5ed 0%, #f3edf5 55%, #e4d9eb 100%);
+  --symptom-map-disc-matched:
+    radial-gradient(ellipse at 20% 10%, #c4a5e1 0%, #f1e5f5 55%, #dfbdd8 100%);
+  --symptom-map-art:
+    radial-gradient(ellipse at 14% 12%, #c1a0df 0%, transparent 62%),
+    radial-gradient(ellipse at 95% 95%, #e6bed5 0%, transparent 65%),
+    linear-gradient(145deg, #ecdef4, #f8f0f7 52%, #d6c0e9);
+  --symptom-map-core:
+    radial-gradient(ellipse at 12% 4%, #684776 0%, transparent 64%),
+    radial-gradient(ellipse at 95% 95%, #54344e 0%, transparent 65%),
+    linear-gradient(145deg, #392044, #25152f);
+  --symptom-map-core-ink: #efdfed;
+  --symptom-map-core-label: #e6c776;
+  --symptom-map-ring-start: #bfa2e1;
+  --symptom-map-ring-mid: #dfc9ef;
+  --symptom-map-ring-end: #e9bfd8;
+  --symptom-map-dot: #804a8a;
+  --symptom-map-disc-strong:
+    radial-gradient(ellipse at 20% 10%, #b48bd9 0%, #e7d3f1 55%, #d6a9cc 100%);
+  --symptom-map-thread: #dccbe6;
+  /* My Health entry card: peach→lavender wash behind the harmonious loop (designer, 2026-11-07). */
+  --symptom-map-card:
+    linear-gradient(105deg, #f8ebe3 0%, #f3e4e0 28%, #ebe0ea 62%, #e4d7ec 100%);
+  --symptom-map-venn-a: radial-gradient(circle at 32% 28%, #f1e9fa 0%, #dccbf0 55%, #cdb7ea 100%);
+  --symptom-map-venn-b: radial-gradient(circle at 68% 28%, #fbeef1 0%, #f1cfd8 55%, #e9bccb 100%);
+  --symptom-map-venn-c: radial-gradient(circle at 50% 75%, #fbf1e3 0%, #f2dcbf 55%, #ebcda7 100%);
+  --symptom-map-venn-rim: rgb(255 255 255 / 0.7);
+  --symptom-map-venn-light: rgb(255 255 255 / 0.45);
+  --symptom-map-cluster-glow: radial-gradient(circle at 60% 40%, rgb(214 192 240 / 0.7), rgb(244 206 220 / 0.45) 55%, transparent 75%);
+  --symptom-map-card-rim: rgb(255 255 255 / 0.85);
+  --symptom-map-thread-strong: #b99acb;
 }
 
 @media (prefers-reduced-motion: reduce) {

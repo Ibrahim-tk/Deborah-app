@@ -1,7 +1,7 @@
 {
   "status": "placeholder",
   "gut": "The gut · your second brain · the hidden side of every circle",
-  "note": "Hypothalamus common-denominator map (M-7.9). Eight areas and labels from the supplied map (source spelling “PMOS” kept). Needs clinical review.",
+  "note": "short = the diagram's title, shortened to its nearest form for the ring (designer, 2026-11-07); plain = a \"when this is off, you can feel\u2026\" line so people recognise their symptoms (designer, 2026-11-07). Hypothalamus common-denominator map (M-7.9). Eight areas and labels from the supplied map (source spelling “PMOS” kept). Needs clinical review.",
   "core": {
     "title": "The Common Denominator",
     "label": "Hypothalamic dysfunction",
@@ -18,58 +18,66 @@
   "domains": [
     {
       "id": "circadian",
-      "short": "Sleep & energy",
+      "short": "Circadian Rhythm",
+      "plain": "When your body clock is off, sleep doesn’t refresh you and your energy runs low.",
       "title": "Circadian & Mitochondrial Dysfunction",
-      "icon": "moon",
+      "icon": "areaClock",
       "symptoms": ["Unrefreshing sleep", "Low energy", "Exercise intolerance", "Runs cold, low body temp", "Brain fog", "Delayed sleep phase"]
     },
     {
       "id": "neuroendocrine",
-      "short": "Hormone signals",
+      "short": "Neuroendocrine",
+      "plain": "When your hormone signals are off, you can feel wired but tired, hot or cold, and your cycle can change.",
       "title": "Neuroendocrine Signaling",
-      "icon": "sun",
+      "icon": "areaSignal",
       "symptoms": ["Wired but tired", "Feeling cold, sluggish", "Weight that won’t budge", "Hot flashes & night sweats", "Low libido", "Menstrual irregularity / PMOS", "Infertility"]
     },
     {
       "id": "autoimmunity",
       "short": "Autoimmunity",
+      "plain": "When your immune system is overactive, joints ache, skin flares and you feel worn out.",
       "title": "Autoimmunity",
-      "icon": "shield",
+      "icon": "areaShield",
       "symptoms": ["Joint pain, swelling", "Chronic inflammation", "Rashes, flares", "Fatigue", "Positive antibody markers", "Organ-specific symptoms"]
     },
     {
       "id": "mood",
-      "short": "Mood & memory",
+      "short": "Mood & Memory",
+      "plain": "When your brain is under strain, focus slips, memory fades and your mood can dip.",
       "title": "Neurodivergence, Mood & Memory",
-      "icon": "brain",
+      "icon": "areaMind",
       "symptoms": ["Brain fog", "Anxiety, depression", "Memory lapses", "Sensory overload", "Executive dysfunction", "ADHD-type symptoms"]
     },
     {
       "id": "aging",
-      "short": "Aging",
+      "short": "Premature Aging",
+      "plain": "When your body repairs more slowly, you lose strength, recover slowly and skin and bones thin.",
       "title": "Premature Aging",
-      "icon": "hourglass",
+      "icon": "areaHourglass",
       "symptoms": ["Sarcopenia", "Slowed metabolism", "Thinning skin", "Bone loss", "Cognitive decline", "Poor recovery", "Reduced resilience"]
     },
     {
       "id": "pain",
-      "short": "Chronic pain",
+      "short": "Chronic Pain",
+      "plain": "When your nerves stay on high alert, pain spreads, headaches come more often and sleep suffers.",
       "title": "Chronic Pain",
-      "icon": "pain",
+      "icon": "areaAche",
       "symptoms": ["Widespread pain", "Migraines, headaches", "Central sensitization", "Muscle spasms", "Fatigue", "Poor sleep"]
     },
     {
       "id": "autonomic",
-      "short": "Autonomic",
+      "short": "Dysautonomia",
+      "plain": "When your body’s automatic controls are off, your heart can race, you feel dizzy, sweat more or your gut slows.",
       "title": "Dysautonomia",
-      "icon": "pulse",
+      "icon": "areaHeart",
       "symptoms": ["Tachycardia", "Dizziness, lightheadedness", "Blood pressure instability", "Heat intolerance, sweating", "GI dysmotility", "Fatigue"]
     },
     {
       "id": "metabolic",
       "short": "Metabolic",
+      "plain": "When your body struggles with sugar and fat, weight is hard to shift and blood sugar and pressure creep up.",
       "title": "Metabolic Syndromes",
-      "icon": "metabolic",
+      "icon": "areaFlame",
       "symptoms": ["Insulin resistance", "Weight gain", "Elevated blood sugar", "Dyslipidemia", "Fatty liver", "Hypertension"]
     }
   ],

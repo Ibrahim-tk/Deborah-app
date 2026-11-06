@@ -7,7 +7,7 @@ import { withConcerns } from '../engine/planConcerns';
 import { replayScript } from '../engine/replay';
 import { scripts } from '../data';
 import { SEEDS } from '../scenarios';
-import type { Conversation, Plan90 } from '../types/domain';
+import type { Conversation, Plan90, Profile } from '../types/domain';
 import { uid } from '../utils/ids';
 import { interpolate } from '../utils/text';
 import type { ScenarioSeed } from '../types/scenario';
@@ -91,12 +91,31 @@ function derivePlans(data: AppData): AppData['plan90'] {
   return plan90;
 }
 
+/** Typical age for each band, used only to back-fill a missing date of birth. */
+const BAND_AGE: Record<string, number> = { teen: 15, 'under-40': 34, '40-45': 43, '46-50': 48, '51-55': 53, '56+': 59 };
+
+/**
+ * Date of birth is set at sign-up, so a profile always has one. Seeds that omit it get one
+ * derived from the age band (or 45 by default) relative to the scenario's "now".
+ */
+function withDob(data: { profiles: { byId: Record<string, Profile> } }, now: string): Record<string, Profile> {
+  const year = new Date(now).getFullYear();
+  return Object.fromEntries(
+    Object.entries(data.profiles.byId).map(([id, p]) => {
+      if (p.dob) return [id, p];
+      const age = BAND_AGE[p.intake?.ageBand ?? ''] ?? 45;
+      return [id, { ...p, dob: `${year - age}-06-15` }];
+    }),
+  );
+}
+
 export function loadScenario(id: string): LoadResult {
   const seed = SEEDS[id];
   if (!seed) return { ok: false, error: `Scenario ${id} isn't available yet` };
   try {
     const prev = useAppStore.getState();
     let data = deepMerge(createDefaults(seed.now), seed.state);
+    data = { ...data, profiles: { ...data.profiles, byId: withDob(data, seed.now) } };
     data = { ...data, conversations: expandConversations(seed, data) };
     data = {
       ...data,

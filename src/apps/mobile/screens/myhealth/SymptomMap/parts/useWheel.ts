@@ -49,6 +49,9 @@ export function useWheel(stage: RefObject<HTMLElement | null>, reduced: boolean,
   const focusCore = () => {
     stopGlide();
     setMode('core');
+    // Turn the wheel half a step so no area sits where the core is; two settle on each side.
+    const r = rotation.get();
+    to(rotation, Math.round((r - SLOT / 2) / SLOT) * SLOT + SLOT / 2, ROLL_SPRING);
     to(zoom, 1, ZOOM_SPRING);
     to(coreZ, 1, ZOOM_SPRING);
   };
@@ -86,8 +89,8 @@ export function useWheel(stage: RefObject<HTMLElement | null>, reduced: boolean,
     let delta: number;
     if (mode === 'area') {
       const width = stage.current?.clientWidth ?? 353;
-      const r1 = (width / 2 - 26) / Math.SQRT1_2;
-      delta = ((e.clientX - d.x) / r1) * (180 / Math.PI);
+      // One slot of roll per ~⅓ of the screen (matches the zoomed carousel spacing).
+      delta = ((e.clientX - d.x) / (width * 0.33)) * SLOT;
       d.x = e.clientX;
     } else {
       const a = angleAt(e);

@@ -1,0 +1,84 @@
+/* M-7.9 reading content: quiet — one display title, body ink, secondary metadata, text-only actions. */
+.content {
+  display: grid; justify-items: center; gap: var(--space-4);
+  width: 100%; max-width: 340px; margin: 0 auto; padding: var(--space-2) var(--space-5) 0;
+  text-align: center; color: var(--color-ink);
+}
+.title { margin: 0; font: var(--weight-regular) 26px / 30px var(--font-display); letter-spacing: -0.005em; text-align: center; }
+.kicker {
+  margin: calc(var(--space-2) * -1) 0 0;
+  font: var(--weight-regular) 12px / 16px var(--font-body); letter-spacing: 0.09em; text-transform: uppercase;
+  color: var(--color-gold-ink);
+}
+.why, .note { margin: 0; font: var(--weight-regular) 14px / 20px var(--font-body); color: var(--color-ink-secondary); }
+
+.list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.list li { font: var(--weight-regular) 15px / 20px var(--font-body); color: var(--color-ink-body); }
+
+.reportedList { display: grid; gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+.reported { display: grid; gap: 2px; }
+.reportedLabel { font: var(--weight-medium) 15px / 20px var(--font-body); color: var(--color-ink); }
+.reportedLabel::before {
+  content: ''; display: inline-block; width: 5px; height: 5px; margin-right: 8px; vertical-align: 3px;
+  border-radius: 50%; background: var(--symptom-map-dot);
+}
+.meta { font: var(--weight-regular) 13px / 18px var(--font-body); color: var(--color-ink-secondary); }
+.inlineLink, .link {
+  padding: 0; border: 0; background: none; cursor: pointer;
+  font: inherit; color: var(--color-ink-secondary);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--color-border-control);
+}
+
+.fold { overflow: hidden; width: 100%; }
+.fold .list { padding-top: var(--space-1); }
+.quiet, .ask {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 var(--space-3);
+  border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  font: var(--weight-regular) 14px / 1 var(--font-body);
+}
+.quiet { color: var(--color-ink-secondary); }
+.ask { color: var(--color-accent); }
+.quiet:active, .ask:active { opacity: 0.7; }
+
+.group { display: grid; gap: var(--space-1); }
+.links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--space-4); }
+.link { min-height: 44px; font: var(--weight-regular) 14px / 20px var(--font-body); }
+
+/* Symptoms as small read-only pills (designer request 2026-11-05, an exception to pills-only-for-choices). */
+.sections { display: grid; gap: var(--space-5); width: 100%; text-align: center; }
+.block { display: grid; justify-items: center; gap: var(--space-2); }
+.eyebrow {
+  margin: 0; font: var(--weight-medium) 13px / 18px var(--font-body);
+  color: var(--color-ink-secondary);
+}
+.pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.pill {
+  padding: 4px 10px; border-radius: var(--radius-full);
+  font: var(--weight-regular) 12px / 16px var(--font-body); color: var(--color-ink-body);
+  background: var(--color-surface-tonal);
+}
+.pillYours { background: var(--color-accent-tint); color: var(--color-accent); font-weight: var(--weight-medium); }
+
+@media (max-width: 370px) {
+  .title { font-size: 26px; line-height: 28px; }
+}
+/* Designer asked for this quieter than 7:1 (2026-11-05): placeholder ink, an intentional exception. */
+.none { margin: 0; font: var(--weight-regular) 13px / 18px var(--font-body); color: var(--color-ink-placeholder); }
+
+/* Area sheet, person-first (2026-11-06): plain title + one line, a statement about you, quiet clinical name. */
+.head { display: grid; justify-items: center; gap: var(--space-1); }
+.plain { margin: 0; max-width: 300px; font: var(--weight-regular) 14px / 20px var(--font-body); color: var(--color-ink-secondary); text-align: center; }
+.statement { margin: 0; font: var(--weight-medium) 14px / 20px var(--font-body); color: var(--color-ink); }
+.statementSource { font-weight: var(--weight-regular); color: var(--color-ink-tertiary); }
+.crossLinks { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.clinical { margin: 0; font: var(--weight-regular) 12px / 16px var(--font-body); color: var(--color-ink-tertiary); text-align: center; }
+
+/* Left-aligned sheet (designer, 2026-11-07): overrides the centred defaults above. */
+.title, .plain, .why, .note, .statement, .meta, .kicker { text-align: left; }
+.head, .block, .group { justify-items: start; }
+.sections { text-align: left; }
+.pills, .links { justify-content: flex-start; }
+.plain { max-width: none; }
+
+/* Sheet lead (2026-11-07): the area's meaning as the big line; its name is on the disc above. */
+.question { margin: 0; font: var(--weight-regular) 18px / 26px var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); text-align: left; }

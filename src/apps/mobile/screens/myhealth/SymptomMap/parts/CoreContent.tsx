@@ -1,32 +1,20 @@
-/** Core view reading: why one root shows up in many places, the mechanisms, and the person's areas. */
-import type { SymptomMapCore, SymptomMapDomain } from '@shared/types/health';
+/** Core view reading (designer, 2026-11-07): the hypothalamus line as the big text, then the mechanisms as pills. */
+import type { SymptomMapCore } from '@shared/types/health';
 import styles from './Content.module.css';
 
 interface Props {
   core: SymptomMapCore;
-  yourAreas: SymptomMapDomain[];
-  onJump: (domainId: string) => void;
 }
 
-export function CoreContent({ core, yourAreas, onJump }: Props) {
+export function CoreContent({ core }: Props) {
   return (
     <>
-      <h2 className={styles.title}>{core.title}</h2>
-      <p className={styles.kicker}>{core.label}</p>
-      <p className={styles.why}>{core.why}</p>
-      <ul className={styles.list}>
-        {core.mechanism.map((m) => <li key={m}>{m}</li>)}
-      </ul>
-      {yourAreas.length > 0 && (
-        <div className={styles.group}>
-          <p className={styles.note}>Your areas</p>
-          <div className={styles.links}>
-            {yourAreas.map((d) => (
-              <button key={d.id} type="button" className={styles.link} onClick={() => onJump(d.id)}>{d.short}</button>
-            ))}
-          </div>
-        </div>
-      )}
+      <h2 className={styles.question}>{core.why}</h2>
+      <section className={styles.sections} aria-label="What can go off">
+        <ul className={styles.pills}>
+          {core.mechanism.map((m) => <li key={m} className={styles.pill}>{m}</li>)}
+        </ul>
+      </section>
     </>
   );
 }

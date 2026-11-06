@@ -53,7 +53,7 @@ export { replayScript, streamInto } from './replay';
 export { beginGuidance, needsMoreDetails, isUncoveredConcern } from './guidance';
 export { matchesUncovered } from './guidanceGates';
 export { asksForAnswer } from './classifier';
-export { resolveSymptomMap, reportedInDomain, sourceOf, focusAreaFor, summarizeSymptomMap, shouldOfferSymptomMap, chatSymptomsFrom, type SymptomMapResult, type SymptomMapSummary } from './symptomMap';
+export { resolveSymptomMap, reportedInDomain, sourceOf, focusAreaFor, satellitesFor, summarizeSymptomMap, shouldOfferSymptomMap, chatSymptomsFrom, type SymptomMapResult, type SymptomMapSummary, type SymptomSatellite } from './symptomMap';
 export {
   assembleVisitBrief,
   briefFromAnswer,

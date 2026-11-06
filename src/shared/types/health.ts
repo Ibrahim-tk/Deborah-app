@@ -77,6 +77,8 @@ export interface SymptomMapDomain {
   id: string;
   /** Ring label (short). */
   short: string;
+  /** One plain-language line: what this area is (placeholder copy). */
+  plain: string;
   title: string;
   /** Glyph key; each app maps it to its own icon adapter. */
   icon: string;

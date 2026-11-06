@@ -12,7 +12,7 @@
  */
 import { useRef, useState } from 'react';
 import { useAppStore } from '@shared/store';
-import { Button } from '@web/ui';
+import { Button, Input } from '@web/ui';
 import { DerivedPage } from '@web/patterns/shell';
 import { useNav, useScreenParams } from '@web/navigation';
 import { useToast } from '@web/hooks/toast.store';
@@ -53,11 +53,8 @@ export default function EditHealthSection() {
         {current?.rows.map((r) => (
           <section key={r.key} className={styles.field} aria-label={r.label}>
             {LOCKED_KEYS.has(r.key) ? (
-              // Read-only: set at sign-up, never edited here (designer, 2026-10-21).
-              <div className={styles.locked}>
-                <span className={styles.lockedLabel}>{r.label}</span>
-                <span className={styles.lockedValue}>{r.value ?? 'Not set'}</span>
-              </div>
+              // Read-only: set at sign-up, never edited here (designer, 2026-10-21) — still shown as a field, disabled (designer, 2026-11-06).
+              <Input label={r.label} value={r.value ?? ''} placeholder="Not set" disabled readOnly hint="Set when you created your profile" />
             ) : (
               <FormField step={r.step} label={r.label} shown={r.value} answers={answers} set={set} />
             )}

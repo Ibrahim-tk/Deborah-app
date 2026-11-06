@@ -1,2 +1,57 @@
-.root { display: flex; flex-direction: column; height: 100%; }
-.body { flex: 1; min-height: 0; }
+.body { position: relative; display: grid; gap: var(--space-4); width: 100%; margin: 0 auto; }
+
+.intro { overflow: hidden; padding: 10px var(--margin-screen) 0; text-align: center; }
+.content { display: grid; justify-items: stretch; gap: var(--space-4); width: 100%; margin: 0; padding: 0; text-align: left; } /* web: fills the panel (its own padding is the gutter) */
+.heading { margin: 0 0 6px; font: var(--weight-regular) 26px / 32px var(--font-display); letter-spacing: -0.01em; color: var(--color-ink); }
+.eyebrow { /* very light by request (2026-11-07), below 7:1 on purpose */
+  max-width: 320px; margin: 6px auto 0; font: var(--weight-regular) 13px / 18px var(--font-body);
+  color: var(--color-ink-placeholder);
+}
+.lede { max-width: 340px; margin: 0 auto; font: var(--weight-regular) 14px / 20px var(--font-body); color: var(--color-ink-secondary); }
+
+.footer { display: grid; justify-items: center; margin-top: var(--space-4); padding: 0 var(--margin-screen); text-align: center; }
+.textButton {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 44px; padding: 0 23px;
+  border: 0; border-radius: var(--radius-full); background: transparent;
+  font: var(--weight-regular) 14px / 1 var(--font-body); color: var(--color-ink-secondary);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.textButton:active { opacity: 0.8; }
+.disclaimer { margin: 0; font: var(--weight-regular) 12px / 16px var(--font-body); color: var(--color-ink-tertiary); }
+
+@media (max-width: 370px) {
+  .heading { font-size: 28px; }
+}
+
+/* Zoomed: one panel under the wheel (web's take on the mobile bottom sheet). */
+.panel {
+  display: grid; gap: var(--space-5); width: 100%;
+  padding: var(--space-6) var(--space-6) var(--space-5);
+  border-radius: var(--radius-xl); background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-border-hairline);
+}
+
+/* Laptop layout (2026-11-07): left-aligned text column + a fluid wheel (zoom set from the space; see SymptomMap.tsx). */
+.layout { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; align-items: center; gap: var(--space-8); }
+.side { display: grid; align-content: start; gap: var(--space-5); text-align: left; }
+.side .intro { padding: 0; text-align: left; }
+.side .heading, .side .eyebrow, .side .lede { text-align: left; margin-left: 0; margin-right: 0; max-width: none; }
+.side .disclaimer { text-align: left; }
+.wheelCell { display: grid; justify-items: center; min-width: 0; }
+.wheelCol { width: 360px; zoom: var(--wz, 1); }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+/* Card + up/down rail side by side; disclaimer centred at the page bottom. */
+.panelRow { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--space-3); }
+.panelRow > :only-child { grid-column: 1 / -1; }
+.rail { display: grid; gap: var(--space-2); }
+.up svg { transform: rotate(180deg); }
+.pageDisclaimer {
+  position: fixed; left: 50%; bottom: var(--space-4); z-index: 20; transform: translateX(-50%);
+  margin: 0; white-space: nowrap; pointer-events: none; text-align: center; font: var(--weight-regular) 12px / 16px var(--font-body); color: var(--color-ink-tertiary); }
+
+/* Clicked rail buttons: no heavy ring (keyboard focus still shows via :focus-visible). */
+.rail button:focus:not(:focus-visible) { outline: none; }

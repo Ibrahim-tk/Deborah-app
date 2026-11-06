@@ -1,7 +1,12 @@
 export {
   MotionDiv,
   MotionSpan,
+  MotionButton,
   AnimatePresence,
+  animate,
+  useMotionValue,
+  useMotionValueEvent,
+  useTransform,
   EASE_IOS,
   EASE_OUT,
   DURATION,
@@ -9,4 +14,4 @@ export {
   REDUCED_FADE,
   useReducedMotionPref,
 } from './Motion';
-export type { PanInfo, Transition } from './Motion';
+export type { MotionValue, PanInfo, Transition } from './Motion';

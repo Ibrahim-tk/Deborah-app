@@ -1,0 +1,154 @@
+/* M-7.9 wheel stage. Discs are 86px DOM nodes centred on (stage centre, 0); motion values move and scale them. */
+.stage {
+  position: relative; isolation: isolate; overflow: clip;
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+}
+.stage.zoomed { touch-action: pan-y; cursor: default; }
+/* Web: the wheel's rolling neighbours fade out at the left and right edges instead of being cut off. */
+.stage {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 18%, #000 82%, transparent 100%);
+}
+.stage.dragging { cursor: grabbing; }
+
+/* Ring-space backdrop: 400×400, centred on the overview ring centre (CENTER_Y 225 → top 25px). */
+.field { position: absolute; left: 50%; top: 25px; width: 400px; height: 400px; margin-left: -200px; pointer-events: none; }
+.field svg { width: 100%; height: 100%; overflow: visible; }
+.wash { fill: none; stroke-width: 30; opacity: 0.32; }
+.ringStart { stop-color: var(--symptom-map-ring-start); }
+.ringMid { stop-color: var(--symptom-map-ring-mid); }
+.ringEnd { stop-color: var(--symptom-map-ring-end); }
+.threads { transition: opacity 0.2s; }
+.threadsHidden { opacity: 0; }
+/* Inner orbit: the person's symptoms. Threads to their areas appear only for the traced symptom (designer, 2026-11-07: always-on links read as ambiguous). */
+.orbit { fill: none; stroke: var(--symptom-map-thread); stroke-width: 1; stroke-dasharray: 2 5; opacity: 0.7; }
+.thread { stroke: var(--symptom-map-thread-strong); stroke-width: 1; opacity: 0; transition: opacity 0.2s, stroke-width 0.2s; }
+.thread[data-state='lit'] { opacity: 1; stroke-width: 1.5; }
+.thread[data-state='dim'] { opacity: 0; }
+.satellite {
+  fill: var(--color-surface); stroke: var(--symptom-map-thread-strong); stroke-width: 1.5;
+  pointer-events: auto; cursor: pointer; transition: r 0.2s, opacity 0.2s, fill 0.2s;
+}
+.satellite[data-state='lit'] { fill: var(--symptom-map-dot); stroke: var(--color-surface); }
+.satellite[data-state='dim'] { opacity: 0.35; }
+
+.disc {
+  position: absolute; left: 50%; top: 0;
+  width: 86px; height: 86px; margin: -43px 0 0 -43px; padding: 9px 6px;
+  border: 0; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  isolation: isolate; background: none; color: var(--color-ink-secondary);
+  box-shadow: 0 0 0 1.5px var(--white), var(--shadow-float-sm);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.disc.matched { color: var(--color-accent); }
+/* Keep the white stroke + lift; drop only the global focus band (it scales with the disc). */
+.disc:focus-visible, .disc:focus { outline: none; box-shadow: 0 0 0 1.5px var(--white), var(--shadow-float-sm); }
+.core:focus-visible, .core:focus { outline: none; box-shadow: 0 0 0 1.5px var(--white), var(--shadow-float-md); }
+/* Same gradient style on every disc, each nudged to its own hue (the glyph keeps its colour). */
+.disc::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: 50%;
+  background: var(--symptom-map-disc); filter: hue-rotate(var(--disc-hue, 0deg));
+}
+.disc.matched::before { background: var(--symptom-map-disc-matched); }
+.disc.strong::before { background: var(--symptom-map-disc-strong); }
+/* Areas without the person's symptoms step back; while tracing, areas off the trace step further back. */
+.disc::before, .glyph, .label { transition: opacity 0.2s; }
+.disc.quiet::before { opacity: 0.55; }
+.disc.quiet .label { color: var(--color-ink-secondary); }
+.disc.dim::before { opacity: 0.3; }
+.disc.dim .glyph, .disc.dim .label { opacity: 0.4; }
+.disc[data-hue='0'] { --disc-hue: 0deg; }
+.disc[data-hue='1'] { --disc-hue: -22deg; }
+.disc[data-hue='2'] { --disc-hue: 16deg; }
+.disc[data-hue='3'] { --disc-hue: -34deg; }
+.disc[data-hue='4'] { --disc-hue: 26deg; }
+.disc[data-hue='5'] { --disc-hue: -10deg; }
+.disc[data-hue='6'] { --disc-hue: 36deg; }
+.disc[data-hue='7'] { --disc-hue: -28deg; }
+.glyph { display: grid; flex: none; width: 20px; height: 20px; place-items: center; }
+.glyph > * { flex: none; margin: -26px; } /* 72px glyph centred in its 20px slot */
+.glyph svg, .coreGlyph svg { width: 72px; height: 72px; max-width: none; max-height: none; }
+.label {
+  position: absolute; top: 100%; left: 50%; width: 104px; margin: 5px 0 0 -52px;
+  transform-origin: 50% 0; pointer-events: none;
+  text-align: center; text-wrap: balance; color: var(--color-ink-body);
+  text-shadow: 0 0 3px var(--color-canvas), 0 0 6px var(--color-canvas);
+  font: var(--weight-medium) 12px / 14px var(--font-body); letter-spacing: -0.01em;
+}
+
+.core {
+  position: absolute; left: 50%; top: 0; z-index: 5;
+  width: 92px; height: 92px; margin: -46px 0 0 -46px; padding: var(--space-2);
+  border: 0; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--symptom-map-core); color: var(--symptom-map-core-ink);
+  box-shadow: 0 0 0 1.5px var(--white), var(--shadow-float-md);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.coreWords, .coreGlyph { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.coreGlyph { color: var(--white); }
+.coreTitle { font: var(--weight-medium) 11px / 13px var(--font-body); letter-spacing: -0.01em; text-align: center; }
+/* Brain glyph above the core's title on the overview. */
+.coreBrain { display: grid; place-items: center; color: var(--symptom-map-core-label); }
+.coreBrain svg { width: 20px; height: 20px; }
+
+
+/* Name just below the main disc, outside the circle (designer, 2026-11-07); moves with it. */
+.innerLabel {
+  position: absolute; top: calc(100% + 4px); left: 50%; width: 200px; margin-left: -100px;
+  transform-origin: 50% 0; pointer-events: none; white-space: nowrap; text-align: center;
+  font: var(--weight-medium) 12px / 16px var(--font-body); color: var(--color-ink);
+}
+/* Beat the global focus-visible ring, which scales with the disc into a thick band. */
+.stage .disc:focus, .stage .disc:focus-visible {
+  outline: none; box-shadow: 0 0 0 1.5px var(--white), var(--shadow-float-sm);
+}
+.stage .core:focus, .stage .core:focus-visible {
+  outline: none; box-shadow: 0 0 0 1.5px var(--white), var(--shadow-float-md);
+}
+
+/* Traced symptom: one orbit arc along the ring through its areas; it draws in from the start. */
+.traceArc {
+  fill: none; stroke: var(--symptom-map-thread-strong); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: symptom-arc-draw 0.6s ease-out forwards;
+}
+@keyframes symptom-arc-draw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .traceArc { animation: none; stroke-dashoffset: 0; } }
+:global(.reduced-motion) .traceArc { animation: none; stroke-dashoffset: 0; }
+/* Off-trace circles read as disabled. */
+.disc.dim { filter: grayscale(0.85); }
+
+/* Disabled circles: their names fade too (inline opacity drives the zoom fade, so use colour). */
+.stage .disc.dim .label { color: var(--color-ink-placeholder); }
+
+/* Core view: "The Common Denominator" just below the core circle. */
+.coreName {
+  position: absolute; top: 100%; left: 50%; width: 200px; margin: 6px 0 0 -100px; transform-origin: 50% 0;
+  pointer-events: none; white-space: nowrap; text-align: center;
+  font: var(--weight-medium) 14px / 18px var(--font-body); color: var(--color-ink);
+}
+
+
+/* Overview: areas with none of the person's symptoms look disabled, so the matching ones stand out (2026-11-07). */
+.stage .disc.quiet::before { opacity: 0.3; }
+.stage .disc.quiet { filter: grayscale(0.85); }
+.stage .disc.quiet .glyph { opacity: 0.4; }
+.stage .disc.quiet .label { color: var(--color-ink-placeholder); }
+
+/* Web hover (designer, 2026-11-07): a circle wakes up under the pointer — richer colour (no ring),
+   its name in accent; greyed-out circles show their colour while hovered. Pointer devices only. */
+@media (hover: hover) {
+  .stage .disc:hover::before { filter: hue-rotate(var(--disc-hue, 0deg)) saturate(1.2) brightness(1.04); opacity: 1; }
+  .stage .disc.quiet:hover, .stage .disc.dim:hover { filter: none; }
+  .stage .disc.quiet:hover .glyph, .stage .disc.dim:hover .glyph { opacity: 1; }
+  .stage .disc:hover .label, .stage .disc.quiet:hover .label, .stage .disc.dim:hover .label { color: var(--color-accent); }
+  .stage .core:hover { filter: brightness(1.12); }
+  .disc, .core { transition: filter 0.2s; }
+}
+
+/* The page zooms the wheel by --wz; text scales by --wt (= 1/√zoom) so on screen it grows with √zoom. */
+.label { font-size: calc(12px * var(--wt, 1)); line-height: calc(14px * var(--wt, 1)); }
+.innerLabel { font-size: calc(12px * var(--wt, 1)); line-height: calc(16px * var(--wt, 1)); }
+.coreTitle { font-size: calc(11px * var(--wt, 1)); line-height: calc(13px * var(--wt, 1)); }
+.coreName { font-size: calc(14px * var(--wt, 1)); line-height: calc(18px * var(--wt, 1)); }

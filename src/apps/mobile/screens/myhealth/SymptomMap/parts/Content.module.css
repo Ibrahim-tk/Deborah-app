@@ -64,3 +64,21 @@
 }
 /* Designer asked for this quieter than 7:1 (2026-11-05): placeholder ink, an intentional exception. */
 .none { margin: 0; font: var(--weight-regular) 13px / 18px var(--font-body); color: var(--color-ink-placeholder); }
+
+/* Area sheet, person-first (2026-11-06): plain title + one line, a statement about you, quiet clinical name. */
+.head { display: grid; justify-items: center; gap: var(--space-1); }
+.plain { margin: 0; max-width: 300px; font: var(--weight-regular) 14px / 20px var(--font-body); color: var(--color-ink-secondary); text-align: center; }
+.statement { margin: 0; font: var(--weight-medium) 14px / 20px var(--font-body); color: var(--color-ink); }
+.statementSource { font-weight: var(--weight-regular); color: var(--color-ink-tertiary); }
+.crossLinks { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.clinical { margin: 0; font: var(--weight-regular) 12px / 16px var(--font-body); color: var(--color-ink-tertiary); text-align: center; }
+
+/* Left-aligned sheet (designer, 2026-11-07): overrides the centred defaults above. */
+.title, .plain, .why, .note, .statement, .meta, .kicker { text-align: left; }
+.head, .block, .group { justify-items: start; }
+.sections { text-align: left; }
+.pills, .links { justify-content: flex-start; }
+.plain { max-width: none; }
+
+/* Sheet lead (2026-11-07): the area's meaning as the big line; its name is on the disc above. */
+.question { margin: 0; font: var(--weight-regular) 18px / 26px var(--font-body); letter-spacing: -0.01em; color: var(--color-ink); text-align: left; }

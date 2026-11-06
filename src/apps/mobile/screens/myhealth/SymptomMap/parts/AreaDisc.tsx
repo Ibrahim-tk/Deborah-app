@@ -20,10 +20,12 @@ interface Props {
   width: MotionValue<number>;
   /** Reachable by keyboard / screen reader (overview, or the hero and its neighbours). */
   reachable: boolean;
+  /** Overview tone: `quiet` (none of the person's symptoms) · `dim` (off the traced symptom). */
+  tone?: 'quiet' | 'dim';
   onPress: (index: number) => void;
 }
 
-export function AreaDisc({ domain, index, strength, rotation, zoom, coreZ, width, reachable, onPress }: Props) {
+export function AreaDisc({ domain, index, strength, rotation, zoom, coreZ, width, reachable, tone, onPress }: Props) {
   const layout = useTransform([rotation, zoom, coreZ, width], ([r, z, c, w]: number[]) => wheelLayout(index, r, z, w, strength, c));
   const x = useTransform(layout, (l) => l.x);
   const y = useTransform(layout, (l) => l.y);
@@ -31,9 +33,10 @@ export function AreaDisc({ domain, index, strength, rotation, zoom, coreZ, width
   const opacity = useTransform(layout, (l) => l.opacity);
   const zIndex = useTransform(layout, (l) => l.z);
   const label = useTransform(layout, (l) => l.label);
-  // Collapse the label as it fades so the glyph settles at the disc's true centre.
-  const labelH = useTransform(label, (o) => o * 30);
-  const labelGap = useTransform(label, (o) => o * 4);
+  // Icon centred in the disc, name below it outside the circle (designer reference, 2026-11-07).
+  const labelScale = useTransform(layout, (l) => l.labelScale);
+  const hero = useTransform(layout, (l) => l.hero);
+  const heroScale = useTransform(layout, (l) => l.heroScale);
   // Glyph is drawn at its largest (hero) size and only ever scaled down, so it stays crisp;
   // the counter-scale lands it at its own size, not the disc's.
   const iconScale = useTransform(layout, (l) => l.icon / ICON_MAX / l.scale);
@@ -42,7 +45,7 @@ export function AreaDisc({ domain, index, strength, rotation, zoom, coreZ, width
   return (
     <MotionButton
       type="button"
-      className={cx(styles.disc, strength > 0 && styles.matched, strength === 2 && styles.strong)}
+      className={cx(styles.disc, strength > 0 && styles.matched, strength === 2 && styles.strong, tone && styles[tone])}
       style={{ x, y, scale, opacity, zIndex, pointerEvents: events }}
       data-hue={index}
       aria-label={domain.title}
@@ -53,7 +56,8 @@ export function AreaDisc({ domain, index, strength, rotation, zoom, coreZ, width
       <MotionSpan className={styles.glyph} style={{ scale: iconScale }}>
         <Icon name={domain.icon as IconName} size={ICON_MAX} />
       </MotionSpan>
-      <MotionSpan className={styles.label} style={{ opacity: label, height: labelH, marginTop: labelGap }}>{domain.short}</MotionSpan>
+      <MotionSpan className={styles.label} style={{ opacity: label, scale: labelScale }}>{domain.short}</MotionSpan>
+      <MotionSpan className={styles.innerLabel} style={{ opacity: hero, scale: heroScale }} aria-hidden>{domain.short}</MotionSpan>
     </MotionButton>
   );
 }

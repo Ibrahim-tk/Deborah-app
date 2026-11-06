@@ -3,12 +3,23 @@
  * Durations and easing mirror the DESIGN.md motion tokens (tokens.primitives.css).
  */
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, type PanInfo, type Transition } from 'motion/react';
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useMotionValueEvent,
+  useTransform,
+  type MotionValue,
+  type PanInfo,
+  type Transition,
+} from 'motion/react';
 
 export const MotionDiv = motion.div;
 export const MotionSpan = motion.span;
-export { AnimatePresence };
-export type { PanInfo, Transition };
+export const MotionButton = motion.button;
+export { AnimatePresence, animate, useMotionValue, useMotionValueEvent, useTransform };
+export type { MotionValue, PanInfo, Transition };
 
 export const EASE_IOS = [0.32, 0.72, 0, 1] as const;
 export const EASE_OUT = [0.22, 1, 0.36, 1] as const;

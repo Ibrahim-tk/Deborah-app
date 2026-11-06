@@ -167,6 +167,16 @@
   --symptom-map-disc-strong:
     radial-gradient(ellipse at 20% 10%, #b48bd9 0%, #e7d3f1 55%, #d6a9cc 100%);
   --symptom-map-thread: #dccbe6;
+  /* My Health entry card: peach→lavender wash behind the harmonious loop (designer, 2026-11-07). */
+  --symptom-map-card:
+    linear-gradient(105deg, #f8ebe3 0%, #f3e4e0 28%, #ebe0ea 62%, #e4d7ec 100%);
+  --symptom-map-venn-a: radial-gradient(circle at 32% 28%, #f1e9fa 0%, #dccbf0 55%, #cdb7ea 100%);
+  --symptom-map-venn-b: radial-gradient(circle at 68% 28%, #fbeef1 0%, #f1cfd8 55%, #e9bccb 100%);
+  --symptom-map-venn-c: radial-gradient(circle at 50% 75%, #fbf1e3 0%, #f2dcbf 55%, #ebcda7 100%);
+  --symptom-map-venn-rim: rgb(255 255 255 / 0.7);
+  --symptom-map-venn-light: rgb(255 255 255 / 0.45);
+  --symptom-map-cluster-glow: radial-gradient(circle at 60% 40%, rgb(214 192 240 / 0.7), rgb(244 206 220 / 0.45) 55%, transparent 75%);
+  --symptom-map-card-rim: rgb(255 255 255 / 0.85);
   --symptom-map-thread-strong: #b99acb;
 }
 .phone-root ::selection { background: var(--purple-100); color: var(--purple-900); }

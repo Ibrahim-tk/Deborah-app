@@ -109,6 +109,51 @@ export function summarizeSymptomMap(result: SymptomMapResult): SymptomMapSummary
   return { total: mapped.length, areas, bridges, strength, sentence };
 }
 
+/** One of the person's symptoms on the inner orbit (between the core and the areas). */
+export interface SymptomSatellite {
+  label: string;
+  domainIds: string[];
+  /** Position on the ring in area-slot units (0…AREA_COUNT): the circular mean of its areas, spread apart. */
+  slot: number;
+}
+
+const MAX_SATELLITES = 6;
+/** Minimum gap between satellites, in slots (0.55 ≈ 25° on an 8-area ring). */
+const MIN_GAP = 0.55;
+
+/**
+ * Inner orbit: the person's mapped symptoms, most-shared first, capped at 6 (the rest are `overflow`).
+ * Each sits at the circular mean of its areas so it reads as their overlap; near-collisions are nudged apart.
+ */
+export function satellitesFor(result: SymptomMapResult): { satellites: SymptomSatellite[]; overflow: number } {
+  const n = symptomMap.domains.length;
+  const index = new Map(symptomMap.domains.map((d, i) => [d.id, i]));
+  const mapped = result.symptoms
+    .filter((s) => s.domainIds.length > 0)
+    .sort((a, b) => b.domainIds.length - a.domainIds.length);
+  const taken = mapped.slice(0, MAX_SATELLITES).map((s) => {
+    let x = 0;
+    let y = 0;
+    for (const id of s.domainIds) {
+      const a = ((index.get(id) ?? 0) / n) * Math.PI * 2;
+      x += Math.cos(a);
+      y += Math.sin(a);
+    }
+    const mean = ((Math.atan2(y, x) / (Math.PI * 2)) * n + n) % n;
+    return { label: s.label, domainIds: s.domainIds, slot: mean };
+  });
+  // Spread: walk round the ring in order and push each one at least MIN_GAP past the previous.
+  const ordered = [...taken].sort((a, b) => a.slot - b.slot);
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = 1; i < ordered.length; i++) {
+      const gap = ordered[i].slot - ordered[i - 1].slot;
+      if (gap < MIN_GAP) ordered[i].slot = ordered[i - 1].slot + MIN_GAP;
+    }
+  }
+  for (const s of ordered) s.slot = ((s.slot % n) + n) % n;
+  return { satellites: taken, overflow: Math.max(0, mapped.length - MAX_SATELLITES) };
+}
+
 /**
  * Intelligent chat-tile trigger: 3+ real (non-seed) symptoms across 2+ areas.
  */
